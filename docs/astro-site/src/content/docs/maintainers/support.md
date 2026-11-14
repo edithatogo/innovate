@@ -1,6 +1,7 @@
 ---
 title: Support Policy
 description: Evidence-backed support policy for Innovate maintainers.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

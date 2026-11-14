@@ -1,6 +1,7 @@
 ---
 title: Handling Seasonal Data with Diffusion Models
 description: Decomposing time series to isolate diffusion trends from seasonal patterns.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

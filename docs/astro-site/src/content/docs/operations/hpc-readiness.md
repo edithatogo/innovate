@@ -1,6 +1,7 @@
 ---
 title: HPC Packaging and Registry Readiness
 description: Deployment and packaging evidence before HPC registry action.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

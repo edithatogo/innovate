@@ -1,6 +1,7 @@
 ---
 title: Multi-Product Diffusion Model
 description: Simulating diffusion of multiple competing products.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

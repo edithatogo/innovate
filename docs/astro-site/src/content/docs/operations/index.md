@@ -1,6 +1,7 @@
 ---
 title: Operations
 description: Runtime roadmap and implementation notes.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

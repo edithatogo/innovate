@@ -1,6 +1,7 @@
 ---
 title: Roadmap
 description: Migration and execution roadmap for runtime ownership.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

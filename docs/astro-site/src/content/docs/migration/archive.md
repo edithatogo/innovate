@@ -1,6 +1,7 @@
 ---
 title: Archive
 description: Conductor archives and historical migration evidence.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

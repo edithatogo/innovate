@@ -1,6 +1,7 @@
 ---
 title: Release Maturity Dashboard
 description: Evidence-backed release, registry, binding, and Rust ownership status.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

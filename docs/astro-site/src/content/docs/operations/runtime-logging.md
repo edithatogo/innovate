@@ -1,6 +1,7 @@
 ---
 title: Runtime Logging
 description: Structured logging configuration and observability for the innovate library.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

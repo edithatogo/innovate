@@ -337,6 +337,9 @@
     "tutorials/data-ingestion-provenance.mdx": {
       "kind": "tutorial",
       "example": "examples/native_reingestion.py"
+    },
+    "historical-documentation.md": {
+      "kind": "index"
     }
   },
   "examples": {

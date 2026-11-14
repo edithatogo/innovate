@@ -1,6 +1,7 @@
 ---
 title: Accelerator and Parallel Execution Evidence
 description: Evidence requirements for scalable execution claims.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

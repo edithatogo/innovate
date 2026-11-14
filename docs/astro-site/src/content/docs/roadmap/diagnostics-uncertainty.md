@@ -1,6 +1,7 @@
 ---
 title: Diagnostics and Uncertainty Artifacts
 description: Stable diagnostics artifact schema and compatibility contract.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

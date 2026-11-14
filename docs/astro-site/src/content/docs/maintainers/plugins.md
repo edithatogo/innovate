@@ -1,6 +1,7 @@
 ---
 title: Plugins Module
 description: Plugin registration and extensibility surface.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

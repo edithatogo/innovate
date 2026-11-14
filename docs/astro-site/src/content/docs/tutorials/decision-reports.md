@@ -1,6 +1,7 @@
 ---
 title: Explainability, Sensitivity, and Decision Reports
 description: Claim-safe decision reports with sensitivity analysis and explainability summaries.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

@@ -1,6 +1,7 @@
 ---
 title: Release Notes
 description: Release-notes policy and changelog responsibilities.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

@@ -1,6 +1,7 @@
 ---
 title: Binding Conformance CI
 description: Shared binding conformance gate and local fallback policy.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

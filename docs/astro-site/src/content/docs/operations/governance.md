@@ -1,6 +1,7 @@
 ---
 title: Governance and Sustainability
 description: External governance dossier for external community and foundation paths.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

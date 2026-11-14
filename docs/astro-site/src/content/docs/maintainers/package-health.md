@@ -1,6 +1,7 @@
 ---
 title: Package Health
 description: Evidence-backed package health for Innovate maintainers.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

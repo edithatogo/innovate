@@ -1,6 +1,7 @@
 ---
 title: Release Readiness
 description: Mature release gate report generation and state interpretation.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

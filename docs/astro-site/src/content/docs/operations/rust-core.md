@@ -1,6 +1,7 @@
 ---
 title: Rust Core
 description: Rust runtime migration roadmap and ownership closure.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

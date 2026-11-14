@@ -1,6 +1,7 @@
 ---
 title: Community Submission Readiness
 description: Scientific reviewer-facing readiness dossier for community targets.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]
