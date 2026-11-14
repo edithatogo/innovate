@@ -66,6 +66,12 @@ artifact-verification and launcher checks. No dependency stub or missing-package
 skip substitutes for them. They do not by themselves qualify Innovate's native
 numerical execution.
 
+The final local check also ran the exact focused suite from an external working
+directory with `-I --import-mode=importlib`. Its command, interpreter/import
+origins, source hashes and output are retained in
+[local-checks-20261114.json](evidence/local-checks-20261114.json), bound to source
+commit `ef5a0737f987d331513f5239f74a8e168a32af37`.
+
 Observed test-first evidence: the first 15 cases failed because
 `read_normalized_frame` was absent, after separating the existing native import
 from the independently executable boundary helpers. The three added wheel

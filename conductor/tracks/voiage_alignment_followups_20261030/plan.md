@@ -22,3 +22,12 @@ check source digests before Polars conversion, and exercise installed native
 Innovate with independent synthetic numerical expectations. Record actual
 import origins, artifact/source hashes, command and exit status outside the
 checkout. Existing scientific and hosted gates remain required.
+
+Source checkpoint: `ef5a0737f987d331513f5239f74a8e168a32af37`,
+[PR #605](https://github.com/edithatogo/innovate/pull/605). Nineteen focused
+contract/artifact/launcher tests pass from outside the checkout. A fresh audit
+of 99 locked installed dependencies reports no known vulnerabilities or skips.
+Native installed qualification and protected hosted gates are pending. Live
+Dependabot/signing acceptance remains unverified; see the linked audit and
+qualification records. The PR is a focused integration proposal for the
+existing repository coordinator, not a completed release or issue closure.

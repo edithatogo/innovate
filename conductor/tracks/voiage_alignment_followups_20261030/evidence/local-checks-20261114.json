@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-14",
+  "source_revision": "ef5a0737f987d331513f5239f74a8e168a32af37",
+  "scope": "Installed Voiage contract/helper/launcher tests only; native Innovate numerical qualification pending hosted execution.",
+  "command": [
+    "/workspace/scratch/02b18930c544/voiage-consumer-env/bin/python",
+    "-I",
+    "-m",
+    "pytest",
+    "--import-mode=importlib",
+    "/workspace/scratch/02b18930c544/innovate-559/tests/consumer/test_voiage_normalized_input.py",
+    "-o",
+    "addopts=-ra",
+    "-q"
+  ],
+  "working_directory": "/workspace/scratch/02b18930c544/consumer-test-working",
+  "exit_status": 0,
+  "stdout": "...................                                                      [100%]\n19 passed in 1.71s\n",
+  "stderr": "",
+  "runtime": {
+    "python": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]",
+    "executable": "/workspace/scratch/02b18930c544/voiage-consumer-env/bin/python",
+    "versions": {
+      "voiage": "3.1.0",
+      "polars": "2.1.0",
+      "pyarrow": "26.0.1",
+      "pytest": "9.2.0"
+    },
+    "imported_paths": {
+      "voiage": "/workspace/scratch/02b18930c544/voiage-consumer-env/lib/python3.15/site-packages/voiage/__init__.py",
+      "polars": "/workspace/scratch/02b18930c544/voiage-consumer-env/lib/python3.15/site-packages/polars/__init__.py",
+      "pyarrow": "/workspace/scratch/02b18930c544/voiage-consumer-env/lib/python3.15/site-packages/pyarrow/__init__.py",
+      "voiage.contracts.normalized_input": "/workspace/scratch/02b18930c544/voiage-consumer-env/lib/python3.15/site-packages/voiage/contracts/normalized_input.py"
+    }
+  },
+  "tools": {
+    "uv": "uv 0.13.6 (x86_64-unknown-linux-gnu)",
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+    "ruff": "ruff 0.17.4"
+  },
+  "source_sha256": {
+    "scripts/qualify_voiage_arrow.py": "4e2cdf0e20488ce2dc10769117f725306351d9643ddc44e0e360006e0f6491c8",
+    "tests/consumer/test_voiage_normalized_input.py": "9119f42cb39955e03e88665ef43b98d969901098e037b27178b863b9a2b7533c",
+    ".github/workflows/voiage-consumer.yml": "685484d6559be79a443615693f9d84390abe34d145981438182f5e155456f5a5",
+    ".github/renovate.json": "d88db6032c08f1e3142188fed76b5554513bc5a0d91166211eb60ffaa2db4af0",
+    "pyproject.toml": "d42aa8194b3e4246baefd49a218e4ac8e01396238590cc0384cdaa0e7e2e9589",
+    "uv.lock": "16098442e498a4bfbfb24809ffb30ee85675696f71bf84b4c1aa2db76002f158",
+    "Cargo.toml": "f765c618a8062bed9765eab6a22ed817868ee17944a6f240dddff6e929842cfc",
+    "Cargo.lock": "42efd1345044b445469ad0c40c8abd0288a7d123a2bd4568c578703567a8db67"
+  },
+  "python_audit": {
+    "command": [
+      ".venv/bin/pip-audit",
+      "--format",
+      "json",
+      "--output",
+      "locked-python-audit.json"
+    ],
+    "exit_status": 0,
+    "installed_distribution_count": 99,
+    "findings": 0,
+    "skips": 0,
+    "report": "python-dependencies-20261114.json",
+    "interpretation": "Current installed locked Linux build/test/Arrow closure; not live GitHub Dependabot inventory or native Innovate build proof."
+  }
+}

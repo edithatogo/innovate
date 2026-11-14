@@ -80,6 +80,16 @@ reports no known vulnerabilities for the audited virtualenv and filelock
 versions and skips the unpublished local Innovate package. It remains historical
 evidence, not a current Dependabot alert inventory or general security clearance.
 
+The fresh local `pip-audit` **2.10.1** run for this increment exited **0**, with
+**99 installed distributions, zero reported vulnerabilities and zero skipped
+distributions**. It audited the locked Linux build/test environment including
+the Arrow extra; the native Innovate package was not installed after the
+recorded compilation failures. The full dependency/version report is retained
+in [python-dependencies-20261114.json](evidence/python-dependencies-20261114.json),
+with scope and invocation in [local-checks-20261114.json](evidence/local-checks-20261114.json).
+This is current package-audit evidence and still does not expose or dispose of
+GitHub's separate Dependabot alerts.
+
 The available GitHub connector does not expose Dependabot alert listing or
 dismissal operations. Its documented generic fetch allowlist does not include
 the Dependabot alert endpoint family. No unsupported endpoint was called and no
