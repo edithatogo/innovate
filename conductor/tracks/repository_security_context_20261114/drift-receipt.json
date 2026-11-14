@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "repository": "edithatogo/innovate",
+  "default_branch": "main",
+  "observed_at": "2026-11-14T13:53:53Z",
+  "commit_sha": "276c2e505a0ce26910820fe8a94a6a498f505700",
+  "rulesets": [],
+  "branch_protection": null,
+  "errors": [
+    "GET /repos/edithatogo/innovate/branches/main/protection: HTTP 403 Resource not accessible by integration. Full approval, bypass and force/deletion settings are unknown."
+  ],
+  "branch_protection_summary": {
+    "protected": true,
+    "required_status_checks": {
+      "enforcement_level": "everyone",
+      "contexts": [
+        "lint",
+        "package",
+        "CodeQL",
+        "Secret Scan",
+        "Workflow and policy lint",
+        "Python quality harness",
+        "unit-tests-base (3.15.1)"
+      ],
+      "checks": [
+        {
+          "context": "lint",
+          "app_id": 15368
+        },
+        {
+          "context": "package",
+          "app_id": 15368
+        },
+        {
+          "context": "CodeQL",
+          "app_id": 57789
+        },
+        {
+          "context": "Secret Scan",
+          "app_id": 15368
+        },
+        {
+          "context": "Workflow and policy lint",
+          "app_id": 15368
+        },
+        {
+          "context": "Python quality harness",
+          "app_id": 15368
+        },
+        {
+          "context": "unit-tests-base (3.15.1)",
+          "app_id": 15368
+        }
+      ]
+    }
+  },
+  "sources": {
+    "rulesets": "https://api.github.com/repos/edithatogo/innovate/rulesets?includes_parents=true",
+    "branch": "https://api.github.com/repos/edithatogo/innovate/branches/main",
+    "branch_protection": "https://api.github.com/repos/edithatogo/innovate/branches/main/protection",
+    "checks": "https://api.github.com/repos/edithatogo/innovate/commits/276c2e505a0ce26910820fe8a94a6a498f505700/check-runs?per_page=100",
+    "renovate_dashboard": "https://github.com/edithatogo/innovate/issues/595",
+    "recent_pull_requests": "https://api.github.com/repos/edithatogo/innovate/pulls?state=all&per_page=40&sort=updated&direction=desc"
+  },
+  "bot_inventory": [
+    {
+      "actor": "renovate[bot]",
+      "status": "observed",
+      "evidence": "Issue #595 created 2026-11-13T18:04:49Z",
+      "scope": "Dependency dashboard detects Cargo, pep621, npm/docs, GitHub Actions, Julia, Docker and pyenv."
+    },
+    {
+      "actor": "dependabot[bot]",
+      "status": "observed",
+      "evidence": "14 of the 40 recently updated PRs, including merged #587, #586 and #585",
+      "scope": "Duplicate version scheduling remains on inspected main; removal proposed only after hosted Renovate health verified."
+    },
+    {
+      "actor": "github-actions[bot]",
+      "status": "configured_and_executed",
+      "evidence": "Pinned workflows and successful main check runs",
+      "scope": "CI, release-please/release drafter, TagBot, incident-monitor issue updates, docs and privacy/security checks. No new bypass granted."
+    },
+    {
+      "actor": "github-advanced-security",
+      "status": "observed",
+      "evidence": "CodeQL required app_id 57789; successful PR #600 check on e0c2009a5bfe13036da977dc55635df5a0162218",
+      "scope": "Security analysis remains a protected automated gate."
+    }
+  ],
+  "selected_ruleset_contexts": [
+    {
+      "context": "lint",
+      "integration_id": 15368,
+      "baseline_result": "success",
+      "check_run_id": 132369174135
+    },
+    {
+      "context": "unit-tests-base (3.15.1)",
+      "integration_id": 15368,
+      "baseline_result": "success",
+      "check_run_id": 132369173959
+    }
+  ],
+  "excluded_new_required_contexts": [
+    {
+      "context": "Code coverage / Codecov",
+      "reason": "No current coverage workflow or Codecov commit check on inspected main; execute and verify before making it required."
+    },
+    {
+      "context": "readiness-report",
+      "reason": "Separate release acceptance intentionally fails for 38 required scientific obligations; not a general PR merge condition."
+    },
+    {
+      "context": "offline-ai-security",
+      "reason": "Draft #590 requires a qualified dedicated runner/assets; no rollout or bypass authorized here."
+    },
+    {
+      "context": "deploy, release-lane-checks, monitor, TagBot",
+      "reason": "Conditional or event-specific; unsuitable as always-present PR checks."
+    }
+  ],
+  "codecov": {
+    "status": "not_verified",
+    "baseline_statuses_count": 0,
+    "baseline_codecov_checks_count": 0,
+    "configuration_is_not_service_acceptance": true
+  },
+  "settings_changes": [],
+  "issue_completion": false,
+  "limitations": [
+    "The proposed .github/rulesets/main.json has not been applied.",
+    "The summary returned by branches/main does not prove zero review approvals or owner-recovery settings.",
+    "Existing seven protected contexts must remain intact; adding a ruleset does not replace classic protection.",
+    "The settings browser is signed out; GitHub administrative access is needed for activation and read-back."
+  ]
+}

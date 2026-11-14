@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
+    "github>edithatogo/renovate-config",
     ":dependencyDashboard",
     ":semanticCommits"
   ],
@@ -15,6 +15,30 @@
   "platformAutomerge": true,
   "automergeType": "pr",
   "labels": ["dependencies", "renovate"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/renovate-config\\.yml$/"],
+      "matchStrings": ["--package=renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "renovate",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/coverage\\.yml$/"],
+      "matchStrings": ["cargo install cargo-llvm-cov --version (?<currentValue>\\d+\\.\\d+\\.\\d+) --locked"],
+      "depNameTemplate": "cargo-llvm-cov",
+      "datasourceTemplate": "crate"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/coverage\\.yml$/"],
+      "matchStrings": ["version: v(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "codecov/codecov-cli",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
   "packageRules": [
     {
       "description": "Group all dev dependencies together",

@@ -1,0 +1,40 @@
+name: Renovate configuration
+
+on:
+  pull_request:
+    branches: [main, work]
+    paths:
+      - .github/renovate.json
+      - .github/workflows/renovate-config.yml
+      - .github/workflows/coverage.yml
+  push:
+    branches: [main, work]
+    paths:
+      - .github/renovate.json
+      - .github/workflows/renovate-config.yml
+      - .github/workflows/coverage.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate-config-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    # Path-filtered validation is intentionally not a required branch context.
+    name: Validate repository Renovate configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          # Renovate 44.239.0 supports ^24.11.0 or ^26.13.0.
+          node-version: 24.22.1
+      - name: Validate the local repository configuration
+        run: npx --yes --package=renovate@44.239.0 renovate-config-validator --strict --no-global .github/renovate.json

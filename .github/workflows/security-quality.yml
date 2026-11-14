@@ -99,22 +99,18 @@ jobs:
         run: |
           uv venv .venv-policy --python 3.15.2
           .venv-policy/bin/python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
-          uv pip install --python .venv-policy/bin/python zizmor==1.32.0
+          uv pip install --python .venv-policy/bin/python zizmor==1.32.0 ruff==0.17.4
       - name: Audit GitHub Actions security posture
         run: .venv-policy/bin/zizmor .github/workflows/security-quality.yml .github/workflows/scorecard.yml
-      - name: Validate dependency policy
+      - name: Test repository policy drift detection
+        run: .venv-policy/bin/python -m unittest discover -s tests/workflows -p 'test_repository_policy.py' -v
+      - name: Lint repository policy tooling
         run: |
-          .venv-policy/bin/python - <<'PY'
-          from pathlib import Path
-          import sys
-
-          required = {".github/dependabot.yml", ".github/renovate.json", "SECURITY.md", "CODEOWNERS"}
-          missing = sorted(path for path in required if not Path(path).is_file())
-          if missing:
-              print("Missing repository security controls:", ", ".join(missing))
-              sys.exit(1)
-          print("Repository security policy files are present.")
-          PY
+          .venv-policy/bin/ruff check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py
+          .venv-policy/bin/ruff format --check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py
+      - name: Validate repository policy
+        run: |
+          .venv-policy/bin/python scripts/check_repository_policy.py --json
 
   python-quality:
     name: Python quality harness
