@@ -120,17 +120,22 @@ jobs:
 
           dockerfile = Path("Dockerfile").read_text(encoding="utf-8")
           unpinned = []
+          stages = set()
           for lineno, line in enumerate(dockerfile.splitlines(), 1):
               stripped = line.strip()
               if stripped.startswith("FROM "):
-                  image = stripped.split()[1]
-                  if "@sha256:" not in image:
+                  tokens = stripped.split()
+                  image = tokens[1]
+                  if image != "scratch" and image not in stages and "@sha256:" not in image:
                       unpinned.append(f"Dockerfile:{lineno}: {image}")
+                  as_match = re.search(r"\bAS\s+(\S+)", stripped, re.IGNORECASE)
+                  if as_match:
+                      stages.add(as_match.group(1))
               elif stripped.startswith("COPY ") and "--from=" in stripped:
                   m = re.search(r"--from=(\S+)", stripped)
                   if m:
                       ref = m.group(1)
-                      if (":" in ref or "/" in ref) and "@sha256:" not in ref:
+                      if ref not in stages and (":" in ref or "/" in ref) and "@sha256:" not in ref:
                           unpinned.append(f"Dockerfile:{lineno}: {ref}")
           if unpinned:
               print("Unpinned container image references found:")
