@@ -195,9 +195,9 @@ fn scenario_execution_exports_preserve_success_failure_pause_and_nested_json() {
             .unwrap()
             .str()
             .unwrap()
-            .into_no_null_iter()
+            .iter()
             .collect::<Vec<_>>(),
-        ["baseline-β", "failed", "paused-γ"]
+        [Some("baseline-β"), Some("failed"), Some("paused-γ")]
     );
     assert_eq!(
         frame
@@ -205,9 +205,9 @@ fn scenario_execution_exports_preserve_success_failure_pause_and_nested_json() {
             .unwrap()
             .bool()
             .unwrap()
-            .into_no_null_iter()
+            .iter()
             .collect::<Vec<_>>(),
-        [true, false, false]
+        [Some(true), Some(false), Some(false)]
     );
     assert_json_rows(&frame, "execution_json", &rows);
 }
@@ -251,9 +251,14 @@ fn scenario_comparison_exports_preserve_pair_ensemble_outcomes_and_nested_json()
             .unwrap()
             .str()
             .unwrap()
-            .into_no_null_iter()
+            .iter()
             .collect::<Vec<_>>(),
-        ["pair", "pair", "ensemble", "ensemble"]
+        [
+            Some("pair"),
+            Some("pair"),
+            Some("ensemble"),
+            Some("ensemble")
+        ]
     );
     assert_eq!(
         frame
@@ -261,9 +266,9 @@ fn scenario_comparison_exports_preserve_pair_ensemble_outcomes_and_nested_json()
             .unwrap()
             .bool()
             .unwrap()
-            .into_no_null_iter()
+            .iter()
             .collect::<Vec<_>>(),
-        [true, false, true, false]
+        [Some(true), Some(false), Some(true), Some(false)]
     );
     assert_json_rows(&frame, "comparison_json", &rows);
 }
