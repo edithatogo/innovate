@@ -12,8 +12,8 @@ testing and MT as metamorphic testing; parent #415 lists mutation separately.
 The existing Rust-native suites already implement both techniques. The historical
 Python/mutmut inventory is not current native execution evidence.
 
-Allowed changes: one new native metamorphic test file, the existing CI/security
-and binding-conformance workflows, and this owning-track receipt/plan entry.
+Allowed changes: one new native metamorphic test file, the existing CI/security,
+binding-conformance and documentation workflows, and this owning-track receipt/plan entry.
 PR #600 owns ensemble time-grid validation; PR #590 is an unqualified offline
 security draft. Neither is a dependency or part of this change. Runtime source,
 manifests, dependency/provider pins, scientific thresholds, required check names
@@ -79,7 +79,12 @@ Local execution uses Rust `1.99.1 (58cf8f9c3 2026-10-13)` and a selected
 `.venv-native` Python 3.15.2. The following checks passed:
 
 - `cargo fmt --all --check` (after formatting the new test file).
-- Verified actionlint 1.7.9 on all three changed workflows, with no findings.
+- `cargo check --locked -p innovate-core --test metamorphic -j 1` with
+  incremental compilation disabled: passed in 28.89 seconds.
+- `cargo clippy --locked -p innovate-core --test metamorphic -j 1 -- -D warnings`
+  with incremental compilation disabled: passed in 5.08 seconds. Neither
+  metadata-only command executes the numerical tests.
+- Verified actionlint 1.7.9 on all 16 repository workflows, with no findings.
   Its official Linux amd64 release archive SHA-256 is
   `233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4`,
   verified against both the upstream release API and the downloaded bytes.
@@ -100,9 +105,25 @@ was killed by SIGKILL before tests executed. The first selected the existing
 `kairos`, `network`, `scientific_contract` and `model_oracles` integration targets
 with `--locked -j 2`; the second also selected `metamorphic`, used `-j 1`, disabled
 incremental compilation and set development/test codegen units to 256. No
-native test pass or application defect is inferred from these resource failures.
+native test pass or application defect is inferred from these process terminations.
 Required hosted CI must execute the exact proposed source before acceptance.
 
 Independent source review found no blocking mathematical or workflow defect;
 review is not a substitute for execution. Native mutation, scientific validation,
 the 38 migration obligations and release acceptance remain unqualified.
+
+## Documentation concurrency correction
+
+The initial PR #603 documentation run `43601930424` was cancelled before creating
+any jobs. Its workflow used a repository-wide `pages` concurrency group for both
+PR checks and actual deployments. Under GitHub's default concurrency queue,
+another pending run in the same group can replace an earlier pending run even
+when `cancel-in-progress` is false. This is a source-qualified cancellation risk;
+the observed run has no job log proving which queued run displaced it.
+
+The correction assigns `pages-pr-<number>` to each pull request and cancels only
+obsolete runs for that PR. Push/manual runs keep the existing `pages` group and
+do not cancel an active deployment. The deployment event/branch/enablement guard,
+environment, permissions and all dependency versions remain unchanged. Build and
+deploy jobs gain 20/10-minute limits. No Pages deployment is activated by this PR.
+See [GitHub's concurrency semantics](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
