@@ -584,7 +584,7 @@
     "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
     "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check",
     "independent_migration_review": "Twelve current pages independently read against source at d732999; six imported expected outputs rechecked unchanged at 5f805f85cbd99be29be99f1077642c9cbf876cdb. Two tutorial paragraphs improved; no raw example changes.",
-    "contract_checker": "Prepared a standard-library consistency/freshness checker and three unittest cases; execution pending because the local environment is unavailable."
+    "contract_checker": "Prepared a standard-library consistency/freshness checker and seven unittest cases covering source drift, human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys; execution pending on the recovered integrated checkout."
   },
   "recovery": {
     "reason": "The local execution environment became unavailable before these edits were committed.",
@@ -609,7 +609,7 @@
     "Human reader trials for the recorded tasks, with observed outcomes and revisions.",
     "Astro build, browser, accessibility and native-runtime qualification on the integrated commit.",
     "Empirical data and study-specific scientific validation before using examples as evidence for a real population.",
-    "Run the review consistency checker and its two negative regression fixtures in the integrated CI environment."
+    "Run the review consistency checker and its seven regression cases in the integrated CI environment."
   ],
   "independent_reviews": {
     "source_commit": "d7329997538e2362e0d30ec9366d0e20d9222088",

@@ -289,7 +289,10 @@ def main(argv: list[str] | None = None) -> int:
     """Write a bounded JSON consistency report and return zero only on success."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
-    parser.add_argument("--output", type=Path, help="Write the report here as well as to stdout.")
+    parser.add_argument(
+        "--output", type=Path,
+        help="Write the report here as well as to stdout; relative paths use the invocation directory.",
+    )
     args = parser.parse_args(argv)
     root = args.root.resolve()
     record: object = None
@@ -313,7 +316,7 @@ def main(argv: list[str] | None = None) -> int:
     rendered = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     print(rendered, end="")
     if args.output is not None:
-        output = args.output if args.output.is_absolute() else root / args.output
+        output = args.output.resolve()
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(rendered, encoding="utf-8")
     return 1 if errors else 0
