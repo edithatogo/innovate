@@ -91,8 +91,8 @@ jobs:
           tar --extract --gzip --file "$archive" --directory "$GITHUB_WORKSPACE" actionlint
       - name: Lint GitHub Actions workflows
         run: ./actionlint -color
-      - name: Test CI failure alert handling
-        run: node --test tests/workflows/ci-gate-monitor.test.cjs
+      - name: Test CI workflow controls
+        run: node --test tests/workflows/*.test.cjs
       - name: Install uv
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
       - name: Select repository-local policy environment

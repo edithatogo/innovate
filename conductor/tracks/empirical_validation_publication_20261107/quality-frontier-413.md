@@ -13,7 +13,8 @@ The existing Rust-native suites already implement both techniques. The historica
 Python/mutmut inventory is not current native execution evidence.
 
 Allowed changes: one new native metamorphic test file, the existing CI/security,
-binding-conformance and documentation workflows, and this owning-track receipt/plan entry.
+binding-conformance, documentation and TagBot workflows, a TagBot event-policy
+regression test, and this owning-track receipt/plan entry.
 PR #600 owns ensemble time-grid validation; PR #590 is an unqualified offline
 security draft. Neither is a dependency or part of this change. Runtime source,
 manifests, dependency/provider pins, scientific thresholds, required check names
@@ -88,7 +89,8 @@ Local execution uses Rust `1.99.1 (58cf8f9c3 2026-10-13)` and a selected
   Its official Linux amd64 release archive SHA-256 is
   `233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4`,
   verified against both the upstream release API and the downloaded bytes.
-- `node --test tests/workflows/ci-gate-monitor.test.cjs`: 13 passed.
+- `node --test tests/workflows/*.test.cjs`: 16 passed (13 existing CI-monitor
+  regressions and three TagBot policy tests).
 - The actual native-test workflow shell was extracted and executed against
   synthetic child commands. Cargo exits 0/27 and tee exits 0/9 propagated
   correctly in all four combinations; stdout/stderr and exit receipts survived
@@ -127,3 +129,33 @@ do not cancel an active deployment. The deployment event/branch/enablement guard
 environment, permissions and all dependency versions remain unchanged. Build and
 deploy jobs gain 20/10-minute limits. No Pages deployment is activated by this PR.
 See [GitHub's concurrency semantics](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+
+## TagBot event/permission correction
+
+A read-only queue inspection found dozens of TagBot runs for ordinary
+`issue_comment` events (for example run `43602003641`, actor `edithatogo`). The
+existing workflow started its write-scoped job on every new issue/PR comment.
+This is observed unnecessary tag-job scheduling; it does not prove the cause of
+the broader hosted-runner queue delay.
+
+The pinned TagBot revision's [canonical example](https://github.com/JuliaRegistries/TagBot/blob/87cc4cc2b4639f6c743f5772f376a32914060732/example.yml)
+identifies **JuliaTagBot**, not the historically used JuliaRegistrator actor, as
+the trusted automatic commenter. The job now accepts only that actor on an issue
+comment or an explicit manual dispatch. Its existing write/read permissions move
+to that guarded job; workflow defaults become read-only. Job-level concurrency
+serializes eligible tag writers without cancelling an active tag operation, and
+a 10-minute timeout bounds execution. Rejected comments cannot occupy that job's
+concurrency group. Action revision, token source and manual capability are unchanged;
+no tag, release, credential or permission expansion is performed by this change.
+
+`tests/workflows/tagbot-policy.test.cjs` exercises the actual guard with positive
+controls for trusted comments/manual dispatch and negative controls for ordinary
+comments, lookalike actor names and unsupported events. The existing workflow
+lint job runs this alongside the original CI-monitor regressions. Native and
+release qualification remain separate from these event-policy tests.
+The regression harness accounts for GitHub's case-insensitive string equality;
+case variants of the trusted login are positive controls, distinct lookalike
+logins are negative controls. Independent review caught and corrected an initial
+case-sensitive JavaScript fixture assumption before publication. All 16 workflow
+tests pass, and executing the new guard tests against the baseline unguarded
+workflow fails as expected.

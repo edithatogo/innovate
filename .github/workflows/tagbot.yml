@@ -6,13 +6,21 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  issues: read
-  pull-requests: read
+  contents: read
 
 jobs:
   tagbot:
+    # Match the trusted comment actor in the pinned upstream example.yml.
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'issue_comment' && github.actor == 'JuliaTagBot')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: tagbot
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      issues: read
+      pull-requests: read
     steps:
       - uses: JuliaRegistries/TagBot@87cc4cc2b4639f6c743f5772f376a32914060732
         with:
