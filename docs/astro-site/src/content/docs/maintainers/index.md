@@ -15,6 +15,7 @@ migration work.
 
 Available pages:
 
+- [Local Test Acceleration](/innovate/maintainers/test-acceleration/)
 - Publication
 - DocSearch Gate
 - Package Health

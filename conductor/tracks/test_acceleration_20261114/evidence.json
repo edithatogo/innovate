@@ -1,0 +1,800 @@
+{
+  "base_commit": "276c2e505a0ce26910820fe8a94a6a498f505700",
+  "coverage_core_comparison": {
+    "actual_cores": [
+      "ctrace",
+      "sysmon"
+    ],
+    "identical_measurement_sha256": "4b83d9b05686c65b806ef165675c0ef375b59eafa909dd4c17bf775dcfd6cd50",
+    "summary": {
+      "covered_branches": 57,
+      "covered_lines": 89,
+      "excluded_lines": 0,
+      "missing_branches": 1,
+      "missing_lines": 1,
+      "num_branches": 58,
+      "num_partial_branches": 1,
+      "num_statements": 90,
+      "percent_branches_covered": 98.27586206896552,
+      "percent_branches_covered_display": "98",
+      "percent_covered": 98.64864864864865,
+      "percent_covered_display": "99",
+      "percent_statements_covered": 98.88888888888889,
+      "percent_statements_covered_display": "99"
+    },
+    "target": "scripts/check_migration.py"
+  },
+  "environment": {
+    "coverage": "7.17.2",
+    "os": "Linux x86_64",
+    "pytest": "9.2.0",
+    "pytest-gremlins": "1.13.2",
+    "pytest-testmon": "2.3.0",
+    "python": "3.15.2"
+  },
+  "excluded_tools": {
+    "Freezegun": "No relevant active Python wall-clock boundary; explicit scientific time inputs and native clocks.",
+    "VCR.py": "Rust reqwest transport already uses synthetic native TCP fixtures; Python interception cannot cover it.",
+    "pytest-picked": "No demonstrated need alongside dependency-aware selection and explicit native/input invalidation."
+  },
+  "issue": 473,
+  "local_native_build": {
+    "attempts": [
+      "locked release build killed with SIGKILL compiling argminmax (2 jobs)",
+      "locked dev build with debug information disabled killed with SIGKILL compiling polars-core (1 job)"
+    ],
+    "native_source_changes": false,
+    "pins_or_requirements_downgraded": false,
+    "status": "blocked"
+  },
+  "mutation_trial": {
+    "all_killed": true,
+    "initial_trial": {
+      "ordinary_tests": 64,
+      "survived": 1,
+      "total": 34,
+      "zapped": 33
+    },
+    "ordinary_tests": 65,
+    "sensitivity_control": "An inverted empty source-inventory guard survived initially. A new ordinary synthetic Git test killed the same guard mutation without changing production code.",
+    "staged_inputs_sha256": {
+      "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "pyproject.toml": "d42aa8194b3e4246baefd49a218e4ac8e01396238590cc0384cdaa0e7e2e9589",
+      "scripts/__init__.py": "19bc00b2057caf6a448c04baa40b0ea58bfdf9f002b2cfae39eb93eaf3cf334f",
+      "scripts/check_migration.py": "3e287565b831079a3de4048de72d3f17caf60b33930682b0acfd7f9ea5de0f49",
+      "tests/native/test_migration_mutation.py": "e4bdfd1ca40cdf4f12e18704857acb374765be18a3e008c7bfb0476fe1399e2c"
+    },
+    "summary": {
+      "error": 0,
+      "pardoned": 0,
+      "percentage": 100.0,
+      "survived": 0,
+      "timeout": 0,
+      "total": 34,
+      "zapped": 34
+    },
+    "target": "scripts/check_migration.py"
+  },
+  "ordinary_verification": {
+    "conductor_hygiene": "passed",
+    "diff_check": "passed",
+    "failed": 0,
+    "passed": 130,
+    "pytest_seconds": 9.0,
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "scope": "129 policy/runner regressions plus 1 optional real-testmon integration test",
+    "skipped": 0
+  },
+  "policy_measurements": {
+    "medians": {
+      "baseline": {
+        "invocation_wall_seconds": 0.8305894019940752,
+        "pytest_wall_seconds": 0.41531941699940944,
+        "wall_seconds": 0.7851716069999384
+      },
+      "coverage-ctrace": {
+        "invocation_wall_seconds": 0.9844758010003716,
+        "pytest_wall_seconds": 0.5005944949953118,
+        "wall_seconds": 0.9462528540025232
+      },
+      "coverage-sysmon": {
+        "invocation_wall_seconds": 0.9212894669981324,
+        "pytest_wall_seconds": 0.42498968799918657,
+        "wall_seconds": 0.8761938020033995
+      },
+      "testmon": {
+        "invocation_wall_seconds": 0.7436374580065603,
+        "pytest_wall_seconds": 0.2940091569980723,
+        "wall_seconds": 0.7039060089955456
+      }
+    },
+    "runs": [
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.8388794220009004,
+        "profile": "baseline",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.18946654899627902,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.41531941699940944,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.7851716069999384
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.7874787640030263,
+        "profile": "baseline",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.20804596800007857,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.4046330860001035,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.7488226150016999
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.8305894019940752,
+        "profile": "baseline",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.1809928860020591,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.4263981789990794,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.786724421006511
+      },
+      {
+        "explicit_rebuild": true,
+        "invalidation_reasons": [
+          "explicit_rebuild"
+        ],
+        "invocation_wall_seconds": 1.1180979409982683,
+        "profile": "testmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.3426974039975903,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.6422808420029469,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 1.07581208999909
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.7531974789962987,
+        "profile": "testmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 81,
+          "duration_seconds": 0.018758530997729395,
+          "errors": 0,
+          "executed": 0,
+          "exitstatus": 5,
+          "failed": 0,
+          "passed": 0,
+          "selected": 0,
+          "skipped": 0,
+          "started": 0
+        },
+        "pytest_wall_seconds": 0.2940091569980723,
+        "seed_inventory_count": 81,
+        "status": "no_tests_selected",
+        "wall_seconds": 0.707525337995321
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.6737645989996963,
+        "profile": "testmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 81,
+          "duration_seconds": 0.017345642001600936,
+          "errors": 0,
+          "executed": 0,
+          "exitstatus": 5,
+          "failed": 0,
+          "passed": 0,
+          "selected": 0,
+          "skipped": 0,
+          "started": 0
+        },
+        "pytest_wall_seconds": 0.26637082600063877,
+        "seed_inventory_count": 81,
+        "status": "no_tests_selected",
+        "wall_seconds": 0.6340682939990074
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.7436374580065603,
+        "profile": "testmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 81,
+          "duration_seconds": 0.015165819000685588,
+          "errors": 0,
+          "executed": 0,
+          "exitstatus": 5,
+          "failed": 0,
+          "passed": 0,
+          "selected": 0,
+          "skipped": 0,
+          "started": 0
+        },
+        "pytest_wall_seconds": 0.3574874460027786,
+        "seed_inventory_count": 81,
+        "status": "no_tests_selected",
+        "wall_seconds": 0.7039060089955456
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.9844758010003716,
+        "profile": "coverage-ctrace",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.26586931200290564,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.5005944949953118,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.9462528540025232
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 1.0498306110021076,
+        "profile": "coverage-sysmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.1988121989998035,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.42498968799918657,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 1.0081288680012221
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.9433996269945055,
+        "profile": "coverage-ctrace",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.2551876630022889,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.4935204350040294,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.9024636350004585
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.8975020840007346,
+        "profile": "coverage-sysmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.1867317069991259,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.40286335100245196,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.8333967970029335
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 1.1272938199981581,
+        "profile": "coverage-ctrace",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.2654170720052207,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.5406559290058794,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.9714543500012951
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 0.9212894669981324,
+        "profile": "coverage-sysmon",
+        "pytest": {
+          "collected": 81,
+          "deselected": 0,
+          "duration_seconds": 0.20411723999859532,
+          "errors": 0,
+          "executed": 81,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 81,
+          "selected": 81,
+          "skipped": 0,
+          "started": 81
+        },
+        "pytest_wall_seconds": 0.4385466880048625,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.8761938020033995
+      },
+      {
+        "explicit_rebuild": false,
+        "invalidation_reasons": [],
+        "invocation_wall_seconds": 8.533297893998679,
+        "profile": "gremlins",
+        "pytest": {
+          "collected": 65,
+          "deselected": 0,
+          "duration_seconds": 7.752143151999917,
+          "errors": 0,
+          "executed": 65,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 65,
+          "selected": 65,
+          "skipped": 0,
+          "started": 65
+        },
+        "pytest_wall_seconds": 8.083104548000847,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 8.492380700001377
+      }
+    ],
+    "samples": "3 baseline, 1 cold seed, 3 warm, 3 paired coverage runs, 1 mutation trial"
+  },
+  "policy_snapshot": {
+    "environment": "a69f0aa71ed27ae8b943ed70656476e7d3ad7224a24ace04df6adc2e3bdae73f",
+    "inventory": "74942b9127da7e98c5ee9b66b8b34809a100778e40a32cb409cf0e0e2d17c3fc",
+    "native": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "opaque": "756df8e0f55df666248e3f6a8f08e7d929e368de51c82f7b9341cdcef8c78838",
+    "python": "cb40f557c25a6053f6d0f30cd0862fc8df6293ab2c100fc72acf68e145e31d1e"
+  },
+  "promotion_evidence": false,
+  "scientific_release_acceptance": false,
+  "scope": "Local Python policy and synthetic selection only; full native build not completed locally",
+  "source_archive": {
+    "constructed": true,
+    "development_profiles_packaged": false,
+    "installed_native_package_acceptance": false,
+    "profile_cache_entries": 0
+  },
+  "source_sha256": {
+    "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+    "pyproject.toml": "d42aa8194b3e4246baefd49a218e4ac8e01396238590cc0384cdaa0e7e2e9589",
+    "scripts/check_migration.py": "3e287565b831079a3de4048de72d3f17caf60b33930682b0acfd7f9ea5de0f49",
+    "scripts/test_acceleration/__init__.py": "6c94211243efa8301f3e472af6ab061502105c4e05e937122e1e9104499f0de9",
+    "scripts/test_acceleration/__main__.py": "60daa8524dee66c220c7e2fa9e84d20c2cc443b5ffc6de3b92f97d35d2f9b405",
+    "scripts/test_acceleration/metrics.py": "fef37a1342674081a786f27423ff61e9ef0e7c229e76ee22fd811de5b2bbf3c4",
+    "scripts/test_acceleration/profiles.py": "994b5844cf5463ffd77f8d66a439b6f7db0b9bf182d61430e0c5a79441bb39e5",
+    "scripts/test_acceleration/requirements.in": "8d8d3fc9bf90196117139f437e9e9e4bcd89c62d95e0811cbe014388afc1b240",
+    "scripts/test_acceleration/requirements.txt": "429ec79761f065c58aa46cdc45d18a4b29df2aa6bfffe5df4f4f2fd2757fe4c5",
+    "tests/native/test_migration_mutation.py": "e4bdfd1ca40cdf4f12e18704857acb374765be18a3e008c7bfb0476fe1399e2c",
+    "tests/native/test_migration_policy.py": "3f52983485d52f7f960ac930bcdabd33ee839d7c82a59000ab358fc57549f9fb",
+    "tests/native/test_test_acceleration.py": "aff91f43a7904468b60c1b1c1b4b6e901a1ec449ad4ff4263ce568d49d1d2b5f",
+    "tests/native/test_test_acceleration_metrics.py": "db4cd35d0b1978e2426fbf1fe99c333fe0af521b8eb0c04a60776fc81a3af2e6",
+    "tests/native/test_test_acceleration_process.py": "ff585437f9279c5148bb2adda9477896c83fc48b63bd8b017d8ffb2e03862c86",
+    "tests/test_acceleration/test_testmon_integration.py": "9fed31b8d1e9e81f5e423d6a9d2aaec023a12ac50ae42a922d619f481496d030",
+    "uv.lock": "16098442e498a4bfbfb24809ffb30ee85675696f71bf84b4c1aa2db76002f158"
+  },
+  "synthetic_selection": {
+    "metrics_source_sha256": "fef37a1342674081a786f27423ff61e9ef0e7c229e76ee22fd811de5b2bbf3c4",
+    "promotion_evidence": false,
+    "runner_source_sha256": "994b5844cf5463ffd77f8d66a439b6f7db0b9bf182d61430e0c5a79441bb39e5",
+    "runs": [
+      {
+        "invalidation_reasons": [],
+        "label": "baseline",
+        "profile": "baseline",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.008874756000295747,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.22988708099728683,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.31415136699797586
+      },
+      {
+        "invalidation_reasons": [
+          "unseeded",
+          "missing_database"
+        ],
+        "label": "testmon_cold",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.03641781899932539,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.29579560599813703,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.3424115969974082
+      },
+      {
+        "invalidation_reasons": [],
+        "label": "testmon_warm",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 0,
+          "deselected": 0,
+          "duration_seconds": 0.0061015940009383485,
+          "errors": 0,
+          "executed": 0,
+          "exitstatus": 5,
+          "failed": 0,
+          "passed": 0,
+          "selected": 0,
+          "skipped": 0,
+          "started": 0
+        },
+        "pytest_wall_seconds": 0.3367840190039715,
+        "seed_inventory_count": 2,
+        "status": "no_tests_selected",
+        "wall_seconds": 0.3836106039962033
+      },
+      {
+        "invalidation_reasons": [],
+        "label": "changed_binding_failure",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 1,
+          "duration_seconds": 0.0310938919938053,
+          "errors": 0,
+          "executed": 1,
+          "exitstatus": 1,
+          "failed": 1,
+          "passed": 0,
+          "selected": 1,
+          "skipped": 0,
+          "started": 1
+        },
+        "pytest_wall_seconds": 0.2593397679956979,
+        "seed_inventory_count": 2,
+        "status": "failed",
+        "wall_seconds": 0.3123367079970194
+      },
+      {
+        "invalidation_reasons": [
+          "unseeded"
+        ],
+        "label": "failure_recovery_reseeds",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.03348607599764364,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.2475836919984431,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.3150866459982353
+      },
+      {
+        "invalidation_reasons": [
+          "opaque"
+        ],
+        "label": "native_source_change",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.03493690300092567,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.249384941002063,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.2979624279978452
+      },
+      {
+        "invalidation_reasons": [
+          "opaque"
+        ],
+        "label": "fixture_change",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.0326681139995344,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.26136978800059296,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.3067950309996377
+      },
+      {
+        "invalidation_reasons": [
+          "opaque"
+        ],
+        "label": "manifest_change",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 2,
+          "deselected": 0,
+          "duration_seconds": 0.03280711299885297,
+          "errors": 0,
+          "executed": 2,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 2,
+          "selected": 2,
+          "skipped": 0,
+          "started": 2
+        },
+        "pytest_wall_seconds": 0.26587147600366734,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.3123764919946552
+      },
+      {
+        "invalidation_reasons": [
+          "inventory"
+        ],
+        "label": "added_test",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 3,
+          "deselected": 0,
+          "duration_seconds": 0.03755290000117384,
+          "errors": 0,
+          "executed": 3,
+          "exitstatus": 0,
+          "failed": 0,
+          "passed": 3,
+          "selected": 3,
+          "skipped": 0,
+          "started": 3
+        },
+        "pytest_wall_seconds": 0.3365325880004093,
+        "seed_inventory_count": null,
+        "status": "passed",
+        "wall_seconds": 0.3838833359986893
+      },
+      {
+        "invalidation_reasons": [],
+        "label": "final_warm",
+        "profile": "testmon",
+        "pytest": {
+          "collected": 0,
+          "deselected": 0,
+          "duration_seconds": 0.0056744960020296276,
+          "errors": 0,
+          "executed": 0,
+          "exitstatus": 5,
+          "failed": 0,
+          "passed": 0,
+          "selected": 0,
+          "skipped": 0,
+          "started": 0
+        },
+        "pytest_wall_seconds": 0.20849491199624026,
+        "seed_inventory_count": 3,
+        "status": "no_tests_selected",
+        "wall_seconds": 0.25460465300420765
+      }
+    ]
+  },
+  "tooling_coverage": {
+    "files": {
+      "scripts/test_acceleration/__init__.py": {
+        "covered_branches": 0,
+        "covered_lines": 0,
+        "excluded_lines": 0,
+        "missing_branches": 0,
+        "missing_lines": 0,
+        "num_branches": 0,
+        "num_partial_branches": 0,
+        "num_statements": 0,
+        "percent_branches_covered": 100.0,
+        "percent_branches_covered_display": "100",
+        "percent_covered": 100.0,
+        "percent_covered_display": "100",
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100"
+      },
+      "scripts/test_acceleration/__main__.py": {
+        "covered_branches": 0,
+        "covered_lines": 2,
+        "excluded_lines": 0,
+        "missing_branches": 0,
+        "missing_lines": 0,
+        "num_branches": 0,
+        "num_partial_branches": 0,
+        "num_statements": 2,
+        "percent_branches_covered": 100.0,
+        "percent_branches_covered_display": "100",
+        "percent_covered": 100.0,
+        "percent_covered_display": "100",
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100"
+      },
+      "scripts/test_acceleration/metrics.py": {
+        "covered_branches": 16,
+        "covered_lines": 58,
+        "excluded_lines": 0,
+        "missing_branches": 0,
+        "missing_lines": 0,
+        "num_branches": 16,
+        "num_partial_branches": 0,
+        "num_statements": 58,
+        "percent_branches_covered": 100.0,
+        "percent_branches_covered_display": "100",
+        "percent_covered": 100.0,
+        "percent_covered_display": "100",
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100"
+      },
+      "scripts/test_acceleration/profiles.py": {
+        "covered_branches": 73,
+        "covered_lines": 228,
+        "excluded_lines": 0,
+        "missing_branches": 19,
+        "missing_lines": 30,
+        "num_branches": 92,
+        "num_partial_branches": 17,
+        "num_statements": 258,
+        "percent_branches_covered": 79.34782608695652,
+        "percent_branches_covered_display": "79",
+        "percent_covered": 86.0,
+        "percent_covered_display": "86",
+        "percent_statements_covered": 88.37209302325581,
+        "percent_statements_covered_display": "88"
+      }
+    },
+    "not_a_native_coverage_claim": true,
+    "scope": "scripts/test_acceleration; ordinary regression subprocesses plus explicit parent CLI coverage for all five profiles",
+    "totals": {
+      "covered_branches": 89,
+      "covered_lines": 288,
+      "excluded_lines": 0,
+      "missing_branches": 19,
+      "missing_lines": 30,
+      "num_branches": 108,
+      "num_partial_branches": 17,
+      "num_statements": 318,
+      "percent_branches_covered": 82.4074074074074,
+      "percent_branches_covered_display": "82",
+      "percent_covered": 88.49765258215963,
+      "percent_covered_display": "88",
+      "percent_statements_covered": 90.56603773584905,
+      "percent_statements_covered_display": "91"
+    }
+  }
+}
