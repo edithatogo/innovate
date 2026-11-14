@@ -1,0 +1,127 @@
+name: Voiage installed consumer
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/voiage-consumer.yml
+      - scripts/qualify_voiage_arrow.py
+      - scripts/build_release_wheel.sh
+      - scripts/normalize_wheel_sbom.py
+      - tests/consumer/**
+      - bindings/python/**
+      - rust/**
+      - specs/ecosystem/voiage/**
+      - Cargo.toml
+      - Cargo.lock
+      - pyproject.toml
+      - uv.lock
+      - .python-version
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/voiage-consumer.yml
+      - scripts/qualify_voiage_arrow.py
+      - scripts/build_release_wheel.sh
+      - scripts/normalize_wheel_sbom.py
+      - tests/consumer/**
+      - bindings/python/**
+      - rust/**
+      - specs/ecosystem/voiage/**
+      - Cargo.toml
+      - Cargo.lock
+      - pyproject.toml
+      - uv.lock
+      - .python-version
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: voiage-consumer-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  installed-consumer:
+    name: Installed Voiage normalized input
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CARGO_BUILD_JOBS: '2'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+        with:
+          enable-cache: false
+
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+
+      - name: Install the locked build tools
+        run: |
+          uv sync --locked --no-install-project --python 3.15.2
+          .venv/bin/python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
+
+      - name: Build the native wheel from its source distribution
+        run: bash scripts/build_release_wheel.sh .venv
+
+      - name: Download the Voiage wheel for artifact verification
+        run: |
+          .venv/bin/python -m pip download --only-binary=:all: --no-deps \
+            --dest dist/voiage voiage==3.1.0
+
+      - name: Install the consumer wheels outside the checkout
+        id: consumer-install
+        run: |
+          consumer_root="$(mktemp -d "$RUNNER_TEMP/voiage-consumer.XXXXXX")"
+          uv venv "$consumer_root" --python .venv/bin/python
+          innovate_wheels=("$GITHUB_WORKSPACE"/dist/innovate-*.whl)
+          voiage_wheels=("$GITHUB_WORKSPACE"/dist/voiage/voiage-*.whl)
+          test "${#innovate_wheels[@]}" -eq 1
+          test -f "${innovate_wheels[0]}"
+          test "${#voiage_wheels[@]}" -eq 1
+          test -f "${voiage_wheels[0]}"
+          uv pip install --only-binary :all: --python "$consumer_root/bin/python" \
+            "${innovate_wheels[0]}" "${voiage_wheels[0]}" pyarrow==26.0.1 pytest==9.2.0
+          uv pip check --python "$consumer_root/bin/python"
+          {
+            printf 'CONSUMER_ENV=%s\n' "$consumer_root"
+            printf 'INNOVATE_WHEEL=%s\n' "${innovate_wheels[0]}"
+            printf 'VOIAGE_WHEEL=%s\n' "${voiage_wheels[0]}"
+          } >> "$GITHUB_ENV"
+
+      - name: Test the normalized bundle consumer
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/consumer-evidence"
+          cd "$RUNNER_TEMP"
+          "$CONSUMER_ENV/bin/python" -I -m pytest --import-mode=importlib \
+            "$GITHUB_WORKSPACE/tests/consumer/test_voiage_normalized_input.py" \
+            2>&1 | tee "$GITHUB_WORKSPACE/consumer-evidence/tests.log"
+
+      - name: Qualify both installed artifacts and retain the receipt
+        if: ${{ !cancelled() && steps.consumer-install.outcome == 'success' }}
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/consumer-evidence"
+          "$CONSUMER_ENV/bin/python" -I "$GITHUB_WORKSPACE/scripts/qualify_voiage_arrow.py" \
+            --wheel "$INNOVATE_WHEEL" --voiage-wheel "$VOIAGE_WHEEL" \
+            > "$GITHUB_WORKSPACE/consumer-evidence/qualification.json" \
+            2> "$GITHUB_WORKSPACE/consumer-evidence/qualification-stderr.log"
+
+      - name: Retain consumer evidence after success or failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: voiage-consumer-${{ github.sha }}
+          path: |
+            consumer-evidence/qualification.json
+            consumer-evidence/qualification-stderr.log
+            consumer-evidence/tests.log
+          if-no-files-found: warn

@@ -500,9 +500,9 @@ Historical completion labels above do not establish current full-native ownershi
   *Link: [./tracks/healthcare_hype_validation_20261107/](./tracks/healthcare_hype_validation_20261107/)*
 
 ---
-- [ ] **Track: voiage alignment follow-ups (innovate)**
+- [~] **Track: voiage alignment follow-ups (innovate)**
   *Link: [./tracks/voiage_alignment_followups_20261030/](./tracks/voiage_alignment_followups_20261030/)*
-  Planned; awaiting owner approval. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
+  Implementation authorised 14 November 2026; normalized-bundle consumer qualification in progress. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
 
 ---
 
