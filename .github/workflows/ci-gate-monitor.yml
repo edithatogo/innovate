@@ -1,7 +1,7 @@
 name: CI Gate Monitor
 
 on:
-  workflow_run:
+  workflow_run: # zizmor: ignore[dangerous-triggers]
     workflows: ["CI", "Release Please"]
     types: [completed]
 

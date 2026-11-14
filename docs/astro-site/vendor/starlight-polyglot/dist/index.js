@@ -18,9 +18,18 @@ function getSidebarGroupPlaceholder(key) {
 }
 
 // handlers/cpp.ts
-import { execSync } from "child_process";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { execFileSync as execFileSyncSafe, execSync } from "child_process";
+import { existsSync, readFileSync, readdirSync, rmSync as rmSyncSafe, writeFileSync } from "fs";
 import path3 from "path";
+function stripHtmlTags(value) {
+  let previous;
+  let current = value;
+  do {
+    previous = current;
+    current = current.replace(/<[^>]*>/g, "");
+  } while (current !== previous);
+  return current.replace(/[<>]/g, "");
+}
 
 // core/mdx-generator.ts
 import fs from "fs/promises";
@@ -289,7 +298,7 @@ function parseDoxygenXmlRaw(xmlContent) {
   return compound;
 }
 function extractParaText(paraContent) {
-  const cleaned = paraContent.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  const cleaned = stripHtmlTags(paraContent).replace(/\s+/g, " ").trim();
   return cleaned || void 0;
 }
 function parseMemberDefs(sectionBody) {
@@ -378,7 +387,7 @@ function parseMemberDefs(sectionBody) {
     const argsMatch = body.match(/<argsstring>([^<]*)<\/argsstring>/);
     const argsstring = argsMatch ? argsMatch[1].trim() : void 0;
     const typeMatch = body.match(/<type>([\s\S]*?)<\/type>/);
-    const type = typeMatch ? typeMatch[1].replace(/<[^>]*>/g, "").trim() : void 0;
+    const type = typeMatch ? stripHtmlTags(typeMatch[1]).trim() : void 0;
     const briefMatch = body.match(/<briefdescription>([\s\S]*?)<\/briefdescription>/);
     const briefdescription = extractParaText(briefMatch ? briefMatch[1] : "");
     const detailedMatch = body.match(/<detaileddescription>([\s\S]*?)<\/detaileddescription>/);
@@ -391,7 +400,8 @@ function parseMemberDefs(sectionBody) {
     while ((paramMatch = paramRegex.exec(body)) !== null) {
       const pBody = paramMatch[1];
       const pName = pBody.match(/<declname>([^<]*)<\/declname>/)?.[1]?.trim();
-      const pType = pBody.match(/<type>([\s\S]*?)<\/type>/)?.[1]?.replace(/<[^>]*>/g, "").trim();
+      const pTypeRaw = pBody.match(/<type>([\s\S]*?)<\/type>/)?.[1];
+      const pType = pTypeRaw ? stripHtmlTags(pTypeRaw).trim() : void 0;
       const pDefval = pBody.match(/<defval>([^<]*)<\/defval>/)?.[1]?.trim();
       const pBrief = extractParaText(
         pBody.match(/<briefdescription>([\s\S]*?)<\/briefdescription>/)?.[1] ?? ""
@@ -1088,8 +1098,7 @@ function extractWithJavadoc(entryPoints, classpath) {
         cmdParts.push(entry);
       }
     }
-    const cmd = cmdParts.join(" ");
-    execSync6(cmd, {
+    execFileSyncSafe(cmdParts[0], cmdParts.slice(1), {
       encoding: "utf-8",
       stdio: "pipe",
       maxBuffer: 10 * 1024 * 1024,
@@ -1123,7 +1132,7 @@ function extractWithJavadoc(entryPoints, classpath) {
     return modules;
   } finally {
     try {
-      execSync6(`rm -rf "${tmpDir}"`, { stdio: "pipe" });
+      rmSyncSafe(tmpDir, { recursive: true, force: true });
     } catch {
     }
   }
@@ -1244,8 +1253,8 @@ function extractWithJulia(entryPoints) {
   if (!existsSync7(scriptPath)) {
     throw new Error(`Julia extraction script not found at ${scriptPath}`);
   }
-  const args = ["julia", scriptPath, ...entryPoints];
-  const result = execSync7(args.join(" "), {
+  const args = [scriptPath, ...entryPoints];
+  const result = execFileSyncSafe("julia", args, {
     encoding: "utf-8",
     maxBuffer: 10 * 1024 * 1024,
     // 10MB
@@ -1732,8 +1741,8 @@ function extractWithGriffe(entryPoints, pythonExecutable = process.env.STARLIGHT
   if (!existsSync10(scriptPath)) {
     throw new Error(`Python extraction script not found at ${scriptPath}`);
   }
-  const args = [pythonExecutable, scriptPath, "--entry-points", ...entryPoints];
-  const result = execSync10(args.join(" "), {
+  const args = [scriptPath, "--entry-points", ...entryPoints];
+  const result = execFileSyncSafe(pythonExecutable, args, {
     encoding: "utf-8",
     maxBuffer: 10 * 1024 * 1024,
     // 10MB
@@ -1782,8 +1791,8 @@ function extractWithRScript(entryPoints) {
   if (!existsSync11(scriptPath)) {
     throw new Error(`R extraction script not found at ${scriptPath}`);
   }
-  const args = ["Rscript", scriptPath, ...entryPoints];
-  const result = execSync11(args.join(" "), {
+  const args = [scriptPath, ...entryPoints];
+  const result = execFileSyncSafe("Rscript", args, {
     encoding: "utf-8",
     maxBuffer: 10 * 1024 * 1024,
     // 10MB
@@ -2061,12 +2070,15 @@ function extractRustItem(item, _index) {
 }
 function extractWithRustDoc(cratePath) {
   const resolvedPath = path15.resolve(cratePath);
-  const cmd = `cargo +nightly rustdoc --output-format json --manifest-path "${resolvedPath}/Cargo.toml" 2>/dev/null`;
-  execSync13(cmd, {
-    encoding: "utf-8",
-    stdio: "pipe",
-    timeout: 12e4
-  });
+  execFileSyncSafe(
+    "cargo",
+    ["+nightly", "rustdoc", "--output-format", "json", "--manifest-path", `${resolvedPath}/Cargo.toml`],
+    {
+      encoding: "utf-8",
+      stdio: "pipe",
+      timeout: 12e4
+    }
+  );
   const crateName = path15.basename(resolvedPath);
   const possiblePaths = [
     path15.resolve(resolvedPath, "target", "doc", `${crateName}.json`),

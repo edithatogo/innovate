@@ -32,7 +32,7 @@ jobs:
       - name: Select isolated release checker
         run: uv venv .venv-release --python 3.15.2
 
-      - name: Require complete native migration
+      - name: Check native migration policy
         run: .venv-release/bin/python scripts/check_migration.py --release
 
   release-lane-checks:
