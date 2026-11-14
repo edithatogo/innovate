@@ -5,9 +5,13 @@ on:
   pull_request:
     branches: [main, work]
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   contract:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:

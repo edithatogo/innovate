@@ -21,6 +21,7 @@ jobs:
     name: Dependency Review
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write
@@ -52,6 +53,7 @@ jobs:
   secret-scan:
     name: Secret Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
       security-events: write
@@ -69,13 +71,24 @@ jobs:
   workflow-lint:
     name: Workflow and policy lint
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         with:
           persist-credentials: false
       - name: Install actionlint
-        run: bash <(curl --fail --silent --show-error https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        shell: bash
+        run: |
+          archive="${RUNNER_TEMP}/actionlint_1.7.9_linux_amd64.tar.gz"
+          curl --fail --silent --show-error --location \
+            --proto '=https' --proto-redir '=https' \
+            "https://github.com/rhysd/actionlint/releases/download/v1.7.9/actionlint_1.7.9_linux_amd64.tar.gz" \
+            --output "$archive"
+          printf '%s  %s\n' \
+            '233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4' "$archive" |
+            sha256sum --check --strict
+          tar --extract --gzip --file "$archive" --directory "$GITHUB_WORKSPACE" actionlint
       - name: Lint GitHub Actions workflows
         run: ./actionlint -color
       - name: Test CI failure alert handling
@@ -106,6 +119,7 @@ jobs:
   python-quality:
     name: Python quality harness
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd

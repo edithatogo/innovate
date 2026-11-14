@@ -14,6 +14,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   native-python:
+    # Scheduled installed-consumer/container/benchmark lanes need a larger budget.
+    timeout-minutes: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 90 || 45 }}
     strategy:
       fail-fast: false
       matrix:
@@ -32,7 +34,29 @@ jobs:
         env:
           CARGO_BUILD_JOBS: '2'
       - run: uv run --no-sync python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
-      - run: cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 2
+      - name: Run native tests with replay evidence
+        id: native-tests
+        timeout-minutes: 20
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p native-test-evidence
+          git rev-parse HEAD > native-test-evidence/source-revision.txt
+          rustc --version --verbose > native-test-evidence/rustc.txt
+          cargo --version > native-test-evidence/cargo.txt
+          uv run --no-sync python -c "import hashlib, pathlib; print(hashlib.sha256(pathlib.Path('Cargo.lock').read_bytes()).hexdigest())" > native-test-evidence/cargo-lock.sha256
+          status=0
+          cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 2 2>&1 | tee native-test-evidence/cargo-test.log || status=$?
+          printf '%s\n' "$status" > native-test-evidence/exit-code.txt
+          exit "$status"
+      - name: Retain native test evidence
+        if: always() && (steps.native-tests.outcome == 'success' || steps.native-tests.outcome == 'failure' || steps.native-tests.outcome == 'cancelled')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-test-evidence-${{ matrix.os }}
+          path: native-test-evidence/
+          if-no-files-found: error
+          retention-days: 30
       - run: uv run --no-sync pytest tests/native
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
@@ -41,6 +65,7 @@ jobs:
           uv run --no-sync python -c "import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])"
       - name: Verify Rust and Python consumers from source distribution
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 20
         shell: bash
         run: |
           staging="$(mktemp -d)"
@@ -84,6 +109,7 @@ jobs:
       - name: Run scheduled native benchmarks
         id: native-benchmarks
         if: matrix.os == 'ubuntu-latest' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+        timeout-minutes: 20
         run: uv run --no-sync python scripts/run_native_benchmarks.py --policy scheduled --workers 2 --output native-benchmarks.json
       - name: Retain native benchmark results
         if: always() && (steps.native-benchmarks.outcome == 'success' || steps.native-benchmarks.outcome == 'failure')
@@ -113,6 +139,7 @@ jobs:
           path: mpi-benchmarks/
           if-no-files-found: error
   lint:
+    timeout-minutes: 5
     needs: native-python
     if: always()
     runs-on: ubuntu-latest
@@ -123,6 +150,7 @@ jobs:
         run: test "$RESULT" = success
 
   unit-tests-base:
+    timeout-minutes: 5
     # The branch protection context retains its old name. Tests run on 3.15.2.
     name: unit-tests-base (3.15.1)
     needs: native-python
@@ -135,6 +163,7 @@ jobs:
         run: test "$RESULT" = success
 
   package:
+    timeout-minutes: 45
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
@@ -160,6 +189,7 @@ jobs:
           fi
 
   julia-r:
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:

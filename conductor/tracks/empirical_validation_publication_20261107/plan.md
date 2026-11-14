@@ -40,6 +40,14 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
 
+## Issue #413 — warranted testing and CI gaps
+
+- [~] Reconcile the July DST/MT inventory, add bounded native metamorphic relations,
+  and qualify immutable workflow linting, runtime bounds and retained native-test
+  evidence. Scope and executed receipts: [quality-frontier-413.md](quality-frontier-413.md).
+  This is a bounded Q01/Q02 contribution; their complete native safety, installed
+  matrix and scientific acceptance obligations remain open.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
