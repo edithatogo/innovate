@@ -15,6 +15,11 @@ Python 3.15.2, Polars 2.1.0, optional PyArrow 26.0.1 and Rust 1.99.1.
   PyArrow extra, preserving row order, types and nested outcome data.
 - [ ] Review the scoped change and record actual executable and hosted evidence.
 
+The [source-bound red receipt](issue-556-arrow-qualification.md) records 33
+expected invalid-input failures and five passing positive/PyArrow controls
+against a retained installed wheel whose affected source matches this baseline.
+The native fix and current-head green qualification remain in progress.
+
 Allowed source paths are `rust/crates/innovate-tabular/src/lib.rs`, its focused
 scenario-export tests and `tests/native/test_scenario_exports.py`, plus this
 track's records. The existing integration owner retains shared manifests, pins,
