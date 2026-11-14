@@ -1,0 +1,94 @@
+---
+title: Prediction and forecasting
+description: Check conditional predictions, preserve row identity, and distinguish a level from a rate or a validated forecast.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_forecast.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+A native prediction evaluates a specified model at the times you provide.
+A forecast additionally interprets predictions beyond an observed information
+window. This tutorial checks the first task explicitly, then explains what is
+needed before making the second claim. The current API uses an explicit time
+table rather than the earlier `predict_model(..., horizon=...)` interface.
+
+## Learning outcomes
+
+You will verify a Logistic prediction against its closed form, retain row
+identifiers, understand eager and lazy input behavior, and explain why a
+conditional curve does not provide a calibrated forecast interval. You will also
+confirm that duplicate times fail the documented input contract.
+
+## Prerequisites
+
+Use the [development installation](/innovate/user-guide/installation/) and an
+interpreter containing the built native package. The fixture uses Python 3.15.2,
+Rust 1.99.1 and three synthetic rows. It needs no downloaded data or network
+service. Read [core concepts](/innovate/core/) if levels, rates and interval
+counts are unfamiliar.
+
+The parameters are `L = 100`, `k = 1` and `x0 = 1`. If time is in years, `k`
+has units of inverse years, `x0` is one year, and `L` is measured in the chosen
+adoption units. The same values must not be reused with a month-based time
+coordinate without the corresponding parameter conversion.
+
+## Steps
+
+Run the maintained source from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_forecast.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_forecast.py" />
+
+The script first calculates the expected curve independently in Python and
+compares each result with the native output. It then checks identifiers, time
+order and unchanged input columns. Finally it compares eager and lazy input and
+requires a duplicate-time request to raise an error. The Python closed form is
+the test oracle; production scientific execution remains in Rust.
+
+## Expected results
+
+Successful assertions produce exactly this contract output:
+
+<Code code={contentQuality.examples['examples/native_forecast.py'].expected_stdout} lang="json" />
+
+There are three returned predictions, in the order of `a`, `b` and `c`. A
+nonzero exit or an unexpected value is a discrepancy to investigate. An import
+failure for `innovate._native` means that this interpreter does not have the
+required native package; return to installation before interpreting the result.
+
+## Interpretation
+
+The checked equation is `L / (1 + exp(-k * (t - x0)))`. At the midpoint
+`t = x0`, the exponential equals one, so the prediction is `L / 2 = 50`.
+The other two outputs are approximately 26.894142 and 73.105858. These are levels
+at specific times. They are not counts of new adopters in the previous interval.
+
+For supported models, [predict](/innovate/api/generated/predict/) also accepts
+`quantity="rate"`; that requests a native derivative and can produce signed rates
+for declining series. The three-row fixture here tests levels only. The
+[Norton–Bass tutorial](/innovate/tutorials/norton-bass/) separately checks held-out
+levels and signed derivatives after fitting.
+
+**Reader task:** if the same time coordinate is changed from years to months,
+what parameter changes preserve the curve? Use `t_months = 12 * t_years`,
+`x0_months = 12 * x0_years` and `k_per_month = k_per_year / 12`; `L` keeps its
+adoption unit. Substitution into the equation leaves the exponent unchanged.
+This is a dimensional check, not evidence about a real population.
+
+## Limitations
+
+The example supplies parameters and does not fit observations. It contains no
+observed training window, forecast-error assessment, interval calibration,
+causal identification or empirical validation. To make a forecast, specify the
+information available at the forecasting date, the future time grid and the
+assumptions that continue beyond the observed window. Evaluate appropriate
+held-out outcomes and uncertainty separately.
+
+A `LazyFrame` is collected at execution, and the current Arrow IPC boundary
+copies buffers. Keep a result's model state when forecasting after estimation;
+see [fitting](/innovate/user-guide/fitting/) and
+[FitResult.predict](/innovate/api/generated/fit-result/).

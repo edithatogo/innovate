@@ -37,20 +37,17 @@
       "kind": "reference"
     },
     "core/arrow-interchange.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "reference"
     },
     "core/diagnostics-contract.md": {
       "kind": "historical",
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
     "core/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "reference"
     },
     "core/kernel.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "reference"
     },
     "index.md": {
       "kind": "index"
@@ -253,23 +250,7 @@
       "kind": "historical",
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
-    "tutorials/arrow-interchange.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/bayesian-fitter.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
     "tutorials/benchmark-workflows.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/counterfactual-analysis.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/data-ingestion-provenance.md": {
       "kind": "historical",
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
@@ -286,8 +267,7 @@
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
     "tutorials/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "index"
     },
     "tutorials/jax-backend.md": {
       "kind": "historical",
@@ -302,10 +282,6 @@
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
     "tutorials/ndlib-integration.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/norton-bass.md": {
       "kind": "historical",
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
@@ -326,16 +302,10 @@
       "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
     "user-guide/backends.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "reference"
     },
     "user-guide/fitting.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "user-guide/forecasting.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+      "kind": "reference"
     },
     "user-guide/getting-started.mdx": {
       "kind": "tutorial",
@@ -343,6 +313,30 @@
     },
     "user-guide/installation.md": {
       "kind": "reference"
+    },
+    "user-guide/forecasting.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_forecast.py"
+    },
+    "tutorials/norton-bass.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_norton_bass.py"
+    },
+    "tutorials/bayesian-fitter.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_bayesian.py"
+    },
+    "tutorials/counterfactual-analysis.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_overlap.py"
+    },
+    "tutorials/arrow-interchange.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_scenarios.py"
+    },
+    "tutorials/data-ingestion-provenance.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_reingestion.py"
     }
   },
   "examples": {

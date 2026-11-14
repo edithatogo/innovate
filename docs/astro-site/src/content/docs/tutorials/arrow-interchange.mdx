@@ -1,0 +1,95 @@
+---
+title: Round-trip and replay scenario results
+description: Save native scenario results as JSON and Arrow, recover their identities and execution records, and check replay.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_scenarios.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This tutorial follows the persistence part of the checked scenario workflow.
+You will save a complete response, convert execution rows to a Polars table,
+write an IPC file, and recover the native artifacts needed for replay. The
+[scenario tutorial](/innovate/tutorials/scenario-experiment-workflows/)
+explains the scientific assumptions of the same four cases.
+
+## Learning outcomes
+
+You will distinguish normalized table columns from retained structured execution
+records, verify row identities after an Arrow round trip, and check a replay
+against the original result. You will explain why successful serialization alone
+does not prove provenance or compatibility across software versions.
+
+## Prerequisites
+
+Use the [native development environment](/innovate/user-guide/installation/).
+The example requires Polars and the installed package. It generates four
+synthetic scenarios and uses a temporary local directory; no dataset or network
+service is required. The temporary files are removed when the example finishes.
+
+Read the [interchange reference](/innovate/core/arrow-interchange/) for the
+current copied IPC boundary and the distinction between file and stream formats.
+The file writer used here is Polars'
+[`DataFrame.write_ipc`](https://docs.pola.rs/api/python/stable/reference/api/polars.DataFrame.write_ipc.html).
+
+## Steps
+
+Run the maintained source from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_scenarios.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_scenarios.py" />
+
+The script first executes baseline, policy, competition and replacement
+scenarios. It checks every execution and comparison for an error before saving
+anything. Focus next on the temporary-directory block: it writes and rereads
+JSON, converts execution rows with `scenario_executions`, writes and reads Arrow,
+recovers `execution_json`, and imports each row's artifact for replay.
+
+## Expected results
+
+The complete script prints this contract value after all assertions pass:
+
+<Code code={contentQuality.examples['examples/native_scenarios.py'].expected_stdout} lang="json" />
+
+The saved table retains the ordered identifiers `baseline`, `pause-innovation`,
+`two-products` and `replacement`. Its decoded execution records equal the
+original records, and all four replayed scientific results equal their original
+results. The script treats a missing replay capability or a per-item error as a
+failure, rather than reporting the count of attempted rows as successful replay.
+
+## Interpretation
+
+| Check | What it establishes in this fixture |
+| --- | --- |
+| Decoded JSON equals the original response | The saved response fields survive this JSON round trip |
+| Scenario identifiers remain ordered | The execution table retains the expected row identity |
+| Decoded `execution_json` equals original executions | The table retains these structured execution records |
+| Imported artifact exposes a replay request | The current implementation accepts the artifact for its supported replay path |
+| Re-executed result equals the saved result | The checked request reproduces the result in the current environment |
+
+The Arrow format defines columnar serialization; it does not know whether a
+scenario is scientifically adequate. Its file and stream structures are specified
+in the [Apache Arrow format](https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc).
+Innovate's artifact fields carry the application-level replay meaning.
+
+**Reader task:** which evidence is lost if you save only the final numeric
+prediction column? You lose the explicit replay request, model and scenario
+configuration, and any metadata or errors not copied into that column. A table
+of final numbers alone is therefore insufficient for the replay checked here.
+
+## Limitations
+
+This example tests IPC file round trips, not every Arrow type, compression mode,
+consumer language or stream transport. The current binding copies buffers, and
+no zero-copy or transport-performance claim follows from a successful run.
+Metadata removed before export cannot be reconstructed by the writer.
+
+Replay is checked against the installed version and its supported artifact
+contract. Compatibility with future versions, external consumer implementations
+and incomplete artifacts needs separate evidence. Preserve version information
+and the required complete records when creating a durable analysis output.
+For content checksums and their exact scope, continue with
+[data ingestion and provenance](/innovate/tutorials/data-ingestion-provenance/).
