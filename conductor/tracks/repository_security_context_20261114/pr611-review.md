@@ -87,3 +87,26 @@ Offline caller PR #590 depends on unqualified repository-standards PR #126.
 Its dedicated runner, immutable image, model assets and actual scanner/agent
 execution require independent evidence. This repair neither substitutes
 infrastructure nor advances that acceptance. The caller must remain draft.
+
+## Hosted cache finding and regression guard
+
+The first published repair was `294c059fa9a1d2b807543302ced2dcb561faf28a`.
+Its policy job failed Zizmor's `cache-poisoning` check: setup-uv default caching
+was active in the credential-capable publishing job. A new test reproduced
+that configuration defect before adding explicit `enable-cache: false`.
+
+During qualification the author independently published exactly that workflow
+correction as `1daad256a1cb618b1b3b17476597db7dff2a63dc` (parent `294c059`).
+The source blob `c4ccc04a2cf7378c34fd81b4676f90cb70d0ffb7` matches the local
+repair. This follow-on commit therefore adds only the regression guard and
+this evidence; it does not duplicate or overwrite the author's workflow fix.
+All eleven local tests pass on actual CPython 3.13.5. The additional test fails
+against the previous cached workflow and accepts the exact published fix.
+
+On `1daad256`, hosted Security and Quality run `43645557941`, policy job
+`132602482067`, passed actionlint, Zizmor, both policy/control suites, pinned
+Ruff checks and repository/container policy validation. These results qualify
+that head only; the added regression guard still requires fresh final-head CI.
+The independent GitHub review of `294c059` reported no major findings; fresh
+review of the new guard is requested before integration. Full hosted native
+and receiving-main qualification remain outstanding. No release gate changed.

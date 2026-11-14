@@ -215,6 +215,13 @@ class ReleaseWorkflowTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(commands, [["python", "scripts/check_migration.py", "--release"]])
 
+    def test_registry_job_disables_dependency_cache(self) -> None:
+        text = (WORKFLOWS / "crates-publish.yml").read_text(encoding="utf-8")
+        step = text.split("      - name: Install uv\n", 1)[1].split("\n      - ", 1)[0]
+        self.assertIn("uses: astral-sh/setup-uv@", step)
+        self.assertRegex(step, r"(?m)^        with:\n          enable-cache: false$")
+        self.assertNotIn("# zizmor: ignore", step)
+
     def test_regressions_are_wired_into_required_policy_job(self) -> None:
         text = (WORKFLOWS / "security-quality.yml").read_text(encoding="utf-8")
         policy_job = text.split("  workflow-lint:\n", 1)[1].split("  python-quality:\n", 1)[0]
