@@ -104,10 +104,12 @@ jobs:
         run: .venv-policy/bin/zizmor .github/workflows/*.yml
       - name: Test repository policy drift detection
         run: .venv-policy/bin/python -m unittest discover -s tests/workflows -p 'test_repository_policy.py' -v
+      - name: Test fail-closed release workflow controls
+        run: .venv-policy/bin/python -m unittest discover -s tests/workflows -p 'test_release_workflows.py' -v
       - name: Lint repository policy tooling
         run: |
-          .venv-policy/bin/ruff check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py
-          .venv-policy/bin/ruff format --check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py
+          .venv-policy/bin/ruff check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py", "tests/workflows/test_release_workflows.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py tests/workflows/test_release_workflows.py
+          .venv-policy/bin/ruff format --check --config 'include = ["scripts/check_repository_policy.py", "tests/workflows/test_repository_policy.py", "tests/workflows/test_release_workflows.py"]' scripts/check_repository_policy.py tests/workflows/test_repository_policy.py tests/workflows/test_release_workflows.py
       - name: Validate repository policy
         run: |
           .venv-policy/bin/python scripts/check_repository_policy.py --json

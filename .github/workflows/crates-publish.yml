@@ -13,10 +13,15 @@ on:
   release:
     types: [published]
 
+concurrency:
+  group: crates-publish
+  cancel-in-progress: false
+
 jobs:
   crates-publish:
     name: Publish crates to crates.io (triggers docs.rs)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: crates-io
     permissions:
       contents: read
@@ -32,17 +37,31 @@ jobs:
         with:
           toolchain: 1.99.1
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+
+      - name: Select isolated release checker
+        run: uv venv .venv-release --python 3.15.2
+
       - name: Verify docs.rs build before publishing
         env:
           RUSTDOCFLAGS: "--cfg docsrs -D warnings"
         run: cargo doc --locked --no-deps -p innovate-core -p innovate-tabular
 
       - name: Mint short-lived crates.io token via Trusted Publishing and publish
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
-            cargo publish --locked --dry-run -p innovate-core
-            cargo publish --locked --dry-run -p innovate-tabular
+          case "${EVENT_NAME}:${DRY_RUN}" in
+            workflow_dispatch:true|workflow_dispatch:false|release:) ;;
+            *) echo "::error::Unsupported publishing mode"; exit 2 ;;
+          esac
+          # Neither a dry run nor an upload can waive scientific release readiness.
+          .venv-release/bin/python scripts/check_migration.py --release
+          cargo publish --locked --dry-run -p innovate-core -p innovate-tabular
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$DRY_RUN" = "true" ]; then
             exit 0
           fi
           jwt="$(curl --silent --show-error --fail \
@@ -56,7 +75,6 @@ jobs:
               --data-binary @- \
               https://crates.io/api/v1/trusted_publishing/tokens |
             jq -er '.token')"
+          echo "::add-mask::$token"
           export CARGO_REGISTRY_TOKEN="$token"
-          cargo publish --locked -p innovate-core
-          sleep 20
-          cargo publish --locked -p innovate-tabular
+          cargo publish --locked -p innovate-core -p innovate-tabular
