@@ -67,7 +67,10 @@ def read_local(root: Path, name: object, digest: object = None) -> bytes:
     require(content.strip(), f"Empty evidence file: {name}")
     if digest is not None:
         require(hex_digest(digest, 64), f"Invalid SHA-256 for {name}")
-        require(hashlib.sha256(content).hexdigest() == digest, f"Evidence digest mismatch: {name}")
+        matches_raw = hashlib.sha256(content).hexdigest() == digest
+        # Windows git checkouts with core.autocrlf=true convert LF to CRLF on text evidence files.
+        matches_lf = b"\r\n" in content and hashlib.sha256(content.replace(b"\r\n", b"\n")).hexdigest() == digest
+        require(matches_raw or matches_lf, f"Evidence digest mismatch: {name}")
     return content
 
 
