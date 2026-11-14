@@ -13,7 +13,19 @@
     "pages": [
       "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
       "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
-      "docs/astro-site/src/content/docs/native-migration.md"
+      "docs/astro-site/src/content/docs/native-migration.md",
+      "docs/astro-site/src/content/docs/core/arrow-interchange.md",
+      "docs/astro-site/src/content/docs/core/index.md",
+      "docs/astro-site/src/content/docs/core/kernel.md",
+      "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+      "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+      "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+      "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+      "docs/astro-site/src/content/docs/tutorials/index.md",
+      "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+      "docs/astro-site/src/content/docs/user-guide/backends.md",
+      "docs/astro-site/src/content/docs/user-guide/fitting.md",
+      "docs/astro-site/src/content/docs/user-guide/forecasting.mdx"
     ],
     "native_guide_sections": [
       "Current scope",
@@ -36,7 +48,8 @@
       "units and denominators",
       "uncertainty and identification",
       "synthetic demonstrations versus empirical evidence",
-      "provenance integrity boundaries"
+      "provenance integrity boundaries",
+      "independent source review of twelve migrated current pages"
     ],
     "exclusions": [
       "exhaustive review of every native-model section",
@@ -62,7 +75,21 @@
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
     "rust/crates/innovate-core/src/causal.rs": "6279cbc58161423b5c5e722c143e845f770073e58cb33f93995f98338b297db3",
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
-    "rust/crates/innovate-core/src/bayesian.rs": "d0e52fe184dc3152cd83b6ab74772927d74b0870ca10807de489aedcf3f05592"
+    "rust/crates/innovate-core/src/bayesian.rs": "d0e52fe184dc3152cd83b6ab74772927d74b0870ca10807de489aedcf3f05592",
+    "docs/astro-site/src/content/docs/core/arrow-interchange.md": "ed2abe399f302a06279fba2ccb1c6377ef2426c9a2531f089ecfb641cbaf5545",
+    "docs/astro-site/src/content/docs/core/index.md": "cbf523434caf031247f002ff10ef2958003d681039469035f3c293cec0495db7",
+    "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
+    "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx": "39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614",
+    "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx": "b6700b4067512c40d4e63b72728b24d869f0d0463aafed97e128a88c341be6fa",
+    "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx": "033e6c825d794ad32b94a9121f8aee7a9c6c8223e3a3952706188e2fb464fea4",
+    "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx": "ab9292f71a1565d3bb6c1fda1e52dc0f7a4e5e3a78a5f647068021c5c570292c",
+    "docs/astro-site/src/content/docs/tutorials/index.md": "2655298db76969b5346333b8b4ebc6364df747340d07338acf09b6461154692e",
+    "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx": "29d81c07c7013b9d4b8c7dc33c0fd84461ff7f102e3547990a8acf1edb53ffb6",
+    "docs/astro-site/src/content/docs/user-guide/backends.md": "4ba50a9b2138990ada589341af0bf62a54a5f27a4c2bdc14a3f515c1a9f46c3c",
+    "docs/astro-site/src/content/docs/user-guide/fitting.md": "ada2ded44c663840b06d14a2b3084206c0ac0fe5e6865da3beaf2ac8e2b189d5",
+    "docs/astro-site/src/content/docs/user-guide/forecasting.mdx": "f0dfaf4eb5e46435b460ec2b8c51fc50b9150a5fe56e55eb6d14da2f0e0db290",
+    "bindings/python/innovate/__init__.py": "e19040f632f3fd19a3d7989bfa36a80bc47ae174dd4f4b4a62d0734f4b283698",
+    "docs/contracts/content-quality.json": "d40f71aa6bab6dd38ba27079e135ff786a26e59a38f87b13cdba05b99f73dcb4"
   },
   "references": [
     {
@@ -158,10 +185,17 @@
       "source_type": "primary research author manuscript abstract",
       "inspected_locations": [
         "author abstract",
-        "version metadata"
+        "version metadata",
+        "Oxford publisher issue metadata for the cited 2018 publication"
       ],
       "supports": "The roles of orthogonal scores and cross-fitting in separating nuisance estimation from target-parameter estimation.",
-      "limits": "Only the abstract was inspected for this claim; it does not establish causal identification or finite-sample coverage for Innovate's stratum-mean estimator."
+      "limits": "Author abstract and publisher metadata only; no causal-identification or finite-sample coverage qualification for Innovate's estimator.",
+      "publication_metadata": {
+        "year": 2018,
+        "doi": "10.1111/ectj.12097",
+        "title": "Double/debiased machine learning for treatment and structural parameters",
+        "url": "https://academic.oup.com/ectj/issue/21/1?browseBy=volume"
+      }
     },
     {
       "id": "cole-hernan-2008",
@@ -180,6 +214,66 @@
       ],
       "supports": "Substantive requirements of consistency, exchangeability and positivity for a causal interpretation.",
       "limits": "Does not validate the implementation's AIPW variance, remove confounding, or justify assumptions for a synthetic or empirical diffusion study."
+    },
+    {
+      "id": "bass-1969",
+      "title": "A New Product Growth for Model Consumer Durables",
+      "authors": [
+        "Frank M. Bass"
+      ],
+      "year": 1969,
+      "doi": "10.1287/mnsc.15.5.215",
+      "url": "https://doi.org/10.1287/mnsc.15.5.215",
+      "source_type": "primary research publisher page",
+      "inspected_locations": [
+        "publisher metadata",
+        "abstract"
+      ],
+      "supports": "Historical origin and initial-purchase diffusion context.",
+      "limits": "The full paper was not inspected; no empirical or implementation validation is inferred for this fixture."
+    },
+    {
+      "id": "nist-shs-2015",
+      "title": "Secure Hash Standard (SHS)",
+      "authors": [
+        "National Institute of Standards and Technology"
+      ],
+      "year": 2015,
+      "doi": "10.6028/NIST.FIPS.180-4",
+      "url": "https://doi.org/10.6028/NIST.FIPS.180-4",
+      "source_type": "official standard",
+      "inspected_locations": [
+        "abstract",
+        "explanation of message digests"
+      ],
+      "supports": "Message digests detect content changes relative to a recorded digest.",
+      "limits": "Does not authenticate the source of an unkeyed checksum or establish Innovate's dataset field coverage."
+    },
+    {
+      "id": "arrow-ipc-format",
+      "title": "Arrow Columnar Format",
+      "url": "https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc",
+      "source_type": "official format specification",
+      "inspected_locations": [
+        "IPC Streaming Format",
+        "IPC File Format",
+        "Custom Application Metadata"
+      ],
+      "supports": "Schema/record-batch stream framing, file footers, and locations for application metadata.",
+      "limits": "Format capabilities do not prove that Innovate implements every type, preserves previously discarded metadata, or executes without copies."
+    },
+    {
+      "id": "polars-write-ipc",
+      "title": "polars.DataFrame.write_ipc",
+      "url": "https://docs.pola.rs/api/python/stable/reference/api/polars.DataFrame.write_ipc.html",
+      "source_type": "official API documentation",
+      "inspected_locations": [
+        "signature",
+        "file parameter",
+        "file and random-access format reference"
+      ],
+      "supports": "The file writer used by the checked example and its BytesIO result when file is None.",
+      "limits": "The documentation is a live stable reference; runtime behavior remains tied to the repository's pinned environment and executable contract."
     }
   ],
   "findings": [
@@ -284,6 +378,28 @@
       "references": [
         "cole-hernan-2008"
       ]
+    },
+    {
+      "id": "bayesian-diagnostic-transfer",
+      "severity": "low",
+      "page": "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+      "status": "resolved_in_prose",
+      "finding": "The tutorial identified a fixture threshold but did not give the nearby primary recommendation for a new analysis.",
+      "resolution": "Added the author manuscript's first-level R-hat guidance and quantity-specific Monte Carlo precision question.",
+      "references": [
+        "vehtari-et-al-2021"
+      ]
+    },
+    {
+      "id": "causal-assumption-citation",
+      "severity": "low",
+      "page": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+      "status": "resolved_in_prose",
+      "finding": "The identification-assumption paragraph needed a directly adjacent primary reference.",
+      "resolution": "Added Cole and Hernán beside the consistency, exchangeability and positivity requirements.",
+      "references": [
+        "cole-hernan-2008"
+      ]
     }
   ],
   "reader_tasks": [
@@ -358,6 +474,102 @@
       "expected_answer": "Sorted serialized dataset excluding provenance.extraction_time/provenance.checksum; no authenticated signature or whole-wrapper digest.",
       "answer_review": "agent_checked",
       "human_execution": "not_run"
+    },
+    {
+      "id": "core-arrow-metadata",
+      "page": "docs/astro-site/src/content/docs/core/arrow-interchange.md",
+      "prompt": "Can IPC export reconstruct metadata discarded before table conversion?",
+      "expected_answer": "No; the native writer can retain compatible metadata present in IPC input, but cannot recover omitted fields.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "core-task-choice",
+      "page": "docs/astro-site/src/content/docs/core/index.md",
+      "prompt": "Which task changes supplied parameters into estimates, and what remains beyond a convergence flag?",
+      "expected_answer": "fit estimates parameters from observations; identifiability, model suitability and uncertainty still require analysis.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "core-kernel-envelope",
+      "page": "docs/astro-site/src/content/docs/core/kernel.md",
+      "prompt": "Does outer scenario-request success show every scenario succeeded, and is fitted state deeply immutable?",
+      "expected_answer": "No; inspect per-item outcomes. FitResult prevents attribute reassignment, while its nested envelope remains mutable and accessors are shallow copies.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "arrow-replay-record",
+      "page": "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+      "prompt": "Why is a saved final prediction column insufficient for the checked replay?",
+      "expected_answer": "It omits the replay request, model/scenario configuration and structured metadata or errors; retain the required complete records.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "bayesian-conditional-posterior",
+      "page": "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+      "prompt": "Derive the scalar posterior mean and variance and explain whether 16000 draws are independent data.",
+      "expected_answer": "Mean 98 and variance 2 before negligible truncation; the draws are dependent posterior samples, with k, x0 and noise scale fixed.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "causal-held-out-score",
+      "page": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+      "prompt": "Recover the first held-out AIPW score and say what the estimate does not identify by itself.",
+      "expected_answer": "1.5 - (1-4)/(1-2/3) = 10.5; the six-score mean is 5.25 outcome units. Causal identification requires substantive assumptions beyond score arithmetic.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "provenance-excluded-time",
+      "page": "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+      "prompt": "Would an unchanged dataset digest establish an unchanged extraction-time label or authenticated authorship?",
+      "expected_answer": "Neither: provenance.extraction_time is excluded, and someone able to replace content plus digest can create a different consistent artifact.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "tutorial-route-choice",
+      "page": "docs/astro-site/src/content/docs/tutorials/index.md",
+      "prompt": "Which tutorial fits a supplied model intervention, and which explains an observational contrast?",
+      "expected_answer": "Use scenario experiments for the specified model comparison and counterfactual/causal analysis for the observational estimator and its assumptions.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "norton-bass-limits",
+      "page": "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+      "prompt": "What are the generation levels as both Bass fractions approach one?",
+      "expected_answer": "First generation tends to zero; second tends to 2500. The signed first-generation rate describes net transfer, not gross incidence.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "backend-language-choice",
+      "page": "docs/astro-site/src/content/docs/user-guide/backends.md",
+      "prompt": "Does changing the host language from Python to R choose a different numerical backend?",
+      "expected_answer": "No; both use the native core. Operation and simulation-engine choices can change the scientific task and must be recorded separately.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "fitting-convergence-limit",
+      "page": "docs/astro-site/src/content/docs/user-guide/fitting.md",
+      "prompt": "Does a convergence flag establish parameter identifiability or calibrated uncertainty?",
+      "expected_answer": "No; it records a stopping condition. Inspect the observation process, data window, competing parameter combinations, residuals and supported uncertainty method.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "forecasting-time-unit",
+      "page": "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+      "prompt": "How do years-to-months conversion and conditional prediction differ from forecast validation?",
+      "expected_answer": "Multiply time and x0 by 12 and divide k by 12, keeping L fixed; forecast validation additionally needs an information window, held-out outcomes and uncertainty assessment.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
     }
   ],
   "verification": {
@@ -370,7 +582,9 @@
     "human_participants": 0,
     "human_task_trials": 0,
     "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
-    "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check"
+    "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check",
+    "independent_migration_review": "Twelve current pages independently read against source at d732999; six imported expected outputs rechecked unchanged at 5f805f85cbd99be29be99f1077642c9cbf876cdb. Two tutorial paragraphs improved; no raw example changes.",
+    "contract_checker": "Prepared a standard-library consistency/freshness checker and three unittest cases; execution pending because the local environment is unavailable."
   },
   "recovery": {
     "reason": "The local execution environment became unavailable before these edits were committed.",
@@ -395,6 +609,203 @@
     "Human reader trials for the recorded tasks, with observed outcomes and revisions.",
     "Astro build, browser, accessibility and native-runtime qualification on the integrated commit.",
     "Empirical data and study-specific scientific validation before using examples as evidence for a real population.",
-    "Executable validation of this report's structure, source hashes and bounded completion claims."
-  ]
+    "Run the review consistency checker and its two negative regression fixtures in the integrated CI environment."
+  ],
+  "independent_reviews": {
+    "source_commit": "d7329997538e2362e0d30ec9366d0e20d9222088",
+    "reviewer_kind": "agent",
+    "independent_of_page_author": true,
+    "results": [
+      {
+        "page": "docs/astro-site/src/content/docs/core/arrow-interchange.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Separated file/stream framing from application provenance.",
+          "Checked copy/materialization and metadata limits against binding code and official format documentation."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/core/arrow-interchange.md",
+          "bindings/python/innovate/__init__.py"
+        ],
+        "references": [
+          "arrow-ipc-format",
+          "polars-write-ipc"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/core/index.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Checked task routing, level/rate distinctions and units.",
+          "Reviewed the distinction between input validity, numerical evidence and scientific acceptance."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/core/index.md",
+          "bindings/python/innovate/__init__.py",
+          "examples/native_forecast.py",
+          "examples/native_norton_bass.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/core/kernel.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Compared request serialization, error decoding and per-item outcomes with Python bindings.",
+          "Checked FitResult state handling and the callback trust boundary."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/core/kernel.md",
+          "bindings/python/innovate/__init__.py",
+          "examples/native_scenarios.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Matched row-order, JSON/Arrow round-trip and replay claims to the maintained example.",
+          "Checked that replay and format success are not presented as cross-version or scientific qualification."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+          "examples/native_scenarios.py",
+          "docs/contracts/content-quality.json",
+          "bindings/python/innovate/__init__.py"
+        ],
+        "references": [
+          "arrow-ipc-format",
+          "polars-write-ipc"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Recomputed the Gaussian posterior and the distance to the support boundaries.",
+          "Matched chain counts, draws and fixture tolerances to the source; added primary diagnostic guidance."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+          "examples/native_bayesian.py",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": [
+          "vehtari-et-al-2021"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Recomputed all six scores and their 5.25 mean against the source and table.",
+          "Checked fold/cluster, small-sample and interference limits; added a local identification reference."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+          "examples/native_overlap.py",
+          "rust/crates/innovate-core/src/causal.rs",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": [
+          "chernozhukov-et-al-dml",
+          "cole-hernan-2008"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Checked excluded fields and encoding scope against Rust provenance code.",
+          "Matched both encodings and numeric tamper rejection to the example; checked the NIST reference."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+          "examples/native_reingestion.py",
+          "rust/crates/innovate-core/src/provenance.rs",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": [
+          "nist-shs-2015"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/index.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Reviewed task-to-tutorial routing and asserted evidence boundaries.",
+          "Checked that remaining historical specialist routes are acknowledged rather than classified as current examples."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/index.md",
+          "examples/native_scenarios.py",
+          "examples/native_overlap.py",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Checked two-generation equations, launch assumptions, units and limiting behavior.",
+          "Matched 41 fitting times, held-out times and tolerances to the source; preserved noiseless-recovery and identification limits."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+          "examples/native_norton_bass.py",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": [
+          "norton-bass-1987",
+          "franses-hernandez-mireles-2006",
+          "bass-1969"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/user-guide/backends.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Checked sequential frame helpers versus native worker batches against binding implementation.",
+          "Reviewed the absence of unsupported speedup, zero-copy and historical-backend availability claims."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/user-guide/backends.md",
+          "bindings/python/innovate/__init__.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/user-guide/fitting.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Checked fit arguments, observation order, retained state and diagnostics against binding implementation.",
+          "Reviewed independent synthetic-recovery evidence and the boundaries on empirical inference."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/user-guide/fitting.md",
+          "bindings/python/innovate/__init__.py",
+          "examples/native_norton_bass.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Recomputed Logistic levels and dimensional conversion.",
+          "Checked rate-output wording against predict's derivative contract and distinguished it from the level-only fixture."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+          "bindings/python/innovate/__init__.py",
+          "examples/native_forecast.py",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": []
+      }
+    ],
+    "limits": "Independent agent source/text review of twelve migrated pages, with two small prose additions. No human trial, native execution, Astro build, empirical validation or exhaustive model qualification was performed."
+  }
 }

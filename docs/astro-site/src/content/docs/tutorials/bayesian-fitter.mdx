@@ -76,6 +76,10 @@ bounds, not an empirical analysis acceptance policy. The diagnostic framework
 and its limits are discussed by
 [Vehtari and colleagues](https://doi.org/10.1214/20-BA1221), with
 [the authors' code and supplementary examples](https://github.com/avehtari/rhat_ess).
+For a new analysis,
+[Section 2 of the author manuscript](https://arxiv.org/html/1903.08008v5#S2)
+recommends at least four chains and `R-hat < 1.01` as a first-level check.
+Assess Monte Carlo error for the particular quantities and precision you need.
 
 **Reader task:** why is the posterior mean 98 rather than the likelihood's 100?
 The prior and likelihood have equal precision in this case, so the mean is their
