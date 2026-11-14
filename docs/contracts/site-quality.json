@@ -21,6 +21,7 @@
     "scripts/check_api_documentation.py",
     "scripts/check_native_documentation.py",
     "scripts/check_documentation_content.py",
+    "scripts/check_scientific_review_contract.py",
     "scripts/verify_production_docs.py",
     ".github/workflows/docs.yml",
     "bindings/julia/src",

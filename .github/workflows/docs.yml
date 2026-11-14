@@ -10,10 +10,10 @@ on:
 permissions:
   contents: read
 
-# PR builds must not replace a pending main publication.
+# Superseded PR checks may stop; main publication retains its ordered queue.
 concurrency:
   group: docs-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:

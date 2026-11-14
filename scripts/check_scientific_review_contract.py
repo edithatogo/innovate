@@ -29,9 +29,21 @@ COMPLETION = {
     "complete_documentation_quality_qualification": False,
 }
 REQUIRED = {
-    "schema_version", "review_date", "review_timezone", "base_commit", "reviewer",
-    "status", "scope", "fingerprint_encoding", "source_files", "references",
-    "findings", "reader_tasks", "verification", "completion", "remaining",
+    "schema_version",
+    "review_date",
+    "review_timezone",
+    "base_commit",
+    "reviewer",
+    "status",
+    "scope",
+    "fingerprint_encoding",
+    "source_files",
+    "references",
+    "findings",
+    "reader_tasks",
+    "verification",
+    "completion",
+    "remaining",
 }
 OPTIONAL = {"recovery", "independent_reviews"}
 
@@ -44,17 +56,17 @@ def _text(value: object) -> bool:
 def _strings(value: object) -> bool:
     """Require a nonempty list of distinct, nonempty strings."""
     return (
-        isinstance(value, list) and bool(value)
-        and all(_text(item) for item in value)
-        and len(value) == len(set(value))
+        isinstance(value, list) and bool(value) and all(_text(item) for item in value) and len(value) == len(set(value))
     )
 
 
 def _relative(value: object) -> bool:
     """Recognize a canonical repository-relative POSIX path."""
     return (
-        isinstance(value, str) and bool(value)
-        and "\\" not in value and "\0" not in value
+        isinstance(value, str)
+        and bool(value)
+        and "\\" not in value
+        and "\0" not in value
         and not PurePosixPath(value).is_absolute()
         and ".." not in PurePosixPath(value).parts
         and PurePosixPath(value).as_posix() == value
@@ -145,8 +157,10 @@ def validate_review(root: Path, record: object) -> list[str]:
         errors.append("base_commit must be a full lowercase Git commit SHA.")
     reviewer = record["reviewer"]
     if (
-        not isinstance(reviewer, dict) or set(reviewer) != {"kind", "role", "human_reviewer"}
-        or reviewer.get("kind") != "agent" or reviewer.get("human_reviewer") is not False
+        not isinstance(reviewer, dict)
+        or set(reviewer) != {"kind", "role", "human_reviewer"}
+        or reviewer.get("kind") != "agent"
+        or reviewer.get("human_reviewer") is not False
         or not _text(reviewer.get("role"))
     ):
         errors.append("Schema 1 requires an explicitly identified agent reviewer.")
@@ -163,7 +177,11 @@ def validate_review(root: Path, record: object) -> list[str]:
         return errors
     pages = set(scope["pages"])
     for page in pages:
-        if not _relative(page) or not PurePosixPath(page).is_relative_to(SITE) or PurePosixPath(page).suffix not in {".md", ".mdx"}:
+        if (
+            not _relative(page)
+            or not PurePosixPath(page).is_relative_to(SITE)
+            or PurePosixPath(page).suffix not in {".md", ".mdx"}
+        ):
             errors.append(f"Reviewed page is not a current documentation source: {page!r}.")
 
     sources = record["source_files"]
@@ -184,7 +202,9 @@ def validate_review(root: Path, record: object) -> list[str]:
         except (OSError, ValueError) as exc:
             errors.append(str(exc))
     for page in pages:
-        for imported in re.findall(r"^import\s+.*?\s+from\s+['\"]([^'\"]+)['\"]", source_texts.get(page, ""), re.MULTILINE):
+        for imported in re.findall(
+            r"^import\s+.*?\s+from\s+['\"]([^'\"]+)['\"]", source_texts.get(page, ""), re.MULTILINE
+        ):
             if not imported.startswith(".") or not (imported.endswith("?raw") or imported.endswith(".json")):
                 continue
             path = (root / page).parent.joinpath(imported.removesuffix("?raw")).resolve()
@@ -209,7 +229,11 @@ def validate_review(root: Path, record: object) -> list[str]:
     for row in findings:
         if not isinstance(row.get("page"), str) or row["page"] not in pages or row.get("status") != "resolved_in_prose":
             errors.append(f"Finding {row.get('id')!r} must identify a reviewed page and resolved status.")
-        if not isinstance(row.get("severity"), str) or row["severity"] not in {"low", "medium", "high"} or not all(_text(row.get(key)) for key in ("finding", "resolution")):
+        if (
+            not isinstance(row.get("severity"), str)
+            or row["severity"] not in {"low", "medium", "high"}
+            or not all(_text(row.get(key)) for key in ("finding", "resolution"))
+        ):
             errors.append(f"Finding {row.get('id')!r} lacks severity, finding or resolution.")
         refs = row.get("references")
         if not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in reference_ids for ref in refs):
@@ -222,7 +246,10 @@ def validate_review(root: Path, record: object) -> list[str]:
             errors.append(f"Reader task {row.get('id')!r} is outside the reviewed scope.")
         else:
             task_pages.add(row["page"])
-        if not all(_text(row.get(key)) for key in ("prompt", "expected_answer")) or row.get("answer_review") != "agent_checked":
+        if (
+            not all(_text(row.get(key)) for key in ("prompt", "expected_answer"))
+            or row.get("answer_review") != "agent_checked"
+        ):
             errors.append(f"Reader task {row.get('id')!r} needs a checked expected answer.")
         if row.get("human_execution") != "not_run":
             errors.append("Schema 1 has no human trial evidence; human_execution must remain not_run.")
@@ -233,7 +260,14 @@ def validate_review(root: Path, record: object) -> list[str]:
     if not isinstance(verification, dict):
         errors.append("verification must explicitly record test and human-review limits.")
     else:
-        for key in ("python_fences", "raw_example_imports", "independent_arithmetic", "native_execution", "astro_build", "citation_review"):
+        for key in (
+            "python_fences",
+            "raw_example_imports",
+            "independent_arithmetic",
+            "native_execution",
+            "astro_build",
+            "citation_review",
+        ):
             if not _text(verification.get(key)):
                 errors.append(f"verification.{key} must state the evidence or limitation.")
         for key in ("human_participants", "human_task_trials"):
@@ -251,10 +285,19 @@ def validate_review(root: Path, record: object) -> list[str]:
 
     independent = record.get("independent_reviews")
     if independent is not None:
-        if not isinstance(independent, dict) or set(independent) != {"source_commit", "reviewer_kind", "independent_of_page_author", "results", "limits"}:
+        if not isinstance(independent, dict) or set(independent) != {
+            "source_commit",
+            "reviewer_kind",
+            "independent_of_page_author",
+            "results",
+            "limits",
+        }:
             errors.append("independent_reviews has an unsupported evidence structure.")
         else:
-            if not isinstance(independent["source_commit"], str) or re.fullmatch(r"[0-9a-f]{40}", independent["source_commit"]) is None:
+            if (
+                not isinstance(independent["source_commit"], str)
+                or re.fullmatch(r"[0-9a-f]{40}", independent["source_commit"]) is None
+            ):
                 errors.append("Independent review needs an immutable source commit.")
             if independent["reviewer_kind"] != "agent" or independent["independent_of_page_author"] is not True:
                 errors.append("Independent review must identify its agent and author relationship.")
@@ -280,7 +323,9 @@ def validate_review(root: Path, record: object) -> list[str]:
                     if not _strings(inputs) or any(path not in sources for path in inputs):
                         errors.append(f"Independent review of {page!r} names untracked source inputs.")
                     refs = row.get("references")
-                    if not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in reference_ids for ref in refs):
+                    if not isinstance(refs, list) or any(
+                        not isinstance(ref, str) or ref not in reference_ids for ref in refs
+                    ):
                         errors.append(f"Independent review of {page!r} has an unknown reference.")
     return errors
 
@@ -290,7 +335,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument(
-        "--output", type=Path,
+        "--output",
+        type=Path,
         help="Write the report here as well as to stdout; relative paths use the invocation directory.",
     )
     args = parser.parse_args(argv)
@@ -307,7 +353,9 @@ def main(argv: list[str] | None = None) -> int:
         "status": "passed" if not errors else "failed",
         "scope": "review_record_consistency_and_declared_source_freshness",
         "errors": errors,
-        "source_files_declared": len(record.get("source_files", {})) if isinstance(record, dict) and isinstance(record.get("source_files"), dict) else 0,
+        "source_files_declared": len(record.get("source_files", {}))
+        if isinstance(record, dict) and isinstance(record.get("source_files"), dict)
+        else 0,
         "scientific_quality_certified": False,
         "pedagogical_quality_certified": False,
         "human_reader_validation_performed": False,

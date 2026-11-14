@@ -72,6 +72,11 @@ class DocumentationWorkflowTests(unittest.TestCase):
         self.assertIn("github.ref == 'refs/heads/main'", deployment)
         self.assertNotIn("always()", deployment)
 
+    def test_only_superseded_pull_request_runs_can_be_cancelled(self):
+        concurrency = self.workflow.split("\nconcurrency:\n", 1)[1].split("\njobs:\n", 1)[0]
+        self.assertIn("  group: docs-${{ github.ref }}\n", concurrency)
+        self.assertIn("  cancel-in-progress: ${{ github.event_name == 'pull_request' }}\n", concurrency)
+
     def test_browser_gate_qualifies_the_built_artifact_before_publication(self):
         build = self.workflow.split("\n  examples:\n", 1)[0]
         browser = self.step("Qualify browser accessibility and interaction")

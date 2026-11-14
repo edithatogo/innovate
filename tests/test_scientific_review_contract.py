@@ -49,37 +49,50 @@ class ScientificReviewContractTests(unittest.TestCase):
             },
             "fingerprint_encoding": checker.ENCODING,
             "source_files": {self.page: hashlib.sha256(self.text.encode("utf-8")).hexdigest()},
-            "references": [{
-                "id": "fixture-source",
-                "title": "Synthetic fixture reference",
-                "url": "https://example.org/primary",
-                "source_type": "synthetic test metadata; not a research claim",
-                "inspected_locations": ["Fixture only"],
-                "supports": "Exercises a source-linked record.",
-                "limits": "No real publication or scientific validation is claimed.",
-            }],
-            "findings": [{
-                "id": "fixture-interpretation",
-                "severity": "medium",
-                "page": self.page,
-                "status": "resolved_in_prose",
-                "finding": "Quantity needed a unit.",
-                "resolution": "The synthetic page now gives one.",
-                "references": ["fixture-source"],
-            }],
-            "reader_tasks": [{
-                "id": "fixture-reader",
-                "page": self.page,
-                "prompt": "Read the synthetic level.",
-                "expected_answer": "50.",
-                "answer_review": "agent_checked",
-                "human_execution": "not_run",
-            }],
+            "references": [
+                {
+                    "id": "fixture-source",
+                    "title": "Synthetic fixture reference",
+                    "url": "https://example.org/primary",
+                    "source_type": "synthetic test metadata; not a research claim",
+                    "inspected_locations": ["Fixture only"],
+                    "supports": "Exercises a source-linked record.",
+                    "limits": "No real publication or scientific validation is claimed.",
+                }
+            ],
+            "findings": [
+                {
+                    "id": "fixture-interpretation",
+                    "severity": "medium",
+                    "page": self.page,
+                    "status": "resolved_in_prose",
+                    "finding": "Quantity needed a unit.",
+                    "resolution": "The synthetic page now gives one.",
+                    "references": ["fixture-source"],
+                }
+            ],
+            "reader_tasks": [
+                {
+                    "id": "fixture-reader",
+                    "page": self.page,
+                    "prompt": "Read the synthetic level.",
+                    "expected_answer": "50.",
+                    "answer_review": "agent_checked",
+                    "human_execution": "not_run",
+                }
+            ],
             "verification": {
                 key: "Synthetic fixture; no execution evidence."
-                for key in ("python_fences", "raw_example_imports", "independent_arithmetic",
-                            "native_execution", "astro_build", "citation_review")
-            } | {"human_participants": 0, "human_task_trials": 0},
+                for key in (
+                    "python_fences",
+                    "raw_example_imports",
+                    "independent_arithmetic",
+                    "native_execution",
+                    "astro_build",
+                    "citation_review",
+                )
+            }
+            | {"human_participants": 0, "human_task_trials": 0},
             "completion": dict(checker.COMPLETION),
             "remaining": ["Human trials and empirical validation remain unperformed."],
         }
@@ -110,9 +123,14 @@ class ScientificReviewContractTests(unittest.TestCase):
         invocation = self.root / "docs/astro-site"
         invocation.mkdir(parents=True, exist_ok=True)
         with chdir(invocation), redirect_stdout(io.StringIO()):
-            status = checker.main([
-                "--root", str(self.root), "--output", ".reports/scientific-review.json",
-            ])
+            status = checker.main(
+                [
+                    "--root",
+                    str(self.root),
+                    "--output",
+                    ".reports/scientific-review.json",
+                ]
+            )
         output = invocation / ".reports/scientific-review.json"
         self.assertEqual(0, status)
         self.assertEqual("passed", json.loads(output.read_text(encoding="utf-8"))["status"])
@@ -157,7 +175,9 @@ class ScientificReviewContractTests(unittest.TestCase):
         self.assertEqual(0, self.run_gate()[0])
         path = self.root / checker.CONTRACT
         raw = path.read_text(encoding="utf-8").replace(
-            '"schema_version": 1', '"schema_version": 0, "schema_version": 1', 1,
+            '"schema_version": 1',
+            '"schema_version": 0, "schema_version": 1',
+            1,
         )
         path.write_text(raw, encoding="utf-8")
         output = self.root / "reports/duplicate-key.json"

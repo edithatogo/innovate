@@ -34,12 +34,12 @@
 - [x] Reconcile receiving main `384ed3b0f42d967f520dc66ef536d8fa0d92df7d`, including merged PRs #610 and #611.
 - [x] Recover twelve migrated current pages and their exact source bindings after the local executor disconnected.
 - [x] Correct the entry/tutorial explanations and retain a scoped primary-source review with worked learner answers.
-- [~] Promote current guides/tutorials in navigation and map all remaining historical current-path routes; preserve the versioned archive.
-- [~] Require bundled Pagefind exclusion for historical current-path pages and retain searchability for current pages.
-- [~] Add a source-freshness and claim-consistency gate for the scoped scientific review record.
+- [x] Promote current guides/tutorials in navigation and map all remaining historical current-path routes; preserve the versioned archive.
+- [x] Require bundled Pagefind exclusion for historical current-path pages and retain searchability for current pages.
+- [x] Add a source-freshness and claim-consistency gate for the scoped scientific review record.
 - [~] Run complete contract-derived Chromium desktop/mobile qualification with axe, keyboard/search/version checks, overflow and resource budgets.
 - [~] Qualify the narrow Julia world-age repair with `--depwarn=error` and fresh native receipts.
-- [~] Recover the exact browser dependency lock through a bounded hosted job, remove that temporary workflow, and qualify the final frozen installation.
+- [x] Recover the exact original browser dependency lock after workspace restoration, remove the unused temporary recovery workflow, and pass frozen installation with the existing supply-chain policy.
 - [ ] Verify the final exact revision through the hosted build, browser and native documentation jobs.
 - [ ] Verify the approved Astro publication at the public URL through the existing integration and Pages activation process.
 
@@ -52,6 +52,28 @@ from immutable Git objects, but this recovery is not runtime or build evidence.
 The original results below remain attributed to their original source. See
 [native-runtime-followup.md](native-runtime-followup.md) for verified historical
 native artifacts and the separately tested aggregate repair.
+
+## Follow-up local qualification
+
+The integrated follow-up passes 233 Python contract tests on Python 3.15.2, all
+ten Node tests, frozen dependency installation, the 202-page Astro build, type
+checking, source-bound content checks, and production artifact verification.
+All ten Python examples and eighteen API doctest statements pass. The local
+full-language command correctly remains nonzero without fresh Julia/R receipts.
+
+The hosted #611 documentation job exposed a second aggregate hash-format defect:
+the inventory's example digests are bare SHA-256, whereas its source map labels
+those same digests with `sha256:`. The follow-up fixes only that comparison,
+preserves exact receipt/source-map equality, and adds five complete-receipt
+regressions that reproduce the Julia and R failure before the fix.
+
+Browser discovery enumerates 142 cases. Actual browser execution, fresh hosted
+native qualification, human reader trials and live publication remain separate.
+Only superseded PR documentation runs may now be cancelled; main publication
+retains its ordered queue, both qualification dependencies and explicit activation.
+
+See [followup-qualification.md](followup-qualification.md) and
+[the source-fingerprinted local record](followup-local-evidence.json).
 
 ## Evidence
 

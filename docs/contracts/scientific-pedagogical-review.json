@@ -584,7 +584,7 @@
     "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
     "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check",
     "independent_migration_review": "Twelve current pages independently read against source at d732999; six imported expected outputs rechecked unchanged at 5f805f85cbd99be29be99f1077642c9cbf876cdb. Two tutorial paragraphs improved; no raw example changes.",
-    "contract_checker": "Prepared a standard-library consistency/freshness checker and seven unittest cases covering source drift, human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys; execution pending on the recovered integrated checkout."
+    "contract_checker": "The seven standard-library unittest cases passed on CPython 3.15.2 in the recovered integrated checkout. They cover fresh UTF-8/CRLF inputs, source drift, unsupported human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys. The real 27-input review record also passed consistency and freshness validation; this does not certify scientific or pedagogical quality."
   },
   "recovery": {
     "reason": "The local execution environment became unavailable before these edits were committed.",
