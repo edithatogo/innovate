@@ -29,6 +29,10 @@ mutants/
 docs/astro-site/node_modules/
 docs/astro-site/dist/
 docs/astro-site/.astro/
+docs/astro-site/.reports/
+docs/astro-site/src/content/docs/api/generated/
+bindings/python/innovate/_native*.so
+bindings/python/innovate/_native*.pyd
 # Node.js
 node_modules/
 dist/

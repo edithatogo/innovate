@@ -50,9 +50,20 @@ pub use adopters::classify_adopters;
 pub use contracts::*;
 pub use kernel::KernelBinding;
 pub use serde_json::json;
+/// Current JSON wire schema understood by the native request dispatcher.
+///
+/// This is a transport schema identifier, independent of the Cargo package version.
 pub const KERNEL_SCHEMA_VERSION: &str = "2.0";
 
-/// JSON transport shared by Python, Julia and R. Errors are data, not panics.
+/// Execute a UTF-8 JSON request through the Rust-owned dispatch surface.
+///
+/// The request supplies `schema_version`, `operation`, optional `model_key` and
+/// an operation-specific `payload`. The returned string is a JSON envelope;
+/// callers must inspect `error` before interpreting `result`.
+///
+/// Malformed JSON and unsupported requests are represented as structured errors.
+/// This transport also exposes advanced operation names beyond [`KernelOperation`].
+/// It neither launches an interpreter nor supplies a non-Rust numerical fallback.
 pub fn execute_json(input: &str) -> String {
     let result = serde_json::from_str::<KernelRequest>(input);
     if result.is_err()

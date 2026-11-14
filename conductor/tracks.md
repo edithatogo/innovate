@@ -7,6 +7,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [~] **Track: Repository security and solo-maintainer context** *(Issue #414; remote enforcement and coverage delivery require live evidence)*
   *Link: [./tracks/repository_security_context_20261114/](./tracks/repository_security_context_20261114/)*
+
+- [~] **Track: Astro documentation quality contracts** *(Implementation in progress; full content and publication acceptance pending)*
+  *Link: [./tracks/documentation_quality_contracts_20261115/](./tracks/documentation_quality_contracts_20261115/)*
 - [ ] **Track: Kairos native consumer and domain boundary** *(Proposed; implementation pending)*
   *Link: [./tracks/kairos_runtime_boundary_20261107/](./tracks/kairos_runtime_boundary_20261107/)*
 

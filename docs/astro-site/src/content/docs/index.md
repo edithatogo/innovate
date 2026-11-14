@@ -1,54 +1,53 @@
 ---
 title: Innovate
-description: Current development API and feature migration status
+description: Learn the current Rust and Polars diffusion API through executable examples and explicit scientific limits.
 ---
 
-Innovate 0.7 is a breaking development line. Rust owns computation and scientific
-validation. Python, Julia and R are the supported bindings; Polars owns tables.
-The installed Python package requires Polars and its native extension. There is
-no Python numerical fallback, pandas or xarray runtime.
+Innovate models innovation adoption, technology substitution and policy
+diffusion. Its **0.7 development line** runs scientific computation in Rust,
+uses Polars tables, and exposes Python, Julia and R bindings.
 
-## Current scope
+## Start with a checked result
 
-Bounded native Bass, Logistic, Gompertz, Fisher–Pry and one-generation Norton–Bass
-operations are exposed. Advanced models, covariates, events, uncertainty and
-native Kairos simulation remain migration obligations. A development test pass
-is not full scientific acceptance. Release is blocked until the feature ledger
-and installed/platform qualification gates close.
+The [native prediction tutorial](/innovate/user-guide/getting-started/) takes you
+from an installed development checkout to a three-point Logistic prediction.
+It checks an independent analytic answer, preserves row identity, and exercises
+invalid-input handling. The code displayed in the tutorial is the file that
+the example runner executes.
 
-## Python
+- [Install the development package](/innovate/user-guide/installation/)
+- [Run the native prediction tutorial](/innovate/user-guide/getting-started/)
+- [Read the current Python API](/innovate/api/python/)
+- [Read the Julia API](/innovate/api/generated/julia/) or [R API](/innovate/api/generated/r/)
+- [Check scientific conventions and supported capabilities](/innovate/native-migration/)
 
-```python
-import polars as pl
-from innovate import predict, fit, capabilities
+## Understand the development boundary
 
-frame = pl.DataFrame({"time": [0.0, 1.0, 2.0]})
-result = predict("logistic", frame, {"L": 100.0, "k": 1.0, "x0": 1.0})
-print(result)
-```
+Sixteen model families have bounded native implementations. Coverage differs by
+operation and model; use capability discovery and the native migration guide.
+Unported capabilities fail explicitly. Full scientific, installed-artifact and
+platform qualification remain release requirements.
 
-Inputs require finite, strictly increasing time. Nulls, duplicate times and
-invalid domains are rejected in Rust. IPC currently copies; LazyFrames collect
-at the execution boundary. Fit data additionally needs an `observed` column.
+Predictions require finite, strictly increasing time. Polars LazyFrames collect
+at the native boundary, and Arrow IPC currently copies buffers. Synthetic
+recovery or local numerical convergence does not establish empirical validity,
+global identifiability or calibrated uncertainty.
 
-## R and Julia
+## Know which documentation you are reading
 
-Both call the Rust library through the C ABI and need no Python interpreter.
-Build with `cargo build --locked -p innovate-ffi`; set `INNOVATE_NATIVE_LIBRARY`
-to the resulting shared library. Julia uses JSON 1.13.4 and R uses jsonlite 2.0.0.
-Native distribution bundles and tabular IPC wrappers remain open qualification.
+The current entry path and generated binding references describe the development
+checkout. Pages labelled **Pre-0.7 reference**, and the **0.6 Reference** version,
+retain historical designs and APIs. They are not evidence that those features
+are available in 0.7.
 
-## Scientific contract
+The [documentation quality contract](/innovate/maintainers/documentation-quality/)
+records inventory, source-bound examples, remaining content debt and the separate
+requirements for scientific review and usability. A working Astro build alone
+does not establish completion.
 
-Schema 2.0 makes Gompertz explicit: `a * exp(-b * exp(-c*t))`. The previous
-implementation ignored `b`. Unimplemented significance tests return null with
-`not_implemented`. Synthetic recovery checks do not establish identifiability,
-calibrated intervals or all-model parity. The full pre-migration source/test
-inventory remains recoverable from Git and is tracked by the active Conductor plan.
+## Ecosystem boundaries
 
-## Ecosystem alignment
-
-Voiage owns economic/VOI calculations and consumes Polars/Arrow scenario tables.
-Kairos owns scheduling, DES/ABM state and deterministic replay. Innovate retains
-diffusion fitting and diagnostics. Do not copy the upstream scheduler or assume
-its optional languages, experimental backends or hosted proofs apply here.
+Kairos owns event scheduling and simulation state. Voiage consumes adoption and
+scenario tables for economic and value-of-information work. Innovate owns its
+diffusion semantics, fitting and diagnostics; other projects' acceptance does not
+automatically qualify this library.

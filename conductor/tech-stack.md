@@ -39,6 +39,17 @@ Astro/Starlight under `docs/astro-site` is the only documentation site.
 - **Build Gate**: run `pnpm build && pnpm check` in the actual docs workspace; do not claim it ran from this plan.
 - Static historical release evidence under `docs/source/_static/` remains source data, not current acceptance by itself.
 
+The November documentation-quality increment generates current Python references
+from maintained source ASTs and Julia/R references from validated public binding
+documentation before Astro loads its collection. The old
+vendored polyglot plugin is retained but no longer treated as proof that API pages
+were emitted. `docs/contracts/` owns API/content/artifact policies; checked
+examples supply the source shown by tutorials. CI requires strict Python
+documentation, source-bound content regression checks, executed native examples,
+Rust documentation and actual rendered-artifact checks. Whole-site scientific,
+browser and live-publication acceptance remain separately tracked in
+`documentation_quality_contracts_20261115`.
+
 ## Historical Rust ownership records
 
 Retain archived closure evidence under `Rust Core Full Native Migration and Ownership Closure` and `Rust Core Migration Completion and Polyglot Claim Closure`. These historical records do not establish present full native ownership. The [Rust-core convergence track](tracks/rust_core_convergence_20261107/index.md) owns the remaining acceptance.

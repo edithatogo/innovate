@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "generated_reference_languages": ["python", "julia", "r"],
+  "python_roots": ["bindings/python/innovate"],
+  "python_extensions": [".py", ".pyi"],
+  "inventory": "All source-defined modules, classes and callables, including private and nested symbols; no import-time execution.",
+  "public_contract": {
+    "parameters": true,
+    "returns": true,
+    "raises": true,
+    "attributes": true,
+    "unresolved_exports_fail": true
+  },
+  "rust": {
+    "status": "compiler_qualification_required",
+    "command": "RUSTDOCFLAGS='-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes' cargo doc --workspace --no-deps --locked",
+    "doctest_command": "cargo test --workspace --doc --locked",
+    "required_crates": ["innovate-core", "innovate-tabular", "innovate-ffi", "innovate-python"],
+    "limitations": "The Python AST checker does not qualify Rust. Rust public API presence and links require the pinned compiler; passing documentation lints does not establish scientific validity or prose quality. PyO3-exported functions also need source doc comments because Rust visibility alone does not identify the Python API."
+  },
+  "qualification": "A ratchet pass only prevents documented legacy gaps from growing or changing without review. Full acceptance also requires strict Python completeness, Rust compiler and doctest results, executable tutorial evidence, and human review of scientific explanation."
+}

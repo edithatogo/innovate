@@ -1,0 +1,107 @@
+---
+title: Scenario experiment workflows
+description: Execute four synthetic native scenarios, verify their expected invariants, and round-trip and replay JSON and Arrow artifacts.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import scenarioSource from '../../../../../../examples/native_scenarios.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This tutorial runs a small scenario grid through the Rust kernel and verifies
+the meaning of its results. The inputs are synthetic. The comparison represents
+the effect of the supplied model assumptions; it is not an estimated causal
+effect of a real policy.
+
+## Learning outcomes
+
+After completing the example, you can specify baseline, intervention,
+competition and substitution scenarios; interpret their distinct outputs;
+preserve scenario order in a Polars table; and replay a saved artifact against
+the same native runtime. You will also distinguish scientific replay equality
+from incidental timestamps and execution durations.
+
+## Prerequisites
+
+Use the source-built Innovate 0.7 development package and its pinned Python
+3.15.2 and Polars environment. Follow the [installation guide](/innovate/user-guide/installation/)
+before running the example. The native extension must support the scenario
+operations and Kairos ABM engine used below; missing capabilities are errors.
+This example uses no remote service or downloaded dataset.
+
+You should be comfortable with Python mappings, cumulative adoption and the
+distinction between a simulated path and an empirical estimate. Each of the four
+scenarios uses two observation times; the stochastic scenarios use 100 agents.
+
+## Steps
+
+1. Use the checked-in `examples/native_scenarios.py` from the same revision as
+   the installed package.
+2. Run it with the interpreter where that native package is installed:
+
+   ```sh
+   .venv-native/bin/python examples/native_scenarios.py
+   ```
+
+3. Check that every assertion passes and the final JSON matches the next section.
+   An assertion or native-operation error fails the exercise; do not suppress it.
+
+<Code code={scenarioSource} lang="python" title="examples/native_scenarios.py" />
+
+Each grid entry supplies a scenario ID, model key, specification and simulation
+payload. `apply_specifications=True` translates the supported specification
+fields into model inputs. Omitting that option validates specifications and
+executes the supplied simulation payloads without applying their changes.
+
+The script writes the complete response to JSON and the ordered execution table
+to Arrow IPC inside a temporary directory. It reads both back, checks equality,
+then replays all four scientific results. The temporary files are removed after
+the checks, so repeated runs do not overwrite user files.
+
+## Expected results
+
+The final output contract is imported from the same manifest used by the example
+runner. The runner checks the actual output and observes execution of outcome
+assertions; the displayed code comes directly from the executable file.
+
+<Code code={contentQuality.examples['examples/native_scenarios.py'].expected_stdout} lang="json" />
+
+The intervention's adopter counts remain zero at both observation times. The
+competition scenario retains the initial allocation of 25 and 75 adopters.
+The replacement scenario conserves 100 adopters. The script also checks that
+the incumbent population at time two is `100 × exp(-1)`, independently of the
+native implementation's calculation, and that all four artifacts replay.
+
+## Interpretation
+
+For the intervention, the baseline innovation coefficient is `p = 0.2` and the
+intervention changes it by `−0.2` from time zero. With zero imitation and no
+initial adopters, the intervention has no mechanism for adoption. The negative
+endpoint difference therefore equals the baseline endpoint's magnitude.
+The baseline simulation uses a fixed seed, but its positive count is not used
+as an empirical estimate or printed as a universal expected number.
+
+Competition begins with 100 adopters drawn from a potential market of 200,
+split 25:75 between products. Zero diffusion and cross-product rates isolate
+allocation from subsequent growth. Substitution uses a replacement rate of
+`0.5` over two time units, so the analytic incumbent fraction is `exp(-1)`.
+These deliberately simple limits make an implementation error easier to detect.
+
+JSON preserves the complete response. The Polars table preserves row order and
+stores nested results in `execution_json`. A replay request resolves the inputs
+for one scenario; retain the original grid response separately if you need its
+cross-scenario comparisons.
+
+## Limitations
+
+These synthetic invariants test bounded execution, serialization and replay.
+They do not establish parameter identifiability, general model accuracy,
+uncertainty calibration or the causal effect of an intervention. A fixed seed
+is not a statistical validation study, and two observation times do not assess
+the entire time path.
+
+Replay compares scientific results using the same runtime. Timestamps and
+elapsed times can vary, and this example does not claim bitwise reproducibility
+across all platforms or future versions. Preserve the package revision and
+runtime identity alongside real project artifacts. Consult the
+[native migration guide](/innovate/native-migration/) for current release gates
+and unsupported operations.

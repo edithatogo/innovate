@@ -24,19 +24,77 @@ the executable subset, and all 38 ledger obligations still block release.
 
 ## Polars fitting and prediction
 
-```python
-import polars as pl
-from innovate import predict, fit
+Run `.venv-native/bin/python -I examples/native_norton_bass.py` from the repository root.
+The contract checks this displayed source against that executable file.
 
-parameters = {"p1": 0.03, "q1": 0.2, "m1": 1000.0,
-              "p2": 0.02, "q2": 0.3, "m2": 1500.0}
-options = {"variant": "successive_generations", "launch_times": [0.0, 4.0]}
-table = pl.DataFrame({"time": [i * 0.5 for i in range(41)]})
-observed = predict("norton_bass", table, parameters, model_options=options)
-result = fit("norton_bass", observed, model_options=options,
-             observed_columns=["prediction_1", "prediction_2"])
-forecast = result.predict(pl.DataFrame({"time": [21.0, 25.0, 30.0]}))
-rates = result.predict(pl.DataFrame({"time": [21.0, 25.0, 30.0]}), quantity="rate")
+```python
+"""Check two-generation fitting and forecasts against analytic diffusion curves."""
+
+import json
+from math import exp, isclose, isfinite
+
+import polars as pl
+
+from innovate import fit, predict
+
+
+def fraction_and_rate(time: float, p: float, q: float) -> tuple[float, float]:
+    """Return the Bass fraction and its right derivative after a fixed launch."""
+    if time < 0:
+        return 0.0, 0.0
+    exponential = exp(-(p + q) * time)
+    denominator = 1 + q / p * exponential
+    return (1 - exponential) / denominator, (p + q) ** 2 / p * exponential / denominator**2
+
+
+def analytic(time: float) -> tuple[tuple[float, float], tuple[float, float]]:
+    """Evaluate the two-generation transfer equations independently in Python."""
+    f1, d1 = fraction_and_rate(time, 0.03, 0.2)
+    f2, d2 = fraction_and_rate(time - 4, 0.02, 0.3)
+    levels = (1000 * f1 * (1 - f2), (1500 + 1000 * f1) * f2)
+    rates = (1000 * (d1 * (1 - f2) - f1 * d2), 1000 * d1 * f2 + (1500 + 1000 * f1) * d2)
+    return levels, rates
+
+
+def main() -> None:
+    """Validate synthetic recovery and held-out levels and signed rates."""
+    parameters = {"p1": 0.03, "q1": 0.2, "m1": 1000.0, "p2": 0.02, "q2": 0.3, "m2": 1500.0}
+    options = {"variant": "successive_generations", "launch_times": [0.0, 4.0]}
+    table = pl.DataFrame({"time": [i * 0.5 for i in range(41)]})
+    observed = predict("norton_bass", table, parameters, model_options=options)
+    for time, first, second in observed.iter_rows():
+        expected, _ = analytic(time)
+        assert isclose(first, expected[0], abs_tol=1e-9, rel_tol=1e-12)
+        assert isclose(second, expected[1], abs_tol=1e-9, rel_tol=1e-12)
+
+    result = fit("norton_bass", observed, model_options=options, observed_columns=["prediction_1", "prediction_2"])
+    assert result.diagnostics["optimizer"]["converged"] is True
+    assert isinstance(result.envelope["result"]["state"], dict)
+    for name, expected in parameters.items():
+        assert isclose(result.parameters[name], expected, rel_tol=0.001)
+
+    future = pl.DataFrame({"time": [21.0, 25.0, 30.0]})
+    forecast = result.predict(future)
+    rates = result.predict(future, quantity="rate")
+    assert forecast.columns == ["time", "prediction_1", "prediction_2"]
+    assert rates.columns == ["time", "rate_1", "rate_2"]
+    assert forecast["time"].to_list() == future["time"].to_list()
+    assert rates["time"].to_list() == future["time"].to_list()
+    for level_row, rate_row in zip(forecast.iter_rows(), rates.iter_rows(), strict=True):
+        expected_levels, expected_rates = analytic(level_row[0])
+        for actual, expected in zip(level_row[1:] + rate_row[1:], expected_levels + expected_rates, strict=True):
+            assert isfinite(actual) and isclose(actual, expected, abs_tol=0.01, rel_tol=0)
+    # Signed generation rates may be negative during substitution.
+    assert rates["rate_1"][0] < 0
+    print(
+        json.dumps(
+            {"converged": True, "forecast_rows": forecast.height, "parameters_checked": len(parameters)}, sort_keys=True
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 Inputs require finite, strictly increasing time. Nulls, duplicate times, unknown
@@ -202,17 +260,86 @@ subset does not replace the full scientific, platform or release gates.
 
 `simulate_model` accepts an explicit `simulation_options` object for Bass:
 
+Run `.venv-native/bin/python -I examples/native_kairos.py` from the repository root.
+The contract checks this displayed source against that executable file.
+
 ```python
-from innovate import execute
+"""Check a seeded Bass DES path, replay and its count-to-level interpretation.
+
+The population has 100 agents, while market potential is 250 arbitrary units.
+One seeded path is a synthetic realization, not an expected adoption curve.
+Finite-population expectations with imitation need not equal deterministic Bass.
+"""
+
+import json
+import math
+from itertools import pairwise
+
 import polars as pl
 
-result = execute("simulate_model", "bass",
-    inputs={"time": [0.0, 1.0, 5.0, 20.0]},
-    parameters={"p": 0.2, "q": 0.3, "m": 100.0},
-    simulation_options={"engine": "kairos_des", "seed": 42, "population": 100})
-trajectory = pl.DataFrame({"time": [0.0, 1.0, 5.0, 20.0],
-                           "adopters": result["result"]["counts"],
-                           "level": result["result"]["values"]})
+from innovate import NativeError, execute
+
+
+def main() -> None:
+    """Validate replay, sampling invariance, physical bounds and engine errors."""
+    times = [0.0, 1.0, 5.0, 20.0]
+    parameters = {"p": 0.2, "q": 0.3, "m": 250.0}
+    options = {"engine": "kairos_des", "seed": 42, "population": 100, "ticks_per_unit": 1_000_000}
+    request = {"inputs": {"time": times}, "parameters": parameters, "simulation_options": options}
+    response = execute("simulate_model", "bass", **request)
+    replay_equal = response == execute("simulate_model", "bass", **request)
+    assert replay_equal
+    assert response["metadata"]["engine"] == "kairos_des"
+
+    result = response["result"]
+    counts = result["counts"]
+    assert len(counts) == len(times)
+    assert all(type(count) is int and 0 <= count <= options["population"] for count in counts)
+    assert counts[0] == 0 and counts[-1] > 0
+    assert all(left <= right for left, right in pairwise(counts))
+
+    # Independent unit conversion: each agent represents m / population units.
+    expected_levels = [parameters["m"] * count / options["population"] for count in counts]
+    assert all(
+        math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12)
+        for actual, expected in zip(result["values"], expected_levels, strict=True)
+    )
+    trajectory = pl.DataFrame({"time": times, "adopters": counts, "level": result["values"]})
+    assert trajectory["time"].to_list() == times
+
+    # Merely asking for fewer observations must not restart the event process.
+    sparse = execute("simulate_model", "bass", **{**request, "inputs": {"time": times[2:]}})["result"]
+    sparse_grid_equal = sparse["counts"] == counts[2:] and sparse["values"] == result["values"][2:]
+    assert sparse_grid_equal
+
+    # With no innovators and no initial adopters, imitation has no source.
+    no_innovators = execute("simulate_model", "bass", **{**request, "parameters": {**parameters, "p": 0.0}})["result"]
+    assert no_innovators["counts"] == [0] * len(times)
+
+    try:
+        execute("simulate_model", "bass", **{**request, "simulation_options": {**options, "engine": "unknown"}})
+    except NativeError as error:
+        unknown_engine_rejected = error.code == "invalid_request"
+    else:
+        unknown_engine_rejected = False
+    assert unknown_engine_rejected, "An unsupported engine must fail instead of selecting a deterministic curve."
+
+    print(
+        json.dumps(
+            {
+                "counts": trajectory["adopters"].to_list(),
+                "levels": trajectory["level"].to_list(),
+                "replay_equal": replay_equal,
+                "sparse_grid_equal": sparse_grid_equal,
+                "unknown_engine_rejected": unknown_engine_rejected,
+            },
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 Kairos revision `e76b97be2ea3712645933d903822ff6381c8883e` owns scheduler
@@ -246,13 +373,103 @@ agent hazards, resource queues and resumable checkpoints remain required work.
 
 Both native simulation engines accept this bounded forcing contract:
 
+Run `.venv-native/bin/python -I examples/native_forcing.py` from the repository root.
+The contract checks this displayed source against that executable file.
+
 ```python
-simulation_options = {
-    "engine": "kairos_abm", "seed": 42, "population": 100,
-    "covariate": {"time": [0.0, 3.0], "values": [-1.0, 0.0],
-                  "beta_p": 0.2, "beta_q": 0.3},
-    "events": [{"time": 6.0, "delta_p": 0.1, "delta_q": 0.0}],
-}
+"""Check an exact adoption pause, equivalent forcing and tracked ABM agents.
+
+The synthetic covariate cancels both Bass rates until time three. A later event
+raises innovation at time six. These piecewise-constant simulation controls are
+distinct from fitted covariate effects or empirical intervention estimates.
+"""
+
+import json
+from itertools import pairwise
+
+from innovate import NativeError, execute
+
+
+def main() -> None:
+    """Exercise covariates, additive events, agent conservation and input guards."""
+    times = [0.0, 1.0, 3.0, 5.0, 6.0, 10.0]
+    parameters = {"p": 0.2, "q": 0.3, "m": 100.0}
+    options = {
+        "engine": "kairos_abm",
+        "seed": 42,
+        "population": 100,
+        "ticks_per_unit": 1_000_000,
+        "covariate": {"time": [0.0, 3.0], "values": [-1.0, 0.0], "beta_p": 0.2, "beta_q": 0.3},
+        "events": [{"time": 6.0, "delta_p": 0.1, "delta_q": 0.0}],
+    }
+    request = {"inputs": {"time": times}, "parameters": parameters, "simulation_options": options}
+    response = execute("simulate_model", "bass", **request)
+    result = response["result"]
+    counts = result["counts"]
+    assert len(counts) == len(times)
+
+    # Before time three, p + beta_p*x and q + beta_q*x are both exactly zero.
+    # At the boundary, adoption still needs at least one positive scheduler tick.
+    assert counts[:3] == [0, 0, 0]
+    assert counts[3] > 0
+    assert all(0 <= count <= options["population"] for count in counts)
+    assert all(left <= right for left, right in pairwise(counts))
+    agents = result["agents"]
+    assert len(agents) == options["population"]
+    assert len({(agent["index"], agent["generation"]) for agent in agents}) == options["population"]
+    assert sum(agent["adopted"] for agent in agents) == counts[-1]
+    assert response == execute("simulate_model", "bass", **request)
+
+    # The same rate schedule can be expressed entirely through additive events.
+    # Identical boundaries and rates should consume the same seeded streams.
+    event_options = {key: value for key, value in options.items() if key != "covariate"}
+    event_options["events"] = [
+        {"time": 0.0, "delta_p": -0.2, "delta_q": -0.3},
+        {"time": 3.0, "delta_p": 0.2, "delta_q": 0.3},
+        {"time": 6.0, "delta_p": 0.1, "delta_q": 0.0},
+    ]
+    equivalent = execute("simulate_model", "bass", **{**request, "simulation_options": event_options})["result"]
+    equivalent_forcing = all(equivalent[key] == result[key] for key in ("counts", "values", "agents"))
+    assert equivalent_forcing
+
+    # A negative rate and two distinct changes rounded to the same tick must fail.
+    invalid_options = [
+        {**options, "covariate": {**options["covariate"], "beta_p": 2.0}},
+        {
+            **options,
+            "ticks_per_unit": 1,
+            "events": [
+                {"time": 0.1, "delta_p": 0.0, "delta_q": 0.0},
+                {"time": 0.2, "delta_p": 0.0, "delta_q": 0.0},
+            ],
+        },
+    ]
+    invalid_forcing_rejected = 0
+    for invalid in invalid_options:
+        try:
+            execute("simulate_model", "bass", **{**request, "simulation_options": invalid})
+        except NativeError as error:
+            assert error.code == "invalid_request"
+            invalid_forcing_rejected += 1
+        else:
+            raise AssertionError("Invalid rates or colliding changes were silently accepted.")
+    assert invalid_forcing_rejected == len(invalid_options)
+
+    print(
+        json.dumps(
+            {
+                "counts": counts,
+                "equivalent_forcing": equivalent_forcing,
+                "invalid_forcing_rejected": invalid_forcing_rejected,
+                "tracked_agents": len(agents),
+            },
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 The covariate is right-continuous and piecewise constant, starting at time zero;
@@ -407,12 +624,108 @@ native parameter recovery validate the current bounded implementation.
 
 Use `simulation_options.engine="kairos_network"` with Bass parameters p/q/m:
 
+Run `.venv-native/bin/python -I examples/native_network.py` from the repository root.
+The contract checks this displayed source against that executable file.
+
 ```python
-simulation_options = {
-    "engine": "kairos_network", "seed": 42, "population": 3,
-    "edges": [[0, 1], [1, 2]], "initial_agents": [0],
-    "capacity": 1, "service_ticks": 5, "ticks_per_unit": 1000000,
-}
+"""Check contagion, service completion and FIFO resource accounting.
+
+One synthetic time unit equals one scheduler tick so the five-tick service time
+is visible. The separate queue fixture uses a very high innovation rate to expose
+the scheduler's minimum one-tick delay; it is not a calibrated adoption model.
+"""
+
+import json
+
+from innovate import NativeError, execute
+
+
+def main() -> None:
+    """Verify graph-dependent spread, independent service timing and graph errors."""
+    times = [0.0, 5.0, 20.0, 100.0]
+    parameters = {"p": 0.0, "q": 3.0, "m": 3.0}
+    options = {
+        "engine": "kairos_network",
+        "seed": 42,
+        "population": 3,
+        "edges": [[0, 1], [1, 2]],
+        "initial_agents": [0],
+        "capacity": 1,
+        "service_ticks": 5,
+        "ticks_per_unit": 1,
+    }
+    request = {"inputs": {"time": times}, "parameters": parameters, "simulation_options": options}
+    response = execute("simulate_model", "bass", **request)
+    chain = response["result"]
+    assert response == execute("simulate_model", "bass", **request)
+    assert chain["counts"][0] == 1 and chain["counts"][-1] == options["population"]
+    assert all(agent["state"] == "adopted" for agent in chain["agents"])
+
+    # With p=0, node two can request only after its sole neighbor one adopts.
+    completions = {event["agent"]: event["tick"] for event in chain["completions"]}
+    requests = {event["agent"]: event["tick"] for event in chain["requests"]}
+    assert set(completions) == set(requests) == {1, 2}
+    assert requests[2] > completions[1]
+    assert chain["counts"][-1] == len(options["initial_agents"]) + len(completions)
+    disconnected = execute("simulate_model", "bass", **{**request, "simulation_options": {**options, "edges": []}})[
+        "result"
+    ]
+    assert disconnected["counts"] == [1] * len(times)
+    assert disconnected["requests"] == disconnected["completions"] == []
+
+    # A second fixture creates demand without peers and queues three agents.
+    queue_options = {**options, "edges": [], "initial_agents": []}
+    queued = execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 5.0, 20.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 3.0},
+        simulation_options=queue_options,
+    )["result"]
+    assert queued["counts"] == [0, 0, 3], "A pending request is not yet adoption."
+    assert len(queued["requests"]) == len(queued["completions"]) == 3
+    free_at = 0
+    expected_occupied_ticks = 0
+    expected_wait_ticks = 0
+    for demand, completion in zip(queued["requests"], queued["completions"], strict=True):
+        # Independent single-server FIFO recurrence; no native queue helper used.
+        start = max(demand["tick"], free_at)
+        free_at = start + queue_options["service_ticks"]
+        assert completion["agent"] == demand["agent"]
+        assert completion["tick"] == free_at
+        expected_occupied_ticks += queue_options["service_ticks"]
+        expected_wait_ticks += start - demand["tick"]
+    metrics = queued["resource_metrics"]
+    assert metrics["peak_in_service"] == queue_options["capacity"]
+    assert metrics["occupied_slot_ticks"] == expected_occupied_ticks
+    assert metrics["admitted_wait_ticks"] == expected_wait_ticks
+    assert metrics["configured_slot_ticks"] == metrics["horizon_ticks"] * queue_options["capacity"]
+    assert metrics["idle_slot_ticks"] + metrics["occupied_slot_ticks"] == metrics["configured_slot_ticks"]
+    assert metrics["over_capacity_slot_ticks"] == 0
+
+    try:
+        execute("simulate_model", "bass", **{**request, "simulation_options": {**options, "edges": [[0, 0]]}})
+    except NativeError as error:
+        invalid_edges_rejected = error.code == "invalid_request"
+    else:
+        invalid_edges_rejected = False
+    assert invalid_edges_rejected, "An undirected self-loop must fail the native graph contract."
+
+    print(
+        json.dumps(
+            {
+                "chain_counts": chain["counts"],
+                "disconnected_counts": disconnected["counts"],
+                "fifo_completions": [event["tick"] for event in queued["completions"]],
+                "invalid_edges_rejected": invalid_edges_rejected,
+            },
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 Edges are unique undirected pairs of node positions, without self-loops. Agent
@@ -455,7 +768,7 @@ waiting in the service queue. Each duration is an integer in 1–10^12. Defaults
 the homogeneous engine and RNG stream. Metadata retains the effective arrays.
 
 The network engine currently rejects continuous mechanistic covariate forcing and
-arbitrary hazard functions. Resume remains open.
+arbitrary hazard functions. Checkpoint compatibility across versions remains open.
 The separate `network_diffusion` family has its own scientific qualification.
 
 ## Historical lock-in
@@ -629,29 +942,80 @@ support. The optional `gaussian_priors` map takes a mean and positive standard
 deviation for each specified parameter. Parameters omitted from the map have
 uniform priors within their bounds.
 
+Run `.venv-native/bin/python -I examples/native_bayesian.py` from the repository root.
+The contract checks this displayed source against that executable file.
+
 ```python
+"""Check a bounded four-chain sampler against an independent Gaussian posterior."""
+
+import json
+from math import isfinite
+from statistics import mean, variance
+
 from innovate import execute
 
-fit = execute(
-    "bayesian_metropolis_chains",
-    forecast_model="logistic",
-    parameter="L",
-    bounds=[80, 120],
-    proposal_step=4,
-    gaussian_priors={"L": {"mean": 96, "sd": 2}},
-    noise_sd=1,
-    observed=[50],
-    prediction={"inputs": {"time": [2]}, "parameters": {"k": 0.5, "x0": 2}},
-    draws=4000,
-    warmup=1000,
-    chains=[
-        {"seed": 41, "initial": {"L": 83}},
-        {"seed": 42, "initial": {"L": 94}},
-        {"seed": 43, "initial": {"L": 106}},
-        {"seed": 44, "initial": {"L": 118}},
-    ],
-)["result"]
+
+def main() -> None:
+    """Check support, draws, diagnostics and a predeclared Monte Carlo tolerance."""
+    result = execute(
+        "bayesian_metropolis_chains",
+        forecast_model="logistic",
+        parameter="L",
+        bounds=[80, 120],
+        proposal_step=4,
+        gaussian_priors={"L": {"mean": 96, "sd": 2}},
+        noise_sd=1,
+        observed=[50],
+        prediction={"inputs": {"time": [2]}, "parameters": {"k": 0.5, "x0": 2}},
+        draws=4000,
+        warmup=1000,
+        chains=[
+            {"seed": 41, "initial": {"L": 83}},
+            {"seed": 42, "initial": {"L": 94}},
+            {"seed": 43, "initial": {"L": 106}},
+            {"seed": 44, "initial": {"L": 118}},
+        ],
+    )["result"]
+    chains = result["chains"]
+    assert len(chains) == 4
+    assert [chain["seed"] for chain in chains] == [41, 42, 43, 44]
+    for chain in chains:
+        assert chain["draws"] == 4000 and chain["warmup"] == 1000
+        assert len(chain["samples"]) == 4000
+        assert 0 < chain["acceptance_rate"] < 1
+    samples = [sample for chain in chains for sample in chain["samples"]]
+    assert all(isfinite(sample) and 80 <= sample <= 120 for sample in samples)
+
+    # At the midpoint, y=L/2. Combining N(96, 4) with y=50, noise variance 1,
+    # gives N(98, 2), truncated to [80, 120]. Both bounds exceed 12 SD from 98;
+    # truncation is negligible at the declared tolerances, not mathematically absent.
+    # These fixed tolerances check a seeded fixture; they are not interval coverage.
+    assert abs(mean(samples) - 98.0) < 0.2
+    assert abs(variance(samples) - 2.0) < 0.3
+    assert len(result["diagnostics"]) == 1
+    diagnostic = result["diagnostics"][0]
+    assert diagnostic["parameter"] == "L"
+    assert diagnostic["effective_sample_size"]["draws_used"] == 16000
+    rhat = diagnostic["split_rhat"]["rhat"]
+    assert isfinite(rhat) and 0 < rhat < 1.05
+    for name in ("bulk_ess", "tail_ess"):
+        effective_samples = diagnostic["effective_sample_size"][name]
+        assert isfinite(effective_samples) and effective_samples > 1000
+    # Diagnostic thresholds are warning criteria, not proof of convergence.
+    print(json.dumps({"chains": len(chains), "draws": len(samples), "posterior_oracle_passed": True}, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
 ```
+
+At the Logistic midpoint the likelihood is `50 ~ Normal(L / 2, 1)`.
+Combining it with the `Normal(96, 4)` prior, with variance as the second argument,
+gives a `Normal(98, 2)` posterior truncated to `[80, 120]`. Both bounds are more
+than twelve posterior standard deviations from the mean. The example checks
+the pooled sample mean within 0.2 and variance within 0.3 of this independent
+target. These are predeclared tolerances for a seeded numerical fixture; they
+do not establish interval coverage or validate a real population model.
 
 The result includes each chain's retained draws and per-parameter rank-normalized
 split R-hat and bulk and tail effective sample sizes. To sample jointly, supply
@@ -660,6 +1024,8 @@ two to sixteen ordered `axes` entries, each with `parameter`, `bounds`, and
 `bayesian_parameter_grid` instead uses `points` per axis for one or two axes,
 with at most 10,000 cells, and returns normalized masses and credible intervals.
 Julia and R accept the same operation and payload through their kernel bridges.
+R-hat and effective sample size are diagnostic warning criteria. Passing the
+example's thresholds does not prove convergence in a different inference problem.
 
 ## Hierarchical grouped point models
 
@@ -1285,19 +1651,45 @@ options or fitted state. Forecast grids can have different lengths.
 The response has one row per input, with a result on success or an
 error for that dataset.
 
-```python
-from innovate import predict_batch
+Run `.venv-native/bin/python -I examples/native_batch.py` from the repository root.
+The contract checks this displayed source against that executable file.
 
-rows = predict_batch(
-    "logistic",
-    [
+```python
+"""Verify ordered batch results, analytic values and worker-count validation."""
+
+import json
+from math import exp, isclose
+
+from innovate import NativeError, predict_batch
+
+
+def main() -> None:
+    """Compare one and two workers using two distinct synthetic Logistic curves."""
+    datasets = [
         {"inputs": {"time": [0, 1]}, "parameters": {"L": 100, "k": 1, "x0": 0}},
         {"inputs": {"time": [0]}, "parameters": {"L": 200, "k": 1, "x0": 0}},
-    ],
-    workers=2,
-)
-assert rows[0]["result"]["values"][0] == 50
-assert rows[1]["result"]["values"] == [100]
+    ]
+    rows = predict_batch("logistic", datasets, workers=2)
+    assert rows == predict_batch("logistic", datasets, workers=1)
+    assert len(rows) == 2 and all(row["error"] is None for row in rows)
+    assert rows[0]["result"]["values"][0] == 50
+    assert isclose(rows[0]["result"]["values"][1], 100 / (1 + exp(-1)), abs_tol=1e-12, rel_tol=0)
+    assert rows[1]["result"]["values"] == [100]
+    rejected = False
+    try:
+        predict_batch("logistic", datasets, workers=0)
+    except NativeError as error:
+        rejected = error.code == "invalid_request"
+    assert rejected
+    print(
+        json.dumps(
+            {"batch_items": len(rows), "invalid_workers_rejected": rejected, "worker_invariant": True}, sort_keys=True
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 Julia and R can call these operations through `kernel_call` with
@@ -1479,19 +1871,103 @@ outcomes, binary treatment indicators, stratum labels and fold IDs.
 For clustered observations, pass cluster labels and assign every
 observation in a cluster to the same fold.
 
-```python
-from innovate import execute
+Run `.venv-native/bin/python -I examples/native_overlap.py` from the repository root.
+The contract checks this displayed source against that executable file.
 
-result = execute(
-    "summarize_causal",
-    method="cross_fitted_stratum_ate",
-    outcomes=[1, 2, 3, 4, 5, 6],
-    treatment=[0, 0, 1, 0, 1, 1],
-    strata=["a"] * 6,
-    folds=[1, 1, 1, 2, 2, 2],
-    minimum_training_arm_count=1,
-)["result"]
-print(result["overlap"])
+```python
+"""Check cross-fitted overlap and contrasts against six hand-worked observations.
+
+These synthetic outcomes do not identify an empirical treatment effect. Meeting
+an overlap count threshold does not establish exchangeability, adequate precision
+or a suitable analysis design. Threshold one is deliberately small in this demo.
+"""
+
+import json
+import math
+
+from innovate import NativeError, execute
+
+
+def main() -> None:
+    """Validate held-out predictions, an independent score oracle and overlap guards."""
+    payload = {
+        "method": "cross_fitted_stratum_ate",
+        "outcomes": [1, 2, 3, 4, 5, 6],
+        "treatment": [0, 0, 1, 0, 1, 1],
+        "strata": ["a"] * 6,
+        "folds": [1, 1, 1, 2, 2, 2],
+        "minimum_training_arm_count": 1,
+    }
+    result = execute("summarize_causal", **payload)["result"]
+
+    # Fold one trains on outcomes 4,5,6; fold two trains on outcomes 1,2,3.
+    # Their respective treatment fractions are 2/3 and 1/3.
+    expected_propensities = [2 / 3] * 3 + [1 / 3] * 3
+    expected_control_means = [4.0] * 3 + [1.5] * 3
+    expected_treated_means = [5.5] * 3 + [3.0] * 3
+    for actual, expected in (
+        (result["propensities"], expected_propensities),
+        (result["control_predictions"], expected_control_means),
+        (result["treated_predictions"], expected_treated_means),
+    ):
+        assert all(math.isclose(a, b, rel_tol=1e-12, abs_tol=1e-12) for a, b in zip(actual, expected, strict=True))
+    overlap = result["overlap"]
+    assert overlap["min_training_arm_count"] == 1
+    assert overlap["min_training_arm_clusters"] is None
+    assert math.isclose(overlap["min_propensity"], 1 / 3)
+    assert math.isclose(overlap["max_propensity"], 2 / 3)
+
+    # For score mu1-mu0 + T*(Y-mu1)/e - (1-T)*(Y-mu0)/(1-e), the six
+    # hand-calculated scores are below. This oracle never calls a model fitter.
+    scores = [10.5, 7.5, -2.25, -2.25, 7.5, 10.5]
+    expected_ate = sum(scores) / len(scores)
+    expected_se = math.sqrt(sum((score - expected_ate) ** 2 for score in scores) / (len(scores) * (len(scores) - 1)))
+    assert math.isclose(result["contrast"]["estimate"], expected_ate, rel_tol=1e-12)
+    assert math.isclose(result["contrast"]["influence_standard_error"], expected_se, rel_tol=1e-12)
+    assert result["contrast"]["observations"] == len(scores)
+
+    # Repeated observations within one arm still count as one distinct cluster.
+    clusters = ["fold1-control", "fold1-control", "fold1-treated", "fold2-control", "fold2-treated", "fold2-treated"]
+    clustered = execute("summarize_causal", **payload, clusters=clusters, minimum_training_arm_clusters=1)["result"]
+    assert clustered["overlap"]["min_training_arm_clusters"] == 1
+    assert math.isclose(clustered["contrast"]["estimate"], expected_ate, rel_tol=1e-12)
+    assert clustered["contrast"]["cluster_count"] == len(set(clusters))
+
+    invalid_designs = [
+        ({**payload, "minimum_training_arm_count": 2}, "minimum_training_arm_count"),
+        ({**payload, "clusters": clusters, "minimum_training_arm_clusters": 2}, "minimum_training_arm_clusters"),
+        (
+            {**payload, "clusters": ["split", "c1", "t1", "split", "t2", "t2"]},
+            "single cross-fitting fold",
+        ),
+    ]
+    rejected_designs = 0
+    for invalid, expected_message in invalid_designs:
+        try:
+            execute("summarize_causal", **invalid)
+        except NativeError as error:
+            assert error.code == "invalid_request" and expected_message in str(error)
+            rejected_designs += 1
+        else:
+            raise AssertionError("An invalid overlap or fold design was silently accepted.")
+    assert rejected_designs == len(invalid_designs)
+
+    print(
+        json.dumps(
+            {
+                "ate": round(result["contrast"]["estimate"], 6),
+                "minimum_training_arm_count": overlap["min_training_arm_count"],
+                "minimum_training_arm_clusters": clustered["overlap"]["min_training_arm_clusters"],
+                "propensity_range": [round(overlap["min_propensity"], 6), round(overlap["max_propensity"], 6)],
+                "rejected_designs": rejected_designs,
+            },
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 This returns a minimum training-arm count of one and held-out
@@ -1546,10 +2022,54 @@ Percentage differences are null where the baseline is zero.
 Pass the complete artifact so Rust can verify the checksum with its
 recorded encoding and recompute dataset diagnostics.
 
-```python
-from innovate import execute
+Run `.venv-native/bin/python -I examples/native_reingestion.py` from the repository root.
+The contract checks this displayed source against that executable file.
 
-verified = execute("ingest_dataset", artifact=artifact)["result"]
+```python
+"""Verify both dataset encodings, complete-artifact replay and tamper rejection."""
+
+import json
+from copy import deepcopy
+
+from innovate import NativeError, execute
+
+
+def main() -> None:
+    """Re-ingest a synthetic adoption dataset while preserving its checksum format."""
+    dataset = {
+        "kind": "adoption",
+        "time": [0, 1],
+        "adoption": [1, 2],
+        "provenance": {
+            "source": "synthetic survey α",
+            "license": "CC0-1.0",
+            "extraction_time": "2026-11-15T00:00:00Z",
+        },
+    }
+    encodings = ["python_sorted_json_v1", "rust_sorted_json_v1"]
+    rejected_count = 0
+    for encoding in encodings:
+        artifact = execute("ingest_dataset", dataset=dataset, encoding=encoding)["result"]
+        assert artifact["checksum_encoding"] == encoding
+        verified = execute("ingest_dataset", artifact=artifact)["result"]
+        assert verified == artifact
+        assert verified["dataset"]["adoption"] == [1, 2]
+        assert verified["dataset"]["time"] == [0, 1]
+        tampered = deepcopy(artifact)
+        tampered["dataset"]["adoption"][1] = 3
+        rejected = False
+        try:
+            execute("ingest_dataset", artifact=tampered)
+        except NativeError as error:
+            rejected = "checksum does not match" in str(error)
+        assert rejected
+        rejected_count += int(rejected)
+    assert dataset["adoption"] == [1, 2]
+    print(json.dumps({"encodings": encodings, "tampered_artifacts_rejected": rejected_count}, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 This works for artifacts recorded with either `python_sorted_json_v1`

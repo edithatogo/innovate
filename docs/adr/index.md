@@ -13,3 +13,4 @@ This directory contains Architecture Decision Records (ADRs) for durable technic
 ```
 
 - [ADR 0006: Rust and Polars native runtime](0006-rust-polars-native-only.md)
+- [ADR 0007: Executable documentation contracts for Astro](0007-executable-documentation-contracts.md)

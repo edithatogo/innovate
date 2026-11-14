@@ -1,0 +1,900 @@
+{
+  "counts": {
+    "julia_documented_functions": 23,
+    "julia_documented_types": 1,
+    "julia_example_assertions": 9,
+    "julia_example_blocks": 7,
+    "julia_exported_symbols": 24,
+    "r_all_manual_pages": 14,
+    "r_documented_functions": 24,
+    "r_example_assertions": 10,
+    "r_example_blocks": 6,
+    "r_exported_functions": 24,
+    "r_manual_pages": 13
+  },
+  "documentation_complete": false,
+  "existing_runtime_qualification": {
+    "commands": {
+      "julia_native_suite": "julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'",
+      "native_prerequisite": "cargo build --release --locked -p innovate-ffi -j 2",
+      "r_install": "R CMD INSTALL bindings/r",
+      "r_native_suite": "Rscript bindings/r/tests/native.R"
+    },
+    "job": "julia-r",
+    "prerequisites": "Stage the native library in both bindings as specified by the workflow; do not treat these commands as execution evidence.",
+    "status": "commands_recorded_not_executed",
+    "toolchain_note": "Julia uses the workflow's 1.13 selector and Project.toml compatibility bounds. R setup/jsonlite resolve through the existing workflow; this contract introduces no dependencies or version changes.",
+    "workflow": ".github/workflows/ci.yml"
+  },
+  "generator": "scripts/check_polyglot_api_documentation.py",
+  "hashing": {
+    "algorithm": "sha256",
+    "example_capture": "Julia code starts after the ```julia newline and retains the newline before the closing fence. R code is the exact text inside the examples braces, including boundary newlines. source_line identifies the opening fence or examples macro.",
+    "newline_normalization": "CRLF and CR become LF before hashing source, runner, documentation and example text.",
+    "text_encoding": "utf-8"
+  },
+  "hosted_documentation_checks": {
+    "commands": {
+      "julia": "julia --project=bindings/julia scripts/check_julia_documentation.jl",
+      "r": "Rscript scripts/check_r_documentation.R"
+    },
+    "default_receipt_directory": "artifacts/docs-qualification",
+    "job": "julia-r",
+    "local_execution": "not_run",
+    "receipt_directory_environment": "DOCS_RECEIPT_DIR",
+    "runners": {
+      "julia": "scripts/check_julia_documentation.jl",
+      "r": "scripts/check_r_documentation.R"
+    },
+    "status": "configured_pending_execution",
+    "workflow": ".github/workflows/ci.yml"
+  },
+  "limitations": [
+    "Presence, parameter names and signature/default consistency are structural checks; prose accuracy and scientific quality require review.",
+    "This parser does not compile Julia/R, execute documentation examples, load native libraries or qualify numerical behavior.",
+    "Private, nested and anonymous functions are outside this public export contract.",
+    "New source files, dynamic exports, additional public methods and unsupported declaration forms require explicit parser review."
+  ],
+  "native_examples": {
+    "julia": [
+      {
+        "assertion_count": 2,
+        "code": "using Innovate\nresponse = kernel_call(\"discover_models\")\n@assert get(response, \"error\", nothing) === nothing\n@assert any(model -> model[\"key\"] == \"bass\", response[\"result\"][\"models\"])\n",
+        "code_sha256": "99031215981966d266f692fdafaab9b4914c4a278ebad2afaef5daca81c2f0e9",
+        "id": "julia:kernel_call:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 96,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_call"
+      },
+      {
+        "assertion_count": 1,
+        "code": "using Innovate\ntime = collect(0.0:1.0:12.0)\nparameters = Dict(\"L\" => 100.0, \"k\" => 0.5, \"x0\" => 6.0)\nobserved = kernel_predict_model(\"logistic\", Dict(\"inputs\" => Dict(\"time\" => time),\n    \"parameters\" => parameters))[\"result\"][\"values\"]\nfit = kernel_fit_model(\"logistic\", Dict(\"inputs\" => Dict(\"time\" => time,\n    \"observed\" => observed), \"fit_options\" => Dict(\"initial_parameters\" => parameters)))\nfuture = kernel_predict_model(\"logistic\", Dict(\"inputs\" => Dict(\"time\" => [13.0, 14.0]),\n    \"state\" => fit[\"result\"][\"state\"]))\n@assert length(future[\"result\"][\"values\"]) == 2\n",
+        "code_sha256": "e37fe57f914e2d7853a8f4cf34341efc064156565427aae49486c6b04dc86e14",
+        "id": "julia:kernel_fit_model:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 392,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_fit_model"
+      },
+      {
+        "assertion_count": 1,
+        "code": "using Innovate\nresponse = kernel_predict_model(\"logistic\", Dict(\n    \"inputs\" => Dict(\"time\" => [1.0]),\n    \"parameters\" => Dict(\"L\" => 100.0, \"k\" => 1.0, \"x0\" => 1.0)))\n@assert response[\"result\"][\"values\"] == [50.0]\n",
+        "code_sha256": "fb9bca231f409029a05342cbdf905a20b23397e820dfe0d160d18927e21a4211",
+        "id": "julia:kernel_predict_model:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 424,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_predict_model"
+      },
+      {
+        "assertion_count": 1,
+        "code": "using Innovate\nresult = kernel_categorize_adopters([0., 1., 2., 3., 4.], [0., 3., 3., 1., 1.])\n@assert result[\"category\"] == [\"Innovators\", \"Early Adopters\", \"Early Majority\",\n    \"Late Majority\", \"Laggards\"]\n",
+        "code_sha256": "535fe568ba22c0f1add4030912052def6d537408591f328b41ac43a1ea6c832c",
+        "id": "julia:kernel_categorize_adopters:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 539,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_categorize_adopters"
+      },
+      {
+        "assertion_count": 1,
+        "code": "using Innovate\n@assert kernel_cumulative_sum([1.0, 2.0, 3.0]) == [1.0, 3.0, 6.0]\n",
+        "code_sha256": "6b0826cc7554e3313178e1c8833075e53d7ec10c746212a5996586f6513f5b4c",
+        "id": "julia:kernel_cumulative_sum:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 593,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_cumulative_sum"
+      },
+      {
+        "assertion_count": 1,
+        "code": "using Innovate\n@assert kernel_rolling_average([1.0, 2.0, 3.0], 2) == [nothing, 1.5, 2.5]\n",
+        "code_sha256": "4f82f3a4ed5b4e9ddd2eae128aaeadd02aef50e4613810ce7c88769736256069",
+        "id": "julia:kernel_rolling_average:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 618,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_rolling_average"
+      },
+      {
+        "assertion_count": 2,
+        "code": "using Innovate\nresult = kernel_aggregate_dates([\"2026-11-01\", \"2026-11-02\"], [1., 2.], \"W\")\n@assert result[\"dates\"] == [\"2026-11-01\"]\n@assert result[\"values\"] == [3.]\n",
+        "code_sha256": "4a8ee6833a8ef509543fd335d7a214f67242751e95609b5cac239d3f5ce08c5c",
+        "id": "julia:kernel_aggregate_dates:1",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 645,
+        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "symbol": "kernel_aggregate_dates"
+      }
+    ],
+    "r": [
+      {
+        "assertion_count": 1,
+        "code": "\nresult <- kernel_categorize_adopters(0:4, c(0, 3, 3, 1, 1))\nstopifnot(identical(unlist(result$category, use.names = FALSE),\n  c(\"Innovators\", \"Early Adopters\", \"Early Majority\", \"Late Majority\", \"Laggards\")))\n",
+        "code_sha256": "af02a45c64a33c52a4aa885ef81106a40765c8c4fe95f32ea6a07d011afeb1a0",
+        "id": "r:bindings/r/man/kernel_adopters.Rd:1",
+        "source": "bindings/r/man/kernel_adopters.Rd",
+        "source_line": 52,
+        "source_sha256": "8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e"
+      },
+      {
+        "assertion_count": 1,
+        "code": "\nweekly <- kernel_aggregate_dates(c(\"2026-11-01\", \"2026-11-02\"), c(1, 2), \"W\")\nstopifnot(weekly$dates[[1]] == \"2026-11-01\", weekly$values[[1]] == 3)\n",
+        "code_sha256": "4574b77a193698c164cda87d8e407cf639dac74c0044e2c3eca3e19e88de872f",
+        "id": "r:bindings/r/man/kernel_aggregate_dates.Rd:1",
+        "source": "bindings/r/man/kernel_aggregate_dates.Rd",
+        "source_line": 34,
+        "source_sha256": "a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211"
+      },
+      {
+        "assertion_count": 2,
+        "code": "\nrows <- kernel_predict_batch(\"logistic\", list(\n  list(inputs = list(time = c(0, 1)), parameters = list(L = 100, k = 1, x0 = 0)),\n  list(inputs = list(time = 0), parameters = list(L = 200, k = 1, x0 = 0))\n), workers = 2L)\nstopifnot(length(rows) == 2L, is.null(rows[[1]]$error), is.null(rows[[2]]$error))\nstopifnot(rows[[1]]$result$values[[1]] == 50,\n          rows[[2]]$result$values[[1]] == 100)\n",
+        "code_sha256": "70fa7bdb5383ef41269884494abcb9bce98ceac644995b1f0f680c8d2157b7c7",
+        "id": "r:bindings/r/man/kernel_batch.Rd:1",
+        "source": "bindings/r/man/kernel_batch.Rd",
+        "source_line": 55,
+        "source_sha256": "c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351"
+      },
+      {
+        "assertion_count": 2,
+        "code": "\ncatalog <- kernel_discover_models()\nstopifnot(any(vapply(catalog$models, function(model) model$key == \"bass\", logical(1))))\nrequest <- '{\"schema_version\":\"2.0\",\"operation\":\"discover_models\",\"payload\":{}}'\nresponse_json <- kernel_call_json(request, raw = TRUE)\nstopifnot(is.character(response_json), length(response_json) == 1L)\n",
+        "code_sha256": "c8fb3d29f5010b29282eeb1c6b5f433d314edb6b3dbaf518e98386298e918c24",
+        "id": "r:bindings/r/man/kernel_bridge.Rd:1",
+        "source": "bindings/r/man/kernel_bridge.Rd",
+        "source_line": 73,
+        "source_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f"
+      },
+      {
+        "assertion_count": 2,
+        "code": "\nparameters <- list(L = 100, k = 0.5, x0 = 6)\ntime <- 0:12\nprediction <- kernel_predict_model(\"logistic\", list(\n  inputs = list(time = time), parameters = parameters))\nobserved <- unlist(prediction$result$values, use.names = FALSE)\nstopifnot(abs(observed[[7]] - 50) < 1e-12)\nfitted <- kernel_fit_model(\"logistic\", list(\n  inputs = list(time = time, observed = observed),\n  fit_options = list(initial_parameters = parameters)))\nfuture <- kernel_predict_model(\"logistic\", list(\n  inputs = list(time = c(13, 14)), state = fitted$result$state))\nstopifnot(length(future$result$values) == 2L)\n",
+        "code_sha256": "effedc84cbe9ea27367e89a204534ae5a6bfe7f8c95816c0c300895e771f8cb9",
+        "id": "r:bindings/r/man/kernel_models.Rd:1",
+        "source": "bindings/r/man/kernel_models.Rd",
+        "source_line": 97,
+        "source_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2"
+      },
+      {
+        "assertion_count": 2,
+        "code": "\nstopifnot(identical(as.numeric(unlist(kernel_cumulative_sum(c(1, 2, 3)))), c(1, 3, 6)))\nrolling <- kernel_rolling_average(c(1, 2, 3), 2L)\nstopifnot(is.null(rolling[[1]]), rolling[[2]] == 1.5, rolling[[3]] == 2.5)\n",
+        "code_sha256": "e9320f253e8fdce5276e591475ec7993d19d030aede8569656567711b4d7d766",
+        "id": "r:bindings/r/man/kernel_preprocessing.Rd:1",
+        "source": "bindings/r/man/kernel_preprocessing.Rd",
+        "source_line": 54,
+        "source_sha256": "398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283"
+      }
+    ]
+  },
+  "rendered_reference": {
+    "julia": "current_generated_reference_not_qualified",
+    "r": "current_generated_reference_not_qualified",
+    "scope": "This inventory qualifies source docstrings/comments and R help files only, not rendered Astro API reference coverage."
+  },
+  "runtime_qualification": "not_run_by_this_checker",
+  "schema_version": 1,
+  "scope": "Explicit Julia and R public exports in the current thin native binding source files.",
+  "sources": {
+    ".github/workflows/ci.yml": "sha256:e3c7a364420ca4144dd977c19b9c1c25809c56474b800b5f4ae5d1c98bb64158",
+    "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
+    "bindings/julia/src/Innovate.jl": "sha256:8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+    "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",
+    "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
+    "bindings/r/R/kernel_bridge.R": "sha256:36292dd1a071422e0fe7406ef03d88eb5c9663c8eca8c1de49dbdb6dea21d560",
+    "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+    "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+    "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+    "bindings/r/man/invoke_registered_extension.Rd": "sha256:f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+    "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+    "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+    "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+    "bindings/r/man/kernel_bridge.Rd": "sha256:10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+    "bindings/r/man/kernel_models.Rd": "sha256:d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+    "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+    "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+    "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+    "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+    "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+    "scripts/check_julia_documentation.jl": "sha256:9675fea150259cf8135b6604c427d95a34a182e2cf9434fdb93bf215a3a1f93e",
+    "scripts/check_polyglot_api_documentation.py": "sha256:bc9f09f2daae854b549ceff8d874e0f4a596f3d05087e448413c4647848c6980",
+    "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
+  },
+  "structural_complete": true,
+  "symbols": {
+    "julia": [
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "c0034f95038cd5b79576edbaea9938b0fd4c885abebd3f152ca5c68f64fc1d0a",
+        "fields": [
+          "code",
+          "message",
+          "validation"
+        ],
+        "kind": "struct",
+        "name": "DatasetValidationError",
+        "signature": "struct DatasetValidationError <: Exception",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 41
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "ec573ae1fd9cc9db3b96b963a6acd47ed9e3438884a7933f4b4365e22714a9c2",
+        "kind": "function",
+        "name": "export_ipc_file",
+        "parameters": [
+          "input"
+        ],
+        "signature": "export_ipc_file(input::Vector{UInt8})",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 253
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "d8906c8f3d07a093b8d3e9607da557e0ee0566cb8058c372efd1b4b4642d954e",
+        "kind": "function",
+        "name": "export_ipc_stream",
+        "parameters": [
+          "input"
+        ],
+        "signature": "export_ipc_stream(input::Vector{UInt8})",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 276
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "be545878034aba15ae7ca060d1e24fecdbdc45163896393f11c5275960fbfd4f",
+        "kind": "function",
+        "name": "invoke_registered_extension",
+        "parameters": [
+          "callback",
+          "selection",
+          "payload"
+        ],
+        "signature": "invoke_registered_extension(callback, selection, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 128
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "ee3c0792b048cfb1d730a8adfbeb9f19a82b60f055fd4c3fb63e954e02c90b72",
+        "kind": "function",
+        "name": "kernel_aggregate_dates",
+        "parameters": [
+          "dates",
+          "values",
+          "frequency"
+        ],
+        "signature": "kernel_aggregate_dates(dates, values, frequency)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 652
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "a98041b5b15656a58acd8ab04272cc47bad2a08f09084a77ccf61c796af94a19",
+        "kind": "function",
+        "name": "kernel_call",
+        "parameters": [
+          "operation",
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{String,Any}())",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 103
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "892fb45fe91d51b12ca81da9c121d146ffc30bbf0d4e61e97144f27221b7f1f9",
+        "kind": "function",
+        "name": "kernel_categorize_adopters",
+        "parameters": [
+          "time",
+          "rates"
+        ],
+        "signature": "kernel_categorize_adopters(time, rates)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 546
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "a194b0eb589a8dc7643734a2d33a77a48a3a0e7c5c041f472333046a9c8e4655",
+        "kind": "function",
+        "name": "kernel_categorize_fitted_adopters",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_categorize_fitted_adopters(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 566
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "acec17f8746d1f5da0181ab633771b551d8d82017ca9d1694c448fddcaa980c6",
+        "kind": "function",
+        "name": "kernel_cumulative_sum",
+        "parameters": [
+          "values"
+        ],
+        "signature": "kernel_cumulative_sum(values)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 598
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "f0a891e73cfb4f7c2b96b5aa5b21df7c00c0d1c575b95d4cc1488de31f3d5d08",
+        "kind": "function",
+        "name": "kernel_diagnose_model",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_diagnose_model(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 520
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "3e323c0e32088e7a4c318d717b6ecdd768e450790576cbec222f7ee7443f0f28",
+        "kind": "function",
+        "name": "kernel_discover_models",
+        "parameters": [],
+        "signature": "kernel_discover_models()",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 373
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "d1fb946774231246b5b933193f40a853d4f59ae66fb6ab1c9631bec5dae60c11",
+        "kind": "function",
+        "name": "kernel_fit_batch",
+        "parameters": [
+          "model",
+          "datasets",
+          "workers"
+        ],
+        "signature": "kernel_fit_batch(model, datasets; workers=1)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 449
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "ec44f300d149e42d06836975841a5b24902b72c6eb432dce5298cfbe9de8c21f",
+        "kind": "function",
+        "name": "kernel_fit_model",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_fit_model(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 405
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "49e82399bc655fbd9e6f17c91581d2446fa1cd24ef5c0e5f34f3035bb1034906",
+        "kind": "function",
+        "name": "kernel_paired_outcomes_ipc",
+        "parameters": [
+          "payload"
+        ],
+        "signature": "kernel_paired_outcomes_ipc(payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 218
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "1b9b838ebab9b3871d5f960762f94851754592955f16543091cd3ea8a9d80310",
+        "kind": "function",
+        "name": "kernel_predict_batch",
+        "parameters": [
+          "model",
+          "datasets",
+          "workers"
+        ],
+        "signature": "kernel_predict_batch(model, datasets; workers=1)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 466
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "3da8e62a13c06a35cc86ee3e5dfcd50b3acd3bfe7028b4ee93cc8e82648eb27b",
+        "kind": "function",
+        "name": "kernel_predict_model",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_predict_model(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 432
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "ca96ca4638a3be3c864150f93a198b75b18dbae4c7c934fbfcb87b61721dafc5",
+        "kind": "function",
+        "name": "kernel_rolling_average",
+        "parameters": [
+          "values",
+          "window"
+        ],
+        "signature": "kernel_rolling_average(values, window)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 623
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "3dc4d74410af45c5d56fcf4fbf8d7a517c947439de7c3a1129d781703ba0026b",
+        "kind": "function",
+        "name": "kernel_sarima_fit",
+        "parameters": [
+          "values",
+          "order",
+          "seasonal_order",
+          "historical"
+        ],
+        "signature": "kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0), historical=false)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 715
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "a96dba0428ddca4c1f03dd31d80f3d110ad62e5b80735ef5e3544ae3134e1452",
+        "kind": "function",
+        "name": "kernel_scenario_comparisons_ipc",
+        "parameters": [
+          "response"
+        ],
+        "signature": "kernel_scenario_comparisons_ipc(response)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 200
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "af891e40291f9ce850a15dcc2f2431e8ffc296b0bb012f90cdd69de2b8c100d6",
+        "kind": "function",
+        "name": "kernel_scenario_executions_ipc",
+        "parameters": [
+          "response"
+        ],
+        "signature": "kernel_scenario_executions_ipc(response)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 182
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "29cd198610e656c650de4633921037f2895b345a5c24c76fe8a6b71d21e37013",
+        "kind": "function",
+        "name": "kernel_scenario_grid_ipc",
+        "parameters": [
+          "data",
+          "payload"
+        ],
+        "signature": "kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 160
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "1e90588aff8fe9629848c6ff19591f00b82e51c447791b361b37f553411957b4",
+        "kind": "function",
+        "name": "kernel_seasonal_decomposition",
+        "parameters": [
+          "values",
+          "period",
+          "trend_span",
+          "robust",
+          "historical",
+          "inner_iterations",
+          "outer_iterations",
+          "seasonal_span",
+          "low_pass_span",
+          "seasonal_degree",
+          "seasonal_jump",
+          "trend_degree",
+          "trend_jump",
+          "low_pass_degree",
+          "low_pass_jump"
+        ],
+        "signature": "kernel_seasonal_decomposition(values, period, trend_span=nothing; robust=false, historical=false, inner_iterations=5, outer_iterations=robust ? 5 : 0, seasonal_span=nothing, low_pass_span=nothing, seasonal_degree=1, seasonal_jump=1, trend_degree=1, trend_jump=1, low_pass_degree=1, low_pass_jump=1)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 685
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "ee67a1b6edec76129f17fb71a3aa09622cedb3bee70233ba7e42607f2d0a1205",
+        "kind": "function",
+        "name": "kernel_simulate_model",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_simulate_model(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 484
+      },
+      {
+        "documentation": "bindings/julia/src/Innovate.jl",
+        "documentation_sha256": "6f5bd7f9026eb1d15287b25f6b0b7e35e877a6b219023f96187a3b8463a70478",
+        "kind": "function",
+        "name": "kernel_summarize_model",
+        "parameters": [
+          "model",
+          "payload"
+        ],
+        "signature": "kernel_summarize_model(model, payload)",
+        "source": "bindings/julia/src/Innovate.jl",
+        "source_line": 502
+      }
+    ],
+    "r": [
+      {
+        "documentation": "bindings/r/man/export_ipc_file.Rd",
+        "kind": "function",
+        "manual_sha256": "1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+        "name": "export_ipc_file",
+        "parameters": [
+          "data"
+        ],
+        "signature": "export_ipc_file(data)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "bfb54bf5734d43a71d7546075228bb86a1e4876063d0c77aed8e547fe68f999a",
+        "source_line": 596
+      },
+      {
+        "documentation": "bindings/r/man/export_ipc_stream.Rd",
+        "kind": "function",
+        "manual_sha256": "d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+        "name": "export_ipc_stream",
+        "parameters": [
+          "data"
+        ],
+        "signature": "export_ipc_stream(data)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "124e05627e5bc7b606cc2ab1bb566fdcbca662083466ffa3eda0353635c73c63",
+        "source_line": 613
+      },
+      {
+        "documentation": "bindings/r/man/invoke_registered_extension.Rd",
+        "kind": "function",
+        "manual_sha256": "f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+        "name": "invoke_registered_extension",
+        "parameters": [
+          "callback",
+          "selection",
+          "payload"
+        ],
+        "signature": "invoke_registered_extension(callback, selection, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "0ca4143a5992ed721425ff2bf940a3b73d04826edad3a14e2d0486dfc59d2ba2",
+        "source_line": 635
+      },
+      {
+        "documentation": "bindings/r/man/kernel_aggregate_dates.Rd",
+        "kind": "function",
+        "manual_sha256": "a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+        "name": "kernel_aggregate_dates",
+        "parameters": [
+          "dates",
+          "values",
+          "frequency"
+        ],
+        "signature": "kernel_aggregate_dates(dates, values, frequency)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "fab37b1d2962eb755c942d321b076077f1c07ebc38e5ede8a9f9a4103316b36b",
+        "source_line": 504
+      },
+      {
+        "documentation": "bindings/r/man/kernel_bridge.Rd",
+        "kind": "function",
+        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "name": "kernel_call",
+        "parameters": [
+          "operation",
+          "model_key",
+          "payload",
+          "raw"
+        ],
+        "signature": "kernel_call(operation, model_key = NULL, payload = list(), raw = FALSE)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "3d0120bbaf78a1236627896634130dac99da51f6326fb42d56827ea97d358603",
+        "source_line": 43
+      },
+      {
+        "documentation": "bindings/r/man/kernel_bridge.Rd",
+        "kind": "function",
+        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "name": "kernel_call_json",
+        "parameters": [
+          "request",
+          "raw"
+        ],
+        "signature": "kernel_call_json(request, raw = FALSE)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "2ac258eb439cf5c4e3c76157d263b266c0002201eeedb88bd3bb21ecca6c201c",
+        "source_line": 128
+      },
+      {
+        "documentation": "bindings/r/man/kernel_adopters.Rd",
+        "kind": "function",
+        "manual_sha256": "8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+        "name": "kernel_categorize_adopters",
+        "parameters": [
+          "time",
+          "rates"
+        ],
+        "signature": "kernel_categorize_adopters(time, rates)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "ca00b9d9d42ba8dd8c81c778055200e36b8716f0f853d27ba5e844d629493cab",
+        "source_line": 423
+      },
+      {
+        "documentation": "bindings/r/man/kernel_adopters.Rd",
+        "kind": "function",
+        "manual_sha256": "8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+        "name": "kernel_categorize_fitted_adopters",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_categorize_fitted_adopters(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "b2a0946abe6318c777241a16b7da1e045b181d0647c1adfda1e3d04edb5a23e6",
+        "source_line": 441
+      },
+      {
+        "documentation": "bindings/r/man/kernel_preprocessing.Rd",
+        "kind": "function",
+        "manual_sha256": "398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+        "name": "kernel_cumulative_sum",
+        "parameters": [
+          "values"
+        ],
+        "signature": "kernel_cumulative_sum(values)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "09cdf3239adc8e95fc1229ae6a0632f427116501037600c8a1552c9d5a45a6c2",
+        "source_line": 463
+      },
+      {
+        "documentation": "bindings/r/man/kernel_models.Rd",
+        "kind": "function",
+        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "name": "kernel_diagnose_model",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_diagnose_model(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "90583e1293f85479f6ec5381f9bcc30eaf7ec7e2ef785eeb8b68f1a467cc7d2c",
+        "source_line": 370
+      },
+      {
+        "documentation": "bindings/r/man/kernel_bridge.Rd",
+        "kind": "function",
+        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "name": "kernel_discover_models",
+        "parameters": [],
+        "signature": "kernel_discover_models()",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "df1e17c55f4f97d8df51c24c3da8f93bb545b23001ca168f119977c737f1c8c4",
+        "source_line": 283
+      },
+      {
+        "documentation": "bindings/r/man/kernel_batch.Rd",
+        "kind": "function",
+        "manual_sha256": "c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+        "name": "kernel_fit_batch",
+        "parameters": [
+          "model_key",
+          "datasets",
+          "workers"
+        ],
+        "signature": "kernel_fit_batch(model_key, datasets, workers = 1L)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "182a1d12dfe63ce34096d9d76cae5c96d03b2b029b2795569355cb2a849c367c",
+        "source_line": 388
+      },
+      {
+        "documentation": "bindings/r/man/kernel_models.Rd",
+        "kind": "function",
+        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "name": "kernel_fit_model",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_fit_model(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "dd99ec1bcb86ae45e1f764f49c7dfe8828bf15744b7e56a5b10f75363c0f818f",
+        "source_line": 303
+      },
+      {
+        "documentation": "bindings/r/man/kernel_paired_outcomes_ipc.Rd",
+        "kind": "function",
+        "manual_sha256": "104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+        "name": "kernel_paired_outcomes_ipc",
+        "parameters": [
+          "payload"
+        ],
+        "signature": "kernel_paired_outcomes_ipc(payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "2f9c4a3fe437253fcb2c122ef560c44fbd7bc62c489d8ad9e5cbd9301c0fd922",
+        "source_line": 220
+      },
+      {
+        "documentation": "bindings/r/man/kernel_batch.Rd",
+        "kind": "function",
+        "manual_sha256": "c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+        "name": "kernel_predict_batch",
+        "parameters": [
+          "model_key",
+          "datasets",
+          "workers"
+        ],
+        "signature": "kernel_predict_batch(model_key, datasets, workers = 1L)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "3e727c6e724f8f5a56a31ab0d3ebb229c9cadbb672988cf72a196fd169cf9f23",
+        "source_line": 406
+      },
+      {
+        "documentation": "bindings/r/man/kernel_models.Rd",
+        "kind": "function",
+        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "name": "kernel_predict_model",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_predict_model(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "ba2a2cdda3336eb59860fe0f5f344ff586da7c5c82146ac679803b2e44278fd7",
+        "source_line": 321
+      },
+      {
+        "documentation": "bindings/r/man/kernel_preprocessing.Rd",
+        "kind": "function",
+        "manual_sha256": "398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+        "name": "kernel_rolling_average",
+        "parameters": [
+          "values",
+          "window"
+        ],
+        "signature": "kernel_rolling_average(values, window)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "9142c4d3f98b74cb6cf5b6eb296df300f1d891529a86e67a21f71654824aa133",
+        "source_line": 480
+      },
+      {
+        "documentation": "bindings/r/man/kernel_sarima_fit.Rd",
+        "kind": "function",
+        "manual_sha256": "98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+        "name": "kernel_sarima_fit",
+        "parameters": [
+          "values",
+          "order",
+          "seasonal_order",
+          "historical"
+        ],
+        "signature": "kernel_sarima_fit(values, order, seasonal_order = c(0L, 0L, 0L, 0L), historical = FALSE)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "38089590c0e2098c16ca669fbd91b919758a28e357e177d02587693440c8361c",
+        "source_line": 577
+      },
+      {
+        "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
+        "kind": "function",
+        "manual_sha256": "cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+        "name": "kernel_scenario_comparisons_ipc",
+        "parameters": [
+          "response"
+        ],
+        "signature": "kernel_scenario_comparisons_ipc(response)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "6b5bac89155cb2e119aa9efdf762f84cf0d2bb1e97af42f095b499d3dcf8c545",
+        "source_line": 199
+      },
+      {
+        "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
+        "kind": "function",
+        "manual_sha256": "cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+        "name": "kernel_scenario_executions_ipc",
+        "parameters": [
+          "response"
+        ],
+        "signature": "kernel_scenario_executions_ipc(response)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "fd2a67fb7eb8bae62e0625a02f397d918e815a872db7df2003b95aa6420c7647",
+        "source_line": 180
+      },
+      {
+        "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
+        "kind": "function",
+        "manual_sha256": "cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+        "name": "kernel_scenario_grid_ipc",
+        "parameters": [
+          "data",
+          "payload"
+        ],
+        "signature": "kernel_scenario_grid_ipc(data, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "1bc764291b2fbee4049397da6672493bfc1987a9840503fc7c65946b6bf6768f",
+        "source_line": 161
+      },
+      {
+        "documentation": "bindings/r/man/kernel_seasonal_decomposition.Rd",
+        "kind": "function",
+        "manual_sha256": "3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+        "name": "kernel_seasonal_decomposition",
+        "parameters": [
+          "values",
+          "period",
+          "trend_span",
+          "robust",
+          "historical",
+          "inner_iterations",
+          "outer_iterations",
+          "seasonal_span",
+          "low_pass_span",
+          "seasonal_degree",
+          "seasonal_jump",
+          "trend_degree",
+          "trend_jump",
+          "low_pass_degree",
+          "low_pass_jump"
+        ],
+        "signature": "kernel_seasonal_decomposition(values, period, trend_span = NULL, robust = FALSE, historical = FALSE, inner_iterations = 5L, outer_iterations = if (isTRUE(robust)) 5L else 0L, seasonal_span = NULL, low_pass_span = NULL, seasonal_degree = 1L, seasonal_jump = 1L, trend_degree = 1L, trend_jump = 1L, low_pass_degree = 1L, low_pass_jump = 1L)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "cee8d68c194cadd6bcee569a8e376ecdda81eb7d43c94df10e0d1134a036f0a8",
+        "source_line": 544
+      },
+      {
+        "documentation": "bindings/r/man/kernel_models.Rd",
+        "kind": "function",
+        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "name": "kernel_simulate_model",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_simulate_model(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "cac8147c0958352dd5a2e1f03dd085d8fb75b3413471dbde46b934b24db13b50",
+        "source_line": 339
+      },
+      {
+        "documentation": "bindings/r/man/kernel_models.Rd",
+        "kind": "function",
+        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "name": "kernel_summarize_model",
+        "parameters": [
+          "model_key",
+          "payload"
+        ],
+        "signature": "kernel_summarize_model(model_key, payload)",
+        "source": "bindings/r/R/kernel_bridge.R",
+        "source_documentation_sha256": "d31eaef2dd2b20654d953c6f66f67d4a04ed7d66a34378a4fa2c600b5197da07",
+        "source_line": 355
+      }
+    ]
+  }
+}

@@ -192,6 +192,15 @@ pub(crate) fn resolve(payload: &Value) -> Result<Value, &'static str> {
 /// after resolution do not invalidate the snapshot. The host selects the callable
 /// and owns its input contract. Dataset providers return a dataset that Rust
 /// ingests into a validated artifact.
+///
+/// `selection` identifies the registered name, exact expected version and
+/// extension point. `input` is passed unchanged to `callback`, alongside the
+/// resolved manifest snapshot. Output validation follows the selected extension
+/// point; the callback is trusted host code, not a sandboxed plugin.
+///
+/// # Errors
+/// Rejects unknown/version-mismatched registrations and invalid extension output,
+/// and propagates callback failures. A callback panic is not caught here.
 pub fn invoke_registered_extension(
     selection: &Value,
     input: &Value,
