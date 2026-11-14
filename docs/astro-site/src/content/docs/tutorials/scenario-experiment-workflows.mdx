@@ -32,6 +32,22 @@ You should be comfortable with Python mappings, cumulative adoption and the
 distinction between a simulated path and an empirical estimate. Each of the four
 scenarios uses two observation times; the stochastic scenarios use 100 agents.
 
+Choose an outcome and comparison before running a real experiment. In this
+example, only the baseline and pause scenarios form an intervention comparison;
+competition and replacement demonstrate separate model contracts.
+
+| Scenario | Observation times, in years | Fixed inputs | Result to interpret |
+| --- | --- | --- | --- |
+| Baseline | 0 and 5 | 100 agents; innovation `p = 0.2` per year; imitation `q = 0` | One simulated adoption path |
+| Pause innovation | 0 and 5 | The same population, seed and starting state; innovation reduced by `0.2` at time 0 | Alternative minus baseline at matched times |
+| Two products | 0 and 5 | 200 potential adopters; 100 initially allocated 25:75; zero growth and interaction rates | Two unchanged product levels |
+| Replacement | 0 and 2 | A fixed pool of 100 incumbent adopters; replacement hazard `0.5` per year | Incumbent and entrant levels whose sum remains 100 |
+
+The common specification has a five-year horizon. The replacement example asks
+for output only through year two; it does not implicitly simulate a five-year
+endpoint for the comparison. `reference_year` labels the time origin rather than
+converting the numeric time coordinates into dates.
+
 ## Steps
 
 1. Use the checked-in `examples/native_scenarios.py` from the same revision as
@@ -86,10 +102,40 @@ allocation from subsequent growth. Substitution uses a replacement rate of
 `0.5` over two time units, so the analytic incumbent fraction is `exp(-1)`.
 These deliberately simple limits make an implementation error easier to detect.
 
+Here `substitution_rate = 0.5` is translated into a continuous replacement hazard.
+It is not a 50% one-year replacement probability: under this model that probability
+is `1 − exp(−0.5)`, approximately 39.35%. The units and the hazard-to-probability
+conversion follow from the specified exponential survival equation.
+
 JSON preserves the complete response. The Polars table preserves row order and
 stores nested results in `execution_json`. A replay request resolves the inputs
 for one scenario; retain the original grid response separately if you need its
 cross-scenario comparisons.
+
+## Check your understanding
+
+1. Why is the intervention contrast nonpositive in this fixture, and what would
+   prevent that conclusion in a different scenario?
+2. Calculate incumbent and entrant levels at year two. Why do they sum to 100
+   when the specification's potential market is 200?
+3. Would ranking the replacement result at year two against the baseline result
+   at year five answer the intervention question?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. The intervention removes the only adoption mechanism: innovation becomes
+   zero, imitation is already zero and there are no initial adopters. Its zero
+   endpoint minus the positive baseline endpoint is negative. That argument
+   does not apply when another adoption mechanism or initial state is present.
+2. The incumbent level is `100 * exp(−1)`, approximately 36.787944, and the
+   entrant level is approximately 63.212056. The fixed pool is the initial
+   adoption fraction `0.5` multiplied by the potential market of 200. This
+   example transfers that pool; it does not recruit the remaining market.
+3. No. Those outputs differ in model, time and outcome meaning. Use an explicitly
+   defined comparison with compatible outcomes and matched evaluation times.
+
+</details>
 
 ## Limitations
 
@@ -98,6 +144,13 @@ They do not establish parameter identifiability, general model accuracy,
 uncertainty calibration or the causal effect of an intervention. A fixed seed
 is not a statistical validation study, and two observation times do not assess
 the entire time path.
+
+For an empirical policy effect, specify the target population, intervention,
+comparator, outcome and time horizon, then justify identification assumptions.
+For example, exchangeability, positivity and consistency have substantive
+requirements beyond a well-formed request; see
+[Cole and Hernán (2008)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2732954/).
+This simulation example does not establish those assumptions.
 
 Replay compares scientific results using the same runtime. Timestamps and
 elapsed times can vary, and this example does not claim bitwise reproducibility

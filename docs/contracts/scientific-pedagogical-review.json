@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-15",
+  "review_timezone": "Australia/Brisbane",
+  "base_commit": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+  "reviewer": {
+    "kind": "agent",
+    "role": "scientific and pedagogical review",
+    "human_reviewer": false
+  },
+  "status": "scoped_agent_review_complete",
+  "scope": {
+    "pages": [
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "docs/astro-site/src/content/docs/native-migration.md"
+    ],
+    "native_guide_sections": [
+      "Current scope",
+      "Choose a task",
+      "Units and denominators",
+      "Polars fitting and prediction",
+      "Norton–Bass conventions",
+      "Fit quality and numerical limits",
+      "Julia and R",
+      "Ecosystem alignment",
+      "Bayesian inference for scalar forecasts",
+      "Exact sign-flip interpretation",
+      "Check treatment overlap in cross-fitted contrasts",
+      "Counterfactual forecasts with parameter events",
+      "Re-ingesting a dataset artifact"
+    ],
+    "focus": [
+      "reader tasks and interpretation",
+      "primary-source support",
+      "units and denominators",
+      "uncertainty and identification",
+      "synthetic demonstrations versus empirical evidence",
+      "provenance integrity boundaries"
+    ],
+    "exclusions": [
+      "exhaustive review of every native-model section",
+      "all historical documentation",
+      "independent specialist sign-off",
+      "human usability trials",
+      "browser and accessibility validation",
+      "empirical scientific validation",
+      "release qualification"
+    ]
+  },
+  "fingerprint_encoding": "sha256 of UTF-8 bytes with CRLF normalized to LF",
+  "source_files": {
+    "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
+    "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx": "579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572",
+    "docs/astro-site/src/content/docs/native-migration.md": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
+    "examples/native_forecast.py": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+    "examples/native_scenarios.py": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+    "examples/native_norton_bass.py": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+    "examples/native_bayesian.py": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+    "examples/native_overlap.py": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+    "examples/native_reingestion.py": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+    "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
+    "rust/crates/innovate-core/src/causal.rs": "6279cbc58161423b5c5e722c143e845f770073e58cb33f93995f98338b297db3",
+    "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
+    "rust/crates/innovate-core/src/bayesian.rs": "d0e52fe184dc3152cd83b6ab74772927d74b0870ca10807de489aedcf3f05592"
+  },
+  "references": [
+    {
+      "id": "norton-bass-1987",
+      "title": "A Diffusion Theory Model of Adoption and Substitution for Successive Generations of High-Technology Products",
+      "authors": [
+        "John A. Norton",
+        "Frank M. Bass"
+      ],
+      "year": 1987,
+      "doi": "10.1287/mnsc.33.9.1069",
+      "url": "https://pubsonline.informs.org/doi/10.1287/mnsc.33.9.1069",
+      "source_type": "primary research publisher page",
+      "inspected_locations": [
+        "publisher metadata",
+        "abstract"
+      ],
+      "supports": "Attribution and scope of the successive-generation diffusion model.",
+      "limits": "The full 1987 paper was not inspected; this source does not qualify the repository implementation or its generalized variants."
+    },
+    {
+      "id": "franses-hernandez-mireles-2006",
+      "title": "When Should Nintendo Launch its Wii? Insights From a Bivariate Successive Generation Model",
+      "authors": [
+        "Philip Hans Franses",
+        "Carlos Hernández-Mireles"
+      ],
+      "year": 2006,
+      "identifier": "ERS-2006-032-MKT",
+      "url": "https://repub.eur.nl/pub/7867/ERS-2006-032-MKT.pdf",
+      "source_type": "primary research institutional manuscript",
+      "inspected_locations": [
+        "PDF pages 13–15",
+        "equations 1–2"
+      ],
+      "supports": "The two-generation level equations and transfer interpretation used in the independent analytic example.",
+      "limits": "Does not validate numerical recovery, arbitrary generation counts, or the empirical fit of these examples."
+    },
+    {
+      "id": "vehtari-et-al-2021",
+      "title": "Rank-normalization, folding, and localization: An improved R-hat for assessing convergence of MCMC",
+      "authors": [
+        "Aki Vehtari",
+        "Andrew Gelman",
+        "Daniel Simpson",
+        "Bob Carpenter",
+        "Paul-Christian Bürkner"
+      ],
+      "year": 2021,
+      "doi": "10.1214/20-BA1221",
+      "url": "https://arxiv.org/html/1903.08008v5#S2",
+      "source_type": "primary research author manuscript",
+      "inspected_locations": [
+        "Section 2: Recommendations for practice",
+        "diagnostic limitation examples"
+      ],
+      "supports": "At least four chains, a 1.01 R-hat first-level check, and quantity-specific effective sample size and Monte Carlo error assessment.",
+      "limits": "Diagnostic thresholds do not prove convergence or validate the observation model; the example's 1.05 assertion is only a fixture regression tolerance."
+    },
+    {
+      "id": "hemerik-goeman-2018",
+      "title": "Exact testing with random permutations",
+      "authors": [
+        "Jesse Hemerik",
+        "Jelle Goeman"
+      ],
+      "year": 2018,
+      "doi": "10.1007/s11749-017-0571-1",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6405018/",
+      "source_type": "primary research full text",
+      "inspected_locations": [
+        "Section 2",
+        "Definition 1",
+        "Theorem 1"
+      ],
+      "supports": "Group invariance under the null as the basis of exact transformation tests, including sign transformations.",
+      "limits": "Does not establish sign exchangeability for the supplied study, independent information from duplicated pairs, or confidence-interval coverage."
+    },
+    {
+      "id": "chernozhukov-et-al-dml",
+      "title": "Double/Debiased Machine Learning for Treatment and Causal Parameters",
+      "authors": [
+        "Victor Chernozhukov",
+        "Denis Chetverikov",
+        "Mert Demirer",
+        "Esther Duflo",
+        "Christian Hansen",
+        "Whitney Newey",
+        "James Robins"
+      ],
+      "identifier": "arXiv:1608.00060v7",
+      "url": "https://arxiv.org/abs/1608.00060",
+      "source_type": "primary research author manuscript abstract",
+      "inspected_locations": [
+        "author abstract",
+        "version metadata"
+      ],
+      "supports": "The roles of orthogonal scores and cross-fitting in separating nuisance estimation from target-parameter estimation.",
+      "limits": "Only the abstract was inspected for this claim; it does not establish causal identification or finite-sample coverage for Innovate's stratum-mean estimator."
+    },
+    {
+      "id": "cole-hernan-2008",
+      "title": "Constructing Inverse Probability Weights for Marginal Structural Models",
+      "authors": [
+        "Stephen R. Cole",
+        "Miguel A. Hernán"
+      ],
+      "year": 2008,
+      "doi": "10.1093/aje/kwn164",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2732954/",
+      "source_type": "primary research full text",
+      "inspected_locations": [
+        "identification assumptions",
+        "Appendix 2"
+      ],
+      "supports": "Substantive requirements of consistency, exchangeability and positivity for a causal interpretation.",
+      "limits": "Does not validate the implementation's AIPW variance, remove confounding, or justify assumptions for a synthetic or empirical diffusion study."
+    }
+  ],
+  "findings": [
+    {
+      "id": "validation-scope",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "Opening wording attributed scientific validation to the Rust implementation.",
+      "resolution": "Separated request/domain/operation validation from model, data and study-design validity.",
+      "references": []
+    },
+    {
+      "id": "units-denominators",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "Readers needed a common interpretation of levels, rates, time units and population denominators.",
+      "resolution": "Added task routing and a units/denominators table; distinguished level change, interval average rate, derivative and unique adoption.",
+      "references": []
+    },
+    {
+      "id": "synthetic-recovery",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "A noiseless model-generated recovery and held-out prediction example could be mistaken for external validation.",
+      "resolution": "Identified the synthetic generating process, independent algebraic oracle and bounds on empirical inference.",
+      "references": [
+        "norton-bass-1987",
+        "franses-hernandez-mireles-2006"
+      ]
+    },
+    {
+      "id": "stale-capability-prose",
+      "severity": "medium",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "The guide retained stale counts and said implemented helpers and IPC wrappers were unavailable.",
+      "resolution": "Removed fixed obligation/fitter counts and obsolete dependency versions, linked current references, and described implemented extensions with remaining qualification limits.",
+      "references": []
+    },
+    {
+      "id": "gaussian-scale-and-mcmc",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "The scalar posterior and diagnostic threshold needed explicit scale conventions and an interpretation boundary.",
+      "resolution": "Derived posterior precision and mean; distinguished API standard deviations from mathematical variances, conditional posterior uncertainty from Monte Carlo/model uncertainty, and the fixture threshold from primary diagnostic guidance.",
+      "references": [
+        "vehtari-et-al-2021"
+      ]
+    },
+    {
+      "id": "exact-test-interpretation",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "Exact enumeration could be misread as proof of study assumptions or interval coverage.",
+      "resolution": "Explained null invariance, descriptive intervals and duplicated-pair limits.",
+      "references": [
+        "hemerik-goeman-2018"
+      ]
+    },
+    {
+      "id": "causal-identification",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "Cross-fitting and counterfactual forecast operations needed clearer separation from empirical identification.",
+      "resolution": "Added AIPW score arithmetic, the 5.25 outcome-unit mean, nuisance-model scope, support and interference considerations, small-sample limits, and conditional forecast interpretation.",
+      "references": [
+        "chernozhukov-et-al-dml",
+        "cole-hernan-2008"
+      ]
+    },
+    {
+      "id": "artifact-integrity-scope",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "status": "resolved_in_prose",
+      "finding": "A checksum description could imply whole-artifact authenticity.",
+      "resolution": "Specified sorted serialized dataset coverage and the extraction_time/checksum exclusions; distinguished content integrity from authenticated authorship, rights and scientific validity.",
+      "references": []
+    },
+    {
+      "id": "quickstart-transfer",
+      "severity": "medium",
+      "page": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "status": "resolved_in_prose",
+      "finding": "A predict-only example called query times observations and lacked interpretation exercises.",
+      "resolution": "Corrected the term and added worked level-change, unit-conversion and slope questions, explicitly separate from executed assertions.",
+      "references": []
+    },
+    {
+      "id": "scenario-estimand",
+      "severity": "high",
+      "page": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "status": "resolved_in_prose",
+      "finding": "Different scenarios, denominators and evaluation times could be ranked as a common policy effect.",
+      "resolution": "Added a scenario input/output table, horizon and hazard explanations, matched-comparison questions and identification limits.",
+      "references": [
+        "cole-hernan-2008"
+      ]
+    }
+  ],
+  "reader_tasks": [
+    {
+      "id": "quickstart-level",
+      "page": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "prompt": "Distinguish the prediction at time 1 from the increase between times 0 and 1.",
+      "expected_answer": "Level 50; interval increase approximately 23.105858 adoption units.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "quickstart-unit-conversion",
+      "page": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "prompt": "Convert years to months while preserving the same Logistic curve.",
+      "expected_answer": "Multiply time and x0 by 12, divide k by 12, keep L unchanged.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "quickstart-slope",
+      "page": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "prompt": "Derive the instantaneous Logistic slope at the midpoint and identify its units.",
+      "expected_answer": "L*k/4 = 25 adoption units per year; differs from a level or whole-interval change.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "scenario-pause",
+      "page": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "prompt": "Explain why the pause fixture has no adoption and when the argument would fail.",
+      "expected_answer": "Innovation, imitation and initial adopters are zero; another mechanism invalidates this argument.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "scenario-replacement",
+      "page": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "prompt": "Calculate year-two incumbent and entrant levels and identify the denominator.",
+      "expected_answer": "Approximately 36.787944 and 63.212056; fixed pool is 0.5*200 = 100.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "scenario-comparison",
+      "page": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "prompt": "Assess whether comparing year-two replacement to year-five baseline answers the intervention question.",
+      "expected_answer": "It does not answer the intervention contrast; model, outcome and time differ.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "native-posterior",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "prompt": "Reconcile standard-deviation API inputs with the scalar posterior variance and mean.",
+      "expected_answer": "Posterior precision is 1/4+(1/2)^2 = 1/2; posterior variance is 2 and mean is 98 before truncation.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "native-causal-support",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "prompt": "Explain what a minimum treated/control count demonstrates and which identification questions remain.",
+      "expected_answer": "An observed count; not exchangeability, suitable interference assumptions or calibrated precision.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "native-checksum",
+      "page": "docs/astro-site/src/content/docs/native-migration.md",
+      "prompt": "Identify the digest's coverage and whether it authenticates the entire artifact.",
+      "expected_answer": "Sorted serialized dataset excluding provenance.extraction_time/provenance.checksum; no authenticated signature or whole-wrapper digest.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    }
+  ],
+  "verification": {
+    "python_fences": "unchanged against f6c7d058466ae5fe15b9846769cc0e6ba6774847; rechecked after recovery",
+    "raw_example_imports": "unchanged against f6c7d058466ae5fe15b9846769cc0e6ba6774847; rechecked after recovery",
+    "independent_arithmetic": "passed before environment loss using Python 3.12 standard library: Logistic levels/unit conversion/slope, replacement levels/hazard probability, Gaussian posterior, AIPW mean and exact sign-flip count",
+    "native_execution": "not run by this review",
+    "astro_build": "not run by this review",
+    "citation_review": "manual primary-source inspection; SourceRight executable was unavailable",
+    "human_participants": 0,
+    "human_task_trials": 0,
+    "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
+    "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check"
+  },
+  "recovery": {
+    "reason": "The local execution environment became unavailable before these edits were committed.",
+    "method": "Reconstructed the three page bodies from immutable base files using the recorded exact replacements; reconstructed this report from the retained review evidence.",
+    "recovered_file_hashes": "Computed in the recovery session; SHA-256 implementation checked against empty-string and abc standard vectors.",
+    "known_pre_outage_fingerprints": {
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288"
+    },
+    "known_fingerprint_result": "Recovered quickstart is an exact hash match.",
+    "verification_boundary": "The other hashes identify reconstructed page content and fetched immutable source content; they do not imply that native tests, Astro, or human trials were rerun after recovery."
+  },
+  "completion": {
+    "scoped_agent_review": true,
+    "human_reader_validation": false,
+    "all_current_pages_reviewed": false,
+    "all_historical_pages_reviewed": false,
+    "scientific_model_validation": false,
+    "complete_documentation_quality_qualification": false
+  },
+  "remaining": [
+    "Independent specialist review of scientific assumptions and implementation where required.",
+    "Human reader trials for the recorded tasks, with observed outcomes and revisions.",
+    "Astro build, browser, accessibility and native-runtime qualification on the integrated commit.",
+    "Empirical data and study-specific scientific validation before using examples as evidence for a real population.",
+    "Executable validation of this report's structure, source hashes and bounded completion claims."
+  ]
+}
