@@ -84,7 +84,7 @@ fn singleton_ensemble_time_is_valid() {
 }
 
 #[test]
-fn_positive_affine_time_change_preserves_ensemble_values() {
+fn positive_affine_time_change_preserves_ensemble_values() {
     let original = execute(&request(json!([-2.0, 0.5, 7.0])));
     let transformed_time = json!([1.0, 6.0, 19.0]);
     let transformed = execute(&request(transformed_time.clone()));
