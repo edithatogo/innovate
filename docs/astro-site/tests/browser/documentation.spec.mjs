@@ -3,6 +3,8 @@ import { budgets, darkEntryRoutes, loadInventory, measureArtifact, siteRoot } fr
 import { test, expect, openPage, assertNoOverflow, scanAccessibility, assertTransferBudget, attachJson, focusWithTab, showMobileMenu } from './support.mjs';
 
 const inventory = loadInventory();
+const currentRoutes = new Set(inventory.pages.map((entry) => entry.route));
+const historicalRoutes = new Set(inventory.historical.map((entry) => entry.route));
 
 for (const entry of inventory.pages) {
   test(`current page: ${entry.route}`, async ({ page, runtime }, testInfo) => {
@@ -18,11 +20,19 @@ for (const entry of inventory.pages) {
 for (const route of darkEntryRoutes) {
   test(`dark entry: ${route}`, async ({ page, isMobile, runtime }, testInfo) => {
     await openPage(page, route);
-    await showMobileMenu(page, isMobile);
+    const menuOpened = await showMobileMenu(page, isMobile);
     const theme = page.locator('starlight-theme-select select:visible').first();
-    await theme.selectOption('dark');
+    let themeMethod = 'visible-select';
+    if (isMobile && !menuOpened && await theme.count() === 0) {
+      // A mobile splash layout exposes no theme picker; qualify the OS preference.
+      await page.emulateMedia({ colorScheme: 'dark' });
+      themeMethod = 'preferred-color-scheme';
+    } else {
+      await theme.selectOption('dark');
+    }
+    await attachJson(testInfo, 'theme-change', { method: themeMethod, menu_opened: menuOpened });
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    if (isMobile) {
+    if (menuOpened) {
       await scanAccessibility(page, testInfo, 'dark-mobile-menu');
       await page.keyboard.press('Escape');
       await expect(page.locator('#starlight__sidebar')).not.toBeVisible();
@@ -75,7 +85,7 @@ for (const { query, expectedRoute } of [
     await expect.poll(async () => new URL(await results.first().getAttribute('href'), page.url()).pathname).toBe(expectedRoute);
     const urls = await results.evaluateAll((links) => links.map((link) => new URL(link.href).pathname));
     expect(urls.length).toBeGreaterThan(0);
-    expect(urls.every((url) => !url.startsWith('/innovate/latest/')), 'Current search must not surface archived versions').toBe(true);
+    expect(urls.filter((url) => !currentRoutes.has(url)), 'Search must return only classified current pages, including no current-path historical material').toEqual([]);
     await attachJson(testInfo, 'pagefind-results', { query, first_result: urls[0], result_routes: urls });
     await assertNoOverflow(page);
     await scanAccessibility(page, testInfo, 'search-dialog');
@@ -101,6 +111,23 @@ test('current navigation and archived version labels', async ({ page, isMobile }
   const sidebar = page.locator('nav.sidebar');
   await expect(sidebar.locator('a[href="/innovate/user-guide/getting-started/"]')).toHaveAccessibleName(/Quickstart/u);
   await expect(sidebar.locator('a[href="/innovate/api/python/"]')).toHaveAccessibleName(/Python API/u);
+  const navigation = await sidebar.locator('.top-level a[href]').evaluateAll((links) => links.map((link) => ({
+    route: new URL(link.href).pathname,
+    group: link.closest('details')?.querySelector(':scope > summary .large')?.textContent.trim() ?? '',
+  })));
+  await attachJson(testInfo, 'primary-navigation', navigation);
+  expect(navigation.filter((entry) => historicalRoutes.has(entry.route)), 'Historical pages must be reached through the historical map, not mixed into primary navigation').toEqual([]);
+  const requiredGroups = {
+    'User Guide': ['/innovate/core/', '/innovate/user-guide/fitting/', '/innovate/user-guide/forecasting/', '/innovate/user-guide/backends/'],
+    'Tutorials': ['/innovate/tutorials/', '/innovate/tutorials/scenario-experiment-workflows/', '/innovate/tutorials/norton-bass/', '/innovate/tutorials/bayesian-fitter/', '/innovate/tutorials/counterfactual-analysis/', '/innovate/tutorials/arrow-interchange/', '/innovate/tutorials/data-ingestion-provenance/'],
+    'API Reference': ['/innovate/api/python/', '/innovate/api/generated/julia/', '/innovate/api/generated/r/', '/innovate/bindings/', '/innovate/core/kernel/', '/innovate/core/arrow-interchange/'],
+    'Historical Reference': ['/innovate/historical-documentation/'],
+  };
+  for (const [group, routes] of Object.entries(requiredGroups)) {
+    for (const route of routes) {
+      expect(navigation.filter((entry) => entry.route === route), `${route} must appear once under ${group}`).toEqual([{ route, group }]);
+    }
+  }
   const version = page.locator('starlight-version-select select:visible').first();
   await expect(version.locator('option:checked')).toHaveText('0.7 Development');
   await expect(version.locator('option')).toHaveText(['0.7 Development', '0.6 Reference']);

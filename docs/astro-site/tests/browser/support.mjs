@@ -129,10 +129,16 @@ export async function focusWithTab(page, target, limit = 30) {
 }
 
 export async function showMobileMenu(page, isMobile) {
-  if (!isMobile) return;
+  if (!isMobile) return false;
   const button = page.locator('button[popovertarget="starlight__sidebar"]');
+  if (await button.count() === 0) {
+    // Splash pages have no sidebar. A missing toggle on a sidebar page is a defect.
+    expect(await page.locator('html').getAttribute('data-has-sidebar')).toBeNull();
+    return false;
+  }
   await focusWithTab(page, button);
   await page.keyboard.press('Enter');
   await expect(page.locator('#starlight__sidebar')).toBeVisible();
   await expect.poll(() => page.locator('#starlight__sidebar').evaluate((element) => element.matches(':popover-open'))).toBe(true);
+  return true;
 }

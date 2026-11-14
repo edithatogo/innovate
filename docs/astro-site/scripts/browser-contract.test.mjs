@@ -100,7 +100,7 @@ test('a passing test without its browser, document, and axe receipts cannot qual
     evidence: {
       'runtime-observation': { browser_version: 'fixture-version', console_errors: [], page_errors: [], failed_internal_resources: [], responses: [{ file: 'index.html', status: 200 }] },
       'classified-page': { route: '/innovate/' },
-      'transfer-budget': { decoded_body_bytes: 50 },
+      'transfer-budget': { decoded_body_bytes: 50, successful_internal_responses: 1, byte_limit: budgets.initialPageBytes, request_limit: budgets.initialPageRequests },
       'axe-light-page': { violations: [], tags: wcagTags },
     },
   };
@@ -123,4 +123,32 @@ test('asset budgets fail on excessive decoded asset bytes', (t) => {
   assert.equal(measureArtifact(root, 2_000_000).files, 2);
   fs.writeFileSync(path.join(root, 'entry.js'), Buffer.alloc(budgets.singleAssetBytes + 1));
   assert.throws(() => measureArtifact(root, 2_000_000), /entry\.js.*budget/u);
+});
+
+test('receipt budgets reject oversized, invalid, or substituted measurements and limits', () => {
+  const entry = {
+    title: 'keyboard Pagefind search: Current Python API',
+    evidence: {
+      'runtime-observation': { browser_version: 'fixture-version', console_errors: [], page_errors: [], failed_internal_resources: [], responses: [] },
+      'pagefind-results': { first_result: '/innovate/api/python/' },
+      'axe-search-dialog': { violations: [], tags: wcagTags },
+      'transfer-budget': { decoded_body_bytes: 50, successful_internal_responses: 1, byte_limit: budgets.searchJourneyBytes, request_limit: budgets.searchJourneyRequests },
+    },
+  };
+  assert.equal(caseEvidenceComplete(entry), true);
+  for (const change of [
+    { decoded_body_bytes: budgets.searchJourneyBytes + 1 },
+    { successful_internal_responses: budgets.searchJourneyRequests + 1 },
+    { byte_limit: budgets.searchJourneyBytes + 1 },
+    { request_limit: budgets.searchJourneyRequests + 1 },
+    { byte_limit: budgets.initialPageBytes, request_limit: budgets.initialPageRequests },
+    { decoded_body_bytes: NaN },
+    { decoded_body_bytes: -1 },
+    { successful_internal_responses: 1.5 },
+    { successful_internal_responses: -1 },
+  ]) {
+    const invalid = structuredClone(entry);
+    Object.assign(invalid.evidence['transfer-budget'], change);
+    assert.equal(caseEvidenceComplete(invalid), false, JSON.stringify(change));
+  }
 });

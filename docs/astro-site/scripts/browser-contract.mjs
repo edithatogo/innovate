@@ -188,6 +188,16 @@ export function caseEvidenceComplete(entry) {
     if (!evidence['pagefind-results']?.first_result || !evidence['transfer-budget']) return false;
   } else if (entry.title === 'deterministic artifact budgets' && !evidence['artifact-budget']) return false;
   if (route && !runtime.responses.some((response) => response.file === artifactPath(route) && response.status === 200)) return false;
+  if (route || entry.title.startsWith('keyboard Pagefind search: ')) {
+    const measurement = evidence['transfer-budget'];
+    const search = entry.title.startsWith('keyboard Pagefind search: ');
+    const byteLimit = search ? budgets.searchJourneyBytes : budgets.initialPageBytes;
+    const requestLimit = search ? budgets.searchJourneyRequests : budgets.initialPageRequests;
+    if (!measurement || !Number.isFinite(measurement.decoded_body_bytes) || measurement.decoded_body_bytes < 0
+      || !Number.isInteger(measurement.successful_internal_responses) || measurement.successful_internal_responses < 0
+      || measurement.byte_limit !== byteLimit || measurement.request_limit !== requestLimit
+      || measurement.decoded_body_bytes > byteLimit || measurement.successful_internal_responses > requestLimit) return false;
+  }
   if (scan && (scan.violations?.length !== 0 || JSON.stringify(scan.tags) !== JSON.stringify(wcagTags))) return false;
   if ((route || entry.title.startsWith('keyboard Pagefind search: ')) && !scan) return false;
   return true;
