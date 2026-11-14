@@ -1,0 +1,33 @@
+{
+  "provider": "Software Heritage",
+  "captured_at_utc": "2026-11-14T13:49:30Z",
+  "method": "GET",
+  "scope": "Two exact origin lookups; no archival request or identifier resolution",
+  "lookups": [
+    {
+      "origin": "https://github.com/edithatogo/innovate",
+      "url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/edithatogo/innovate/get/",
+      "provider_response_date_utc": "2026-11-14T13:48:11Z",
+      "http_status": 404,
+      "content_type": "application/json",
+      "outcome": "not_found",
+      "response": {
+        "exception": "NotFoundExc",
+        "reason": "Origin with url https://github.com/edithatogo/innovate not found!"
+      }
+    },
+    {
+      "origin": "https://github.com/edithatogo/innovate.git",
+      "url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/edithatogo/innovate.git/get/",
+      "provider_response_date_utc": "2026-11-14T13:48:30Z",
+      "http_status": 404,
+      "content_type": "application/json",
+      "outcome": "not_found",
+      "response": {
+        "exception": "NotFoundExc",
+        "reason": "Origin with url https://github.com/edithatogo/innovate.git not found!"
+      }
+    }
+  ],
+  "limitation": "Not found applies only to the tested origin and observation time. It does not establish permanent absence or absence under other origins. No SWHID was verified."
+}
