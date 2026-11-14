@@ -51,7 +51,7 @@ jobs:
 
       - name: Test documentation contracts
         run: |
-          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation test_documentation_workflow; do
+          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_documentation_source_hash_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation test_documentation_workflow; do
             ../../.venv-docs/bin/python -m unittest discover -s ../../tests -p "$suite.py"
           done
 

@@ -849,13 +849,15 @@ def _verified_native_inventory(root: Path) -> tuple[dict[str, Any], str]:
         "Polyglot inventory omits a checker or native runner.",
     )
     for relative, expected in sources.items():
-        _require(_safe_relative(relative) and _valid_hash(expected), "Invalid polyglot source path or hash.")
+        # Native inventories label SHA-256; older synthetic inventories use bare digests.
+        expected_digest = expected.removeprefix("sha256:") if isinstance(expected, str) else expected
+        _require(_safe_relative(relative) and _valid_hash(expected_digest), "Invalid polyglot source path or hash.")
         source = root / relative
         _require(
             source.is_file() and source.resolve().is_relative_to(root),
             f"Polyglot source is absent or external: {relative}.",
         )
-        _require(_normalized_digest(source) == expected, f"Polyglot source changed: {relative}.")
+        _require(_normalized_digest(source) == expected_digest, f"Polyglot source changed: {relative}.")
     return inventory, _normalized_digest(inventory_path)
 
 
