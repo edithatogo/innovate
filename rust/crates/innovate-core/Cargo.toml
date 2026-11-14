@@ -5,7 +5,16 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage = "https://github.com/edithatogo/innovate"
+documentation = "https://docs.rs/innovate-core"
+readme = "../../../README.md"
+keywords = ["innovation", "diffusion", "bass-model", "forecasting", "simulation"]
+categories = ["science", "simulation", "mathematics"]
 description = "Rust-owned innovation diffusion scientific kernel"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 serde.workspace = true

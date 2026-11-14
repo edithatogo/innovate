@@ -1,8 +1,7 @@
 name: Release Drafter
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 on:
   push:
@@ -14,6 +13,9 @@ on:
 jobs:
   update_release_draft:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: release-drafter/release-drafter@978bb0b30c5ee8cdd332ced253758157150d43f0
         with:

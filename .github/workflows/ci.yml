@@ -60,6 +60,11 @@ jobs:
       - run: uv run --no-sync pytest tests/native
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
+      - name: Verify Rust docs.rs documentation build
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          RUSTDOCFLAGS: "--cfg docsrs -D warnings"
+        run: cargo doc --locked --no-deps -p innovate-core -p innovate-tabular -p innovate-ffi
       - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
       - run: |
           uv run --no-sync python -c "import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])"
