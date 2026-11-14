@@ -396,6 +396,8 @@ pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String
 
 /// Encode the ordered execution rows of a successful grid envelope as Arrow IPC.
 /// Nested results, artifacts and errors retain their full JSON representation.
+/// Rows must explicitly contain either an object result and null error, or a
+/// null result and object error. Paused executions are not marked successful.
 pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     let rows = scenario_rows(response, "executions")?;
     let mut ids = Vec::with_capacity(rows.len());
@@ -413,7 +415,7 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
                 .as_str()
                 .ok_or_else(|| polars_err!(SchemaMismatch: "missing scenario model key"))?,
         );
-        successful.push(row["error"].is_null() && row["result"]["status"] != "paused");
+        successful.push(scenario_outcome_has_result(row)? && row["result"]["status"] != "paused");
         encoded.push(row.to_string());
     }
     let mut frame = df!("scenario_id" => ids, "model_key" => models,
@@ -422,6 +424,8 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
 }
 
 /// Encode ordered pair and ensemble comparisons, preserving nested outcomes.
+/// Each row must explicitly contain an object result and null error, or a null
+/// result and object error; incomplete or contradictory outcomes are rejected.
 pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     let rows = scenario_rows(response, "comparisons")?;
     let mut kinds = Vec::with_capacity(rows.len());
@@ -436,7 +440,7 @@ pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
             polars_bail!(SchemaMismatch: "invalid scenario comparison row");
         };
         kinds.push(kind);
-        successful.push(row["error"].is_null());
+        successful.push(scenario_outcome_has_result(row)?);
         encoded.push(row.to_string());
     }
     let indices: Vec<_> = (0..rows.len() as u64).collect();
@@ -445,8 +449,20 @@ pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     write_ipc_file(&mut frame)
 }
 
+fn scenario_outcome_has_result(row: &Value) -> PolarsResult<bool> {
+    match (row.get("result"), row.get("error")) {
+        (Some(Value::Object(_)), Some(Value::Null)) => Ok(true),
+        (Some(Value::Null), Some(Value::Object(_))) => Ok(false),
+        _ => {
+            polars_bail!(SchemaMismatch: "scenario outcome requires an explicit object result and null error, or null result and object error")
+        }
+    }
+}
+
 fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Value]> {
-    if response["operation"] != "execute_scenario_grid" || !response["error"].is_null() {
+    if response["operation"] != "execute_scenario_grid"
+        || response.get("error") != Some(&Value::Null)
+    {
         polars_bail!(SchemaMismatch: "expected a successful scenario grid envelope");
     }
     response["result"][field]

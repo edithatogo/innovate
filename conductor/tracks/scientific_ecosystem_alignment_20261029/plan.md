@@ -1,5 +1,33 @@
 # Plan
 
+## Issue #556 continuation — 14 November 2026
+
+Base: `276c2e505a0ce26910820fe8a94a6a498f505700`; branch:
+`chatgpt/issue-556-arrow-qualification`. The merged Python/Arrow candidate in
+PR #554 has been superseded by the native 0.7 development architecture using
+Python 3.15.2, Polars 2.1.0, optional PyArrow 26.0.1 and Rust 1.99.1.
+
+- [~] Reject incomplete or contradictory scenario outcomes at the native Arrow
+  export boundary; retain valid completed, failed and paused rows and exact
+  nested JSON. First reproduce missing result/error fields becoming successful
+  in Rust and the installed Python binding, then verify the fix and recovery.
+- [ ] Qualify this bounded installed Arrow consumer with the locked optional
+  PyArrow extra, preserving row order, types and nested outcome data.
+- [ ] Review the scoped change and record actual executable and hosted evidence.
+
+The [source-bound red receipt](issue-556-arrow-qualification.md) records 33
+expected invalid-input failures and five passing positive/PyArrow controls
+against a retained installed wheel whose affected source matches this baseline.
+The native fix and current-head green qualification remain in progress.
+
+Allowed source paths are `rust/crates/innovate-tabular/src/lib.rs`, its focused
+scenario-export tests and `tests/native/test_scenario_exports.py`, plus this
+track's records. The existing integration owner retains shared manifests, pins,
+CI and promotion. PR #600's ensemble time-grid work and PR #590's security draft
+are separate. Historical ArviZ/benchmark-tool exceptions remain recorded; this
+increment does not restore retired Python numerical backends or close the
+broader scientific, provider, optional-consumer or release gates.
+
 - [x] Reconcile current source, active ownership and reusable evidence (archive reconciliation `5cd07b7f`; continuation-20261106.md).
 - [x] Qualify Python 3.15.1 and PyArrow 26 base dependencies; optional Polars acceptance remains open.
 - [~] Inventory actual Kairos calls and qualify the accepted upstream pin without copying a scheduler (inventory and retained-pin native examples pass; lock/integrator acceptance open).
