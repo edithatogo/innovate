@@ -72,10 +72,34 @@ fn model_inputs(frame: &DataFrame, observed: &[String], kwargs: &Value) -> Polar
     Ok(input)
 }
 
+/// Append native level predictions to a frame using default prediction options.
+///
+/// `frame` supplies a nonempty finite, strictly increasing numeric `time` column;
+/// `model` and `parameters` identify the native model and its parameter object.
+/// Existing columns remain, and output columns are named `prediction` or
+/// `prediction_1`, `prediction_2`, etc. for multivariate results.
+///
+/// # Errors
+/// Returns schema/compute errors for invalid input, unsupported model parameters,
+/// unavailable native output or collisions with generated output column names.
 pub fn predict(frame: DataFrame, model: &str, parameters: Value) -> PolarsResult<DataFrame> {
     predict_with_options(frame, model, parameters, json!({}))
 }
 
+/// Append native level or signed-rate predictions using explicit tabular options.
+///
+/// `options` accepts only `model_options`, `quantity` (`level` or `rate`) and
+/// `covariate_rate_columns`. The latter maps every declared Logistic covariate to
+/// its derivative column when requesting rates. Input time/covariate columns
+/// must be nonempty, finite and numeric; time must be strictly increasing.
+///
+/// Level output uses `prediction` columns; rate output uses `rate` columns,
+/// numbered from one for multivariate results. Rates are derivatives in the
+/// supplied time unit and may be signed; they are not gross incidence.
+///
+/// # Errors
+/// Rejects unknown/malformed options, invalid columns, native execution failures,
+/// nonfinite/misaligned output and collisions with generated column names.
 pub fn predict_with_options(
     mut frame: DataFrame,
     model: &str,
@@ -194,12 +218,25 @@ fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
     }
 }
 
-/// Encode a Polars frame as an IPC file with a leading schema message.
+/// Rewrite Arrow IPC file or stream bytes as interoperable IPC file bytes.
+///
+/// Preserves custom schema metadata and compatible field annotations while
+/// materializing the data through Polars. This conversion copies data and does
+/// not promise byte-for-byte identity with the input.
+///
+/// # Errors
+/// Returns the underlying Arrow/Polars read, schema or write failure.
 pub fn export_ipc_file(data: &[u8]) -> PolarsResult<Vec<u8>> {
     rewrite_ipc(data, false)
 }
 
-/// Encode an IPC stream with custom metadata in the leading schema.
+/// Rewrite Arrow IPC file or stream bytes as a stream with leading schema metadata.
+///
+/// Preserves custom schema metadata and compatible field annotations using the
+/// same copying conversion as [`export_ipc_file`].
+///
+/// # Errors
+/// Returns the underlying Arrow/Polars read, schema or write failure.
 pub fn export_ipc_stream(data: &[u8]) -> PolarsResult<Vec<u8>> {
     rewrite_ipc(data, true)
 }
@@ -291,10 +328,23 @@ fn preserve_ipc_annotations(input: &ArrowField, output: &mut ArrowField) -> bool
     compatible
 }
 
+/// Read IPC file/stream bytes, append default level predictions, and return an IPC file.
+///
+/// Input and output are copied. See [`predict`] for column names and model units.
+///
+/// # Errors
+/// Propagates IPC decoding/encoding errors and all validation errors from [`predict`].
 pub fn predict_ipc(data: &[u8], model: &str, parameters: Value) -> PolarsResult<Vec<u8>> {
     predict_ipc_with_options(data, model, parameters, json!({}))
 }
 
+/// Predict from IPC file/stream bytes with the options accepted by [`predict_with_options`].
+///
+/// Returns a newly encoded IPC file containing original and prediction/rate columns.
+/// This operation does not promise to retain arbitrary input schema metadata.
+///
+/// # Errors
+/// Propagates IPC decoding/encoding failures and tabular/native prediction errors.
 pub fn predict_ipc_with_options(
     data: &[u8],
     model: &str,
@@ -308,10 +358,28 @@ pub fn predict_ipc_with_options(
     Ok(bytes)
 }
 
+/// Fit a native model from IPC bytes using `time` and `observed` columns.
+///
+/// Returns a serialized native JSON envelope. The caller must check its `error`
+/// member; an `Ok` string is not by itself proof of a successful scientific fit.
+///
+/// # Errors
+/// Returns a Polars error for invalid IPC or tabular inputs. Native fit failures
+/// are represented in the returned JSON envelope.
 pub fn fit_ipc(data: &[u8], model: &str) -> PolarsResult<String> {
     fit_ipc_with_options(data, model, json!({}))
 }
 
+/// Fit a native model from IPC bytes with explicit column/model/fitter options.
+///
+/// `options` accepts only `model_options`, `observed_columns` and `fit_options`.
+/// Observations default to the single `observed` column; multiple columns become
+/// one row per time point in a multivariate payload. Time must be finite and
+/// strictly increasing, and observation/covariate columns must be finite numeric data.
+///
+/// # Errors
+/// Malformed options or input tables return a Polars error. Native validation and
+/// fit failures are encoded in the returned JSON string's `error` member.
 pub fn fit_ipc_with_options(data: &[u8], model: &str, options: Value) -> PolarsResult<String> {
     let frame = read_ipc(data)?;
     let options = options
@@ -344,6 +412,14 @@ pub fn fit_ipc_with_options(data: &[u8], model: &str, options: Value) -> PolarsR
 }
 
 /// Assigns historical adopter categories using sample-weighted adoption times.
+///
+/// Reads numeric `time` and `rate_column`, then appends a string `category` column.
+/// Weights are used per sample, without time-step-width multiplication; see
+/// [`innovate_core::classify_adopters`] for category boundaries and interpretation.
+///
+/// # Errors
+/// Rejects invalid/negative/nonfinite weights, non-increasing time, zero total
+/// weight and a pre-existing `category` column, alongside Polars schema failures.
 pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsResult<DataFrame> {
     let time = numbers(&frame, "time")?;
     let rates = numbers(&frame, rate_column)?;
@@ -356,6 +432,10 @@ pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsRes
     Ok(frame)
 }
 
+/// Append adopter categories to an IPC file/stream and return newly encoded file bytes.
+///
+/// # Errors
+/// Propagates IPC decoding/encoding errors and the [`categorize_adopters`] contract.
 pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<Vec<u8>> {
     let frame = read_ipc(data)?;
     let mut output = categorize_adopters(frame, rate_column)?;
@@ -365,6 +445,14 @@ pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<V
 }
 
 /// Execute a scenario grid with one shared time column from Arrow IPC file or stream bytes.
+///
+/// Each `payload.scenarios` entry must contain a simulation object. The validated
+/// Arrow `time` column is injected into every simulation's inputs; a conflicting
+/// `time` or `t` value in an individual scenario is rejected.
+///
+/// # Errors
+/// IPC/schema failures return a Polars error. Native execution failures remain
+/// in the returned JSON envelope and must be checked before consuming results.
 pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String> {
     let frame = read_ipc(data)?;
     let time = inputs(&frame, &[])?;
@@ -398,6 +486,14 @@ pub fn scenario_grid_ipc(data: &[u8], mut payload: Value) -> PolarsResult<String
 /// Nested results, artifacts and errors retain their full JSON representation.
 /// Rows must explicitly contain either an object result and null error, or a
 /// null result and object error. Paused executions are not marked successful.
+///
+/// Output columns are `scenario_id`, `model_key`, `successful` and `execution_json`.
+/// The boolean reflects absence of a row error and absence of paused status; it
+/// is not independent scientific or completeness validation of the nested result.
+///
+/// # Errors
+/// Rejects a failed/non-grid envelope, missing execution rows or missing row IDs/model
+/// keys, and propagates Polars/IPC construction failures.
 pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     let rows = scenario_rows(response, "executions")?;
     let mut ids = Vec::with_capacity(rows.len());
@@ -426,6 +522,14 @@ pub fn scenario_executions_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
 /// Encode ordered pair and ensemble comparisons, preserving nested outcomes.
 /// Each row must explicitly contain an object result and null error, or a null
 /// result and object error; incomplete or contradictory outcomes are rejected.
+///
+/// Returns IPC columns `comparison_index`, `kind`, `successful` and `comparison_json`.
+/// The success flag reflects the row's error field; nested outcomes remain JSON
+/// and are not independently scientifically validated by this projection.
+///
+/// # Errors
+/// Rejects a failed/non-grid envelope, absent comparison rows or rows without a
+/// recognized pair/ensemble shape, and propagates Polars/IPC construction failures.
 pub fn scenario_comparisons_ipc(response: &Value) -> PolarsResult<Vec<u8>> {
     let rows = scenario_rows(response, "comparisons")?;
     let mut kinds = Vec::with_capacity(rows.len());
@@ -481,6 +585,14 @@ fn write_ipc_file(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
 
 /// Encode validated paired Bass trajectories in strategy, draw and time order.
 /// Parameter arrays retain their original names, values, units and order as JSON.
+///
+/// Each output row identifies a strategy/draw/time point and retains time units,
+/// perspective and provenance. See [`innovate_core::validate_paired_outcomes`]
+/// for the enforced alignment and finite-value contract.
+///
+/// # Errors
+/// Rejects invalid paired-outcome payloads and propagates Polars/IPC encoding
+/// failures. Passing this structural contract does not validate economic outcomes.
 pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
     innovate_core::validate_paired_outcomes(payload)
         .map_err(|error| polars_err!(ComputeError: "{error}"))?;

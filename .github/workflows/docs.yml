@@ -2,21 +2,18 @@ name: Deploy Documentation
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
-  # Allow manual triggering
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# Isolate PR checks while preserving the existing serialized deployment group.
+# PR builds must not replace a pending main publication.
 concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('pages-pr-{0}', github.event.pull_request.number) || 'pages' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: docs-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -25,6 +22,9 @@ jobs:
     defaults:
       run:
         working-directory: docs/astro-site
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      INNOVATE_DOCS_PYTHON: ${{ github.workspace }}/.venv-docs/bin/python
     steps:
       - name: Checkout code
         uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
@@ -45,28 +45,121 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
-      - name: Install isolated Python documentation extractor
+
+      - name: Set up isolated documentation interpreter
+        run: uv venv ../../.venv-docs --python 3.15.2
+
+      - name: Test documentation contracts
         run: |
-          uv venv ../../.venv-docs --python 3.15.2
-          uv pip install --python ../../.venv-docs/bin/python griffe==2.4.1
+          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation; do
+            ../../.venv-docs/bin/python -m unittest discover -s ../../tests -p "$suite.py"
+          done
+
+      - name: Require complete Python docstrings
+        run: ../../.venv-docs/bin/python ../../scripts/check_api_documentation.py --mode strict --output .reports/api.json
+
+      - name: Require complete Julia and R public documentation structure
+        run: ../../.venv-docs/bin/python ../../scripts/check_polyglot_api_documentation.py --check > .reports/polyglot-api.json
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test content transforms
+        run: pnpm test
+
       - name: Build documentation site
         run: pnpm build
-        env:
-          STARLIGHT_POLYGLOT_PYTHON: ${{ github.workspace }}/.venv-docs/bin/python
+
+      - name: Type-check documentation
+        run: pnpm check
+
+      - name: Require no new documentation debt
+        run: ../../.venv-docs/bin/python ../../scripts/check_documentation_content.py --mode ratchet --output .reports/content.json
+
+      - name: Verify production documentation contract
+        run: ../../.venv-docs/bin/python ../../scripts/verify_production_docs.py --output .reports/artifact.json
+
+      - name: Retain documentation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: documentation-build-evidence
+          path: docs/astro-site/.reports/
+          if-no-files-found: error
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
         with:
           path: docs/astro-site/dist/
 
-  deploy:
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.ENABLE_PAGES_ACTIONS_DEPLOY == 'true'
+  examples:
+    name: Native documentation examples
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CARGO_BUILD_JOBS: '1'
+      DOCS_RECEIPT_DIR: ${{ github.workspace }}/docs/astro-site/.reports
+    steps:
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+      - name: Install the locked native development package
+        run: uv sync --locked --python 3.15.2
+      - name: Generate source-bound reference
+        run: .venv/bin/python scripts/generate_api_reference.py
+      - name: Verify native extension runtime docstrings
+        run: .venv/bin/python scripts/check_native_documentation.py --output docs/astro-site/.reports/native-api.json
+      - name: Require complete Rust public documentation
+        env:
+          RUSTDOCFLAGS: '-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes'
+        run: cargo doc --workspace --no-deps --locked -j 1
+      - name: Execute Rust documentation examples
+        run: cargo test --workspace --doc --locked -j 1
+
+      - name: Build and stage the C ABI for language documentation
+        run: |
+          cargo build --release --locked -p innovate-ffi -j 1
+          mkdir -p bindings/julia/deps bindings/r/inst/lib
+          cp target/release/libinnovate_ffi.so bindings/julia/deps/
+          cp target/release/libinnovate_ffi.so bindings/r/inst/lib/
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687
+        with:
+          version: '1.13'
+      - name: Install the existing Julia project dependencies
+        run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
+      - name: Execute Julia documentation examples and check runtime docs
+        timeout-minutes: 5
+        run: julia --project=bindings/julia scripts/check_julia_documentation.jl
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
+      - name: Install the existing R package and dependency
+        run: |
+          Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
+          R CMD INSTALL bindings/r
+      - name: Execute R documentation examples and check installed help
+        timeout-minutes: 5
+        run: Rscript scripts/check_r_documentation.R
+      - name: Qualify current examples across all maintained languages
+        run: .venv/bin/python scripts/check_documentation_content.py --mode ratchet --execute --python .venv/bin/python --language-receipt-dir docs/astro-site/.reports --output docs/astro-site/.reports/execution.json
+      - name: Retain executed-example evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: documentation-execution-evidence
+          path: docs/astro-site/.reports/
+          if-no-files-found: error
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.ENABLE_PAGES_ACTIONS_DEPLOY == 'true'
+    needs: [build, examples]
+    runs-on: ubuntu-latest
     timeout-minutes: 10
+    concurrency:
+      group: pages-deployment
+      cancel-in-progress: false
     permissions:
       contents: read
       pages: write

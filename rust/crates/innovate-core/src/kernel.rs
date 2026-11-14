@@ -5,17 +5,35 @@ use serde_json::{Map, Value, json};
 const DISCOVERY_MANIFEST_JSON: &str = include_str!("discovery.json");
 
 #[derive(Debug, Default, Clone, Copy)]
+/// Stateless facade for typed, in-process Rust kernel operations.
+///
+/// The facade owns no dataset or interpreter. Each operation receives its complete
+/// payload, and unsupported capabilities return structured errors.
+///
+/// # Examples
+/// ```
+/// use innovate_core::{KernelBinding, KernelOperation, KERNEL_SCHEMA_VERSION};
+///
+/// let kernel = KernelBinding::new();
+/// assert_eq!(kernel.schema_version(), KERNEL_SCHEMA_VERSION);
+/// assert!(kernel.available_operations().contains(&KernelOperation::PredictModel));
+/// ```
 pub struct KernelBinding;
 
 impl KernelBinding {
+    /// Construct the stateless native facade without allocating model state.
     pub fn new() -> Self {
         Self
     }
 
+    /// Return the wire schema version used by requests built through this facade.
     pub fn schema_version(&self) -> &'static str {
         KERNEL_SCHEMA_VERSION
     }
 
+    /// List the six typed operations in their stable discovery-to-diagnostics order.
+    ///
+    /// Individual models support subsets; consult model discovery before execution.
     pub fn available_operations(&self) -> [KernelOperation; 6] {
         [
             KernelOperation::DiscoverModels,
@@ -27,14 +45,19 @@ impl KernelBinding {
         ]
     }
 
+    /// Build an unexecuted discovery request with empty payload and metadata.
     pub fn discover_models_request(&self) -> KernelRequest {
         KernelRequest::discover_models()
     }
 
+    /// Build a fitting request from the model identity and caller-supplied payload.
+    ///
+    /// Payload validation is deferred until [`Self::invoke`].
     pub fn fit_model_request(&self, model_key: impl Into<String>, payload: Value) -> KernelRequest {
         KernelRequest::fit_model(model_key, payload)
     }
 
+    /// Build an unexecuted prediction request with its times and parameters/state.
     pub fn predict_model_request(
         &self,
         model_key: impl Into<String>,
@@ -43,6 +66,7 @@ impl KernelBinding {
         KernelRequest::predict_model(model_key, payload)
     }
 
+    /// Build an unexecuted request using the selected model's simulation payload.
     pub fn simulate_model_request(
         &self,
         model_key: impl Into<String>,
@@ -51,6 +75,7 @@ impl KernelBinding {
         KernelRequest::simulate_model(model_key, payload)
     }
 
+    /// Build an unexecuted fitted-state summary request.
     pub fn summarize_model_request(
         &self,
         model_key: impl Into<String>,
@@ -59,6 +84,7 @@ impl KernelBinding {
         KernelRequest::summarize_model(model_key, payload)
     }
 
+    /// Build an unexecuted diagnostic request containing observations and model state.
     pub fn diagnose_model_request(
         &self,
         model_key: impl Into<String>,
@@ -67,15 +93,31 @@ impl KernelBinding {
         KernelRequest::diagnose_model(model_key, payload)
     }
 
+    /// Decode the embedded native model/capability manifest.
+    ///
+    /// # Panics
+    /// Panics if the manifest embedded when compiling the crate is invalid.
     pub fn discover_models_native(&self) -> KernelDiscoveryResponse {
         serde_json::from_str(DISCOVERY_MANIFEST_JSON)
             .expect("embedded Rust discovery manifest must decode")
     }
 
+    /// Return embedded model declarations in the facade's fallible result shape.
+    ///
+    /// The current implementation returns `Ok` after decoding; a malformed embedded
+    /// manifest has the panic behavior documented by [`Self::discover_models_native`].
     pub fn discover_models(&self) -> Result<KernelDiscoveryResponse, KernelBindingError> {
         Ok(self.discover_models_native())
     }
 
+    /// Fit `model_key` using the observation/options contract in `payload`.
+    ///
+    /// Returns the complete native envelope, including fitted state and available
+    /// diagnostics. A successful fit is not independent model validation.
+    ///
+    /// # Errors
+    /// Propagates request validation, numerical fitting and unsupported-capability
+    /// errors from [`Self::invoke`]; no alternative runtime is attempted.
     pub fn fit_model(
         &self,
         model_key: impl Into<String>,
@@ -86,6 +128,9 @@ impl KernelBinding {
     }
 
     /// Fits independent datasets in input order, retaining each fit's state or error.
+    ///
+    /// `datasets` contains complete fit payloads for the same `model_key`. Execution
+    /// is sequential in this typed facade; one failure does not discard other results.
     pub fn fit_batch(
         &self,
         model_key: &str,
@@ -98,6 +143,9 @@ impl KernelBinding {
     }
 
     /// Predicts independently for each payload and its fitted state.
+    ///
+    /// Returns one result per input in the original order, retaining individual
+    /// validation/capability errors. This method does not parallelize execution.
     pub fn predict_batch(
         &self,
         model_key: &str,
@@ -138,6 +186,11 @@ impl KernelBinding {
         crate::fitting::refine(request, seed, max_iterations)
     }
 
+    /// Evaluate `model_key` on payload times using supplied parameters or fitted state.
+    ///
+    /// # Errors
+    /// Propagates malformed payload, invalid parameter and unavailable native-route
+    /// failures from [`Self::invoke`]. Output units follow the model's input contract.
     pub fn predict_model(
         &self,
         model_key: impl Into<String>,
@@ -154,6 +207,13 @@ impl KernelBinding {
         fitted_state_native_response(KernelOperation::PredictModel, request)
     }
 
+    /// Execute the selected model's simulation route and return its native envelope.
+    ///
+    /// Simulation semantics and engine support are model-specific; deterministic
+    /// prediction, stochastic population simulation and paused execution are distinct.
+    ///
+    /// # Errors
+    /// Propagates request validation, numerical and unsupported-engine/capability errors.
     pub fn simulate_model(
         &self,
         model_key: impl Into<String>,
@@ -170,6 +230,11 @@ impl KernelBinding {
         fitted_state_native_response(KernelOperation::SimulateModel, request)
     }
 
+    /// Compute the supported native summary of `model_key` and its supplied state.
+    ///
+    /// # Errors
+    /// Returns request/numerical failures or an unsupported-operation error when the
+    /// selected native model does not implement summarization.
     pub fn summarize_model(
         &self,
         model_key: impl Into<String>,
@@ -196,6 +261,14 @@ impl KernelBinding {
         }
     }
 
+    /// Compare model state with supplied observations using supported native diagnostics.
+    ///
+    /// Diagnostics describe the supplied data/model combination and do not by
+    /// themselves establish out-of-sample validity or causal identification.
+    ///
+    /// # Errors
+    /// Returns validation/numerical errors or an unsupported-operation error for
+    /// models without a native diagnostic implementation.
     pub fn diagnose_model(
         &self,
         model_key: impl Into<String>,
@@ -225,6 +298,15 @@ impl KernelBinding {
 
 impl KernelBinding {
     /// Dispatch only within Rust. No process, interpreter or compatibility fallback.
+    ///
+    /// Validates schema and model identity before dispatch. Non-fit operations may
+    /// supply explicit `parameters` or a fitted `state`, but not both; parameters
+    /// are normalized into a state envelope before the model route runs.
+    ///
+    /// # Errors
+    /// Returns structured errors for invalid schemas/payloads, unavailable native
+    /// capabilities and model-specific numerical failures. Result fields remain
+    /// operation-specific and must be interpreted with the relevant model contract.
     pub fn invoke(&self, request: &KernelRequest) -> Result<KernelResponse, KernelBindingError> {
         if request.schema_version != KERNEL_SCHEMA_VERSION {
             return Err(KernelBindingError::invalid_request(

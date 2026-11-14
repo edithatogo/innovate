@@ -28,6 +28,16 @@ struct Parameter {
 }
 
 /// Validate the paired Bass payload shared by JSON and Arrow consumers.
+///
+/// Requires at least two uniquely named strategies with provenance, matching
+/// time units/perspectives, identical ordered draw IDs and one shared strictly
+/// increasing time grid. Each draw retains finite, named `p`, `q` and `m`
+/// parameters with matching units, plus aligned finite nonnegative adoption.
+///
+/// # Errors
+/// Returns the first violated structural/value contract as a static explanation.
+/// A successful validation does not establish causal comparability, economically
+/// appropriate units or scientific calibration of the supplied trajectories.
 pub fn validate_paired_outcomes(payload: &Value) -> Result<(), &'static str> {
     let strategies = payload["strategies"]
         .as_array()

@@ -1,4 +1,26 @@
 /// Assign historical adopter categories from aligned sample weights.
+///
+/// `time` must be strictly increasing in one consistent unit. `rates` are
+/// nonnegative sample weights; they are not multiplied by time-step widths.
+/// Weighted time mean/standard deviation define the five historical categories,
+/// with boundary ties assigned to the earlier category. One label is returned
+/// for every input time, including zero-weight samples.
+///
+/// # Errors
+/// Rejects empty/misaligned arrays, nonfinite values, non-increasing time,
+/// negative weights and a zero total weight. Signed net adoption rates are
+/// therefore not admissible as gross adoption weights.
+///
+/// # Examples
+/// ```
+/// let categories = innovate_core::classify_adopters(
+///     &[0.0, 1.0, 2.0, 3.0, 4.0], &[0.0, 3.0, 3.0, 1.0, 1.0],
+/// )?;
+/// assert_eq!(categories, [
+///     "Innovators", "Early Adopters", "Early Majority", "Late Majority", "Laggards",
+/// ]);
+/// # Ok::<(), &'static str>(())
+/// ```
 pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str>, &'static str> {
     if time.is_empty()
         || time.len() != rates.len()

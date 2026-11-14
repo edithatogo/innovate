@@ -224,6 +224,15 @@ jobs:
         run: |
           unset INNOVATE_NATIVE_LIBRARY
           julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate(); Pkg.test()'
+      - name: Check Julia documentation and execute examples
+        timeout-minutes: 5
+        shell: bash
+        env:
+          DOCS_RECEIPT_DIR: ${{ runner.temp }}/polyglot-docs
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          julia --project=bindings/julia scripts/check_julia_documentation.jl
+          test -s "$DOCS_RECEIPT_DIR/julia-documentation.json"
       - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
       - shell: bash
         run: Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
@@ -244,6 +253,22 @@ jobs:
         run: |
           unset INNOVATE_NATIVE_LIBRARY
           Rscript bindings/r/tests/native.R
+      - name: Check R documentation and execute examples
+        timeout-minutes: 5
+        shell: bash
+        env:
+          DOCS_RECEIPT_DIR: ${{ runner.temp }}/polyglot-docs
+        run: |
+          unset INNOVATE_NATIVE_LIBRARY
+          Rscript scripts/check_r_documentation.R
+          test -s "$DOCS_RECEIPT_DIR/r-documentation.json"
+      - name: Upload native documentation execution receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-documentation-${{ matrix.os }}
+          path: ${{ runner.temp }}/polyglot-docs/*.json
+          if-no-files-found: warn
       - name: Verify R loads the Windows DLL from a Unicode path
         if: matrix.os == 'windows-latest'
         shell: bash

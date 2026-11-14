@@ -4,9 +4,10 @@
   "packageManager": "pnpm@12.18.0",
   "type": "module",
   "scripts": {
-    "build": "astro build",
-    "check": "astro check",
-    "dev": "astro dev",
+    "build": "node scripts/generate-api.mjs && astro build",
+    "check": "node scripts/generate-api.mjs --check && astro check",
+    "test": "node --test scripts/*.test.mjs",
+    "dev": "node scripts/generate-api.mjs && astro dev",
     "preview": "astro preview"
   },
   "dependencies": {

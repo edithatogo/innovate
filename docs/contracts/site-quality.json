@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "origin": "https://edithatogo.github.io",
+  "base": "/innovate/",
+  "required_routes": [
+    "/",
+    "/user-guide/getting-started/",
+    "/api/python/",
+    "/latest/",
+    "/latest/api/python/",
+    "/native-migration/",
+    "/maintainers/documentation-quality/",
+    "/api/generated/julia/",
+    "/api/generated/r/"
+  ],
+  "source_roots": [
+    "docs/astro-site",
+    "docs/contracts",
+    "bindings/python/innovate",
+    "examples",
+    "scripts/check_api_documentation.py",
+    "scripts/check_native_documentation.py",
+    "scripts/check_documentation_content.py",
+    "scripts/verify_production_docs.py",
+    ".github/workflows/docs.yml",
+    "bindings/julia/src",
+    "bindings/r/R",
+    "bindings/r/man",
+    "bindings/r/NAMESPACE",
+    "scripts/check_polyglot_api_documentation.py",
+    "scripts/generate_api_reference.py",
+    "scripts/check_julia_documentation.jl",
+    "scripts/check_r_documentation.R",
+    ".github/workflows/ci.yml"
+  ],
+  "exclude_source_parts": [
+    "node_modules",
+    "dist",
+    ".astro",
+    ".reports",
+    "__pycache__"
+  ],
+  "max_html_bytes": 2000000
+}

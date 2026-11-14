@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightDocSearch from '@astrojs/starlight-docsearch';
-import polyglot from 'starlight-polyglot';
+import remarkSingleTitle from './scripts/remark-single-title.mjs';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightVersions from 'starlight-versions';
 
@@ -19,11 +19,11 @@ const docSearchPlugins =
     : [];
 
 export default defineConfig({
-  site: 'https://edithatogo.github.io/innovate',
+  site: 'https://edithatogo.github.io',
   base: '/innovate',
   trailingSlash: 'always',
   markdown: {
-    processor: unified(),
+    processor: unified({ remarkPlugins: [remarkSingleTitle] }),
   },
   integrations: [
     starlight({
@@ -47,13 +47,6 @@ export default defineConfig({
           current: { label: '0.7 Development' },
           versions: [{ slug: 'latest', label: '0.6 Reference' }],
         }),
-        polyglot({
-          python: {
-            entryPoints: ['../../bindings/python/innovate'],
-            pythonExecutable: process.env.STARLIGHT_POLYGLOT_PYTHON ?? '../../.venv-native/bin/python',
-            output: 'api/python',
-          },
-        }),
       ],
       sidebar: [
         {
@@ -61,11 +54,14 @@ export default defineConfig({
           items: [
             { label: 'Overview', link: '/' },
             { label: 'Quickstart', link: '/user-guide/getting-started/' },
+            { label: 'Scenario experiments', link: '/tutorials/scenario-experiment-workflows/' },
             { label: 'Installation', link: '/user-guide/installation/' },
+            { label: 'Native capabilities and limits', link: '/native-migration/' },
           ],
         },
         {
-          label: 'User Guide',
+          label: 'Earlier user guide (pre-0.7)',
+          collapsed: true,
           items: [
             { label: 'Core Concepts', link: '/core/' },
             { label: 'Fitting Models', link: '/user-guide/fitting/' },
@@ -78,15 +74,24 @@ export default defineConfig({
           label: 'API Reference',
           items: [
             { label: 'Python API', link: '/api/python/' },
+            { label: 'Julia API', link: '/api/generated/julia/' },
+            { label: 'R API', link: '/api/generated/r/' },
+            { label: 'Native bindings', link: '/bindings/' },
+          ],
+        },
+        {
+          label: 'Earlier API design (pre-0.7)',
+          collapsed: true,
+          items: [
             { label: 'Kernel', link: '/core/kernel/' },
             { label: 'Arrow Interchange', link: '/core/arrow-interchange/' },
-            { label: 'Bindings', link: '/bindings/' },
           ],
         },
         {
           label: 'Maintainers',
           items: [
             { label: 'Overview', link: '/maintainers/' },
+            { label: 'Documentation quality contracts', link: '/maintainers/documentation-quality/' },
             { label: 'Publication', link: '/maintainers/publication/' },
             { label: 'DocSearch Gate', link: '/maintainers/docsearch/' },
             { label: 'Package Health', link: '/maintainers/package-health/' },
@@ -103,6 +108,7 @@ export default defineConfig({
         },
         {
           label: 'Operations',
+          collapsed: true,
           items: [
             { label: 'Roadmap', link: '/operations/roadmap/' },
             { label: 'Release Maturity', link: '/operations/release-maturity/' },
@@ -114,6 +120,7 @@ export default defineConfig({
         },
         {
           label: 'Architecture',
+          collapsed: true,
           items: [
             { label: 'Overview', link: '/architecture/' },
             { label: 'ADR Log', link: '/architecture/adr/' },
@@ -122,6 +129,7 @@ export default defineConfig({
         },
         {
           label: 'Migration',
+          collapsed: true,
           items: [
             { label: 'Overview', link: '/migration/' },
             { label: 'Redirects', link: '/migration/redirects/' },
