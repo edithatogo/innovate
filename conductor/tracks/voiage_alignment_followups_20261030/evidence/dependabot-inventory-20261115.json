@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "receipt_kind": "direct_dependabot_ui_observation",
+  "recorded_at_utc": "2026-11-14 23:04:16 UTC",
+  "repository": "edithatogo/innovate",
+  "issue": 559,
+  "observed_at_utc_window": {
+    "from": "2026-11-14T22:35:00Z",
+    "to": "2026-11-14T22:43:00Z",
+    "precision": "Bounded inspection window; no exact observation second retained."
+  },
+  "url": "https://github.com/edithatogo/innovate/security/dependabot",
+  "authenticated_session": true,
+  "page_title": "Dependabot alerts · edithatogo/innovate",
+  "filter": "is:open",
+  "open_alert_count": 0,
+  "closed_alert_count": 159,
+  "visible_heading": "No open alerts",
+  "visible_message": "There are no open Dependabot alerts for this repository.",
+  "dependency_files_last_checked_display": "Nov 15, 2026, 8:02 AM GMT+11",
+  "changes": {
+    "alerts_dismissed": 0,
+    "alerts_modified": 0,
+    "settings_changed": false
+  },
+  "scope": "Direct observation of the authenticated open-alert inventory. It closes the prior signed-out visibility gap at the recorded observation, not a general or permanent security clearance.",
+  "limitations": [
+    "The 159 closed alerts and their reasons were not reviewed individually.",
+    "An attempted read of the auto-dismissed-alert view timed out; no auto-dismissed subset count or disposition is claimed.",
+    "Classic signed-commit rule details were not inspected; the earlier integration API read returned 403.",
+    "No screenshot was retained; this is a structured observation receipt.",
+    "The source package audit, open-alert UI inventory and actual Renovate signature are distinct evidence."
+  ]
+}

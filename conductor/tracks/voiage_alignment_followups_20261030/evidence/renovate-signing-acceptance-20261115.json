@@ -1,0 +1,692 @@
+{
+  "schema_version": 2,
+  "observed_at_utc": "2026-11-14T23:19:51Z",
+  "repository": "edithatogo/innovate",
+  "issue": 559,
+  "trigger": {
+    "actor": "root",
+    "dashboard": 595,
+    "marker": "unschedule-branch=renovate/renovate-44.x",
+    "requested_update": "44.239.0 -> 44.239.1",
+    "scope": "Only the existing Renovate validator pin; root confirmed dashboard request succeeded."
+  },
+  "pull_request": {
+    "number": 612,
+    "url": "https://github.com/edithatogo/innovate/pull/612",
+    "author": "renovate[bot]",
+    "author_type": "Bot",
+    "head": "594380162002123533db322248363a6546301534",
+    "base": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "state": "closed",
+    "draft": false,
+    "auto_merge": {
+      "commit_message": null,
+      "commit_title": null,
+      "merge_method": "squash",
+      "enabled_by": {
+        "login": "edithatogo",
+        "id": 15080672,
+        "node_id": "MDQ6VXNlcjE1MDgwNjcy",
+        "avatar_url": "https://avatars.githubusercontent.com/u/15080672?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/edithatogo",
+        "html_url": "https://github.com/edithatogo",
+        "followers_url": "https://api.github.com/users/edithatogo/followers",
+        "following_url": "https://api.github.com/users/edithatogo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/edithatogo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/edithatogo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/edithatogo/subscriptions",
+        "organizations_url": "https://api.github.com/users/edithatogo/orgs",
+        "repos_url": "https://api.github.com/users/edithatogo/repos",
+        "events_url": "https://api.github.com/users/edithatogo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/edithatogo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      }
+    },
+    "merged": true,
+    "merged_at": "2026-11-14T23:18:20Z",
+    "merge_commit_sha": "663002b03ccb92abee2ece934d69116cb4bf3415",
+    "merged_by": "edithatogo"
+  },
+  "scope_check": {
+    "passed": true,
+    "files": [
+      {
+        "path": ".github/workflows/renovate-config.yml",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "blob": "f36b6c973caf3e581bfd0cbd8adf44830ebf047a",
+        "patch": "@@ -37,4 +37,4 @@ jobs:\n           # Renovate 44.239.0 supports ^24.11.0 or ^26.13.0.\n           node-version: 24.22.1\n       - name: Validate the local repository configuration\n-        run: npx --yes --package=renovate@44.239.0 renovate-config-validator --strict --no-global .github/renovate.json\n+        run: npx --yes --package=renovate@44.239.1 renovate-config-validator --strict --no-global .github/renovate.json"
+      }
+    ]
+  },
+  "commit": {
+    "sha": "594380162002123533db322248363a6546301534",
+    "url": "https://github.com/edithatogo/innovate/commit/594380162002123533db322248363a6546301534",
+    "author": "renovate[bot]",
+    "committer": "web-flow",
+    "parent_shas": [
+      "384ed3b0f42d967f520dc66ef536d8fa0d92df7d"
+    ],
+    "tree": "b070238cde2eaec58eca2f68457e83282328c282",
+    "message": "chore(deps): update dependency renovate to v44.239.1",
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq+ORRCRC1aQ7uu5UhlAAAlfoQABEJYmrqMY2AOgPXgsN/Oes4\naS669YxQaxUI67Z/owUqiqhD/uU8wXxVqCjxGLag/COIUyMHFQBpDmvurEYxl/QA\nzJLTd5v/yRHwugudhpFZM+PgL7ltpQz3fA3rjkMmmVqJTmi+9qQQ03OFrkaxWh9Z\ngAFh8m8XbfcEWCmKHYDXX4kALPds2EzYycWdQFzKac+TKQt41b57BaW/gvX8lhWJ\npgy9Z4yQ/2tUoquIxO8/CO+BNrTAeI5haPMd6AMEkJUTI57xzEjt1ROM6QrSKjnK\nehpUXevWIjsfIR/kcQeMr0MeR0hlHEL+A6iITFO0eabo2pgLzH4rGzJeqzFrtInV\nkevbwyOCC88eGYV5uhK2bRw0fuUFFiZ5nhCrUWPL/QJsHuR1SLLyvu9oJtQWHEuu\n9Q4G8DYPSvhTeSAeAyauj9EMrwLfAr2S2UOAACj9c9ehaGJnGkpazsq4l46+7odk\nBHB1U9jJ1Bf7i25EqKHQvwo8nmEhXAdOZAMTdJXxBqQ0crJLZ2/onqoPRWkurpPj\n9c94PaJF41VqKgKAByYQUtl53AxXvL86etyvsoXHhqBdKX3Y0NjVx2JigifEdbzi\n0/NUBmRAvwlxb7+4f9fhl+REOz5Ptm9cFxsqVdociDQFOrEWRW5gbgWtLCwe0PUs\ncj485uZeQkSQwHl/7Q6p\n=16vK\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree b070238cde2eaec58eca2f68457e83282328c282\nparent 384ed3b0f42d967f520dc66ef536d8fa0d92df7d\nauthor renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> 1794696273 +0000\ncommitter GitHub <noreply@github.com> 1794696273 +0000\n\nchore(deps): update dependency renovate to v44.239.1",
+      "verified_at": "2026-11-14T22:44:33Z"
+    }
+  },
+  "review_state_history": [
+    {
+      "id": 36155947853,
+      "event": "auto_squash_enabled",
+      "actor": "renovate[bot]",
+      "created_at": "2026-11-14T22:44:41Z",
+      "commit_id": null
+    },
+    {
+      "id": 36156001381,
+      "event": "convert_to_draft",
+      "actor": "edithatogo",
+      "created_at": "2026-11-14T22:45:48Z",
+      "commit_id": null
+    },
+    {
+      "id": 36156001886,
+      "event": "auto_merge_disabled",
+      "actor": "renovate[bot]",
+      "created_at": "2026-11-14T22:45:49Z",
+      "commit_id": null
+    },
+    {
+      "id": 36156031581,
+      "event": "ready_for_review",
+      "actor": "edithatogo",
+      "created_at": "2026-11-14T22:46:27Z",
+      "commit_id": null
+    },
+    {
+      "id": 36156033963,
+      "event": "auto_squash_enabled",
+      "actor": "edithatogo",
+      "created_at": "2026-11-14T22:46:30Z",
+      "commit_id": null
+    },
+    {
+      "id": 36157606285,
+      "event": "merged",
+      "actor": "edithatogo",
+      "created_at": "2026-11-14T23:18:20Z",
+      "commit_id": "663002b03ccb92abee2ece934d69116cb4bf3415"
+    },
+    {
+      "id": 36157606352,
+      "event": "closed",
+      "actor": "edithatogo",
+      "created_at": "2026-11-14T23:18:20Z",
+      "commit_id": null
+    }
+  ],
+  "mutation_by_this_subtask": {
+    "action": "convert_to_draft",
+    "pr": 612,
+    "completed_at": "2026-11-14T22:45:48Z",
+    "subsequent_state": "Root observed and instructed preservation of later ready-for-review/automerge restoration by the coordinator; no second draft transition was made.",
+    "other_authorized_action": "Created immutable GitData evidence blobs only; root owns commits/refs and integration.",
+    "no_promote_or_merge_by_this_subtask": true
+  },
+  "required_check_contexts": [
+    "lint",
+    "package",
+    "CodeQL",
+    "Secret Scan",
+    "Workflow and policy lint",
+    "Python quality harness",
+    "unit-tests-base (3.15.1)"
+  ],
+  "required_check_observations": [
+    {
+      "name": "lint",
+      "id": 132620082521,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679114/job/132620082521",
+      "started_at": "2026-11-14T23:16:35Z",
+      "completed_at": "2026-11-14T23:16:37Z"
+    },
+    {
+      "name": "package",
+      "id": 132615134459,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679114/job/132615134459",
+      "started_at": "2026-11-14T22:44:57Z",
+      "completed_at": "2026-11-14T22:51:27Z"
+    },
+    {
+      "name": "CodeQL",
+      "id": 132615741085,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 57789,
+        "slug": "github-advanced-security"
+      },
+      "url": "https://github.com/edithatogo/innovate/runs/132615741085",
+      "started_at": "2026-11-14T22:47:00Z",
+      "completed_at": "2026-11-14T22:47:03Z"
+    },
+    {
+      "name": "Secret Scan",
+      "id": 132615134611,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679151/job/132615134611",
+      "started_at": "2026-11-14T22:45:46Z",
+      "completed_at": "2026-11-14T22:46:00Z"
+    },
+    {
+      "name": "Workflow and policy lint",
+      "id": 132615134853,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679151/job/132615134853",
+      "started_at": "2026-11-14T22:46:36Z",
+      "completed_at": "2026-11-14T22:47:01Z"
+    },
+    {
+      "name": "Python quality harness",
+      "id": 132615134926,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679151/job/132615134926",
+      "started_at": "2026-11-14T22:49:07Z",
+      "completed_at": "2026-11-14T22:56:25Z"
+    },
+    {
+      "name": "unit-tests-base (3.15.1)",
+      "id": 132620082510,
+      "status": "completed",
+      "conclusion": "success",
+      "head": "594380162002123533db322248363a6546301534",
+      "app": {
+        "id": 15368,
+        "slug": "github-actions"
+      },
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679114/job/132620082510",
+      "started_at": "2026-11-14T23:18:06Z",
+      "completed_at": "2026-11-14T23:18:09Z"
+    }
+  ],
+  "hosted_runs": [
+    {
+      "id": 43649679111,
+      "name": "Release Drafter",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679111",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679109,
+      "name": "Privacy and secrets",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679109",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679071,
+      "name": "Renovate configuration",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679071",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679048,
+      "name": "Release Readiness",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679048",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679089,
+      "name": "Binding Conformance",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679089",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679161,
+      "name": "Deploy Documentation",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679161",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "in_progress",
+      "conclusion": null,
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679151,
+      "name": "Security and Quality",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679151",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679126,
+      "name": "Coverage",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679126",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649679114,
+      "name": "CI",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649679114",
+      "event": "pull_request",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 43649676213,
+      "name": "PR #612",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649676213",
+      "event": "dynamic",
+      "head": "594380162002123533db322248363a6546301534",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    }
+  ],
+  "validator_44_239_1": {
+    "job_id": 132615134287,
+    "url": "https://github.com/edithatogo/innovate/actions/runs/43649679071/job/132615134287",
+    "conclusion": "success",
+    "command": "npx --yes --package=renovate@44.239.1 renovate-config-validator --strict --no-global .github/renovate.json",
+    "relevant_log_lines": [
+      "2026-11-14T22:47:21.5737960Z node: v24.22.1",
+      "2026-11-14T22:47:50.1118228Z  INFO: Validating .github/renovate.json as repo config",
+      "2026-11-14T22:47:50.1351442Z  INFO: Config validated successfully against 1 file(s)"
+    ],
+    "scope": "Executed local repository configuration validation; not fully merged remote preset evaluation.",
+    "run_id": 43649679071,
+    "actual_checkout": "692fb28fea6c47a8a68717951475d865bd4cd356",
+    "checkout_log_source": "GitHub Actions validator job logs",
+    "re2_fallback_warning_observed": false,
+    "node_version": "24.22.1"
+  },
+  "release_readiness": {
+    "job_id": 132615134254,
+    "url": "https://github.com/edithatogo/innovate/actions/runs/43649679048/job/132615134254",
+    "relevant_log_lines": [
+      "2026-11-14T22:48:05.3654482Z Release blocked: scientific migration and acceptance remain incomplete: bass, complementary_goods, composite, fisher_pry, gompertz, hierarchical, latent_process, lock_in, logistic, lotka_volterra, mixture, multi_product, network_diffusion, norton_bass, policy_hazard, regime_switching, covariates_and_events, multi_generation_substitution, competitive_ecosystems, hierarchical_mixture_inference, latent_regime_models, network_policy_diffusion, kairos_des_abm, bayesian_inference, bootstrap_uncertainty, batch_fitting, preprocessing, causal_analysis, adopter_classification, data_ingestion_provenance_validation, scenario_registry_execution, explainability_sensitivity_reporting, benchmark_model_cards, plugin_contracts, remote_execution, accelerator_hpc, voiage_arrow_handoff, calibration_identifiability",
+      "2026-11-14T22:48:05.3731830Z ##[error]Process completed with exit code 1."
+    ],
+    "run_id": 43649679048,
+    "command": ".venv-release/bin/python scripts/check_migration.py --release",
+    "exit_code": 1,
+    "conclusion": "failure",
+    "scientific_obligation_count": 38,
+    "scientific_obligations": [
+      "bass",
+      "complementary_goods",
+      "composite",
+      "fisher_pry",
+      "gompertz",
+      "hierarchical",
+      "latent_process",
+      "lock_in",
+      "logistic",
+      "lotka_volterra",
+      "mixture",
+      "multi_product",
+      "network_diffusion",
+      "norton_bass",
+      "policy_hazard",
+      "regime_switching",
+      "covariates_and_events",
+      "multi_generation_substitution",
+      "competitive_ecosystems",
+      "hierarchical_mixture_inference",
+      "latent_regime_models",
+      "network_policy_diffusion",
+      "kairos_des_abm",
+      "bayesian_inference",
+      "bootstrap_uncertainty",
+      "batch_fitting",
+      "preprocessing",
+      "causal_analysis",
+      "adopter_classification",
+      "data_ingestion_provenance_validation",
+      "scenario_registry_execution",
+      "explainability_sensitivity_reporting",
+      "benchmark_model_cards",
+      "plugin_contracts",
+      "remote_execution",
+      "accelerator_hpc",
+      "voiage_arrow_handoff",
+      "calibration_identifiability"
+    ],
+    "interpretation": "Existing scientific release blockers remain preserved; no obligation is waived by this security/signing acceptance."
+  },
+  "acceptance": {
+    "real_renovate_commit_github_verified": true,
+    "all_required_checks_complete": true,
+    "all_seven_required_contexts_success": true,
+    "all_seven_required_contexts_preserved": true,
+    "merged": true,
+    "receiving_commit_github_verified": true,
+    "signed_head_test_merge_and_receiving_tree_identical": true,
+    "real_bot_signing_acceptance": "satisfied",
+    "live_alert_inventory": "Root records separately observed signed-in Dependabot UI evidence (is:open, Open 0, Closed 159, No open alerts); this subtask did not inspect or mutate alerts.",
+    "scientific_release_accepted": false
+  },
+  "limitations": [
+    "GitHub verification.verified=true and reason=valid are observed provider cryptographic verification; no independent local PGP verification was executed.",
+    "The standalone Renovate command validated local repository configuration, not fully merged remote inherited-preset behavior.",
+    "Nonrequired PR documentation and receiving-main CI states remain time bounded and were not awaited or claimed successful.",
+    "The Release Readiness command still exits 1 with the same 38 scientific obligations. Security/signing acceptance does not establish scientific, release, clinical, accelerator or HPC acceptance.",
+    "The one-line validator workflow pin update did not trigger a Voiage consumer run; broader current-main native-consumer evidence is owned by root separately.",
+    "Only the initial PR-to-draft transition and immutable receipt blob creation were performed by this subtask. Later ready/automerge and actual merge were observed, not performed here."
+  ],
+  "recorded_at_utc": "2026-11-14 23:22:56 UTC",
+  "observation_scope": "GitHub API readbacks through 23:19:51Z; PR state-event chronology refreshed at 23:22:56Z. Nonrequired documentation and receiving-main run states are time-bounded observations.",
+  "branch_protection_observed": {
+    "reference": "main",
+    "sha": "663002b03ccb92abee2ece934d69116cb4bf3415",
+    "protection": {
+      "enabled": true,
+      "required_status_checks": {
+        "enforcement_level": "everyone",
+        "contexts": [
+          "lint",
+          "package",
+          "CodeQL",
+          "Secret Scan",
+          "Workflow and policy lint",
+          "Python quality harness",
+          "unit-tests-base (3.15.1)"
+        ],
+        "checks": [
+          {
+            "context": "lint",
+            "app_id": 15368
+          },
+          {
+            "context": "package",
+            "app_id": 15368
+          },
+          {
+            "context": "CodeQL",
+            "app_id": 57789
+          },
+          {
+            "context": "Secret Scan",
+            "app_id": 15368
+          },
+          {
+            "context": "Workflow and policy lint",
+            "app_id": 15368
+          },
+          {
+            "context": "Python quality harness",
+            "app_id": 15368
+          },
+          {
+            "context": "unit-tests-base (3.15.1)",
+            "app_id": 15368
+          }
+        ]
+      }
+    },
+    "scope": "Visible branch endpoint protection summary; no settings were changed and no full classic-protection administration access is claimed."
+  },
+  "codeql_chronology": {
+    "id": 132615741085,
+    "initial_conclusion": "neutral",
+    "initial_meaning": "Waiting for expected C/C++ and Rust analysis configurations; not counted as a pass.",
+    "success_observed_by_utc": "2026-11-14T23:01:35Z",
+    "final_conclusion": "success",
+    "title": "No new alerts in code changed by this pull request",
+    "caution": "API completed_at retained the initial aggregate timestamp after conclusion updated; it is not evidence of success at that earlier time."
+  },
+  "test_merge": {
+    "sha": "692fb28fea6c47a8a68717951475d865bd4cd356",
+    "url": "https://github.com/edithatogo/innovate/commit/692fb28fea6c47a8a68717951475d865bd4cd356",
+    "parents": [
+      "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "594380162002123533db322248363a6546301534"
+    ],
+    "tree": "b070238cde2eaec58eca2f68457e83282328c282",
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq+ORXCRC1aQ7uu5UhlAAAgcQQAJwtjzOXUjQemnJFjkerm8mE\noZPF1CT4oc+uESdkurcrgrM9NPEyy2vU0OEpzlYAhXocLZb26bvz2v4Ehwc2DCpA\nbbkWFqh21gQiOBW8SsIiQST5GltTeL4180yOXqsVMqKKNVKKT7i6Az0ByHzUPNg2\nVbsXDMt0rlr4TFnc95PdmJ0kuhKUbrSgoEPawQl5TNxScRWrTFOaadLEOK5qMVoE\nCa8bp9WHhL8pvY87bKp0U1apI7lJMzUiIXRURBLIdR9lPEdRwnNW1tpbPo0W6wDQ\nEgB49FbIi/C4TyEip6ILyRMk3ta2IQiRCN/icggjmgdffJevlTnY7GOlo+Iduf+4\nLL64ZcU6EiB95t8gun8Pl9KOSnttbtU3tv3/La9hrf/dM5lAoUGnh3ALEB8+alhx\ntqfzUmRJTLffaAMqtir0a7IKF3LSx/ook2yinGC4Ns85TdBg7KLGqg6EjlRGz5XM\n3flNES6lTLpOfk4QenLZFaNo/ldtNnTwKYkLkN40Sj9jRGEM3wMafiwUWy6rw4h2\nZk2rwGicxnNuXVnhEj0H52nEgYHGrWmcLn+BJ6CKe1pG/yKcx7GYsvTriQEH8pL0\n+3QkwZfE003OMFa6ggPCLEM8favYJDlP6YfyN6cJky0cMyFY55zDeQxrOxSYvNXj\nPGBkT4BNC+HPM/5vmOAq\n=b440\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree b070238cde2eaec58eca2f68457e83282328c282\nparent 384ed3b0f42d967f520dc66ef536d8fa0d92df7d\nparent 594380162002123533db322248363a6546301534\nauthor renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> 1794696279 +0000\ncommitter GitHub <noreply@github.com> 1794696279 +0000\n\nMerge 594380162002123533db322248363a6546301534 into 384ed3b0f42d967f520dc66ef536d8fa0d92df7d\n",
+      "verified_at": "2026-11-14T22:44:40Z"
+    }
+  },
+  "receiving_main": {
+    "sha": "663002b03ccb92abee2ece934d69116cb4bf3415",
+    "url": "https://github.com/edithatogo/innovate/commit/663002b03ccb92abee2ece934d69116cb4bf3415",
+    "parents": [
+      "384ed3b0f42d967f520dc66ef536d8fa0d92df7d"
+    ],
+    "tree": "b070238cde2eaec58eca2f68457e83282328c282",
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq+Ow8CRC1aQ7uu5UhlAAAD9QQABrVyttVPBKhCzy0FZSyXofu\n0BAPSRQj7pQHxmw6pWDq3NM9jNGYMQnyUm/mpmXPAc4CyZsBu+TeC0JGJeiIgzhv\nY06XJwdDfogRAFMJ9gvB0t7zFHgw+/pkYFB1/9Oao3HSINGT2K6IqV0bwqEeOOnB\nmkOT9vfm99WiOl1UmOiYBUidY/bqKswR20uQkHnKt/SgK90Eqd4yWNjXj/qJbrvp\nIPdCVkHp6Ig77EX7MNPuj+EITb93uwdBJgVlfHd0lYYMz+mifvdYjWc3YxYSpXNe\napYRiK2XoYQTWacFQw16McxI/u/rGJb3UiM2T0ufNuiUrfO4rl5wiObj0W+xvadT\n1GRttRZ4ORySIDsxEhaNGvY9vWFygRImU8dNDe07p35apyWa1XsZYa0eikjzIl5D\nHzydFmFP+bS8q5hjrmMbiCA1B6Lxrh9bSKxv6PEJSZHqldCnOEmaeKKlCkcesKup\nzz5NgXkVb80SPFLzwKLIvlXaLipgkicNBZlBrOVvxqfh2ZO+L7G4EAPzALKBrLNx\n+hp+JPM5X6SCarxg9YtqnacOh1rsS3Y2GWZJUF40deiIF8lB50HX7Um0ZMSOqwPm\nkxnj2atD2YQ5S+RI/+FKWEYpY+qAD5fiaeWAzEPZ56aM6QOoZMeMs+XFsl07dw8p\nolWUt2cpPkZdWWP2gBmb\n=7IHI\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree b070238cde2eaec58eca2f68457e83282328c282\nparent 384ed3b0f42d967f520dc66ef536d8fa0d92df7d\nauthor renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> 1794698300 +0000\ncommitter GitHub <noreply@github.com> 1794698300 +0000\n\nchore(deps): update dependency renovate to v44.239.1 (#612)\n\nThis PR contains the following updates:\n\n| Package | Change |\n[Age](https://docs.renovatebot.com/merge-confidence/) |\n[Confidence](https://docs.renovatebot.com/merge-confidence/) |\n|---|---|---|---|\n| [renovate](https://renovatebot.com)\n([source](https://redirect.github.com/renovatebot/renovate),\n[changelog](https://redirect.github.com/renovate)) | [`44.239.0` →\n`44.239.1`](https://octochangelog.com/compare?repo=renovatebot%2Frenovate&from=44.239.0&to=44.239.1)\n|\n![age](https://developer.mend.io/api/mc/badges/age/npm/renovate/44.239.1?slim=true)\n|\n![confidence](https://developer.mend.io/api/mc/badges/confidence/npm/renovate/44.239.0/44.239.1?slim=true)\n|\n\n---\n\n> [!WARNING]\n> Some dependencies could not be looked up. Check the [Dependency\nDashboard](../issues/595) for more information.\n\n---\n\n### Release Notes\n\n<details>\n<summary>renovatebot/renovate (renovate)</summary>\n\n###\n[`v44.239.1`](https://redirect.github.com/renovatebot/renovate/releases/tag/44.239.1)\n\n[Compare\nSource](https://redirect.github.com/renovatebot/renovate/compare/44.239.0...44.239.1)\n\n##### Build System\n\n- **deps:** update dependency\n[@&#8203;opentelemetry/semantic-conventions](https://redirect.github.com/opentelemetry/semantic-conventions)\nto v1.45.0 (main)\n([#&#8203;48044](https://redirect.github.com/renovatebot/renovate/issues/48044))\n([9bd78fd](https://redirect.github.com/renovatebot/renovate/commit/9bd78fd68dc4133dea88154ffb4aac6dc66be75a))\n\n</details>\n\n---\n\n### Configuration\n\n📅 **Schedule**: (in timezone Australia/Sydney)\n\n- Branch creation\n  - Only on Monday (`* * * * 1`)\n- Automerge\n  - At any time (no schedule defined)\n\n🚦 **Automerge**: Enabled.\n\n♻ **Rebasing**: Whenever PR is behind base branch, or you tick the\nrebase/retry checkbox.\n\n🔕 **Ignore**: Close this PR and you won't be reminded about this update\nagain.\n\n---\n\n- [ ] <!-- rebase-check -->If you want to rebase/retry this PR, check\nthis box\n\n---\n\nThis PR was generated by [Mend Renovate](https://mend.io/renovate/).\nView the [repository job\nlog](https://developer.mend.io/github/edithatogo/innovate).\n\n<!--renovate-debug:eyJjcmVhdGVkSW5WZXIiOiI0NC4yMjguMCIsInVwZGF0ZWRJblZlciI6IjQ0LjIyOC4wIiwidGFyZ2V0QnJhbmNoIjoibWFpbiIsImxhYmVscyI6WyJkZXBlbmRlbmNpZXMiLCJyZW5vdmF0ZSJdfQ==-->\n\nCo-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>",
+      "verified_at": "2026-11-14T23:18:20Z"
+    },
+    "merged_at": "2026-11-14T23:18:20Z",
+    "observed_main": "663002b03ccb92abee2ece934d69116cb4bf3415",
+    "workflow_runs": [
+      {
+        "id": 43652581661,
+        "name": "CI Gate Monitor",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652581661",
+        "event": "workflow_run",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "completed",
+        "conclusion": "skipped",
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562346,
+        "name": "Release Drafter",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562346",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562285,
+        "name": "Coverage",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562285",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562322,
+        "name": "Release Readiness",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562322",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562396,
+        "name": "CI",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562396",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562275,
+        "name": "Deploy Documentation",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562275",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562336,
+        "name": "Security and Quality",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562336",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562392,
+        "name": "Renovate configuration",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562392",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562273,
+        "name": "Privacy and secrets",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562273",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562345,
+        "name": "Release Please",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562345",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652562261,
+        "name": "OpenSSF Scorecard",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652562261",
+        "event": "push",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      },
+      {
+        "id": 43652561736,
+        "name": "Push on main",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43652561736",
+        "event": "dynamic",
+        "head": "663002b03ccb92abee2ece934d69116cb4bf3415",
+        "status": "queued",
+        "conclusion": null,
+        "run_attempt": 1
+      }
+    ],
+    "scope": "Postmerge runs were queued or skipped when observed. This receipt does not claim receiving-main CI success."
+  },
+  "tree_identity": {
+    "signed_bot_head": "594380162002123533db322248363a6546301534",
+    "tested_pr_checkout": "692fb28fea6c47a8a68717951475d865bd4cd356",
+    "receiving_main": "663002b03ccb92abee2ece934d69116cb4bf3415",
+    "identical_tree": "b070238cde2eaec58eca2f68457e83282328c282",
+    "verified_equal": true
+  },
+  "nonrequired_documentation_at_observation": {
+    "run_id": 43649679161,
+    "job_id": 132617145191,
+    "name": "Native documentation examples",
+    "status": "in_progress",
+    "conclusion": null,
+    "url": "https://github.com/edithatogo/innovate/actions/runs/43649679161/job/132617145191",
+    "scope": "Still in progress at observation; no pass claimed and existing owner preserved."
+  },
+  "evidence_sources": [
+    "https://api.github.com/repos/edithatogo/innovate/pulls/612",
+    "https://api.github.com/repos/edithatogo/innovate/pulls/612/files?per_page=100",
+    "https://api.github.com/repos/edithatogo/innovate/issues/612/events?per_page=100",
+    "https://api.github.com/repos/edithatogo/innovate/commits/594380162002123533db322248363a6546301534",
+    "https://api.github.com/repos/edithatogo/innovate/commits/692fb28fea6c47a8a68717951475d865bd4cd356",
+    "https://api.github.com/repos/edithatogo/innovate/commits/663002b03ccb92abee2ece934d69116cb4bf3415",
+    "https://api.github.com/repos/edithatogo/innovate/commits/594380162002123533db322248363a6546301534/check-runs?per_page=100",
+    "https://api.github.com/repos/edithatogo/innovate/branches/main",
+    "https://api.github.com/repos/edithatogo/innovate/actions/runs?head_sha=594380162002123533db322248363a6546301534&per_page=100",
+    "https://api.github.com/repos/edithatogo/innovate/actions/runs?head_sha=663002b03ccb92abee2ece934d69116cb4bf3415&per_page=100",
+    "https://github.com/edithatogo/innovate/actions/runs/43649679071/job/132615134287",
+    "https://github.com/edithatogo/innovate/actions/runs/43649679048/job/132615134254"
+  ]
+}
