@@ -13,6 +13,11 @@ pub(crate) fn compose(payload: &Value) -> Result<Value, &'static str> {
     {
         return Err("regime predictions must align with a nonempty time grid");
     }
+    if time.iter().any(|value| !value.is_finite())
+        || time.windows(2).any(|pair| pair[0] >= pair[1])
+    {
+        return Err("time must be finite and strictly increasing");
+    }
     let mut weights: BTreeMap<String, f64> = if payload["weights"].is_null() {
         predictions.keys().map(|key| (key.clone(), 1.)).collect()
     } else {
