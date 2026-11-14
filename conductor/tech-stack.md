@@ -16,6 +16,12 @@ Separate core, bindings, optional backend, build, isolated test-oracle and devel
 
 Python dependency management remains `uv`-first, with **nox** — Python task orchestration for repeatable local and CI sessions. Rust uses Cargo and an exact toolchain/lock; no undeclared latest or rolling Git main. `scripts/sync_versions.py` remains the package-version synchronisation utility.
 
+Optional local test-acceleration experiments are isolated under
+`scripts/test_acceleration/`, with separately hash-locked testmon/Gremlins tooling.
+The [issue #473 track](tracks/test_acceleration_20261114/index.md) records scope,
+compatibility and measurements. These tools do not change the runtime lock,
+default Nox/pytest selection, full CI, native acceptance or release gates.
+
 ## Simulation and ecosystem
 
 Kairos owns simulation time, events, state, resources and simulation RNG. Innovate owns innovation model semantics and behaviours. Optional game adapters consume the single generic game-runtime capability, not duplicate solvers. Voiage consumes exported joint uncertainty through explicit decision bindings; application artefacts may feed selected designs back without mutual core dependencies.

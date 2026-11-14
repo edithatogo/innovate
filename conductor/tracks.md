@@ -2,6 +2,9 @@
 
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
+- [~] **Track: Bounded local test acceleration (#473)** *(Local qualification; integration pending)*
+  *Link: [./tracks/test_acceleration_20261114/](./tracks/test_acceleration_20261114/)*
+
 - [ ] **Track: Kairos native consumer and domain boundary** *(Proposed; implementation pending)*
   *Link: [./tracks/kairos_runtime_boundary_20261107/](./tracks/kairos_runtime_boundary_20261107/)*
 
