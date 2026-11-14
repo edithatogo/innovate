@@ -29,7 +29,7 @@ jobs:
       - name: Review dependency changes
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294
         with:
-          fail-on-severity: high
+          fail-on-severity: moderate
           comment-summary-in-pr: always
           vulnerability-check: true
           license-check: true
@@ -101,7 +101,7 @@ jobs:
           .venv-policy/bin/python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
           uv pip install --python .venv-policy/bin/python zizmor==1.32.0 ruff==0.17.4
       - name: Audit GitHub Actions security posture
-        run: .venv-policy/bin/zizmor .github/workflows/security-quality.yml .github/workflows/scorecard.yml
+        run: .venv-policy/bin/zizmor .github/workflows/*.yml
       - name: Test repository policy drift detection
         run: .venv-policy/bin/python -m unittest discover -s tests/workflows -p 'test_repository_policy.py' -v
       - name: Lint repository policy tooling
@@ -111,6 +111,34 @@ jobs:
       - name: Validate repository policy
         run: |
           .venv-policy/bin/python scripts/check_repository_policy.py --json
+      - name: Validate container digest pinning policy
+        run: |
+          .venv-policy/bin/python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          dockerfile = Path("Dockerfile").read_text(encoding="utf-8")
+          unpinned = []
+          for lineno, line in enumerate(dockerfile.splitlines(), 1):
+              stripped = line.strip()
+              if stripped.startswith("FROM "):
+                  image = stripped.split()[1]
+                  if "@sha256:" not in image:
+                      unpinned.append(f"Dockerfile:{lineno}: {image}")
+              elif stripped.startswith("COPY ") and "--from=" in stripped:
+                  m = re.search(r"--from=(\S+)", stripped)
+                  if m:
+                      ref = m.group(1)
+                      if (":" in ref or "/" in ref) and "@sha256:" not in ref:
+                          unpinned.append(f"Dockerfile:{lineno}: {ref}")
+          if unpinned:
+              print("Unpinned container image references found:")
+              for item in unpinned:
+                  print(" ", item)
+              sys.exit(1)
+          print("Container digest pinning check passed.")
+          PY
 
   python-quality:
     name: Python quality harness

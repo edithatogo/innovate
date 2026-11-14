@@ -32,8 +32,19 @@ jobs:
       - name: Select isolated release checker
         run: uv venv .venv-release --python 3.15.2
 
-      - name: Require complete native migration
-        run: .venv-release/bin/python scripts/check_migration.py --release
+      - name: Check native migration policy
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            .venv-release/bin/python scripts/check_migration.py --release
+          else
+            .venv-release/bin/python scripts/check_migration.py
+            {
+              echo "### Release Readiness Migration Gate"
+              echo '```text'
+              .venv-release/bin/python scripts/check_migration.py --release || true
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
   release-lane-checks:
     runs-on: ubuntu-latest

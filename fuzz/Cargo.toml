@@ -1,0 +1,21 @@
+[package]
+name = "innovate-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.innovate-core]
+path = "../rust/crates/innovate-core"
+
+[[bin]]
+name = "kernel_request"
+path = "fuzz_targets/kernel_request.rs"
+test = false
+doc = false
+bench = false
