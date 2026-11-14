@@ -1,17 +1,19 @@
 # Security Policy
 
-## Supported Versions
+## Development and support scope
 
-The following versions of `innovate` are currently supported with security updates:
+Active development is the Rust-native 0.7 prerelease line on `main`; the package
+manifests record its exact version. It is undergoing scientific and distribution
+qualification and is not a claim of stable-release or production readiness.
+See [README.md](README.md), the [migration ledger](migration-ledger.json) and
+[release gates](conductor/release-gates-20261107.md).
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.5.x   | :white_check_mark: |
-| < 0.5   | :x:                |
+Historical release records remain available for provenance. This development
+branch does not establish a current security-support or backport commitment for
+every earlier release. Report the exact affected version or commit so the
+maintainer can assess exposure and any required backport.
 
 ## Reporting a Vulnerability
-
-We take the security of `innovate` seriously. If you believe you have found a security vulnerability, please report it to us as described below.
 
 **Please do NOT report security vulnerabilities through public GitHub issues.**
 
@@ -33,13 +35,38 @@ Please include the following information in your report:
 
 We prefer all communications to be in English.
 
-## Security Measures
+## Configured security controls
 
-- Dependencies are scanned for vulnerabilities using `pip-audit` and `bandit`
-- All dependencies are managed via `uv` with a locked `uv.lock` file
-- Renovate manages dependency update PRs, groups non-major updates by ecosystem,
-  and can automerge vulnerability fixes only after the required CI and branch
-  protection gates pass. GitHub Dependabot security updates remain enabled as
-  an additional vulnerability-alert source; scheduled version updates are
-  owned by Renovate to avoid duplicate PRs.
-- CI pipeline includes security scanning on every push
+[Security and Quality](.github/workflows/security-quality.yml) runs on pull
+requests and pushes targeting `main` or `work`, a weekly schedule and manual
+dispatch. It configures dependency review for pull requests, a RustSec audit of
+`Cargo.lock`, Gitleaks history scanning, workflow/policy lint and Python binding
+checks including Bandit. Bandit checks source code; it is not a dependency
+vulnerability audit. Installing `pip-audit` as a development tool does not prove
+that an audit has run.
+
+The separate [Privacy and secrets](.github/workflows/privacy-secrets.yml) workflow
+uses the pinned shared Presidio/Gitleaks action. [OpenSSF
+Scorecard](.github/workflows/scorecard.yml) records repository posture. These
+workflow definitions describe configured controls; only completed runs on the
+relevant source establish their outcomes. A queued offline-security job or a
+draft rollout is not completed security evidence.
+
+Python dependencies use `uv.lock`, Rust uses `Cargo.lock` with explicit upstream
+revisions, and documentation dependencies use the documentation workspace lock.
+The hosted Renovate app owns scheduled version updates through
+[its repository configuration](.github/renovate.json). Confirm an active Renovate
+dashboard or update pull request before retiring a Dependabot version-update
+schedule. Dependabot alerts and security-update settings are separate GitHub
+controls and must be verified independently.
+
+Required automated checks gate routine merges. Keep zero mandatory human,
+code-owner or team approvals and retain owner recovery for this solo-maintainer
+repository. Do not weaken checks, grant bots broad bypasses or treat a missing
+check as successful. See [AGENTS.md](AGENTS.md) for ownership and execution rules.
+
+Run `python scripts/check_repository_policy.py` from the repository root for the
+dependency-free policy/drift check. Its result is scoped to the checks reported;
+it does not establish live enforcement, scanner success, external coverage
+delivery or scientific release acceptance. [CONTRIBUTING.md](CONTRIBUTING.md)
+lists the separate development and migration gates.

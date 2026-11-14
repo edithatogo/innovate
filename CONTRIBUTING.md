@@ -5,6 +5,13 @@ Polars, and exposes only Python, Julia and R bindings. Read README.md and
 migration-ledger.json before adding a capability. All existing and planned
 features remain required; a temporarily unavailable feature is not a retired requirement.
 
+Read [AGENTS.md](AGENTS.md) for execution and ownership rules,
+[SECURITY.md](SECURITY.md) for vulnerability reporting, and the
+[Conductor index](conductor/index.md) for project context. Resolve the owning
+track through [the track registry](conductor/tracks.md), then read its specification
+and plan before implementation. Historical completion labels apply to their
+recorded scope; they do not establish current release acceptance.
+
 ## Environment
 
 Use Rust 1.99.1 and an explicitly selected repo-local Python 3.15.2 environment:
@@ -23,11 +30,34 @@ runner checks the selected interpreter's actual version before invoking tools.
 
 ## Development checks
 
+From the repository root, run the dependency-free repository-policy check:
+
 ```sh
-.venv-native/bin/nox -s lint types tests native
+python scripts/check_repository_policy.py
+```
+
+Its result covers repository policy and drift within the reported scope. Live
+GitHub settings, bot operation and external coverage delivery require their own
+current evidence. This command does not run the scientific implementation or
+replace required CI checks.
+
+After installing the development environment, the full development validation
+command is:
+
+```sh
+.venv-native/bin/nox -s lint types tests native docs package
+```
+
+Keep migration and version consistency checks explicit:
+
+```sh
 .venv-native/bin/python scripts/check_migration.py
 .venv-native/bin/python scripts/sync_versions.py --check
 ```
+
+Coverage, security, clean-package/platform and release gates remain separate.
+`scripts/check_migration.py --release` must continue to fail while mandatory
+migration obligations are unresolved; a passing development run does not override it.
 
 During edits, select affected pytest files/nodes and Cargo tests. Keep pytest's
 cache and use `--lf --last-failed-no-failures=none` only for rerunning known
@@ -41,6 +71,12 @@ For the documentation site, use Node 26 and pnpm 12.18.0. Set
 Keep the lockfile, package release-age policy and recorded compatibility exceptions.
 
 ## Scientific changes and review
+
+The repository supports one maintainer: zero mandatory human approvals, code-owner
+approvals or team gates. Automated review and required checks on the exact proposed
+commit control routine merges. CODEOWNERS is routing information only. Preserve
+owner recovery without using it to waive failed checks, and coordinate shared-file
+changes and promotion with the integrator.
 
 Rust owns validation, numeric algorithms and capability reporting. Bindings adapt
 transport only. Tests should use independent analytic/reference oracles and cover

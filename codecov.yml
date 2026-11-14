@@ -1,0 +1,50 @@
+# These reports measure executed lines, not scientific validity, branch coverage
+# or mutation strength. Critical scientific modules still target >90% coverage;
+# the 90% changed-line target does not establish that separate qualification.
+codecov:
+  # Report coverage even while the separate scientific release gate is blocked.
+  require_ci_to_pass: false
+  notify:
+    after_n_builds: 2
+    wait_for_ci: false
+
+coverage:
+  precision: 2
+  round: down
+  range: '80...100'
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 0%
+        if_not_found: failure
+      rust-native:
+        target: 80%
+        threshold: 0%
+        flags: [rust-native]
+        if_not_found: failure
+      python-binding:
+        target: 80%
+        threshold: 0%
+        flags: [python-binding]
+        if_not_found: failure
+    patch:
+      default:
+        target: 90%
+        threshold: 0%
+        if_not_found: failure
+
+flags:
+  rust-native:
+    paths:
+      - rust/crates/innovate-core/src/
+      - rust/crates/innovate-tabular/src/
+      - rust/crates/innovate-ffi/src/
+    carryforward: false
+  python-binding:
+    paths:
+      - bindings/python/innovate/
+    carryforward: false
+
+# Commit statuses and retained reports supply evidence without PR comment noise.
+comment: false
