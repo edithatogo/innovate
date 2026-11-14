@@ -25,7 +25,7 @@ concurrency:
 jobs:
   validate:
     # Path-filtered validation is intentionally not a required branch context.
-    name: Validate inherited Renovate configuration
+    name: Validate repository Renovate configuration
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -36,7 +36,5 @@ jobs:
         with:
           # Renovate 44.239.0 supports ^24.11.0 or ^26.13.0.
           node-version: 24.22.1
-      - name: Validate the repository config and resolve its public preset
-        env:
-          RENOVATE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx --yes --package=renovate@44.239.0 renovate-config-validator --strict .github/renovate.json
+      - name: Validate the local repository configuration
+        run: npx --yes --package=renovate@44.239.0 renovate-config-validator --strict --no-global .github/renovate.json

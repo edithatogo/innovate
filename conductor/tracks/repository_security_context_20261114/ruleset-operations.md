@@ -39,26 +39,62 @@ recorded, never a substitute for required checks during routine integration.
 
 Hosted Renovate created [dashboard #595](https://github.com/edithatogo/innovate/issues/595)
 and enumerated all four ecosystems previously scheduled by Dependabot. The
-recent-PR inventory also contains 14 Dependabot PRs, confirming overlap. The
-updated Renovate config inherits `github>edithatogo/renovate-config`; the local
-Monday cron remains because [#594](https://github.com/edithatogo/innovate/pull/594)
-repaired an invalid schedule. Existing main-branch targeting, production/dev
-grouping, digest pinning, limits, semantic commits and major-update handling
-remain to preserve the established rollout behavior. No GitHub vulnerability
-alert or security-update setting is changed by removing the version-update file.
-Three narrowly scoped regex managers keep the inline Renovate validator,
-cargo-llvm-cov and Codecov CLI versions visible to Renovate; the Actions manager
-owns the immutable uploader-action pin. The dedicated configuration workflow
-resolves the public inherited preset with the pinned upstream validator. Its
-path-filtered job is not a required branch context.
+recent-PR inventory also contains 14 Dependabot PRs, confirming overlap. This
+establishes existing hosted-app activity before retiring duplicate scheduling;
+the dashboard does not prove that this PR's new inherited preset was evaluated.
+
+The updated Renovate config inherits `github>edithatogo/renovate-config`; the
+local Monday cron remains because
+[#594](https://github.com/edithatogo/innovate/pull/594) repaired an invalid schedule.
+Existing main-branch targeting, production/dev grouping, digest pinning, limits,
+semantic commits and major-update handling remain to preserve the established
+rollout behavior. No GitHub vulnerability alert or security-update setting is
+changed by removing the version-update file. Three narrowly scoped regex managers
+keep the inline Renovate validator, cargo-llvm-cov and Codecov CLI versions visible
+to Renovate; the Actions manager owns the immutable uploader-action pin.
+
+The dedicated workflow uses pinned Renovate 44.239.0 for local repository-config
+validation with `--no-global`, without exposing an unnecessary Renovate token.
+This validation does not resolve or evaluate top-level `extends`. The earlier
+successful [run 43602887341](https://github.com/edithatogo/innovate/actions/runs/43602887341)
+on `b8020005153b76f3c0049b7f478bc29fcd0a7c0a` used global-config mode and cannot
+qualify the corrected invocation. Repository-mode execution remains pending on
+the next head. Evaluation of the merged inherited configuration requires separate
+hosted-app or resolver evidence for the new config and remains unverified.
+The path-filtered validator job is not a required branch context.
 
 Release Please, Release Drafter, TagBot and the incident monitor use their
 existing GitHub Actions permissions. They receive no ruleset exemption.
 Conditional deployment, release, monitoring and offline-security jobs are not
-new required PR contexts. Codecov must produce a verified service result before
-its contexts are considered stable enough for protection. The separate release
-readiness failure and offline-security draft #590 remain explicit gates in their
-own scopes.
+new required PR contexts. A successful Codecov result on one head does not by
+itself qualify a new required context. The separate release-readiness failure and
+offline-security draft #590 remain explicit gates in their own scopes.
+
+## Observed hosted coverage and remaining acceptance
+
+On PR #606 head `b8020005153b76f3c0049b7f478bc29fcd0a7c0a`,
+[Coverage run 43602887328](https://github.com/edithatogo/innovate/actions/runs/43602887328)
+passed both jobs, their 80% line floors, OIDC uploads and artifact retention.
+Rust measured 20,728/23,071 lines (**89.84%**), with 372 tests passed and one
+live OECD test ignored. Python binding coverage measured 205/237 lines
+(**86.50%**), with 158 tests passed and one live OECD test skipped.
+
+[Codecov-app patch check 132476340576](https://github.com/edithatogo/innovate/runs/132476340576)
+also succeeded for that exact head. This establishes actual Codecov service
+activity for the uploaded PR coverage. Project contexts have not been observed,
+and no Codecov context is added to protection by this proposal.
+
+Aggregate coverage does not establish the critical-module 90% target: reported
+Rust line coverage includes FFI 29.67%, tabular 69.98%, contracts 65.66% and kernel
+75.31%. It also does not establish branch or mutation coverage. See the
+[prior-head hosted evidence](plan.md#hosted-evidence-for-pr-606) for job links,
+security/privacy/binding results and the separate local SIGKILL history.
+
+These successes do not apply the ruleset, resolve the HTTP 403 blocking full
+classic-protection inspection, validate the corrected Renovate invocation or
+prove merged-preset evaluation. No active repository ruleset has been observed.
+Required checks must be reconciled on the final head; the 38 scientific
+obligations and release-readiness failure remain unchanged.
 
 ## Apply only through an authenticated administrator
 
