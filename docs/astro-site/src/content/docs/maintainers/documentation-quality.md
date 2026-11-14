@@ -18,6 +18,8 @@ receipts, generated headings and a successful build do not establish completenes
 | Content | Every page and example is discovered and explicitly classified; current tutorials have outcomes, prerequisites, steps, expected results, interpretation and limitations | Pedagogical quality and scientific correctness cannot be inferred from headings |
 | Execution | Python runs the exact displayed sources with assertions and expected output; Julia/R runners execute every inventoried native example and record observed assertion counts | Receipts establish source and outcome consistency, not authenticated provenance or scientific validity; Python isolation is not a security sandbox |
 | Artifact | Rendered local links and fragments, canonical paths, sitemap, search index, semantics and size are inspected from the build output | Browser interaction, assistive-technology testing and live deployment |
+| Browser | Every current page is tested in Chromium at desktop and mobile sizes; checks cover automated accessibility findings, keyboard/search/version interactions, overflow, resource integrity and byte/request budgets | Human assistive-technology use, usability trials, other browser engines, real-user performance and live deployment |
+| Scientific review record | Reviewed inputs are fingerprinted; findings, primary references, worked reader tasks and scope claims must remain internally consistent | A consistent review record does not establish empirical validity or prove that readers can complete the tasks |
 
 The versioned machine-readable contracts live in 
 [docs/contracts](https://github.com/edithatogo/innovate/tree/main/docs/contracts).
@@ -63,6 +65,13 @@ Only visible source bindings and tutorial guidance qualify. MDX and HTML
 comments cannot supply an example component, required heading or historical
 notice. Literal comment markers inside displayed code remain part of that code.
 
+Current pages must remain searchable. Pages classified as historical at current
+paths must declare the literal frontmatter boolean `pagefind: false`; their
+retained routes and the separate versioned archive remain available through the
+[historical documentation map](/innovate/historical-documentation/). This rule
+controls the bundled Pagefind index. An optional external Algolia crawl requires
+its own exclusion and version-filter qualification.
+
 ## Contributor commands
 
 From the repository root, use the Python 3.15.2 tooling environment from the
@@ -72,6 +81,7 @@ Generate current reference pages before auditing content:
 ```sh
 .venv-docs/bin/python scripts/check_api_documentation.py --mode strict --output docs/astro-site/.reports/api.json
 .venv-docs/bin/python scripts/check_polyglot_api_documentation.py --check
+.venv-docs/bin/python scripts/check_scientific_review_contract.py --output docs/astro-site/.reports/scientific-review.json
 .venv-docs/bin/python scripts/generate_api_reference.py
 .venv-docs/bin/python scripts/check_documentation_content.py --mode audit --output docs/astro-site/.reports/content-audit.json
 .venv-docs/bin/python scripts/check_documentation_content.py --mode ratchet --output docs/astro-site/.reports/content.json
@@ -87,7 +97,7 @@ before aggregation:
 
 ```sh
 export DOCS_RECEIPT_DIR="$PWD/docs/astro-site/.reports"
-julia --project=bindings/julia scripts/check_julia_documentation.jl
+julia --depwarn=error --project=bindings/julia scripts/check_julia_documentation.jl
 Rscript scripts/check_r_documentation.R
 .venv-native/bin/python scripts/check_documentation_content.py \
   --mode ratchet --execute --python .venv-native/bin/python \
@@ -125,6 +135,9 @@ pnpm test
 pnpm build
 pnpm check
 ../../.venv-docs/bin/python ../../scripts/verify_production_docs.py
+pnpm test:browser:list
+pnpm exec playwright install --with-deps chromium
+pnpm test:browser
 ```
 
 Generated reports belong to this run. They carry source fingerprints and execution
@@ -132,13 +145,39 @@ results; the artifact receipt fingerprints both source and output. The CI sequen
 builds from a clean checkout and retains its reports. A source/output hash pair
 alone is not a cryptographic proof that a particular compiler produced the output.
 
+## Browser and review evidence
+
+The browser suite previews the built artifact, so it exercises the actual
+Pagefind index. It uses a complete contract-derived page inventory, one desktop
+viewport and a 390-pixel mobile viewport. Separate cases check six dark-theme
+entry routes, keyboard focus and skip navigation, search, version switching and
+deterministic resource budgets. The reporter rejects filtered, skipped, retried,
+duplicate or incomplete runs and compares source, artifact and served-resource
+fingerprints.
+
+Axe findings are retained with the report. Automated violations fail the run;
+incomplete findings remain visible for manual investigation. Passing this suite
+does not certify WCAG conformance, screen-reader usability, every browser engine
+or real-user loading speed. Byte and request limits are reproducible budgets,
+not measured Core Web Vitals.
+
+The scientific review record lists the pages actually reviewed, the primary
+references consulted, corrections and worked learner tasks. Its checker fails
+when reviewed source changes or when the record claims human task completion
+without the required observations. Refresh the review by inspecting changed
+claims and recording the result; do not simply replace hashes to silence drift.
+Human reader trials, assistive-technology review and empirical scientific
+validation remain separate acceptance work.
+
 ## Current acceptance boundary
 
-The current Python entry path, scenario-workflow tutorial and eight native
-reference examples are bound to ten executable source files. The content baseline
-has no accepted current-page exceptions. A new or changed unbound snippet fails
-the regression gate. Most retained pages describe the earlier implementation and
-remain explicitly outside current API qualification.
+The quickstart, scenario workflow, forecasting, Norton–Bass, Bayesian,
+counterfactual, Arrow and provenance tutorials display registered executable
+sources. Together with the API reference examples, they use ten checked Python
+files. The content baseline has no accepted current-page exceptions. A new or
+changed unbound snippet fails the regression gate. Retained historical material
+is explicitly outside current API qualification and is mapped to current
+guidance where a supported replacement exists.
 
 Full acceptance additionally requires compiler-verified Rust docs, all supported
 language examples, scientific reference review, keyboard/mobile/search behavior,

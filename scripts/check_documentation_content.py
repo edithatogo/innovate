@@ -326,6 +326,25 @@ def _frontmatter(text: str) -> dict[str, str]:
     }
 
 
+def _pagefind_setting(text: str) -> str:
+    """Read the supported search flag only from top-level YAML frontmatter.
+
+    Starlight validates the complete YAML schema at build time. This bounded
+    check accepts literal booleans, rejects ambiguous duplicate keys, and does
+    not mistake prose, comments, quoted strings or fenced code for the flag.
+    """
+    match = re.match(r"\A---\s*\n(.*?)\n---(?:\n|\Z)", text, re.DOTALL)
+    if match is None:
+        return "default"
+    values = re.findall(r"^pagefind:[ \t]*([^\n]*)$", match.group(1), re.MULTILINE)
+    if not values:
+        return "default"
+    if len(values) != 1:
+        return "invalid"
+    value = re.sub(r"[ \t]+#.*$", "", values[0]).strip()
+    return value if value in {"true", "false"} else "invalid"
+
+
 def _has_source_binding(page: Path, text: str, example: Path) -> bool:
     # Support a complete verbatim fence or a Starlight Code component backed by
     # Vite's raw import. A prose mention of a source filename is not evidence.
@@ -477,7 +496,14 @@ def build_report(root: Path, contract: dict[str, Any] | None = None) -> dict[str
                 + ", ".join(missing_bindings)
                 + ".",
             )
+        search_setting = _pagefind_setting(text)
         if classification == "historical":
+            if search_setting != "false":
+                add(
+                    repo_path,
+                    "historical-search-visibility",
+                    "Historical current-path pages must declare the literal frontmatter boolean pagefind: false.",
+                )
             if LEGACY_NOTICE not in _fences(text)[0]:
                 add(
                     repo_path,
@@ -485,6 +511,12 @@ def build_report(root: Path, contract: dict[str, Any] | None = None) -> dict[str
                     "Historical current-path page must visibly identify its pre-0.7 scope.",
                 )
             continue
+        if search_setting not in {"default", "true"}:
+            add(
+                repo_path,
+                "current-search-visibility",
+                "Current documentation must remain searchable; pagefind must be absent or the literal boolean true.",
+            )
         metadata = _frontmatter(text)
         for field in ("title", "description"):
             value = metadata.get(field, "")
@@ -648,6 +680,8 @@ def evaluate_ratchet(report: dict[str, Any], baseline: object) -> dict[str, Any]
         "empty-example-inventory",
         "source-outside-repository",
         "generated-api-evidence",
+        "historical-search-visibility",
+        "current-search-visibility",
     }
     hard = [item for item in report["violations"] if item["rule"] in hard_rules]
     return {
