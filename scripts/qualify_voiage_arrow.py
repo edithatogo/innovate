@@ -6,25 +6,184 @@ import argparse
 import hashlib
 import io
 import json
+import subprocess
 import sys
 from importlib.metadata import distribution, version
-from math import exp, isclose
+from importlib.util import find_spec
+from math import exp, isclose, log
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from zipfile import ZipFile
 
 import polars as pl
+import pyarrow as pa
 import voiage
+from voiage.contracts import normalized_input
+from voiage.contracts.normalized_input import (
+    DatasetManifest,
+    FieldManifest,
+    NormalizedInputBundle,
+    SourceProvenance,
+    TableManifest,
+)
 from voiage.methods.basic import evpi
 from voiage.schema import ValueArray
 
-import innovate
-from innovate import _native
+
+def read_normalized_frame(path: Path, *, format: str, table_id: str, expected_digest: str) -> pl.DataFrame:
+    """Verify a Voiage bundle's identity before crossing the Polars boundary.
+
+    The expected digest comes from the producer, separately from the file.
+    Voiage's digest includes Arrow metadata and chunk layout; converting first
+    would discard evidence needed to verify the original input.
+    """
+    readers = {"ipc": NormalizedInputBundle.read_ipc, "parquet": NormalizedInputBundle.read_parquet}
+    if format not in readers:
+        raise ValueError("normalized input format must be ipc or parquet")
+    bundle = readers[format](path)
+    if bundle.content_digest != expected_digest:
+        raise ValueError("normalized input content_digest mismatch")
+    if table_id not in bundle.tables:
+        raise ValueError("normalized input table is absent")
+    return pl.from_arrow(bundle.table(table_id))
 
 
-def qualify(wheel: Path | None = None) -> dict[str, object]:
+def _sha256(path: Path) -> str:
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def verify_installed_wheel(name: str, wheel: Path, required_paths: list[Path]) -> str:
+    """Bind imported modules and all package members to the supplied artifact."""
+    dist = distribution(name)
+    root = Path(dist.locate_file(name)).resolve()
+    required_members = {f"{name}/{path.resolve().relative_to(root).as_posix()}" for path in required_paths}
+    with ZipFile(wheel) as archive:
+        members = {
+            member for member in archive.namelist() if member.startswith(f"{name}/") and not member.endswith("/")
+        }
+        if not members or not required_members.issubset(members):
+            raise ValueError(f"supplied wheel is missing required {name} module members")
+        for member in members:
+            installed_path = Path(dist.locate_file(member)).resolve()
+            if not installed_path.is_relative_to(root):
+                raise ValueError("wheel member is outside the installed package")
+            with archive.open(member) as source:
+                if hashlib.file_digest(source, "sha256").hexdigest() != _sha256(installed_path):
+                    raise ValueError(f"installed {member} differs from the supplied wheel")
+    return _sha256(wheel)
+
+
+def _normalized_cases(directory: Path) -> list[dict[str, object]]:
+    """Consume real normalized files with independent native Logistic oracles."""
+    import innovate
+
+    covariance = pa.list_(pa.field("covariance_element", pa.float64(), metadata={b"unit": b"AUD^2"}), 2)
+    tables = {
+        "simple": pa.table({"time": [0.0, 1.0, 2.0], "sample_id": ["a", "b", "c"]}),
+        "multi_chunk": pa.table(
+            {
+                "time": pa.chunked_array([[0.0, 1.0], [2.0]]),
+                "sample_id": pa.chunked_array([["a", "b"], ["c"]]),
+            }
+        ),
+        "parquet_normalized_types": pa.table(
+            {
+                "time": [0.0, 1.0, 2.0],
+                "sample_id": ["a", "b", "c"],
+                "at": pa.array([0, 1, 2], type=pa.timestamp("s")),
+                "covariance": pa.array([[1.0, 0.25], [0.25, 4.0], [2.0, 0.5]], type=covariance),
+            }
+        ).replace_schema_metadata({b"fixture": b"synthetic-normalized-types"}),
+    }
+    results = []
+    for case, table in tables.items():
+        manifest = DatasetManifest(
+            dataset_id=f"innovate-{case}",
+            tables=(
+                TableManifest(
+                    table_id="observations",
+                    fields=tuple(
+                        FieldManifest(
+                            field_id=field.name, dtype=str(field.type), unit="day" if field.name == "time" else None
+                        )
+                        for field in table.schema
+                    ),
+                ),
+            ),
+            provenance=SourceProvenance(
+                provider_id="innovate-qualification",
+                source_uri=f"file:///synthetic/{case}",
+                descriptor_digest=hashlib.sha256(case.encode()).hexdigest(),
+            ),
+        )
+        bundle = NormalizedInputBundle(manifest=manifest, tables={"observations": table})
+        expected_digest = bundle.content_digest
+        for format in ("ipc", "parquet"):
+            path = directory / f"{case}.{format}"
+            getattr(bundle, f"write_{format}")(path)
+            restored = getattr(NormalizedInputBundle, f"read_{format}")(path)
+            if not restored.table("observations").schema.equals(table.schema, check_metadata=True):
+                raise ValueError("normalized round trip changed Arrow schema metadata")
+            if restored.content_digest != expected_digest:
+                raise ValueError("normalized round trip changed content_digest")
+            frame = read_normalized_frame(path, format=format, table_id="observations", expected_digest=expected_digest)
+            # The full source schema/digest is verified above. Timestamp and
+            # covariance are provenance-only here, not additional native dtype
+            # capability claims. Select the explicit numerical input boundary.
+            native_frame = frame.select("time", "sample_id")
+            predicted = innovate.predict("logistic", native_frame, {"L": 4.0, "k": log(3.0), "x0": 1.0})
+            if not predicted.select(native_frame.columns).equals(native_frame):
+                raise ValueError("native normalized consumer changed input rows")
+            # These three values follow from exp(log(3)) = 3, independently of
+            # the implementation and without generating the expected curve in Innovate.
+            values = predicted["prediction"].to_list()
+            if not all(
+                isclose(actual, expected, abs_tol=1e-12, rel_tol=1e-12)
+                for actual, expected in zip(values, (1.0, 2.0, 3.0), strict=True)
+            ):
+                raise ValueError("normalized native Logistic oracle mismatch")
+            output = innovate.export_ipc_file(predicted)
+            if not pl.read_ipc(io.BytesIO(output)).equals(predicted):
+                raise ValueError("normalized consumer output IPC changed predictions")
+            results.append(
+                {
+                    "case": case,
+                    "format": format,
+                    "input_file_sha256": _sha256(path),
+                    "source_content_digest": expected_digest,
+                    "restored_content_digest": restored.content_digest,
+                    "schema_fingerprint": bundle.schema_fingerprint,
+                    "source_chunk_lengths": [[len(chunk) for chunk in column.chunks] for column in table.columns],
+                    "restored_chunk_lengths": [
+                        [len(chunk) for chunk in column.chunks] for column in restored.table("observations").columns
+                    ],
+                    "native_input_columns": native_frame.columns,
+                    "expected_predictions": [1.0, 2.0, 3.0],
+                    "installed_predictions": values,
+                    "output_ipc_sha256": hashlib.sha256(output).hexdigest(),
+                }
+            )
+    return results
+
+
+def qualify(wheel: Path | None = None, voiage_wheel: Path | None = None) -> dict[str, object]:
+    from voiage import _core
+
+    import innovate
+    from innovate import _native
+
     if sys.version_info[:3] != (3, 15, 2):
         raise ValueError("qualification requires repo-local Python 3.15.2")
+    checkout = Path(__file__).resolve().parents[1]
+    if Path.cwd().resolve().is_relative_to(checkout):
+        raise ValueError("installed qualification must run outside the checkout")
+    for prohibited in ("pandas", "xarray"):
+        if find_spec(prohibited) is not None:
+            raise ValueError(f"installed consumer unexpectedly includes {prohibited}")
     record_hashes = {}
+    imported_paths = {}
+    artifact = {}
     for name, module in (("innovate", innovate), ("voiage", voiage)):
         dist = distribution(name)
         init = Path(dist.locate_file(f"{name}/__init__.py")).resolve()
@@ -32,25 +191,39 @@ def qualify(wheel: Path | None = None) -> dict[str, object]:
             raise ValueError(f"{name} is not an installed wheel")
         if init != Path(module.__file__).resolve():
             raise ValueError(f"{name} import origin is shadowed")
+        if init.is_relative_to(checkout):
+            raise ValueError(f"{name} is installed inside the source checkout")
+        imported_paths[name] = str(init)
         record = dist.read_text("RECORD")
         if not record:
             raise ValueError(f"{name} wheel has no installed RECORD")
         record_hashes[name] = hashlib.sha256(record.encode()).hexdigest()
+        supplied_wheel = wheel if name == "innovate" else voiage_wheel
+        if supplied_wheel is not None:
+            required = (
+                [init, Path(_native.__file__)]
+                if name == "innovate"
+                else [init, Path(normalized_input.__file__), Path(_core.__file__)]
+            )
+            artifact[f"{name}_wheel_sha256"] = verify_installed_wheel(name, supplied_wheel, required)
     native_path = Path(_native.__file__).resolve()
     if native_path.parent != Path(innovate.__file__).resolve().parent:
         raise ValueError("Innovate native extension import origin is shadowed")
     with native_path.open("rb") as native_binary:
         native_sha256 = hashlib.file_digest(native_binary, "sha256").hexdigest()
-    artifact = {}
-    if wheel is not None:
-        with ZipFile(wheel) as archive:
-            for module_path in (Path(innovate.__file__), native_path):
-                with archive.open(f"innovate/{module_path.name}") as member, module_path.open("rb") as installed:
-                    member_digest = hashlib.file_digest(member, "sha256").digest()
-                    if member_digest != hashlib.file_digest(installed, "sha256").digest():
-                        raise ValueError(f"installed {module_path.name} differs from the supplied wheel")
-        with wheel.open("rb") as package:
-            artifact["innovate_wheel_sha256"] = hashlib.file_digest(package, "sha256").hexdigest()
+    imported_paths["innovate._native"] = str(native_path)
+    contract_path = Path(normalized_input.__file__).resolve()
+    if not contract_path.is_relative_to(Path(voiage.__file__).resolve().parent):
+        raise ValueError("Voiage normalized contract import origin is shadowed")
+    imported_paths["voiage.contracts.normalized_input"] = str(contract_path)
+    voiage_native_path = Path(_core.__file__).resolve()
+    if voiage_native_path.parent != Path(voiage.__file__).resolve().parent:
+        raise ValueError("Voiage native extension import origin is shadowed")
+    imported_paths["voiage._core"] = str(voiage_native_path)
+    imported_paths["polars"] = str(Path(pl.__file__).resolve())
+    imported_paths["pyarrow"] = str(Path(pa.__file__).resolve())
+    with TemporaryDirectory(prefix="innovate-normalized-") as temporary:
+        normalized_cases = _normalized_cases(Path(temporary))
     rates = (0.01, 0.08)
     scenarios = [
         {
@@ -112,6 +285,10 @@ def qualify(wheel: Path | None = None) -> dict[str, object]:
         "innovate": version("innovate"),
         "voiage": version("voiage"),
         "polars": pl.__version__,
+        "pyarrow": pa.__version__,
+        "imported_paths": imported_paths,
+        "voiage_normalized_module_sha256": _sha256(contract_path),
+        "voiage_native_sha256": _sha256(Path(_core.__file__)),
         "installed_record_sha256": record_hashes,
         "innovate_native_sha256": native_sha256,
         "arrow_ipc_sha256": hashlib.sha256(data).hexdigest(),
@@ -120,11 +297,47 @@ def qualify(wheel: Path | None = None) -> dict[str, object]:
         "weighted_arrow_ipc_sha256": hashlib.sha256(weighted_data).hexdigest(),
         "weighted_reference_evpi": weighted_expected,
         "weighted_installed_evpi": weighted_observed,
+        "normalized_cases": normalized_cases,
         "scope": "Synthetic CPU scenario handoff only; not full scientific/HPC/clinical acceptance",
     }
 
 
-if __name__ == "__main__":
+def main() -> int:
+    """Run the installed consumer in an isolated process outside the checkout."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--wheel", type=Path, help="Innovate wheel used for the installed consumer")
-    print(json.dumps(qualify(parser.parse_args().wheel), indent=2))
+    parser.add_argument("--wheel", type=Path, required=True, help="Innovate wheel used for the installed consumer")
+    parser.add_argument("--voiage-wheel", type=Path, help="Optional Voiage wheel to compare with the installed package")
+    parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
+    args = parser.parse_args()
+    if args.worker:
+        if not sys.flags.isolated:
+            raise ValueError("qualification worker requires Python isolated mode")
+        print(json.dumps(qualify(args.wheel, args.voiage_wheel), indent=2))
+        return 0
+    script = Path(__file__).resolve()
+    command = [sys.executable, "-I", str(script), "--worker", "--wheel", str(args.wheel.resolve())]
+    if args.voiage_wheel is not None:
+        command += ["--voiage-wheel", str(args.voiage_wheel.resolve())]
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=script.parents[1], check=True, capture_output=True, text=True
+    ).stdout.strip()
+    with TemporaryDirectory(prefix="innovate-installed-consumer-") as temporary:
+        process = subprocess.run(command, cwd=temporary, capture_output=True, text=True, check=False)
+        if process.stderr:
+            print(process.stderr, file=sys.stderr, end="")
+        receipt = json.loads(process.stdout) if process.returncode == 0 else {}
+        receipt.update(
+            status="passed" if process.returncode == 0 else "failed",
+            command=command,
+            exit_status=process.returncode,
+            working_directory=temporary,
+            source_checkout=str(script.parents[1]),
+            qualification_source_revision=revision,
+            qualification_script_sha256=_sha256(script),
+        )
+    print(json.dumps(receipt, indent=2))
+    return process.returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
