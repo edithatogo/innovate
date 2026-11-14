@@ -1,0 +1,161 @@
+# Issue #413: native testing and CI qualification
+
+Status: implemented; hosted native execution and integration pending. This receipt contributes to
+Q01/Q02; it does not close their broader acceptance requirements.
+
+## Reconciliation and ownership
+
+Baseline: `276c2e505a0ce26910820fe8a94a6a498f505700` (main).
+[Issue #413](https://github.com/edithatogo/innovate/issues/413) and parent #415
+record a July inventory. DST is interpreted here as deterministic simulation
+testing and MT as metamorphic testing; parent #415 lists mutation separately.
+The existing Rust-native suites already implement both techniques. The historical
+Python/mutmut inventory is not current native execution evidence.
+
+Allowed changes: one new native metamorphic test file, the existing CI/security,
+binding-conformance, documentation and TagBot workflows, a TagBot event-policy
+regression test, and this owning-track receipt/plan entry.
+PR #600 owns ensemble time-grid validation; PR #590 is an unqualified offline
+security draft. Neither is a dependency or part of this change. Runtime source,
+manifests, dependency/provider pins, scientific thresholds, required check names
+and the migration ledger are preserved.
+
+## Applicable techniques and exclusions
+
+| Technique | Existing executable scope | Issue #413 increment |
+| --- | --- | --- |
+| Deterministic simulation | `tests/kairos.rs`: fixed-seed DES/ABM replay, sampling-grid invariance, checkpoint restoration and independent binomial expectations. `tests/network.rs`: checkpoint recovery at every tick, queued service, scheduling ties and resource conservation over fixed seeds. | Re-execute these public native integration targets and retain source/runtime/lock identity with results. |
+| Metamorphic relations | `tests/network.rs`: common edge-weight scaling across 128 seeds. `tests/model_oracles.rs`: serial/parallel equivalence and prediction subsets. `tests/scientific_contract.rs`: Bass time/output-unit rescaling. | A named `tests/metamorphic.rs` target covers supported model time-unit covariance, amplitude scaling and mixture permutation, with analytic landmarks and finite case tables. |
+| Mutation | Native scientific mutation remains unqualified in `conductor/workflow.md`; historical Python mutmut does not qualify Rust. | No mutation-score claim. The weekly native runner and >70% target remain open; this issue's MT evidence is not mutation evidence. |
+| Workflow controls | Read-only defaults, scoped elevated permissions, SHA-pinned actions, update configuration, lint/security gates and scheduled expensive lanes already exist. | Verify the actionlint release archive before execution; add explicit job/step time limits and binding concurrency; retain native-test logs on success/failure. |
+
+Rust test paths in the table are relative to `rust/crates/innovate-core/`.
+The simulation engine, scheduler, RNG and replay implementation remain Kairos-owned.
+These tests exercise Innovate's pinned consumer contract; no second simulator is
+introduced. Fault-tolerant distributed/HPC, empirical model validity, unsupported
+inference capabilities, live/offline security runner provisioning and deployment
+are outside this bounded change. Their existing requirements remain intact.
+
+Time-unit covariance changes time and inverse-time parameters together; it does
+not imply arbitrary time-shift invariance for origin-dependent models. Amplitude
+scaling is limited to models with an amplitude/capacity parameter. Fisher–Pry is a
+probability, so an arbitrary output scale is inapplicable. No generic covariance
+claim is made for fitted parameters, priors, covariates, event histories or
+discretised simulation tick units. Metamorphic equivalence complements the
+existing independent mathematical oracles; it cannot establish empirical validity.
+
+## Runtime and evidence policy
+
+Keep the fixed-case tests in the ordinary native suite on Linux/macOS/Windows.
+Do not create a duplicate build or an artificial large PR sweep. Existing source
+distribution, worker-container and benchmark/MPI lanes remain scheduled/manual.
+Require zero failed native tests. Each numerical relation records its tolerance
+before execution; same-input seeded simulation replay retains exact equality.
+
+Native test execution is bounded at 20 minutes after dependency installation;
+ordinary native and Julia/R jobs have 45-minute limits. Scheduled native jobs have
+90 minutes for their additional existing installed-consumer and benchmark work.
+These limits exceed observed main-run native job times (approximately 9–19 minutes
+in run `43567616550`) without leaving GitHub's six-hour default as the bound.
+The existing narrower container/MPI limits remain, and source-distribution and
+benchmark steps each receive a 20-minute limit.
+
+Every native test job retains its full Cargo log, actual checkout revision,
+Cargo.lock SHA-256, compiler/Cargo versions and process exit status for 30 days.
+The shell uses pipefail and propagates a failed Cargo/tee process; uploading
+evidence cannot convert a failed test into success. A timeout/cancellation may
+leave a partial log without an exit-code receipt and never counts as a pass.
+GitHub's job conclusion remains authoritative for interrupted runs.
+
+## Executed evidence
+
+The new matrix has three tests and 119 public native invocations: 64 for time
+covariance, 48 for amplitude covariance and seven mixture diagnostic calls. It
+uses eight fixed curves, six time points and a predeclared mixed tolerance of
+`1e-12 + 1e-12 * max(abs(actual), abs(expected))`. Analytic landmarks, finite/shape
+checks, nonconstant curves and distinct mixture responsibilities prevent a zero
+or uniform result from satisfying equivalence vacuously.
+
+Local execution uses Rust `1.99.1 (58cf8f9c3 2026-10-13)` and a selected
+`.venv-native` Python 3.15.2. The following checks passed:
+
+- `cargo fmt --all --check` (after formatting the new test file).
+- `cargo check --locked -p innovate-core --test metamorphic -j 1` with
+  incremental compilation disabled: passed in 28.89 seconds.
+- `cargo clippy --locked -p innovate-core --test metamorphic -j 1 -- -D warnings`
+  with incremental compilation disabled: passed in 5.08 seconds. Neither
+  metadata-only command executes the numerical tests.
+- Verified actionlint 1.7.9 on all 16 repository workflows, with no findings.
+  Its official Linux amd64 release archive SHA-256 is
+  `233b280d05e100837f4af1433c7b40a5dcb306e3aa68fb4f17f8a7f45a7df7b4`,
+  verified against both the upstream release API and the downloaded bytes.
+- `node --test tests/workflows/*.test.cjs`: 16 passed (13 existing CI-monitor
+  regressions and three TagBot policy tests).
+- The actual native-test workflow shell was extracted and executed against
+  synthetic child commands. Cargo exits 0/27 and tee exits 0/9 propagated
+  correctly in all four combinations; stdout/stderr and exit receipts survived
+  both failure paths. An independent reviewer separately checked Cargo exits
+  0/1/27. These exercise CI failure handling, not native scientific computation.
+- `.venv-native/bin/python scripts/check_migration.py`: policy valid; all 38
+  feature obligations still block release.
+- `.venv-native/bin/python scripts/conductor_registry_hygiene.py --json`:
+  no missing, stale, orphaned or wrong-target entries.
+- `git diff --check`.
+
+Two local native builds exited 101 because the `innovate-core` compiler process
+was killed by SIGKILL before tests executed. The first selected the existing
+`kairos`, `network`, `scientific_contract` and `model_oracles` integration targets
+with `--locked -j 2`; the second also selected `metamorphic`, used `-j 1`, disabled
+incremental compilation and set development/test codegen units to 256. No
+native test pass or application defect is inferred from these process terminations.
+Required hosted CI must execute the exact proposed source before acceptance.
+
+Independent source review found no blocking mathematical or workflow defect;
+review is not a substitute for execution. Native mutation, scientific validation,
+the 38 migration obligations and release acceptance remain unqualified.
+
+## Documentation concurrency correction
+
+The initial PR #603 documentation run `43601930424` was cancelled before creating
+any jobs. Its workflow used a repository-wide `pages` concurrency group for both
+PR checks and actual deployments. Under GitHub's default concurrency queue,
+another pending run in the same group can replace an earlier pending run even
+when `cancel-in-progress` is false. This is a source-qualified cancellation risk;
+the observed run has no job log proving which queued run displaced it.
+
+The correction assigns `pages-pr-<number>` to each pull request and cancels only
+obsolete runs for that PR. Push/manual runs keep the existing `pages` group and
+do not cancel an active deployment. The deployment event/branch/enablement guard,
+environment, permissions and all dependency versions remain unchanged. Build and
+deploy jobs gain 20/10-minute limits. No Pages deployment is activated by this PR.
+See [GitHub's concurrency semantics](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+
+## TagBot event/permission correction
+
+A read-only queue inspection found dozens of TagBot runs for ordinary
+`issue_comment` events (for example run `43602003641`, actor `edithatogo`). The
+existing workflow started its write-scoped job on every new issue/PR comment.
+This is observed unnecessary tag-job scheduling; it does not prove the cause of
+the broader hosted-runner queue delay.
+
+The pinned TagBot revision's [canonical example](https://github.com/JuliaRegistries/TagBot/blob/87cc4cc2b4639f6c743f5772f376a32914060732/example.yml)
+identifies **JuliaTagBot**, not the historically used JuliaRegistrator actor, as
+the trusted automatic commenter. The job now accepts only that actor on an issue
+comment or an explicit manual dispatch. Its existing write/read permissions move
+to that guarded job; workflow defaults become read-only. Job-level concurrency
+serializes eligible tag writers without cancelling an active tag operation, and
+a 10-minute timeout bounds execution. Rejected comments cannot occupy that job's
+concurrency group. Action revision, token source and manual capability are unchanged;
+no tag, release, credential or permission expansion is performed by this change.
+
+`tests/workflows/tagbot-policy.test.cjs` exercises the actual guard with positive
+controls for trusted comments/manual dispatch and negative controls for ordinary
+comments, lookalike actor names and unsupported events. The existing workflow
+lint job runs this alongside the original CI-monitor regressions. Native and
+release qualification remain separate from these event-policy tests.
+The regression harness accounts for GitHub's case-insensitive string equality;
+case variants of the trusted login are positive controls, distinct lookalike
+logins are negative controls. Independent review caught and corrected an initial
+case-sensitive JavaScript fixture assumption before publication. All 16 workflow
+tests pass, and executing the new guard tests against the baseline unguarded
+workflow fails as expected.
