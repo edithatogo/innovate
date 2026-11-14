@@ -1,0 +1,79 @@
+name: Recover documentation dependency lock
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/docs-lock-recovery.yml'
+      - 'docs/astro-site/package.json'
+
+permissions:
+  contents: read
+
+jobs:
+  lock:
+    name: Resolve and record exact browser-test dependencies
+    if: github.head_ref == 'docs/astro-qualification-followup-20261115'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: docs/astro-site
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - name: Checkout the exact proposed revision
+        uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        with:
+          version: 12.18.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '26'
+
+      - name: Recover the dependency lock without lifecycle scripts
+        run: pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile
+
+      - name: Record exact lock and package fingerprints
+        run: |
+          mkdir -p .reports/lock-recovery
+          node --input-type=module <<'NODE'
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const hash = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
+          const receipt = {
+            schema_version: 1,
+            purpose: 'Recover the exact npm registry lock after an interrupted local execution workspace.',
+            git_head: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+            node: process.version,
+            pnpm: execFileSync('pnpm', ['--version'], { encoding: 'utf8' }).trim(),
+            package_sha256: hash('package.json'),
+            lock_sha256: hash('pnpm-lock.yaml'),
+            qualification: 'Dependency resolution only; no install, build or browser pass is claimed.',
+          };
+          writeFileSync('.reports/lock-recovery/receipt.json', JSON.stringify(receipt, null, 2) + '\n');
+          console.log(JSON.stringify(receipt, null, 2));
+          NODE
+
+      - name: Print the reproducible lock diff
+        working-directory: .
+        run: git diff -- docs/astro-site/pnpm-lock.yaml
+
+      - name: Retain the exact recovered files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: documentation-lock-recovery
+          path: |
+            docs/astro-site/package.json
+            docs/astro-site/pnpm-lock.yaml
+            docs/astro-site/.reports/lock-recovery/receipt.json
+          include-hidden-files: true
+          if-no-files-found: error
