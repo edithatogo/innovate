@@ -41,7 +41,8 @@ jobs:
         run: |
           set -euo pipefail
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
-            cargo publish --locked --dry-run --allow-dirty -p innovate-core || echo "::warning::crates.io publish requires replacing git dependencies (kairo-ecs-*, polars) with published crates.io versions."
+            cargo publish --locked --dry-run -p innovate-core
+            cargo publish --locked --dry-run -p innovate-tabular
             exit 0
           fi
           jwt="$(curl --silent --show-error --fail \
