@@ -6,16 +6,18 @@ on:
     types: [completed]
 
 permissions:
+  actions: read
   contents: read
   issues: write
   pull-requests: write
 
 jobs:
   monitor:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: ${{ contains(fromJSON('["failure", "success"]'), github.event.workflow_run.conclusion) }}
     runs-on: ubuntu-latest
     steps:
       - name: Check for existing failure issue
+        id: incident
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           script: |
@@ -23,6 +25,12 @@ jobs:
             const run = context.payload.workflow_run;
             const branch = run.head_branch;
             const title = `🚨 ${run.name} failed on ${branch}`;
+            const repository = `${owner}/${repo}`.toLowerCase();
+
+            if (!branch) {
+              core.info('Run has no branch; leaving failure issues unchanged.');
+              return;
+            }
 
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner,
@@ -34,6 +42,65 @@ jobs:
             const existingIssue = issues.find(issue =>
               !issue.pull_request && issue.title === title
             );
+
+            if (run.conclusion === 'success' && !existingIssue) return;
+
+            const latestRuns = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id: run.workflow_id,
+              branch,
+              event: run.event,
+              per_page: 1
+            });
+            const latest = latestRuns.data.workflow_runs[0];
+            const sameOrigin = candidate =>
+              candidate?.head_repository?.full_name?.toLowerCase() === repository;
+            const sameScope = candidate => sameOrigin(candidate) &&
+              candidate.workflow_id === run.workflow_id &&
+              candidate.head_branch === branch && candidate.event === run.event;
+            const isCurrent = latest?.id === run.id &&
+              latest?.run_attempt === run.run_attempt;
+
+            if (run.conclusion === 'success') {
+              // Older events, foreign forks and runs with unresolved follow-ups
+              // must not close an incident merely because another run passed.
+              if (!sameScope(run) || !sameScope(latest) || !isCurrent ||
+                  latest.status !== 'completed' || latest.conclusion !== 'success' ||
+                  existingIssue.comments !== 0) return;
+
+              const original = existingIssue.body?.match(
+                /^- \*\*Run URL:\*\* .*\/actions\/runs\/(\d+)\s*$/m
+              );
+              if (!original) return;
+              let originalRun;
+              try {
+                originalRun = await github.rest.actions.getWorkflowRun({
+                  owner, repo, run_id: Number(original[1])
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                core.info('Original run is unavailable; leaving the issue open.');
+                return;
+              }
+              const failedRun = originalRun.data;
+              if (!sameScope(failedRun)) return;
+
+              await github.rest.issues.update({
+                owner, repo, issue_number: existingIssue.number,
+                state: 'closed', state_reason: 'completed'
+              });
+              core.info(`Closed recovered issue #${existingIssue.number}`);
+              return;
+            }
+
+            // Completion events may arrive out of order. A newer successful run
+            // of the same event and origin already supersedes this failure.
+            if (!isCurrent && sameScope(run) && sameScope(latest) &&
+                latest?.status === 'completed' && latest?.conclusion === 'success') {
+              core.setOutput('superseded', 'true');
+              return;
+            }
 
             if (existingIssue) {
               // Add a comment to the existing issue
@@ -57,7 +124,7 @@ jobs:
             }
 
       - name: Post PR comment if applicable
-        if: ${{ github.event.workflow_run.pull_requests[0] }}
+        if: ${{ github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.pull_requests[0] && steps.incident.outputs.superseded != 'true' }}
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           script: |
