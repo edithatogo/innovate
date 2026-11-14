@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/edithatogo/innovate",
+  "parent_issue": 398,
+  "assessed_revision": "276c2e505a0ce26910820fe8a94a6a498f505700",
+  "software_version": "0.7.0a1",
+  "input_sha256": {
+    "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+    "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+    "pyproject.toml": "d42aa8194b3e4246baefd49a218e4ac8e01396238590cc0384cdaa0e7e2e9589",
+    "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5"
+  },
+  "destinations": [
+    {
+      "key": "software_heritage",
+      "issue": 399,
+      "dossier": "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md",
+      "outstanding": [
+        "Select a release/tag and record its exact commit and publication/rights prerequisites; no current release qualification is implied.",
+        "The two tested origin URLs were not found; retain an actual archive-request receipt and successful visit/snapshot for the selected release.",
+        "Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion."
+      ],
+      "state": "pending",
+      "identifier": null,
+      "evidence": null
+    },
+    {
+      "key": "rrid",
+      "issue": 400,
+      "dossier": "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md",
+      "outstanding": [
+        "Complete a live duplicate check by resource name and canonical repository identity; the observed provider challenge did not establish absence.",
+        "Retain the actual submission receipt and curator decision for the root Innovate resource.",
+        "Verify the assigned RRID resolver identifies this repository before advertising an identifier."
+      ],
+      "state": "pending",
+      "identifier": null,
+      "evidence": null
+    },
+    {
+      "key": "joss",
+      "issue": 401,
+      "dossier": "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md",
+      "outstanding": [
+        "Create and verify a current JOSS-format paper.md and bibliography; legacy manuscripts and readiness inventories do not qualify native 0.7.",
+        "Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.",
+        "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
+        "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."
+      ],
+      "state": "pending",
+      "identifier": null,
+      "evidence": null
+    }
+  ]
+}

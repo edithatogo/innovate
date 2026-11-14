@@ -1,20 +1,19 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If you use this development version, cite the exact commit as well as this metadata. Release qualification remains pending."
 type: software
-title: "innovate: A Python library for simplifying innovation and policy diffusion modelling"
+title: "innovate: Rust-native innovation and policy diffusion modelling"
 abstract: >
-  innovate is a comprehensive, modular Python library for modeling the diffusion,
-  substitution, competition, and dynamics of innovations, technologies, and policies
-  over time. It provides a flexible framework for researchers and practitioners in
-  economics, marketing, public policy, and technology forecasting, supporting
-  everything from classic S-curve models to advanced agent-based simulations.
+  innovate models innovation adoption, technology substitution, competition, and
+  policy diffusion. The 0.7 development line uses a Rust scientific core, Polars
+  tables, and Python, Julia, and R bindings. Native migration and scientific
+  qualification remain in progress; this metadata does not claim a qualified release.
 authors:
   - family-names: Mordaunt
     given-names: Dylan A.
     email: dylan.mordaunt@vuw.ac.nz
     affiliation: "Victoria University of Wellington"
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-version: 0.5.0
+    orcid: "https://orcid.org/0000-0002-9775-0603"
+version: 0.7.0a1
 license: Apache-2.0
 repository-code: "https://github.com/edithatogo/innovate"
 url: "https://github.com/edithatogo/innovate"
@@ -28,3 +27,5 @@ keywords:
   - "substitution modeling"
   - "hype cycle"
   - "python"
+  - "rust"
+  - "polars"

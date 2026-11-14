@@ -1,0 +1,13 @@
+{
+  "provider": "SciCrunch",
+  "captured_at_utc": "2026-11-14T13:49:30Z",
+  "method": "GET",
+  "url": "https://scicrunch.org/resources/Tools/search?q=innovate&l=innovate",
+  "provider_response_date_utc": "2026-11-14T13:48:39Z",
+  "http_status": 403,
+  "content_type": "text/html; charset=UTF-8",
+  "outcome": "unavailable",
+  "response_kind": "browser_challenge",
+  "duplicate_check_complete": false,
+  "limitation": "A browser challenge prevented inspection of live search results. No absence, submission, curator approval, RRID assignment or identifier resolution is established. Challenge HTML and tokens are not retained."
+}
