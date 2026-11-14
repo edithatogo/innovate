@@ -17,7 +17,7 @@
 - [x] Qualify the final Astro artifact and restore build/type-check/contract workflow steps.
 - [~] Gate publication on executed Julia/R documentation examples and source-bound language receipts, preserving honest local versus hosted results.
 - [x] Run independent review, apply findings and record exact commands and limitations.
-- [ ] Open a focused PR and verify exact-head hosted checks; preserve coordinator merge ownership.
+- [~] Open a focused PR and verify exact-head hosted checks; preserve coordinator merge ownership.
 
 ## Full-quality acceptance remains open
 
@@ -94,3 +94,17 @@ before dispatch. No browser screenshot, keyboard/mobile/search interaction or
 assistive-technology result is claimed. The published URL still requires the
 existing integration and explicit Pages activation process. The 153 retained
 historical pages and all scientific release obligations remain separately open.
+
+## PR 610 integration repair — 15 November 2026
+
+- [x] Diagnose the exact-head documentation artifact failure from hosted logs.
+- [x] Add six dependency-free workflow regressions; reproduce the defect before
+  the change and verify the narrow repair locally on CPython 3.13.5.
+- [x] Explicitly permit hidden receipt uploads using per-job filename allowlists;
+  preserve empty-artifact failure and both publication qualification dependencies.
+- [ ] Qualify the repaired head on hosted Python 3.15.2, including actual uploads
+  and the previously skipped native documentation examples.
+
+See [the bounded repair evidence](evidence-upload-repair.md) for exact source
+identity, failing job, commands, local-runtime limitations and preserved gates.
+The historical qualification above is not reattributed to the repaired head.

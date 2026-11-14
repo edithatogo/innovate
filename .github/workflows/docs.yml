@@ -51,7 +51,7 @@ jobs:
 
       - name: Test documentation contracts
         run: |
-          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation; do
+          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation test_documentation_workflow; do
             ../../.venv-docs/bin/python -m unittest discover -s ../../tests -p "$suite.py"
           done
 
@@ -84,7 +84,13 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: documentation-build-evidence
-          path: docs/astro-site/.reports/
+          # Upload only named receipts, not unrelated hidden workspace files.
+          path: |
+            docs/astro-site/.reports/api.json
+            docs/astro-site/.reports/polyglot-api.json
+            docs/astro-site/.reports/content.json
+            docs/astro-site/.reports/artifact.json
+          include-hidden-files: true
           if-no-files-found: error
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
@@ -149,7 +155,13 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: documentation-execution-evidence
-          path: docs/astro-site/.reports/
+          # Upload only named receipts, not unrelated hidden workspace files.
+          path: |
+            docs/astro-site/.reports/native-api.json
+            docs/astro-site/.reports/julia-documentation.json
+            docs/astro-site/.reports/r-documentation.json
+            docs/astro-site/.reports/execution.json
+          include-hidden-files: true
           if-no-files-found: error
 
   deploy:
