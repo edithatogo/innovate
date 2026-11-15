@@ -970,8 +970,13 @@ def _verify_native_receipt(
             isinstance(example["code"], str) and _digest(example["code"].encode("utf-8")) == example["code_sha256"],
             "Inventory example code hash is invalid.",
         )
+        # Example digests are bare; the verified sources map may label SHA-256.
+        source_hash = inventory["sources"][example["source"]]
+        source_digest = source_hash.removeprefix("sha256:") if isinstance(source_hash, str) else source_hash
         _require(
-            example["source_sha256"] == inventory["sources"][example["source"]],
+            _valid_hash(example.get("source_sha256"))
+            and _valid_hash(source_digest)
+            and example["source_sha256"] == source_digest,
             "Inventory example source hash is invalid.",
         )
         _require(item.get("status") == "passed", f"Native example did not pass: {identity}.")

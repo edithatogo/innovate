@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_linalg_optimization_20261115",
+  "type": "refactor",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Replace custom Vec<Vec<f64>> linear algebra, rank checks, and damped least-squares optimization in innovate-core with nalgebra/faer and levenberg-marquardt/argmin."
+}

@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_ode_integration_20261115",
+  "type": "refactor",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Replace custom fixed-step RK4 integrator in innovate-core with adaptive ODE/IVP integration (ode_solvers or differential-equations)."
+}
