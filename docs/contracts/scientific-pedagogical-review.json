@@ -73,7 +73,7 @@
     "examples/native_overlap.py": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
     "examples/native_reingestion.py": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
-    "rust/crates/innovate-core/src/causal.rs": "6279cbc58161423b5c5e722c143e845f770073e58cb33f93995f98338b297db3",
+    "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
     "rust/crates/innovate-core/src/bayesian.rs": "83f1b24cee933755560778ec38c587bb319ae570e18ff151e305e1a5ea9c746b",
     "docs/astro-site/src/content/docs/core/arrow-interchange.md": "ed2abe399f302a06279fba2ccb1c6377ef2426c9a2531f089ecfb641cbaf5545",
