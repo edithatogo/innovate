@@ -412,38 +412,48 @@ where
     })
 }
 
-fn rk4<F>(time: f64, y: &[f64], h: f64, f: &F) -> Vec<f64>
+struct ClosureSystem<'a, F>(&'a F);
+
+impl<F> ode_solvers::System<f64, ode_solvers::DVector<f64>> for ClosureSystem<'_, F>
 where
     F: Fn(f64, &[f64]) -> Vec<f64>,
 {
-    let k1 = f(time, y);
-    let k2 = f(
-        time + h / 2.0,
-        &y.iter()
-            .zip(&k1)
-            .map(|(y, k)| y + h * k / 2.0)
-            .collect::<Vec<_>>(),
-    );
-    let k3 = f(
-        time + h / 2.0,
-        &y.iter()
-            .zip(&k2)
-            .map(|(y, k)| y + h * k / 2.0)
-            .collect::<Vec<_>>(),
-    );
-    let k4 = f(
-        time + h,
-        &y.iter()
-            .zip(&k3)
-            .map(|(y, k)| y + h * k)
-            .collect::<Vec<_>>(),
-    );
-    (0..y.len())
-        .map(|i| y[i] + h * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]) / 6.0)
+    fn system(&self, x: f64, y: &ode_solvers::DVector<f64>, dy: &mut ode_solvers::DVector<f64>) {
+        let deriv = (self.0)(x, y.as_slice());
+        for (dst, src) in dy.iter_mut().zip(deriv) {
+            *dst = src;
+        }
+    }
+}
+
+/// Adaptive Dormand-Prince 5(4) IVP solver via `ode_solvers::Dopri5`.
+fn rk4_single_step<F>(f: &F, t: f64, y: &[f64], h: f64) -> Vec<f64>
+where
+    F: Fn(f64, &[f64]) -> Vec<f64>,
+{
+    let k1 = f(t, y);
+    let half_h = 0.5 * h;
+    let y2: Vec<f64> = y
+        .iter()
+        .zip(&k1)
+        .map(|(yi, k1i)| yi + half_h * k1i)
+        .collect();
+    let k2 = f(t + half_h, &y2);
+    let y3: Vec<f64> = y
+        .iter()
+        .zip(&k2)
+        .map(|(yi, k2i)| yi + half_h * k2i)
+        .collect();
+    let k3 = f(t + half_h, &y3);
+    let y4: Vec<f64> = y.iter().zip(&k3).map(|(yi, k3i)| yi + h * k3i).collect();
+    let k4 = f(t + h, &y4);
+    y.iter()
+        .enumerate()
+        .map(|(i, yi)| yi + (h / 6.0) * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]))
         .collect()
 }
 
-/// Adaptive step-doubling RK4. Integrate from an explicit origin, never from the first requested sample.
+/// Integrate from an explicit origin, never from the first requested sample.
 pub(crate) fn integrate<F>(
     times: &[f64],
     origin: f64,
@@ -453,51 +463,79 @@ pub(crate) fn integrate<F>(
 where
     F: Fn(f64, &[f64]) -> Vec<f64>,
 {
-    let mut t = origin;
-    let mut state = initial.to_vec();
-    let mut step = 0.1_f64;
-    let mut rows = Vec::new();
-    let mut attempts = 0;
-    for &target in times {
-        if target < origin {
-            return Err("observation time precedes initial_time".into());
-        }
-        while t < target {
-            attempts += 1;
-            if attempts > 200_000 {
-                return Err("ODE step budget exhausted".into());
-            }
-            let h = step.min(target - t);
-            if t + h == t {
-                return Err("ODE step underflow".into());
-            }
-            let coarse = rk4(t, &state, h, &f);
-            let half = rk4(t, &state, h / 2.0, &f);
-            let fine = rk4(t + h / 2.0, &half, h / 2.0, &f);
-            let error = coarse
-                .iter()
-                .zip(&fine)
-                .zip(&state)
-                .map(|((a, b), y)| (a - b).abs() / (15.0 * (1e-10 + 1e-10 * y.abs().max(b.abs()))))
-                .fold(0.0_f64, f64::max);
-            if !error.is_finite() || fine.iter().any(|x| !x.is_finite()) {
+    use ode_solvers::{DVector, Dopri5, OutputType};
+
+    if times.is_empty() {
+        return Ok(Vec::new());
+    }
+    if initial.iter().any(|x| !x.is_finite()) || !origin.is_finite() {
+        return Err("ODE left the finite numerical domain".into());
+    }
+    if initial.is_empty() {
+        for &target in times {
+            if !target.is_finite() {
                 return Err("ODE left the finite numerical domain".into());
             }
-            if error <= 1.0 {
-                state = fine
-                    .iter()
-                    .zip(&coarse)
-                    .map(|(fine, coarse)| fine + (fine - coarse) / 15.0)
-                    .collect();
-                t += h;
+            if target < origin {
+                return Err("observation time precedes initial_time".into());
             }
-            step = h * if error == 0.0 {
-                4.0
-            } else {
-                (0.9 * error.powf(-0.2)).clamp(0.1, 4.0)
-            };
         }
-        rows.push(state.clone());
+        return Ok(vec![Vec::new(); times.len()]);
+    }
+    let mut t_prev = origin;
+    let mut state = DVector::from_column_slice(initial);
+    let mut rows = Vec::with_capacity(times.len());
+    for &target in times {
+        if !target.is_finite() {
+            return Err("ODE left the finite numerical domain".into());
+        }
+        if target < t_prev {
+            return Err("observation time precedes initial_time".into());
+        }
+        if target > t_prev {
+            let span = target - t_prev;
+            let tiny_tol = 64.0 * f64::EPSILON * target.abs().max(t_prev.abs()).max(1.0);
+            if span <= tiny_tol {
+                let next = rk4_single_step(&f, t_prev, state.as_slice(), span);
+                if next.iter().any(|x| !x.is_finite()) {
+                    return Err("ODE left the finite numerical domain".into());
+                }
+                state = DVector::from_vec(next);
+                t_prev = target;
+            } else {
+                let mut solver = Dopri5::from_param(
+                    ClosureSystem(&f),
+                    t_prev,
+                    target,
+                    0.0,
+                    state.clone(),
+                    1e-8,
+                    1e-8,
+                    0.9,
+                    0.04,
+                    0.2,
+                    10.0,
+                    span,
+                    0.0,
+                    100000,
+                    1000,
+                    OutputType::Sparse,
+                );
+                solver
+                    .integrate()
+                    .map_err(|err| format!("ODE integration failed: {err}"))?;
+                let next = solver
+                    .y_out()
+                    .last()
+                    .ok_or_else(|| "ODE solver produced no final state".to_string())?;
+                if next.iter().any(|x| !x.is_finite()) {
+                    return Err("ODE left the finite numerical domain".into());
+                }
+                state = next.clone();
+                t_prev = target;
+            }
+        }
+        rows.push(state.as_slice().to_vec());
     }
     Ok(rows)
 }
@@ -738,5 +776,55 @@ mod tests {
         .expect("bounded fit should complete without desynchronizing");
         assert!(fit.parameters.iter().all(|v| v.abs() <= 35.0));
         assert!(fit.report["scaled_rss"].as_f64().unwrap().is_finite());
+    }
+
+    #[test]
+    fn dopri5_matches_coupled_linear_analytical_solution_on_irregular_grid() {
+        let times = [0.15, 0.37, 1.25, 3.8, 7.5];
+        let rows = integrate(&times, 0.0, &[1.0, 0.0], |_t, y| {
+            vec![-0.7 * y[0], 0.7 * y[0] - 0.3 * y[1]]
+        })
+        .expect("irregular grid integration should succeed");
+        assert_eq!(rows.len(), times.len());
+        for (&t, row) in times.iter().zip(&rows) {
+            let exact_y0 = (-0.7 * t).exp();
+            let exact_y1 = (0.7 / (0.7 - 0.3)) * ((-0.3 * t).exp() - (-0.7 * t).exp());
+            assert!(
+                (row[0] - exact_y0).abs() < 1e-7,
+                "y0 mismatch at t={t}: got {}, expected {exact_y0}",
+                row[0]
+            );
+            assert!(
+                (row[1] - exact_y1).abs() < 1e-7,
+                "y1 mismatch at t={t}: got {}, expected {exact_y1}",
+                row[1]
+            );
+        }
+
+        let err_before_origin = integrate(&[-0.1], 0.0, &[1.0], |_t, y| vec![-y[0]])
+            .expect_err("times before origin must error");
+        assert!(err_before_origin.contains("precede"));
+
+        let err_non_finite = integrate(&[1.0], 0.0, &[f64::NAN], |_t, y| vec![-y[0]])
+            .expect_err("non-finite initial state must error");
+        assert!(err_non_finite.contains("finite"));
+    }
+
+    #[test]
+    fn dopri5_handles_zero_length_origin_step_and_extreme_rates() {
+        let times = [0.0, 1e-4, 0.05, 0.5];
+        let k = 250.0;
+        let rows = integrate(&times, 0.0, &[2.0], |_t, y| vec![-k * y[0]])
+            .expect("extreme-rate integration should succeed");
+        assert_eq!(rows.len(), times.len());
+        assert_eq!(rows[0], vec![2.0]);
+        for (&t, row) in times.iter().zip(&rows) {
+            let exact = 2.0 * (-k * t).exp();
+            assert!(
+                (row[0] - exact).abs() < 1e-7,
+                "stiff decay mismatch at t={t}: got {}, expected {exact}",
+                row[0]
+            );
+        }
     }
 }
