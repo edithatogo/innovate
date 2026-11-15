@@ -34,8 +34,15 @@ jobs:
         with:
           toolchain: nightly
 
+      - uses: Swatinem/rust-cache@e9d7b9f1e587218970671bac74e5511ed9506e6a # v2
+        with:
+          workspaces: "fuzz -> target"
+          shared-key: "fuzz"
+
       - name: Install cargo-fuzz
-        run: cargo install cargo-fuzz --locked
+        uses: taiki-e/install-action@4a76afe23f9e08d2d9550fb56e556444e8611d21 # v2
+        with:
+          tool: cargo-fuzz
 
       - name: Run kernel_request fuzz target
         run: cargo fuzz run kernel_request -- -max_total_time=30

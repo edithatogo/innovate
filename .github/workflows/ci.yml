@@ -26,13 +26,18 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+        with:
+          enable-cache: true
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
           components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@e9d7b9f1e587218970671bac74e5511ed9506e6a # v2
+        with:
+          shared-key: "${{ matrix.os }}-native-python"
       - run: uv sync --locked --python 3.15.2
         env:
-          CARGO_BUILD_JOBS: '2'
+          CARGO_BUILD_JOBS: '4'
       - run: uv run --no-sync python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
       - name: Run native tests with replay evidence
         id: native-tests
@@ -46,7 +51,7 @@ jobs:
           cargo --version > native-test-evidence/cargo.txt
           uv run --no-sync python -c "import hashlib, pathlib; print(hashlib.sha256(pathlib.Path('Cargo.lock').read_bytes()).hexdigest())" > native-test-evidence/cargo-lock.sha256
           status=0
-          cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 2 2>&1 | tee native-test-evidence/cargo-test.log || status=$?
+          cargo test --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 4 2>&1 | tee native-test-evidence/cargo-test.log || status=$?
           printf '%s\n' "$status" > native-test-evidence/exit-code.txt
           exit "$status"
       - name: Retain native test evidence
@@ -175,14 +180,19 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+        with:
+          enable-cache: true
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
+      - uses: Swatinem/rust-cache@e9d7b9f1e587218970671bac74e5511ed9506e6a # v2
+        with:
+          shared-key: "package"
       - run: uv sync --locked --no-install-project --python 3.15.2
       - run: .venv/bin/python -c "import sys; assert sys.version_info[:3] == (3, 15, 2)"
       - name: Build the wheel from the source distribution and validate both
         env:
-          CARGO_BUILD_JOBS: '2'
+          CARGO_BUILD_JOBS: '4'
         run: |
           bash scripts/build_release_wheel.sh .venv
           .venv/bin/twine check dist/*
@@ -213,6 +223,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
+      - uses: Swatinem/rust-cache@e9d7b9f1e587218970671bac74e5511ed9506e6a # v2
+        with:
+          shared-key: "${{ matrix.os }}-julia-r"
       - run: cargo build --release --locked -p innovate-ffi -j 2
       - name: Stage native library in both bindings
         shell: bash
@@ -225,6 +238,7 @@ jobs:
       - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687
         with:
           version: '1.13'
+      - uses: julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9 # v2
       - shell: bash
         run: |
           unset INNOVATE_NATIVE_LIBRARY
