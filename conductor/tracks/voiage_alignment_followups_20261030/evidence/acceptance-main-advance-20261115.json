@@ -1,0 +1,841 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-14 22:49:06 UTC",
+  "scope": "Read-only reconciliation of the subsequent PR #611 main advance during issue #559 acceptance restoration.",
+  "previous_main": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+  "current_main": {
+    "sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "tree_sha": "432c386c5be53df9e67097acf481e3e644e4434e",
+    "parent_shas": [
+      "f6c7d058466ae5fe15b9846769cc0e6ba6774847"
+    ],
+    "url": "https://github.com/edithatogo/innovate/commit/384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "committed_at": "2026-11-14T22:41:54Z",
+    "signature_verified": true
+  },
+  "integrated_pull_request": {
+    "number": 611,
+    "url": "https://github.com/edithatogo/innovate/pull/611",
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-11-14T22:41:55Z",
+    "merged_by_account": "edithatogo",
+    "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+    "merge_commit_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "head_tree_sha": "432c386c5be53df9e67097acf481e3e644e4434e",
+    "head_and_receiving_tree_equal": true
+  },
+  "changed_paths": [
+    {
+      "path": ".github/workflows/ci-gate-monitor.yml",
+      "status": "modified",
+      "changes": 2
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "status": "modified",
+      "changes": 5
+    },
+    {
+      "path": ".github/workflows/crates-publish.yml",
+      "status": "added",
+      "changes": 82
+    },
+    {
+      "path": ".github/workflows/docs.yml",
+      "status": "modified",
+      "changes": 2
+    },
+    {
+      "path": ".github/workflows/fuzz.yml",
+      "status": "added",
+      "changes": 41
+    },
+    {
+      "path": ".github/workflows/release-drafter.yml",
+      "status": "modified",
+      "changes": 6
+    },
+    {
+      "path": ".github/workflows/release-please.yml",
+      "status": "modified",
+      "changes": 5
+    },
+    {
+      "path": ".github/workflows/release-readiness.yml",
+      "status": "modified",
+      "changes": 2
+    },
+    {
+      "path": ".github/workflows/security-quality.yml",
+      "status": "modified",
+      "changes": 43
+    },
+    {
+      "path": ".github/workflows/tagbot.yml",
+      "status": "modified",
+      "changes": 2
+    },
+    {
+      "path": "Dockerfile",
+      "status": "modified",
+      "changes": 12
+    },
+    {
+      "path": "conductor/tracks/repository_security_context_20261114/index.md",
+      "status": "modified",
+      "changes": 1
+    },
+    {
+      "path": "conductor/tracks/repository_security_context_20261114/pr611-documentation-repair.md",
+      "status": "added",
+      "changes": 60
+    },
+    {
+      "path": "conductor/tracks/repository_security_context_20261114/pr611-review.md",
+      "status": "added",
+      "changes": 112
+    },
+    {
+      "path": "docs/astro-site/package.json",
+      "status": "modified",
+      "changes": 8
+    },
+    {
+      "path": "docs/astro-site/pnpm-lock.yaml",
+      "status": "modified",
+      "changes": 1202
+    },
+    {
+      "path": "docs/astro-site/vendor/starlight-polyglot/dist/index.cjs",
+      "status": "modified",
+      "changes": 50
+    },
+    {
+      "path": "docs/astro-site/vendor/starlight-polyglot/dist/index.js",
+      "status": "modified",
+      "changes": 52
+    },
+    {
+      "path": "docs/contracts/polyglot-api-documentation.json",
+      "status": "modified",
+      "changes": 2
+    },
+    {
+      "path": "fuzz/Cargo.lock",
+      "status": "added",
+      "changes": 1979
+    },
+    {
+      "path": "fuzz/Cargo.toml",
+      "status": "added",
+      "changes": 23
+    },
+    {
+      "path": "fuzz/fuzz_targets/kernel_request.rs",
+      "status": "added",
+      "changes": 9
+    },
+    {
+      "path": "rust/crates/innovate-core/Cargo.toml",
+      "status": "modified",
+      "changes": 9
+    },
+    {
+      "path": "rust/crates/innovate-tabular/Cargo.toml",
+      "status": "modified",
+      "changes": 9
+    },
+    {
+      "path": "scripts/check_documentation_content.py",
+      "status": "modified",
+      "changes": 6
+    },
+    {
+      "path": "tests/test_documentation_source_hash_contract.py",
+      "status": "added",
+      "changes": 125
+    },
+    {
+      "path": "tests/workflows/test_release_workflows.py",
+      "status": "added",
+      "changes": 237
+    }
+  ],
+  "source_impact": {
+    "voiage_track_changes": [],
+    "other_owned_path_changes": [],
+    "owned_paths_checked": [
+      "scripts/qualify_voiage_arrow.py",
+      "tests/consumer/test_voiage_normalized_input.py",
+      ".github/workflows/voiage-consumer.yml",
+      ".github/renovate.json"
+    ],
+    "interpretation": "All 27 changes are outside the Voiage follow-up track, harness, consumer tests/workflow and Renovate config. Restore #559 evidence while preserving this main advancement."
+  },
+  "pr611_final_head_required_contexts": [
+    {
+      "name": "lint",
+      "id": 132613894792,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879395/job/132613894792",
+      "started_at": "2026-11-14T22:41:21Z",
+      "completed_at": "2026-11-14T22:41:23Z"
+    },
+    {
+      "name": "package",
+      "id": 132609681607,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879395/job/132609681607",
+      "started_at": "2026-11-14T22:24:15Z",
+      "completed_at": "2026-11-14T22:31:40Z"
+    },
+    {
+      "name": "CodeQL",
+      "id": 132609731409,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/runs/132609731409",
+      "started_at": "2026-11-14T22:24:24Z",
+      "completed_at": "2026-11-14T22:24:27Z"
+    },
+    {
+      "name": "Secret Scan",
+      "id": 132609592715,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879406/job/132609592715",
+      "started_at": "2026-11-14T22:23:56Z",
+      "completed_at": "2026-11-14T22:24:14Z"
+    },
+    {
+      "name": "Workflow and policy lint",
+      "id": 132609592933,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879406/job/132609592933",
+      "started_at": "2026-11-14T22:23:56Z",
+      "completed_at": "2026-11-14T22:24:14Z"
+    },
+    {
+      "name": "Python quality harness",
+      "id": 132609592920,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879406/job/132609592920",
+      "started_at": "2026-11-14T22:23:56Z",
+      "completed_at": "2026-11-14T22:30:26Z"
+    },
+    {
+      "name": "unit-tests-base (3.15.1)",
+      "id": 132613894819,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879395/job/132613894819",
+      "started_at": "2026-11-14T22:40:32Z",
+      "completed_at": "2026-11-14T22:40:37Z"
+    }
+  ],
+  "pr611_final_head_workflows": [
+    {
+      "name": "Release Readiness",
+      "id": 43647879413,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879413",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:24:07Z"
+    },
+    {
+      "name": "Privacy and secrets",
+      "id": 43647879439,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879439",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:24:30Z"
+    },
+    {
+      "name": "Release Drafter",
+      "id": 43647879370,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879370",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:24:41Z"
+    },
+    {
+      "name": "Voiage installed consumer",
+      "id": 43647879336,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879336",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:32:17Z"
+    },
+    {
+      "name": "Continuous Fuzzing",
+      "id": 43647879349,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879349",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:29:19Z"
+    },
+    {
+      "name": "Security and Quality",
+      "id": 43647879406,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879406",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:30:27Z"
+    },
+    {
+      "name": "Binding Conformance",
+      "id": 43647879330,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879330",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:30:45Z"
+    },
+    {
+      "name": "Coverage",
+      "id": 43647879482,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879482",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:31:42Z"
+    },
+    {
+      "name": "CI",
+      "id": 43647879395,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879395",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:41:24Z"
+    },
+    {
+      "name": "Deploy Documentation",
+      "id": 43647879490,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "pull_request",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879490",
+      "created_at": "2026-11-14T22:23:53Z",
+      "updated_at": "2026-11-14T22:41:58Z"
+    },
+    {
+      "name": "PR #611",
+      "id": 43647875120,
+      "head_sha": "c8a0fb6986537c424a2c47d7a44d15f746723d7a",
+      "event": "dynamic",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647875120",
+      "created_at": "2026-11-14T22:23:50Z",
+      "updated_at": "2026-11-14T22:34:10Z"
+    }
+  ],
+  "receiving_main_workflows": [
+    {
+      "name": "Voiage installed consumer",
+      "id": 43649444847,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444847",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:17Z"
+    },
+    {
+      "name": "Release Readiness",
+      "id": 43649444877,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444877",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:23Z"
+    },
+    {
+      "name": "Release Please",
+      "id": 43649444903,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444903",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:46Z"
+    },
+    {
+      "name": "Coverage",
+      "id": 43649444852,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444852",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:48Z"
+    },
+    {
+      "name": "Release Drafter",
+      "id": 43649444799,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444799",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:48Z"
+    },
+    {
+      "name": "CI",
+      "id": 43649444961,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:49Z"
+    },
+    {
+      "name": "Security and Quality",
+      "id": 43649444843,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:54Z"
+    },
+    {
+      "name": "Push on main",
+      "id": 43649444152,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "dynamic",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:42:54Z"
+    },
+    {
+      "name": "Privacy and secrets",
+      "id": 43649444788,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444788",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:43:11Z"
+    },
+    {
+      "name": "OpenSSF Scorecard",
+      "id": 43649444763,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444763",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:43:18Z"
+    },
+    {
+      "name": "Deploy Documentation",
+      "id": 43649444910,
+      "head_sha": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "event": "push",
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444910",
+      "created_at": "2026-11-14T22:41:57Z",
+      "updated_at": "2026-11-14T22:45:47Z"
+    }
+  ],
+  "receiving_main_checks": [
+    {
+      "name": "Native documentation examples",
+      "id": 132614927566,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444910/job/132614927566",
+      "started_at": "2026-11-14T22:45:46Z",
+      "completed_at": null
+    },
+    {
+      "name": "Analyze (rust)",
+      "id": 132614417079,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417079",
+      "started_at": "2026-11-14T22:42:53Z",
+      "completed_at": null
+    },
+    {
+      "name": "Analyze (python)",
+      "id": 132614417050,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417050",
+      "started_at": "2026-11-14T22:42:25Z",
+      "completed_at": "2026-11-14T22:43:28Z"
+    },
+    {
+      "name": "Analyze (actions)",
+      "id": 132614417043,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417043",
+      "started_at": "2026-11-14T22:42:47Z",
+      "completed_at": "2026-11-14T22:43:26Z"
+    },
+    {
+      "name": "Analyze (c-cpp)",
+      "id": 132614416994,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614416994",
+      "started_at": "2026-11-14T22:42:20Z",
+      "completed_at": "2026-11-14T22:43:26Z"
+    },
+    {
+      "name": "Analyze (javascript-typescript)",
+      "id": 132614416767,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614416767",
+      "started_at": "2026-11-14T22:42:09Z",
+      "completed_at": "2026-11-14T22:43:13Z"
+    },
+    {
+      "name": "release-lane-checks",
+      "id": 132614416150,
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444877/job/132614416150",
+      "started_at": "2026-11-14T22:41:58Z",
+      "completed_at": "2026-11-14T22:41:57Z"
+    },
+    {
+      "name": "Dependency Review",
+      "id": 132614416105,
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614416105",
+      "started_at": "2026-11-14T22:41:58Z",
+      "completed_at": "2026-11-14T22:41:57Z"
+    },
+    {
+      "name": "native-python (ubuntu-latest)",
+      "id": 132614415563,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415563",
+      "started_at": "2026-11-14T22:42:49Z",
+      "completed_at": null
+    },
+    {
+      "name": "native-python (macos-latest)",
+      "id": 132614415496,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415496",
+      "started_at": "2026-11-14T22:42:09Z",
+      "completed_at": null
+    },
+    {
+      "name": "native-python (windows-latest)",
+      "id": 132614415480,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415480",
+      "started_at": "2026-11-14T22:42:07Z",
+      "completed_at": null
+    },
+    {
+      "name": "julia-r (windows-latest, innovate_ffi.dll)",
+      "id": 132614415453,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415453",
+      "started_at": "2026-11-14T22:42:02Z",
+      "completed_at": null
+    },
+    {
+      "name": "julia-r (macos-latest, libinnovate_ffi.dylib)",
+      "id": 132614415433,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415433",
+      "started_at": "2026-11-14T22:42:45Z",
+      "completed_at": null
+    },
+    {
+      "name": "package",
+      "id": 132614415427,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415427",
+      "started_at": "2026-11-14T22:42:48Z",
+      "completed_at": null
+    },
+    {
+      "name": "RustSec advisory audit",
+      "id": 132614415276,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614415276",
+      "started_at": "2026-11-14T22:42:53Z",
+      "completed_at": "2026-11-14T22:45:04Z"
+    },
+    {
+      "name": "julia-r (ubuntu-latest, libinnovate_ffi.so)",
+      "id": 132614415241,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415241",
+      "started_at": "2026-11-14T22:42:17Z",
+      "completed_at": null
+    },
+    {
+      "name": "Python quality harness",
+      "id": 132614415235,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614415235",
+      "started_at": "2026-11-14T22:42:41Z",
+      "completed_at": null
+    },
+    {
+      "name": "Secret Scan",
+      "id": 132614415206,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614415206",
+      "started_at": "2026-11-14T22:42:37Z",
+      "completed_at": "2026-11-14T22:42:53Z"
+    },
+    {
+      "name": "build",
+      "id": 132614415045,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444910/job/132614415045",
+      "started_at": "2026-11-14T22:42:44Z",
+      "completed_at": "2026-11-14T22:43:54Z"
+    },
+    {
+      "name": "readiness-report",
+      "id": 132614415041,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444877/job/132614415041",
+      "started_at": "2026-11-14T22:42:09Z",
+      "completed_at": "2026-11-14T22:42:22Z"
+    },
+    {
+      "name": "Python binding line coverage",
+      "id": 132614415029,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444852/job/132614415029",
+      "started_at": "2026-11-14T22:42:48Z",
+      "completed_at": null
+    },
+    {
+      "name": "Workflow and policy lint",
+      "id": 132614414976,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614414976",
+      "started_at": "2026-11-14T22:42:07Z",
+      "completed_at": "2026-11-14T22:42:23Z"
+    },
+    {
+      "name": "release-please",
+      "id": 132614414882,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444903/job/132614414882",
+      "started_at": "2026-11-14T22:42:19Z",
+      "completed_at": "2026-11-14T22:42:46Z"
+    },
+    {
+      "name": "Rust line coverage",
+      "id": 132614414837,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444852/job/132614414837",
+      "started_at": "2026-11-14T22:42:24Z",
+      "completed_at": null
+    },
+    {
+      "name": "Installed Voiage normalized input",
+      "id": 132614414776,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444847/job/132614414776",
+      "started_at": "2026-11-14T22:42:17Z",
+      "completed_at": null
+    },
+    {
+      "name": "update_release_draft",
+      "id": 132614414737,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444799/job/132614414737",
+      "started_at": "2026-11-14T22:42:05Z",
+      "completed_at": "2026-11-14T22:42:47Z"
+    },
+    {
+      "name": "privacy-and-secrets",
+      "id": 132614414726,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444788/job/132614414726",
+      "started_at": "2026-11-14T22:42:37Z",
+      "completed_at": "2026-11-14T22:43:10Z"
+    },
+    {
+      "name": "Scorecard analysis",
+      "id": 132614414504,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444763/job/132614414504",
+      "started_at": "2026-11-14T22:42:24Z",
+      "completed_at": "2026-11-14T22:43:17Z"
+    }
+  ],
+  "documentation_acceptance": {
+    "final_pr_head_workflow": {
+      "id": 43647879490,
+      "run_attempt": 1,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43647879490",
+      "native_job_id": 132614368807
+    },
+    "receiving_main_workflow": {
+      "id": 43649444910,
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444910",
+      "native_job_id": 132614927566
+    },
+    "interpretation": "PR #611 merged while its first documentation attempt was still executing. All protected named checks had passed, but native-documentation acceptance must remain pending until its actual result. This audit performed no integration or rerun."
+  },
+  "release_readiness": {
+    "run_id": 43649444877,
+    "job_id": 132614415041,
+    "command": ".venv-release/bin/python scripts/check_migration.py --release",
+    "exit_status": 1,
+    "exact_blocking_log_line": "2026-11-14T22:42:20.4727653Z Release blocked: scientific migration and acceptance remain incomplete: bass, complementary_goods, composite, fisher_pry, gompertz, hierarchical, latent_process, lock_in, logistic, lotka_volterra, mixture, multi_product, network_diffusion, norton_bass, policy_hazard, regime_switching, covariates_and_events, multi_generation_substitution, competitive_ecosystems, hierarchical_mixture_inference, latent_regime_models, network_policy_diffusion, kairos_des_abm, bayesian_inference, bootstrap_uncertainty, batch_fitting, preprocessing, causal_analysis, adopter_classification, data_ingestion_provenance_validation, scenario_registry_execution, explainability_sensitivity_reporting, benchmark_model_cards, plugin_contracts, remote_execution, accelerator_hpc, voiage_arrow_handoff, calibration_identifiability",
+    "exact_exit_log_line": "2026-11-14T22:42:20.4801188Z ##[error]Process completed with exit code 1.",
+    "obligations": [
+      "bass",
+      "complementary_goods",
+      "composite",
+      "fisher_pry",
+      "gompertz",
+      "hierarchical",
+      "latent_process",
+      "lock_in",
+      "logistic",
+      "lotka_volterra",
+      "mixture",
+      "multi_product",
+      "network_diffusion",
+      "norton_bass",
+      "policy_hazard",
+      "regime_switching",
+      "covariates_and_events",
+      "multi_generation_substitution",
+      "competitive_ecosystems",
+      "hierarchical_mixture_inference",
+      "latent_regime_models",
+      "network_policy_diffusion",
+      "kairos_des_abm",
+      "bayesian_inference",
+      "bootstrap_uncertainty",
+      "batch_fitting",
+      "preprocessing",
+      "causal_analysis",
+      "adopter_classification",
+      "data_ingestion_provenance_validation",
+      "scenario_registry_execution",
+      "explainability_sensitivity_reporting",
+      "benchmark_model_cards",
+      "plugin_contracts",
+      "remote_execution",
+      "accelerator_hpc",
+      "voiage_arrow_handoff",
+      "calibration_identifiability"
+    ],
+    "obligation_count": 38
+  },
+  "ownership": {
+    "observed_merge_account": "edithatogo",
+    "originating_chat_exposed_by_github": false,
+    "preserved_owner_comment_url": "https://github.com/edithatogo/innovate/pull/611#issuecomment-6884951788",
+    "interpretation": "GitHub proves the merged account and PR. Existing comments retain the separately owned documentation/security repair; it does not identify the originating ordinary ChatGPT chat. No source or integration work was duplicated here."
+  },
+  "limitations": [
+    "Receiving-main checks were still executing at this observation; no prospective pass is claimed.",
+    "No artifacts were downloaded in this subtask.",
+    "No repository or remote writes were performed."
+  ]
+}

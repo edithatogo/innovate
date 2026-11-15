@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-14T15:18:53.217231+00:00",
+  "scope": "Local repository-mode strict validation of exact PR #605 Renovate config; inherited preset contents are not fetched or evaluated.",
+  "command_argv": [
+    "node",
+    "--max-old-space-size=1024",
+    "/workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/dist/config-validator.js",
+    "--strict",
+    "--no-global",
+    ".github/renovate.json"
+  ],
+  "working_directory": "/workspace/scratch/02b18930c544/innovate-559",
+  "timeout_seconds": 90,
+  "node_version": "v24.22.1",
+  "renovate_version": "44.239.0",
+  "config_path": ".github/renovate.json",
+  "config_sha256": "d88db6032c08f1e3142188fed76b5554513bc5a0d91166211eb60ffaa2db4af0",
+  "exit_status": 0,
+  "stdout": " WARN: RE2 not usable, falling back to RegExp: regex validation may be inaccurate\n       \"err\": {\n         \"code\": \"MODULE_NOT_FOUND\",\n         \"requireStack\": [\n           \"/workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/dist/expose.js\"\n         ],\n         \"message\": \"Cannot find module 're2'\\nRequire stack:\\n- /workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/dist/expose.js\"\n       }\n       Error: Cannot find module 're2'\n       Require stack:\n       - /workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/dist/expose.js\n           at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)\n           at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)\n           at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)\n           at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)\n           at Module._load (node:internal/modules/cjs/loader:1341:5)\n           at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\n           at Module.require (node:internal/modules/cjs/loader:1674:12)\n           at require (node:internal/modules/helpers:157:16)\n           at re2 (file:///workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/lib/expose.ts:12:10)\n           at file:///workspace/scratch/02b18930c544/renovate-validator-559/node_modules/renovate/lib/util/regex.ts:23:17\n INFO: Validating .github/renovate.json as repo config\n INFO: Config validated successfully against 1 file(s)\n",
+  "stderr": "",
+  "stdout_path": "/workspace/scratch/02b18930c544/renovate-validator-559-confirmed.stdout.log",
+  "stdout_sha256": "0047e672356d786231f3532ab277254666538511736ac16c82c1c97a063b0ca5",
+  "stderr_path": "/workspace/scratch/02b18930c544/renovate-validator-559-confirmed.stderr.log",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "limitations": [
+    "The omitted optional re2 dependency makes Renovate use its built-in RegExp fallback; the tool warns that regex validation may be inaccurate.",
+    "This exact config contains no custom regex managers or regex patterns. A future configuration with such patterns needs RE2-capable validation.",
+    "Validation does not prove GitHub signing-rule enforcement or a real Renovate update commit signature.",
+    "Top-level extends references are locally validated but their merged remote preset contents are not evaluated."
+  ],
+  "bounded_install": {
+    "command_argv": [
+      "timeout",
+      "240s",
+      "env",
+      "NODE_OPTIONS=--max-old-space-size=1536",
+      "npm",
+      "install",
+      "--prefix",
+      "/workspace/scratch/02b18930c544/renovate-validator-559",
+      "--ignore-scripts",
+      "--omit=optional",
+      "--no-package-lock",
+      "--maxsockets=2",
+      "--no-audit",
+      "--no-fund",
+      "--fetch-retries=0",
+      "--fetch-timeout=15000",
+      "renovate@44.239.0"
+    ],
+    "working_directory": "/workspace/scratch/02b18930c544/innovate-559",
+    "exit_status": 0,
+    "log_path": "/workspace/scratch/02b18930c544/renovate-validator-559-install.log",
+    "log_sha256": "c4f0f91c1db3c1d0fe0ea75eb7357185ea0293db8c724f0f9e1f12288519236f",
+    "note": "Isolated scratch tool installation; no repository runtime or development dependency change."
+  },
+  "historical_attempt": {
+    "exit_status": 137,
+    "status": "Installation terminated before validation during the prior implementation turn; not reclassified as a validation pass."
+  }
+}

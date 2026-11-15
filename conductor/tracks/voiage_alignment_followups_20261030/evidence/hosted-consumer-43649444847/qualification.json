@@ -1,0 +1,316 @@
+{
+  "innovate_wheel_sha256": "6e4a63976b81d48a54e5f4fa99631c2402bc8836e6b251ec3d41a6efac35cfe0",
+  "voiage_wheel_sha256": "e7a68dae8a94fcb8b70077c671242cbdc8f260bd64367c74f547e122236cfd1a",
+  "python": "3.15.2",
+  "innovate": "0.7.0a1",
+  "voiage": "3.1.0",
+  "polars": "2.1.0",
+  "pyarrow": "26.0.1",
+  "imported_paths": {
+    "innovate": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/innovate/__init__.py",
+    "voiage": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/voiage/__init__.py",
+    "innovate._native": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/innovate/_native.cpython-315-x86_64-linux-gnu.so",
+    "voiage.contracts.normalized_input": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/voiage/contracts/normalized_input.py",
+    "voiage._core": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/voiage/_core.abi3.so",
+    "polars": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/polars/__init__.py",
+    "pyarrow": "/home/runner/work/_temp/voiage-consumer.4HY0Ij/lib/python3.15/site-packages/pyarrow/__init__.py"
+  },
+  "voiage_normalized_module_sha256": "846dbdf6aee4ec843a7147ba6ba42e3ad8618fcb6c88755332b341150e61b08c",
+  "voiage_native_sha256": "7e503d3c80af7284fdb59652db56010a426adb46544e3cc654c425c95f133be2",
+  "installed_record_sha256": {
+    "innovate": "019d348de7e100a62761409b0071c5f1bbe0498d66ad5230dccc7f94dc43687e",
+    "voiage": "2e274f9c4645cdc28856601756bb77d7ca18f226bdeae2225a5e02294324ffb0"
+  },
+  "innovate_native_sha256": "5e974002fb99b9ea05e30f5218de739928ddaaea657f31926d21189761b5331f",
+  "arrow_ipc_sha256": "80e7328f530cd72ecb522771a4c6745a4966123120a13f52983477d98573a26e",
+  "reference_evpi": 5.641720719927869,
+  "installed_evpi": 5.641720719927868,
+  "weighted_arrow_ipc_sha256": "ee1146136fe9edf7a697d995f47150c764a8d8cf0bd123fc9b646c8cb7a4dd2b",
+  "weighted_reference_evpi": 3.7317144196428957,
+  "weighted_installed_evpi": 3.731714419642895,
+  "normalized_cases": [
+    {
+      "case": "simple",
+      "format": "ipc",
+      "input_file_sha256": "57ab6c8cd9803a8df8135d19c374da6196d99ffa848d5af5c1f03ec04fe51f11",
+      "source_content_digest": "95d06031c550c11475688d55d4c504311d1eb794c0371ff16b4b94af096ab742",
+      "restored_content_digest": "95d06031c550c11475688d55d4c504311d1eb794c0371ff16b4b94af096ab742",
+      "schema_fingerprint": "09deb62d2fd6c1a38fb0b102ee6a8adf8d13813c729e57cc352df53cd36c12bb",
+      "source_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    },
+    {
+      "case": "simple",
+      "format": "parquet",
+      "input_file_sha256": "6ca6845c029c7608d3d165f124cf491c8a7afb6a131089ac07db62b3223724ec",
+      "source_content_digest": "95d06031c550c11475688d55d4c504311d1eb794c0371ff16b4b94af096ab742",
+      "restored_content_digest": "95d06031c550c11475688d55d4c504311d1eb794c0371ff16b4b94af096ab742",
+      "schema_fingerprint": "09deb62d2fd6c1a38fb0b102ee6a8adf8d13813c729e57cc352df53cd36c12bb",
+      "source_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    },
+    {
+      "case": "multi_chunk",
+      "format": "ipc",
+      "input_file_sha256": "da5a791eac50bf601e29f2de8bcf3bd79daaba09d371578efd4adfd95922e7df",
+      "source_content_digest": "d9536373e08192a089ac9b8a7c5f0507f970dc68a3a5d2d1b9934a6bb2f3b9ff",
+      "restored_content_digest": "d9536373e08192a089ac9b8a7c5f0507f970dc68a3a5d2d1b9934a6bb2f3b9ff",
+      "schema_fingerprint": "09deb62d2fd6c1a38fb0b102ee6a8adf8d13813c729e57cc352df53cd36c12bb",
+      "source_chunk_lengths": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    },
+    {
+      "case": "multi_chunk",
+      "format": "parquet",
+      "input_file_sha256": "78ceb0371cfa5a3a978f5ee494f031f36cbfee85102f7cc1a108a5868b54710f",
+      "source_content_digest": "d9536373e08192a089ac9b8a7c5f0507f970dc68a3a5d2d1b9934a6bb2f3b9ff",
+      "restored_content_digest": "d9536373e08192a089ac9b8a7c5f0507f970dc68a3a5d2d1b9934a6bb2f3b9ff",
+      "schema_fingerprint": "09deb62d2fd6c1a38fb0b102ee6a8adf8d13813c729e57cc352df53cd36c12bb",
+      "source_chunk_lengths": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    },
+    {
+      "case": "parquet_normalized_types",
+      "format": "ipc",
+      "input_file_sha256": "ef7c9ad6290c8619223b7180f45a43cdddc0062ce0c5813a1c9aa749f923ac27",
+      "source_content_digest": "dea463508fe55edb635b90d25dad3080975718fcb383bae319405f1f599e2d14",
+      "restored_content_digest": "dea463508fe55edb635b90d25dad3080975718fcb383bae319405f1f599e2d14",
+      "schema_fingerprint": "b2755cbd71aa00f1207307dcd69443a407067541a7e268dc1d390e1d79e861da",
+      "source_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    },
+    {
+      "case": "parquet_normalized_types",
+      "format": "parquet",
+      "input_file_sha256": "a22dd6fbefac459b3d200845253710594ea1e81fa055fa4accf74eeacd7d34f4",
+      "source_content_digest": "dea463508fe55edb635b90d25dad3080975718fcb383bae319405f1f599e2d14",
+      "restored_content_digest": "dea463508fe55edb635b90d25dad3080975718fcb383bae319405f1f599e2d14",
+      "schema_fingerprint": "b2755cbd71aa00f1207307dcd69443a407067541a7e268dc1d390e1d79e861da",
+      "source_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "restored_chunk_lengths": [
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ],
+      "native_input_columns": [
+        "time",
+        "sample_id"
+      ],
+      "expected_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "installed_predictions": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "output_ipc_sha256": "aa8acb6e7b2841654b46007551c03efdbd2dbe780baa284c3a7ec78fe04a112c"
+    }
+  ],
+  "scope": "Synthetic CPU scenario handoff only; not full scientific/HPC/clinical acceptance",
+  "status": "passed",
+  "command": [
+    "/home/runner/work/_temp/voiage-consumer.4HY0Ij/bin/python",
+    "-I",
+    "/home/runner/work/innovate/innovate/scripts/qualify_voiage_arrow.py",
+    "--worker",
+    "--wheel",
+    "/home/runner/work/innovate/innovate/dist/innovate-0.7.0a1-cp315-cp315-manylinux_2_38_x86_64.whl",
+    "--voiage-wheel",
+    "/home/runner/work/innovate/innovate/dist/voiage/voiage-3.1.0-cp315-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+  ],
+  "exit_status": 0,
+  "working_directory": "/tmp/innovate-installed-consumer-pfrx4x2l",
+  "source_checkout": "/home/runner/work/innovate/innovate",
+  "qualification_source_revision": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+  "qualification_script_sha256": "4e2cdf0e20488ce2dc10769117f725306351d9643ddc44e0e360006e0f6491c8"
+}

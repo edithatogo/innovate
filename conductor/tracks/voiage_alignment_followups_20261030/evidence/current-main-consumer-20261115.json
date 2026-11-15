@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-14 23:08:13 UTC",
+  "repository": "edithatogo/innovate",
+  "issue_url": "https://github.com/edithatogo/innovate/issues/559",
+  "source_revision": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+  "source_tree": "432c386c5be53df9e67097acf481e3e644e4434e",
+  "evidence_type": "GitHub API and decoded workflow job log; current raw artifact not independently inspected.",
+  "consumer": {
+    "run_id": 43649444847,
+    "run_attempt": 1,
+    "event": "push",
+    "run_url": "https://github.com/edithatogo/innovate/actions/runs/43649444847",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T22:41:57Z",
+    "updated_at": "2026-11-14T22:48:58Z",
+    "job_id": 132614414776,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43649444847/job/132614414776",
+    "job_steps": [
+      {
+        "name": "Install the locked build tools",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      },
+      {
+        "name": "Build the native wheel from its source distribution",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6
+      },
+      {
+        "name": "Download the Voiage wheel for artifact verification",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7
+      },
+      {
+        "name": "Install the consumer wheels outside the checkout",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8
+      },
+      {
+        "name": "Test the normalized bundle consumer",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 9
+      },
+      {
+        "name": "Qualify both installed artifacts and retain the receipt",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 10
+      },
+      {
+        "name": "Retain consumer evidence after success or failure",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 11
+      }
+    ],
+    "observed_checkout_revision": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "build_command": [
+      "bash",
+      "scripts/build_release_wheel.sh",
+      ".venv"
+    ],
+    "build_method": "Build sdist from the checked-out main revision, then build its extracted native source into the installed wheel.",
+    "observed_tools": {
+      "python": "3.15.2",
+      "rustc": "1.99.1",
+      "uv": "0.13.8"
+    },
+    "observed_consumer_packages": {
+      "innovate": "0.7.0a1",
+      "voiage": "3.1.0",
+      "polars": "2.1.0",
+      "pyarrow": "26.0.1",
+      "pytest": "9.2.0"
+    },
+    "installed_environment": "/home/runner/work/_temp/voiage-consumer.4HY0Ij",
+    "source_checkout": "/home/runner/work/innovate/innovate",
+    "package_compatibility_check": {
+      "installed_packages": 34,
+      "result": "All installed packages are compatible"
+    },
+    "focused_tests": {
+      "passed": 19,
+      "seconds": 1.85,
+      "exact_log_line": "2026-11-14T22:48:51.2552363Z 19 passed in 1.85s"
+    },
+    "qualification": {
+      "shell_command_argv": [
+        "/home/runner/work/_temp/voiage-consumer.4HY0Ij/bin/python",
+        "-I",
+        "/home/runner/work/innovate/innovate/scripts/qualify_voiage_arrow.py",
+        "--wheel",
+        "/home/runner/work/innovate/innovate/dist/innovate-0.7.0a1-cp315-cp315-manylinux_2_38_x86_64.whl",
+        "--voiage-wheel",
+        "/home/runner/work/innovate/innovate/dist/voiage/voiage-3.1.0-cp315-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "step_conclusion": "success",
+      "stdout_redirect": "consumer-evidence/qualification.json",
+      "stderr_redirect": "consumer-evidence/qualification-stderr.log",
+      "raw_worker_receipt_read": false,
+      "explicit_worker_exit_status_read_from_receipt": null,
+      "explicit_numeric_results_read_from_receipt": false,
+      "actual_import_paths_and_worker_directory_read_from_receipt": false,
+      "interpretation": "The actual qualification command and successful step are observed. Its redirected JSON and stderr bytes were not independently read; do not substitute older-run paths, numeric fields or artifact hashes."
+    },
+    "relevant_log_lines": [
+      "2026-11-14T22:42:26.9380918Z [command]/usr/bin/git log -1 --format=%H",
+      "2026-11-14T22:42:26.9402103Z 384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+      "2026-11-14T22:42:28.0448103Z Successfully installed uv version 0.13.8",
+      "2026-11-14T22:42:36.8949634Z rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+      "2026-11-14T22:42:37.9370033Z Using CPython 3.15.2",
+      "2026-11-14T22:42:48.2906116Z ##[group]Run bash scripts/build_release_wheel.sh .venv",
+      "2026-11-14T22:43:12.9716954Z \ud83d\udce6 Built source distribution to /tmp/innovate-release.9AveLQ/sdist/innovate-0.7.0a1.tar.gz",
+      "2026-11-14T22:48:45.2853797Z \ud83d\udce6 Built wheel for CPython 3.15 to /tmp/innovate-release.9AveLQ/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_38_x86_64.whl",
+      "2026-11-14T22:48:47.8745917Z Using CPython 3.15.2 interpreter at: .venv/bin/python",
+      "2026-11-14T22:48:48.8467172Z Checked 34 packages in 0.54ms",
+      "2026-11-14T22:48:48.8477093Z All installed packages are compatible",
+      "2026-11-14T22:48:51.2552363Z 19 passed in 1.85s",
+      "2026-11-14T22:48:55.0400835Z SHA256 digest of uploaded artifact zip is 6800e15218c51ee8181b3aea0cf73be4621ed8c28c14c4cfc555d73a7be1ebbc",
+      "2026-11-14T22:48:55.3920711Z Artifact voiage-consumer-384ed3b0f42d967f520dc66ef536d8fa0d92df7d.zip successfully finalized. Artifact ID 14135661886",
+      "2026-11-14T22:48:55.3922253Z Artifact voiage-consumer-384ed3b0f42d967f520dc66ef536d8fa0d92df7d has been successfully uploaded! Final size is 2376 bytes. Artifact ID is 14135661886",
+      "2026-11-14T22:48:55.3926710Z Artifact download URL: https://github.com/edithatogo/innovate/actions/runs/43649444847/artifacts/14135661886"
+    ]
+  },
+  "artifact": {
+    "id": 14135661886,
+    "name": "voiage-consumer-384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+    "size_in_bytes": 2376,
+    "created_at": "2026-11-14T22:48:55Z",
+    "expires_at": "2027-02-12T22:41:57Z",
+    "expired": false,
+    "api_url": "https://api.github.com/repos/edithatogo/innovate/actions/artifacts/14135661886",
+    "download_api_url": "https://api.github.com/repos/edithatogo/innovate/actions/artifacts/14135661886/zip",
+    "api_reported_archive_sha256": "6800e15218c51ee8181b3aea0cf73be4621ed8c28c14c4cfc555d73a7be1ebbc",
+    "upload_log_reported_archive_sha256": "6800e15218c51ee8181b3aea0cf73be4621ed8c28c14c4cfc555d73a7be1ebbc",
+    "api_and_upload_log_report_match": true,
+    "raw_archive_downloaded_and_read": false,
+    "archive_digest_independently_verified": false,
+    "raw_qualification_json_independently_read": false,
+    "distinction": "API and upload-log hashes are both GitHub-reported evidence. They are not an independent digest computation over downloaded ZIP bytes. The parent task's independent verification of the earlier f6c7d058 run 43640667994 remains separate evidence and is not transferred to this archive."
+  },
+  "protected_contexts": {
+    "policy_source_url": "https://api.github.com/repos/edithatogo/innovate/branches/main",
+    "policy_contexts": [
+      "lint",
+      "package",
+      "CodeQL",
+      "Secret Scan",
+      "Workflow and policy lint",
+      "Python quality harness",
+      "unit-tests-base (3.15.1)"
+    ],
+    "observations": [
+      {
+        "name": "lint",
+        "id": 132619648248,
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132619648248"
+      },
+      {
+        "name": "package",
+        "id": 132614415427,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415427"
+      },
+      {
+        "name": "CodeQL",
+        "present": false
+      },
+      {
+        "name": "Secret Scan",
+        "id": 132614415206,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614415206"
+      },
+      {
+        "name": "Workflow and policy lint",
+        "id": 132614414976,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614414976"
+      },
+      {
+        "name": "Python quality harness",
+        "id": 132614415235,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444843/job/132614415235"
+      },
+      {
+        "name": "unit-tests-base (3.15.1)",
+        "id": 132619648252,
+        "status": "queued",
+        "conclusion": null,
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132619648252"
+      }
+    ],
+    "native_python_jobs": [
+      {
+        "name": "native-python (ubuntu-latest)",
+        "id": 132614415563,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415563"
+      },
+      {
+        "name": "native-python (macos-latest)",
+        "id": 132614415496,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415496"
+      },
+      {
+        "name": "native-python (windows-latest)",
+        "id": 132614415480,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961/job/132614415480"
+      }
+    ],
+    "codeql_analyses": [
+      {
+        "name": "Analyze (rust)",
+        "id": 132614417079,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417079"
+      },
+      {
+        "name": "Analyze (python)",
+        "id": 132614417050,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417050"
+      },
+      {
+        "name": "Analyze (actions)",
+        "id": 132614417043,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614417043"
+      },
+      {
+        "name": "Analyze (c-cpp)",
+        "id": 132614416994,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614416994"
+      },
+      {
+        "name": "Analyze (javascript-typescript)",
+        "id": 132614416767,
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43649444152/job/132614416767"
+      }
+    ],
+    "ci_workflow": {
+      "id": 43649444961,
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43649444961"
+    },
+    "interpretation": "At this observation four named required check runs passed, lint/unit-test aggregators were queued, and the PR-only aggregate CodeQL context was absent on the push. All three native Python matrix jobs and all five CodeQL analyses had passed. Queued or absent contexts are not counted as passes."
+  },
+  "independent_documentation_failure": {
+    "run_id": 43649444910,
+    "job_id": 132614927566,
+    "url": "https://github.com/edithatogo/innovate/actions/runs/43649444910/job/132614927566",
+    "status": "completed",
+    "conclusion": "failure",
+    "failing_command": ".venv/bin/python scripts/check_documentation_content.py --mode ratchet --execute --python .venv/bin/python --language-receipt-dir docs/astro-site/.reports --output docs/astro-site/.reports/execution.json",
+    "exit_status": 1,
+    "julia_receipt_qualified": false,
+    "r_receipt_qualified": false,
+    "reason": "Inventory example source hash is invalid.",
+    "exact_relevant_log_lines": [
+      "2026-11-14T23:04:27.0696928Z PASS Julia documentation: 24 exported docstrings; 7 examples; 9 observed assertions",
+      "2026-11-14T23:05:09.4234852Z PASS R documentation: 24 exports; 14 manuals; 6 examples; 10 observed assertions",
+      "2026-11-14T23:05:13.3810429Z   \"api_doctest_status\": \"passed\",",
+      "2026-11-14T23:05:13.3814878Z   \"example_execution_status\": \"passed\",",
+      "2026-11-14T23:05:13.3889469Z       \"reason\": \"Inventory example source hash is invalid.\",",
+      "2026-11-14T23:05:13.3890998Z       \"reason\": \"Inventory example source hash is invalid.\",",
+      "2026-11-14T23:05:13.4111766Z ##[error]Process completed with exit code 1."
+    ],
+    "ownership": "This is the separate documentation lane following merged PR #611. Native consumer success does not qualify it; no duplicate source repair was attempted here."
+  },
+  "preserved_release_boundary": {
+    "run_id": 43649444877,
+    "job_id": 132614415041,
+    "exit_status": 1,
+    "incomplete_scientific_obligation_count": 38,
+    "prior_exact_log_evidence_blob": "4006f033a3323630bb6dfbc31cea0d274e269ac8",
+    "interpretation": "All 38 scientific obligations remain incomplete, including the broader voiage_arrow_handoff obligation."
+  },
+  "scope_limits": [
+    "No claim of independent current-artifact ZIP/JSON verification; only API, step and job-log evidence is retained here.",
+    "No claim of current-main documentation acceptance or all protected contexts passing.",
+    "The separate Dependabot UI and Renovate signature work is recorded by its owner; this receipt does not independently inspect those results.",
+    "No additional Voiage source defect was found in this bounded verification. Lost acceptance records still need restoration through the parent's record-repair PR.",
+    "No repository branch, commit, PR, setting or workflow execution was mutated in this subtask; only this authorized Git data evidence blob is created."
+  ]
+}
