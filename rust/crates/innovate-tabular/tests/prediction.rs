@@ -1,6 +1,93 @@
 use innovate_tabular::predict;
-use polars::prelude::*;
+use polars_arrow::datatypes::Metadata;
+use polars_arrow::io::ipc::read::{
+    FileReader, StreamReader, StreamState, read_file_metadata, read_stream_metadata,
+};
+use polars_arrow::io::ipc::write::{FileWriter, StreamWriter, WriteOptions};
+use polars_core::prelude::*;
 use serde_json::json;
+use std::io::Cursor;
+
+fn write_ipc_file_with_metadata(
+    frame: &mut DataFrame,
+    metadata: Option<std::sync::Arc<Metadata>>,
+) -> Vec<u8> {
+    let compat = CompatLevel::oldest();
+    let schema = frame.schema().to_arrow(compat);
+    frame.align_chunks_par();
+    let mut bytes = Vec::new();
+    let mut writer = FileWriter::new(
+        &mut bytes,
+        schema.into(),
+        None,
+        WriteOptions { compression: None },
+    );
+    if let Some(metadata) = metadata {
+        writer.set_custom_schema_metadata(metadata);
+    }
+    writer.start().unwrap();
+    for batch in frame.iter_chunks(compat, true) {
+        writer.write(&batch, None).unwrap();
+    }
+    writer.finish().unwrap();
+    bytes
+}
+
+fn write_ipc_stream_with_metadata(
+    frame: &mut DataFrame,
+    metadata: Option<std::sync::Arc<Metadata>>,
+) -> Vec<u8> {
+    let compat = CompatLevel::oldest();
+    let schema = frame.schema().to_arrow(compat);
+    frame.align_chunks_par();
+    let mut bytes = Vec::new();
+    let mut writer = StreamWriter::new(&mut bytes, WriteOptions { compression: None });
+    if let Some(metadata) = metadata {
+        writer.set_custom_schema_metadata(metadata);
+    }
+    writer.start(&schema, None).unwrap();
+    for batch in frame.iter_chunks(compat, true) {
+        writer.write(&batch, None).unwrap();
+    }
+    writer.finish().unwrap();
+    bytes
+}
+
+fn read_ipc_file_with_metadata(
+    bytes: &[u8],
+) -> (DataFrame, ArrowSchema, Option<std::sync::Arc<Metadata>>) {
+    let mut cursor = Cursor::new(bytes);
+    let metadata = read_file_metadata(&mut cursor).unwrap();
+    let schema = metadata.schema.as_ref().clone();
+    let custom = metadata.custom_schema_metadata.clone();
+    let polars_schema = Schema::from_arrow_schema(&schema);
+    let mut frame = DataFrame::empty_with_schema(&polars_schema);
+    for batch in FileReader::new(cursor, metadata, None, None) {
+        frame.append_record_batch(batch.unwrap()).unwrap();
+    }
+    (frame, schema, custom)
+}
+
+fn read_ipc_stream_with_metadata(
+    bytes: &[u8],
+) -> (DataFrame, ArrowSchema, Option<std::sync::Arc<Metadata>>) {
+    let mut cursor = Cursor::new(bytes);
+    let metadata = read_stream_metadata(&mut cursor).unwrap();
+    let schema = metadata.schema.clone();
+    let custom = metadata
+        .custom_schema_metadata
+        .clone()
+        .map(std::sync::Arc::new);
+    let polars_schema = Schema::from_arrow_schema(&schema);
+    let mut reader = StreamReader::new(cursor, metadata, None);
+    let mut frame = DataFrame::empty_with_schema(&polars_schema);
+    for state in &mut reader {
+        if let StreamState::Some(batch) = state.unwrap() {
+            frame.append_record_batch(batch).unwrap();
+        }
+    }
+    (frame, schema, custom)
+}
 
 #[test]
 fn prediction_preserves_identity_and_adds_native_values() {
@@ -127,15 +214,11 @@ fn adopter_categories_use_historical_inclusive_boundaries() {
 #[test]
 fn arrow_scenario_grid_supplies_time_and_rejects_conflicting_times() {
     let mut frame = df!("time" => [0., 1.]).unwrap();
-    let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes).finish(&mut frame).unwrap();
+    let bytes = write_ipc_file_with_metadata(&mut frame, None);
     let mut payload = json!({"scenarios":[{"id":"base","model_key":"logistic",
         "simulation":{"parameters":{"L":100.,"k":1.,"x0":1.}}}]});
     let response = innovate_tabular::scenario_grid_ipc(&bytes, payload.clone()).unwrap();
-    let mut stream = Vec::new();
-    IpcStreamWriter::new(&mut stream)
-        .finish(&mut frame)
-        .unwrap();
+    let stream = write_ipc_stream_with_metadata(&mut frame, None);
     assert_eq!(
         innovate_tabular::scenario_grid_ipc(&stream, payload.clone()).unwrap(),
         response
@@ -161,9 +244,7 @@ fn scenario_arrow_execution_rows_preserve_nested_data_and_order() {
     let envelope = json!({"operation":"execute_scenario_grid","error":null,
         "result":{"executions":rows}});
     let bytes = innovate_tabular::scenario_executions_ipc(&envelope).unwrap();
-    let frame = IpcReader::new(std::io::Cursor::new(bytes))
-        .finish()
-        .unwrap();
+    let (frame, _, _) = read_ipc_file_with_metadata(&bytes);
     assert_eq!(
         frame.column("scenario_id").unwrap().str().unwrap().get(0),
         Some("a")
@@ -202,9 +283,7 @@ fn scenario_arrow_comparisons_preserve_pair_and_ensemble_rows() {
     let response = json!({"operation":"execute_scenario_grid","error":null,
         "result":{"comparisons":rows}});
     let bytes = innovate_tabular::scenario_comparisons_ipc(&response).unwrap();
-    let frame = IpcReader::new(std::io::Cursor::new(bytes))
-        .finish()
-        .unwrap();
+    let (frame, _, _) = read_ipc_file_with_metadata(&bytes);
     assert_eq!(
         frame.column("kind").unwrap().str().unwrap().get(1),
         Some("ensemble")
@@ -231,34 +310,27 @@ fn export_ipc_file_frames_schema_and_preserves_nulls_and_types() {
             .into_iter()
             .collect(),
     );
-    let mut stream = Vec::new();
-    let mut stream_writer = IpcStreamWriter::new(&mut stream);
-    stream_writer.set_custom_schema_metadata(std::sync::Arc::clone(&metadata));
-    stream_writer.finish(&mut frame).unwrap();
-
-    let mut source_file = Vec::new();
-    let mut file_writer = IpcWriter::new(&mut source_file);
-    file_writer.set_custom_schema_metadata(std::sync::Arc::clone(&metadata));
-    file_writer.finish(&mut frame).unwrap();
+    let stream = write_ipc_stream_with_metadata(&mut frame, Some(std::sync::Arc::clone(&metadata)));
+    let source_file =
+        write_ipc_file_with_metadata(&mut frame, Some(std::sync::Arc::clone(&metadata)));
 
     for input in [stream, source_file] {
         let bytes = innovate_tabular::export_ipc_file(&input).unwrap();
         assert_eq!(&bytes[..12], b"ARROW1\0\0\xff\xff\xff\xff");
-        let mut reader = IpcReader::new(std::io::Cursor::new(bytes));
-        assert_eq!(reader.custom_metadata().unwrap().as_ref(), Some(&metadata));
-        assert_eq!(reader.finish().unwrap(), frame);
+        let (decoded, _, custom) = read_ipc_file_with_metadata(&bytes);
+        assert_eq!(custom.as_ref(), Some(&metadata));
+        assert_eq!(decoded, frame);
 
         let bytes = innovate_tabular::export_ipc_stream(&input).unwrap();
-        let mut reader = IpcStreamReader::new(std::io::Cursor::new(bytes));
-        assert_eq!(reader.custom_metadata().unwrap().as_ref(), Some(&metadata));
-        assert_eq!(reader.finish().unwrap(), frame);
+        let (decoded, _, custom) = read_ipc_stream_with_metadata(&bytes);
+        assert_eq!(custom.as_ref(), Some(&metadata));
+        assert_eq!(decoded, frame);
     }
 }
 
 #[test]
 fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
     use polars_arrow::io::ipc::write::{StreamWriter, WriteOptions};
-    use std::io::Cursor;
 
     use polars_arrow::datatypes::ArrowDataType::LargeList;
 
@@ -316,20 +388,19 @@ fn ipc_rewrite_keeps_annotations_for_compatible_field_types() {
     writer.finish().unwrap();
 
     let file = innovate_tabular::export_ipc_file(&source).unwrap();
-    let mut reader = IpcReader::new(Cursor::new(&file));
-    assert_annotations(&reader.schema().unwrap());
+    let (_, file_schema, _) = read_ipc_file_with_metadata(&file);
+    assert_annotations(&file_schema);
     for input in [source, file] {
         let stream = innovate_tabular::export_ipc_stream(&input).unwrap();
-        let mut reader = IpcStreamReader::new(Cursor::new(stream));
-        assert_annotations(&reader.arrow_schema().unwrap());
-        assert_eq!(reader.finish().unwrap(), frame);
+        let (decoded, stream_schema, _) = read_ipc_stream_with_metadata(&stream);
+        assert_annotations(&stream_schema);
+        assert_eq!(decoded, frame);
     }
 }
 
 #[test]
 fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
     use innovate_tabular::paired_outcomes_ipc;
-    use std::io::Cursor;
 
     let parameters = json!([
         {"name":"m","value":100,"unit":"people"},
@@ -347,7 +418,7 @@ fn paired_ipc_preserves_order_and_rejects_reordered_draws() {
     };
     let mut payload = json!({"strategies":[strategy("baseline",3),strategy("alternative",4)]});
     let bytes = paired_outcomes_ipc(&payload).unwrap();
-    let frame = IpcReader::new(Cursor::new(bytes)).finish().unwrap();
+    let (frame, _, _) = read_ipc_file_with_metadata(&bytes);
     assert_eq!(frame.height(), 8);
     let draws = frame.column("draw_id").unwrap().u64().unwrap();
     assert!(

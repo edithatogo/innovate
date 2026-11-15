@@ -19,7 +19,3 @@ debug = 0
 
 [profile.test]
 debug = 0
-
-# Required by the exact upstream Polars source; preserve its immutable patch.
-[patch.crates-io]
-hashbrown = { git = "https://github.com/pola-rs/hashbrown", rev = "d76a6f81abd8f388676aff15068236a8d21c7e1a" }
