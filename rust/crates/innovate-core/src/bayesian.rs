@@ -159,7 +159,7 @@ fn observations(payload: &Value) -> Result<(f64, Vec<f64>), &'static str> {
     Ok((sigma, observed))
 }
 
-struct GaussianPriors<'a>(Vec<(&'a str, f64, f64)>);
+struct GaussianPriors<'a>(Vec<(&'a str, statrs::distribution::Normal)>);
 
 impl<'a> GaussianPriors<'a> {
     fn parse(
@@ -186,7 +186,9 @@ impl<'a> GaussianPriors<'a> {
                     .as_f64()
                     .filter(|sd| *sd > 0.)
                     .ok_or("Gaussian prior sd must be finite and positive")?;
-                Ok((name.as_str(), mean, sd))
+                let dist = statrs::distribution::Normal::new(mean, sd)
+                    .map_err(|_| "Gaussian prior mean and sd must be valid")?;
+                Ok((name.as_str(), dist))
             })
             .collect::<Result<Vec<_>, _>>()?;
         Ok(Self(entries))
@@ -201,13 +203,15 @@ impl<'a> GaussianPriors<'a> {
     }
 
     fn log_density(&self, prediction: &Value) -> f64 {
+        use statrs::distribution::Continuous;
+
         self.0
             .iter()
-            .map(|(name, mean, sd)| {
+            .map(|(name, dist)| {
                 let value = prediction["parameters"][*name]
                     .as_f64()
                     .expect("evaluated parameter");
-                -0.5 * ((value - mean) / sd).powi(2)
+                dist.ln_pdf(value)
             })
             .sum()
     }
@@ -220,6 +224,8 @@ fn log_likelihood(
     observed: &[f64],
     sigma: f64,
 ) -> Result<f64, &'static str> {
+    use statrs::distribution::{Continuous, Normal};
+
     let forecast = kernel
         .predict_model(model, prediction.clone())
         .map_err(|_| "posterior prediction failed")?
@@ -234,7 +240,9 @@ fn log_likelihood(
         let value = value
             .as_f64()
             .ok_or("posterior prediction must be numeric")?;
-        log_weight -= 0.5 * ((value - y) / sigma).powi(2);
+        let dist =
+            Normal::new(*y, sigma).map_err(|_| "Gaussian likelihood parameters must be valid")?;
+        log_weight += dist.ln_pdf(value);
     }
     Ok(log_weight)
 }
@@ -467,17 +475,11 @@ fn rank_scores(values: &[f64]) -> Vec<f64> {
 }
 
 fn normal_quantile(probability: f64) -> f64 {
-    // The bounded draw counts keep the Blom probabilities inside Phi(±8).
-    let (mut low, mut high) = (-8_f64, 8_f64);
-    for _ in 0..48 {
-        let middle = low.midpoint(high);
-        if 0.5 * libm::erfc(-middle / std::f64::consts::SQRT_2) < probability {
-            low = middle;
-        } else {
-            high = middle;
-        }
-    }
-    low.midpoint(high)
+    use statrs::distribution::{ContinuousCDF, Normal};
+
+    Normal::new(0.0, 1.0)
+        .expect("standard normal parameters are valid")
+        .inverse_cdf(probability)
 }
 
 fn split_rhat_moments(splits: &[&[f64]]) -> Result<Option<f64>, &'static str> {
@@ -554,7 +556,10 @@ fn paired_ess(values: &[f64], half: usize) -> Option<f64> {
     let n = half as f64;
     let means: Vec<_> = values
         .chunks_exact(half)
-        .map(|chain| chain.iter().sum::<f64>() / n)
+        .map(|chain| {
+            let origin = chain[0];
+            origin + chain.iter().map(|value| value - origin).sum::<f64>() / n
+        })
         .collect();
     let m = means.len() as f64;
     let grand_mean = means.iter().sum::<f64>() / m;
@@ -678,4 +683,48 @@ pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
             "effective_sample_size":effective_sample_size(&input)?}));
     }
     Ok(json!({"parameters":parameter_names,"chains":results,"diagnostics":diagnostics}))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use statrs::distribution::{Continuous, ContinuousCDF, Normal};
+
+    #[test]
+    fn normal_quantile_matches_statrs_across_tails() {
+        let standard = Normal::new(0.0, 1.0).expect("valid standard normal");
+        let cases = [
+            (1e-6, -4.753424308817088_f64),
+            (0.025, -1.9599639845400545_f64),
+            (0.5, 0.0_f64),
+            (0.975, 1.9599639845400545_f64),
+            (1.0 - 1e-6, 4.753424308817088_f64),
+        ];
+        for (p, expected) in cases {
+            let q = normal_quantile(p);
+            assert!(
+                (q - expected).abs() < 1e-10,
+                "quantile mismatch at p={p}: got={q}, expected={expected}"
+            );
+            assert!(
+                (standard.cdf(q) - p).abs() < 1e-10,
+                "cdf roundtrip mismatch at p={p}: q={q}, cdf={}",
+                standard.cdf(q)
+            );
+        }
+    }
+
+    #[test]
+    fn normal_ln_pdf_matches_unnormalized_gaussian_differences() {
+        let dist = Normal::new(2.5, 0.75).expect("valid normal");
+        let x1 = 1.9;
+        let x2 = 3.4;
+        let statrs_diff = dist.ln_pdf(x2) - dist.ln_pdf(x1);
+        let manual_diff =
+            -0.5 * ((x2 - 2.5) / 0.75_f64).powi(2) - (-0.5 * ((x1 - 2.5) / 0.75_f64).powi(2));
+        assert!(
+            (statrs_diff - manual_diff).abs() < 1e-14,
+            "ln_pdf difference mismatch: statrs={statrs_diff}, manual={manual_diff}"
+        );
+    }
 }

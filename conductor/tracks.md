@@ -546,7 +546,7 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 - [x] **Track: Rust Linear Algebra and Nonlinear Optimization Modernization** *(Completed — P1, Order #4; after #1–#2; parallelizable with #5)*
   *Link: [./archive/rust_linalg_optimization_20261115/](./archive/rust_linalg_optimization_20261115/)*
 
-- [ ] **Track: Rust Statistical Distributions and Quantiles Modernization** *(Planned — P1, Order #5; after #1–#2; parallelizable with #4)*
+- [~] **Track: Rust Statistical Distributions and Quantiles Modernization** *(In Progress — P1, Order #5; after #1–#2; parallelizable with #4)*
   *Link: [./tracks/rust_stats_distributions_20261115/](./tracks/rust_stats_distributions_20261115/)*
 
 - [ ] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Planned — P1, Order #6; after #4)*
