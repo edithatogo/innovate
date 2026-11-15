@@ -3,6 +3,6 @@
   "type": "refactor",
   "status": "in_progress",
   "created_at": "2026-11-15T00:00:00Z",
-  "updated_at": "2026-11-15T06:36:08Z",
+  "updated_at": "2026-11-15T06:47:42Z",
   "description": "Promote transitive petgraph to a direct dependency in innovate-core and replace custom graph storage/traversal in network.rs."
 }

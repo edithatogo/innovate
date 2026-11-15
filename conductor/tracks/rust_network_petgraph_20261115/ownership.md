@@ -32,7 +32,7 @@ Please add this direct dependency to `[dependencies]` in
 `rust/crates/innovate-core/Cargo.toml`:
 
 ```toml
-petgraph = { version = "=0.8.3", default-features = false, features = ["std"] }
+petgraph = { version = "=0.8.3", default-features = false }
 ```
 
 The checked `Cargo.lock` already contains crates.io `petgraph` 0.8.3, checksum
@@ -44,6 +44,13 @@ need no optional graph algorithms, serialization, parallelism or parser features
 Verify the resolved features and package closure with
 `cargo tree --locked -p innovate-core -i petgraph` and
 `cargo tree --locked -p innovate-core -e features -i petgraph`.
+
+This minimal declaration supersedes the initial PR request that also listed
+`features = ["std"]`. Actual metadata showed that `std` was not enabled on
+the locked petgraph dependency; the APIs used here do not need it. The final
+request deliberately adds no feature. A standalone-package comparison is used
+for conditional local tests, because whole-workspace metadata also unifies
+unrelated tabular/binding features and is not an equivalent comparison scope.
 
 Shared registry status and full workspace/installed-consumer/docs/Miri/security
 gates also remain with the integrator. This lane will supply exact source-bound

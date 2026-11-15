@@ -10,6 +10,11 @@ use kairo_ecs_rng::{
     rand_distr::{Exp, Uniform},
 };
 use kairo_ecs_types::{EntityId, EventKind, SimTime, StepOutcome};
+use petgraph::{
+    Direction::Incoming,
+    graph::{DiGraph, NodeIndex},
+    visit::EdgeRef,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -336,7 +341,8 @@ impl HazardForcing {
 }
 
 struct Graph {
-    incoming: Vec<Vec<(usize, f64)>>,
+    // Node weights cache incoming degree, keeping hazard lookup constant-time.
+    adjacency: DiGraph<usize, f64>,
     totals: Vec<f64>,
     weighted: bool,
 }
@@ -348,14 +354,13 @@ impl Graph {
         edges: &[[usize; 2]],
         weights: Option<&[f64]>,
     ) -> Result<Self, &'static str> {
-        let mut incoming = vec![Vec::new(); population];
         let mut unique = std::collections::HashSet::new();
         if weights.is_some_and(|weights| {
             weights.len() != edges.len() || weights.iter().any(|w| !w.is_finite() || *w <= 0.)
         }) {
             return Err("edge_weights must contain one finite positive weight per edge");
         }
-        for (index, &[a, b]) in edges.iter().enumerate() {
+        for &[a, b] in edges {
             let key = if directed {
                 (a, b)
             } else {
@@ -364,27 +369,57 @@ impl Graph {
             if a >= population || b >= population || a == b || !unique.insert(key) {
                 return Err("edges must be unique non-self pairs within population");
             }
+        }
+        let mut adjacency = DiGraph::<usize, f64>::with_capacity(
+            population,
+            edges.len() * if directed { 1 } else { 2 },
+        );
+        for _ in 0..population {
+            adjacency.add_node(0);
+        }
+        // Directed petgraph adjacency iterates newest edges first. Reverse
+        // insertion preserves the original input-relative floating-point folds.
+        // Undirected inputs need separate arcs: normalization is per target.
+        for (index, &[a, b]) in edges.iter().enumerate().rev() {
+            let (a, b) = (NodeIndex::new(a), NodeIndex::new(b));
             let weight = weights.map_or(1., |w| w[index]);
-            incoming[b].push((a, weight));
+            adjacency.add_edge(a, b, weight);
+            adjacency[b] += 1;
             if !directed {
-                incoming[a].push((b, weight));
+                adjacency.add_edge(b, a, weight);
+                adjacency[a] += 1;
             }
         }
         let mut totals = vec![0.; population];
         if weights.is_some() {
-            for (neighbors, total) in incoming.iter_mut().zip(&mut totals) {
-                let scale = neighbors.iter().map(|(_, w)| *w).fold(0., f64::max);
-                for (_, weight) in neighbors {
+            for node in adjacency.node_indices() {
+                let scale = adjacency
+                    .edges_directed(node, Incoming)
+                    .map(|edge| *edge.weight())
+                    .fold(0., f64::max);
+                let mut neighbors = adjacency.neighbors_directed(node, Incoming).detach();
+                while let Some(edge) = neighbors.next_edge(&adjacency) {
+                    let weight = &mut adjacency[edge];
                     *weight /= scale;
-                    *total += *weight;
+                    totals[node.index()] += *weight;
                 }
             }
         }
         Ok(Self {
-            incoming,
+            adjacency,
             totals,
             weighted: weights.is_some(),
         })
+    }
+
+    fn degree(&self, node: usize) -> usize {
+        self.adjacency[NodeIndex::new(node)]
+    }
+
+    fn incoming(&self, node: usize) -> impl Iterator<Item = (usize, f64)> + '_ {
+        self.adjacency
+            .edges_directed(NodeIndex::new(node), Incoming)
+            .map(|edge| (edge.source().index(), *edge.weight()))
     }
 }
 fn ticks() -> u64 {
@@ -908,7 +943,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     if context.get::<u8>(agents[i]) != Some(&0) {
                         0.
                     } else {
-                        let degree = graph.incoming[i].len();
+                        let degree = graph.degree(i);
                         let multiplier = imitation_weights[i];
                         let rate = imitation * multiplier;
                         let exposed_rate = |fraction| {
@@ -922,15 +957,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                             + if degree == 0 {
                                 0.
                             } else if graph.weighted {
-                                let exposed: f64 = graph.incoming[i]
-                                    .iter()
+                                let exposed: f64 = graph
+                                    .incoming(i)
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .map(|(_, weight)| weight)
                                     .sum();
                                 exposed_rate(exposed / graph.totals[i])
                             } else {
-                                let exposed = graph.incoming[i]
-                                    .iter()
+                                let exposed = graph
+                                    .incoming(i)
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64;
                                 // Preserve seeded arithmetic for existing finite unforced paths.
@@ -1296,7 +1331,15 @@ mod tests {
     // Only this observation adapter changes with storage representation. The
     // independently calculated fixture values and assertions stay unchanged.
     fn graph_snapshot(graph: &Graph) -> Vec<Vec<(usize, f64)>> {
-        graph.incoming.clone()
+        graph
+            .adjacency
+            .node_indices()
+            .map(|node| {
+                let incoming: Vec<_> = graph.incoming(node.index()).collect();
+                assert_eq!(graph.degree(node.index()), incoming.len());
+                incoming
+            })
+            .collect()
     }
 
     #[test]
