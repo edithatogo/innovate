@@ -1,9 +1,12 @@
 //! Polars-owned tabular contracts and Arrow IPC exchange. IPC currently copies.
 #![forbid(unsafe_code)]
 use innovate_core::{KernelBinding, KernelRequest, json};
-use polars::prelude::*;
-use polars_arrow::datatypes::ArrowDataType;
+use polars_arrow::datatypes::{ArrowDataType, Metadata};
+use polars_arrow::io::ipc::read::{
+    FileReader, StreamReader, StreamState, read_file_metadata, read_stream_metadata,
+};
 use polars_arrow::io::ipc::write::{FileWriter, StreamWriter, WriteOptions};
+use polars_core::prelude::*;
 use serde_json::Value;
 use std::io::Cursor;
 
@@ -210,12 +213,42 @@ pub fn predict_with_options(
     Ok(frame)
 }
 
-fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
+fn read_ipc_with_metadata(
+    data: &[u8],
+) -> PolarsResult<(DataFrame, ArrowSchema, Option<std::sync::Arc<Metadata>>)> {
+    let mut cursor = Cursor::new(data);
     if data.starts_with(b"ARROW1") {
-        IpcReader::new(Cursor::new(data)).finish()
+        let metadata = read_file_metadata(&mut cursor)?;
+        let schema = metadata.schema.as_ref().clone();
+        let custom = metadata.custom_schema_metadata.clone();
+        let polars_schema = Schema::from_arrow_schema(&schema);
+        let reader = FileReader::new(cursor, metadata, None, None);
+        let mut frame = DataFrame::empty_with_schema(&polars_schema);
+        for batch in reader {
+            frame.append_record_batch(batch?)?;
+        }
+        Ok((frame, schema, custom))
     } else {
-        IpcStreamReader::new(Cursor::new(data)).finish()
+        let metadata = read_stream_metadata(&mut cursor)?;
+        let schema = metadata.schema.clone();
+        let custom = metadata
+            .custom_schema_metadata
+            .clone()
+            .map(std::sync::Arc::new);
+        let polars_schema = Schema::from_arrow_schema(&schema);
+        let mut reader = StreamReader::new(cursor, metadata, None);
+        let mut frame = DataFrame::empty_with_schema(&polars_schema);
+        for state in &mut reader {
+            if let StreamState::Some(batch) = state? {
+                frame.append_record_batch(batch)?;
+            }
+        }
+        Ok((frame, schema, custom))
     }
+}
+
+fn read_ipc(data: &[u8]) -> PolarsResult<DataFrame> {
+    Ok(read_ipc_with_metadata(data)?.0)
 }
 
 /// Rewrite Arrow IPC file or stream bytes as interoperable IPC file bytes.
@@ -242,17 +275,7 @@ pub fn export_ipc_stream(data: &[u8]) -> PolarsResult<Vec<u8>> {
 }
 
 fn rewrite_ipc(data: &[u8], stream: bool) -> PolarsResult<Vec<u8>> {
-    let (mut frame, input_schema, metadata) = if data.starts_with(b"ARROW1") {
-        let mut reader = IpcReader::new(Cursor::new(data));
-        let schema = reader.schema()?;
-        let metadata = reader.custom_metadata()?;
-        (reader.finish()?, schema, metadata)
-    } else {
-        let mut reader = IpcStreamReader::new(Cursor::new(data));
-        let schema = reader.arrow_schema()?.into();
-        let metadata = reader.custom_metadata()?;
-        (reader.finish()?, schema, metadata)
-    };
+    let (mut frame, input_schema, metadata) = read_ipc_with_metadata(data)?;
     let compat = CompatLevel::oldest();
     let mut schema = frame.schema().to_arrow(compat);
     for (name, field) in schema.iter_mut() {
@@ -353,9 +376,7 @@ pub fn predict_ipc_with_options(
 ) -> PolarsResult<Vec<u8>> {
     let frame = read_ipc(data)?;
     let mut output = predict_with_options(frame, model, parameters, options)?;
-    let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes).finish(&mut output)?;
-    Ok(bytes)
+    write_ipc_file(&mut output)
 }
 
 /// Fit a native model from IPC bytes using `time` and `observed` columns.
@@ -439,9 +460,7 @@ pub fn categorize_adopters(mut frame: DataFrame, rate_column: &str) -> PolarsRes
 pub fn categorize_adopters_ipc(data: &[u8], rate_column: &str) -> PolarsResult<Vec<u8>> {
     let frame = read_ipc(data)?;
     let mut output = categorize_adopters(frame, rate_column)?;
-    let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes).finish(&mut output)?;
-    Ok(bytes)
+    write_ipc_file(&mut output)
 }
 
 /// Execute a scenario grid with one shared time column from Arrow IPC file or stream bytes.
@@ -576,10 +595,21 @@ fn scenario_rows<'a>(response: &'a Value, field: &str) -> PolarsResult<&'a [Valu
 }
 
 fn write_ipc_file(frame: &mut DataFrame) -> PolarsResult<Vec<u8>> {
+    let compat = CompatLevel::oldest();
+    let schema = frame.schema().to_arrow(compat);
+    frame.align_chunks_par();
     let mut bytes = Vec::new();
-    IpcWriter::new(&mut bytes)
-        .with_compat_level(CompatLevel::oldest())
-        .finish(frame)?;
+    let mut writer = FileWriter::new(
+        &mut bytes,
+        schema.into(),
+        None,
+        WriteOptions { compression: None },
+    );
+    writer.start()?;
+    for batch in frame.iter_chunks(compat, true) {
+        writer.write(&batch, None)?;
+    }
+    writer.finish()?;
     Ok(bytes)
 }
 
