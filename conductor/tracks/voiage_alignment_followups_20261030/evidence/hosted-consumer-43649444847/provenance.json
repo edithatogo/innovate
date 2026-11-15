@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-14T23:12:17.272144+00:00",
+  "repository": "edithatogo/innovate",
+  "issue": 559,
+  "run_id": 43649444847,
+  "job_id": 132614414776,
+  "run_url": "https://github.com/edithatogo/innovate/actions/runs/43649444847",
+  "job_url": "https://github.com/edithatogo/innovate/actions/runs/43649444847/job/132614414776",
+  "event": "push",
+  "run_conclusion": "success",
+  "checkout_revision": "384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+  "checkout_tree": "432c386c5be53df9e67097acf481e3e644e4434e",
+  "build_command": "bash scripts/build_release_wheel.sh .venv",
+  "build_provenance": "Actual job log records source-distribution creation from checkout and release-wheel build from its extracted source; package version alone is not used as source provenance.",
+  "tools": {
+    "python": "3.15.2",
+    "rust": "1.99.1",
+    "uv": "0.13.8"
+  },
+  "artifact_id": 14135661886,
+  "artifact_name": "voiage-consumer-384ed3b0f42d967f520dc66ef536d8fa0d92df7d",
+  "archive_size_bytes": 2376,
+  "archive_sha256": "6800e15218c51ee8181b3aea0cf73be4621ed8c28c14c4cfc555d73a7be1ebbc",
+  "api_reported_archive_sha256": "6800e15218c51ee8181b3aea0cf73be4621ed8c28c14c4cfc555d73a7be1ebbc",
+  "archive_downloaded": true,
+  "archive_sha256_independently_verified": true,
+  "qualification_json_independently_parsed": true,
+  "retained_files": {
+    "qualification.json": {
+      "archive_member": "qualification.json",
+      "sha256": "08dfb17e16f3f44e11000abf1d5eecfd3efd29ab372c700b7cafa0165739e4a8",
+      "bytes": 9392
+    },
+    "tests.txt": {
+      "archive_member": "tests.log",
+      "sha256": "079a4fa921f23a2729d90db49c3df26101dae3fc7edbc1c0cc091d55dfaac909",
+      "bytes": 99
+    }
+  },
+  "qualification_stderr_empty": true,
+  "worker_exit_status": 0,
+  "focused_tests": {
+    "passed": 19,
+    "duration_seconds": 1.85
+  },
+  "normalized_native_cases": 6,
+  "all_digests_match": true,
+  "all_chunk_layouts_match": true,
+  "all_native_predictions_match_independent_expectation": [
+    1,
+    2,
+    3
+  ],
+  "recorded_working_directory_outside_checkout": true,
+  "all_recorded_import_paths_outside_checkout": true,
+  "inspection_sequence": "The earlier current-main-consumer API receipt accurately states that archive bytes were not inspected at its 23:08 UTC observation. Executor access subsequently returned, enabling this independent download/hash/JSON verification.",
+  "scope": "Synthetic CPU normalized numerical projection and EVPI consumer only; the broader voiage_arrow_handoff and all38 scientific obligations remain open."
+}

@@ -1,5 +1,9 @@
 # Normalized Voiage consumer qualification
 
+> Historical checkpoint. [Current acceptance record](acceptance-20261115.md) supersedes
+> the pending execution, signed-out alert, signing and validator status below.
+> The original observations and failures remain intact as dated evidence.
+
 This bounded continuation addresses [issue #559](https://github.com/edithatogo/innovate/issues/559)
 inside the existing follow-up track. It starts from Innovate
 `276c2e505a0ce26910820fe8a94a6a498f505700`. The parent scientific programme,

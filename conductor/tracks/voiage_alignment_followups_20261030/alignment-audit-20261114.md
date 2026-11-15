@@ -1,5 +1,9 @@
 # Voiage alignment: dependency and automation reconciliation
 
+> Historical checkpoint. [Current acceptance record](acceptance-20261115.md) supersedes
+> the pending execution, signed-out alert, signing and validator status below.
+> The original observations and failures remain intact as dated evidence.
+
 Date: 14 November 2026. Owning issue: [Innovate #559](https://github.com/edithatogo/innovate/issues/559).
 Source baseline: [`276c2e505a0ce26910820fe8a94a6a498f505700`](https://github.com/edithatogo/innovate/tree/276c2e505a0ce26910820fe8a94a6a498f505700).
 
