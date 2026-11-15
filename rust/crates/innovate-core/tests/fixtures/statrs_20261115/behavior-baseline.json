@@ -1,0 +1,822 @@
+{
+  "schema_version": 1,
+  "qualification": "pre-migration behavioral replay baseline, not an independent mathematical oracle",
+  "provenance": {
+    "base_commit": "42189a223fd44c823ca11aec689ea67b11c25790",
+    "source_sha256": {
+      "rust/crates/innovate-core/src/bayesian.rs": "d0e52fe184dc3152cd83b6ab74772927d74b0870ca10807de489aedcf3f05592",
+      "rust/crates/innovate-core/src/bootstrap.rs": "6f0e46f6205d58f092c2c600298fdc89806685d8dc6e06db893f3be440936e4d",
+      "rust/crates/innovate-core/src/numerics.rs": "dfee5a727391b932c02502a5744f58707933c63835690fa55679237168f9ffde",
+      "Cargo.lock": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e"
+    },
+    "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+    "capture_binary_sha256": "decd75028b0a48cae2c056a7270b899e8bd6e5b932788bcf4cc07f5f72c0cefe",
+    "build_command": "cargo build --locked --offline -p innovate-core --lib",
+    "numeric_comparison": "exact JSON values for same platform; independent numerical references are normal.json"
+  },
+  "cases": [
+    {
+      "id": "scalar_prior",
+      "request": {
+        "schema_version": "2.0",
+        "operation": "bayesian_metropolis",
+        "payload": {
+          "forecast_model": "logistic",
+          "parameter": "L",
+          "bounds": [
+            80.0,
+            120.0
+          ],
+          "draws": 12,
+          "warmup": 7,
+          "seed": 42,
+          "proposal_step": 4.0,
+          "noise_sd": 1.0,
+          "observed": [
+            50.0
+          ],
+          "gaussian_priors": {
+            "L": {
+              "mean": 96.0,
+              "sd": 2.0
+            }
+          },
+          "prediction": {
+            "inputs": {
+              "time": [
+                2.0
+              ]
+            },
+            "parameters": {
+              "L": 100.0,
+              "k": 0.5,
+              "x0": 2.0
+            }
+          }
+        }
+      },
+      "expected": {
+        "error": null,
+        "metadata": {
+          "runtime": "rust_native"
+        },
+        "model_key": null,
+        "operation": "bayesian_metropolis",
+        "result": {
+          "acceptance_rate": 0.25,
+          "accepted": 3,
+          "draws": 12,
+          "likelihood": "independent_gaussian_known_sd",
+          "method": "random_walk_metropolis",
+          "parameter": "L",
+          "posterior_mean": 97.09385131181435,
+          "prior": "independent_gaussian_or_uniform_within_bounds",
+          "samples": [
+            99.01588490844685,
+            99.01588490844685,
+            99.01588490844685,
+            99.01588490844685,
+            99.01588490844685,
+            97.89524519415853,
+            98.0259080307847,
+            94.82512759491898,
+            94.82512759491898,
+            94.82512759491898,
+            94.82512759491898,
+            94.82512759491898
+          ],
+          "seed": 42,
+          "warmup": 7
+        },
+        "schema_version": "2.0"
+      }
+    },
+    {
+      "id": "joint_prior",
+      "request": {
+        "schema_version": "2.0",
+        "operation": "bayesian_metropolis",
+        "payload": {
+          "forecast_model": "logistic",
+          "axes": [
+            {
+              "parameter": "L",
+              "bounds": [
+                80.0,
+                120.0
+              ],
+              "proposal_step": 4.0
+            },
+            {
+              "parameter": "k",
+              "bounds": [
+                0.1,
+                0.9
+              ],
+              "proposal_step": 0.08
+            }
+          ],
+          "draws": 12,
+          "warmup": 7,
+          "seed": 17,
+          "noise_sd": 1.0,
+          "observed": [
+            38.0,
+            50.0,
+            63.0
+          ],
+          "gaussian_priors": {
+            "L": {
+              "mean": 96.0,
+              "sd": 2.0
+            },
+            "k": {
+              "mean": 0.6,
+              "sd": 0.12
+            }
+          },
+          "prediction": {
+            "inputs": {
+              "time": [
+                1.0,
+                2.0,
+                3.0
+              ]
+            },
+            "parameters": {
+              "L": 100.0,
+              "k": 0.5,
+              "x0": 2.0
+            }
+          }
+        }
+      },
+      "expected": {
+        "error": null,
+        "metadata": {
+          "runtime": "rust_native"
+        },
+        "model_key": null,
+        "operation": "bayesian_metropolis",
+        "result": {
+          "acceptance_rate": 0.25,
+          "accepted": 3,
+          "draws": 12,
+          "likelihood": "independent_gaussian_known_sd",
+          "method": "random_walk_metropolis",
+          "parameters": [
+            "L",
+            "k"
+          ],
+          "posterior_means": [
+            99.06372525195238,
+            0.494582862678034
+          ],
+          "prior": "independent_gaussian_or_uniform_within_bounds",
+          "samples": [
+            [
+              98.61314946280041,
+              0.49553211531161157
+            ],
+            [
+              98.61314946280041,
+              0.49553211531161157
+            ],
+            [
+              101.36023273273035,
+              0.5289057651621721
+            ],
+            [
+              101.36023273273035,
+              0.5289057651621721
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              98.73324552403216,
+              0.4761901862823137
+            ],
+            [
+              97.6852199641419,
+              0.552787287212645
+            ]
+          ],
+          "seed": 17,
+          "warmup": 7
+        },
+        "schema_version": "2.0"
+      }
+    },
+    {
+      "id": "grid_prior",
+      "request": {
+        "schema_version": "2.0",
+        "operation": "bayesian_parameter_grid",
+        "payload": {
+          "forecast_model": "logistic",
+          "parameter": "L",
+          "bounds": [
+            90.0,
+            110.0
+          ],
+          "points": 11,
+          "noise_sd": 1.0,
+          "observed": [
+            50.0
+          ],
+          "gaussian_priors": {
+            "L": {
+              "mean": 96.0,
+              "sd": 2.0
+            }
+          },
+          "prediction": {
+            "inputs": {
+              "time": [
+                2.0
+              ]
+            },
+            "parameters": {
+              "L": 100.0,
+              "k": 0.5,
+              "x0": 2.0
+            }
+          }
+        }
+      },
+      "expected": {
+        "error": null,
+        "metadata": {
+          "runtime": "rust_native"
+        },
+        "model_key": null,
+        "operation": "bayesian_parameter_grid",
+        "result": {
+          "credible_interval": [
+            94.54545454545455,
+            100.0
+          ],
+          "credible_mass": 0.95,
+          "grid": [
+            90.9090909090909,
+            92.72727272727273,
+            94.54545454545455,
+            96.36363636363636,
+            98.18181818181819,
+            100.0,
+            101.81818181818181,
+            103.63636363636364,
+            105.45454545454545,
+            107.27272727272728,
+            109.0909090909091
+          ],
+          "interval_method": "equal_tail_discrete_grid",
+          "likelihood": "independent_gaussian_known_sd",
+          "method": "midpoint_grid_quadrature",
+          "parameter": "L",
+          "posterior_mass": [
+            1.7817160443937551e-06,
+            0.0004914752982867739,
+            0.025961081476078614,
+            0.26260424764223655,
+            0.5086728921169736,
+            0.1886832389572329,
+            0.01340250360232832,
+            0.00018230409480301805,
+            4.7485913357954305e-07,
+            2.368596313825005e-10,
+            2.2624301697243484e-14
+          ],
+          "posterior_mean": 98.00005290129789,
+          "prior": "independent_gaussian_or_uniform_within_bounds"
+        },
+        "schema_version": "2.0"
+      }
+    },
+    {
+      "id": "bootstrap_cases",
+      "request": {
+        "schema_version": "2.0",
+        "operation": "bootstrap_fit",
+        "payload": {
+          "fit_model": "logistic",
+          "draws": 8,
+          "seed": 42,
+          "interval_mass": 0.8,
+          "forecast_inputs": {
+            "time": [
+              11,
+              12
+            ]
+          },
+          "fit": {
+            "inputs": {
+              "time": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              "observed": [
+                5.932417589886875,
+                10.609682119561297,
+                19.881611144141825,
+                33.581222783183385,
+                49.8,
+                66.91877721681661,
+                79.81838885585816,
+                89.3903178804387,
+                94.16758241011314,
+                97.26877692486437,
+                98.3225968306727
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "error": null,
+        "metadata": {
+          "runtime": "rust_native"
+        },
+        "model_key": null,
+        "operation": "bootstrap_fit",
+        "result": {
+          "baseline_optimizer": {
+            "alternative_start_scaled_rss_gap": 4.87890977618477e-19,
+            "converged": true,
+            "converged_starts": 3,
+            "gradient_max_abs": 2.2924639508752065e-11,
+            "initialization": "model_specific_native_estimate",
+            "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+            "iterations": 4,
+            "max_iterations": 300,
+            "method": "deterministic_multistart_damped_least_squares",
+            "scaled_rss": 6.915791506175315e-05,
+            "selected_start_index": 0,
+            "start_reports": [
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.017165144071831815,
+                  1.942855769708985,
+                  0.39996880177862526
+                ],
+                "initial_scaled_rss": 7.153363668210714e-05,
+                "initial_transformed_parameters": [
+                  0.016552319196249082,
+                  1.9421164233072685,
+                  0.3995150643450446
+                ],
+                "iterations": 4,
+                "scaled_rss": 6.915791506175315e-05,
+                "termination": "gradient_or_residual_tolerance"
+              },
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.017165144382667457,
+                  1.9428557680382872,
+                  0.3999688018849344
+                ],
+                "initial_scaled_rss": 0.09537880171776375,
+                "initial_transformed_parameters": [
+                  0.11655231919624909,
+                  2.0421164233072684,
+                  0.49951506434504456
+                ],
+                "iterations": 6,
+                "scaled_rss": 6.915791506175364e-05,
+                "termination": "gradient_or_residual_tolerance"
+              },
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.01716514432789816,
+                  1.942855768328453,
+                  0.3999688018656699
+                ],
+                "initial_scaled_rss": 0.07660290435690462,
+                "initial_transformed_parameters": [
+                  -0.08344768080375092,
+                  1.8421164233072684,
+                  0.2995150643450446
+                ],
+                "iterations": 6,
+                "scaled_rss": 6.915791506175413e-05,
+                "termination": "gradient_or_residual_tolerance"
+              }
+            ],
+            "starts": 3,
+            "termination": "gradient_or_residual_tolerance"
+          },
+          "baseline_parameters": {
+            "L": 100.02488659835414,
+            "k": 0.6978651963673055,
+            "x0": 3.9996880177862524
+          },
+          "draws": 8,
+          "estimates": {
+            "L": [
+              99.80222521018258,
+              100.09327002028105,
+              99.98356251532384,
+              100.04422309764746,
+              99.93872925188492,
+              100.25498054417237,
+              99.66692534297155,
+              100.12401453074061
+            ],
+            "k": [
+              0.6979364426793573,
+              0.6973659719129078,
+              0.7024510033136829,
+              0.6945551323435626,
+              0.6960629795322415,
+              0.6955915501355971,
+              0.6994040830257138,
+              0.6987108196742476
+            ],
+            "x0": [
+              3.9875829052112017,
+              4.012722635157031,
+              3.989518506971799,
+              4.006896207536317,
+              3.988554577377796,
+              4.005945074158546,
+              3.9906808359168977,
+              4.004687434613391
+            ]
+          },
+          "failed": 0,
+          "failure_counts": {
+            "fit_error": 0,
+            "nonconverged": 0,
+            "nonfinite_synthetic": 0,
+            "rank_deficient": 0
+          },
+          "forecast": {
+            "baseline_rows": [
+              [
+                99.27466279743558
+              ],
+              [
+                99.65012828497821
+              ]
+            ],
+            "columns": [
+              "prediction"
+            ],
+            "failed": 0,
+            "interval_mass": 0.8,
+            "interval_method": "percentile_of_refitted_mean_paths",
+            "pointwise_intervals": [
+              [
+                [
+                  99.02178680318971,
+                  99.40872322487768
+                ]
+              ],
+              [
+                [
+                  99.3922625444759,
+                  99.78632283485906
+                ]
+              ]
+            ],
+            "succeeded": 8,
+            "time": [
+              11,
+              12
+            ]
+          },
+          "interval_mass": 0.8,
+          "interval_method": "percentile",
+          "method": "paired_case_resampling",
+          "parameter_correlation": {
+            "L": {
+              "L": 1.0,
+              "k": -0.35818230343081453,
+              "x0": 0.7412284926585224
+            },
+            "k": {
+              "L": -0.35818230343081453,
+              "k": 1.0,
+              "x0": -0.46512646484155473
+            },
+            "x0": {
+              "L": 0.7412284926585224,
+              "k": -0.46512646484155473,
+              "x0": 1.0
+            }
+          },
+          "parameter_intervals": {
+            "L": [
+              99.76163525001928,
+              100.16330433477015
+            ],
+            "k": [
+              0.6952806247979868,
+              0.7003181591121046
+            ],
+            "x0": [
+              3.9882630757278177,
+              4.008644135822531
+            ]
+          },
+          "parameter_standard_errors": {
+            "L": 0.18672667270989798,
+            "k": 0.0024972041154300785,
+            "x0": 0.010185037389068537
+          },
+          "seed": 42,
+          "succeeded": 8
+        },
+        "schema_version": "2.0"
+      }
+    },
+    {
+      "id": "bootstrap_residuals",
+      "request": {
+        "schema_version": "2.0",
+        "operation": "bootstrap_fit",
+        "payload": {
+          "fit_model": "logistic",
+          "draws": 8,
+          "seed": 42,
+          "interval_mass": 0.8,
+          "forecast_inputs": {
+            "time": [
+              11,
+              12
+            ]
+          },
+          "fit": {
+            "inputs": {
+              "time": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              "observed": [
+                5.932417589886875,
+                10.609682119561297,
+                19.881611144141825,
+                33.581222783183385,
+                49.8,
+                66.91877721681661,
+                79.81838885585816,
+                89.3903178804387,
+                94.16758241011314,
+                97.26877692486437,
+                98.3225968306727
+              ]
+            }
+          },
+          "method": "centered_residual_resampling"
+        }
+      },
+      "expected": {
+        "error": null,
+        "metadata": {
+          "runtime": "rust_native"
+        },
+        "model_key": null,
+        "operation": "bootstrap_fit",
+        "result": {
+          "baseline_optimizer": {
+            "alternative_start_scaled_rss_gap": 4.87890977618477e-19,
+            "converged": true,
+            "converged_starts": 3,
+            "gradient_max_abs": 2.2924639508752065e-11,
+            "initialization": "model_specific_native_estimate",
+            "interpretation": "numerical termination only; not a global optimum or statistical acceptance",
+            "iterations": 4,
+            "max_iterations": 300,
+            "method": "deterministic_multistart_damped_least_squares",
+            "scaled_rss": 6.915791506175315e-05,
+            "selected_start_index": 0,
+            "start_reports": [
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.017165144071831815,
+                  1.942855769708985,
+                  0.39996880177862526
+                ],
+                "initial_scaled_rss": 7.153363668210714e-05,
+                "initial_transformed_parameters": [
+                  0.016552319196249082,
+                  1.9421164233072685,
+                  0.3995150643450446
+                ],
+                "iterations": 4,
+                "scaled_rss": 6.915791506175315e-05,
+                "termination": "gradient_or_residual_tolerance"
+              },
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.017165144382667457,
+                  1.9428557680382872,
+                  0.3999688018849344
+                ],
+                "initial_scaled_rss": 0.09537880171776375,
+                "initial_transformed_parameters": [
+                  0.11655231919624909,
+                  2.0421164233072684,
+                  0.49951506434504456
+                ],
+                "iterations": 6,
+                "scaled_rss": 6.915791506175364e-05,
+                "termination": "gradient_or_residual_tolerance"
+              },
+              {
+                "converged": true,
+                "final_transformed_parameters": [
+                  0.01716514432789816,
+                  1.942855768328453,
+                  0.3999688018656699
+                ],
+                "initial_scaled_rss": 0.07660290435690462,
+                "initial_transformed_parameters": [
+                  -0.08344768080375092,
+                  1.8421164233072684,
+                  0.2995150643450446
+                ],
+                "iterations": 6,
+                "scaled_rss": 6.915791506175413e-05,
+                "termination": "gradient_or_residual_tolerance"
+              }
+            ],
+            "starts": 3,
+            "termination": "gradient_or_residual_tolerance"
+          },
+          "baseline_parameters": {
+            "L": 100.02488659835414,
+            "k": 0.6978651963673055,
+            "x0": 3.9996880177862524
+          },
+          "draws": 8,
+          "estimates": {
+            "L": [
+              99.94041974130346,
+              99.68349423852047,
+              100.13731274846907,
+              100.14389729979165,
+              100.08875396081616,
+              100.3830155513606,
+              99.68545009211996,
+              100.30543531850665
+            ],
+            "k": [
+              0.7022427097510847,
+              0.70773376174097,
+              0.702152815000753,
+              0.6967791858466957,
+              0.6972270603162884,
+              0.6926540161355255,
+              0.7017772085353609,
+              0.6932803409174089
+            ],
+            "x0": [
+              3.994265806565898,
+              3.988267525413989,
+              4.00211216322122,
+              4.010213440350333,
+              3.996426008589346,
+              4.0135218805099635,
+              3.9885687492129334,
+              4.020897367368251
+            ]
+          },
+          "failed": 0,
+          "failure_counts": {
+            "fit_error": 0,
+            "nonconverged": 0,
+            "nonfinite_synthetic": 0,
+            "rank_deficient": 0
+          },
+          "forecast": {
+            "baseline_rows": [
+              [
+                99.27466279743558
+              ],
+              [
+                99.65012828497821
+              ]
+            ],
+            "columns": [
+              "prediction"
+            ],
+            "failed": 0,
+            "interval_mass": 0.8,
+            "interval_method": "percentile_of_refitted_mean_paths",
+            "pointwise_intervals": [
+              [
+                [
+                  98.98270971939422,
+                  99.54060936459324
+                ]
+              ],
+              [
+                [
+                  99.33659750467928,
+                  99.9330840192895
+                ]
+              ]
+            ],
+            "succeeded": 8,
+            "time": [
+              11,
+              12
+            ]
+          },
+          "interval_mass": 0.8,
+          "interval_method": "percentile",
+          "method": "centered_residual_resampling",
+          "parameter_correlation": {
+            "L": {
+              "L": 1.0,
+              "k": -0.8695516520400421,
+              "x0": 0.9117285367923342
+            },
+            "k": {
+              "L": -0.8695516520400421,
+              "k": 1.0,
+              "x0": -0.8554933278543861
+            },
+            "x0": {
+              "L": 0.9117285367923342,
+              "k": -0.8554933278543861,
+              "x0": 0.9999999999999999
+            }
+          },
+          "parameter_intervals": {
+            "L": [
+              99.68486333604011,
+              100.32870938836284
+            ],
+            "k": [
+              0.6930924434828438,
+              0.7038900253480502
+            ],
+            "x0": [
+              3.98847838207325,
+              4.015734526567449
+            ]
+          },
+          "parameter_standard_errors": {
+            "L": 0.25999720189407244,
+            "k": 0.005142008511412727,
+            "x0": 0.012052451141912475
+          },
+          "residual_design": {
+            "conditioning_rows": 0,
+            "pool_rows": 11
+          },
+          "seed": 42,
+          "succeeded": 8
+        },
+        "schema_version": "2.0"
+      }
+    }
+  ]
+}

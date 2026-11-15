@@ -1,4 +1,8 @@
 //! Case and centered residual resampling for native model fits.
+#[cfg(test)]
+#[path = "bootstrap/statrs_migration_tests.rs"]
+mod statrs_migration_tests;
+
 use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;

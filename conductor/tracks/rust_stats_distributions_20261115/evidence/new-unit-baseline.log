@@ -1,0 +1,18 @@
+   Compiling innovate-core v0.7.0-alpha.1 (<checkout>/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 6.93s
+     Running unittests src/lib.rs (<target>/debug/deps/innovate_core-c4b0f8b7d0e8f069)
+
+running 10 tests
+test bayesian::statrs_migration_tests::gaussian_prior_omission_and_invalid_domains_keep_their_contracts ... ok
+test bayesian::statrs_migration_tests::likelihood_observation_validation_rejects_invalid_noise_and_data ... ok
+test bayesian::statrs_migration_tests::tied_rank_scores_keep_average_ranks_and_signed_zero_equivalence ... ok
+test bootstrap::statrs_migration_tests::statrs_migration_constant_columns_remain_null_not_zero ... ok
+test bootstrap::statrs_migration_tests::statrs_migration_correlation_does_not_invent_insufficient_draws ... ok
+test bootstrap::statrs_migration_tests::statrs_migration_correlation_preserves_extreme_scale_and_sign ... ok
+test bayesian::statrs_migration_tests::parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales ... ok
+test bayesian::statrs_migration_tests::likelihood_uses_actual_predictions_without_losing_small_or_scaled_scores ... ok
+test bayesian::statrs_migration_tests::quantiles_match_independent_center_tail_and_attainable_domain_references ... ok
+test bayesian::statrs_migration_tests::maximum_pooled_rank_count_stays_inside_the_qualified_probability_domain ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 48 filtered out; finished in 0.34s
+

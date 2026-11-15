@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "phase": "pre-migration characterization",
+  "base_commit": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+  "production_quantile": "original 48-step bisection; no statrs dependency in tracked manifest",
+  "source_sha256": {
+    "rust/crates/innovate-core/src/bayesian.rs": "a2cdb86bcf32a679ce184545898adf180fa7f11216e232b38954e5620e241257",
+    "rust/crates/innovate-core/src/bootstrap.rs": "1108f9cf07164f7285216d20e8aadd6131ee5e622471a4d231293944c10bd4dd",
+    "rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs": "e4d9c0add828af7a0ee527a6af698efd2f9cce0ace23671c071b57f81b1e96a4",
+    "rust/crates/innovate-core/src/bootstrap/statrs_migration_tests.rs": "99b4467793f9621ad2f058592d8a17996e164006e145cb71be766263f08e41bc",
+    "rust/crates/innovate-core/tests/statrs_migration.rs": "0f1230731c618f66a289a703f1f691377180ec2e83695270c339308fe182c066",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/normal.json": "fd591fe542d0c13644f887941ba74c8d6381012f730bbb7f84d8926af79418ac",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json": "412b2f7fd4c2da1dc0b8c93740a90d88b3fa172c2dbc8c2194c96c65c6a1c903",
+    "Cargo.lock": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+    "rust/crates/innovate-core/Cargo.toml": "c136f99bd00b701deb95b776582c57c852932f865ce53e4459e6cac3237e9058"
+  },
+  "checks": [
+    {
+      "name": "base-core-unit",
+      "command": "cargo test --locked -p innovate-core --lib",
+      "exit_code": 0,
+      "expected_count": 48,
+      "log": "base-core-unit.log",
+      "sha256": "10b6066a9aa01d2df378112b1b9afa03c19da637820dcc830410670c50561e33"
+    },
+    {
+      "name": "new-unit-baseline",
+      "command": "cargo test --locked --offline -p innovate-core --lib statrs_migration",
+      "exit_code": 0,
+      "expected_count": 10,
+      "log": "new-unit-baseline.log",
+      "sha256": "a6fcbc0e3f2872ced6fb606a1d0626281c0037544edc680dbbf25bf411dabd7f"
+    },
+    {
+      "name": "new-public-baseline",
+      "command": "cargo test --locked --offline -p innovate-core --test statrs_migration",
+      "exit_code": 0,
+      "expected_count": 6,
+      "log": "new-public-baseline.log",
+      "sha256": "8583a68ab502598d56ec48cd909d6ff5dda25e217d3becf996f19c5659e06f13"
+    },
+    {
+      "name": "existing-bayesian-baseline",
+      "command": "cargo test --locked --offline -p innovate-core --test native_boundary bayesian",
+      "exit_code": 0,
+      "expected_count": null,
+      "log": "existing-bayesian-baseline.log",
+      "sha256": "33fad4d26daa136787e82b3130aabb24234c57e997a617c6976972c9c83df8a2"
+    }
+  ],
+  "baseline_test_corrections": [
+    "Alternating tied maximum makes the upper-tail indicator constant; expected upper and combined tail ESS are null.",
+    "Duplicate predictor time [0,0] was rejected; additive-score test corrected to distinct [0,1] with independent high-precision expected score before production changes."
+  ],
+  "blocked_attempts": [
+    {
+      "command": "cargo test --locked --offline -p innovate-core --lib",
+      "exit_code": 101,
+      "reason": "private dependency cache lacked ureq; locked online build subsequently passed"
+    }
+  ],
+  "limitations": [
+    "Synthetic numerical characterization only.",
+    "Main-produced behavioral replay is not an independent mathematical oracle.",
+    "No full workspace, installed consumer, coverage, platform or release qualification."
+  ]
+}

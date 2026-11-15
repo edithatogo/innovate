@@ -1,0 +1,14 @@
+   Compiling innovate-core v0.7.0-alpha.1 (<checkout>/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 0.52s
+     Running tests/statrs_migration.rs (<target>/debug/deps/statrs_migration-5db7ebb8f7e491c0)
+
+running 6 tests
+test statrs_migration_antithetic_ess_has_the_analytic_cap ... ok
+test statrs_migration_stuck_diagnostics_preserve_nulls_and_counts ... ok
+test statrs_migration_odd_chain_middle_is_excluded_before_ranking ... ok
+test statrs_migration_public_diagnostics_reject_invalid_domains ... ok
+test statrs_migration_keeps_seeded_draws_acceptance_and_grid_mass ... ok
+test statrs_migration_bootstrap_keeps_empirical_type_seven_intervals ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+

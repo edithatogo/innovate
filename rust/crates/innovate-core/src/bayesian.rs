@@ -1,4 +1,8 @@
 //! Bounded posterior quadrature using the native predictor.
+#[cfg(test)]
+#[path = "bayesian/statrs_migration_tests.rs"]
+mod statrs_migration_tests;
+
 use serde_json::{Value, json};
 
 pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {

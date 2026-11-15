@@ -1,0 +1,17 @@
+   Compiling innovate-core v0.7.0-alpha.1 (<checkout>/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 2.91s
+     Running tests/native_boundary.rs (<target>/debug/deps/native_boundary-b808d74c7c219f30)
+
+running 9 tests
+test bayesian_classical_split_rhat_detects_drift_and_stuck_chains ... ok
+test bayesian_effective_sample_size_distinguishes_persistence_and_stuck_chains ... ok
+test bayesian_ranked_split_rhat_detects_chain_scale_difference ... ok
+test bayesian_joint_grid_preserves_row_major_mass ... ok
+test bayesian_metropolis_retains_ordered_joint_draws ... ok
+test bayesian_logistic_capacity_grid_matches_symmetric_gaussian_reference ... ok
+test bayesian_gaussian_prior_combines_with_gaussian_likelihood ... ok
+test bayesian_metropolis_chains_diagnoses_each_joint_parameter ... ok
+test bayesian_metropolis_replays_and_recovers_logistic_capacity ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 96 filtered out; finished in 0.15s
+
