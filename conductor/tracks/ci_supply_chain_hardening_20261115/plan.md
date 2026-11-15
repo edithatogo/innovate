@@ -16,7 +16,7 @@
 - [x] **2.4 Conductor Review (Phase 2):** Run `conductor-review` on Phase 2 changes, apply any fixes, re-verify, and commit checkpoint.
 
 ## Phase 3: Sigstore / in-toto / SLSA Provenance & Syft / Grype SBOM
-- [ ] **3.1 Add `actions/attest-build-provenance` (Sigstore + in-toto + SLSA):** Wire SHA-pinned `actions/attest-build-provenance` in `.github/workflows/bindings-publish.yml` (with `attestations: write` and `id-token: write` job permissions) for built FFI shared-library archives, and document `gh attestation verify` / `slsa-verifier` verification in release docs.
-- [ ] **3.2 Add `Syft` SBOM generation + `Grype` scan:** Add SHA-pinned `anchore/sbom-action` (`Syft`) and `anchore/scan-action` (`Grype`) in `.github/workflows/bindings-publish.yml` / release packaging, uploading SPDX/CycloneDX SBOMs as release artifacts.
-- [ ] **3.3 Run full workflow & policy verification:** Execute `uvx zizmor .github/workflows/*.yml`, `python3 scripts/check_repository_policy.py`, `pytest -o minversion=9.0 tests/workflows/test_release_workflows.py`, and `pytest -o minversion=9.0 tests/workflows/test_repository_policy.py`.
-- [ ] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-verify, and mark track complete in `conductor/tracks.md`.
+- [x] **3.1 Add `actions/attest-build-provenance` (Sigstore + in-toto + SLSA):** Wire SHA-pinned `actions/attest-build-provenance` in `.github/workflows/bindings-publish.yml` (with `attestations: write` and `id-token: write` job permissions) for built FFI shared-library archives, and document `gh attestation verify` / `slsa-verifier` verification in release docs.
+- [x] **3.2 Add `Syft` SBOM generation + `Grype` scan:** Add SHA-pinned `anchore/sbom-action` (`Syft`) and `anchore/scan-action` (`Grype`) in `.github/workflows/bindings-publish.yml` / release packaging, uploading SPDX/CycloneDX SBOMs as release artifacts.
+- [x] **3.3 Run full workflow & policy verification:** Execute `uvx zizmor .github/workflows/*.yml`, `python3 scripts/check_repository_policy.py`, `pytest -o minversion=9.0 tests/workflows/test_release_workflows.py`, and `pytest -o minversion=9.0 tests/workflows/test_repository_policy.py`.
+- [x] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-verify, and mark track complete in `conductor/tracks.md`.

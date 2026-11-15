@@ -561,5 +561,5 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 - [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned — P1, Order #9; after #4)*
   *Link: [./tracks/rust_regime_changepoint_20261115/](./tracks/rust_regime_changepoint_20261115/)*
 
-- [~] **Track: CI & Release Supply-Chain Hardening** *(In Progress — P1, Order #10; strict `cargo-deny` source checks depend on #2 & #3; parallelizable for `Harden-Runner`, `Sigstore`/`SLSA`, `Syft`/`Grype`, `poutine`)*
+- [x] **Track: CI & Release Supply-Chain Hardening** *(Completed — P1, Order #10; `deny.toml` retains temporary `allow-git` for `kairos.git` until Order #3 publishes `kairo-ecs-*`)*
   *Link: [./tracks/ci_supply_chain_hardening_20261115/](./tracks/ci_supply_chain_hardening_20261115/)*
