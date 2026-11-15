@@ -1,0 +1,8 @@
+{
+  "track_id": "ci_supply_chain_hardening_20261115",
+  "type": "chore",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Add cargo-deny policy, Harden-Runner egress auditing, Sigstore/in-toto/SLSA build provenance attestations, Syft/Grype SBOM scanning, and poutine workflow linting."
+}

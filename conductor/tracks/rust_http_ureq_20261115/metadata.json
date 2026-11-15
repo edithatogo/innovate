@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_http_ureq_20261115",
+  "type": "refactor",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Replace reqwest (blocking + aws-lc-rs/tokio/hyper/cmake) with pure-Rust synchronous ureq in innovate-core."
+}

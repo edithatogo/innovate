@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_nuts_hmc_20261115",
+  "type": "feature",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Migrate bayesian.rs beyond 1D/2D bounded quadrature to multi-parameter HMC/NUTS sampling using nuts-rs."
+}
