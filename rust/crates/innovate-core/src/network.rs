@@ -1293,6 +1293,120 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
 mod tests {
     use super::*;
 
+    // Only this observation adapter changes with storage representation. The
+    // independently calculated fixture values and assertions stay unchanged.
+    fn graph_snapshot(graph: &Graph) -> Vec<Vec<(usize, f64)>> {
+        graph.incoming.clone()
+    }
+
+    #[test]
+    fn network_petgraph_matches_independent_ordered_graph_fixtures() {
+        let corpus: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/network_petgraph_20261115.json"
+        ))
+        .unwrap();
+        assert_eq!(corpus["schema_version"], 1);
+        assert_eq!(corpus["cases"].as_array().unwrap().len(), 10);
+        for case in corpus["cases"].as_array().unwrap() {
+            let edges: Vec<[usize; 2]> = serde_json::from_value(case["edges"].clone()).unwrap();
+            let weights: Option<Vec<f64>> =
+                serde_json::from_value(case["weights"].clone()).unwrap();
+            let graph = Graph::new(
+                case["population"].as_u64().unwrap() as usize,
+                case["directed"].as_bool().unwrap(),
+                &edges,
+                weights.as_deref(),
+            )
+            .unwrap();
+            let expected: Vec<Vec<(usize, f64)>> =
+                serde_json::from_value(case["incoming"].clone()).unwrap();
+            let actual = graph_snapshot(&graph);
+            assert_eq!(actual.len(), expected.len(), "{}", case["name"]);
+            assert_eq!(graph.weighted, case["weighted"].as_bool().unwrap());
+            for (node, (actual, expected)) in actual.iter().zip(&expected).enumerate() {
+                assert_eq!(actual.len(), expected.len(), "{} node {node}", case["name"]);
+                for ((source, weight), (expected_source, expected_weight)) in
+                    actual.iter().zip(expected)
+                {
+                    assert_eq!(source, expected_source, "{} node {node}", case["name"]);
+                    assert_eq!(
+                        weight.to_bits(),
+                        expected_weight.to_bits(),
+                        "{} node {node} source {source}",
+                        case["name"]
+                    );
+                }
+                assert_eq!(
+                    graph.totals[node].to_bits(),
+                    case["totals"][node].as_f64().unwrap().to_bits(),
+                    "{} node {node} total",
+                    case["name"]
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn network_petgraph_input_order_has_a_nonvacuous_rounding_control() {
+        let tiny = 2_f64.powi(-53);
+        let forward =
+            Graph::new(5, true, &[[3, 4], [0, 4], [2, 4]], Some(&[1., tiny, tiny])).unwrap();
+        let reverse =
+            Graph::new(5, true, &[[2, 4], [0, 4], [3, 4]], Some(&[tiny, tiny, 1.])).unwrap();
+        assert_eq!(forward.totals[4].to_bits(), 1_f64.to_bits());
+        assert_eq!(reverse.totals[4].to_bits(), (1. + f64::EPSILON).to_bits());
+        assert_ne!(forward.totals[4].to_bits(), reverse.totals[4].to_bits());
+    }
+
+    #[test]
+    fn network_petgraph_rejects_invalid_weights_before_invalid_edges() {
+        let message = "edge_weights must contain one finite positive weight per edge";
+        for weight in [0., -0., -1., f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            assert_eq!(
+                Graph::new(2, true, &[[0, 1]], Some(&[weight])).err(),
+                Some(message)
+            );
+            assert_eq!(
+                Graph::new(2, true, &[[2, 2]], Some(&[weight])).err(),
+                Some(message)
+            );
+        }
+        assert_eq!(
+            Graph::new(2, true, &[[0, 1]], Some(&[])).err(),
+            Some(message)
+        );
+        assert_eq!(Graph::new(2, true, &[], Some(&[1.])).err(), Some(message));
+    }
+
+    #[test]
+    fn network_petgraph_preserves_pair_validation_and_antiparallel_edges() {
+        let message = "edges must be unique non-self pairs within population";
+        for directed in [false, true] {
+            for edges in [
+                vec![[0, 0]],
+                vec![[0, 2]],
+                vec![[2, 0]],
+                vec![[0, 1], [0, 1]],
+            ] {
+                assert_eq!(Graph::new(2, directed, &edges, None).err(), Some(message));
+            }
+        }
+        assert_eq!(
+            Graph::new(2, false, &[[0, 1], [1, 0]], None).err(),
+            Some(message)
+        );
+        let graph = Graph::new(2, true, &[[0, 1], [1, 0]], None).unwrap();
+        assert_eq!(graph_snapshot(&graph), vec![vec![(1, 1.)], vec![(0, 1.)]]);
+    }
+
+    #[test]
+    fn network_petgraph_positive_subnormal_weights_remain_valid() {
+        let smallest = f64::from_bits(1);
+        let graph = Graph::new(2, false, &[[0, 1]], Some(&[smallest])).unwrap();
+        assert_eq!(graph_snapshot(&graph), vec![vec![(1, 1.)], vec![(0, 1.)]]);
+        assert_eq!(graph.totals, vec![1., 1.]);
+    }
+
     #[test]
     fn rebuilt_deadlines_keep_original_expiry_and_arrival_order() {
         let mut context = ABMContext::new(42);
