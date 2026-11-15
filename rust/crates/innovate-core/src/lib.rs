@@ -119,6 +119,8 @@ pub fn execute_json(input: &str) -> String {
                 | "bayesian_parameter_grid"
                 | "bayesian_metropolis"
                 | "bayesian_metropolis_chains"
+                | "bayesian_nuts"
+                | "bayesian_nuts_chains"
                 | "bayesian_split_rhat"
                 | "bayesian_effective_sample_size"
                 | "describe_stability_tier"
@@ -384,6 +386,12 @@ fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
         }
         if value["operation"] == "bayesian_split_rhat" {
             return bayesian::split_rhat(payload);
+        }
+        if value["operation"] == "bayesian_nuts_chains" {
+            return bayesian::sample_nuts_chains(payload);
+        }
+        if value["operation"] == "bayesian_nuts" {
+            return bayesian::sample_nuts(payload);
         }
         if value["operation"] == "bayesian_metropolis_chains" {
             return bayesian::sample_chains(payload);

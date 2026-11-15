@@ -247,13 +247,30 @@ fn log_likelihood(
     Ok(log_weight)
 }
 
-pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
-    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+struct SamplingSpec<'a> {
+    model: &'a str,
+    prediction: Value,
+    joint: bool,
+    names: Vec<&'a str>,
+    initial: Vec<f64>,
+    bounds: Vec<std::ops::RangeInclusive<f64>>,
+    steps: Vec<f64>,
+    priors: GaussianPriors<'a>,
+    draws: u64,
+    warmup: u64,
+    seed: u64,
+    sigma: f64,
+    observed: Vec<f64>,
+}
 
+fn parse_sampling_spec<'a>(
+    payload: &'a Value,
+    require_proposal_step: bool,
+) -> Result<SamplingSpec<'a>, &'static str> {
     let model = payload["forecast_model"]
         .as_str()
         .ok_or("forecast_model is required")?;
-    let mut prediction = payload["prediction"].clone();
+    let prediction = payload["prediction"].clone();
     let joint = payload.get("axes").is_some();
     let axes = match payload.get("axes") {
         Some(axes) => {
@@ -272,7 +289,7 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         None => vec![payload],
     };
     let mut names = Vec::with_capacity(axes.len());
-    let mut current = Vec::with_capacity(axes.len());
+    let mut initial = Vec::with_capacity(axes.len());
     let mut bounds = Vec::with_capacity(axes.len());
     let mut steps = Vec::with_capacity(axes.len());
     for axis in axes {
@@ -280,7 +297,7 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         if names.contains(&name) {
             return Err("sampling axes must name distinct parameters");
         }
-        let initial = prediction["parameters"][name]
+        let init_val = prediction["parameters"][name]
             .as_f64()
             .ok_or("initial parameter is required")?;
         let [lower, upper]: [f64; 2] = serde_json::from_value(axis["bounds"].clone())
@@ -288,16 +305,20 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         if !lower.is_finite()
             || !upper.is_finite()
             || lower >= upper
-            || !(lower..=upper).contains(&initial)
+            || !(lower..=upper).contains(&init_val)
         {
             return Err("initial parameter must lie inside finite increasing bounds");
         }
-        let step = axis["proposal_step"]
-            .as_f64()
-            .filter(|step| step.is_finite() && *step > 0.)
-            .ok_or("proposal_step must be finite and positive")?;
+        let step = if require_proposal_step {
+            axis["proposal_step"]
+                .as_f64()
+                .filter(|step| step.is_finite() && *step > 0.)
+                .ok_or("proposal_step must be finite and positive")?
+        } else {
+            0.1
+        };
         names.push(name);
-        current.push(initial);
+        initial.push(init_val);
         bounds.push(lower..=upper);
         steps.push(step);
     }
@@ -314,6 +335,42 @@ pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
         .as_u64()
         .ok_or("seed must be an unsigned integer")?;
     let (sigma, observed) = observations(payload)?;
+    Ok(SamplingSpec {
+        model,
+        prediction,
+        joint,
+        names,
+        initial,
+        bounds,
+        steps,
+        priors,
+        draws,
+        warmup,
+        seed,
+        sigma,
+        observed,
+    })
+}
+
+pub(crate) fn sample(payload: &Value) -> Result<Value, &'static str> {
+    if payload.get("sampler").and_then(Value::as_str) == Some("nuts") {
+        return sample_nuts(payload);
+    }
+    use kairo_ecs_rng::{DeterministicStream, rand_distr::Uniform};
+
+    let spec = parse_sampling_spec(payload, true)?;
+    let mut prediction = spec.prediction;
+    let names = spec.names;
+    let mut current = spec.initial;
+    let bounds = spec.bounds;
+    let steps = spec.steps;
+    let priors = spec.priors;
+    let draws = spec.draws;
+    let warmup = spec.warmup;
+    let seed = spec.seed;
+    let (sigma, observed) = (spec.sigma, spec.observed);
+    let joint = spec.joint;
+    let model = spec.model;
     let kernel = crate::KernelBinding::new();
     let mut current_log = log_likelihood(&kernel, model, &prediction, &observed, sigma)?
         + priors.log_density(&prediction);
@@ -604,6 +661,16 @@ fn paired_ess(values: &[f64], half: usize) -> Option<f64> {
 
 /// Run independent, explicitly initialized chains and diagnose each marginal.
 pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
+    let use_nuts = payload.get("sampler").and_then(Value::as_str) == Some("nuts");
+    run_chains(payload, use_nuts)
+}
+
+/// Run independent, explicitly initialized NUTS chains and diagnose each marginal.
+pub(crate) fn sample_nuts_chains(payload: &Value) -> Result<Value, &'static str> {
+    run_chains(payload, true)
+}
+
+fn run_chains(payload: &Value, use_nuts: bool) -> Result<Value, &'static str> {
     let specs = payload["chains"]
         .as_array()
         .filter(|chains| (2..=16).contains(&chains.len()))
@@ -654,7 +721,11 @@ pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
             parameters.insert(name.clone(), value.clone());
         }
         request["seed"] = json!(seed);
-        let mut result = sample(&request)?;
+        let mut result = if use_nuts {
+            sample_nuts(&request)?
+        } else {
+            sample(&request)?
+        };
         result["initial"] = spec["initial"].clone();
         results.push(result);
     }
@@ -682,7 +753,256 @@ pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
         diagnostics.push(json!({"parameter":name,"split_rhat":split_rhat(&input)?,
             "effective_sample_size":effective_sample_size(&input)?}));
     }
-    Ok(json!({"parameters":parameter_names,"chains":results,"diagnostics":diagnostics}))
+    let mut response =
+        json!({"parameters":parameter_names,"chains":results,"diagnostics":diagnostics});
+    if use_nuts {
+        let total_divergences: u64 = results
+            .iter()
+            .filter_map(|chain| chain["divergences"].as_u64())
+            .sum();
+        response["total_divergences"] = json!(total_divergences);
+        response["method"] = json!("nuts_hmc");
+    }
+    Ok(response)
+}
+
+#[derive(Debug)]
+struct NutsLogpError(&'static str);
+
+impl std::fmt::Display for NutsLogpError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.0)
+    }
+}
+
+impl std::error::Error for NutsLogpError {}
+
+impl nuts_rs::LogpError for NutsLogpError {
+    fn is_recoverable(&self) -> bool {
+        true
+    }
+}
+
+fn sigmoid(u: f64) -> f64 {
+    if u >= 0.0 {
+        1.0 / (1.0 + (-u).exp())
+    } else {
+        let e = u.exp();
+        e / (1.0 + e)
+    }
+}
+
+fn logit_from_bounded(theta: f64, lower: f64, upper: f64) -> f64 {
+    let p = ((theta - lower) / (upper - lower)).clamp(1e-12, 1.0 - 1e-12);
+    (p / (1.0 - p)).ln()
+}
+
+fn constrained_and_log_jacobian(u: f64, lower: f64, upper: f64) -> (f64, f64) {
+    let width = upper - lower;
+    let p = sigmoid(u);
+    let theta = lower + width * p;
+    // Compute ln(sigmoid(u) * (1 - sigmoid(u))) = -|u| - 2 * ln(1 + exp(-|u|))
+    // directly from u so extreme coordinates avoid 1 - sigmoid(u) cancellation.
+    let abs_u = u.abs();
+    let log_jac = width.ln() - abs_u - 2.0 * (-abs_u).exp().ln_1p();
+    (theta, log_jac)
+}
+
+#[derive(Clone)]
+struct DiffusionLogp<'a> {
+    kernel: crate::KernelBinding,
+    model: &'a str,
+    prediction: Value,
+    names: Vec<&'a str>,
+    bounds: Vec<std::ops::RangeInclusive<f64>>,
+    priors: &'a GaussianPriors<'a>,
+    observed: &'a [f64],
+    sigma: f64,
+}
+
+impl std::fmt::Debug for DiffusionLogp<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("DiffusionLogp")
+            .field("model", &self.model)
+            .field("names", &self.names)
+            .finish()
+    }
+}
+
+impl DiffusionLogp<'_> {
+    fn eval_unconstrained(&mut self, u: &[f64]) -> Result<f64, NutsLogpError> {
+        let mut log_jac = 0.0;
+        for ((&ui, name), bound) in u.iter().zip(&self.names).zip(&self.bounds) {
+            if !ui.is_finite() {
+                return Err(NutsLogpError("non-finite unconstrained coordinate"));
+            }
+            let (theta, lj) = constrained_and_log_jacobian(ui, *bound.start(), *bound.end());
+            if !theta.is_finite() || !lj.is_finite() {
+                return Err(NutsLogpError("non-finite transformed parameter"));
+            }
+            self.prediction["parameters"][*name] = json!(theta);
+            log_jac += lj;
+        }
+        let ll = log_likelihood(
+            &self.kernel,
+            self.model,
+            &self.prediction,
+            self.observed,
+            self.sigma,
+        )
+        .map_err(NutsLogpError)?;
+        let lp = self.priors.log_density(&self.prediction);
+        let total = ll + lp + log_jac;
+        if total.is_finite() {
+            Ok(total)
+        } else {
+            Err(NutsLogpError("non-finite target log posterior"))
+        }
+    }
+}
+
+impl nuts_rs::HasDims for DiffusionLogp<'_> {
+    fn dim_sizes(&self) -> std::collections::HashMap<String, u64> {
+        vec![(
+            "unconstrained_parameter".to_string(),
+            self.names.len() as u64,
+        )]
+        .into_iter()
+        .collect()
+    }
+}
+
+impl nuts_rs::CpuLogpFunc for DiffusionLogp<'_> {
+    type LogpError = NutsLogpError;
+    type ExpandedVector = Vec<f64>;
+    type FlowParameters = ();
+
+    fn dim(&self) -> usize {
+        self.names.len()
+    }
+
+    fn logp(&mut self, position: &[f64], grad: &mut [f64]) -> Result<f64, Self::LogpError> {
+        const EPS: f64 = 1e-6;
+        let center = self.eval_unconstrained(position)?;
+        let mut scratch = position.to_vec();
+        for idx in 0..position.len() {
+            let orig = scratch[idx];
+            scratch[idx] = orig + EPS;
+            let plus = self.eval_unconstrained(&scratch)?;
+            scratch[idx] = orig - EPS;
+            let minus = self.eval_unconstrained(&scratch)?;
+            scratch[idx] = orig;
+            let g = (plus - minus) / (2.0 * EPS);
+            if !g.is_finite() {
+                return Err(NutsLogpError("non-finite finite-difference gradient"));
+            }
+            grad[idx] = g;
+        }
+        Ok(center)
+    }
+
+    fn expand_vector<R: rand::Rng + ?Sized>(
+        &mut self,
+        _rng: &mut R,
+        position: &[f64],
+    ) -> Result<Vec<f64>, nuts_rs::CpuMathError> {
+        Ok(position
+            .iter()
+            .zip(&self.bounds)
+            .map(|(&u, bound)| constrained_and_log_jacobian(u, *bound.start(), *bound.end()).0)
+            .collect())
+    }
+}
+
+/// Sample a diffusion posterior using `nuts-rs` (HMC/NUTS with diagonal adaptation).
+pub(crate) fn sample_nuts(payload: &Value) -> Result<Value, &'static str> {
+    use nuts_rs::{Chain, CpuMath, DiagNutsSettings, Settings};
+    use rand::SeedableRng;
+
+    let spec = parse_sampling_spec(payload, false)?;
+    let priors = &spec.priors;
+    let init_u: Vec<f64> = spec
+        .initial
+        .iter()
+        .zip(&spec.bounds)
+        .map(|(&theta, bound)| logit_from_bounded(theta, *bound.start(), *bound.end()))
+        .collect();
+    let bounds = spec.bounds;
+    let mut logp_func = DiffusionLogp {
+        kernel: crate::KernelBinding::new(),
+        model: spec.model,
+        prediction: spec.prediction,
+        names: spec.names.clone(),
+        bounds: bounds.clone(),
+        priors,
+        observed: &spec.observed,
+        sigma: spec.sigma,
+    };
+    if logp_func.eval_unconstrained(&init_u).is_err() {
+        return Err("initial log likelihood must be finite");
+    }
+    let math = CpuMath::new(logp_func);
+    let mut settings = DiagNutsSettings::default();
+    settings.num_tune = spec.warmup;
+    let mut rng = rand::rngs::StdRng::seed_from_u64(spec.seed);
+    let mut sampler = settings
+        .new_chain(0, math, &mut rng)
+        .map_err(|_| "failed to initialize NUTS chain")?;
+    sampler
+        .set_position(&init_u)
+        .map_err(|_| "failed to set initial NUTS position")?;
+    let total_steps = spec.warmup + spec.draws;
+    let mut samples = Vec::with_capacity(spec.draws as usize);
+    let mut divergences = 0_u64;
+    let mut last_step_size = 0.0_f64;
+    for step in 0..total_steps {
+        let (draw, info) = sampler
+            .draw()
+            .map_err(|_| "NUTS sampling encountered an unrecoverable error")?;
+        if step >= spec.warmup {
+            if info.diverging {
+                divergences += 1;
+            }
+            last_step_size = info.step_size;
+            let constrained: Vec<f64> = draw
+                .iter()
+                .zip(&bounds)
+                .map(|(&u, bound)| constrained_and_log_jacobian(u, *bound.start(), *bound.end()).0)
+                .collect();
+            samples.push(constrained);
+        }
+    }
+    let means = (0..spec.names.len())
+        .map(|axis| {
+            samples
+                .iter()
+                .map(|row| row[axis] / spec.draws as f64)
+                .sum::<f64>()
+        })
+        .collect::<Vec<_>>();
+    if means.iter().any(|mean| !mean.is_finite()) {
+        return Err("posterior mean exceeds finite numerical domain");
+    }
+    let mut result = json!({
+        "seed": spec.seed,
+        "draws": spec.draws,
+        "warmup": spec.warmup,
+        "divergences": divergences,
+        "step_size": last_step_size,
+        "method": "nuts_hmc",
+        "prior": spec.priors.label(),
+        "likelihood": "independent_gaussian_known_sd"
+    });
+    if spec.joint {
+        result["parameters"] = json!(spec.names);
+        result["samples"] = json!(samples);
+        result["posterior_means"] = json!(means);
+    } else {
+        result["parameter"] = json!(spec.names[0]);
+        result["samples"] = json!(samples.iter().map(|row| row[0]).collect::<Vec<_>>());
+        result["posterior_mean"] = json!(means[0]);
+    }
+    Ok(result)
 }
 
 #[cfg(test)]
@@ -726,5 +1046,97 @@ mod tests {
             (statrs_diff - manual_diff).abs() < 1e-14,
             "ln_pdf difference mismatch: statrs={statrs_diff}, manual={manual_diff}"
         );
+    }
+
+    #[test]
+    fn nuts_logit_bijection_roundtrip_and_jacobian_match_finite_difference() {
+        let lower = 0.01_f64;
+        let upper = 1.5_f64;
+        for theta in [0.05, 0.4, 1.25] {
+            let u = logit_from_bounded(theta, lower, upper);
+            let (recovered, log_jac) = constrained_and_log_jacobian(u, lower, upper);
+            assert!((recovered - theta).abs() < 1e-12);
+            let eps = 1e-7;
+            let (plus, _) = constrained_and_log_jacobian(u + eps, lower, upper);
+            let (minus, _) = constrained_and_log_jacobian(u - eps, lower, upper);
+            let fd_jac = ((plus - minus) / (2.0 * eps)).ln();
+            assert!((log_jac - fd_jac).abs() < 1e-7);
+        }
+    }
+
+    #[test]
+    fn nuts_sampler_recovers_logistic_capacity_and_is_seed_deterministic() {
+        let request = json!({
+            "forecast_model": "logistic",
+            "sampler": "nuts",
+            "parameter": "L",
+            "bounds": [50.0, 200.0],
+            "draws": 40,
+            "warmup": 40,
+            "seed": 12345,
+            "noise_sd": 1.0,
+            "observed": [32.23, 50.0, 67.77, 81.76],
+            "prediction": {
+                "inputs": {"time": [1.0, 2.0, 3.0, 4.0]},
+                "parameters": {"L": 110.0, "k": 0.75, "x0": 2.0}
+            }
+        });
+        let first = sample(&request).expect("NUTS sampling should succeed");
+        let second = sample(&request).expect("NUTS sampling should be deterministic");
+        assert_eq!(first["method"], "nuts_hmc");
+        assert_eq!(first["samples"], second["samples"]);
+        assert_eq!(first["divergences"], second["divergences"]);
+        assert!(first["step_size"].as_f64().is_some_and(|s| s > 0.0));
+        let mean = first["posterior_mean"].as_f64().expect("posterior_mean");
+        assert!((mean - 100.0).abs() < 5.0, "mean={mean}");
+    }
+
+    #[test]
+    fn nuts_multi_chain_produces_rhat_and_ess_diagnostics() {
+        let request = json!({
+            "forecast_model": "logistic",
+            "sampler": "nuts",
+            "axes": [
+                {"parameter": "k", "bounds": [0.1, 2.0]},
+                {"parameter": "L", "bounds": [50.0, 200.0]}
+            ],
+            "draws": 40,
+            "warmup": 40,
+            "noise_sd": 1.0,
+            "observed": [32.23, 50.0, 67.77, 81.76],
+            "prediction": {
+                "inputs": {"time": [1.0, 2.0, 3.0, 4.0]},
+                "parameters": {"L": 100.0, "k": 0.75, "x0": 2.0}
+            },
+            "chains": [
+                {"seed": 101, "initial": {"k": 0.7, "L": 95.0}},
+                {"seed": 202, "initial": {"k": 0.8, "L": 105.0}}
+            ]
+        });
+        let result = sample_chains(&request).expect("NUTS multi-chain should succeed");
+        assert_eq!(result["method"], "nuts_hmc");
+        assert_eq!(result["chains"].as_array().map(Vec::len), Some(2));
+        assert!(result["total_divergences"].as_u64().is_some());
+        let diagnostics = result["diagnostics"].as_array().expect("diagnostics array");
+        assert_eq!(diagnostics.len(), 2);
+        for diag in diagnostics {
+            assert!(diag["split_rhat"]["rhat"].as_f64().is_some());
+            assert!(diag["effective_sample_size"]["bulk_ess"].as_f64().is_some());
+        }
+    }
+
+    #[test]
+    fn constrained_and_log_jacobian_stays_accurate_in_extreme_tails() {
+        let eps = 1e-6;
+        for u in [-50.0_f64, -25.0, 0.0, 25.0, 37.0, 50.0] {
+            let (_, lj_plus) = constrained_and_log_jacobian(u + eps, 0.1, 2.0);
+            let (_, lj_minus) = constrained_and_log_jacobian(u - eps, 0.1, 2.0);
+            let fd_grad = (lj_plus - lj_minus) / (2.0 * eps);
+            let exact_grad = 1.0 - 2.0 * sigmoid(u);
+            assert!(
+                (fd_grad - exact_grad).abs() < 1e-8,
+                "gradient mismatch at u={u}: fd={fd_grad}, exact={exact_grad}"
+            );
+        }
     }
 }

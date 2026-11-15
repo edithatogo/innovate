@@ -2390,3 +2390,36 @@ def test_import_policy_specification_bounds_document_bytes():
             method="import_policy_specification",
             document=json.dumps({**json.loads(document), "extra": True}),
         )
+
+
+def test_bayesian_nuts_chains_diagnostics():
+    result = innovate.execute(
+        "bayesian_nuts_chains",
+        forecast_model="logistic",
+        axes=[
+            {"parameter": "k", "bounds": [0.1, 2.0]},
+            {"parameter": "L", "bounds": [50.0, 200.0]},
+        ],
+        draws=20,
+        warmup=20,
+        noise_sd=1.0,
+        observed=[32.23, 50.0, 67.77, 81.76],
+        prediction={
+            "inputs": {"time": [1.0, 2.0, 3.0, 4.0]},
+            "parameters": {"L": 100.0, "k": 0.75, "x0": 2.0},
+        },
+        chains=[
+            {"seed": 101, "initial": {"k": 0.7, "L": 95.0}},
+            {"seed": 202, "initial": {"k": 0.8, "L": 105.0}},
+        ],
+    )["result"]
+    assert result["method"] == "nuts_hmc"
+    assert len(result["chains"]) == 2
+    assert isinstance(result["total_divergences"], int)
+    for chain in result["chains"]:
+        assert isinstance(chain["divergences"], int)
+        assert chain["step_size"] > 0.0
+    assert len(result["diagnostics"]) == 2
+    for diag in result["diagnostics"]:
+        assert diag["split_rhat"]["rhat"] is not None
+        assert diag["effective_sample_size"]["bulk_ess"] is not None
