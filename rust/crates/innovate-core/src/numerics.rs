@@ -568,4 +568,59 @@ mod tests {
         .unwrap();
         assert!(error.contains("finite numerical domain"));
     }
+
+    #[test]
+    fn solve_handles_well_conditioned_and_singular_systems() {
+        let x = solve(
+            vec![
+                vec![2.0, 1.0, -1.0],
+                vec![-3.0, -1.0, 2.0],
+                vec![-2.0, 1.0, 2.0],
+            ],
+            vec![8.0, -11.0, -3.0],
+        )
+        .expect("well-conditioned 3x3 system must solve");
+        assert!((x[0] - 2.0).abs() < 1e-12);
+        assert!((x[1] - 3.0).abs() < 1e-12);
+        assert!((x[2] - (-1.0)).abs() < 1e-12);
+
+        let singular = solve(vec![vec![1.0, 2.0], vec![2.0, 4.0]], vec![3.0, 6.0]);
+        assert!(singular.is_none());
+    }
+
+    #[test]
+    fn local_rank_reports_full_rank_and_near_collinearity() {
+        let full = local_rank(vec![vec![3.0, 0.0], vec![0.0, 4.0]]);
+        assert_eq!(full["rank"], 2);
+        assert_eq!(full["status"], "local_full_rank");
+        assert_eq!(full["qr_diagonal_ratio"], 1.0);
+
+        let collinear = local_rank(vec![vec![1.0, 1.0], vec![1.0, 1.0 + 1e-9]]);
+        assert_eq!(collinear["rank"], 1);
+        assert_eq!(collinear["status"], "rank_deficient");
+        assert!(collinear["qr_diagonal_ratio"].is_null());
+    }
+
+    #[test]
+    fn least_squares_recovers_nonlinear_exponential_fit() {
+        let times = [0.0_f64, 1.0, 2.0, 3.0, 4.0];
+        let observed: Vec<f64> = times.iter().map(|&t| 2.5 * (-0.4 * t).exp()).collect();
+        let fit = least_squares(
+            &observed,
+            &[vec![1.0, -0.1], vec![4.0, -1.0]],
+            |theta| {
+                Ok(times
+                    .iter()
+                    .map(|&t| theta[0] * (theta[1] * t).exp())
+                    .collect())
+            },
+            50,
+        )
+        .expect("nonlinear exponential fit should succeed");
+        assert_eq!(fit.report["converged"], true);
+        assert!((fit.parameters[0] - 2.5).abs() < 1e-6);
+        assert!((fit.parameters[1] - (-0.4)).abs() < 1e-6);
+        assert!(fit.report["scaled_rss"].as_f64().unwrap() < 1e-12);
+        assert_eq!(fit.identifiability["status"], "local_full_rank");
+    }
 }
