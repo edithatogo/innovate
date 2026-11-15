@@ -1,5 +1,6 @@
 use innovate_tabular::{scenario_comparisons_ipc, scenario_executions_ipc};
-use polars::prelude::*;
+use polars_arrow::io::ipc::read::{FileReader, read_file_metadata};
+use polars_core::prelude::*;
 use serde_json::{Value, json};
 use std::io::Cursor;
 
@@ -33,9 +34,15 @@ fn ensemble() -> Value {
 }
 
 fn read_export(export: Exporter, response: &Value) -> DataFrame {
-    IpcReader::new(Cursor::new(export(response).unwrap()))
-        .finish()
-        .unwrap()
+    let bytes = export(response).unwrap();
+    let mut cursor = Cursor::new(&bytes);
+    let metadata = read_file_metadata(&mut cursor).unwrap();
+    let polars_schema = Schema::from_arrow_schema(metadata.schema.as_ref());
+    let mut frame = DataFrame::empty_with_schema(&polars_schema);
+    for batch in FileReader::new(cursor, metadata, None, None) {
+        frame.append_record_batch(batch.unwrap()).unwrap();
+    }
+    frame
 }
 
 fn assert_json_rows(frame: &DataFrame, column: &str, rows: &Value) {
