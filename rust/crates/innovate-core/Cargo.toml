@@ -22,6 +22,7 @@ serde_json.workspace = true
 ureq = { version = "=3.5.2", default-features = false, features = ["rustls"] }
 libm = "=0.2.16"
 sha2 = "=0.11.1"
+statrs = "=0.19.1"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
 kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }
 kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }

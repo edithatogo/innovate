@@ -679,3 +679,42 @@ pub(crate) fn sample_chains(payload: &Value) -> Result<Value, &'static str> {
     }
     Ok(json!({"parameters":parameter_names,"chains":results,"diagnostics":diagnostics}))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use statrs::distribution::{Continuous, ContinuousCDF, Normal};
+
+    #[test]
+    fn normal_quantile_matches_statrs_across_tails() {
+        let standard = Normal::new(0.0, 1.0).expect("valid standard normal");
+        let probabilities = [1e-6, 0.025, 0.5, 0.975, 1.0 - 1e-6];
+        for p in probabilities {
+            let legacy = normal_quantile(p);
+            let statrs_q = standard.inverse_cdf(p);
+            assert!(
+                (legacy - statrs_q).abs() < 1e-12,
+                "quantile mismatch at p={p}: legacy={legacy}, statrs={statrs_q}"
+            );
+            assert!(
+                (standard.cdf(statrs_q) - p).abs() < 1e-10,
+                "cdf roundtrip mismatch at p={p}: statrs_q={statrs_q}, cdf={}",
+                standard.cdf(statrs_q)
+            );
+        }
+    }
+
+    #[test]
+    fn normal_ln_pdf_matches_unnormalized_gaussian_differences() {
+        let dist = Normal::new(2.5, 0.75).expect("valid normal");
+        let x1 = 1.9;
+        let x2 = 3.4;
+        let statrs_diff = dist.ln_pdf(x2) - dist.ln_pdf(x1);
+        let manual_diff =
+            -0.5 * ((x2 - 2.5) / 0.75_f64).powi(2) - (-0.5 * ((x1 - 2.5) / 0.75_f64).powi(2));
+        assert!(
+            (statrs_diff - manual_diff).abs() < 1e-14,
+            "ln_pdf difference mismatch: statrs={statrs_diff}, manual={manual_diff}"
+        );
+    }
+}
