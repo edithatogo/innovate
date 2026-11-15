@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-14T15:17:22.006647+00:00",
+  "issue_url": "https://github.com/edithatogo/innovate/issues/559",
+  "pull_request_url": "https://github.com/edithatogo/innovate/pull/605",
+  "workflow_run": {
+    "id": 43603039393,
+    "html_url": "https://github.com/edithatogo/innovate/actions/runs/43603039393",
+    "head_sha": "7075f24ef2b6dcc3e49cdfe07df659afec522475",
+    "head_branch": "fix/559-voiage-consumer-alignment",
+    "event": "pull_request",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-11-14T14:05:33Z",
+    "updated_at": "2026-11-14T14:24:04Z"
+  },
+  "job_id": 132471687381,
+  "checked_out_test_merge": {
+    "sha": "6d132d6379cfe7f7ba08456b7fc0563cab696fc5",
+    "tree": "b7ea97300f10d1b60033336b3318b9ee9bda74ef",
+    "parents": [
+      "276c2e505a0ce26910820fe8a94a6a498f505700",
+      "7075f24ef2b6dcc3e49cdfe07df659afec522475"
+    ]
+  },
+  "artifact": {
+    "id": 14117822045,
+    "name": "voiage-consumer-6d132d6379cfe7f7ba08456b7fc0563cab696fc5",
+    "size_in_bytes": 2373,
+    "digest": "sha256:e9fce853715cba333207b884b13012600a0ca11d21b3f8c91f1ee17383fcc6c2",
+    "created_at": "2026-11-14T14:24:01Z",
+    "expires_at": "2027-02-12T14:05:34Z"
+  },
+  "downloaded_archive_sha256": "e9fce853715cba333207b884b13012600a0ca11d21b3f8c91f1ee17383fcc6c2",
+  "archive_digest_matches_github": true,
+  "retained_files": [
+    {
+      "original_name": "qualification.json",
+      "retained_path": "qualification.json",
+      "size_bytes": 9392,
+      "sha256": "e89fcb4e2ebfb30265a17d42ba2531c7f0958ca2234834f9fc970745b2f58970"
+    },
+    {
+      "original_name": "qualification-stderr.log",
+      "retained_path": null,
+      "size_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_name": "tests.log",
+      "retained_path": "tests.txt",
+      "size_bytes": 99,
+      "sha256": "272967b8a76c2257d55e005a95f22fc3e9d323c2bbe2c2d3fce92eae6a099f51"
+    }
+  ],
+  "source_sha256_at_pull_request_head": {
+    "scripts/qualify_voiage_arrow.py": "4e2cdf0e20488ce2dc10769117f725306351d9643ddc44e0e360006e0f6491c8",
+    "tests/consumer/test_voiage_normalized_input.py": "9119f42cb39955e03e88665ef43b98d969901098e037b27178b863b9a2b7533c",
+    ".github/workflows/voiage-consumer.yml": "685484d6559be79a443615693f9d84390abe34d145981438182f5e155456f5a5",
+    "scripts/build_release_wheel.sh": "cf0a2cd540ef1c46921abcc619a8ba8d6b993935889ba9283c07d2a0dab1078d",
+    "scripts/normalize_wheel_sbom.py": "594ce9434bf833f0e596864584e5de7094c4b5064ac04eab02a81e36130ad955",
+    "pyproject.toml": "d42aa8194b3e4246baefd49a218e4ac8e01396238590cc0384cdaa0e7e2e9589",
+    "uv.lock": "16098442e498a4bfbfb24809ffb30ee85675696f71bf84b4c1aa2db76002f158",
+    "Cargo.toml": "f765c618a8062bed9765eab6a22ed817868ee17944a6f240dddff6e929842cfc",
+    "Cargo.lock": "42efd1345044b445469ad0c40c8abd0288a7d123a2bd4568c578703567a8db67"
+  },
+  "build": {
+    "command": [
+      "bash",
+      "scripts/build_release_wheel.sh",
+      ".venv"
+    ],
+    "method": "Create sdist from the checked-out test merge, then build its extracted source with maturin --release --locked; normalize wheel SBOM paths.",
+    "python": "3.15.2",
+    "rustc": "1.99.1",
+    "uv": "0.13.8",
+    "consumer_dependency_check": "34 packages compatible"
+  },
+  "job_log_sha256": "6fde1849beb4289682ac0fc60b5b64596459c40b26cfdfeac5e3066bb7876d95",
+  "job_log_relevant_excerpt": [
+    "2026-11-14T14:17:57.4486498Z HEAD is now at 6d132d6 Merge 7075f24ef2b6dcc3e49cdfe07df659afec522475 into 276c2e505a0ce26910820fe8a94a6a498f505700",
+    "2026-11-14T14:17:58.2618393Z Successfully installed uv version 0.13.8",
+    "2026-11-14T14:18:05.9094854Z   1.99.1-x86_64-unknown-linux-gnu installed - rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "2026-11-14T14:18:05.9551372Z   1.99.1-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "2026-11-14T14:18:06.0911451Z rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "2026-11-14T14:18:16.7532213Z ##[group]Run bash scripts/build_release_wheel.sh .venv",
+    "2026-11-14T14:18:40.6395260Z \ud83d\udce6 Built source distribution to /tmp/innovate-release.n8VtYe/sdist/innovate-0.7.0a1.tar.gz",
+    "2026-11-14T14:23:51.4180845Z \ud83d\udce6 Built wheel for CPython 3.15 to /tmp/innovate-release.n8VtYe/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_38_x86_64.whl",
+    "2026-11-14T14:23:57.3489529Z 19 passed in 1.73s",
+    "2026-11-14T14:24:01.0001437Z SHA256 digest of uploaded artifact zip is e9fce853715cba333207b884b13012600a0ca11d21b3f8c91f1ee17383fcc6c2"
+  ],
+  "review": {
+    "focused_tests_passed": 19,
+    "normalized_native_cases_passed": 6,
+    "all_original_restored_digests_equal": true,
+    "all_original_restored_chunk_layouts_equal": true,
+    "all_logistic_predictions": [
+      1.0,
+      2.0,
+      3.0
+    ],
+    "empty_qualification_stderr": true,
+    "wheel_bytes_and_imported_members_verified": true
+  },
+  "scope": "Synthetic installed CPU consumer on the old-base PR test merge. Does not qualify later main changes, live Dependabot alert disposition, future Renovate signing, or scientific/release acceptance."
+}
