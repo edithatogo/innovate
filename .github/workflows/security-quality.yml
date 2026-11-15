@@ -49,6 +49,10 @@ jobs:
         run: cargo install cargo-audit --version 0.22.2 --locked
       - name: Scan the committed Rust lock
         run: cargo audit --file Cargo.lock
+      - name: Enforce cargo-deny supply-chain policy
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          command: check
 
   secret-scan:
     name: Secret Scan
@@ -102,6 +106,15 @@ jobs:
           uv pip install --python .venv-policy/bin/python zizmor==1.32.0 ruff==0.17.4
       - name: Audit GitHub Actions security posture
         run: .venv-policy/bin/zizmor .github/workflows/*.yml
+      - name: Audit GitHub Actions supply chain with poutine
+        uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
+        with:
+          format: pretty
+          output: poutine-report.txt
+      - name: Print poutine audit report
+        run: |
+          cat poutine-report.txt
+          rm -f poutine-report.txt
       - name: Test repository policy drift detection
         run: .venv-policy/bin/python -m unittest discover -s tests/workflows -p 'test_repository_policy.py' -v
       - name: Test fail-closed release workflow controls
