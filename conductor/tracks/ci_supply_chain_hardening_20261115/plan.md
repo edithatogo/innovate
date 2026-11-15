@@ -10,10 +10,10 @@
 - [x] **1.5 Conductor Review (Phase 1):** Run `conductor-review` on Phase 1 changes, apply any fixes, re-verify, and commit checkpoint.
 
 ## Phase 2: `Harden-Runner` on Publish Workflows
-- [ ] **2.1 Audit outbound endpoints for publish workflows:** Inspect `.github/workflows/pypi-publish.yml`, `crates-publish.yml`, `bindings-publish.yml`, and `conda-publish.yml` and list required allowed endpoints (GitHub, PyPI, crates.io, conda/anaconda, rustup).
-- [ ] **2.2 Add SHA-pinned `step-security/harden-runner`:** Add `harden-runner` (`egress-policy: audit` initially, then `block` with `allowed-endpoints` once verified) as the first step in each publish job.
-- [ ] **2.3 Verify workflow lint & release tests:** Run `uvx zizmor .github/workflows/*.yml` and `pytest -o minversion=9.0 tests/workflows/test_release_workflows.py`.
-- [ ] **2.4 Conductor Review (Phase 2):** Run `conductor-review` on Phase 2 changes, apply any fixes, re-verify, and commit checkpoint.
+- [x] **2.1 Audit outbound endpoints for publish workflows:** Inspect `.github/workflows/pypi-publish.yml`, `crates-publish.yml`, `bindings-publish.yml`, and `conda-publish.yml` and list required allowed endpoints (GitHub, PyPI, crates.io, conda/anaconda, rustup).
+- [x] **2.2 Add SHA-pinned `step-security/harden-runner`:** Add `harden-runner` (`egress-policy: audit` initially, then `block` with `allowed-endpoints` once verified) as the first step in each publish job.
+- [x] **2.3 Verify workflow lint & release tests:** Run `uvx zizmor .github/workflows/*.yml` and `pytest -o minversion=9.0 tests/workflows/test_release_workflows.py`.
+- [x] **2.4 Conductor Review (Phase 2):** Run `conductor-review` on Phase 2 changes, apply any fixes, re-verify, and commit checkpoint.
 
 ## Phase 3: Sigstore / in-toto / SLSA Provenance & Syft / Grype SBOM
 - [ ] **3.1 Add `actions/attest-build-provenance` (Sigstore + in-toto + SLSA):** Wire SHA-pinned `actions/attest-build-provenance` in `.github/workflows/bindings-publish.yml` (with `attestations: write` and `id-token: write` job permissions) for built FFI shared-library archives, and document `gh attestation verify` / `slsa-verifier` verification in release docs.
