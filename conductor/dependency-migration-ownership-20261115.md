@@ -1,175 +1,186 @@
 # Dependency migration ownership and acceptance — 15 November 2026
 
-## Authority and interpretation
+## Current authority and receipt
 
-Dylan retains the continuing ordinary Pro ChatGPT conversation as the sole
-Innovate integration coordinator. The live coordination thread is
-[issue #624](https://github.com/edithatogo/innovate/issues/624).
-This record is a timestamped reconciliation, not scientific certification,
-permission to publish, or permission to replace an existing worker.
+Dylan retains sole integration coordinator
+`6aeeeda6-d4ec-8320-a3b5-c3e2362e5b53`. The authoritative
+[accepted archival handoff](https://github.com/edithatogo/innovate/issues/624#issuecomment-6892039719)
+receives the three named worker packets and transfers their residual obligations.
+**Acceptance for chat archival is not scientific, release, dependency,
+performance, or whole-track qualification.** This coordinator remains active.
 
-The coordinator owns shared Cargo manifests and locks, common Conductor registry,
-shared CI integration, cross-lane interfaces and `causal.rs`. Existing specialist
-documentation, issue #559/Voiage, CI-optimisation and offline-security owners
-remain in place. Their existing proposals must be reviewed and integrated once,
-not overwritten by a parallel implementation.
+This reconciliation replaces stale operational claims in the
+[original immutable ownership record](https://github.com/edithatogo/innovate/blob/c620f80e7fc305a155f31092f47f35fb85d9a1ae/conductor/dependency-migration-ownership-20261115.md).
+That revision preserves the initial observations, review findings and evidence;
+its then-open/preparation/retained-ownership labels are not current assignments.
 
-Re-read live main, PRs, this record's updates in #624 and the owning track before
-claiming a path. An unchecked box, archived plan, empty PR search, passing status
-or merged PR does not independently establish ownership or acceptance.
+Initial main inspected in this pass was
+`e538af2c9aeb86a439fbeb955e752d1e2bba5b6a`. It advanced through externally
+merged #628 to `03fa096d633aa935f7e34575ad2f53f14b44ce6a`. Exact comparison
+showed only #628's nine supply-chain/workflow/documentation paths, not this
+file or the reviewed network/Bayesian source. This pass did not merge #628
+or qualify its security, publication or deployment behavior.
 
-## Immutable reconciliation anchors
+## Reconciled immutable anchors
 
-| Packet | Final PR head | Receiving commit | Interpretation |
-| --- | --- | --- | --- |
-| HTTP Track 1, #618 | `8f30c5a03cc48960b464e8c18a0a750e73b6e2ae` | `349fb0d88b765026385f5361d096070aa2c2795f` | Merged implementation; reuse, do not redo. |
-| Tabular Track 2, #619 | `f2742d3a99952914f1e7193f0d57f67eccbd02ee` | `1cd9af803a21cdb08705cf77a45b27346afa4b69` | Merged implementation; reuse published-Polars work and preserve Arrow contracts. |
-| Linalg Track 4, #621 | `4b2f152d868d901c9f7aa222af3c7d46b3e223c1` | `1e190cfb29be95e0622e79c06bdcb4e272bea1d6` | Merged during coordinator review; downstream acceptance held. |
-| Statistics Track 5, #625 | `a39f81ca318c6ec98ac6ea3a62f9c99448dd0a21` | None at inspection | Open proposal on base `1e190cfb29be95e0622e79c06bdcb4e272bea1d6`; not accepted. |
-
-Initial main was `42189a223fd44c823ca11aec689ea67b11c25790`. While the
-coordinator reviewed #621, another actor merged it at 06:38:32 UTC on 15 November.
-This coordinator did not invoke that merge. Main was subsequently read back as
-`1e190cfb29be95e0622e79c06bdcb4e272bea1d6`.
-
-The #621 PR test merge `711ec65faed873ad661a3853e36fbd92c1ebff0c` and its
-receiving commit have the identical Git tree
-`e965faac4dce04bf85bd164abb59860c16201559`. This establishes tree identity,
-not complete qualification or correctness.
-
-Existing owner anchors, without expanding their acceptance claims:
-
-- Documentation #613 merged as `42189a223fd44c823ca11aec689ea67b11c25790`.
-- Issue #559/Voiage #614 merged as `785c0451ff05f978675bb93150dddbda569e521c`.
-- CI optimisation #616 merged as `1f9e5436f65ba0c7c3d56036d18ba73aea2ebffd`;
-  preserve related #615 ownership as well.
-- Offline security #590 merged as `1e06bcc33f47b74600e842bd7b3fe13fcd2dbd84`.
-  Its stale draft warning is not proof of present PR state; its merge is also
-  not proof that a dedicated runner, offline assets or real scanner/agent
-  integration have been qualified. Preserve the existing security owner/gates.
-
-## Lane map and dependency order
-
-**HTTP + tabular precede linalg, statistics and network. Accepted linalg precedes
-ODE and regime. Accepted statistics precedes NUTS.** Independent cleared tests
-and adapter slices can proceed without claiming dependent release qualification.
-
-| Track | Existing or proposed lane | Write boundary and prerequisite |
+| Packet | Final PR head | Receiving commit / disposition |
 | --- | --- | --- |
-| 1 HTTP: `rust_http_ureq_20261115` | Existing merged owner, #618 | No duplicate HTTP migration. Hand shared follow-ups to the coordinator. |
-| 2 tabular: `rust_tabular_crates_io_20261115` | Existing merged owner, #619 | No duplicate tabular migration. Preserve portable table/Arrow contracts. |
-| 4 linalg: `rust_linalg_optimization_20261115` | Existing #621 owner, including bounded review follow-up | `numerics.rs` and cleared dedicated tests/evidence. Existing shared hunks are retained as proposals for serialized integration. ODE/regime acceptance remains held. |
-| 5 statistics: `rust_stats_distributions_20261115` | Existing proposal #625; do not start a second statistics writer | `bayesian.rs`, `bootstrap.rs`, cleared dedicated tests/evidence. No concurrent `causal.rs`, manifests, locks, registry, CI or common-doc edits. HTTP/tabular first. |
-| 7 network: `rust_network_petgraph_20261115` | Dylan is preparing a worker, subject to live ownership clearance | `network.rs`, cleared dedicated tests/evidence. Preserve scheduling, deterministic order, replay and Kairos boundaries. HTTP/tabular first; no upstream writes. |
-| 6 ODE: `rust_ode_integration_20261115` | No new writer assigned by this coordinator | Wait for accepted Track 4 interfaces and exact receiving revision. |
-| 9 regime: `rust_regime_changepoint_20261115` | No new writer assigned by this coordinator | Wait for accepted Track 4 interfaces and exact receiving revision. |
-| 8 NUTS: `rust_nuts_hmc_20261115` | No new writer assigned by this coordinator | Wait for accepted Track 5 and an explicit serial `bayesian.rs` handoff. |
-| 3 Kairos crates.io: `rust_kairos_crates_io_20261115` | External publication prerequisite, not authorised here | Upstream is read-only. Do not publish or change the existing pin without separately qualified integration. |
-| 10 supply chain: `ci_supply_chain_hardening_20261115` | Existing CI/security owners; shared changes received here | No new account, permission, publication or runner choices. Strict registry-only closure cannot be asserted while Track 3 is unresolved. |
+| HTTP #618 | `8f30c5a03cc48960b464e8c18a0a750e73b6e2ae` | `349fb0d88b765026385f5361d096070aa2c2795f`; merged, do not redo |
+| Tabular #619 | `f2742d3a99952914f1e7193f0d57f67eccbd02ee` | `1cd9af803a21cdb08705cf77a45b27346afa4b69`; merged, do not redo |
+| Linalg #621 | `4b2f152d868d901c9f7aa222af3c7d46b3e223c1` | `1e190cfb29be95e0622e79c06bdcb4e272bea1d6`; merged, acceptance hold retained |
+| Network #623 | `ead7d5e5a61161dc4f73f5cb508678d3b49952c2` | `5bc63fa0874b402dfa8ee8c69c4a7ef5766735ea`; merged implementation, residual qualification open |
+| Statistics #625 | `f89d148e701f844bd6f4c7b13a491ded376bfd82` | `e538af2c9aeb86a439fbeb955e752d1e2bba5b6a`; merged implementation, residual qualification open |
+| Coordination #626 | `43201a040888a339e579d34cb72c2b93a6b6ced7` | `c620f80e7fc305a155f31092f47f35fb85d9a1ae`; merged historical record, superseded operational labels below |
+| Preserved statistics #622 | `6a85b4c91d5dfc427e17f5fba885681e04ae31ac` | Closed, unmerged; evidence accepted and retained, not a second implementation |
+| Original CI #615 | `3d2a6ec638d6d46b2341d9f77e035d2fc44cd72b` | Closed, unmerged; superseded by #616, no residual worker ownership |
+| Replacement CI #616 | `7edb822277c8d871396c87b558f8d3bb7a36142f` | `1f9e5436f65ba0c7c3d56036d18ba73aea2ebffd`; existing owner preserved |
+| Supply chain #628 | `879ed340bab3759407fd0ae71f4062f7127f1e08` | `03fa096d633aa935f7e34575ad2f53f14b44ce6a`; externally merged, existing owner preserved |
 
-### Serial `causal.rs` reservation
+For closed-unmerged PRs, a synthetic `merge_commit_sha` is not a receiving
+commit. Merge status and source-tree identity do not establish qualification.
+Re-read live main, PRs and #624 before subsequent integration or path claims.
 
-`rust/crates/innovate-core/src/causal.rs` belongs to the coordinator's serial
-integration boundary. Retain the already-proposed linalg changes from #621;
-qualify that slice first. Statistics must submit a separate proposed causal
-patch, not edit the file in parallel. Only after the linalg acceptance revision
-is pinned may a separately reviewed statistics causal slice be applied.
+## Worker chat archival decisions
 
-### Shared-file overlap discovered in #625
+| Worker chat | Accepted durable handoff | Disposition |
+| --- | --- | --- |
+| Network `6af950b7-c300-83ec-9bb0-316f9a9718a3` | [#624 comment 6890788042](https://github.com/edithatogo/innovate/issues/624#issuecomment-6890788042), source/evidence `ff7e077a672721bc14fe045454164766f3fa0e45` | May archive; implementation packet received, residual qualification transferred to NET-QUAL below |
+| Preserved statistics `6af95062-c3bc-83ec-a013-841a9bc3ab02` | [#626 comment 6890860269](https://github.com/edithatogo/innovate/pull/626#issuecomment-6890860269), packet `6a85b4c91d5dfc427e17f5fba885681e04ae31ac` | May archive; superseded/preserved packet received, findings transferred to STAT-NUM below; separate #625 source owner not released |
+| Original CI `6af8f5be-1c38-83ec-90ba-18b2e1687946` | [#615 comment 6891713298](https://github.com/edithatogo/innovate/pull/615#issuecomment-6891713298) and [#624 comment 6891719758](https://github.com/edithatogo/innovate/issues/624#issuecomment-6891719758) | May archive; explicit release accepted, no residual implementation/workflow/registry/branch-maintenance/cleanup/monitoring claim |
 
-At head `a39f81ca318c6ec98ac6ea3a62f9c99448dd0a21`, #625 proposes changes to
-`Cargo.lock`, the core manifest, `conductor/tracks.md` and the documentation
-review fingerprint. Those proposals are retained, not independently rewritten.
-Its changed-file list does not include `causal.rs` or `bootstrap.rs`.
-Absence of a bootstrap change is not automatically a defect: the owner must
-state whether its requirements are retained, completed or still open.
+These three chats retain no further implementation or monitoring duty. Their
+source, fixtures, patches, logs and immutable history must be preserved; chat
+archival does not authorise branch pruning or evidence deletion. The receipt
+does not itself change ChatGPT archive state. No additional chat is cleared.
 
-The coordinator therefore narrowed this repository packet to this new file
-only, avoiding a competing registry edit. #624 and the comments on #621/#625
-record the operational reservations. Shared registry corrections must be
-applied once during integration, after reconciling the active proposal.
+## Residual obligations and their durable owners
 
-## Registry reconciliation, not retrospective erasure
+### NET-QUAL — Track 7 / #623 / #624
 
-At receiving commit `1e190cfb29be95e0622e79c06bdcb4e272bea1d6`,
-`conductor/tracks.md` still labels Tracks 1 and 2 planned, while Track 4 is marked
-completed and linked to its archive. Reconcile those entries as follows:
+The coordinator receives remaining integration and qualification from the
+network worker. Its immutable
+[handoff](https://github.com/edithatogo/innovate/blob/ff7e077a672721bc14fe045454164766f3fa0e45/conductor/tracks/rust_network_petgraph_20261115/handoff.md)
+and [review record](https://github.com/edithatogo/innovate/blob/ff7e077a672721bc14fe045454164766f3fa0e45/conductor/tracks/rust_network_petgraph_20261115/evidence/review.md)
+were inspected. `network.rs` has identical Git blob
+`364068cb7171bf7cd65d5aa6189371c1d64f66a2` at that worker head and inspected
+main `e538af2c9aeb86a439fbeb955e752d1e2bba5b6a`.
 
-| Existing label | Reconciled meaning |
-| --- | --- |
-| HTTP planned | Implementation merged in #618; no redo. Preserve specific qualification limits. |
-| Tabular planned | Implementation merged in #619; no redo. Preserve specific qualification limits. |
-| Linalg completed/archive | Implementation merged in #621; coordinator acceptance and dependent ODE/regime integration held on the findings below. Keep the historical archive as evidence. |
-| Statistics planned, proposed archival in #625 | Existing owner/PR received, not accepted. Resolve actual scope and exact-head evidence before completing the track. |
-| Network planned | Worker preparation is authorised but exact paths must first be checked against live ownership. |
+The recorded 72 selected tests and 160 full-response comparisons remain
+worker-executed original-base evidence using an external dependency manifest,
+not new integrated-head runs. Independent graph fixtures, deterministic
+ordering, directed/undirected normalization, isolates and Kairos boundaries
+remain part of the accepted packet, not empirical validity claims.
 
-This record does not silently change historical metadata, approve new consumer
-implementation, or declare any scientific obligation complete.
+The current core manifest supplies `petgraph = "=0.8.3"`; the missing direct
+declaration is no longer the source-state blocker. It does not use the requested
+`default-features = false`. Exact feature/lock-closure reconciliation remains
+with the coordinator, along with applicable integrated workspace, installed
+Python/Julia/R/platform, documentation, Miri, coverage, native mutation,
+security and measured runtime/memory/compile-overhead acceptance. No zero-overhead
+or full-workspace-closure claim is accepted.
 
-## #621 qualification findings and evidence
+### STAT-NUM — Track 5 / #625 / immutable #622 packet / #624
 
-Exact-head coordinator review:
-[review 5909490616](https://github.com/edithatogo/innovate/pull/621#pullrequestreview-5909490616).
-This is a coordinator review, not an independent reviewer or an executed local
-numerical validation.
+The coordinator owns reconciliation with the existing #625 source owner;
+the documentation owner retains substantive source/claim review. The preserved
+[packet README](https://github.com/edithatogo/innovate/blob/6a85b4c91d5dfc427e17f5fba885681e04ae31ac/conductor/tracks/rust_stats_distributions_20261115/evidence/ownership-handoff-20261115/README.md)
+and [qualification receipt](https://github.com/edithatogo/innovate/blob/6a85b4c91d5dfc427e17f5fba885681e04ae31ac/conductor/tracks/rust_stats_distributions_20261115/evidence/ownership-handoff-20261115/qualification.json)
+were read. Exact comparison from baseline
+`b344f379926e934be30edc0842779dc5e3455f86` to evidence head
+`6a85b4c91d5dfc427e17f5fba885681e04ae31ac` confirms one commit adding exactly
+20 handoff files and no other change. Its completed migration remains a deferred
+patch, not a second applied production implementation.
 
-Two important source-level findings require a bounded owner follow-up:
+Preserve each finding and its original execution scope:
 
-1. Invalid/out-of-bound trial residuals are replaced by finite `1e75` values.
-   Legitimate residuals can exceed that penalty, so it is not a guaranteed
-   rejection. Final candidate re-evaluation also lacks the declared parameter
-   bound check. The review provides a scale-stress regression proposal; it has
-   not been executed in this chat.
-2. The new library's normalized orthogonality, initial scaled step bound and
-   function-evaluation budget differ from the old adapter's criteria. The code
-   can also return an initial-point fallback while retaining a candidate's
-   termination classification. Qualify the actual semantics and attach
-   convergence to the returned valid point; do not infer equivalence from
-   matching numeric configuration constants.
+- The independent 83-row oracle and reconstructed candidate result:
+  **393 passed, one failed, one inherited live-OECD ignore** across 28 targets.
+  **14 of 36 CDF/survival comparisons fail unchanged relative tolerance
+  `2e-13`**. The 22 inverse-CDF and 18 normalized-log-PDF cases pass in that
+  candidate receipt; none is a current-main execution.
+- The negative control for normalized-log-density subtraction loses the
+  `-5e-21` near-centre Gaussian score. Reconcile relative/unnormalised score
+  semantics against the merged source; do not dismiss it on supersession.
+- The demonstrated 80-draw constant-chain ESS regression, exact-split constancy
+  guards, other constant-chain cases and preserved R-hat overflow errors.
+  Empirical type-7 bootstrap intervals, null/count behavior and RNG remain
+  constraints; no analytic helper needed replacement in bootstrap.
+- Scientific-review freshness failed for the preserved candidate. Substantive
+  review of the accepted Bayesian source remains required; a refreshed shared
+  fingerprint does not independently establish scientific qualification.
 
-Observed hosted evidence at this head:
+These results do not test merged #625 or current main. Their exact integrated-head
+disposition remains open. Do not weaken tolerances, ignore failing cases, replace
+independent oracle values or reopen/reimplement #622. The current manifest uses
+`statrs = "=0.19.1"`, not the requested no-default-features/std-only declaration;
+feature, lock and advisory qualification remain coordinator-owned. The original
+base dependency patch must not overwrite the newer shared lock.
 
-| Evidence | Observed result / limit |
-| --- | --- |
-| CI `43685509133` | Workflow reports success; this alone does not dispose of the review findings. |
-| Documentation `43685509160`, browser job `132725050345` | 142 cases executed: 141 passed, 1 failed. Mobile dark `/innovate/native-migration/` failed the internal artifact-identity assertion; response for `/innovate/` differed from built `index.html`. Not established as pre-existing or harmless. |
-| Browser diagnostics | Artifact `14150317226`; build evidence artifact `14150042950`. Documentation owner retains the repair scope. |
-| Offline security `43685509599`, job `132725051187` | Queued with no executed steps when inspected. Not scanner/agent runtime qualification. |
-| Release Readiness `43685509288` | Failure observed; no waiver or release claim. |
+### CI-CURRENT — coordinator's shared-CI intake in #624
 
-Receiving-main workflow evidence is a separate acceptance item. A later owner
-receipt must identify the actual run, attempt, checkout revision and tree;
-reuse of an older branch result is not sufficient for a changed tree.
+The #615 ownership release is accepted, rather than merely awaiting acknowledgement.
+Shared follow-ups remain here with existing #616/#628, documentation and security
+owners preserved. The #615 worker has no branch-maintenance or monitoring duty.
 
-## Exact-SHA handoff and sequential acceptance
+Retain exact-current-head gate qualification and any controlled performance
+measurement. #615's own cancelled CI/coverage are not passes; neither cache
+success nor different-revision timings establish attributable hosted speedup.
+The #622 Release Drafter missing-configuration/fallback-404 observation remains
+an unresolved reconciliation item: run `43688357924`, job `132733491111`, at
+its historical evidence SHA. It is not asserted as a current-main failure.
+This pass did not rerun workflows or qualify the latest main.
 
-Each owner hands off the PR, full immutable head/base SHAs, exact changed paths,
-shared-file proposal, independent expected-result and negative tests, actual
-commands/toolchain/exit codes, hosted run/job identities, skips/unexecuted gates,
-review findings/fixes and downstream restrictions. A moving branch is not a
-final handoff.
+## Shared ownership, dependencies and unchanged holds
 
-The coordinator reviews the full scoped diff and all affected contracts,
-checks the tested synthetic merge and base identity, and qualifies applicable
-Rust, installed Python, Julia/R/platform, formatting/docs, coverage, policy,
-advisory/privacy/security and consumer evidence. New head/base changes require
-reconciliation. Merge only one accepted packet at a time; verify the receiving
-SHA/tree and receiving-main checks before admitting dependent integration.
+The coordinator retains all shared Cargo manifests/locks, common Conductor
+registry, shared CI integration, interfaces and serial `causal.rs`. Existing
+specialist ownership is preserved, except the explicit #615 release above.
+Statistics must not concurrently edit the linalg causal slice.
 
-All **38 scientific migration/acceptance obligations**, the fail-closed release
-gate, and four historical scenario human checks remain. Planning-only consumer
-restrictions remain, including Tobac. CI does not constitute empirical,
-clinical, publication or human acceptance. Offline-security runtime acceptance
-cannot be replaced by a static check or runner substitution.
+**HTTP + tabular precede linalg/statistics/network. Accepted linalg precedes ODE
+and regime. Accepted statistics precedes NUTS, with a serial `bayesian.rs`
+handoff.** No merged implementation or archived plan lifts those holds.
 
-No release/publication, upstream write, account/permission choice, paid compute
-expansion, blanket merge/pruning or disposal/publication of preserved local
-stash/ignored material is authorised. This coordinator has not created workers.
+- Linalg remains with its existing owner and
+  [review 5909490616](https://github.com/edithatogo/innovate/pull/621#pullrequestreview-5909490616).
+  The finite `1e75` trial penalty/final-bound concern and changed or detached
+  termination semantics are unresolved source-level findings, not locally
+  reproduced failures in this coordinator chat. ODE/regime acceptance stays held.
+- Documentation remains with the existing #613 owner, including
+  [browser handoff 6890734373](https://github.com/edithatogo/innovate/pull/613#issuecomment-6890734373)
+  and substantive Bayesian source review. Historical browser run `43685509160`
+  executed 141 passes and one artifact-identity failure out of 142; no disposition
+  is inferred from later unrelated merges.
+- #559/Voiage ownership remains. Offline-security #590 and its existing owner
+  retain dedicated runner, local assets and actual scanner/agent qualification;
+  a queued job or merged caller is not acceptance.
+- Track 3 Kairos publication remains an external, separately authorised
+  prerequisite. Upstream is read-only here; retain the existing pin. #628 does
+  not authorise account choices, publication, runner substitution or blanket
+  registry-only supply-chain acceptance.
+- All **38 scientific obligations**, four human scenario checks, fail-closed
+  release/security gates and planning-only consumers, including Tobac, remain.
+  No new worker, publication, permissions change, upstream write, paid compute
+  expansion, blanket merge/pruning or disposal of unverified work is authorised.
 
-## Execution limitation
+Each later integration handoff must supply immutable head/base SHAs, exact paths,
+shared changes, independent tests, real commands/exits/toolchain, hosted checkout
+identity, skips, review findings and limitations. Reconcile changed heads/bases;
+merge only qualified packets sequentially and verify receiving SHA/tree and
+applicable receiving-main checks. Generic review or CI is not scientific sign-off.
 
-The ordinary ChatGPT sandbox terminal and Python failed at the infrastructure
-layer before command execution. A subsequent terminal/disk-capacity probe also
-failed. No local build, test, disk-capacity result or numerical reproduction is
-claimed. No local Codex/Work or user's machine was used. Hosted observations
-above are separate from proposed regression work and pending qualification.
+## Registry interpretation and verification limits
+
+`conductor/tracks.md` is not edited by this receipt pass. In particular, historical
+HTTP/tabular planned labels do not call for reimplementation, linalg completion
+labels do not lift its acceptance hold, and merged statistics/network source does
+not complete scientific qualification. Their current operational ownership and
+residual obligations are given above and in the accepted #624 receipt.
+
+Fresh checks in this pass were GitHub PR/ref reads, immutable evidence reads,
+GitHub comparisons and source blob-identity inspection. The sandbox capacity
+probe failed before command execution. No local build, test, disk-capacity result,
+checksum recomputation, numerical reproduction, new independent review or fresh
+integrated-head qualification is claimed. This one-file documentation correction
+requires its own review/checks before merge; the published #624 acknowledgement
+already establishes accepted handoff and archival eligibility.
