@@ -75,7 +75,7 @@
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
     "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
-    "rust/crates/innovate-core/src/bayesian.rs": "83f1b24cee933755560778ec38c587bb319ae570e18ff151e305e1a5ea9c746b",
+    "rust/crates/innovate-core/src/bayesian.rs": "c4dd036f563423d3ac440a6fb7afcf1154010e1fc551886e5fc9b23697feea10",
     "docs/astro-site/src/content/docs/core/arrow-interchange.md": "ed2abe399f302a06279fba2ccb1c6377ef2426c9a2531f089ecfb641cbaf5545",
     "docs/astro-site/src/content/docs/core/index.md": "cbf523434caf031247f002ff10ef2958003d681039469035f3c293cec0495db7",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",

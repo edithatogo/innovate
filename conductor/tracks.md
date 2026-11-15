@@ -555,7 +555,7 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 - [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned — P2, Order #7; after #1–#2; parallelizable with #4–#6)*
   *Link: [./tracks/rust_network_petgraph_20261115/](./tracks/rust_network_petgraph_20261115/)*
 
-- [ ] **Track: Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)** *(Planned — P1, Order #8; after #5)*
+- [x] **Track: Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)** *(Completed — P1, Order #8; after #5)*
   *Link: [./tracks/rust_nuts_hmc_20261115/](./tracks/rust_nuts_hmc_20261115/)*
 
 - [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned — P1, Order #9; after #4)*
