@@ -14,5 +14,5 @@
 
 ## Phase 3: Publish Dry-Run & Workspace Gates
 - [ ] **3.1 Verify `crates.io` packaging:** Run `cargo publish --dry-run -p innovate-core --locked` (or `cargo package --locked -p innovate-core`) and confirm zero git-dependency errors.
-- [ ] **3.2 Run full workspace & docs checks:** Execute `cargo test --workspace --locked`, `cargo audit`, and `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps -p innovate-core`.
+- [ ] **3.2 Run full workspace, `cargo-deny` & docs checks:** Execute `cargo test --workspace --locked`, `cargo audit`, `cargo deny check sources` (enforcing `allow-git = []` in `deny.toml` now that `polars` and `kairo-ecs-*` are on `crates.io`), and `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps -p innovate-core`.
 - [ ] **3.3 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-run verification gates, and mark track complete in `conductor/tracks.md`.

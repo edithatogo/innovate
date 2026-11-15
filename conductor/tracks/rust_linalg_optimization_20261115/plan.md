@@ -17,5 +17,5 @@
 ## Phase 3: Full Workspace, Polyglot & Gate Verification
 - [ ] **3.1 Run full Rust test suite:** Execute `cargo test --workspace --locked` and confirm zero failures.
 - [ ] **3.2 Run Python native tests:** Execute `pytest tests/native` and confirm all native tests pass.
-- [ ] **3.3 Run docs & security gates:** Execute `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps --workspace` and `cargo audit` and confirm zero warnings/advisories.
+- [ ] **3.3 Run docs, `Miri` & security gates:** Execute `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps --workspace`, scoped `cargo +nightly miri test -p innovate-core --lib numerics` (pure-Rust kernel checks), `cargo audit`, and `cargo deny check` (if configured), confirming zero warnings/advisories.
 - [ ] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-run verification gates, and mark track complete in `conductor/tracks.md`.

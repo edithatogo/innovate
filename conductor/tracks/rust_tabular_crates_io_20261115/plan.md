@@ -16,7 +16,7 @@
 - [ ] **2.5 Conductor Review (Phase 2):** Run `conductor-review` on Phase 2 changes, apply any fixes, re-run tests, and commit checkpoint.
 
 ## Phase 3: Security Audit & Full Workspace Verification
-- [ ] **3.1 Verify `RUSTSEC-2025-0141` clearance:** Run `cargo audit` and confirm `bincode 2.0.1` advisory is gone (or verify zero `git+` polars/hashbrown entries in `Cargo.lock`).
+- [ ] **3.1 Verify `RUSTSEC-2025-0141` & `cargo-deny` / scoped `Miri`:** Run `cargo audit` (confirm `bincode 2.0.1` advisory is gone), run `cargo deny check` (confirming `innovate-tabular` has zero `git+` sources), and run `cargo +nightly miri test -p innovate-tabular --lib` on pure-Rust IPC/buffer unit tests to verify zero UB/aliasing errors.
 - [ ] **3.2 Run full Rust & Python test suites:** Execute `cargo test --workspace --locked` and `pytest tests/native` and confirm zero failures.
 - [ ] **3.3 Run docs gate:** Execute `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps -p innovate-tabular` and confirm zero warnings.
 - [ ] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-run verification gates, and mark track complete in `conductor/tracks.md`.

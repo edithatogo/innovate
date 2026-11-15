@@ -560,3 +560,6 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 
 9. - [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned — P1, Order #9; after #4)*
      *Link: [./tracks/rust_regime_changepoint_20261115/](./tracks/rust_regime_changepoint_20261115/)*
+
+10. - [ ] **Track: CI & Release Supply-Chain Hardening** *(Planned — P1; strict `cargo-deny` source checks depend on #2 & #3; parallelizable for `Harden-Runner`, `Sigstore`/`SLSA`, `Syft`/`Grype`, `poutine`)*
+      *Link: [./tracks/ci_supply_chain_hardening_20261115/](./tracks/ci_supply_chain_hardening_20261115/)*

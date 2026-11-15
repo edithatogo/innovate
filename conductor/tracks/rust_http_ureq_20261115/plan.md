@@ -17,6 +17,6 @@
 
 ## Phase 3: Full Workspace & Gate Verification
 - [ ] **3.1 Run full Rust test suite:** Execute `cargo test --workspace --locked` and confirm zero failures.
-- [ ] **3.2 Run docs & security gates:** Execute `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps --workspace` and `cargo audit` and confirm zero warnings/errors.
+- [ ] **3.2 Run docs & security gates:** Execute `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps --workspace`, `cargo audit` (or hosted `RustSec advisory audit`), and `cargo deny check advisories licenses bans` (if `deny.toml` exists); optionally record `cargo geiger -p innovate-core` before/after `unsafe` counts in `spec.md`.
 - [ ] **3.3 Run Python native tests:** Execute `pytest tests/native` and confirm all tests pass.
 - [ ] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-run verification gates, and mark track complete in `conductor/tracks.md`.
