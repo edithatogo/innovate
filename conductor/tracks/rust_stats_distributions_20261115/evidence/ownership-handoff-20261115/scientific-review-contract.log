@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "scope": "review_record_consistency_and_declared_source_freshness",
+  "errors": [
+    "Reviewed source changed: rust/crates/innovate-core/src/bayesian.rs. Re-review before updating its fingerprint."
+  ],
+  "source_files_declared": 27,
+  "scientific_quality_certified": false,
+  "pedagogical_quality_certified": false,
+  "human_reader_validation_performed": false,
+  "native_execution_performed": false
+}

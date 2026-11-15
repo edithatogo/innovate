@@ -1,0 +1,407 @@
+diff --git a/rust/crates/innovate-core/src/bayesian.rs b/rust/crates/innovate-core/src/bayesian.rs
+index 3ff4dd1..e98f19f 100644
+--- a/rust/crates/innovate-core/src/bayesian.rs
++++ b/rust/crates/innovate-core/src/bayesian.rs
+@@ -4,6 +4,7 @@
+ mod statrs_migration_tests;
+ 
+ use serde_json::{Value, json};
++use statrs::distribution::{ContinuousCDF, Normal};
+ 
+ pub(crate) fn grid(payload: &Value) -> Result<Value, &'static str> {
+     let model = payload["forecast_model"]
+@@ -471,17 +472,10 @@ fn rank_scores(values: &[f64]) -> Vec<f64> {
+ }
+ 
+ fn normal_quantile(probability: f64) -> f64 {
+-    // The bounded draw counts keep the Blom probabilities inside Phi(±8).
+-    let (mut low, mut high) = (-8_f64, 8_f64);
+-    for _ in 0..48 {
+-        let middle = low.midpoint(high);
+-        if 0.5 * libm::erfc(-middle / std::f64::consts::SQRT_2) < probability {
+-            low = middle;
+-        } else {
+-            high = middle;
+-        }
+-    }
+-    low.midpoint(high)
++    // Only rank_scores calls this helper. Validated chain limits and average
++    // tied ranks keep Blom probabilities in [0.625/160000.25, 1-0.625/160000.25],
++    // strictly inside (0, 1). Density scores and RNG streams are unchanged.
++    Normal::standard().inverse_cdf(probability)
+ }
+ 
+ fn split_rhat_moments(splits: &[&[f64]]) -> Result<Option<f64>, &'static str> {
+@@ -509,7 +503,14 @@ fn split_rhat_moments(splits: &[&[f64]]) -> Result<Option<f64>, &'static str> {
+     if !within.is_finite() || !between_per_draw.is_finite() {
+         return Err("split R-hat moments exceed finite numerical domain");
+     }
+-    if within == 0. {
++    // Repeated summation can leave a tiny residual even for an exactly
++    // constant split. Preserve zero-within-variance semantics without an
++    // epsilon threshold, after retaining the nonfinite-moment error above.
++    if within == 0.
++        || splits
++            .iter()
++            .all(|split| split.iter().all(|value| *value == split[0]))
++    {
+         return Ok(None);
+     }
+     let rhat = ((n - 1.) / n + between_per_draw / within).sqrt();
+@@ -555,6 +556,14 @@ pub(crate) fn effective_sample_size(payload: &Value) -> Result<Value, &'static s
+ }
+ 
+ fn paired_ess(values: &[f64], half: usize) -> Option<f64> {
++    // Distinct constant chains/splits still have exactly zero within variance.
++    // Test equality before rounded means can invent a nonzero residual.
++    if values
++        .chunks_exact(half)
++        .all(|split| split.iter().all(|value| *value == split[0]))
++    {
++        return None;
++    }
+     let n = half as f64;
+     let means: Vec<_> = values
+         .chunks_exact(half)
+diff --git a/rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs b/rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs
+index 342d014..d5073ed 100644
+--- a/rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs
++++ b/rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs
+@@ -1,9 +1,14 @@
+ //! Independent characterization before and after the Track 5 quantile migration.
+ //!
+-//! These tests intentionally need no statrs import: they first execute against
+-//! the original implementation. Dependency-only CDF/PDF qualification is separate.
++//! These tests intentionally need no statrs import. The initial characterization
++//! ran against the original implementation; the exact-constant regressions were
++//! added after observing the migration's rounding effect. Dependency-only
++//! CDF/PDF qualification is separate.
+ 
+-use super::{GaussianPriors, log_likelihood, normal_quantile, observations, rank_scores};
++use super::{
++    GaussianPriors, log_likelihood, normal_quantile, observations, paired_ess, rank_scores,
++    split_rhat_moments,
++};
+ use serde_json::{Value, json};
+ 
+ fn fixture() -> Value {
+@@ -249,3 +254,47 @@ fn likelihood_observation_validation_rejects_invalid_noise_and_data() {
+         );
+     }
+ }
++
++#[test]
++fn exact_constant_splits_keep_zero_variance_despite_mean_roundoff() {
++    for half in [3, 40, 5000] {
++        let values: Vec<_> = [
++            -0.6744897501960817,
++            0.6744897501960817,
++            1.2345678901234567,
++            -1.2345678901234567,
++        ]
++        .into_iter()
++        .flat_map(|value| std::iter::repeat_n(value, half))
++        .collect();
++        let splits: Vec<_> = values.chunks_exact(half).collect();
++        assert_eq!(paired_ess(&values, half), None, "half={half}");
++        assert_eq!(split_rhat_moments(&splits).unwrap(), None, "half={half}");
++    }
++}
++
++#[test]
++fn a_single_varying_split_of_adjacent_numbers_is_not_constant() {
++    let adjacent = 1_f64.next_up();
++    let values = [
++        1., adjacent, 1., adjacent, 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
++    ];
++    let splits: Vec<_> = values
++        .as_chunks::<4>()
++        .0
++        .iter()
++        .map(|split| split.as_slice())
++        .collect();
++    assert!(paired_ess(&values, 4).unwrap().is_finite());
++    assert!(split_rhat_moments(&splits).unwrap().unwrap().is_finite());
++}
++
++#[test]
++fn constant_split_detection_does_not_mask_rhat_overflow_errors() {
++    let positive = [f64::MAX; 3];
++    let negative = [-f64::MAX; 3];
++    assert_eq!(
++        split_rhat_moments(&[&positive, &negative]),
++        Err("split R-hat moments exceed finite numerical domain")
++    );
++}
+diff --git a/rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md
+index 30fafaf..fb9fe6a 100644
+--- a/rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md
++++ b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md
+@@ -94,6 +94,34 @@ probabilities or this accidental private behavior into a public API.
+ No reference establishes empirical validity, sampler convergence, NUTS readiness,
+ causal identification, downstream implementation permission, or release approval.
+ 
++## Separate pre-migration behavioral capture
++
++`behavior-baseline.json` contains five synthetic request/response pairs captured
++from main `42189a223fd44c823ca11aec689ea67b11c25790` before the migration.
++It records the original source/lock hashes, Rust version, target and capture
++binary hash. These values describe historical behavior; they are not independent
++evidence that the producer is scientifically correct.
++
++Reproduce in a separate checkout of that exact revision. Build the native core
++with `cargo build --locked -p innovate-core --lib`, then compile
++`capture_baseline.rs` against that resulting `libinnovate_core.rlib` with
++`rustc --edition 2024`, `--extern innovate_core=<rlib>` and
++`-L dependency=<target>/debug/deps`. Feed each recorded `request` as one JSON
++line on stdin; compare each resulting response with its corresponding
++`expected`. The original capture executable was equivalent to this small runner.
++
++Same-target exact equality was checked before and after the quantile migration.
++The portable regression keeps draws, acceptance counts, metadata and discrete
++grids/intervals exact. Grid masses use the existing `1e-12` absolute tolerance
++and posterior means the existing `1e-10` tolerance, because platform math
++libraries may differ in the last bits of `exp`/`ln`. A local pass does not
++qualify the unexecuted Linux/macOS/Windows matrix.
++
++Bootstrap captures remain available for inspection. The regression independently
++checks type-7 percentile coefficients using actual returned estimates, retaining
++the eight-success contract for these well-conditioned fixtures. It does not
++freeze solver estimates or confer acceptance on the separate linalg migration.
++
+ ## Primary references
+ 
+ - [mpmath inverse error function and error-function definitions](https://mpmath.org/doc/1.3.0/functions/expintegrals.html#erfinv)
+diff --git a/rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json
+index c2eb5e3..db552f5 100644
+--- a/rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json
++++ b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json
+@@ -12,7 +12,9 @@
+     "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+     "capture_binary_sha256": "decd75028b0a48cae2c056a7270b899e8bd6e5b932788bcf4cc07f5f72c0cefe",
+     "build_command": "cargo build --locked --offline -p innovate-core --lib",
+-    "numeric_comparison": "exact JSON values for same platform; independent numerical references are normal.json"
++    "numeric_comparison": "Exact sampled draws, accepted counts and metadata; grid mass abs 1e-12 and mean abs 1e-10 retain existing cross-platform numerical tolerances. Local exact equality was established before migration.",
++    "target": "x86_64-unknown-linux-gnu",
++    "platform": "Linux; glibc 2.41"
+   },
+   "cases": [
+     {
+diff --git a/rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs
+new file mode 100644
+index 0000000..5f735c1
+--- /dev/null
++++ b/rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs
+@@ -0,0 +1,11 @@
++//! Read one versioned request per line and emit the actual native response.
++//!
++//! Compile against the exact recorded baseline revision when reproducing
++//! behavior-baseline.json. This is a capture tool, not a mathematical oracle.
++use std::io::{self, BufRead};
++
++fn main() {
++    for line in io::stdin().lock().lines() {
++        println!("{}", innovate_core::execute_json(&line.unwrap()));
++    }
++}
+diff --git a/rust/crates/innovate-core/tests/statrs_migration.rs b/rust/crates/innovate-core/tests/statrs_migration.rs
+index 4ca61f2..de14ff6 100644
+--- a/rust/crates/innovate-core/tests/statrs_migration.rs
++++ b/rust/crates/innovate-core/tests/statrs_migration.rs
+@@ -28,10 +28,32 @@ fn statrs_migration_keeps_seeded_draws_acceptance_and_grid_mass() {
+         if case["request"]["operation"] == "bootstrap_fit" {
+             continue;
+         }
+-        let response: Value =
++        let mut response: Value =
+             serde_json::from_str(&innovate_core::execute_json(&case["request"].to_string()))
+                 .unwrap();
+-        assert_eq!(response, case["expected"], "{}", case["id"]);
++        let mut expected = case["expected"].clone();
++        if case["request"]["operation"] == "bayesian_parameter_grid" {
++            let actual_mass = response["result"]["posterior_mass"].as_array().unwrap();
++            let expected_mass = expected["result"]["posterior_mass"].as_array().unwrap();
++            assert_eq!(actual_mass.len(), expected_mass.len());
++            for (actual, expected) in actual_mass.iter().zip(expected_mass) {
++                assert!((actual.as_f64().unwrap() - expected.as_f64().unwrap()).abs() < 1e-12);
++            }
++            assert!(
++                (response["result"]["posterior_mean"].as_f64().unwrap()
++                    - expected["result"]["posterior_mean"].as_f64().unwrap())
++                .abs()
++                    < 1e-10
++            );
++            // exp/ln final bits vary across platform math libraries. Retain
++            // existing grid tolerances while comparing all other disclosure
++            // and the discrete interval/grid exactly.
++            for key in ["posterior_mass", "posterior_mean"] {
++                response["result"].as_object_mut().unwrap().remove(key);
++                expected["result"].as_object_mut().unwrap().remove(key);
++            }
++        }
++        assert_eq!(response, expected, "{}", case["id"]);
+         checked += 1;
+     }
+     assert_eq!(checked, 3);
+@@ -199,3 +221,161 @@ fn statrs_migration_stuck_diagnostics_preserve_nulls_and_counts() {
+         assert!(ess["result"][key].is_null(), "{key}: {ess}");
+     }
+ }
++
++#[test]
++fn statrs_migration_long_and_piecewise_constant_splits_keep_null_diagnostics() {
++    for draws in [80, 10_000] {
++        let half = draws / 2;
++        let piecewise = |left, right| {
++            std::iter::repeat_n(left, half)
++                .chain(std::iter::repeat_n(right, half))
++                .collect::<Vec<f64>>()
++        };
++        for chains in [
++            json!([vec![0.; draws], vec![1.; draws]]),
++            json!([piecewise(0., 1.), piecewise(2., 3.)]),
++        ] {
++            let rhat = execute(
++                "bayesian_split_rhat",
++                json!({"method":"rank_normalized_split_rhat", "chains":chains}),
++            );
++            assert!(rhat["error"].is_null(), "{rhat}");
++            for key in ["rhat", "bulk_rhat", "folded_rhat"] {
++                assert!(rhat["result"][key].is_null(), "draws={draws} {key}: {rhat}");
++            }
++            let ess = execute("bayesian_effective_sample_size", json!({"chains":chains}));
++            assert!(ess["error"].is_null(), "{ess}");
++            assert_eq!(ess["result"]["draws_used"], 2 * draws);
++            for key in ["bulk_ess", "lower_tail_ess", "upper_tail_ess", "tail_ess"] {
++                assert!(ess["result"][key].is_null(), "draws={draws} {key}: {ess}");
++            }
++        }
++    }
++}
++
++mod distribution_dependency {
++    use super::*;
++    use statrs::distribution::{Continuous, ContinuousCDF, Normal};
++
++    fn reference() -> Value {
++        serde_json::from_str(include_str!("fixtures/statrs_20261115/normal.json")).unwrap()
++    }
++
++    fn number(value: &Value) -> f64 {
++        match value.as_str() {
++            Some("-inf") => f64::NEG_INFINITY,
++            Some("inf") => f64::INFINITY,
++            Some("nan") => f64::NAN,
++            Some(tag) => panic!("unknown reference number {tag}"),
++            None => value.as_f64().expect("numeric reference"),
++        }
++    }
++
++    fn reference_error(actual: f64, expected: f64, case: &Value) -> Option<String> {
++        let tolerance =
++            number(&case["abs_tol"]) + case["rel_tol"].as_f64().unwrap_or(0.) * expected.abs();
++        let matches = if expected.is_nan() {
++            actual.is_nan()
++        } else if expected.is_infinite() || expected == 0. {
++            actual == expected
++        } else {
++            actual.is_finite() && (actual - expected).abs() <= tolerance
++        };
++        (!matches).then(|| {
++            format!(
++                "{}: actual={actual:.17e}, expected={expected:.17e}, tolerance={tolerance:.17e}",
++                case["id"]
++            )
++        })
++    }
++
++    fn assert_reference(actual: f64, expected: f64, case: &Value) {
++        if let Some(error) = reference_error(actual, expected, case) {
++            panic!("{error}");
++        }
++    }
++
++    #[test]
++    fn statrs_migration_distribution_quantiles_match_independent_tails_and_endpoints() {
++        let data = reference();
++        let cases = data["normal_quantile"].as_array().unwrap();
++        assert_eq!(cases.len(), 22);
++        let normal = Normal::standard();
++        for case in cases {
++            let probability = number(&case["p"]);
++            let actual = normal.inverse_cdf(probability);
++            assert_reference(actual, number(&case["expected"]), case);
++            assert_eq!(normal.try_inverse_cdf(probability).unwrap(), actual);
++        }
++    }
++
++    #[test]
++    fn statrs_migration_distribution_cdf_and_survival_preserve_tiny_tails() {
++        let data = reference();
++        let cases = data["normal_cdf"].as_array().unwrap();
++        assert_eq!(cases.len(), 18);
++        let normal = Normal::standard();
++        let mut failures = Vec::new();
++        for case in cases {
++            let value = number(&case["x"]);
++            for (operation, actual, expected) in [
++                ("cdf", normal.cdf(value), number(&case["expected"])),
++                ("survival", normal.sf(value), number(&case["survival"])),
++            ] {
++                if let Some(error) = reference_error(actual, expected, case) {
++                    failures.push(format!("{operation} {error}"));
++                }
++            }
++        }
++        assert!(
++            failures.is_empty(),
++            "all 36 CDF/survival comparisons executed; failures:\n{}",
++            failures.join("\n")
++        );
++    }
++
++    #[test]
++    fn statrs_migration_distribution_log_pdf_keeps_extreme_scales_finite() {
++        let data = reference();
++        let cases = data["normal_log_pdf"].as_array().unwrap();
++        assert_eq!(cases.len(), 18);
++        for case in cases {
++            let normal = Normal::new(number(&case["mean"]), number(&case["sd"])).unwrap();
++            assert_reference(
++                normal.ln_pdf(number(&case["x"])),
++                number(&case["expected"]),
++                case,
++            );
++        }
++    }
++
++    #[test]
++    fn statrs_migration_distribution_rejects_invalid_probability_and_scale() {
++        let normal = Normal::standard();
++        for probability in [
++            -1.,
++            -f64::MIN_POSITIVE,
++            1. + f64::EPSILON,
++            f64::INFINITY,
++            f64::NEG_INFINITY,
++            f64::NAN,
++        ] {
++            // In statrs 0.19.1 the default try_inverse_cdf delegates to the
++            // panicking inverse_cdf; Result does not imply input validation.
++            assert!(
++                std::panic::catch_unwind(|| normal.inverse_cdf(probability)).is_err(),
++                "{probability}"
++            );
++            assert!(
++                std::panic::catch_unwind(|| normal.try_inverse_cdf(probability)).is_err(),
++                "{probability}"
++            );
++        }
++        for sd in [0., -0., -1., f64::NAN] {
++            assert!(Normal::new(0., sd).is_err(), "{sd}");
++        }
++        assert!(Normal::new(f64::NAN, 1.).is_err());
++        // Innovate's stricter finite JSON and positive-noise contracts are
++        // independently exercised above; they are not delegated to statrs.
++    }
++}

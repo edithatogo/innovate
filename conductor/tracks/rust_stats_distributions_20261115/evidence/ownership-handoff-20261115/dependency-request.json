@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "status": "request_only_shared_integration_blocked",
+  "integrator": "6aeeeda6-d4ec-8320-a3b5-c3e2362e5b53",
+  "base_commit": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "direct_dependency": {
+    "package": "statrs",
+    "version": "=0.19.1",
+    "registry": "crates.io",
+    "default_features": false,
+    "features": [
+      "std"
+    ],
+    "checksum": "c1837f9a1bd13dabbdbb04489c39451482d3cdd35a6e1a0d0f3570dea2b8c8be",
+    "archive_checksum_verified": true
+  },
+  "tracked_shared_files_edited": [],
+  "patch": "statrs-dependency-request.patch",
+  "patch_sha256": "073220651839a6bc2d94288f33a6e08174f5c056e8bd65e18754328ba17fedb7",
+  "base_lock_sha256": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+  "candidate_lock_sha256": "90f609f72fc7ac48d9ec508aacf46d95b3c7ec1955bfb1af57fa100b215a1c1b",
+  "added_lock_packages": [
+    {
+      "name": "glam",
+      "version": "0.30.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "19fc433e8437a212d1b6f1e68c7824af3aed907da60afa994e7f542d18d12aa9"
+    },
+    {
+      "name": "glam",
+      "version": "0.31.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "556f6b2ea90b8d15a74e0e7bb41671c9bdf38cd9f78c284d750b9ce58a2b5be7"
+    },
+    {
+      "name": "glam",
+      "version": "0.32.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f70749695b063ecbf6b62949ccccde2e733ec3ecbbd71d467dca4e5c6c97cca0"
+    },
+    {
+      "name": "glam",
+      "version": "0.33.12",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "37bfe73dc8ec21f54d181e5a60554327ec3f1c600c455a75ccbfc65d2106a6c4"
+    },
+    {
+      "name": "matrixmultiply",
+      "version": "0.3.11",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "3f607c237553f086e7043417a51df26b2eb899d3caff94e6a67592ff992fedc7",
+      "dependencies": [
+        "autocfg",
+        "rawpointer"
+      ]
+    },
+    {
+      "name": "nalgebra",
+      "version": "0.35.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "adc43a60c217b0c6ff46e47f26911015ad8d2e5a8be1af668c67e370d99a4346",
+      "dependencies": [
+        "approx",
+        "glam 0.30.10",
+        "glam 0.31.1",
+        "glam 0.32.1",
+        "glam 0.33.12",
+        "matrixmultiply",
+        "num-complex",
+        "num-rational",
+        "num-traits",
+        "simba",
+        "typenum"
+      ]
+    },
+    {
+      "name": "num-bigint",
+      "version": "0.4.8",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c89e69e7e0f03bea5ef08013795c25018e101932225a656383bd384495ecc367",
+      "dependencies": [
+        "num-integer",
+        "num-traits"
+      ]
+    },
+    {
+      "name": "num-complex",
+      "version": "0.4.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495",
+      "dependencies": [
+        "num-traits"
+      ]
+    },
+    {
+      "name": "num-integer",
+      "version": "0.1.47",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "7ce2d95d4b3734dc35aa2f45e1aa22cd416814592a4f9d9205e11affd5b8e10b",
+      "dependencies": [
+        "num-traits"
+      ]
+    },
+    {
+      "name": "num-rational",
+      "version": "0.4.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f83d14da390562dca69fc84082e73e548e1ad308d24accdedd2720017cb37824",
+      "dependencies": [
+        "num-bigint",
+        "num-integer",
+        "num-traits"
+      ]
+    },
+    {
+      "name": "rawpointer",
+      "version": "0.2.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
+    },
+    {
+      "name": "safe_arch",
+      "version": "1.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "42c6efa15875e6ecb39ca61fb0b0c1a40b84fac5a5ffe71eef7d1000c8eb3f5f",
+      "dependencies": [
+        "bytemuck"
+      ]
+    },
+    {
+      "name": "simba",
+      "version": "0.10.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f1a7200d82ff1c7b4235efd12f11e2537a402c91cf83a5cb97ce80eef787fde7",
+      "dependencies": [
+        "approx",
+        "num-complex",
+        "num-traits",
+        "wide"
+      ]
+    },
+    {
+      "name": "statrs",
+      "version": "0.19.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "c1837f9a1bd13dabbdbb04489c39451482d3cdd35a6e1a0d0f3570dea2b8c8be",
+      "dependencies": [
+        "approx",
+        "nalgebra",
+        "num-traits",
+        "rand",
+        "thiserror"
+      ]
+    },
+    {
+      "name": "wide",
+      "version": "1.7.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "d920ac99c3c8edce110cb8d07dbb324d6d026011dce85b1e9355b70f0adacc4f",
+      "dependencies": [
+        "bytemuck",
+        "safe_arch"
+      ]
+    }
+  ],
+  "removed_lock_packages": [],
+  "changed_existing_lock_packages": [
+    "innovate-core"
+  ],
+  "compiled_statrs_features": [
+    {
+      "profile_fingerprint": "statrs-6f0da3f01c87abf4",
+      "enabled_features": [
+        "std"
+      ]
+    },
+    {
+      "profile_fingerprint": "statrs-ce0cf60b98caf031",
+      "enabled_features": [
+        "std"
+      ]
+    }
+  ],
+  "notes": [
+    "Cargo resolves optional dependency packages into the lock even though compiled statrs features are only std; the optional closure is not deleted.",
+    "The patch is based on original main, not linalg PR621; the integrator must reconcile the combined dependency graph.",
+    "Successful candidate core checks use a disposable copied manifest and lock; they do not qualify the untouched tracked manifest.",
+    "CDF/SF reference failures remain an explicit gate; no threshold or dependency source was changed to pass.",
+    "Shared Cargo audit, CI, common-registry reconciliation, causal disposition and complete integrated exact-head qualification remain integrator-owned."
+  ]
+}

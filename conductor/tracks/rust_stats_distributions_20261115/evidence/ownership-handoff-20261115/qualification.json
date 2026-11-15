@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "status": "ownership_hold_and_incomplete_numerical_shared_scientific_qualification",
+  "recorded_utc": "2026-11-15T07:03:16.535490+00:00",
+  "base_commit": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "baseline_checkpoint": "b344f379926e934be30edc0842779dc5e3455f86",
+  "candidate_patch_sha256": "6e54a27ba271c1af05539773048dc10e020b4abde2e0340505ed8aa3d6999767",
+  "dependency_patch_sha256": "073220651839a6bc2d94288f33a6e08174f5c056e8bd65e18754328ba17fedb7",
+  "candidate_source_sha256": {
+    "rust/crates/innovate-core/src/bayesian.rs": "b83e0abf3f400c77bd441c7feb1f487bb1b027dd32578660439c771ac5c4e99f",
+    "rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs": "eccaa6c6531d656158c12179afe824a94f98804d99f776227edb9275884d6c8b",
+    "rust/crates/innovate-core/src/bootstrap.rs": "1108f9cf07164f7285216d20e8aadd6131ee5e622471a4d231293944c10bd4dd",
+    "rust/crates/innovate-core/src/bootstrap/statrs_migration_tests.rs": "99b4467793f9621ad2f058592d8a17996e164006e145cb71be766263f08e41bc",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md": "f18edbf40af10e9f9f3550e58cff42070e0e564641c54b0b609fa67ab9a82413",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json": "1c86c5381fd93419f68e94ab4717216926b42dccaeac4f57a9e3ea0f374d6a8f",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs": "68606258dd17228f8c61a02d051d3316b78eb0b54ac886ec128b6708004e9620",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/generate.py": "edc9be338d189edefacdf7c18829ba2f9e5d4d733cd48f4648b306313ef1fc8a",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/normal.json": "fd591fe542d0c13644f887941ba74c8d6381012f730bbb7f84d8926af79418ac",
+    "rust/crates/innovate-core/tests/statrs_migration.rs": "32b73c752120cbba0037f182f52b35c1b007ac489cd3ceb91e4bcd342f16b5d7"
+  },
+  "candidate_lock_sha256": "90f609f72fc7ac48d9ec508aacf46d95b3c7ec1955bfb1af57fa100b215a1c1b",
+  "published_branch_disposition": "Only new handoff evidence files after b344; candidate patch is deferred, not applied to production or contested active-track files.",
+  "reconstruction": {
+    "base": "b344f379926e934be30edc0842779dc5e3455f86",
+    "patches": [
+      "candidate-implementation.patch",
+      "statrs-dependency-request.patch"
+    ],
+    "git_apply_check_passed": true,
+    "all_10_source_fixture_hashes_match": true,
+    "candidate_lock_hash_matches": true,
+    "source_recompiled": true
+  },
+  "environment": {
+    "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+    "cargo": "1.99.1 (5f94df478 2026-08-27)",
+    "target": "x86_64-unknown-linux-gnu",
+    "libc": "glibc 2.41",
+    "python_oracle_and_policy_only": "3.12.14",
+    "mpmath": "1.3.0",
+    "oracle_precision_decimal_digits": 400,
+    "cargo_jobs": 2,
+    "incremental": false,
+    "capacity_before_final_reconstruction": {
+      "tmp_available": "1.2 GiB",
+      "original_filesystem_available": "6.1 MiB",
+      "memory_available": "4.9 GiB"
+    },
+    "other_work_deleted_or_modified": false
+  },
+  "checks": [
+    {
+      "name": "reconstructed-frozen-candidate-core",
+      "command": "CARGO_BUILD_JOBS=2 CARGO_INCREMENTAL=0 cargo test --locked --offline --manifest-path /tmp/innovate-statrs-reconstructed-89d5a5e932cf/Cargo.toml -p innovate-core --no-fail-fast",
+      "exit_code": 101,
+      "log": "candidate-core-suite.log",
+      "log_sha256": "3247de9f68eaf9f2d644bc385183ce889d1bc71e0502fc28f0c41ce309e70290",
+      "scope": "all innovate-core test targets and doctests; not workspace or installed consumers",
+      "passed": 393,
+      "failed": 1,
+      "ignored": 1,
+      "targets": 28,
+      "failing_test": "distribution_dependency::statrs_migration_distribution_cdf_and_survival_preserve_tiny_tails",
+      "failed_cdf_survival_comparisons": 14,
+      "total_cdf_survival_comparisons": 36,
+      "ignored_test": "oecd_fetch_returns_csv_from_live_endpoint (pre-existing live public endpoint requirement)",
+      "groups": {
+        "unit": {
+          "passed": 61
+        },
+        "native_boundary": {
+          "passed": 104,
+          "ignored": 1
+        },
+        "statrs_migration": {
+          "passed": 10,
+          "failed": 1
+        }
+      }
+    },
+    {
+      "name": "frozen-candidate-without-shared-dependency",
+      "command": "cargo check --locked --offline -p innovate-core",
+      "exit_code": 101,
+      "log": "candidate-without-dependency.log",
+      "log_sha256": "78e5d06498614c24815acc720376a699ea6013a9de14331db48b1162bd7b1572",
+      "scope": "preserved local candidate source with untouched original-base tracked manifests/lock; not the evidence-only published PR tree",
+      "reason": "E0433 unresolved statrs import"
+    },
+    {
+      "name": "candidate-clippy",
+      "command": "CARGO_BUILD_JOBS=2 CARGO_INCREMENTAL=0 cargo clippy --locked --offline --manifest-path /tmp/innovate-statrs-validation-89d5a5e932cf/Cargo.toml -p innovate-core --lib --tests -- -D warnings",
+      "exit_code": 0,
+      "log": "candidate-clippy.log",
+      "log_sha256": "9f52a7bf92c48c0955aa765893694d2a103861e30a9d00d3112571576af4ef24",
+      "scope": "frozen candidate bytes with disposable dependency overlay; final as_chunks test style correction included"
+    },
+    {
+      "name": "negative-control-reversed-probability",
+      "command": "cargo test --locked --offline --manifest-path /tmp/innovate-statrs-mutation-quantile-89d5a5e932cf/Cargo.toml -p innovate-core --lib quantiles_match_independent_center_tail_and_attainable_domain_references",
+      "exit_code": 101,
+      "log": "negative-control-quantile.log",
+      "log_sha256": "fb66314b1cb176f520db22b32b45fe0a4fac8eb02bf6240a59c419b1e3e65588",
+      "scope": "isolated mutant; not candidate source",
+      "mutation": "inverse_cdf(probability) -> inverse_cdf(1. - probability)",
+      "detected": true
+    },
+    {
+      "name": "negative-control-relative-score-cancellation",
+      "command": "cargo test --locked --offline --manifest-path /tmp/innovate-statrs-mutation-score-89d5a5e932cf/Cargo.toml -p innovate-core --lib parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales",
+      "exit_code": 101,
+      "log": "negative-control-relative-score.log",
+      "log_sha256": "52fa462efc416bb5e9a2b77c7d7538672abf9c455a0d4945cbe2cd210e728a64",
+      "scope": "isolated mutant recompiled after timestamp refresh; not candidate source",
+      "mutation": "relative quadratic -> ln_pdf(z) - ln_pdf(0)",
+      "detected": true
+    },
+    {
+      "name": "constant-split-red",
+      "exit_code": 101,
+      "log": "constant-split-red.log",
+      "log_sha256": "493d563a6165f0433f1216b2af78f19318a3481213a41930b57f4bccc39d77c8",
+      "scope": "pre-repair candidate; original inverse-CDF migration regression",
+      "reason": "half=40 ESS Some(2.0253164556962027) instead of None",
+      "reproduction_command": "cargo test --locked --offline --manifest-path /tmp/innovate-statrs-validation-89d5a5e932cf/Cargo.toml -p innovate-core --lib exact_constant_splits_keep_zero_variance_despite_mean_roundoff",
+      "original_argv_retained": false,
+      "note": "Named red test and failure are retained in the original runner log; command is the equivalent reproducer."
+    },
+    {
+      "name": "scoped-rustfmt",
+      "command": "rustfmt --check --edition 2024 rust/crates/innovate-core/src/bayesian.rs rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs rust/crates/innovate-core/src/bootstrap.rs rust/crates/innovate-core/src/bootstrap/statrs_migration_tests.rs rust/crates/innovate-core/tests/statrs_migration.rs rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs",
+      "exit_code": 0,
+      "log": "candidate-rustfmt.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "scope": "preserved local candidate checkout; not published evidence-only head"
+    },
+    {
+      "name": "independent-oracle",
+      "command": "python rust/crates/innovate-core/tests/fixtures/statrs_20261115/generate.py --check",
+      "exit_code": 0,
+      "log": "oracle-regeneration.log",
+      "log_sha256": "6351311a75f8d00a8a189fc4c4eaf70d783750c0c57f5b4ef1d7caf0054590e3",
+      "scope": "preserved local candidate checkout; not published evidence-only head"
+    },
+    {
+      "name": "repository-policy",
+      "command": "python scripts/check_repository_policy.py",
+      "exit_code": 0,
+      "log": "repository-policy.log",
+      "log_sha256": "363de84fee649c085d9c9ba186d50faae9c4673a3c143cd94e8aa5cd9a2353c4",
+      "scope": "preserved local candidate checkout; not published evidence-only head"
+    },
+    {
+      "name": "scientific-review-contract",
+      "command": "python scripts/check_scientific_review_contract.py",
+      "exit_code": 1,
+      "log": "scientific-review-contract.log",
+      "log_sha256": "337ea554bcb78f79d1ea54693dedebfcdf1057747de1830539fbb01653ce95a4",
+      "scope": "preserved local candidate checkout; not published evidence-only head"
+    },
+    {
+      "name": "conductor-structure",
+      "command": "python scripts/conductor_registry_hygiene.py --json",
+      "exit_code": 0,
+      "log": "conductor-hygiene.json",
+      "log_sha256": "8efa71dc59a664c84bd82b21f30272fd2e29114d54a14b9c79d2c0a405b0bad2",
+      "scope": "preserved local candidate checkout; not published evidence-only head"
+    }
+  ],
+  "review": {
+    "independent_reviewer": "ownership_audit",
+    "scope": "ownership, source/scientific semantics, fixtures, permitted paths, candidate documents and handoff; reviewer did not run tests",
+    "remaining_source_findings": [],
+    "final_reviewed_production_sha256": "b83e0abf3f400c77bd441c7feb1f487bb1b027dd32578660439c771ac5c4e99f"
+  },
+  "retained_blockers": [
+    "Coordinator must reconcile PR622 and PR625; no further parallel implementation or contested-track rewrite.",
+    "Shared dependency/lock/feature/audit integration is reserved; original-base request is not applied onto latest main.",
+    "14 of 36 CDF/survival comparisons fail the frozen tolerance.",
+    "Scientific review fingerprint requires substantive re-review of accepted Bayesian source before refresh.",
+    "Current main and peer PR625 not tested by this original-base candidate receipt."
+  ],
+  "unexecuted_acceptance": [
+    "complete integrated workspace",
+    "Python 3.15.2 installed consumers",
+    "Julia/R and platform matrix",
+    "clean-package and release qualification",
+    "RustSec audit and complete dependency-feature graph",
+    "overall/critical-module coverage",
+    "native mutation score and weekly schedule",
+    "reproducible performance comparison",
+    "four human scenario checks",
+    "all 38 scientific obligations",
+    "offline-security dedicated runner/assets qualification"
+  ],
+  "nonqualifying_attempts": [
+    "Initial candidate core copy lacked external compile-time fixture files; later reconstructed copy includes exact base files.",
+    "Initial score mutation command reused a stale build artifact; excluded, then explicitly recompiled and detected.",
+    "Initial clippy run rejected a constant-size chunks_exact in a new test; as_chunks correction passes, and reconstructed full suite tests final source.",
+    "Original-core baseline first offline attempt lacked ureq; original immutable baseline receipt records the subsequent locked online pass."
+  ],
+  "limits": [
+    "No new test ignored and no existing scientific tolerance altered.",
+    "Negative-control detections are not a measured mutation score.",
+    "Local source checks are not live GitHub-setting enforcement or scientific acceptance.",
+    "A bare evidence-only PR check is characterization proof, not proof of the deferred migration.",
+    "No merge, publication, permissions change, gate weakening, shared-file write, deletion or planning-only downstream activation."
+  ]
+}

@@ -1,0 +1,11 @@
+    Checking innovate-core v0.7.0-alpha.1 (/tmp/innovate-statrs-89d5a5e932cf/rust/crates/innovate-core)
+error[E0433]: cannot find module or crate `statrs` in this scope
+ --> rust/crates/innovate-core/src/bayesian.rs:7:5
+  |
+7 | use statrs::distribution::{ContinuousCDF, Normal};
+  |     ^^^^^^ use of unresolved module or unlinked crate `statrs`
+  |
+  = help: if you wanted to use a crate named `statrs`, use `cargo add statrs` to add it to your `Cargo.toml`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `innovate-core` (lib) due to 1 previous error

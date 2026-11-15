@@ -1,0 +1,24 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/tmp/innovate-statrs-validation-89d5a5e932cf/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 6.48s
+     Running unittests src/lib.rs (/tmp/innovate-statrs-target-89d5a5e932cf/debug/deps/innovate_core-dd8935b16a0561d5)
+
+running 1 test
+test bayesian::statrs_migration_tests::exact_constant_splits_keep_zero_variance_despite_mean_roundoff ... FAILED
+
+failures:
+
+---- bayesian::statrs_migration_tests::exact_constant_splits_keep_zero_variance_despite_mean_roundoff stdout ----
+
+thread 'bayesian::statrs_migration_tests::exact_constant_splits_keep_zero_variance_despite_mean_roundoff' (47) panicked at rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs:269:9:
+assertion `left == right` failed: half=40
+  left: Some(2.0253164556962027)
+ right: None
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bayesian::statrs_migration_tests::exact_constant_splits_keep_zero_variance_despite_mean_roundoff
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 60 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --lib`

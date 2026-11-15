@@ -1,0 +1,180 @@
+[
+  {
+    "count": 4,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 4,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "code": "invalid_request",
+      "message": "effective sample size requires at least six draws per chain"
+    },
+    "candidate": {
+      "code": "invalid_request",
+      "message": "effective sample size requires at least six draws per chain"
+    }
+  },
+  {
+    "count": 6,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 6,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "bulk_ess": null,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    },
+    "candidate": {
+      "bulk_ess": null,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    }
+  },
+  {
+    "count": 8,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 8,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "bulk_ess": null,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    },
+    "candidate": {
+      "bulk_ess": null,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    }
+  },
+  {
+    "count": 80,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": 1222281281057293.2,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": 1629708374743088.5,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 80,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "bulk_ess": null,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    },
+    "candidate": {
+      "bulk_ess": 2.0253164556962027,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    }
+  },
+  {
+    "count": 1000,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": 110105480834952.92,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": 235940316074904.56,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 1000,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "bulk_ess": 2.002002002002002,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    },
+    "candidate": {
+      "bulk_ess": 2.002002002002002,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    }
+  },
+  {
+    "count": 10000,
+    "operation": "bayesian_split_rhat",
+    "base": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    },
+    "candidate": {
+      "rhat": null,
+      "bulk_rhat": null,
+      "folded_rhat": null,
+      "status": "zero_within_split_variance"
+    }
+  },
+  {
+    "count": 10000,
+    "operation": "bayesian_effective_sample_size",
+    "base": {
+      "bulk_ess": 2.000200020002,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    },
+    "candidate": {
+      "bulk_ess": 2.000200020002,
+      "lower_tail_ess": null,
+      "upper_tail_ess": null
+    }
+  }
+]

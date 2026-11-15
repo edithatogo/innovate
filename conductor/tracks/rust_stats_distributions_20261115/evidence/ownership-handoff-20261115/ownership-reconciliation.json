@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-15T07:04:01.264130+00:00",
+  "integrator": "6aeeeda6-d4ec-8320-a3b5-c3e2362e5b53",
+  "status": "unresolved_ownership_hold_preserve_completed_candidate_only",
+  "initial_base": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "latest_observed_main": "1e190cfb29be95e0622e79c06bdcb4e272bea1d6",
+  "http618_merged": "349fb0d88b765026385f5361d096070aa2c2795f",
+  "tabular619_merged": "1cd9af803a21cdb08705cf77a45b27346afa4b69",
+  "linalg621": {
+    "initial_head": "d49eb66aa821cc3fde5ca28c7adcec45d28ed64f",
+    "final_head": "4b2f152d868d901c9f7aa222af3c7d46b3e223c1",
+    "merge_sha": "1e190cfb29be95e0622e79c06bdcb4e272bea1d6",
+    "merged_at": "2026-11-15T06:38:32Z",
+    "merged_by_this_lane": false,
+    "merge_is_not_scientific_acceptance": true
+  },
+  "our_packet": {
+    "pr": 622,
+    "opened_at": "2026-11-15T06:31:50Z",
+    "claim": "94c47a60ffa9db55f803e64b4823f2e9a7dc7c20",
+    "baseline": "b344f379926e934be30edc0842779dc5e3455f86",
+    "disposition": "draft; only new handoff evidence after baseline, completed implementation deferred as patch"
+  },
+  "overlapping_packet": {
+    "pr": 625,
+    "opened_at": "2026-11-15T06:40:07Z",
+    "inspected_source_head": "a39f81ca318c6ec98ac6ea3a62f9c99448dd0a21",
+    "later_observed_head": "d949014164899d22f2fa2265bfa6f54e7dd6c939",
+    "state": "open",
+    "draft": false,
+    "prior_commits": [
+      {
+        "sha": "ee3e329b84e7040abc5a5347892d365fb356ed52",
+        "committed_at": "2026-11-15T06:12:24Z"
+      },
+      {
+        "sha": "b1fbffc3afd19c1d4c45765818f71d8a0b2314f3",
+        "committed_at": "2026-11-15T06:23:02Z"
+      }
+    ],
+    "executed_by_this_lane": false,
+    "later_observed_modified_paths": [
+      "Cargo.lock",
+      "conductor/tracks.md",
+      "conductor/tracks/rust_stats_distributions_20261115/plan.md",
+      "conductor/tracks/rust_stats_distributions_20261115/spec.md",
+      "docs/contracts/scientific-pedagogical-review.json",
+      "rust/crates/innovate-core/Cargo.toml",
+      "rust/crates/innovate-core/src/bayesian.rs"
+    ]
+  },
+  "coordinator": {
+    "issue": 624,
+    "map_pr": 626,
+    "map_head": "4c88f396f22c2b6fa641f21460c5444a5633edd8",
+    "receipt_url": "https://github.com/edithatogo/innovate/pull/625#issuecomment-6890645878",
+    "disposition": "Recognizes existing625; no second statistics writer; no acceptance from archival. Does not acknowledge622 at inspection."
+  },
+  "overlapping_existing_paths": [
+    "rust/crates/innovate-core/src/bayesian.rs",
+    "conductor/tracks/rust_stats_distributions_20261115/index.md",
+    "conductor/tracks/rust_stats_distributions_20261115/metadata.json",
+    "conductor/tracks/rust_stats_distributions_20261115/plan.md",
+    "conductor/tracks/rust_stats_distributions_20261115/spec.md"
+  ],
+  "preservation": [
+    "No further production implementation after ownership conflict was discovered.",
+    "No rebase, main merge, archive reconciliation, branch rewrite, closure or deletion by this lane.",
+    "Published baseline production/test/active-track files remain byte-identical; evidence update adds only the dedicated handoff directory.",
+    "Earlier PR opening and earlier peer commit timestamps do not settle exclusive ownership.",
+    "Sole integrator receives both scientific choices and all remaining gates."
+  ],
+  "overlap_paths_scope": "first inspected a39f81ca head; later d9490141 inventory is separately recorded"
+}

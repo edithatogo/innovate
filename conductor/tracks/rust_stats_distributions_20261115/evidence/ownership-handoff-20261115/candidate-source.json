@@ -1,0 +1,36 @@
+{
+  "base_commit": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "baseline_checkpoint": "b344f379926e934be30edc0842779dc5e3455f86",
+  "status": "completed_candidate_frozen_for_ownership_reconciliation",
+  "source_sha256": {
+    "rust/crates/innovate-core/src/bayesian.rs": "b83e0abf3f400c77bd441c7feb1f487bb1b027dd32578660439c771ac5c4e99f",
+    "rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs": "eccaa6c6531d656158c12179afe824a94f98804d99f776227edb9275884d6c8b",
+    "rust/crates/innovate-core/src/bootstrap.rs": "1108f9cf07164f7285216d20e8aadd6131ee5e622471a4d231293944c10bd4dd",
+    "rust/crates/innovate-core/src/bootstrap/statrs_migration_tests.rs": "99b4467793f9621ad2f058592d8a17996e164006e145cb71be766263f08e41bc",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md": "f18edbf40af10e9f9f3550e58cff42070e0e564641c54b0b609fa67ab9a82413",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json": "1c86c5381fd93419f68e94ab4717216926b42dccaeac4f57a9e3ea0f374d6a8f",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs": "68606258dd17228f8c61a02d051d3316b78eb0b54ac886ec128b6708004e9620",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/generate.py": "edc9be338d189edefacdf7c18829ba2f9e5d4d733cd48f4648b306313ef1fc8a",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/normal.json": "fd591fe542d0c13644f887941ba74c8d6381012f730bbb7f84d8926af79418ac",
+    "rust/crates/innovate-core/tests/statrs_migration.rs": "32b73c752120cbba0037f182f52b35c1b007ac489cd3ceb91e4bcd342f16b5d7"
+  },
+  "unmodified_shared_sha256": {
+    "Cargo.toml": "1039753b1d5df7c329cd2d794ee2a596807db61e93812640d7a5f8ab29451c99",
+    "Cargo.lock": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+    "rust/crates/innovate-core/Cargo.toml": "c136f99bd00b701deb95b776582c57c852932f865ce53e4459e6cac3237e9058",
+    "rust/crates/innovate-core/src/causal.rs": "6279cbc58161423b5c5e722c143e845f770073e58cb33f93995f98338b297db3",
+    "rust/crates/innovate-core/src/numerics.rs": "dfee5a727391b932c02502a5744f58707933c63835690fa55679237168f9ffde",
+    "conductor/tracks.md": "ffde07388b77133784b6ef50ae5bb0d8f4491da54532c379f266ba69471a0952"
+  },
+  "candidate_patch_base": "b344f379926e934be30edc0842779dc5e3455f86",
+  "candidate_patch_sha256": "6e54a27ba271c1af05539773048dc10e020b4abde2e0340505ed8aa3d6999767",
+  "candidate_patch_paths": [
+    "rust/crates/innovate-core/src/bayesian.rs",
+    "rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/README.md",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/behavior-baseline.json",
+    "rust/crates/innovate-core/tests/fixtures/statrs_20261115/capture_baseline.rs",
+    "rust/crates/innovate-core/tests/statrs_migration.rs"
+  ],
+  "created_utc": "2026-11-15T06:58:42.811636+00:00"
+}

@@ -1,0 +1,22 @@
+   Compiling innovate-core v0.7.0-alpha.1 (/tmp/innovate-statrs-mutation-score-89d5a5e932cf/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 6.76s
+     Running unittests src/lib.rs (/tmp/innovate-statrs-target-89d5a5e932cf/debug/deps/innovate_core-dd8935b16a0561d5)
+
+running 1 test
+test bayesian::statrs_migration_tests::parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales ... FAILED
+
+failures:
+
+---- bayesian::statrs_migration_tests::parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales stdout ----
+
+thread 'bayesian::statrs_migration_tests::parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales' (49) panicked at rust/crates/innovate-core/src/bayesian/statrs_migration_tests.rs:30:13:
+near_center_1e10: actual=0.00000000000000000e0, expected=-5.00000000000000048e-21, tolerance=2.50000000000000035e-35
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    bayesian::statrs_migration_tests::parsed_gaussian_priors_preserve_unnormalised_scores_and_extreme_scales
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 60 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p innovate-core --lib`
