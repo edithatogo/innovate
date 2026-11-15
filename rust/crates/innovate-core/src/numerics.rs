@@ -169,17 +169,22 @@ where
     }
 
     fn residuals(&self) -> Option<DVector<f64>> {
-        let prediction = (self.evaluate)(self.params.as_slice()).ok()?;
-        if prediction.len() != self.observed.len() || prediction.iter().any(|x| !x.is_finite()) {
-            return None;
+        match (self.evaluate)(self.params.as_slice()) {
+            Ok(prediction)
+                if prediction.len() == self.observed.len()
+                    && prediction.iter().all(|x| x.is_finite()) =>
+            {
+                Some(DVector::from_iterator(
+                    self.observed.len(),
+                    prediction
+                        .into_iter()
+                        .zip(self.observed)
+                        .map(|(p, y)| p - y),
+                ))
+            }
+            // Treat infeasible or non-finite trial steps as high-cost rejections so LM shrinks the trust region.
+            _ => Some(DVector::from_element(self.observed.len(), 1e75)),
         }
-        Some(DVector::from_iterator(
-            self.observed.len(),
-            prediction
-                .into_iter()
-                .zip(self.observed)
-                .map(|(p, y)| p - y),
-        ))
     }
 
     fn jacobian(&self) -> Option<DMatrix<f64>> {
@@ -264,7 +269,8 @@ where
                 .with_ftol(1e-12)
                 .with_xtol(1e-12)
                 .with_gtol(1e-9)
-                .with_patience(max_iterations.saturating_mul(start.len().max(1) + 2))
+                .with_stepbound(3.0)
+                .with_patience(max_iterations)
                 .minimize(problem);
             if let Some(err) = solved.domain_error.into_inner() {
                 return Err(err);
@@ -286,9 +292,12 @@ where
                 TerminationReason::ResidualsZero | TerminationReason::Orthogonal => {
                     (true, "gradient_or_residual_tolerance")
                 }
+                TerminationReason::Converged { .. } if max_iterations > 1 => {
+                    (true, "objective_tolerance")
+                }
                 TerminationReason::Converged { .. }
-                | TerminationReason::NoImprovementPossible(_) => (true, "objective_tolerance"),
-                TerminationReason::LostPatience => (false, "iteration_limit"),
+                | TerminationReason::NoImprovementPossible(_)
+                | TerminationReason::LostPatience => (false, "iteration_limit"),
                 TerminationReason::User(_)
                 | TerminationReason::NoParameters
                 | TerminationReason::NoResiduals
