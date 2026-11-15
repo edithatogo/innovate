@@ -59,3 +59,13 @@ For historical profiling context, **cargo-flamegraph** and **DHAT** are recorded
 ## Delivery
 
 Follow the [programme](frontier-programme-20261107.md), [taskbook](innovation-taskbook-20261107.md), [execution contract](execution-contract-20261107.md) and [release gates](release-gates-20261107.md). No runtime dependency pins are modified by this planning revision.
+
+## Rust Dependency Modernization — 15 November 2026
+
+Per Guiding Principle #2 in [workflow.md](workflow.md), the following published `crates.io` dependency replacements are pre-approved for implementation under the ordered tracks in [tracks.md](tracks.md):
+
+- **HTTP client (`rust_http_ureq_20261115`):** Replace `reqwest` (`blocking` + `aws-lc-rs`/`tokio`/`hyper`/`cmake`) in `innovate-core` with `ureq` (`rustls` + `ring`).
+- **Tabular / Arrow (`rust_tabular_crates_io_20261115`):** Replace git-pinned `polars`/`polars-arrow` and root `[patch.crates-io] hashbrown` with `crates.io` `arrow-ipc`/`arrow-array`/`arrow-schema` (or published `crates.io` `polars`), clearing `RUSTSEC-2025-0141`.
+- **Kairos ECS (`rust_kairos_crates_io_20261115`):** Replace `kairo-ecs-*` git pins in `innovate-core` with published `crates.io` semver releases.
+- **Numerical & Inference Stack:** `nalgebra`/`faer` + `levenberg-marquardt`/`argmin`, `statrs`, `ode_solvers`/`differential-equations`, `petgraph`, `nuts-rs`, and `augurs-changepoint`/PELT.
+- **Deferred (keep as-is unless profiling/requirements change):** `chrono` (`=0.4.45`) and `serde_json` (`=1.0.154`, `float_roundtrip`) for polyglot RPC.

@@ -532,6 +532,8 @@ Historical completion labels above do not establish current full-native ownershi
 
 Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`, and fast CI builds; Phase B: #4–#5 build shared math/distribution primitives; Phase C: #6–#7 modernize independent modules; Phase D: #8–#9 consume Phase B primitives):
 
+> **Local Tooling Notes:** If `cargo-audit` is not installed locally, install it (`cargo install cargo-audit`) or verify RustSec cleanliness via the hosted `RustSec advisory audit` CI check (`security-quality.yml`). If local `pytest` is `< 9.2`, run `pytest -o minversion=9.0 tests/native` (or use the CI/Nox `pytest 9.2` environment).
+
 1. - [ ] **Track: Rust Synchronous HTTP Client Migration (`ureq`)** *(Planned — P0, Order #1; parallelizable with #2–#3)*
      *Link: [./tracks/rust_http_ureq_20261115/](./tracks/rust_http_ureq_20261115/)*
 
