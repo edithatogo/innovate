@@ -148,7 +148,9 @@ struct LeastSquaresProblemAdapter<'a, F> {
     observed: &'a [f64],
     evaluate: &'a F,
     params: DVector<f64>,
+    max_iterations: usize,
     iterations: RefCell<usize>,
+    iteration_limit_reached: RefCell<bool>,
     domain_error: RefCell<Option<String>>,
 }
 
@@ -161,7 +163,7 @@ where
     type ParameterStorage = Owned<f64, Dyn>;
 
     fn set_params(&mut self, x: &DVector<f64>) {
-        self.params = DVector::from_iterator(x.len(), x.iter().map(|v| v.clamp(-35.0, 35.0)));
+        self.params = x.clone();
     }
 
     fn params(&self) -> DVector<f64> {
@@ -169,6 +171,9 @@ where
     }
 
     fn residuals(&self) -> Option<DVector<f64>> {
+        if self.params.iter().any(|v| !v.is_finite() || v.abs() > 35.0) {
+            return Some(DVector::from_element(self.observed.len(), 1e75));
+        }
         match (self.evaluate)(self.params.as_slice()) {
             Ok(prediction)
                 if prediction.len() == self.observed.len()
@@ -188,7 +193,12 @@ where
     }
 
     fn jacobian(&self) -> Option<DMatrix<f64>> {
-        *self.iterations.borrow_mut() += 1;
+        let next = *self.iterations.borrow() + 1;
+        if next > self.max_iterations {
+            *self.iteration_limit_reached.borrow_mut() = true;
+            return None;
+        }
+        *self.iterations.borrow_mut() = next;
         let prediction = (self.evaluate)(self.params.as_slice()).ok()?;
         let columns = match jacobian(self.params.as_slice(), &prediction, self.evaluate) {
             Ok(columns) => columns,
@@ -262,7 +272,9 @@ where
                 observed,
                 evaluate: &evaluate,
                 params: DVector::from_column_slice(start),
+                max_iterations,
                 iterations: RefCell::new(0),
+                iteration_limit_reached: RefCell::new(false),
                 domain_error: RefCell::new(None),
             };
             let (solved, lm_report) = LevenbergMarquardt::new()
@@ -275,7 +287,8 @@ where
             if let Some(err) = solved.domain_error.into_inner() {
                 return Err(err);
             }
-            let iterations = solved.iterations.into_inner().min(max_iterations);
+            let iteration_limit_reached = solved.iteration_limit_reached.into_inner();
+            let iterations = solved.iterations.into_inner();
             let candidate_theta = solved.params.as_slice().to_vec();
             let candidate_pred = evaluate(&candidate_theta).ok();
             let candidate_err = candidate_pred.as_deref().map_or(f64::INFINITY, loss);
@@ -288,22 +301,26 @@ where
             } else {
                 (start.clone(), initial_prediction, initial_error)
             };
-            let (converged, reason) = match lm_report.termination {
-                TerminationReason::ResidualsZero | TerminationReason::Orthogonal => {
-                    (true, "gradient_or_residual_tolerance")
-                }
-                TerminationReason::Converged { .. } if max_iterations > 1 => {
-                    (true, "objective_tolerance")
-                }
-                TerminationReason::Converged { .. }
-                | TerminationReason::NoImprovementPossible(_)
-                | TerminationReason::LostPatience => (false, "iteration_limit"),
-                TerminationReason::User(_)
-                | TerminationReason::NoParameters
-                | TerminationReason::NoResiduals
-                | TerminationReason::WrongDimensions(_) => (false, "damping_limit"),
-                TerminationReason::Numerical(_) => {
-                    return Err("optimizer exceeded the finite numerical domain".into());
+            let (converged, reason) = if iteration_limit_reached {
+                (false, "iteration_limit")
+            } else {
+                match lm_report.termination {
+                    TerminationReason::ResidualsZero | TerminationReason::Orthogonal => {
+                        (true, "gradient_or_residual_tolerance")
+                    }
+                    TerminationReason::Converged { .. } if max_iterations > 1 => {
+                        (true, "objective_tolerance")
+                    }
+                    TerminationReason::Converged { .. }
+                    | TerminationReason::NoImprovementPossible(_)
+                    | TerminationReason::LostPatience => (false, "iteration_limit"),
+                    TerminationReason::User(_)
+                    | TerminationReason::NoParameters
+                    | TerminationReason::NoResiduals
+                    | TerminationReason::WrongDimensions(_) => (false, "damping_limit"),
+                    TerminationReason::Numerical(_) => {
+                        return Err("optimizer exceeded the finite numerical domain".into());
+                    }
                 }
             };
             (theta, prediction, error, iterations, converged, reason)
@@ -685,5 +702,41 @@ mod tests {
         assert!((fit.parameters[1] - (-0.4)).abs() < 1e-6);
         assert!(fit.report["scaled_rss"].as_f64().unwrap() < 1e-12);
         assert_eq!(fit.identifiability["status"], "local_full_rank");
+    }
+
+    #[test]
+    fn least_squares_enforces_iteration_budget() {
+        let times = [0.0_f64, 1.0, 2.0, 3.0, 4.0];
+        let observed: Vec<f64> = times.iter().map(|&t| 2.5 * (-0.4 * t).exp()).collect();
+        let fit = least_squares(
+            &observed,
+            &[vec![0.5, -1.5]],
+            |theta| {
+                Ok(times
+                    .iter()
+                    .map(|&t| theta[0] * (theta[1] * t).exp())
+                    .collect())
+            },
+            1,
+        )
+        .expect("single-iteration fit should complete without error");
+        let start = &fit.report;
+        assert!(start["iterations"].as_u64().unwrap() <= 1);
+        assert_eq!(start["converged"], false);
+        assert_eq!(start["termination"], "iteration_limit");
+    }
+
+    #[test]
+    fn least_squares_rejects_out_of_bounds_steps_consistently() {
+        let observed = [100.0_f64, 100.0, 100.0];
+        let fit = least_squares(
+            &observed,
+            &[vec![34.5, 34.5]],
+            |theta| Ok(vec![theta[0], theta[1], theta[0] + theta[1]]),
+            20,
+        )
+        .expect("bounded fit should complete without desynchronizing");
+        assert!(fit.parameters.iter().all(|v| v.abs() <= 35.0));
+        assert!(fit.report["scaled_rss"].as_f64().unwrap().is_finite());
     }
 }
