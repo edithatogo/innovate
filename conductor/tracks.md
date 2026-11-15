@@ -525,3 +525,41 @@ Historical completion labels above do not establish current full-native ownershi
 
 - [~] **Track: Research Software Registry Readiness** *(External gates pending)*
 *Link: [./tracks/research_software_registry_readiness_20260721/](./tracks/research_software_registry_readiness_20260721/)*
+
+---
+
+## Rust Dependency Modernization — 15 November 2026
+
+Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`, and fast CI builds; Phase B: #4–#5 build shared math/distribution primitives; Phase C: #6–#7 modernize independent modules; Phase D: #8–#9 consume Phase B primitives):
+
+> **Local Tooling Notes:** If `cargo-audit` is not installed locally, install it (`cargo install cargo-audit`) or verify RustSec cleanliness via the hosted `RustSec advisory audit` CI check (`security-quality.yml`). If local `pytest` is `< 9.2`, run `pytest -o minversion=9.0 tests/native` (or use the CI/Nox `pytest 9.2` environment).
+
+- [ ] **Track: Rust Synchronous HTTP Client Migration (`ureq`)** *(Planned — P0, Order #1; parallelizable with #2–#3)*
+  *Link: [./tracks/rust_http_ureq_20261115/](./tracks/rust_http_ureq_20261115/)*
+
+- [ ] **Track: Rust Tabular & Arrow `crates.io` Modernization** *(Planned — P0, Order #2; parallelizable with #1 & #3)*
+  *Link: [./tracks/rust_tabular_crates_io_20261115/](./tracks/rust_tabular_crates_io_20261115/)*
+
+- [ ] **Track: Rust `kairo-ecs-*` `crates.io` Publishing & Pinning** *(Planned — P0, Order #3; parallelizable with #1–#2; external `edithatogo/kairos` release prerequisite)*
+  *Link: [./tracks/rust_kairos_crates_io_20261115/](./tracks/rust_kairos_crates_io_20261115/)*
+
+- [ ] **Track: Rust Linear Algebra and Nonlinear Optimization Modernization** *(Planned — P1, Order #4; after #1–#2; parallelizable with #5)*
+  *Link: [./tracks/rust_linalg_optimization_20261115/](./tracks/rust_linalg_optimization_20261115/)*
+
+- [ ] **Track: Rust Statistical Distributions and Quantiles Modernization** *(Planned — P1, Order #5; after #1–#2; parallelizable with #4)*
+  *Link: [./tracks/rust_stats_distributions_20261115/](./tracks/rust_stats_distributions_20261115/)*
+
+- [ ] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Planned — P1, Order #6; after #4)*
+  *Link: [./tracks/rust_ode_integration_20261115/](./tracks/rust_ode_integration_20261115/)*
+
+- [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned — P2, Order #7; after #1–#2; parallelizable with #4–#6)*
+  *Link: [./tracks/rust_network_petgraph_20261115/](./tracks/rust_network_petgraph_20261115/)*
+
+- [ ] **Track: Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)** *(Planned — P1, Order #8; after #5)*
+  *Link: [./tracks/rust_nuts_hmc_20261115/](./tracks/rust_nuts_hmc_20261115/)*
+
+- [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned — P1, Order #9; after #4)*
+  *Link: [./tracks/rust_regime_changepoint_20261115/](./tracks/rust_regime_changepoint_20261115/)*
+
+- [ ] **Track: CI & Release Supply-Chain Hardening** *(Planned — P1, Order #10; strict `cargo-deny` source checks depend on #2 & #3; parallelizable for `Harden-Runner`, `Sigstore`/`SLSA`, `Syft`/`Grype`, `poutine`)*
+  *Link: [./tracks/ci_supply_chain_hardening_20261115/](./tracks/ci_supply_chain_hardening_20261115/)*
