@@ -6,6 +6,11 @@
 
 :root[data-theme='light'] {
   --sl-color-accent-low: #d7efe7;
-  --sl-color-accent: #0a7c66;
+  --sl-color-accent: #086b57;
   --sl-color-accent-high: #064b3d;
+}
+
+.sl-markdown-content table[tabindex='0']:focus-visible {
+  outline: 2px solid var(--sl-color-text-accent);
+  outline-offset: -2px;
 }

@@ -109,6 +109,37 @@ export async function scanAccessibility(page, testInfo, name) {
   expect(results.violations, `Axe violations in ${name}`).toEqual([]);
 }
 
+export async function assertTableKeyboardScroll(page, testInfo) {
+  const tables = page.locator('.sl-markdown-content table');
+  const count = await tables.count();
+  const observations = [];
+  for (let index = 0; index < count; index += 1) {
+    const table = tables.nth(index);
+    const overflowing = await table.evaluate((element) => element.scrollWidth > element.clientWidth + 1);
+    if (!overflowing) continue;
+    await expect(table, 'Scrollable tables must join the normal keyboard focus order').toHaveAttribute('tabindex', '0');
+    await table.focus();
+    await expect(table).toBeFocused();
+    const before = await table.evaluate((element) => ({
+      left: element.scrollLeft,
+      maximum: element.scrollWidth - element.clientWidth,
+    }));
+    const direction = before.left >= before.maximum - 1 ? 'ArrowLeft' : 'ArrowRight';
+    await page.keyboard.press(direction);
+    await expect.poll(async () => {
+      const left = await table.evaluate((element) => element.scrollLeft);
+      return direction === 'ArrowRight' ? left > before.left : left < before.left;
+    }, { message: 'A focused overflowing table must scroll with the arrow keys' }).toBe(true);
+    const after = await table.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { left: element.scrollLeft, outline: style.outlineStyle, outlineWidth: parseFloat(style.outlineWidth) };
+    });
+    expect(after.outline !== 'none' && after.outlineWidth > 0, 'Focused tables need a visible indicator').toBe(true);
+    observations.push({ index, direction, before, after });
+  }
+  await attachJson(testInfo, 'table-keyboard-scroll', observations);
+}
+
 export async function assertTransferBudget(runtime, testInfo, search = false) {
   await runtime.settle();
   const bytes = runtime.responses.reduce((sum, response) => sum + response.bytes, 0);

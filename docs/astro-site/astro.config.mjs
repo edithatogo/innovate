@@ -3,6 +3,7 @@ import { unified } from '@astrojs/markdown-remark';
 import starlight from '@astrojs/starlight';
 import starlightDocSearch from '@astrojs/starlight-docsearch';
 import remarkSingleTitle from './scripts/remark-single-title.mjs';
+import rehypeFocusableTables from './scripts/rehype-focusable-tables.mjs';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightVersions from 'starlight-versions';
 
@@ -23,13 +24,19 @@ export default defineConfig({
   base: '/innovate',
   trailingSlash: 'always',
   markdown: {
-    processor: unified({ remarkPlugins: [remarkSingleTitle] }),
+    processor: unified({
+      remarkPlugins: [remarkSingleTitle],
+      rehypePlugins: [rehypeFocusableTables],
+    }),
   },
   integrations: [
     starlight({
       title: 'Innovate',
       description: 'Rust-native innovation diffusion modelling with Polars.',
       customCss: ['./src/styles/custom.css'],
+      ...(docSearchPlugins.length === 0
+        ? { components: { Search: './src/components/AccessibleSearch.astro' } }
+        : {}),
       editLink: {
         baseUrl: 'https://github.com/edithatogo/innovate/edit/main/docs/astro-site/src/content/docs/',
       },

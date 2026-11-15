@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { budgets, darkEntryRoutes, loadInventory, measureArtifact, siteRoot } from '../../scripts/browser-contract.mjs';
-import { test, expect, openPage, assertNoOverflow, scanAccessibility, assertTransferBudget, attachJson, focusWithTab, showMobileMenu } from './support.mjs';
+import { test, expect, openPage, assertNoOverflow, assertTableKeyboardScroll, scanAccessibility, assertTransferBudget, attachJson, focusWithTab, showMobileMenu } from './support.mjs';
 
 const inventory = loadInventory();
 const currentRoutes = new Set(inventory.pages.map((entry) => entry.route));
@@ -11,6 +11,7 @@ for (const entry of inventory.pages) {
     await openPage(page, entry.route);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     await assertNoOverflow(page);
+    await assertTableKeyboardScroll(page, testInfo);
     await scanAccessibility(page, testInfo, 'light-page');
     await assertTransferBudget(runtime, testInfo);
     await attachJson(testInfo, 'classified-page', entry);
@@ -95,6 +96,11 @@ for (const { query, expectedRoute } of [
     await page.keyboard.press('Control+k');
     await expect(dialog).toBeVisible();
     await expect(input).toBeFocused();
+    // Pagefind clears the query on Escape; reopening starts a fresh search.
+    await expect(input).toHaveValue('');
+    await input.pressSequentially(query);
+    await expect(results.first()).toBeVisible();
+    await expect.poll(async () => new URL(await results.first().getAttribute('href'), page.url()).pathname).toBe(expectedRoute);
     await focusWithTab(page, results.first(), 12);
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL((url) => url.pathname === expectedRoute);

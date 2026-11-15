@@ -75,6 +75,20 @@ retains its ordered queue, both qualification dependencies and explicit activati
 See [followup-qualification.md](followup-qualification.md) and
 [the source-fingerprinted local record](followup-local-evidence.json).
 
+## Observed browser failures and repair
+
+The first full hosted Chromium run executed all 142 cases: 61 passed and 81
+failed. It exposed accessible-name, light-theme contrast and scrollable-table
+defects, plus a search-test assumption about Pagefind's Escape reset.
+The bounded repair preserves the complete suite and thresholds, and adds actual
+arrow-key scrolling checks within the existing page cases. The repaired Astro
+build, type check, Node tests, review gate and artifact verifier pass locally.
+Fresh hosted browser and native results remain required.
+
+The receiving main has advanced to 663002b03ccb92abee2ece934d69116cb4bf3415
+through merged PR #612. Its sole change is the accepted Renovate action update.
+See [the exact browser failure and repair record](browser-repair.md).
+
 ## Evidence
 
 Initial source: `13bdcf10ccb3e1cd06da1df4d98fc5da831768db`.
