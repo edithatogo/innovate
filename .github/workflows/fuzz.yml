@@ -45,4 +45,4 @@ jobs:
           tool: cargo-fuzz
 
       - name: Run kernel_request fuzz target
-        run: cargo fuzz run kernel_request -- -max_total_time=30
+        run: cargo fuzz run kernel_request --target x86_64-unknown-linux-gnu -- -max_total_time=30
