@@ -1,0 +1,28 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "innovate-core",
+    "--lib",
+    "--test",
+    "network_petgraph",
+    "network",
+    "-j",
+    "1"
+  ],
+  "base_sha": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "head": "226c93856e23df8f7a9d4e7c7da7a42d3ce10610",
+  "source_sha256": {
+    "rust/crates/innovate-core/src/network.rs": "bbc66f06f24eb36abe158f64ce94849596e61a4b265f3904336b6eb6e5bd5fea",
+    "rust/crates/innovate-core/tests/network_petgraph.rs": "25d86c7e3b89d1c69cdd184879bcbc9b7f513cb96432297551e22854ad611a7c",
+    "rust/crates/innovate-core/tests/fixtures/network_petgraph_20261115.json": "57753a47801567e9ae76a71ba7c15926bf57d3a26e5f89694b2722c708ffead1",
+    "Cargo.lock": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e"
+  },
+  "scope": "Tests-first characterization, original production Graph implementation; worktree changes are unit/integration tests and track documentation.",
+  "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  2.8G  2.2G  57% /tmp\n",
+  "exit_code": 0,
+  "elapsed_seconds": 13.778
+}

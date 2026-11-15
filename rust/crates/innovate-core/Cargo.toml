@@ -23,6 +23,7 @@ ureq = { version = "=3.5.2", default-features = false, features = ["rustls"] }
 libm = "=0.2.16"
 nalgebra = "=0.34.2"
 levenberg-marquardt = "=0.15.0"
+petgraph = "=0.8.3"
 sha2 = "=0.11.1"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
 kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "e76b97be2ea3712645933d903822ff6381c8883e" }

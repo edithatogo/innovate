@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "baseline_sha": "42189a223fd44c823ca11aec689ea67b11c25790",
+    "method": "Independent hand calculations: input-relative incoming incidences, destination-specific maximum scaling, and left-to-right binary64 sums. No expected values were captured from production execution.",
+    "ordering_witness": "In ordered_rounding, adding 2^-53 twice after 1 rounds to 1; reversing those additions yields 1 + 2^-52. Input order must therefore be preserved exactly.",
+    "scope": "Synthetic graph representation and arithmetic contracts only; not empirical or scientific model qualification. Unweighted totals remain zero because that branch does not use them."
+  },
+  "cases": [
+    {
+      "name": "ordered_rounding",
+      "population": 5,
+      "directed": true,
+      "edges": [[3, 4], [0, 4], [2, 4]],
+      "weights": [1, 1.1102230246251565e-16, 1.1102230246251565e-16],
+      "incoming": [[], [], [], [], [[3, 1], [0, 1.1102230246251565e-16], [2, 1.1102230246251565e-16]]],
+      "totals": [0, 0, 0, 0, 1],
+      "weighted": true
+    },
+    {
+      "name": "undirected_destination_specific_scaling",
+      "population": 5,
+      "directed": false,
+      "edges": [[0, 1], [1, 2]],
+      "weights": [2, 8],
+      "incoming": [[[1, 1]], [[0, 0.25], [2, 1]], [[1, 1]], [], []],
+      "totals": [1, 1.25, 1, 0, 0],
+      "weighted": true
+    },
+    {
+      "name": "directed_antiparallel_and_isolate",
+      "population": 4,
+      "directed": true,
+      "edges": [[2, 0], [0, 2], [1, 2]],
+      "weights": null,
+      "incoming": [[[2, 1]], [], [[0, 1], [1, 1]], []],
+      "totals": [0, 0, 0, 0],
+      "weighted": false
+    },
+    {
+      "name": "undirected_input_order_and_isolates",
+      "population": 6,
+      "directed": false,
+      "edges": [[4, 1], [0, 4], [2, 1]],
+      "weights": null,
+      "incoming": [[[4, 1]], [[4, 1], [2, 1]], [[1, 1]], [], [[1, 1], [0, 1]], []],
+      "totals": [0, 0, 0, 0, 0, 0],
+      "weighted": false
+    },
+    {
+      "name": "disconnected_directed_components",
+      "population": 7,
+      "directed": true,
+      "edges": [[0, 2], [2, 4], [1, 5]],
+      "weights": null,
+      "incoming": [[], [], [[0, 1]], [], [[2, 1]], [[1, 1]], []],
+      "totals": [0, 0, 0, 0, 0, 0, 0],
+      "weighted": false
+    },
+    {
+      "name": "empty_weighted_graph",
+      "population": 3,
+      "directed": false,
+      "edges": [],
+      "weights": [],
+      "incoming": [[], [], []],
+      "totals": [0, 0, 0],
+      "weighted": true
+    },
+    {
+      "name": "empty_unweighted_graph",
+      "population": 3,
+      "directed": true,
+      "edges": [],
+      "weights": null,
+      "incoming": [[], [], []],
+      "totals": [0, 0, 0],
+      "weighted": false
+    },
+    {
+      "name": "huge_finite_weights_do_not_overflow",
+      "population": 4,
+      "directed": true,
+      "edges": [[0, 2], [1, 2]],
+      "weights": [1e308, 1e308],
+      "incoming": [[], [], [[0, 1], [1, 1]], []],
+      "totals": [0, 0, 2, 0],
+      "weighted": true
+    },
+    {
+      "name": "positive_weight_can_underflow_after_scaling",
+      "population": 4,
+      "directed": true,
+      "edges": [[0, 2], [1, 2]],
+      "weights": [1e-300, 1e300],
+      "incoming": [[], [], [[0, 0], [1, 1]], []],
+      "totals": [0, 0, 1, 0],
+      "weighted": true
+    },
+    {
+      "name": "weighted_unsorted_sources_and_separate_target",
+      "population": 5,
+      "directed": true,
+      "edges": [[3, 2], [0, 2], [1, 2], [2, 4]],
+      "weights": [2, 8, 4, 16],
+      "incoming": [[], [], [[3, 0.25], [0, 1], [1, 0.5]], [], [[2, 1]]],
+      "totals": [0, 0, 1.75, 0, 1],
+      "weighted": true
+    }
+  ]
+}

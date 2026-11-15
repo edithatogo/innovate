@@ -1,0 +1,22 @@
+{
+  "command": [
+    "cargo",
+    "clippy",
+    "--locked",
+    "--offline",
+    "--manifest-path",
+    "/tmp/innovate-network-test-overlay-minimal-c8da3a3c93a3/Cargo.toml",
+    "--lib",
+    "--tests",
+    "-j",
+    "1",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "scope": "Conditional standalone manifest; actual core source and 4 named integration tests. No shared-manifest qualification.",
+  "network_sha256": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  3.6G  1.3G  74% /tmp\n",
+  "exit_code": 0,
+  "elapsed_seconds": 27.954
+}

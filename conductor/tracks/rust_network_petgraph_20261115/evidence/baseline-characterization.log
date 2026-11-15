@@ -1,0 +1,28 @@
+COMMAND: cargo test --locked -p innovate-core --lib --test network_petgraph network -j 1
+   Compiling innovate-core v0.7.0-alpha.1 (/tmp/innovate-network-c8da3a3c93a3/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 13.75s
+     Running unittests src/lib.rs (/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/innovate_core-c4b0f8b7d0e8f069)
+
+running 8 tests
+test network::tests::network_petgraph_input_order_has_a_nonvacuous_rounding_control ... ok
+test network::tests::admission_order_reconstructs_tied_completion_order ... ok
+test network::tests::network_petgraph_positive_subnormal_weights_remain_valid ... ok
+test network::tests::network_petgraph_preserves_pair_validation_and_antiparallel_edges ... ok
+test network::tests::rebuilt_deadlines_keep_original_expiry_and_arrival_order ... ok
+test network::tests::network_petgraph_matches_independent_ordered_graph_fixtures ... ok
+test network::tests::rebuilt_waiters_retain_priority_and_fifo_order ... ok
+test network::tests::network_petgraph_rejects_invalid_weights_before_invalid_edges ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 45 filtered out; finished in 0.00s
+
+     Running tests/network_petgraph.rs (/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/network_petgraph-feb5c07fef654b98)
+
+running 5 tests
+test network_petgraph_empty_weighted_graph_retains_public_metadata ... ok
+test network_petgraph_rejects_invalid_graphs_and_future_replacements ... ok
+test network_petgraph_directed_chain_preserves_analytical_times_and_disconnection ... ok
+test network_petgraph_edge_reversal_respects_directedness ... ok
+test network_petgraph_scheduled_graph_replacement_survives_tied_resume_boundaries ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

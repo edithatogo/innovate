@@ -1,0 +1,19 @@
+{
+  "scope": "External standalone package compiles actual core sources with only the requested direct petgraph dependency added. Shared repository manifests/lock unchanged. Metadata comparison uses equivalent isolated-package scope on both sides, not whole-workspace feature unification.",
+  "baseline_base": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "baseline_package_count": 101,
+  "candidate_package_count": 101,
+  "added_packages": [],
+  "removed_packages": [],
+  "changed_features": {},
+  "petgraph": {
+    "petgraph@0.8.3|registry+https://github.com/rust-lang/crates.io-index": [
+      "graphmap",
+      "stable_graph"
+    ]
+  },
+  "shared_lock_sha256": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+  "overlay_lock_sha256": "dcfba0fbe8008cf01b015bdcf8769d9f0fd02eb7448101a91f7cbe447ce7e426",
+  "overlay_manifest_sha256": "c536f0fb2bbef8ab04172a6bb87075f80bf017ad60989479c1efc3fe34f881ca",
+  "initial_probe": "Whole-workspace vs isolated metadata assertion failed before tests: scopes differ; initial std request also enabled an unnecessary feature. Corrected to default-features=false only and repeated equivalent-scope comparison."
+}

@@ -1,0 +1,33 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "--manifest-path",
+    "/tmp/innovate-network-test-overlay-minimal-c8da3a3c93a3/Cargo.toml",
+    "-p",
+    "innovate-core",
+    "--test",
+    "network",
+    "--test",
+    "network_petgraph",
+    "--test",
+    "network_diffusion",
+    "--test",
+    "kairos",
+    "-j",
+    "1"
+  ],
+  "scope": "External standalone package compiles actual core sources with only the requested direct petgraph dependency added. Shared repository manifests/lock unchanged. Metadata comparison uses equivalent isolated-package scope on both sides, not whole-workspace feature unification.",
+  "source_parent": "07d6d897b3f2b57672e6c9a2d4cb54ac1dfcd6e0",
+  "source_sha256": {
+    "rust/crates/innovate-core/src/network.rs": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
+    "rust/crates/innovate-core/tests/network_petgraph.rs": "25d86c7e3b89d1c69cdd184879bcbc9b7f513cb96432297551e22854ad611a7c",
+    "rust/crates/innovate-core/tests/fixtures/network_petgraph_20261115.json": "57753a47801567e9ae76a71ba7c15926bf57d3a26e5f89694b2722c708ffead1"
+  },
+  "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  3.5G  1.5G  71% /tmp\n",
+  "exit_code": 0,
+  "elapsed_seconds": 12.231
+}

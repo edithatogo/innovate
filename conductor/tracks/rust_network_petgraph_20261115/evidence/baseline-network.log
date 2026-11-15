@@ -1,0 +1,134 @@
+COMMAND: cargo test --locked -p innovate-core --test network -j 1
+   Compiling libm v0.2.16
+   Compiling proc-macro2 v1.0.107
+   Compiling autocfg v1.5.1
+   Compiling num-traits v0.2.19
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v3.0.9
+   Compiling rand_core v0.10.1
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.15
+   Compiling cc v1.11.1
+   Compiling thiserror v2.0.21
+   Compiling libc v0.2.191
+   Compiling byteorder v1.5.0
+   Compiling serde_core v1.0.229
+   Compiling zerocopy v0.8.63
+   Compiling heapless v0.8.0
+   Compiling hash32 v0.3.1
+   Compiling ring v0.17.14
+   Compiling thiserror-impl v2.0.21
+   Compiling cfg-if v1.0.5
+   Compiling stable_deref_trait v1.2.1
+   Compiling rand v0.10.3
+   Compiling zeroize v1.9.1
+   Compiling kairo-ecs-types v0.0.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling smallvec v1.16.4
+   Compiling log v0.4.35
+   Compiling serde v1.0.229
+   Compiling typenum v1.20.1
+   Compiling hybrid-array v0.4.15
+   Compiling rustls-pki-types v1.15.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling getrandom v0.2.17
+   Compiling serde_derive v1.0.229
+   Compiling i_float v1.16.0
+   Compiling httparse v1.10.1
+   Compiling untrusted v0.9.0
+   Compiling itoa v1.0.18
+   Compiling i_shape v1.18.0
+   Compiling rand_chacha v0.10.0
+   Compiling rstar v0.12.2
+   Compiling kairo-ecs-core v0.0.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling rand_distr v0.6.0
+   Compiling approx v0.5.1
+   Compiling zmij v1.0.23
+   Compiling foldhash v0.1.5
+   Compiling hashbrown v0.17.1
+   Compiling equivalent v1.0.3
+   Compiling bytes v1.12.1
+   Compiling i_tree v0.18.0
+   Compiling i_key_sort v0.10.3
+   Compiling rustls v0.23.46
+   Compiling i_overlay v4.5.2
+   Compiling http v1.5.0
+   Compiling indexmap v2.14.2
+   Compiling hashbrown v0.15.5
+   Compiling geo-types v0.7.20
+   Compiling kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling kairo-ecs-state v0.0.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling rustls-webpki v0.103.16
+   Compiling crypto-common v0.2.2
+   Compiling block-buffer v0.12.1
+   Compiling rand_pcg v0.10.2
+   Compiling geographiclib-rs v0.2.7
+   Compiling once_cell v1.21.4
+   Compiling base64 v0.23.1
+   Compiling sif-itree v0.4.1
+   Compiling fixedbitset v0.5.7
+   Compiling float_next_after v2.0.0
+   Compiling subtle v2.6.1
+   Compiling serde_json v1.0.154
+   Compiling const-oid v0.10.2
+   Compiling robust v1.2.0
+   Compiling geo v0.33.1
+   Compiling digest v0.11.3
+   Compiling petgraph v0.8.3
+   Compiling ureq-proto v0.7.1
+   Compiling webpki-roots v1.0.12
+   Compiling rstar v0.13.1
+   Compiling utf8-zero v0.8.1
+   Compiling cpufeatures v0.3.1
+   Compiling percent-encoding v2.3.2
+   Compiling memchr v2.8.3
+   Compiling ureq v3.5.2
+   Compiling sha2 v0.11.1
+   Compiling kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling kairo-ecs-des v0.1.0 (https://github.com/edithatogo/kairos.git?rev=e76b97be2ea3712645933d903822ff6381c8883e#e76b97be)
+   Compiling chrono v0.4.45
+   Compiling innovate-core v0.7.0-alpha.1 (/tmp/innovate-network-c8da3a3c93a3/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 43.62s
+     Running tests/network.rs (/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/network-0f0f8df0e00b6890)
+
+running 37 tests
+test continuous_forcing_validates_effective_hazard_instead_of_unforced_total ... ok
+test continuous_hazard_scales_agent_weights_before_aggregation ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test heterogeneous_imitation_scales_large_coefficients_by_exposure ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... ok
+test continuous_hazard_can_wake_from_zero_and_replays ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+test directed_weights_control_exposure_without_overflow ... ok
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test imitation_weights_control_seeded_contagion ... ok
+test linear_hazard_clock_matches_analytic_crossing ... ok
+test checkpoint_preserves_schedule_change_tied_with_completion ... ok
+test resource_metrics_clip_service_and_queue_wait_at_horizon ... ok
+test priority_reorders_waiters_without_preempting_service ... ok
+test reopening_admits_priority_waiter_at_deadline ... ok
+test retry_restores_hazard_after_balking_or_expiry ... ok
+test scheduled_agent_durations_replace_scalar_override_at_admission ... ok
+test schedule_retargets_innovation_without_resetting_service ... ok
+test network_checkpoint_can_pause_again_at_every_completion ... ok
+test network_checkpoint_preserves_pending_service_queue_and_schedule ... ok
+test pending_agents_are_not_counted_as_adopted ... ok
+test scheduled_queue_limit_preserves_waiters_and_blocks_new_entries ... ok
+test scheduled_retry_preserves_pending_wake_after_policy_clears ... ok
+test scheduled_wait_deadline_applies_only_to_new_waiters ... ok
+test scheduled_graph_and_service_changes_take_effect_at_boundaries ... ok
+test scheduled_priorities_reorder_waiters_without_preempting_service ... ok
+test scheduled_capacity_pauses_admission_and_reopens_waiting_service ... ok
+test unweighted_imitation_preserves_finite_hazard_at_large_rates ... ok
+test waiting_deadline_withdraws_only_agents_that_miss_service ... ok
+test scheduled_hazards_enable_and_disable_requests_without_interrupting_service ... ok
+test scheduled_null_clears_queue_restrictions ... ok
+test weighted_contagion_is_invariant_to_common_edge_weight_scale ... ok
+test scheduled_resource_slot_ticks_balance_across_seeds ... ok
+test single_agent_request_frequency_matches_exponential_hazard ... ok
+test seeded_contagion_request_frequency_matches_imitation_exposure ... ok
+test network_checkpoint_continues_continuous_hazard_forcing ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+
