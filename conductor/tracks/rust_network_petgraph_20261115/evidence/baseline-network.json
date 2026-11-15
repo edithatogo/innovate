@@ -1,0 +1,29 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "-p",
+    "innovate-core",
+    "--test",
+    "network",
+    "-j",
+    "1"
+  ],
+  "source_base": "42189a223fd44c823ca11aec689ea67b11c25790",
+  "head": "226c93856e23df8f7a9d4e7c7da7a42d3ce10610",
+  "network_sha256": "0c7ba088039858419a1a1315cbf78344de0889737265536197234ce060d9508b",
+  "lock_sha256": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+  "environment": {
+    "CARGO_HOME": "/tmp/innovate-network-cargo-c8da3a3c93a3",
+    "CARGO_TARGET_DIR": "/tmp/innovate-network-target-c8da3a3c93a3",
+    "CARGO_INCREMENTAL": "0",
+    "CI": "true"
+  },
+  "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  2.4G  2.6G  48% /tmp\n",
+  "scope": "Baseline production source unchanged; graph characterization tests added but this run selects existing integration target only.",
+  "exit_code": 0,
+  "elapsed_seconds": 44.496
+}

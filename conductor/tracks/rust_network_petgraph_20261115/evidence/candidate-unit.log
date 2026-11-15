@@ -1,0 +1,17 @@
+COMMAND: cargo test --locked --offline --manifest-path /tmp/innovate-network-test-overlay-minimal-c8da3a3c93a3/Cargo.toml -p innovate-core --lib network -j 1
+   Compiling innovate-core v0.7.0-alpha.1 (/tmp/innovate-network-test-overlay-minimal-c8da3a3c93a3)
+    Finished `test` profile [unoptimized] target(s) in 5.43s
+     Running unittests /tmp/innovate-network-c8da3a3c93a3/rust/crates/innovate-core/src/lib.rs (/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/innovate_core-4a87eaecaa3c646f)
+
+running 8 tests
+test network::tests::admission_order_reconstructs_tied_completion_order ... ok
+test network::tests::network_petgraph_input_order_has_a_nonvacuous_rounding_control ... ok
+test network::tests::network_petgraph_positive_subnormal_weights_remain_valid ... ok
+test network::tests::network_petgraph_preserves_pair_validation_and_antiparallel_edges ... ok
+test network::tests::network_petgraph_rejects_invalid_weights_before_invalid_edges ... ok
+test network::tests::rebuilt_deadlines_keep_original_expiry_and_arrival_order ... ok
+test network::tests::network_petgraph_matches_independent_ordered_graph_fixtures ... ok
+test network::tests::rebuilt_waiters_retain_priority_and_fifo_order ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 45 filtered out; finished in 0.00s
+

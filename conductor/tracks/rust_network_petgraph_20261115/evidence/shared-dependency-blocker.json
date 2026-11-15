@@ -1,0 +1,19 @@
+{
+  "command": [
+    "cargo",
+    "check",
+    "--locked",
+    "--offline",
+    "-p",
+    "innovate-core",
+    "--lib",
+    "-j",
+    "1"
+  ],
+  "scope": "Actual repository manifest, without the integrator-owned direct dependency change. This records the integration blocker, not a passing candidate check.",
+  "network_sha256": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
+  "shared_lock_sha256": "976b5bd7bd8c62da5b109f0a33d264e19991a2807f341fc22aac460df9c6fc8e",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  3.7G  1.3G  76% /tmp\n",
+  "exit_code": 101,
+  "elapsed_seconds": 3.751
+}

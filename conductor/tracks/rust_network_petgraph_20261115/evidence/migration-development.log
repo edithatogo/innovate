@@ -1,0 +1,2 @@
+COMMAND: /workspace/scratch/fedc7cb711f1/python-runtime/cpython-3.15.2-linux-x86_64-gnu/bin/python3.15 scripts/check_migration.py
+Native development policy valid; 38 feature obligations still block release

@@ -722,6 +722,7 @@ dependencies = [
  "levenberg-marquardt",
  "libm",
  "nalgebra 0.34.2",
+ "petgraph",
  "serde",
  "serde_json",
  "sha2",
