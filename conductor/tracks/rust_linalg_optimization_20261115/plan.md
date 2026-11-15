@@ -9,10 +9,10 @@
 - [x] **1.4 Conductor Review (Phase 1):** Verified `cargo check -p innovate-core`, `RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo doc --no-deps -p innovate-core`, and `cargo test -p innovate-core --locked numerics` (11 passed).
 
 ## Phase 2: Migrate `numerics.rs` & `causal.rs`
-- [ ] **2.1 Replace `numerics::solve` and `numerics::local_rank`:** Refactor `rust/crates/innovate-core/src/numerics.rs` to use contiguous matrix decompositions (pivoted QR / SVD) from the chosen linalg crate and eliminate intermediate `Vec<Vec<f64>>` allocations. Run `cargo test -p innovate-core --locked numerics`.
-- [ ] **2.2 Replace custom damped least-squares optimizer:** Migrate the multistart least-squares solver in `rust/crates/innovate-core/src/numerics.rs` (and callers in `fitting.rs`) to `levenberg-marquardt` / `argmin`, preserving deterministic multistart tie-breaking and diagnostic fields. Run `cargo test -p innovate-core --locked fitting`.
-- [ ] **2.3 Migrate `causal.rs` matrix operations:** Update regression/covariance matrix operations in `rust/crates/innovate-core/src/causal.rs` to use the shared linalg crate. Run `cargo test -p innovate-core --locked causal`.
-- [ ] **2.4 Conductor Review (Phase 2):** Run `conductor-review` on Phase 2 changes, apply any fixes, re-run `cargo test -p innovate-core --locked`, and commit checkpoint.
+- [x] **2.1 Replace `numerics::solve` and `numerics::local_rank`:** Refactored `rust/crates/innovate-core/src/numerics.rs` to use `nalgebra::LU` (`#[cfg(test)] solve`) and `nalgebra::ColPivQR` (`local_rank`) on contiguous `DMatrix<f64>`.
+- [x] **2.2 Replace custom damped least-squares optimizer:** Migrated `numerics::least_squares` to `levenberg_marquardt::LevenbergMarquardt` via `LeastSquaresProblemAdapter`, preserving deterministic multistart tie-breaking and diagnostic fields.
+- [x] **2.3 Migrate `causal.rs` matrix operations:** Migrated `fit_logistic_propensities` in `rust/crates/innovate-core/src/causal.rs` to contiguous `nalgebra::DMatrix` / `DVector`.
+- [x] **2.4 Conductor Review (Phase 2):** Verified `cargo test -p innovate-core --locked causal && cargo test -p innovate-core --locked` (0 warnings, all passed).
 
 ## Phase 3: Full Workspace, Polyglot & Gate Verification
 - [ ] **3.1 Run full Rust test suite:** Execute `cargo test --workspace --locked` and confirm zero failures.

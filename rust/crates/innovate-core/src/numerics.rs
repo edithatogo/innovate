@@ -1,4 +1,8 @@
 //! Small deterministic numerical routines. No language runtime or scheduler dependency.
+use std::cell::RefCell;
+
+use levenberg_marquardt::{LeastSquaresProblem, LevenbergMarquardt, TerminationReason};
+use nalgebra::{ColPivQR, DMatrix, DVector, Dyn, storage::Owned};
 use serde_json::{Value, json};
 
 pub(crate) struct LeastSquares {
@@ -51,78 +55,80 @@ where
     Ok(columns)
 }
 
-fn solve(mut a: Vec<Vec<f64>>, mut b: Vec<f64>) -> Option<Vec<f64>> {
+#[cfg(test)]
+fn solve(a: Vec<Vec<f64>>, b: Vec<f64>) -> Option<Vec<f64>> {
     let n = b.len();
-    for k in 0..n {
-        let pivot = (k..n).max_by(|&i, &j| a[i][k].abs().total_cmp(&a[j][k].abs()))?;
-        if !a[pivot][k].is_finite() || a[pivot][k].abs() < 1e-20 {
-            return None;
-        }
-        a.swap(k, pivot);
-        b.swap(k, pivot);
-        for i in k + 1..n {
-            let factor = a[i][k] / a[k][k];
-            let pivot_values = a[k].clone();
-            for (value, pivot) in a[i].iter_mut().zip(pivot_values).skip(k) {
-                *value -= factor * pivot;
-            }
-            b[i] -= factor * b[k];
-        }
+    if n == 0 {
+        return Some(Vec::new());
     }
-    let mut x = vec![0.0; n];
-    for i in (0..n).rev() {
-        x[i] = (b[i] - (i + 1..n).map(|j| a[i][j] * x[j]).sum::<f64>()) / a[i][i];
+    if a.len() != n || a.iter().any(|row| row.len() != n) {
+        return None;
     }
-    x.iter().all(|x| x.is_finite()).then_some(x)
+    let matrix = DMatrix::from_fn(n, n, |i, j| a[i][j]);
+    let rhs = DVector::from_column_slice(&b);
+    if matrix.iter().chain(rhs.iter()).any(|x| !x.is_finite()) {
+        return None;
+    }
+    let lu = matrix.lu();
+    if lu
+        .u()
+        .diagonal()
+        .iter()
+        .any(|d| !d.is_finite() || d.abs() < 1e-20)
+    {
+        return None;
+    }
+    let sol = lu.solve(&rhs)?;
+    sol.iter()
+        .all(|x| x.is_finite())
+        .then(|| sol.as_slice().to_vec())
 }
 
-fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
+fn local_rank(columns: Vec<Vec<f64>>) -> Value {
     const MIN_COLUMN_NORM: f64 = 1e-14;
     let n = columns.len();
-    let norm = |v: &[f64]| v.iter().map(|x| x * x).sum::<f64>().sqrt();
+    let nrows = columns.first().map_or(0, Vec::len);
     let mut norms = Vec::with_capacity(n);
-    for column in &mut columns {
+    let mut normalized = DMatrix::<f64>::zeros(nrows, n);
+
+    for (j, column) in columns.iter().enumerate() {
         let scale = column.iter().map(|x| x.abs()).fold(0., f64::max);
         if scale == 0. {
             norms.push(0.);
             continue;
         }
-        for value in column.iter_mut() {
-            *value /= scale;
-        }
-        let scaled_norm = norm(column);
+        let scaled_norm = column
+            .iter()
+            .map(|&x| {
+                let s = x / scale;
+                s * s
+            })
+            .sum::<f64>()
+            .sqrt();
         let magnitude = scale * scaled_norm;
         norms.push(magnitude);
         if magnitude > MIN_COLUMN_NORM {
-            for value in column {
-                *value /= scaled_norm;
+            let denom = scale * scaled_norm;
+            for (i, &x) in column.iter().enumerate() {
+                // Divide via scale first to avoid intermediate underflow/overflow when scale ~ 1e308.
+                normalized[(i, j)] = (x / scale) / scaled_norm;
             }
-        } else {
-            column.fill(0.);
+            let _ = denom;
         }
     }
-    let mut diagonals = Vec::new();
-    for k in 0..n {
-        let pivot = (k..n)
-            .max_by(|&i, &j| norm(&columns[i]).total_cmp(&norm(&columns[j])))
-            .unwrap();
-        columns.swap(k, pivot);
-        let d = norm(&columns[k]);
-        if d < 1e-7 {
-            break;
-        }
-        diagonals.push(d);
-        let basis: Vec<_> = columns[k].iter().map(|x| x / d).collect();
-        for c in columns.iter_mut().skip(k + 1) {
-            // Reorthogonalise to reduce numerical loss of rank near collinearity.
-            for _ in 0..2 {
-                let dot = c.iter().zip(&basis).map(|(a, b)| a * b).sum::<f64>();
-                for (x, q) in c.iter_mut().zip(&basis) {
-                    *x -= dot * q;
-                }
-            }
-        }
-    }
+
+    let diagonals: Vec<f64> = if nrows > 0 && n > 0 {
+        let qr = ColPivQR::new(normalized);
+        let r = qr.r();
+        let k = nrows.min(n);
+        (0..k)
+            .map(|i| r[(i, i)].abs())
+            .take_while(|&d| d >= 1e-7)
+            .collect()
+    } else {
+        Vec::new()
+    };
+
     let rank = diagonals.len();
     let excluded: Vec<_> = norms
         .iter()
@@ -136,6 +142,67 @@ fn local_rank(mut columns: Vec<Vec<f64>>) -> Value {
         "sensitivity_column_norm_cutoff":MIN_COLUMN_NORM,
         "excluded_sensitivity_column_indices":excluded,
         "scope":"local transformed-parameter sensitivity; not global uniqueness or calibrated uncertainty"})
+}
+
+struct LeastSquaresProblemAdapter<'a, F> {
+    observed: &'a [f64],
+    evaluate: &'a F,
+    params: DVector<f64>,
+    iterations: RefCell<usize>,
+    domain_error: RefCell<Option<String>>,
+}
+
+impl<'a, F> LeastSquaresProblem<f64, Dyn, Dyn> for LeastSquaresProblemAdapter<'a, F>
+where
+    F: Fn(&[f64]) -> Result<Vec<f64>, String>,
+{
+    type ResidualStorage = Owned<f64, Dyn>;
+    type JacobianStorage = Owned<f64, Dyn, Dyn>;
+    type ParameterStorage = Owned<f64, Dyn>;
+
+    fn set_params(&mut self, x: &DVector<f64>) {
+        self.params = DVector::from_iterator(x.len(), x.iter().map(|v| v.clamp(-35.0, 35.0)));
+    }
+
+    fn params(&self) -> DVector<f64> {
+        self.params.clone()
+    }
+
+    fn residuals(&self) -> Option<DVector<f64>> {
+        let prediction = (self.evaluate)(self.params.as_slice()).ok()?;
+        if prediction.len() != self.observed.len() || prediction.iter().any(|x| !x.is_finite()) {
+            return None;
+        }
+        Some(DVector::from_iterator(
+            self.observed.len(),
+            prediction
+                .into_iter()
+                .zip(self.observed)
+                .map(|(p, y)| p - y),
+        ))
+    }
+
+    fn jacobian(&self) -> Option<DMatrix<f64>> {
+        *self.iterations.borrow_mut() += 1;
+        let prediction = (self.evaluate)(self.params.as_slice()).ok()?;
+        let columns = match jacobian(self.params.as_slice(), &prediction, self.evaluate) {
+            Ok(columns) => columns,
+            Err(err) => {
+                *self.domain_error.borrow_mut() = Some(err);
+                return None;
+            }
+        };
+        let m = prediction.len();
+        let n = self.params.len();
+        let matrix = DMatrix::from_fn(m, n, |i, j| columns[j][i]);
+        let normal = matrix.transpose() * &matrix;
+        if normal.iter().any(|x| !x.is_finite()) {
+            *self.domain_error.borrow_mut() =
+                Some("optimizer exceeded the finite numerical domain".into());
+            return None;
+        }
+        Some(matrix)
+    }
 }
 
 /// Damped nonlinear least squares in caller-supplied transformed parameters.
@@ -163,8 +230,7 @@ where
     let mut best_converged: Option<(usize, Candidate)> = None;
     let mut start_reports = Vec::with_capacity(starts.len());
     for (index, start) in starts.iter().enumerate() {
-        let mut theta = start.clone();
-        let mut prediction = match evaluate(&theta) {
+        let initial_prediction = match evaluate(start) {
             Ok(prediction) => prediction,
             Err(error) => {
                 start_reports.push(json!({"termination":"invalid_initial_prediction",
@@ -172,79 +238,67 @@ where
                 continue;
             }
         };
-        let mut error = loss(&prediction);
-        if !error.is_finite() {
+        let initial_error = loss(&initial_prediction);
+        if !initial_error.is_finite() {
             start_reports.push(json!({"termination":"nonfinite_initial_loss","initial_transformed_parameters":start}));
             continue;
         }
-        let initial_error = error;
-        let mut damping = 1e-3_f64;
-        let mut converged = false;
-        let mut reason = "iteration_limit";
-        let mut iterations = 0;
-        for iteration in 0..max_iterations {
-            iterations = iteration + 1;
-            let columns = jacobian(&theta, &prediction, &evaluate)?;
-            let n = theta.len();
-            let mut normal = vec![vec![0.0; n]; n];
-            let mut rhs = vec![0.0; n];
-            for a in 0..n {
-                rhs[a] = -columns[a]
-                    .iter()
-                    .zip(prediction.iter().zip(observed))
-                    .map(|(j, (p, y))| j * (p - y))
-                    .sum::<f64>();
-                for b in 0..n {
-                    normal[a][b] = columns[a].iter().zip(&columns[b]).map(|(a, b)| a * b).sum();
+        let (theta, prediction, error, iterations, converged, reason) = if max_iterations == 0 {
+            (
+                start.clone(),
+                initial_prediction,
+                initial_error,
+                0,
+                false,
+                "iteration_limit",
+            )
+        } else {
+            let problem = LeastSquaresProblemAdapter {
+                observed,
+                evaluate: &evaluate,
+                params: DVector::from_column_slice(start),
+                iterations: RefCell::new(0),
+                domain_error: RefCell::new(None),
+            };
+            let (solved, lm_report) = LevenbergMarquardt::new()
+                .with_ftol(1e-12)
+                .with_xtol(1e-12)
+                .with_gtol(1e-9)
+                .with_patience(max_iterations.saturating_mul(start.len().max(1) + 2))
+                .minimize(problem);
+            if let Some(err) = solved.domain_error.into_inner() {
+                return Err(err);
+            }
+            let iterations = solved.iterations.into_inner().min(max_iterations);
+            let candidate_theta = solved.params.as_slice().to_vec();
+            let candidate_pred = evaluate(&candidate_theta).ok();
+            let candidate_err = candidate_pred.as_deref().map_or(f64::INFINITY, loss);
+            let (theta, prediction, error) = if candidate_err <= initial_error {
+                (
+                    candidate_theta,
+                    candidate_pred.unwrap_or(initial_prediction),
+                    candidate_err,
+                )
+            } else {
+                (start.clone(), initial_prediction, initial_error)
+            };
+            let (converged, reason) = match lm_report.termination {
+                TerminationReason::ResidualsZero | TerminationReason::Orthogonal => {
+                    (true, "gradient_or_residual_tolerance")
                 }
-            }
-            let gradient_norm = rhs.iter().copied().map(f64::abs).fold(0.0, f64::max);
-            if rhs
-                .iter()
-                .chain(normal.iter().flatten())
-                .any(|x| !x.is_finite())
-            {
-                return Err("optimizer exceeded the finite numerical domain".into());
-            }
-            if error < 1e-20 || gradient_norm < 1e-9 {
-                converged = true;
-                reason = "gradient_or_residual_tolerance";
-                break;
-            }
-            for (i, row) in normal.iter_mut().enumerate() {
-                row[i] += damping * row[i].max(1e-8);
-            }
-            let delta = solve(normal, rhs);
-            let candidate = delta.map(|d| {
-                theta
-                    .iter()
-                    .zip(d)
-                    .map(|(t, d)| (t + d.clamp(-3.0, 3.0)).clamp(-35.0, 35.0))
-                    .collect::<Vec<_>>()
-            });
-            let attempt = candidate.as_ref().and_then(|c| evaluate(c).ok());
-            if let (Some(candidate), Some(candidate_prediction)) = (candidate, attempt) {
-                let candidate_error = loss(&candidate_prediction);
-                if candidate_error < error {
-                    let improvement = error - candidate_error;
-                    theta = candidate;
-                    prediction = candidate_prediction;
-                    error = candidate_error;
-                    damping = (damping * 0.25).max(1e-12);
-                    if improvement < 1e-12 * (error + improvement) {
-                        converged = true;
-                        reason = "objective_tolerance";
-                        break;
-                    }
-                    continue;
+                TerminationReason::Converged { .. }
+                | TerminationReason::NoImprovementPossible(_) => (true, "objective_tolerance"),
+                TerminationReason::LostPatience => (false, "iteration_limit"),
+                TerminationReason::User(_)
+                | TerminationReason::NoParameters
+                | TerminationReason::NoResiduals
+                | TerminationReason::WrongDimensions(_) => (false, "damping_limit"),
+                TerminationReason::Numerical(_) => {
+                    return Err("optimizer exceeded the finite numerical domain".into());
                 }
-            }
-            damping *= 10.0;
-            if damping > 1e14 {
-                reason = "damping_limit";
-                break;
-            }
-        }
+            };
+            (theta, prediction, error, iterations, converged, reason)
+        };
         start_reports.push(json!({
             "iterations": iterations,
             "converged": converged,
