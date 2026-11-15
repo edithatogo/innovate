@@ -46,7 +46,7 @@ jobs:
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
-          toolchain: 1.99.1
+          toolchain: 1.100.0
       - run: uv venv .venv-release --python 3.15.2
       - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
       - name: Verify release policy and wheel SBOM normalization

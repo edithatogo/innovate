@@ -30,14 +30,14 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
         with:
-          version: 12.18.0
+          version: 12.21.0
           run_install: false
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
 
         with:
-          toolchain: 1.99.1
+          toolchain: 1.100.0
 
       - name: Set up R
         uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
