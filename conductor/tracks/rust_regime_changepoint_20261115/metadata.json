@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_regime_changepoint_20261115",
+  "type": "refactor",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Modernize regime.rs changepoint detection (PELT / augurs-changepoint evaluation) and delegate per-regime curve fitting while preserving ruptures fixture parity."
+}

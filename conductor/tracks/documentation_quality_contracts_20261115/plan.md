@@ -169,3 +169,20 @@ historical pages and all scientific release obligations remain separately open.
 See [the bounded repair evidence](evidence-upload-repair.md) for exact source
 identity, failing job, commands, local-runtime limitations and preserved gates.
 The historical qualification above is not reattributed to the repaired head.
+
+## PR 616 documentation example receipts
+
+On `c24638b4ac4a0948dc2853c2ebd079ee6e95393e`, the aggregate check
+rejected the Julia and R receipts because the tracked source map prefixes
+digests with `sha256:` and example records use bare digests. The same check
+failed on main `663002b03ccb92abee2ece934d69116cb4bf3415`.
+[PR 616 job](https://github.com/edithatogo/innovate/actions/runs/43659146178/job/132645986240)
+[Main run](https://github.com/edithatogo/innovate/actions/runs/43652562275)
+
+This repair brings forward the hash comparison and regressions from [PR 613](https://github.com/edithatogo/innovate/pull/613).
+On Python 3.15.2, the new case reproduced the failure for both languages.
+After the repair, 14 source-hash, 60 content, and six documentation workflow
+tests passed using `.venv-native/bin/python -m unittest discover -s tests -p`
+with `test_documentation_source_hash_contract.py`, `test_documentation_content_contract.py`,
+and `test_documentation_workflow.py`. Fresh hosted native receipts are required
+to qualify the repaired PR.
