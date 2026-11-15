@@ -1,0 +1,8 @@
+{
+  "track_id": "rust_tabular_crates_io_20261115",
+  "type": "refactor",
+  "status": "planned",
+  "created_at": "2026-11-15T00:00:00Z",
+  "updated_at": "2026-11-15T00:00:00Z",
+  "description": "Replace git-pinned polars/polars-arrow and root [patch.crates-io] hashbrown in innovate-tabular with crates.io arrow-rs or published polars."
+}
