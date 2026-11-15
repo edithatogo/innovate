@@ -29,6 +29,7 @@ jobs:
 
   ffi-sbom-and-provenance:
     name: Package FFI archive, SBOM, and SLSA provenance
+    needs: release-readiness
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -48,19 +49,23 @@ jobs:
       - name: Build FFI shared library and package archive
         run: |
           cargo build --release --locked -p innovate-ffi
-          mkdir -p dist-ffi
+          mkdir -p dist-ffi sbom-input
           cp target/release/libinnovate_ffi.so dist-ffi/
+          cp target/release/libinnovate_ffi.so Cargo.lock sbom-input/
           tar -czf innovate-ffi-linux-x86_64.tar.gz -C dist-ffi .
       - name: Generate SPDX SBOM with Syft
         uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
         with:
-          path: dist-ffi
+          path: sbom-input
           format: spdx-json
           output-file: innovate-ffi-sbom.spdx.json
-      - name: Scan workspace and FFI archive with Grype
+          upload-release-assets: false
+      - name: Verify Rust packages in generated SBOM
+        run: jq -e '.packages | any(.name == "innovate-ffi")' innovate-ffi-sbom.spdx.json > /dev/null
+      - name: Scan FFI archive and Rust lockfile with Grype
         uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
         with:
-          path: dist-ffi
+          path: sbom-input
           fail-build: true
           severity-cutoff: critical
       - name: Attest SLSA build provenance (Sigstore / in-toto)
