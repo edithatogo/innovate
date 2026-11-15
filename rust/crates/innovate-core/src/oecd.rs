@@ -75,23 +75,29 @@ fn download(url: &str) -> Result<String, String> {
     use std::{io::Read, time::Duration};
 
     const MAX_BYTES: u64 = 16 * 1024 * 1024;
-    let client = reqwest::blocking::Client::builder()
-        .timeout(Duration::from_secs(30))
-        .redirect(reqwest::redirect::Policy::none())
-        .build()
-        .map_err(|error| error.to_string())?;
-    let response = client.get(url).send().map_err(|error| error.to_string())?;
+    let config = ureq::Agent::config_builder()
+        .timeout_global(Some(Duration::from_secs(30)))
+        .max_redirects(0)
+        .http_status_as_error(false)
+        .build();
+    let agent = ureq::Agent::new_with_config(config);
+    let response = agent.get(url).call().map_err(|error| error.to_string())?;
     if !response.status().is_success() {
         return Err(format!("OECD returned HTTP {}", response.status()));
     }
     if response
-        .content_length()
+        .headers()
+        .get("content-length")
+        .and_then(|value| value.to_str().ok())
+        .and_then(|text| text.parse::<u64>().ok())
         .is_some_and(|size| size > MAX_BYTES)
     {
         return Err("OECD response exceeds 16 MiB".into());
     }
     let mut bytes = Vec::new();
     response
+        .into_body()
+        .into_reader()
         .take(MAX_BYTES + 1)
         .read_to_end(&mut bytes)
         .map_err(|error| error.to_string())?;
