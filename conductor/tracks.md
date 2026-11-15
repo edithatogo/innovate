@@ -541,3 +541,9 @@ Historical completion labels above do not establish current full-native ownershi
 
 - [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned)*
   *Link: [./tracks/rust_network_petgraph_20261115/](./tracks/rust_network_petgraph_20261115/)*
+
+- [ ] **Track: Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)** *(Planned)*
+  *Link: [./tracks/rust_nuts_hmc_20261115/](./tracks/rust_nuts_hmc_20261115/)*
+
+- [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned)*
+  *Link: [./tracks/rust_regime_changepoint_20261115/](./tracks/rust_regime_changepoint_20261115/)*
