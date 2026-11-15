@@ -1,6 +1,7 @@
 ---
 title: Submission Readiness Dossiers
 description: Evidence dossiers for submission and governance targets.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

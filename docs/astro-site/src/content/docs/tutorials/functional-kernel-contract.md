@@ -1,6 +1,7 @@
 ---
 title: Functional Kernel Contract
 description: Language-neutral execution surface and portable kernel operations.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

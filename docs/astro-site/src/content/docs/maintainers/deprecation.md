@@ -1,6 +1,7 @@
 ---
 title: Deprecation Policy
 description: Evidence-backed deprecation policy for Innovate maintainers.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

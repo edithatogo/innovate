@@ -1,6 +1,7 @@
 ---
 title: Compatibility Policy
 description: Evidence-backed compatibility policy for Innovate maintainers.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

@@ -1,6 +1,7 @@
 ---
 title: Architecture
 description: Repository architecture and ADR navigation.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

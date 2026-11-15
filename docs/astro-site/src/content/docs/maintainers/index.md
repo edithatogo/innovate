@@ -1,6 +1,7 @@
 ---
 title: Maintainers
 description: Publication, release, and migration documentation.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

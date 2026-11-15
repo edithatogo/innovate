@@ -10,15 +10,15 @@ on:
 permissions:
   contents: read
 
-# PR builds must not replace a pending main publication.
+# Superseded PR checks may stop; main publication retains its ordered queue.
 concurrency:
   group: docs-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     defaults:
       run:
         working-directory: docs/astro-site
@@ -53,7 +53,7 @@ jobs:
 
       - name: Test documentation contracts
         run: |
-          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_documentation_source_hash_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation test_documentation_workflow; do
+          for suite in test_api_documentation_contract test_native_documentation_contract test_documentation_content_contract test_documentation_source_hash_contract test_production_docs_contract test_api_reference_generation test_polyglot_api_documentation test_documentation_workflow test_scientific_review_contract; do
             ../../.venv-docs/bin/python -m unittest discover -s ../../tests -p "$suite.py"
           done
 
@@ -62,6 +62,9 @@ jobs:
 
       - name: Require complete Julia and R public documentation structure
         run: ../../.venv-docs/bin/python ../../scripts/check_polyglot_api_documentation.py --check > .reports/polyglot-api.json
+
+      - name: Verify reviewed-source freshness and scoped claims
+        run: ../../.venv-docs/bin/python ../../scripts/check_scientific_review_contract.py --output .reports/scientific-review.json
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -81,6 +84,28 @@ jobs:
       - name: Verify production documentation contract
         run: ../../.venv-docs/bin/python ../../scripts/verify_production_docs.py --output .reports/artifact.json
 
+      - name: Discover the complete browser qualification suite
+        run: pnpm test:browser:list
+
+      - name: Install Chromium for documentation qualification
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Qualify browser accessibility and interaction
+        timeout-minutes: 22
+        run: pnpm test:browser
+
+      - name: Retain browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: documentation-browser-diagnostics
+          path: |
+            docs/astro-site/.reports/browser/playwright.json
+            docs/astro-site/.reports/browser/html/
+            docs/astro-site/.reports/browser/test-results/
+          include-hidden-files: true
+          if-no-files-found: error
+
       - name: Retain documentation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -92,6 +117,8 @@ jobs:
             docs/astro-site/.reports/polyglot-api.json
             docs/astro-site/.reports/content.json
             docs/astro-site/.reports/artifact.json
+            docs/astro-site/.reports/scientific-review.json
+            docs/astro-site/.reports/browser/qualification.json
           include-hidden-files: true
           if-no-files-found: error
 
@@ -149,7 +176,7 @@ jobs:
         run: julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
       - name: Execute Julia documentation examples and check runtime docs
         timeout-minutes: 5
-        run: julia --project=bindings/julia scripts/check_julia_documentation.jl
+        run: julia --depwarn=error --project=bindings/julia scripts/check_julia_documentation.jl
       - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
       - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
         with:

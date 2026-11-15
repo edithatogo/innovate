@@ -1,6 +1,7 @@
 ---
 title: Plugin API and Stability Tiers
 description: Stability tiers, extension manifests, and plugin lifecycle rules.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

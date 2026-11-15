@@ -3,6 +3,7 @@ title: Advanced Policy, Competition, and Substitution Modeling
 description: Explore policy diffusion, competition dynamics, and technology substitution models
 sidebar:
   order: 6
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

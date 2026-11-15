@@ -1,6 +1,7 @@
 ---
 title: Migration
 description: Cutover policy, inventories, and route-stability notes.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

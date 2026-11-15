@@ -1,6 +1,7 @@
 ---
 title: Shared Diagnostics Contract and Uncertainty
 description: Standardized fit output across deterministic, bootstrap, and Bayesian fitters.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

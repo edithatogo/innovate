@@ -1,6 +1,7 @@
 ---
 title: Registry Submission Receipts
 description: Current evidence bundle for binding and HPC registry targets.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

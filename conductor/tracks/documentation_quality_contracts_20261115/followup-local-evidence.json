@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-14T23:31:59.664266+00:00",
+  "base_commit": "b14c05077e83223fce13353b958a323ae02ea82d",
+  "scope": "Local qualification of the integrated follow-up working tree; exact inputs below. Hosted browser/native and live-publication acceptance remain separate.",
+  "source_sha256": {
+    ".github/workflows/docs.yml": "4c4edc10e7570c7cb6bec685213029d306007204dc4791acac622b0b4a4c4ef0",
+    "docs/astro-site/package.json": "214639e49c0dbd578c7598dde31c31222156cb0ec8566ad9315dc18f1532f3b2",
+    "docs/astro-site/pnpm-lock.yaml": "c91355378d6bbeff0d9f930e55fa1afe9af7424e35f45df22b9805f9d3868512",
+    "docs/contracts/content-quality.json": "d40f71aa6bab6dd38ba27079e135ff786a26e59a38f87b13cdba05b99f73dcb4",
+    "docs/contracts/content-baseline.json": "21e2128c1ddd559101660176180cc4a78158691c5518b50f36cc8817899c520c",
+    "docs/contracts/site-quality.json": "e78ed5696894ea1c8cc5286656fa22b0d7907f407b3f39bf877629bc5941719c",
+    "docs/contracts/scientific-pedagogical-review.json": "d18e3d202aaa39c76c890c91a5ea7e0424dc7a5c4079ef36ab95954b7b6441bb",
+    "scripts/check_documentation_content.py": "7b5f43f36e549e8d729ad06249ea17937225e8db7430fec4cf46f8f010ff3056",
+    "scripts/check_scientific_review_contract.py": "4cf3b5a097f9fca1ce75ac1ce27c14dadf4b3dc68b96935fa2f94181de6845e8",
+    "scripts/check_julia_documentation.jl": "9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+    "tests/test_documentation_source_hash_contract.py": "2b88ffbc7bea21827b3e0e817d9ce5ce5e5e9a5fedf675b7873b29ee5f815cb5",
+    "tests/test_scientific_review_contract.py": "c96875376cfbed562b76882d839186ba2d42e3e523954080dce68814b17d7992",
+    "tests/test_documentation_workflow.py": "ed5301beeddc4527ad4c9ba797e6721d196b1292dcabdb4261c71291c2b6d6f0",
+    "docs/astro-site/scripts/browser-contract.mjs": "2de7c017d478b1c8d8276124e70a6bc34abcb80f97dbbfc9c444be9eb8d09077",
+    "docs/astro-site/scripts/browser-contract.test.mjs": "74802f2d3372133aab9a6f6b0a2284889f378f7ac489c0bc6477d5b850ff8f91",
+    "docs/astro-site/scripts/browser-report.mjs": "8255db7dd8753bb4a49462f934a619e703d25c4a0ac916c1cfda4f3024b66dea",
+    "docs/astro-site/tests/browser/documentation.spec.mjs": "ad3c6a8df0cd9aafab2c7538039e8ebc81ae05ce260f65b74c57e780a2e7ddc5",
+    "docs/astro-site/tests/browser/support.mjs": "029beaa9c0deb8ff9ccf4f1b31c68676e0b51e2d2fc886902d35dea7d47e5d0e",
+    "docs/astro-site/playwright.config.mjs": "c1c47739d104453443b46314e294ea8af0b68582e0d75a4402f22467f9fe0f6c"
+  },
+  "toolchain": {
+    "python": "3.15.2",
+    "node": "26.13.1",
+    "pnpm": "12.18.0",
+    "astro": "7.4.11",
+    "starlight": "0.42.11"
+  },
+  "frozen_dependency_install": {
+    "status": "passed",
+    "supply_chain_policy_entries": 567
+  },
+  "python_contract_tests": {
+    "python": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]",
+    "tests_run": 233,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage": {
+      "covered_lines": 2130,
+      "num_statements": 2535,
+      "percent_covered": 81.86624372191382,
+      "percent_covered_display": "82",
+      "missing_lines": 405,
+      "excluded_lines": 0,
+      "percent_statements_covered": 84.02366863905326,
+      "percent_statements_covered_display": "84",
+      "num_branches": 1248,
+      "num_partial_branches": 205,
+      "covered_branches": 967,
+      "missing_branches": 281,
+      "percent_branches_covered": 77.48397435897436,
+      "percent_branches_covered_display": "77"
+    }
+  },
+  "node_tests": {
+    "status": "passed",
+    "tests": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "astro_build": {
+    "status": "passed",
+    "html_pages": 202
+  },
+  "astro_check": {
+    "status": "passed",
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "rendered_artifact": {
+    "status": "passed",
+    "counts": {
+      "checked_local_links": 11699,
+      "errors": 0,
+      "external_urls_not_checked": 335,
+      "html_pages": 202
+    },
+    "artifact_sha256": "c054a2c4ffb8d5d8321ee95328cefc4a10d0f1691de0b19d5125d3bc9737c773",
+    "source_sha256": "8aea07cf8decba270b8458afd699efbe1619ead4c5ebbd9997c781ea3eedb89e",
+    "source_artifact_binding_verified": false
+  },
+  "content_counts": {
+    "current_pages": 60,
+    "examples": 10,
+    "generated_api_pages": 34,
+    "historical_pages": 61,
+    "pages": 201,
+    "unbound_python_blocks": 0,
+    "versioned_archive_pages": 80,
+    "violations": 0
+  },
+  "python_execution": {
+    "status": "passed",
+    "example_files": 10,
+    "doctest_statements": 18,
+    "installed_native_source_binding_verified": false
+  },
+  "local_full_language_command": {
+    "exit_code": 1,
+    "reason": "Julia and R runtimes and fresh native receipts are unavailable locally; the command retains passing Python evidence and fails the complete declared scope.",
+    "language_receipts": {
+      "julia": {
+        "qualified": false,
+        "reason": "Required native documentation receipt is missing: docs/astro-site/.reports/julia-documentation.json.",
+        "status": "not_run"
+      },
+      "r": {
+        "qualified": false,
+        "reason": "Required native documentation receipt is missing: docs/astro-site/.reports/r-documentation.json.",
+        "status": "not_run"
+      }
+    }
+  },
+  "scientific_review_record_gate": {
+    "schema_version": 1,
+    "status": "passed",
+    "scope": "review_record_consistency_and_declared_source_freshness",
+    "errors": [],
+    "source_files_declared": 27,
+    "scientific_quality_certified": false,
+    "pedagogical_quality_certified": false,
+    "human_reader_validation_performed": false,
+    "native_execution_performed": false
+  },
+  "browser_discovery": {
+    "status": "passed",
+    "cases": 142,
+    "projects": 2,
+    "actual_browser_execution": "not_run_locally"
+  },
+  "workflow_lint": {
+    "actionlint": "passed",
+    "zizmor": "not_rerun_locally; tool unavailable in recovered environment"
+  },
+  "scoped_ruff": {
+    "check": "passed",
+    "format": "passed"
+  },
+  "full_documentation_quality_complete": false,
+  "human_reader_trials_performed": false,
+  "live_deployment_verified": false
+}

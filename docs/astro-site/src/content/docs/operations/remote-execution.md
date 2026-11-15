@@ -1,6 +1,7 @@
 ---
 title: Remote Execution
 description: Remote service boundary for kernel requests and responses.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

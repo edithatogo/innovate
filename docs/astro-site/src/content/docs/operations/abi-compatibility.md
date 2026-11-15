@@ -1,6 +1,7 @@
 ---
 title: ABI and Binary Compatibility
 description: Native and binary boundary strategy for the packaging stack.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

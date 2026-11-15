@@ -1,0 +1,101 @@
+---
+title: Check a native Bayesian sampler
+description: Compare four native Metropolis chains with a tractable posterior and interpret support, Monte Carlo error and diagnostics.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_bayesian.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+The current example uses Rust's `bayesian_metropolis_chains` operation through
+[execute](/innovate/api/generated/execute/). It replaces the earlier
+`NumpyroFitter` tutorial. Its purpose is to check a sampler against a known
+answer before considering a less tractable scientific model.
+
+## Learning outcomes
+
+You will derive the target mean and variance for one bounded parameter, run four
+chains from dispersed starts, and distinguish stored draws from effective sample
+size. You will explain why good diagnostic values and agreement in one fixture
+do not prove convergence or validate an empirical likelihood.
+
+## Prerequisites
+
+Use the [native development installation](/innovate/user-guide/installation/).
+The example needs the installed package and Python's standard library, with no
+external dataset or network access. Basic familiarity with a Normal likelihood,
+a Normal prior and variance is helpful.
+
+Only the Logistic asymptote `L` is unknown. The slope `k = 0.5` and midpoint
+`x0 = 2` are fixed. The single synthetic observation is `y = 50` at `t = 2`,
+where the model gives `y = L / 2`. The observation noise standard deviation is
+one and the prior for `L` has mean 96 and standard deviation two. Support is
+restricted to `[80, 120]`.
+
+## Steps
+
+Run the checked file from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_bayesian.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_bayesian.py" />
+
+Four chains start at 83, 94, 106 and 118 using distinct explicit seeds. Each
+uses 1000 warmup iterations and retains 4000 draws. The script checks every
+sample against the support, checks the declared posterior-moment tolerances,
+and requires finite diagnostic values within the fixture's bounds.
+
+## Expected results
+
+The successful run prints this exact contract output:
+
+<Code code={contentQuality.examples['examples/native_bayesian.py'].expected_stdout} lang="json" />
+
+The 16,000 stored draws are the combined retained samples from four chains.
+They are not 16,000 independent observations. A failed assertion should trigger
+investigation of the sampled target, initialization, implementation and Monte
+Carlo behavior; changing the expected value to match a run would remove the
+independent check.
+
+## Interpretation
+
+At the midpoint, observing 50 with noise variance one supplies a likelihood
+for `L` centered at 100 with variance four. The prior also has variance four,
+centered at 96. Adding their precisions gives posterior variance
+`1 / (1/4 + 1/4) = 2`; the precision-weighted posterior mean is 98. The finite
+support truncates this Normal distribution. Both boundaries are more than
+12 posterior standard deviations from the mean, so truncation is negligible at
+the declared tolerances, though it is not mathematically absent.
+
+The script allows absolute deviations below 0.2 for the sample mean and 0.3 for
+the sample variance. It also checks rank-normalized split R-hat below 1.05 and
+bulk and tail effective sample sizes above 1000. These are fixture regression
+bounds, not an empirical analysis acceptance policy. The diagnostic framework
+and its limits are discussed by
+[Vehtari and colleagues](https://doi.org/10.1214/20-BA1221), with
+[the authors' code and supplementary examples](https://github.com/avehtari/rhat_ess).
+For a new analysis,
+[Section 2 of the author manuscript](https://arxiv.org/html/1903.08008v5#S2)
+recommends at least four chains and `R-hat < 1.01` as a first-level check.
+Assess Monte Carlo error for the particular quantities and precision you need.
+
+**Reader task:** why is the posterior mean 98 rather than the likelihood's 100?
+The prior and likelihood have equal precision in this case, so the mean is their
+average. If the prior standard deviation were changed, the independent target
+calculation and tolerances would need deliberate review before changing the
+checked fixture.
+
+## Limitations
+
+One observation cannot identify `L`, `k` and `x0` jointly in this example; the
+last two are deliberately fixed. The case does not test a hierarchical model,
+multimodal posterior, empirical prior, calibrated credible-interval coverage or
+an appropriate observation model for real adoption counts.
+
+A favorable R-hat or effective sample size is a diagnostic observation, not proof
+that all posterior regions were explored. The posterior oracle strengthens this
+specific test but does not establish general sampler adequacy. Use the
+[native capability guide](/innovate/native-migration/) for supported Bayesian
+operations and the scientific qualification work that remains open.

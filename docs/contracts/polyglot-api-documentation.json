@@ -214,7 +214,7 @@
     "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
     "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
     "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
-    "scripts/check_julia_documentation.jl": "sha256:9675fea150259cf8135b6604c427d95a34a182e2cf9434fdb93bf215a3a1f93e",
+    "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
     "scripts/check_polyglot_api_documentation.py": "sha256:bc9f09f2daae854b549ceff8d874e0f4a596f3d05087e448413c4647848c6980",
     "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
   },

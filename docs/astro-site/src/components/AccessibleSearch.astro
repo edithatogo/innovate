@@ -1,0 +1,22 @@
+---
+import VersionSearch from 'starlight-versions/components/VersionSearch.astro';
+---
+
+<VersionSearch {...Astro.props}><slot /></VersionSearch>
+
+<script is:inline>
+  // Reuse the localized label and platform shortcut in the accessible name.
+  // Starlight's preceding inline script has already selected Ctrl or Command.
+  (() => {
+    const search = document.querySelector('site-search');
+    const opener = search?.querySelector(':scope > button[data-open-modal]');
+    const label = opener?.querySelector(':scope > span');
+    const shortcut = opener?.querySelector(':scope > kbd');
+    if (!(opener instanceof HTMLButtonElement) || !label || !shortcut) return;
+    label.id = 'innovate-search-label';
+    shortcut.id = 'innovate-search-shortcut';
+    label.after(' ');
+    opener.setAttribute('aria-labelledby', [label.id, shortcut.id].join(' '));
+    opener.removeAttribute('aria-label');
+  })();
+</script>

@@ -1,6 +1,7 @@
 ---
 title: NDlib Integration for Network-Based Diffusion
 description: Legacy NDlib network diffusion (optional legacy-abm extra). Prefer the Kairos simulation adapter for new work.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

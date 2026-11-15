@@ -56,14 +56,17 @@ function execute_example(example)
     # include_string parses with Julia itself. A separate module prevents examples
     # from succeeding because of variables created by an earlier example.
     sandbox = Module(gensym(:InnovateDocumentationExample))
-    Core.eval(sandbox, :(const __documentation_assertions__ = Ref(0)))
+    # Retain the counter locally: looking up a newly defined constant afterward
+    # would access a binding newer than this function's fixed world age.
+    assertion_counter = Ref(0)
+    Core.eval(sandbox, :(const __documentation_assertions__ = $assertion_counter))
     counter_reference = GlobalRef(sandbox, :__documentation_assertions__)
     planned = Ref(0)
     started = time()
     Base.include_string(
         expression -> instrument_assertions(expression, counter_reference, planned),
         sandbox, code, example["source"] * ":" * string(opening))
-    observed = getfield(sandbox, :__documentation_assertions__)[]
+    observed = assertion_counter[]
     expected = example["assertion_count"]
     planned[] == expected > 0 || error("Assertion inventory differs: $(example["id"])")
     observed == planned[] || error("An assertion was skipped or repeated: $(example["id"])")

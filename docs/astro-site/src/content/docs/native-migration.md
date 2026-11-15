@@ -1,10 +1,12 @@
 ---
-title: Native Rust and Polars migration
-description: Current development API, scientific conventions and remaining obligations
+title: Native API and scientific conventions
+description: Choose native workflows, interpret units and uncertainty, and distinguish checked computation from scientific evidence.
 ---
 
-Innovate 0.7 is a breaking development line. Rust owns computation and scientific
-validation. Python, Julia and R are the supported bindings; Polars owns tables.
+Innovate 0.7 is a breaking development line. Rust owns numerical computation and
+validation of request shapes, parameter domains and operation contracts.
+Scientific validity depends on the model, data and study design as well as the
+implementation. Python, Julia and R are the supported bindings; Polars owns tables.
 The installed Python package requires Polars and its native extension. There is
 no Python numerical fallback, pandas or xarray runtime.
 
@@ -20,7 +22,36 @@ Pointwise Logistic and mechanistic Bass/Gompertz covariates/events, plus other
 specific extensions, are described below;
 full covariates/events across models, inference, uncertainty, richer Kairos and
 all remaining scientific/distribution obligations stay required. Discovery is
-the executable subset, and all 38 ledger obligations still block release.
+the executable subset; outstanding scientific ledger obligations still block release.
+
+## Choose a task
+
+| Your task | Start here | Question to settle first |
+| --- | --- | --- |
+| Predict a supplied curve | [Checked quickstart](/innovate/user-guide/getting-started/) | Are the observations levels, interval counts or rates? |
+| Fit two generations and extrapolate | [Polars fitting and prediction](#polars-fitting-and-prediction) | Are launches fixed, and what does each generation's level measure? |
+| Compare model scenarios | [Scenario experiment tutorial](/innovate/tutorials/scenario-experiment-workflows/) | Which outcome, population and evaluation time define the contrast? |
+| Check Bayesian computation | [Scalar posterior example](#bayesian-inference-for-scalar-forecasts) | Does the observation model represent the data-generating process? |
+| Estimate an observational contrast | [Cross-fitted overlap example](#check-treatment-overlap-in-cross-fitted-contrasts) | Which assumptions identify the requested treatment effect? |
+
+### Units and denominators
+
+A successful request cannot establish that the submitted quantity has the right
+scientific interpretation. Record these choices alongside an analysis:
+
+| Quantity | Meaning to record | Common mismatch |
+| --- | --- | --- |
+| Time | Unit, origin, observation times and intervention/launch times | Changing years to months without rescaling coefficients measured per unit time |
+| Level | The model's output quantity and its population or market denominator | Fitting daily new adoptions as though they were a cumulative level |
+| Rate | The family-specific derivative or increment convention, including its time unit | Reading a signed substitution derivative as a count of new unique adopters |
+| Market potential | Adoption units represented by `L`, `m` or the family-specific capacity | Treating a market potential of 250 as the number of agents when `population = 100` |
+| Scenario difference | Alternative minus baseline for comparable outcomes at a shared time | Comparing different horizons or interpreting a model contrast as an identified policy effect |
+
+For a level curve, its net change over an interval is a difference of levels;
+its average rate is that difference divided by the interval duration. An
+instantaneous derivative answers a different question. A net change in one
+generation's level is not a count of new unique adopters. Historical sampled-rate
+conventions are described separately below where they differ from a derivative.
 
 ## Polars fitting and prediction
 
@@ -104,6 +135,13 @@ Rates use `rate` or `rate_N`. Existing output column names are errors, preventin
 accidental overwrite. Observation column order defines model series order.
 IPC currently copies; LazyFrames collect at the execution boundary.
 
+The fitting data in this example are generated from the same model family with
+no measurement noise. The independent formula checks the implementation's
+algebra and the fitted parameters are compared with their known generating
+values. The future times are held out of the fitting grid, but they are still
+synthetic. This is a recovery and extrapolation check, not an external validation
+dataset or evidence that the model describes a particular population.
+
 ## Norton–Bass conventions
 
 `legacy_cannibalization` preserves the repository's historical ODE:
@@ -126,7 +164,9 @@ then `p2`, `q2`, `m2`, and so on. Innovation and imitation rates may be zero for
 prediction; potentials must be positive. Launch times are supplied, not estimated.
 At launch, rates use the right derivative. A generation level can decline:
 its signed derivative is neither gross incidence nor cumulative unique adoption.
-Threshold/half-life helpers and covariate extensions remain unported.
+Implemented threshold summaries, controls and fixed parameter events are
+described in the corresponding sections below. Their remaining inference and
+qualification limits are stated with each extension.
 
 ## Competitive models
 
@@ -192,8 +232,8 @@ payload fields `time` and `adoption_rate`.
 
 ## Fit quality and numerical limits
 
-All seven fitters report actual numerical termination, iterations and scaled
-residual loss. `fit_options` accepts `initial_parameters` and `max_iterations`
+The deterministic least-squares paths report numerical termination, iterations
+and scaled residual loss. `fit_options` accepts `initial_parameters` and `max_iterations`
 (1–2000 per local refinement start). Scalar models otherwise use their native
 model-specific initializer; the limit does not constrain that initialization.
 The deterministic multi-start damped least-squares optimizer uses positive log
@@ -221,6 +261,13 @@ ratio is not an SVD condition number. Full local rank does not establish global
 uniqueness, calibrated uncertainty or scientific validity. These are point
 estimates. Separate operations provide bounded Bayesian inference and bootstrap intervals.
 
+Treat a converged fit as a candidate analysis result. Inspect residual patterns,
+the observation window, excluded sensitivities and alternative starts before
+interpreting individual coefficients. Agreement between starts strengthens the
+numerical check without proving uniqueness. A narrow observation window can
+leave different parameter combinations with similar fitted curves but different
+extrapolations; examine that ambiguity before presenting a single forecast.
+
 The diagnostic reports `sensitivity_column_norm_cutoff` and the
 zero-based `excluded_sensitivity_column_indices` in sensitivity
 column order. Columns at or below the absolute norm cutoff are
@@ -242,18 +289,22 @@ unavailable status; no p-values are fabricated.
 
 Both call the Rust library through the C ABI and need no Python interpreter.
 Build with `cargo build --locked -p innovate-ffi`; set `INNOVATE_NATIVE_LIBRARY`
-to the resulting shared library. Julia uses JSON 1.13.4 and R uses jsonlite 2.0.0.
+to the resulting shared library. Each binding manifest records its JSON
+dependency requirements.
 They accept the same `constructor_kwargs`, `fit_options`, observation matrices
 and fitted `state` as the native JSON contract. R retains one-element vectors
-as arrays and preserves optional null fields. Native distribution bundles and
-tabular IPC wrappers remain open qualification.
+as arrays and preserves optional null fields. The current
+[Julia reference](/innovate/api/generated/julia/) and
+[R reference](/innovate/api/generated/r/) show the exported operations, including
+IPC conversion wrappers. Packaged distribution and complete tabular compatibility
+remain separate qualification requirements.
 
 ## Ecosystem alignment
 
 Voiage owns economic/VOI calculations and consumes Polars/Arrow scenario tables.
 Kairos owns scheduling, DES/ABM state and deterministic replay. Innovate retains
 diffusion fitting and diagnostics. The pre-migration source/test inventory and
-all 38 model/feature obligations remain retained in Conductor. A passing native
+the full set of model/feature obligations remain recorded in Conductor. A passing native
 subset does not replace the full scientific, platform or release gates.
 
 ## Native Kairos Bass simulation
@@ -1024,8 +1075,26 @@ two to sixteen ordered `axes` entries, each with `parameter`, `bounds`, and
 `bayesian_parameter_grid` instead uses `points` per axis for one or two axes,
 with at most 10,000 cells, and returns normalized masses and credible intervals.
 Julia and R accept the same operation and payload through their kernel bridges.
-R-hat and effective sample size are diagnostic warning criteria. Passing the
-example's thresholds does not prove convergence in a different inference problem.
+The API's `sd` and `noise_sd` fields are **standard deviations**. In the derivation
+above, the second argument of `Normal` is a **variance**: the prior variance is
+`2² = 4` and the observation variance is `1² = 1`. The posterior precision is
+`1/4 + (1/2)²/1 = 1/2`, giving variance 2 and mean
+`2 * (96/4 + (1/2)*50/1) = 98` before truncation.
+
+For a new analysis, distinguish three uncertainties: posterior variation under
+the specified model, Monte Carlo error from finite draws, and uncertainty about
+whether the model represents the data. More retained draws address the second;
+they do not remove the third. This example fixes `k`, `x0` and the noise scale,
+so its posterior describes uncertainty in `L` conditional on those choices.
+
+The fixture's `R-hat < 1.05` threshold is a regression tolerance, not a recommended
+acceptance rule for a new inference problem.
+[Vehtari et al. (2021), Section 2](https://arxiv.org/html/1903.08008v5#S2)
+recommend at least four chains, the stricter `R-hat < 1.01` first-level check,
+and effective sample sizes appropriate to the quantities being estimated.
+Assess Monte Carlo error against the precision your decision requires and inspect
+chain behavior. Passing diagnostic thresholds does not prove convergence or
+calibrate the observation model.
 
 ## Hierarchical grouped point models
 
@@ -1864,6 +1933,13 @@ seeds, `require_distinct_pair_seeds` can check for matching effective
 seeds within pairs and distinct seeds across pairs. The study design
 must still justify sign exchangeability.
 
+“Exact” describes enumeration of the sign assignments under that null, not the
+truth of the null assumptions. Distributional invariance is the basis of this
+type of test; see [Hemerik and Goeman (2018), Section 2](https://pmc.ncbi.nlm.nih.gov/articles/PMC6405018/).
+A descriptive empirical interval across the supplied pairs is not automatically
+a confidence interval for a population effect. Reusing one simulated pair many
+times also does not create independent information.
+
 ## Check treatment overlap in cross-fitted contrasts
 
 Use `cross_fitted_stratum_ate` or `cross_fitted_stratum_att` with
@@ -1984,6 +2060,33 @@ number of distinct clusters in a training arm. Use
 rows from the same cluster count once per arm. Both minimums apply when
 supplied together.
 
+### Interpretation and identifying assumptions
+
+For the ATE example, the held-out augmented inverse-probability score for each
+observation is
+`mu1 − mu0 + T*(Y − mu1)/e − (1−T)*(Y − mu0)/(1−e)`.
+Its six independently calculated values average to **5.25 outcome units**.
+Here `e`, `mu0` and `mu1` are estimated from the other fold within the stratum.
+The deliberately small fixture tests score arithmetic, fold separation and
+rejection of unsupported designs; its estimated standard error is not a
+small-sample coverage guarantee.
+
+Cross-fitting separates nuisance fitting from score evaluation; it does not
+supply a causal identification argument. See
+[Chernozhukov et al., *Double/Debiased Machine Learning*](https://arxiv.org/abs/1608.00060)
+for the role of orthogonal scores and sample splitting. This operation uses
+stratum means and treatment fractions, not an arbitrary machine-learning model.
+
+Before interpreting an empirical result causally, specify the estimand and
+justify consistency, conditional exchangeability and adequate treatment support;
+these assumptions are discussed by
+[Cole and Hernán (2008)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2732954/).
+Counting one observation per arm does not establish them. For diffusion studies,
+explicitly consider whether one unit's treatment can change another unit's
+outcome, and define an exposure/estimand that represents such interactions.
+Cluster labels control the implemented fold and variance handling; they do not
+by themselves model spillovers or remove unmeasured confounding.
+
 ## Counterfactual forecasts with parameter events
 
 Use the `counterfactual_forecast` method of `summarize_causal` to
@@ -2017,10 +2120,16 @@ The result contains both trajectories and the alternative minus the
 baseline. Multi-product results include column labels and row matrices.
 Percentage differences are null where the baseline is zero.
 
+The operation name describes a forecast under changed model inputs. It does not
+identify an empirical counterfactual by itself. Parameters, initial states,
+controls and event changes are supplied or previously fitted assumptions; their
+estimated uncertainty is not automatically propagated into the trajectory
+difference. State the contrast and those conditioning assumptions when reporting it.
+
 ## Re-ingesting a dataset artifact
 
-Pass the complete artifact so Rust can verify the checksum with its
-recorded encoding and recompute dataset diagnostics.
+Pass the complete artifact so Rust can verify the dataset-content checksum with
+its recorded encoding and recompute dataset diagnostics.
 
 Run `.venv-native/bin/python -I examples/native_reingestion.py` from the repository root.
 The contract checks this displayed source against that executable file.
@@ -2080,7 +2189,16 @@ For datasets without a checksum, ingestion assigns omitted policy event
 labels as `event_0`, `event_1`, and so on, and fills omitted network edge
 weights with `1.0` before calculating the digest. For checksummed inputs,
 preserve the generated fields and their JSON numeric types. Removing a
-field causes checksum verification to fail.
+covered generated field causes checksum verification to fail.
+
+The SHA-256 digest covers the sorted, serialized **dataset** after excluding
+`provenance.extraction_time` and `provenance.checksum`, using the recorded
+encoding. It does not cover every field of the enclosing artifact. The digest
+detects a mismatch against the recorded value; it is not an authenticated
+signature and does not establish authorship, licensing rights or scientific
+validity. Someone able to replace both content and its digest can create a
+different internally consistent artifact. Retain trusted provenance and runtime
+identity separately when the analysis requires them.
 
 ### Historical interaction-matrix competition
 

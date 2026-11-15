@@ -1,6 +1,7 @@
 ---
 title: Validation
 description: Route stability and link validation for the Astro/Starlight cutover.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

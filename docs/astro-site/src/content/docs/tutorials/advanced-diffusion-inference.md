@@ -1,6 +1,7 @@
 ---
 title: Advanced Diffusion Inference
 description: Using advanced model families for research-grade diffusion analysis.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

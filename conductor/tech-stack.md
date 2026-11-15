@@ -31,9 +31,9 @@ Kairos owns simulation time, events, state, resources and simulation RNG. Innova
 Astro/Starlight under `docs/astro-site` is the only documentation site.
 
 - **Site Generator**: Astro with Starlight; `docs/astro-site` is the active site.
-- **Versioned Baseline**: existing `astro` `^7.0.5`, `@astrojs/starlight` `^0.41.3`, and `@astrojs/markdown-remark` `^7.2.0` records are historical/current-manifest observations, not an instruction to freeze obsolete versions.
-- **Polyglot Plugin**: starlight-polyglot; versioned pages use starlight-versions `0.9.1`; link tooling includes starlight-links-validator `0.25.2`.
-- **Search**: `@astrojs/starlight-docsearch` `0.7.0` remains a separately qualified integration; `@astrojs/sitemap` supplies the sitemap integration.
+- **Versioned Baseline**: the maintained manifest declares `astro` `^7.4.11`, `@astrojs/starlight` `^0.42.11`, and `@astrojs/markdown-remark` `^7.3.8`. The committed pnpm lock resolves the exact dependency graph; upgrades require current build evidence.
+- **Polyglot Plugin**: the vendored starlight-polyglot package is retained; versioned pages declare starlight-versions `^0.10.2`, and link tooling declares starlight-links-validator `^0.27.0`.
+- **Search**: local Pagefind is the default. The optional `@astrojs/starlight-docsearch` `^0.8.2` integration requires its explicit environment configuration and separate qualification. Historical pages retained at current paths opt out of current search; the versioned archive stays accessible.
 - **Migration Record**: Astro/Starlight Documentation Site Migration retains historical cutover and route evidence.
 - **Prose Linting**: Vale with Repo/ValueProse; dependency updates require their own build evidence.
 - **Build Gate**: run `pnpm build && pnpm check` in the actual docs workspace; do not claim it ran from this plan.

@@ -1,6 +1,7 @@
 ---
 title: Benchmark Workflows and Model Cards
 description: Reproducible benchmark corpus, model cards, promotion dossiers, and opt-in timing evidence.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

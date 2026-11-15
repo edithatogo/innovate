@@ -1,37 +1,50 @@
 ---
-title: Tutorials
-description: Tutorial index for the Innovate documentation.
+title: Tutorials and learning routes
+description: Choose an executable native tutorial by the scientific task and evidence you need.
 ---
 
-:::caution[Pre-0.7 reference]
-This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
-:::
+These tutorials use the current Rust and Polars development API. Install the
+[locked development environment](/innovate/user-guide/installation/) first.
+Each current tutorial displays a checked example file, its expected output,
+interpretation and limits. Run the unchanged file successfully before adapting
+it to a new analysis.
 
+## Choose a starting point
 
-# Tutorials
+| Reader task | Tutorial | What its assertions establish |
+| --- | --- | --- |
+| Make a first native call | [Quickstart](/innovate/user-guide/getting-started/) | Logistic values, retained identifiers and rejection of duplicate times |
+| Define prediction units and quantities | [Prediction and forecasting](/innovate/user-guide/forecasting/) | Agreement with a closed-form curve and the table boundary |
+| Recover a known multi-generation model | [Norton–Bass fitting](/innovate/tutorials/norton-bass/) | Six-parameter recovery and held-out levels and signed derivatives |
+| Inspect a sampler using a known posterior | [Bayesian fitting](/innovate/tutorials/bayesian-fitter/) | Support, declared posterior tolerances and chain diagnostic bounds |
+| Compare specified policy and product scenarios | [Scenario experiments](/innovate/tutorials/scenario-experiment-workflows/) | Scenario invariants, saved artifacts and deterministic replay |
+| Understand a cross-fitted contrast | [Counterfactual and causal analysis](/innovate/tutorials/counterfactual-analysis/) | Hand-calculated scores and rejection of invalid overlap/fold designs |
+| Save and recover execution data | [Arrow round trips](/innovate/tutorials/arrow-interchange/) | JSON and Arrow recovery, row identity and supported replay |
+| Detect altered dataset content | [Data ingestion and provenance](/innovate/tutorials/data-ingestion-provenance/) | Both declared checksum encodings and rejection of modified data |
 
-This section hosts the tutorial surface in Starlight and is the canonical target for migration of the legacy tutorials index.
+## Work through a complete analysis
 
-Current tutorial areas:
+For a first modeling workflow, follow **quickstart → fitting → forecasting →
+scenario experiments**. For a reproducible data workflow, follow **ingestion →
+Arrow round trips → scenario replay**. For inference, read the
+[fitting guide](/innovate/user-guide/fitting/) before choosing a Bayesian or
+causal tutorial: they address different estimands and assumptions.
 
-- **Core contracts**: [Functional Kernel Contract](/innovate/tutorials/functional-kernel-contract/), [Diagnostics Contract](/innovate/tutorials/diagnostics-contract/), and [Arrow Interchange](/innovate/tutorials/arrow-interchange/)
-- **Modeling and Integration**: [Norton-Bass](/innovate/tutorials/norton-bass/), [Advanced Diffusion](/innovate/tutorials/advanced-diffusion-inference/), [Bayesian Fitting](/innovate/tutorials/bayesian-fitter/), [Multi-Product](/innovate/tutorials/multi-product/), [Seasonal Data](/innovate/tutorials/seasonal-data/), [Counterfactual Analysis](/innovate/tutorials/counterfactual-analysis/), [JAX Backend](/innovate/tutorials/jax-backend/), [Kairos Simulation Adapter](/innovate/tutorials/kairos-simulation-adapter/), [Data Ingestion and Provenance](/innovate/tutorials/data-ingestion-provenance/), [Decision Reports](/innovate/tutorials/decision-reports/), and [NDlib Integration](/innovate/tutorials/ndlib-integration/) (legacy extra)
-- Core usage patterns
-- Benchmark workflows
-- Plugin API stability
+Use each tutorial's reader task to explain the result in your own words. A useful
+handoff includes the quantity, units, inputs, model assumptions, relevant
+diagnostics, failure behavior and the inference the example does not support.
+Changing data or assumptions creates a new analysis requiring its own checks.
 
-## Migration sources
+## Qualification and earlier material
 
-Historical references to source RST files:
-- `docs/source/tutorials.rst` - main index
-- `docs/source/tutorials/functional_kernel_contract.rst` - migrated to Functional Kernel Contract
-- `docs/source/tutorials/diagnostics_contract.rst` - migrated to Diagnostics Contract
-- `docs/source/tutorials/arrow_interchange.rst` - migrated to Arrow Interchange
-- `docs/source/tutorials/norton_bass.rst` - migrated to Norton-Bass
-- `docs/source/tutorials/advanced_diffusion_inference.rst` - migrated to Advanced Diffusion Inference
-- `docs/source/tutorials/bayesian_fitter_tutorial.rst` - migrated to Bayesian Fitter
-- `docs/source/tutorials/multi_product.rst` - migrated to Multi-Product
-- `docs/source/tutorials/seasonal_data_tutorial.rst` - migrated to Seasonal Data
-- `docs/source/tutorials/counterfactual_analysis.rst` - migrated to Counterfactual Analysis
-- `docs/source/tutorials/jax_backend.rst` - migrated to JAX Backend
-- `docs/source/tutorials/ndlib_integration.rst` - migrated to NDlib Integration
+Passing a synthetic example establishes its stated software checks. It does not
+establish empirical accuracy, causal identification, interval coverage or
+suitability for a particular population. The
+[documentation quality guide](/innovate/maintainers/documentation-quality/)
+separates structure, execution and broader scientific and reader-task review.
+
+Earlier tutorials remain in the [versioned archive](/innovate/latest/tutorials/).
+Some current-path specialist pages also retain an explicit pre-0.7 notice while
+their replacements are being qualified. Use those notices to recognize earlier
+interfaces; the [native capability guide](/innovate/native-migration/) determines
+which capabilities are currently implemented and which gates remain open.

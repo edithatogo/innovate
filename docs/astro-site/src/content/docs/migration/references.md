@@ -1,6 +1,7 @@
 ---
 title: Migration References
 description: Reader-facing index of migration and provenance docs.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

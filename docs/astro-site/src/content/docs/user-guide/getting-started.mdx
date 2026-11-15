@@ -22,7 +22,7 @@ check that invalid time grids produce an error.
 
 Use the repository checkout with Python **3.15.2**, Rust **1.99.1**, and the
 locked environment installed. You need basic Python and dataframe familiarity.
-The example uses three synthetic observations, requires no dataset download,
+The example uses three synthetic query times, requires no dataset download,
 and performs no network request.
 
 The time unit is arbitrary but must agree with the parameters. With time in
@@ -70,6 +70,34 @@ test oracle; Innovate's scientific execution remains in Rust.
 The input frame keeps its identifiers and ordering. A LazyFrame is collected at
 the native boundary. Arrow IPC currently copies buffers, so the example makes
 no claim of zero-copy transport.
+
+## Check your understanding
+
+Before reading the answers, use the displayed formula to answer these questions:
+
+1. Does the prediction of 50 at time 1 mean that 50 new adoptions occurred
+   between times 0 and 1? Calculate the change over that interval.
+2. If you change the time unit from years to months, what values of `k` and
+   `x0` preserve the same curve? What happens to `L`?
+3. What is the instantaneous slope at the midpoint, and how do its units
+   differ from the prediction column?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. The prediction is a level. Its increase from time 0 to time 1 is
+   approximately `50 − 26.894142 = 23.105858` adoption units.
+2. Multiply the time coordinates and `x0` by 12, giving `x0 = 12`; divide
+   `k` by 12, giving `k = 1/12` per month. `L = 100` retains the same adoption
+   units. The dimensionless product `k * (t − x0)` remains unchanged.
+3. Differentiating the Logistic expression gives the midpoint slope
+   `L * k / 4 = 25` adoption units per year. This instantaneous derivative
+   differs from the change accumulated over a whole year.
+
+</details>
+
+These are interpretation exercises. The executable example checks the supplied
+three-point curve; it does not run the modified time-unit exercise for you.
 
 ## Limitations
 

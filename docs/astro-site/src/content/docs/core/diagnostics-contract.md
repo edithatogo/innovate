@@ -1,6 +1,7 @@
 ---
 title: Diagnostics Contract
 description: Stable diagnostics payloads for fitted-state reporting.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

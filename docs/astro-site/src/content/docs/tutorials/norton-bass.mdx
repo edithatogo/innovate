@@ -1,0 +1,97 @@
+---
+title: Fit and forecast successive generations
+description: Recover a two-generation Norton–Bass model and check held-out levels and signed rates against independent equations.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_norton_bass.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This tutorial uses the native `norton_bass` model with the
+`successive_generations` variant. It combines diffusion within generations with
+transfer between generations. The original model family was developed by
+[Norton and Bass (1987)](https://doi.org/10.1287/mnsc.33.9.1069); the explicit
+equations and conventions below describe the fixture tested by this implementation.
+
+## Learning outcomes
+
+You will recover six parameters from a known synthetic case, preserve fixed
+launch-time assumptions in fitted state, and verify forecasts at times beyond
+the fitting window. You will distinguish a generation's level and signed net
+rate from a cumulative count of first adoptions.
+
+## Prerequisites
+
+Install the [native development environment](/innovate/user-guide/installation/)
+and read the [fitting guide](/innovate/user-guide/fitting/). The script requires
+Polars and the installed native package. All observations are synthetic and no
+external data or network request is used.
+
+The first generation launches at time zero and the second at time four. These
+launches are fixed model options, not estimated parameters. Use one consistent
+time unit: `p` and `q` then have inverse-time units, launch times use the time
+coordinate, and `m1` and `m2` use the chosen adoption units.
+
+## Steps
+
+Run the example from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_norton_bass.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_norton_bass.py" />
+
+The script checks native predictions against separate equations at 41 times
+from 0 to 20 before fitting those values. It requests both observation columns
+explicitly, checks recovery of all six parameters, and then predicts at times
+21, 25 and 30. The last checks compare both levels and signed rates with the
+independent calculation and require a negative rate for the declining first
+generation.
+
+## Expected results
+
+The successful run prints:
+
+<Code code={contentQuality.examples['examples/native_norton_bass.py'].expected_stdout} lang="json" />
+
+Parameter recovery uses a relative tolerance of 0.001. Held-out levels and rates
+use an absolute tolerance of 0.01 in their respective units. These tolerances
+are declared regression criteria for this synthetic case. They are not accuracy
+bounds for every parameter combination or dataset.
+
+## Interpretation
+
+For time since launch `u >= 0`, the fixture's Bass fraction is
+`F(u) = (1 - exp(-(p + q) * u)) / (1 + (q / p) * exp(-(p + q) * u))`.
+Before launch it is zero. Write `F1` for the first generation's fraction and
+`F2` for the second generation's fraction evaluated at `t - 4`. The tested
+levels are:
+
+- First generation: `1000 * F1 * (1 - F2)`.
+- Second generation: `(1500 + 1000 * F1) * F2`.
+
+The first level can fall as the second generation gains users. Its derivative
+includes the negative transfer term `-1000 * F1 * dF2/dt`. A negative value is
+therefore meaningful net change, not an invalid negative number of gross
+adoptions. Summing the two levels cancels the transfer term and gives
+`1000 * F1 + 1500 * F2`.
+
+**Reader task:** what are the limiting levels as both fractions approach one?
+The first tends to zero and the second to 2500. Before the second launch,
+`F2` is zero, so only the first generation contributes. These checks explain
+both the launch convention and the distinction from fixed-pool replacement.
+
+## Limitations
+
+The fit uses noiseless synthetic data and fixed launch times. Successful
+parameter recovery does not establish identifiability with sparse real data,
+uncertainty coverage, robustness to measurement error or the suitability of this
+model for a particular technology. A convergence flag alone is insufficient.
+
+The example does not infer gross adoption, churn or individual user histories
+from net generation levels. It also does not estimate launch times or validate
+other Norton–Bass variants. Read the [native capabilities](/innovate/native-migration/)
+for the supported options and remaining qualification gates. The original
+[Bass (1969) paper](https://doi.org/10.1287/mnsc.15.5.215) provides the diffusion
+model's scientific context; citing that model does not validate this application.

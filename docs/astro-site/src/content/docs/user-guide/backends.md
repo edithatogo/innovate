@@ -1,151 +1,63 @@
 ---
-title: Backends
-description: Using Innovate's multi-backend architecture for different computation environments.
+title: Runtime and execution choices
+description: Use the current Rust core, select supported native operations, and understand language, engine and parallelism boundaries.
 ---
 
-:::caution[Pre-0.7 reference]
-This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
-:::
+Innovate's 0.7 development API uses a Rust scientific core. The earlier global
+`set_backend` interface and NumPy/JAX/Numba backend instructions belong to the
+[versioned archive](/innovate/latest/user-guide/backends/). They do not describe
+the maintained native package.
 
+## Separate language, algorithm and execution engine
 
-Innovate's multi-backend architecture allows you to choose the most appropriate numerical backend for your workload, from lightweight CPU computation to GPU-accelerated simulation.
+| Choice | Current meaning | Where to look |
+| --- | --- | --- |
+| Python, Julia or R | Host-language access to the native implementation | [Binding overview](/innovate/bindings/) |
+| Model key | Scientific model requested for a supported operation | [Model discovery](/innovate/api/generated/execute/) and [native capabilities](/innovate/native-migration/) |
+| Fitting or sampling operation | A particular estimation algorithm and its payload contract | [Fitting](/innovate/user-guide/fitting/) and [Bayesian tutorial](/innovate/tutorials/bayesian-fitter/) |
+| Simulation engine | A supported native trajectory mechanism for that model and task | [Scenario tutorial](/innovate/tutorials/scenario-experiment-workflows/) |
+| Batch workers | Native batch concurrency for independent payloads | [fit_batch](/innovate/api/generated/fit-batch/) and [predict_batch](/innovate/api/generated/predict-batch/) |
 
-## Available Backends
+Choosing R instead of Python does not choose a different numerical backend.
+Choosing a stochastic simulation instead of a deterministic curve can change the
+scientific question and output interpretation, even when the model name is
+related. Inspect the documented operation and engine configuration before
+comparing results.
 
-| Backend | Hardware | Strengths | Use Case |
-|---------|----------|-----------|----------|
-| NumPy | CPU | Broad compatibility, no extra deps | Default, quick analysis |
-| JAX | CPU/GPU/TPU | Hardware acceleration, autodiff | Large-scale, HPC |
-| Numba | CPU (JIT) | Loop acceleration | Simulation-heavy workloads |
-| Bayesian | CPU (MCMC) | Full uncertainty quantification | Inference with priors |
+## Table execution and parallel work
 
-## Setting the Backend
+Python table operations use Polars and the [Arrow IPC boundary](/innovate/core/arrow-interchange/).
+Lazy input is collected at execution. Polars expressions before that boundary
+are not a promise that the scientific model runs lazily inside a query plan.
 
-Global backend selection:
+`fit_frames` and `predict_frames` process an iterable of frames sequentially and
+retain documented per-input failures as values. Native `fit_batch` and
+`predict_batch` instead accept explicit request payload batches and worker
+control. Inspect every item in either result. The checked batch example in the
+[native guide](/innovate/native-migration/) compares one and two workers and
+requires stable ordering and equal numerical results for its supported fixture.
 
-```python
-from innovate import set_backend
+## Reproducibility and performance
 
-# Switch to JAX backend
-set_backend('jax')
+Record the source or package version, model options, time grid, input checksum,
+operation controls and seeds. A seed alone does not specify an analysis. For
+stochastic workflows, keep the chosen engine and initial state with the result;
+the scenario tutorial preserves the replay request for each execution.
 
-# All subsequent operations use JAX
-result = fit_model(data, model='bass')
-```
+The maintained documentation does not provide a validated cross-backend speedup
+table or infer GPU/TPU/HPC support from historical implementations. Hardware,
+dataset, compilation profile, serialization costs and scientific workload affect
+timing. Report an observed benchmark with its exact configuration before making
+a performance claim. Scientific equivalence and reproducibility need their own
+checks when an execution path changes.
 
-Per-call backend selection:
+## When a capability is unavailable
 
-```python
-result = fit_model(data, model='bass', backend='numba')
-```
+An unsupported operation, model option or engine should fail visibly. Use the
+[current native capability guide](/innovate/native-migration/) to determine
+whether the task is implemented and qualified; an old example or optional-extra
+name is not evidence that it is available in the current package.
 
-## NumPy Backend
-
-The default backend. Requires no additional dependencies.
-
-```python
-set_backend('numpy')
-```
-
-- Best for: quick prototyping, small-to-medium datasets
-- Strengths: zero extra dependencies, mature ecosystem integration
-- Limitations: CPU-only, no automatic differentiation
-
-## JAX Backend
-
-Hardware-accelerated backend supporting CPU, GPU, and TPU.
-
-```python
-set_backend('jax')
-```
-
-Installation:
-```bash
-pip install "innovate[jax]"
-```
-
-- Best for: large datasets, HPC clusters, GPU acceleration
-- Strengths: XLA compilation, automatic differentiation, hardware portability
-- Features: gradient-based optimisation, vectorised simulation
-
-Example with GPU acceleration:
-
-```python
-import jax
-print(f"Available devices: {jax.devices()}")
-
-set_backend('jax')
-result = fit_model(large_data, model='bass')
-# Automatically uses GPU if available
-```
-
-## Numba Backend
-
-Just-in-time compilation for CPU workloads.
-
-```python
-set_backend('numba')
-```
-
-Installation:
-```bash
-pip install "innovate[numba]"
-```
-
-- Best for: simulation-heavy agent-based models
-- Strengths: significant speedup for tight numerical loops
-- Limitations: CPU-only, limited function support
-
-## Bayesian Backend
-
-Full Bayesian inference using the JAX-based NumPyro and BlackJAX stack.
-
-```python
-set_backend('bayesian')
-
-result = fit_model(
-    data,
-    model='bass',
-    method='bayesian',
-    draws=4000,
-    chains=4
-)
-
-# Examine posterior distributions
-print(result.posterior_summary())
-```
-
-Installation:
-```bash
-pip install "innovate[bayesian]"
-```
-
-- Best for: uncertainty quantification, prior incorporation
-- Strengths: full posterior distributions, prior specification
-- Limitations: computationally intensive, longer run times
-
-## Backend Benchmarks
-
-Comparative performance for fitting a Bass model with 100 data points:
-
-| Backend | Fit Time (ms) | Memory (MB) | Speedup vs NumPy |
-|---------|--------------|-------------|------------------|
-| NumPy   | 45.2         | 12.3        | 1×               |
-| Numba   | 28.7         | 14.1        | 1.6×             |
-| JAX (CPU) | 12.4       | 18.6        | 3.6×             |
-| JAX (GPU) | 3.1        | 45.2        | 14.6×            |
-| Bayesian | 12,400      | 256.0       | 0.004×           |
-
-## Backend-Aware Code
-
-Write code that adapts to the active backend:
-
-```python
-from innovate.backend import get_backend
-
-backend = get_backend()
-print(f"Active backend: {backend}")
-
-# Backend-agnostic operations work identically
-# regardless of the active backend
-```
+Trusted extension callbacks can run host-language application code, as described
+by the [extension API](/innovate/api/generated/invoke-registered-extension/).
+Their existence does not create an automatic numerical fallback or a sandbox.
