@@ -801,7 +801,10 @@ fn constrained_and_log_jacobian(u: f64, lower: f64, upper: f64) -> (f64, f64) {
     let width = upper - lower;
     let p = sigmoid(u);
     let theta = lower + width * p;
-    let log_jac = width.ln() + p.max(1e-300).ln() + (1.0 - p).max(1e-300).ln();
+    // Compute ln(sigmoid(u) * (1 - sigmoid(u))) = -|u| - 2 * ln(1 + exp(-|u|))
+    // directly from u so extreme coordinates avoid 1 - sigmoid(u) cancellation.
+    let abs_u = u.abs();
+    let log_jac = width.ln() - abs_u - 2.0 * (-abs_u).exp().ln_1p();
     (theta, log_jac)
 }
 
@@ -1119,6 +1122,21 @@ mod tests {
         for diag in diagnostics {
             assert!(diag["split_rhat"]["rhat"].as_f64().is_some());
             assert!(diag["effective_sample_size"]["bulk_ess"].as_f64().is_some());
+        }
+    }
+
+    #[test]
+    fn constrained_and_log_jacobian_stays_accurate_in_extreme_tails() {
+        let eps = 1e-6;
+        for u in [-50.0_f64, -25.0, 0.0, 25.0, 37.0, 50.0] {
+            let (_, lj_plus) = constrained_and_log_jacobian(u + eps, 0.1, 2.0);
+            let (_, lj_minus) = constrained_and_log_jacobian(u - eps, 0.1, 2.0);
+            let fd_grad = (lj_plus - lj_minus) / (2.0 * eps);
+            let exact_grad = 1.0 - 2.0 * sigmoid(u);
+            assert!(
+                (fd_grad - exact_grad).abs() < 1e-8,
+                "gradient mismatch at u={u}: fd={fd_grad}, exact={exact_grad}"
+            );
         }
     }
 }
