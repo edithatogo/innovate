@@ -105,6 +105,8 @@ jobs:
     timeout-minutes: 45
     env:
       CARGO_BUILD_JOBS: '4'
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
       DOCS_RECEIPT_DIR: ${{ github.workspace }}/docs/astro-site/.reports
     steps:
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
@@ -116,6 +118,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
           toolchain: 1.99.1
+      - uses: Mozilla-Actions/sccache-action@d651010b8da762cde178750d8eda7b5febfe147a # v0.0.9
       - uses: Swatinem/rust-cache@e9d7b9f1e587218970671bac74e5511ed9506e6a # v2
         with:
           shared-key: "docs-examples"
@@ -148,10 +151,11 @@ jobs:
         timeout-minutes: 5
         run: julia --project=bindings/julia scripts/check_julia_documentation.jl
       - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
-      - name: Install the existing R package and dependency
-        run: |
-          Rscript -e 'install.packages("jsonlite", repos="https://cloud.r-project.org")'
-          R CMD INSTALL bindings/r
+      - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
+        with:
+          packages: any::jsonlite
+      - name: Install the existing R package
+        run: R CMD INSTALL bindings/r
       - name: Execute R documentation examples and check installed help
         timeout-minutes: 5
         run: Rscript scripts/check_r_documentation.R
