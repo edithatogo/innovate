@@ -151,9 +151,9 @@ pytest==9.2.0 \
     #   -r scripts/test_acceleration/requirements.in
     #   pytest-gremlins
     #   pytest-testmon
-pytest-gremlins==1.13.2 \
-    --hash=sha256:154378b2df6d28b037dd21664f32a2935d0fe2ad7b77999b711cc8306e15dde0 \
-    --hash=sha256:9cafbe19f41d07c753de9f47534738d265f85fcde186c9200835707dad2c0d46
+pytest-gremlins==1.14.1 \
+    --hash=sha256:3b155fd963aac599d3cc68888b644ee24e7206f2bcd2ce3296ccea30c2fc28a5 \
+    --hash=sha256:abb0bd699c31bea851de9643deb8f1ca4f9adf34c9dbea155779feb51b1f61b7
     # via -r scripts/test_acceleration/requirements.in
 pytest-testmon==2.3.0 \
     --hash=sha256:7bcd50afce305393edc6b530ee77a61c91949efafe0c54f799f12fe3da999623 \
