@@ -3,11 +3,11 @@
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
 ## Phase 1: `cargo-deny` & `poutine` in Security Quality Workflow
-- [ ] **1.1 Create `deny.toml` at repo root:** Configure `[advisories]`, `[licenses]` (SPDX allowlist), `[bans]` (duplicate/wildcards), and `[sources]` (`unknown-registry = "deny"`, `unknown-git = "deny"`). Run `cargo deny check` locally (or via `taiki-e/install-action` in CI) and verify baseline pass.
-- [ ] **1.2 Wire `cargo-deny` into `.github/workflows/security-quality.yml`:** Add a `cargo-deny` step alongside `cargo-audit` using SHA-pinned `EmbarkStudios/cargo-deny-action` or `taiki-e/install-action`.
-- [ ] **1.3 Add `poutine` workflow supply-chain check:** Add a SHA-pinned `poutine` scan step in `.github/workflows/security-quality.yml` alongside `zizmor`.
-- [ ] **1.4 Verify workflow lint & policy tests:** Run `uvx zizmor .github/workflows/security-quality.yml`, `python3 scripts/check_repository_policy.py`, and `pytest -o minversion=9.0 tests/workflows/test_repository_policy.py`.
-- [ ] **1.5 Conductor Review (Phase 1):** Run `conductor-review` on Phase 1 changes, apply any fixes, re-verify, and commit checkpoint.
+- [x] **1.1 Create `deny.toml` at repo root:** Configure `[advisories]`, `[licenses]` (SPDX allowlist), `[bans]` (duplicate/wildcards), and `[sources]` (`unknown-registry = "deny"`, `unknown-git = "deny"`). Run `cargo deny check` locally (or via `taiki-e/install-action` in CI) and verify baseline pass.
+- [x] **1.2 Wire `cargo-deny` into `.github/workflows/security-quality.yml`:** Add a `cargo-deny` step alongside `cargo-audit` using SHA-pinned `EmbarkStudios/cargo-deny-action` or `taiki-e/install-action`.
+- [x] **1.3 Add `poutine` workflow supply-chain check:** Add a SHA-pinned `poutine` scan step in `.github/workflows/security-quality.yml` alongside `zizmor`.
+- [x] **1.4 Verify workflow lint & policy tests:** Run `uvx zizmor .github/workflows/security-quality.yml`, `python3 scripts/check_repository_policy.py`, and `pytest -o minversion=9.0 tests/workflows/test_repository_policy.py`.
+- [x] **1.5 Conductor Review (Phase 1):** Run `conductor-review` on Phase 1 changes, apply any fixes, re-verify, and commit checkpoint.
 
 ## Phase 2: `Harden-Runner` on Publish Workflows
 - [ ] **2.1 Audit outbound endpoints for publish workflows:** Inspect `.github/workflows/pypi-publish.yml`, `crates-publish.yml`, `bindings-publish.yml`, and `conda-publish.yml` and list required allowed endpoints (GitHub, PyPI, crates.io, conda/anaconda, rustup).
