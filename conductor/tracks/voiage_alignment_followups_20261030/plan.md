@@ -1,33 +1,45 @@
 # Plan
 
-- [x] Inventory pandas/xarray use and the Polars/PyArrow boundary (alignment-audit-20261114.md).
-- [~] Add a failing consumer test for normalized-bundle round trip, then implement.
-- [x] Record toolchain exceptions against the shared matrix (alignment-audit-20261114.md).
-- [~] Triage open Dependabot alerts; fix or dismiss with a recorded reason.
-- [~] Installed-artifact evidence; run required hosted gates (qualification-20261114.md; local contract tests pass, native hosted evidence pending).
-- [x] Owner authorisation: Dylan requested implementation of issue #559 on 14 November 2026.
-- [ ] Archive only after the remaining acceptance gates pass.
+## Bounded issue acceptance
 
-## 14 November 2026 continuation
+- [x] Inventory pandas/xarray use and the Polars/PyArrow boundary; preserve the optional Arrow extra.
+- [x] Implement and qualify normalized IPC/Parquet bundle consumption, digest verification, multi-chunk and normalized-schema round trips.
+- [x] Record current Python/Rust targets and the retained basedpyright/Presidio exceptions; ty is not represented as executed.
+- [x] Inspect the authenticated Dependabot inventory: zero open alerts; no dismissals or unreviewed closed-alert dispositions.
+- [x] Verify a real Renovate bot commit and its actual protected contexts (PR #612; signing receipt).
+- [x] Reconcile installed native artifact evidence and all seven required contexts on PR #605's actual final head and receiving tree.
+- [x] Owner authorisation: Dylan requested implementation of #559 and continuation of its remaining acceptance work.
+- [x] Complete independent review of the merged source, restored raw consumer receipt and current acceptance wording; apply the invocation/import-path precision correction.
+- [~] Restore the omitted historical evidence and publish the current acceptance record; the resulting record-restoration PR needs its own protected checks.
+- [ ] Existing integration owner completes promotion and track archival/shared-registry reconciliation after those checks pass.
 
-Reconciled GitHub main at `276c2e505a0ce26910820fe8a94a6a498f505700`.
-This continuation owns the existing Voiage qualification harness, focused
-consumer tests, the Renovate signing option and this follow-up's records.
-It reuses the parent scientific ecosystem programme. Shared toolchain promotion
-and the broader #556 lane retain their owners; PR #600's ensemble guard and
-the unqualified offline security draft #590 are separate work.
+See [current acceptance record](acceptance-20261115.md) for the exact revisions,
+runs, artifact hashes, limitations and independently inspected observations.
+The original [source audit](alignment-audit-20261114.md),
+[qualification checkpoint](qualification-20261114.md) and restored
+[hosted continuation](continuation-20261115.md) remain dated historical evidence.
 
-Extend `scripts/qualify_voiage_arrow.py` to read normalized IPC/Parquet bundles,
-check source digests before Polars conversion, and exercise installed native
-Innovate with independent synthetic numerical expectations. Record actual
-import origins, artifact/source hashes, command and exit status outside the
-checkout. Existing scientific and hosted gates remain required.
+## Source and integration checkpoints
 
-Source checkpoint: `ef5a0737f987d331513f5239f74a8e168a32af37`,
-[PR #605](https://github.com/edithatogo/innovate/pull/605). Nineteen focused
-contract/artifact/launcher tests pass from outside the checkout. A fresh audit
-of 99 locked installed dependencies reports no known vulnerabilities or skips.
-Native installed qualification and protected hosted gates are pending. Live
-Dependabot/signing acceptance remains unverified; see the linked audit and
-qualification records. The PR is a focused integration proposal for the
-existing repository coordinator, not a completed release or issue closure.
+PR #605's final head `5bfafaede6bb1001463480cc16a429cee052eb33` passed all seven
+required contexts and merged as `eeac954a5fa335e00632f0aec4f3cbb94f75b656` with
+an identical tree. Native consumer runs on that head, receiving main,
+`f6c7d058` and `384ed3b0` passed. The `f6c7d058` archive was independently
+downloaded, hashed and parsed; the later `384ed3b0` archive was subsequently
+verified in the same way after executor access returned. Its earlier API-only
+snapshot remains explicitly time-bounded.
+
+Real Renovate head `59438016` passed all seven required contexts and merged
+as `663002b03ccb92abee2ece934d69116cb4bf3415`. Its signed receiving tree equals
+the verified bot head; the one-line validator patch does not change the
+qualified consumer source.
+
+Six continuation/evidence files from `4ddd0c7` were omitted during integration.
+Restore their exact blobs and retain separate current receipts. Preserve
+#606's central Renovate configuration and #611's independently owned changes.
+
+The scoped issue criteria are evidenced; completion of the record proposal's
+hosted checks and coordinator archival is still recorded as pending. Successful
+earlier runs are not claimed for a later untested head. This track remains
+inside the existing scientific ecosystem programme; the broader 38 scientific
+obligations, release restrictions and offline security draft #590 are unchanged.

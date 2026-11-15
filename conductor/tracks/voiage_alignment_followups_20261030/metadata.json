@@ -4,10 +4,16 @@
   "status": "in_progress",
   "approved": true,
   "implementation_started": true,
-  "updated_at": "2026-11-14",
+  "updated_at": "2026-11-15",
   "repository": "innovate",
   "issue": "https://github.com/edithatogo/innovate/issues/559",
   "related_pull_request": "https://github.com/edithatogo/innovate/pull/605",
   "parent_track": "scientific_ecosystem_alignment_20261029",
-  "created_at": "2026-10-30"
+  "created_at": "2026-10-30",
+  "acceptance_record": "acceptance-20261115.md",
+  "acceptance_status": "evidenced_pending_record_integration",
+  "remaining_work": [
+    "Protected checks on the evidence-restoration proposal",
+    "Existing coordinator integration and archival/shared-registry reconciliation"
+  ]
 }

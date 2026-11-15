@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "receipt_kind": "reconstructed_source_audit",
+  "reconstructed_at_utc": "2026-11-14 22:56:13 UTC",
+  "original_audit_observed_at_utc": "2026-11-14 22:39:20 UTC",
+  "reconstruction_note": "Reconstructed from retained GitHub API responses and already verified source-inventory findings after executor access became unavailable. This is a new compact receipt, not a byte-identical copy of the earlier scratch JSON.",
+  "repository": "edithatogo/innovate",
+  "issue": 559,
+  "source_revision": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+  "renovate_configuration": {
+    "path": ".github/renovate.json",
+    "source_url": "https://github.com/edithatogo/innovate/blob/f6c7d058466ae5fe15b9846769cc0e6ba6774847/.github/renovate.json",
+    "git_blob_sha": "30d1a0d6ae51704578b42da778a1ad43575926fe",
+    "sha256": "92dba60b86e925c326e8e62b2046485abb063ed45c896549864a2ec47a4951ae",
+    "platformCommit": "enabled",
+    "extends": [
+      "github>edithatogo/renovate-config",
+      ":dependencyDashboard",
+      ":semanticCommits"
+    ],
+    "custom_manager_count": 3,
+    "repository_schedule": [
+      "* * * * 1"
+    ],
+    "repository_explicit_timezone": null,
+    "current_source_matches_pr606_head_and_receiving_merge": true,
+    "central_preset_source_revision": "e854a13caed8e9dee19e708d52f1224106ccfb38",
+    "central_preset_declared_timezone": "Australia/Sydney",
+    "fully_merged_preset_evaluated_by_this_audit": false
+  },
+  "hosted_repository_mode_validation": [
+    {
+      "run_id": 43629854032,
+      "job_id": 132553819192,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43629854032/job/132553819192",
+      "head_sha": "05fbe3c6d767d3c2680c30083be2ab600b3f7c93",
+      "checkout_revision": "ee6a5b26b6ae6a87c947ba2a3ba072785adb5e6b",
+      "conclusion": "success",
+      "node": "24.22.1",
+      "renovate": "44.239.0",
+      "command": "npx --yes --package=renovate@44.239.0 renovate-config-validator --strict --no-global .github/renovate.json",
+      "no_re2_fallback_warning_in_log": true,
+      "relevant_log_lines": [
+        "2026-11-14T19:02:22.5212688Z node: v24.22.1",
+        "2026-11-14T19:02:44.4408764Z  INFO: Validating .github/renovate.json as repo config",
+        "2026-11-14T19:02:44.4673302Z  INFO: Config validated successfully against 1 file(s)"
+      ]
+    },
+    {
+      "run_id": 43632044253,
+      "job_id": 132560591861,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43632044253/job/132560591861",
+      "head_sha": "30fa17d5fa5e40e05cd4313032de4921a3971f52",
+      "checkout_revision": "30fa17d5fa5e40e05cd4313032de4921a3971f52",
+      "conclusion": "success",
+      "node": "24.22.1",
+      "renovate": "44.239.0",
+      "command": "npx --yes --package=renovate@44.239.0 renovate-config-validator --strict --no-global .github/renovate.json",
+      "no_re2_fallback_warning_in_log": true,
+      "relevant_log_lines": [
+        "2026-11-14T19:30:22.9883297Z node: v24.22.1",
+        "2026-11-14T19:30:51.5457747Z  INFO: Validating .github/renovate.json as repo config",
+        "2026-11-14T19:30:51.5704648Z  INFO: Config validated successfully against 1 file(s)"
+      ]
+    }
+  ],
+  "dependency_source_inventory": {
+    "source_revision": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+    "requires_python": ">=3.15.2,<3.16",
+    "base_runtime": [
+      "polars==2.1.0"
+    ],
+    "optional_arrow": [
+      "pyarrow==26.0.1"
+    ],
+    "uv_lock_package_count": 101,
+    "versions": {
+      "filelock": "4.2.9",
+      "virtualenv": "21.15.5",
+      "polars": "2.1.0",
+      "pyarrow": "26.0.1"
+    },
+    "absent_from_inspected_uv_and_test_tool_closures": [
+      "pillow",
+      "tornado",
+      "pandas",
+      "xarray"
+    ],
+    "astro": {
+      "manifest": "^7.4.7",
+      "locked": "7.4.7",
+      "requested_floor": "7.3.3",
+      "pnpm_yaml_document_count": 2,
+      "application_document_index": 1
+    },
+    "separate_test_tools": {
+      "path": "scripts/test_acceleration/requirements.txt",
+      "pinned_package_count": 9,
+      "named_issue_packages_present": []
+    },
+    "active_locks": [
+      "uv.lock",
+      "Cargo.lock",
+      "docs/astro-site/pnpm-lock.yaml",
+      "scripts/test_acceleration/requirements.txt"
+    ],
+    "historical_locks": [
+      "conductor/tracks/scientific_ecosystem_alignment_20261029/kairos-candidate.Cargo.lock"
+    ],
+    "historical_python_locks": [],
+    "interpretation": "Immutable-source inventory only. These versions are facts for f6c7d058, before the later PR611 merge. The 101 lock records are not the earlier 99 installed Linux distributions audited; no fresh vulnerability scan or alert disposition is inferred."
+  },
+  "signing_observation_before_manual_exercise": {
+    "dashboard": 595,
+    "dashboard_updated_at": "2026-11-14T21:04:15Z",
+    "author": "renovate[bot]",
+    "renovate_branch_count": 0,
+    "renovate_pr_count": 0,
+    "renovate_author_commit_count": 0,
+    "status": "No actual Renovate update commit was available at the original pre-trigger observation."
+  },
+  "superseding_evidence": {
+    "live_dependabot": "Root subsequently observed signed-in Dependabot UI with zero open alerts; root retains that separate UI receipt.",
+    "real_bot_update": "Root subsequently requested the bounded validator patch via dashboard595. PR612 and verified commit594380162002123533db322248363a6546301534 are covered by a separate signing receipt; the earlier absence observation is not current status."
+  },
+  "source_only_limitations": [
+    "This subtask did not access Dependabot alert endpoints or mutate alerts.",
+    "Repository-mode validation does not fetch and validate all merged inherited remote presets.",
+    "The isolated historical candidate Cargo lock is evidence, not the active root build lock; no unseen alert was dismissed.",
+    "All38 scientific obligations and release boundaries remain with the existing programme."
+  ],
+  "changes_during_original_source_audit": {
+    "repository_edits": false,
+    "settings_changes": false,
+    "alerts_dismissed": false,
+    "bot_triggered": false,
+    "comments_sent": false
+  }
+}

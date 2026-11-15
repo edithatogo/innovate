@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "receipt_kind": "independently_inspected_consumer_archive_summary",
+  "recorded_at_utc": "2026-11-14 23:04:16 UTC",
+  "repository": "edithatogo/innovate",
+  "issue": 559,
+  "source_revision": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+  "run": {
+    "id": 43640667994,
+    "job_id": 132587317739,
+    "event": "push",
+    "conclusion": "success",
+    "url": "https://github.com/edithatogo/innovate/actions/runs/43640667994",
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43640667994/job/132587317739",
+    "started_at": "2026-11-14T21:02:36Z",
+    "completed_at": "2026-11-14T21:10:44Z"
+  },
+  "artifact": {
+    "id": 14131728926,
+    "zip_sha256": "8cdd3629c30541ec99fff7c14c4ddb37ebc49a7d9c4184709a764c2b89dd36f0",
+    "downloaded": true,
+    "sha256_independently_computed": true,
+    "matched_api_digest": true,
+    "members": [
+      "qualification.json",
+      "qualification-stderr.log",
+      "tests.log"
+    ],
+    "qualification_stderr_empty": true
+  },
+  "verification": {
+    "qualification_json_parsed": true,
+    "source_revision_matched": true,
+    "status": "passed",
+    "worker_exit_status": 0,
+    "focused_tests_passed": 19,
+    "focused_test_seconds": 2.37,
+    "normalized_case_count": 6,
+    "all_original_restored_digests_equal": true,
+    "all_original_restored_chunk_lengths_equal": true,
+    "all_native_expected": [
+      1,
+      2,
+      3
+    ],
+    "all_native_observed": [
+      1,
+      2,
+      3
+    ],
+    "installed_package_members_matched_supplied_wheels": true
+  },
+  "versions": {
+    "python": "3.15.2",
+    "innovate": "0.7.0a1",
+    "voiage": "3.1.0",
+    "polars": "2.1.0",
+    "pyarrow": "26.0.1",
+    "rust": "1.99.1",
+    "uv": "0.13.8"
+  },
+  "execution": {
+    "working_directory": "/tmp/innovate-installed-consumer-vxfk5bb1",
+    "checkout": "/home/runner/work/innovate/innovate",
+    "installed_package_root": "/home/runner/work/_temp/voiage-consumer.cQ2zoD/lib/python3.15/site-packages",
+    "invocation_log_lines": [
+      "2026-11-14T21:10:34.6638951Z \u001b[36;1m\"$CONSUMER_ENV/bin/python\" -I \"$GITHUB_WORKSPACE/scripts/qualify_voiage_arrow.py\" \\\u001b[0m",
+      "2026-11-14T21:10:34.6639660Z \u001b[36;1m  --wheel \"$INNOVATE_WHEEL\" --voiage-wheel \"$VOIAGE_WHEEL\" \\\u001b[0m",
+      "2026-11-14T21:10:34.6640104Z \u001b[36;1m  > \"$GITHUB_WORKSPACE/consumer-evidence/qualification.json\" \\\u001b[0m",
+      "2026-11-14T21:10:34.6640567Z \u001b[36;1m  2> \"$GITHUB_WORKSPACE/consumer-evidence/qualification-stderr.log\"\u001b[0m",
+      "2026-11-14T21:10:34.6689633Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}",
+      "2026-11-14T21:10:34.6689961Z env:",
+      "2026-11-14T21:10:34.6690152Z   CARGO_BUILD_JOBS: 2",
+      "2026-11-14T21:10:34.6690439Z   UV_PYTHON_INSTALL_DIR: /home/runner/work/_temp/uv-python-dir",
+      "2026-11-14T21:10:34.6690782Z   CARGO_HOME: /home/runner/.cargo",
+      "2026-11-14T21:10:34.6691026Z   CARGO_INCREMENTAL: 0",
+      "2026-11-14T21:10:34.6691270Z   CARGO_TERM_COLOR: always",
+      "2026-11-14T21:10:34.6691566Z   CONSUMER_ENV: /home/runner/work/_temp/voiage-consumer.cQ2zoD",
+      "2026-11-14T21:10:34.6692144Z   INNOVATE_WHEEL: /home/runner/work/innovate/innovate/dist/innovate-0.7.0a1-cp315-cp315-manylinux_2_38_x86_64.whl",
+      "2026-11-14T21:10:34.6692975Z   VOIAGE_WHEEL: /home/runner/work/innovate/innovate/dist/voiage/voiage-3.1.0-cp315-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "2026-11-14T21:10:34.6693546Z ##[endgroup]"
+    ],
+    "build": "bash scripts/build_release_wheel.sh .venv; source distribution built from the checked-out revision, then native release wheel built from the extracted sdist"
+  },
+  "hashes": {
+    "innovate_wheel_sha256": "abc6d45af8eb20a825d5ffc384ee66dfaf3b9f40e3e4e145687baff520d1bf95",
+    "voiage_wheel_sha256": "e7a68dae8a94fcb8b70077c671242cbdc8f260bd64367c74f547e122236cfd1a",
+    "innovate_native_sha256": "5e974002fb99b9ea05e30f5218de739928ddaaea657f31926d21189761b5331f",
+    "voiage_normalized_module_sha256": "846dbdf6aee4ec843a7147ba6ba42e3ad8618fcb6c88755332b341150e61b08c",
+    "voiage_native_sha256": "7e503d3c80af7284fdb59652db56010a426adb46544e3cc654c425c95f133be2",
+    "innovate_record_sha256": "fc821026ffbbaaa38ddbe135632ab43790c1bdd41957edc18969c31451a1adb7",
+    "voiage_record_sha256": "cca0c8e5b1b1893520e16c30d9e7facebdfdc1361587e7aa4c32d4be3fe7b842",
+    "qualification_script_sha256": "4e2cdf0e20488ce2dc10769117f725306351d9643ddc44e0e360006e0f6491c8"
+  },
+  "evpi": {
+    "unweighted": {
+      "input_ipc_sha256": "80e7328f530cd72ecb522771a4c6745a4966123120a13f52983477d98573a26e",
+      "reference": 5.641720719927869,
+      "observed": 5.641720719927868
+    },
+    "weighted_3_to_1": {
+      "input_ipc_sha256": "ee1146136fe9edf7a697d995f47150c764a8d8cf0bd123fc9b646c8cb7a4dd2b",
+      "reference": 3.7317144196428957,
+      "observed": 3.731714419642895
+    }
+  },
+  "limitations": [
+    "This is a new summary of a directly downloaded, hashed and inspected archive, not an unmodified copy of its full qualification JSON.",
+    "The original historical run43603039393 full qualification JSON is restored separately. Do not substitute this summary for all per-case hashes in that original receipt.",
+    "Only the explicit numerical projection time/sample_id is natively qualified; preserved timestamps and covariance metadata do not establish native datetime/covariance semantics.",
+    "This synthetic CPU consumer pass does not complete the broader voiage_arrow_handoff or any of the 38 scientific release obligations.",
+    "At this summary's original observation, the later run43649444847 archive had not been independently downloaded/parsed after executor access failed. Subsequent direct verification is recorded separately in hosted-consumer-43649444847/provenance.json."
+  ],
+  "updated_at_utc": "2026-11-14 23:12:46 UTC"
+}
