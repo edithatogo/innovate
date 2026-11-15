@@ -1,0 +1,31 @@
+{
+  "compile_command": [
+    "/workspace/scratch/d3c65674726e/tooling/rustup/toolchains/1.99.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2024",
+    "/tmp/innovate-network-c8da3a3c93a3/conductor/tracks/rust_network_petgraph_20261115/evidence/replay_probe.rs",
+    "-L",
+    "dependency=/tmp/innovate-network-target-c8da3a3c93a3/debug/deps",
+    "--extern",
+    "baseline=/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/libinnovate_core-283eac7071225697.rlib",
+    "--extern",
+    "candidate=/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/libinnovate_core-e30800fa9816a824.rlib",
+    "--extern",
+    "serde_json=/tmp/innovate-network-target-c8da3a3c93a3/debug/deps/libserde_json-d78ba2bc983236ab.rlib",
+    "-o",
+    "/tmp/innovate-network-replay-probe-c8da3a3c93a3"
+  ],
+  "scope": "Exact full KernelResponse JSON equality on 10 graph cases x16 fixed seeds. Original-repository compiled baseline core versus actual candidate core compiled with the requested dependency in an external standalone package.",
+  "baseline_source_sha256": "bbc66f06f24eb36abe158f64ce94849596e61a4b265f3904336b6eb6e5bd5fea",
+  "candidate_source_sha256": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
+  "library_sha256": {
+    "candidate": "e53ddd4f24cc87be525ebace87764f287f76b1815806334d35b158e07d40c623",
+    "baseline": "a8440a172926062034b20b2a0dbfcf8be169941b46461e6efdade70d0065d6ba"
+  },
+  "probe_sha256": "e328de8a46d831cea22cba10a7f79de048181e79dace5e11d9558bb895648aa1",
+  "storage": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           4.9G  3.6G  1.4G  73% /tmp\n",
+  "compile_exit_code": 0,
+  "exit_code": 0,
+  "comparisons": 160,
+  "output_sha256": "47e3e6aeec589cc73ba5a17b4518c192a1db328b4e0b57e8e41e8a515ce99c80",
+  "elapsed_seconds": 0.524
+}

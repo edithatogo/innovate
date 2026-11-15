@@ -10,6 +10,11 @@ use kairo_ecs_rng::{
     rand_distr::{Exp, Uniform},
 };
 use kairo_ecs_types::{EntityId, EventKind, SimTime, StepOutcome};
+use petgraph::{
+    Direction::Incoming,
+    graph::{DiGraph, NodeIndex},
+    visit::EdgeRef,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -336,7 +341,8 @@ impl HazardForcing {
 }
 
 struct Graph {
-    incoming: Vec<Vec<(usize, f64)>>,
+    // Node weights cache incoming degree, keeping hazard lookup constant-time.
+    adjacency: DiGraph<usize, f64>,
     totals: Vec<f64>,
     weighted: bool,
 }
@@ -348,14 +354,13 @@ impl Graph {
         edges: &[[usize; 2]],
         weights: Option<&[f64]>,
     ) -> Result<Self, &'static str> {
-        let mut incoming = vec![Vec::new(); population];
         let mut unique = std::collections::HashSet::new();
         if weights.is_some_and(|weights| {
             weights.len() != edges.len() || weights.iter().any(|w| !w.is_finite() || *w <= 0.)
         }) {
             return Err("edge_weights must contain one finite positive weight per edge");
         }
-        for (index, &[a, b]) in edges.iter().enumerate() {
+        for &[a, b] in edges {
             let key = if directed {
                 (a, b)
             } else {
@@ -364,27 +369,57 @@ impl Graph {
             if a >= population || b >= population || a == b || !unique.insert(key) {
                 return Err("edges must be unique non-self pairs within population");
             }
+        }
+        let mut adjacency = DiGraph::<usize, f64>::with_capacity(
+            population,
+            edges.len() * if directed { 1 } else { 2 },
+        );
+        for _ in 0..population {
+            adjacency.add_node(0);
+        }
+        // Directed petgraph adjacency iterates newest edges first. Reverse
+        // insertion preserves the original input-relative floating-point folds.
+        // Undirected inputs need separate arcs: normalization is per target.
+        for (index, &[a, b]) in edges.iter().enumerate().rev() {
+            let (a, b) = (NodeIndex::new(a), NodeIndex::new(b));
             let weight = weights.map_or(1., |w| w[index]);
-            incoming[b].push((a, weight));
+            adjacency.add_edge(a, b, weight);
+            adjacency[b] += 1;
             if !directed {
-                incoming[a].push((b, weight));
+                adjacency.add_edge(b, a, weight);
+                adjacency[a] += 1;
             }
         }
         let mut totals = vec![0.; population];
         if weights.is_some() {
-            for (neighbors, total) in incoming.iter_mut().zip(&mut totals) {
-                let scale = neighbors.iter().map(|(_, w)| *w).fold(0., f64::max);
-                for (_, weight) in neighbors {
+            for node in adjacency.node_indices() {
+                let scale = adjacency
+                    .edges_directed(node, Incoming)
+                    .map(|edge| *edge.weight())
+                    .fold(0., f64::max);
+                let mut neighbors = adjacency.neighbors_directed(node, Incoming).detach();
+                while let Some(edge) = neighbors.next_edge(&adjacency) {
+                    let weight = &mut adjacency[edge];
                     *weight /= scale;
-                    *total += *weight;
+                    totals[node.index()] += *weight;
                 }
             }
         }
         Ok(Self {
-            incoming,
+            adjacency,
             totals,
             weighted: weights.is_some(),
         })
+    }
+
+    fn degree(&self, node: usize) -> usize {
+        self.adjacency[NodeIndex::new(node)]
+    }
+
+    fn incoming(&self, node: usize) -> impl Iterator<Item = (usize, f64)> + '_ {
+        self.adjacency
+            .edges_directed(NodeIndex::new(node), Incoming)
+            .map(|edge| (edge.source().index(), *edge.weight()))
     }
 }
 fn ticks() -> u64 {
@@ -908,7 +943,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                     if context.get::<u8>(agents[i]) != Some(&0) {
                         0.
                     } else {
-                        let degree = graph.incoming[i].len();
+                        let degree = graph.degree(i);
                         let multiplier = imitation_weights[i];
                         let rate = imitation * multiplier;
                         let exposed_rate = |fraction| {
@@ -922,15 +957,15 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
                             + if degree == 0 {
                                 0.
                             } else if graph.weighted {
-                                let exposed: f64 = graph.incoming[i]
-                                    .iter()
+                                let exposed: f64 = graph
+                                    .incoming(i)
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .map(|(_, weight)| weight)
                                     .sum();
                                 exposed_rate(exposed / graph.totals[i])
                             } else {
-                                let exposed = graph.incoming[i]
-                                    .iter()
+                                let exposed = graph
+                                    .incoming(i)
                                     .filter(|(j, _)| context.get::<u8>(agents[*j]) == Some(&2))
                                     .count() as f64;
                                 // Preserve seeded arithmetic for existing finite unforced paths.
@@ -1292,6 +1327,128 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    // Only this observation adapter changes with storage representation. The
+    // independently calculated fixture values and assertions stay unchanged.
+    fn graph_snapshot(graph: &Graph) -> Vec<Vec<(usize, f64)>> {
+        graph
+            .adjacency
+            .node_indices()
+            .map(|node| {
+                let incoming: Vec<_> = graph.incoming(node.index()).collect();
+                assert_eq!(graph.degree(node.index()), incoming.len());
+                incoming
+            })
+            .collect()
+    }
+
+    #[test]
+    fn network_petgraph_matches_independent_ordered_graph_fixtures() {
+        let corpus: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/network_petgraph_20261115.json"
+        ))
+        .unwrap();
+        assert_eq!(corpus["schema_version"], 1);
+        assert_eq!(corpus["cases"].as_array().unwrap().len(), 10);
+        for case in corpus["cases"].as_array().unwrap() {
+            let edges: Vec<[usize; 2]> = serde_json::from_value(case["edges"].clone()).unwrap();
+            let weights: Option<Vec<f64>> =
+                serde_json::from_value(case["weights"].clone()).unwrap();
+            let graph = Graph::new(
+                case["population"].as_u64().unwrap() as usize,
+                case["directed"].as_bool().unwrap(),
+                &edges,
+                weights.as_deref(),
+            )
+            .unwrap();
+            let expected: Vec<Vec<(usize, f64)>> =
+                serde_json::from_value(case["incoming"].clone()).unwrap();
+            let actual = graph_snapshot(&graph);
+            assert_eq!(actual.len(), expected.len(), "{}", case["name"]);
+            assert_eq!(graph.weighted, case["weighted"].as_bool().unwrap());
+            for (node, (actual, expected)) in actual.iter().zip(&expected).enumerate() {
+                assert_eq!(actual.len(), expected.len(), "{} node {node}", case["name"]);
+                for ((source, weight), (expected_source, expected_weight)) in
+                    actual.iter().zip(expected)
+                {
+                    assert_eq!(source, expected_source, "{} node {node}", case["name"]);
+                    assert_eq!(
+                        weight.to_bits(),
+                        expected_weight.to_bits(),
+                        "{} node {node} source {source}",
+                        case["name"]
+                    );
+                }
+                assert_eq!(
+                    graph.totals[node].to_bits(),
+                    case["totals"][node].as_f64().unwrap().to_bits(),
+                    "{} node {node} total",
+                    case["name"]
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn network_petgraph_input_order_has_a_nonvacuous_rounding_control() {
+        let tiny = 2_f64.powi(-53);
+        let forward =
+            Graph::new(5, true, &[[3, 4], [0, 4], [2, 4]], Some(&[1., tiny, tiny])).unwrap();
+        let reverse =
+            Graph::new(5, true, &[[2, 4], [0, 4], [3, 4]], Some(&[tiny, tiny, 1.])).unwrap();
+        assert_eq!(forward.totals[4].to_bits(), 1_f64.to_bits());
+        assert_eq!(reverse.totals[4].to_bits(), (1. + f64::EPSILON).to_bits());
+        assert_ne!(forward.totals[4].to_bits(), reverse.totals[4].to_bits());
+    }
+
+    #[test]
+    fn network_petgraph_rejects_invalid_weights_before_invalid_edges() {
+        let message = "edge_weights must contain one finite positive weight per edge";
+        for weight in [0., -0., -1., f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            assert_eq!(
+                Graph::new(2, true, &[[0, 1]], Some(&[weight])).err(),
+                Some(message)
+            );
+            assert_eq!(
+                Graph::new(2, true, &[[2, 2]], Some(&[weight])).err(),
+                Some(message)
+            );
+        }
+        assert_eq!(
+            Graph::new(2, true, &[[0, 1]], Some(&[])).err(),
+            Some(message)
+        );
+        assert_eq!(Graph::new(2, true, &[], Some(&[1.])).err(), Some(message));
+    }
+
+    #[test]
+    fn network_petgraph_preserves_pair_validation_and_antiparallel_edges() {
+        let message = "edges must be unique non-self pairs within population";
+        for directed in [false, true] {
+            for edges in [
+                vec![[0, 0]],
+                vec![[0, 2]],
+                vec![[2, 0]],
+                vec![[0, 1], [0, 1]],
+            ] {
+                assert_eq!(Graph::new(2, directed, &edges, None).err(), Some(message));
+            }
+        }
+        assert_eq!(
+            Graph::new(2, false, &[[0, 1], [1, 0]], None).err(),
+            Some(message)
+        );
+        let graph = Graph::new(2, true, &[[0, 1], [1, 0]], None).unwrap();
+        assert_eq!(graph_snapshot(&graph), vec![vec![(1, 1.)], vec![(0, 1.)]]);
+    }
+
+    #[test]
+    fn network_petgraph_positive_subnormal_weights_remain_valid() {
+        let smallest = f64::from_bits(1);
+        let graph = Graph::new(2, false, &[[0, 1]], Some(&[smallest])).unwrap();
+        assert_eq!(graph_snapshot(&graph), vec![vec![(1, 1.)], vec![(0, 1.)]]);
+        assert_eq!(graph.totals, vec![1., 1.]);
+    }
 
     #[test]
     fn rebuilt_deadlines_keep_original_expiry_and_arrival_order() {
