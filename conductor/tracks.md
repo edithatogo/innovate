@@ -525,3 +525,19 @@ Historical completion labels above do not establish current full-native ownershi
 
 - [~] **Track: Research Software Registry Readiness** *(External gates pending)*
 *Link: [./tracks/research_software_registry_readiness_20260721/](./tracks/research_software_registry_readiness_20260721/)*
+
+---
+
+## Rust Dependency Modernization — 15 November 2026
+
+- [ ] **Track: Rust Linear Algebra and Nonlinear Optimization Modernization** *(Planned)*
+  *Link: [./tracks/rust_linalg_optimization_20261115/](./tracks/rust_linalg_optimization_20261115/)*
+
+- [ ] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Planned)*
+  *Link: [./tracks/rust_ode_integration_20261115/](./tracks/rust_ode_integration_20261115/)*
+
+- [ ] **Track: Rust Statistical Distributions and Quantiles Modernization** *(Planned)*
+  *Link: [./tracks/rust_stats_distributions_20261115/](./tracks/rust_stats_distributions_20261115/)*
+
+- [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned)*
+  *Link: [./tracks/rust_network_petgraph_20261115/](./tracks/rust_network_petgraph_20261115/)*
