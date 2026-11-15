@@ -1,6 +1,7 @@
 ---
 title: XLA Backend Strategy
 description: Eligibility and promotion policy for optional XLA execution.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

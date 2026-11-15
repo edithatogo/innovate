@@ -1,6 +1,7 @@
 ---
 title: JAX Backend for High-Performance Computing
 description: Using the JAX backend for accelerated diffusion model computations.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

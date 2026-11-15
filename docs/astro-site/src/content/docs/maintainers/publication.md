@@ -1,6 +1,7 @@
 ---
 title: Publication
 description: Binding publication and release gate guidance.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

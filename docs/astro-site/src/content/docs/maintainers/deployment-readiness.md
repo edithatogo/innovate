@@ -1,6 +1,7 @@
 ---
 title: Deployment Readiness
 description: Production documentation deployment checklist and rollback notes.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

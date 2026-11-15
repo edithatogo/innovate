@@ -1,6 +1,7 @@
 ---
 title: Probabilistic Inference
 description: Posterior payload boundaries and optional probabilistic backends.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

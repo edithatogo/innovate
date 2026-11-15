@@ -1,6 +1,7 @@
 ---
 title: Polyglot Repository Architecture
 description: Documentation and ownership map for the current repository layout.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

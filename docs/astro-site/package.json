@@ -8,7 +8,9 @@
     "check": "node scripts/generate-api.mjs --check && astro check",
     "test": "node --test scripts/*.test.mjs",
     "dev": "node scripts/generate-api.mjs && astro dev",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:browser": "playwright test",
+    "test:browser:list": "playwright test --list --reporter=list"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.8",
@@ -21,7 +23,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "4.14.0",
     "@emnapi/runtime": "1.11.3",
+    "@playwright/test": "1.65.1",
+    "axe-core": "4.14.0",
     "typescript": "6.0.3"
   },
   "engines": {

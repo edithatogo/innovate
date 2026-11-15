@@ -1,6 +1,7 @@
 ---
 title: Stability Module
 description: Stability API surface and public-facing behavior.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

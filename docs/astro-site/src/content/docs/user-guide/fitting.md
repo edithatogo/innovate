@@ -1,145 +1,79 @@
 ---
-title: Fitting Diffusion Models
-description: Learn how to fit diffusion models to adoption data using Innovate.
+title: Fit and assess a native model
+description: Prepare observations, preserve model state, inspect diagnostics and distinguish parameter recovery from scientific validation.
 ---
 
-:::caution[Pre-0.7 reference]
-This page records the earlier implementation. The Rust/Polars migration permits temporary feature unavailability; consult the [native migration guide](/innovate/native-migration/) for current APIs and open gates. Earlier language and backend support claims are historical.
-:::
+The current table interface is [fit](/innovate/api/generated/fit/). It estimates
+native model parameters from an ordered Polars table and returns a
+[FitResult](/innovate/api/generated/fit-result/). This guide explains the choices
+around that call; the [Norton–Bass tutorial](/innovate/tutorials/norton-bass/)
+provides a complete executable recovery and forecasting example.
 
+## Specify observations before selecting controls
 
-Innovate provides a unified interface for fitting a wide range of diffusion models.
+| Input decision | Current contract | Analysis decision |
+| --- | --- | --- |
+| Time | Nonempty, finite, strictly increasing numeric `time`, without nulls | Choose the origin and unit and explain how dates became numeric time |
+| Scalar observations | The default observation column is `observed` | State whether it measures a level, count, share or another quantity |
+| Multiple series | Supply distinct `observed_columns` in model output order | Keep series identities and measurement units consistent |
+| Model construction | Pass supported `model_options`; fitted state retains them | Specify launches, events or other structural assumptions before fitting |
+| Fitting controls | Pass supported model-specific `fit_options` | Document starts, bounds, iteration limits and why they are appropriate |
 
-## Available Models
+Polars `LazyFrame` input is collected at the native boundary. Missing or invalid
+required data fails; the wrapper does not silently choose an imputation model.
+Column names do not establish compatible units or an appropriate observation
+model.
 
-Innovate supports the following diffusion model families:
+## Start with a known answer
 
-| Model | Description | Parameters |
-|-------|-------------|------------|
-| Bass | Classic mixed-influence model | p (innovation), q (imitation), m (market potential) |
-| Gompertz | Asymmetric S-curve with flexible inflection | a, b, c |
-| Logistic | Symmetric S-curve | K (carrying capacity), r (growth rate), t0 (midpoint) |
-| Weibull | Flexible hazard-rate model | shape, scale |
-| Gumbel | Extreme-value diffusion | location, scale |
-| Exponential | Constant-hazard adoption | rate |
-| Gamma | Erlang-family adoption | shape, rate |
+In the [two-generation example](/innovate/tutorials/norton-bass/), the native
+predictions are checked against separate closed-form calculations before they
+are used as synthetic observations. The fit then recovers six parameters, and
+its predictions and signed rates are checked at times beyond the fitting window.
+This sequence can expose interface, fitting and prediction discrepancies without
+mistaking agreement with an unchecked data generator for independent evidence.
 
-## Fitting Methods
+Run that example unchanged first. When adapting it, change one assumption at a
+time and retain the original expected result as a regression case. A failure to
+recover a known synthetic case should be investigated before fitting real data.
 
-### Maximum Likelihood Estimation (MLE)
+## Read the returned evidence
 
-The default fitting method. Finds parameters that maximise the likelihood of observing the data.
+Inspect `parameters`, `diagnostics` and the complete `envelope`. Available
+diagnostic fields depend on the model and operation; the wrapper does not
+promise a universal AIC, BIC, likelihood or standard-error table. An optimizer's
+convergence flag describes its stopping condition, not the identifiability of
+every parameter or the adequacy of the model.
 
-```python
-from innovate import fit_model
+Use the returned result's `predict` method with an explicit new time table so
+that stored model options are reused. Where profiling is supported, accessors
+such as `launch_profile` expose the native candidate scores. Candidate scores
+are not automatically calibrated confidence limits.
 
-result = fit_model(
-    data,
-    model='bass',
-    method='mle',
-    target_col='adoptions',
-    time_col='time'
-)
-```
+## Assess the analysis beyond the call
 
-### Non-linear Least Squares (NLS)
+Consider how the observation process relates to the model quantity, whether the
+observed window contains information about saturation or launch timing, and
+whether several parameter combinations fit similarly. Examine held-out behavior,
+residual structure and sensitivity to scientifically plausible assumptions.
+These are analysis tasks; successful serialization and optimizer convergence do
+not complete them.
 
-Minimises the sum of squared residuals. Often faster than MLE for large datasets.
+For posterior sampling, use the separately documented
+[native Bayesian operation](/innovate/tutorials/bayesian-fitter/). Its tutorial
+checks a tractable posterior and chain diagnostics. A deterministic fit does not
+acquire posterior uncertainty by changing its label, and returned uncertainty
+still requires the assumptions and validation appropriate to the selected method.
 
-```python
-result = fit_model(
-    data,
-    model='gompertz',
-    method='nls'
-)
-```
+## Failure handling and next steps
 
-### Bayesian MCMC
+Preserve the native error code and validation details when present. A malformed
+table, an unsupported feature and a scientific optimization failure can require
+different remedies; consult the [fit exception contract](/innovate/api/generated/fit/)
+instead of treating every failure as a request for more iterations.
 
-Full Bayesian inference using NumPyro and BlackJAX. Returns posterior samples for all parameters.
-
-```python
-result = fit_model(
-    data,
-    model='bass',
-    method='bayesian',
-    draws=2000,
-    chains=4
-)
-
-# Access posterior samples
-posterior = result.posterior
-print(posterior['p'].mean())  # Posterior mean of innovation coefficient
-```
-
-## Model Comparison
-
-Fit multiple models and compare them using information criteria:
-
-```python
-from innovate import fit_model, compare_models
-
-models = ['bass', 'gompertz', 'logistic']
-results = {}
-
-for model_name in models:
-    results[model_name] = fit_model(data, model=model_name)
-
-comparison = compare_models(results)
-print(comparison)
-```
-
-Output:
-```
-          AIC       BIC   LogLik
-bass     90.36    91.72   -42.18
-gompertz 94.21    95.57   -44.10
-logistic 92.88    94.24   -43.44
-```
-
-## Custom Initial Parameters
-
-Provide initial parameter guesses to guide the optimiser:
-
-```python
-result = fit_model(
-    data,
-    model='bass',
-    method='mle',
-    init_params={'p': 0.01, 'q': 0.4, 'm': 500}
-)
-```
-
-## Parameter Constraints
-
-Bound parameters to reasonable ranges:
-
-```python
-result = fit_model(
-    data,
-    model='bass',
-    method='mle',
-    bounds={
-        'p': (0.0, 1.0),    # Innovation coefficient [0, 1]
-        'q': (0.0, 1.0),    # Imitation coefficient [0, 1]
-        'm': (100, 10000)   # Market potential
-    }
-)
-```
-
-## Multi-Model Ensembles
-
-Combine multiple models into an ensemble forecast:
-
-```python
-from innovate import ensemble
-
-models = ['bass', 'gompertz', 'logistic']
-fitted = [fit_model(data, model=m) for m in models]
-
-# Equal-weighted ensemble
-ensemble_result = ensemble(fitted, weights='equal')
-
-# Or optimise ensemble weights
-ensemble_result = ensemble(fitted, weights='optimise')
-```
+Continue with [prediction and forecasting](/innovate/user-guide/forecasting/) and
+[scenario experiments](/innovate/tutorials/scenario-experiment-workflows/).
+The [earlier fitting guide](/innovate/latest/user-guide/fitting/) is retained as
+historical documentation; its removed `fit_model`, ensemble and backend examples
+are not current API instructions.

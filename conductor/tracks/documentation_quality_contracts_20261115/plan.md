@@ -17,16 +17,77 @@
 - [x] Qualify the final Astro artifact and restore build/type-check/contract workflow steps.
 - [~] Gate publication on executed Julia/R documentation examples and source-bound language receipts, preserving honest local versus hosted results.
 - [x] Run independent review, apply findings and record exact commands and limitations.
-- [~] Open a focused PR and verify exact-head hosted checks; preserve coordinator merge ownership.
+- [x] Integrate the initial contracts through PR #610 and the aggregate receipt repair through PR #611; preserve coordinator merge ownership.
+- [~] Qualify follow-up PR #613 at its final exact revision, including browser behavior and migrated content.
 
 ## Full-quality acceptance remains open
 
 - [x] Reach zero structural debt for current pages and execute all ten current Python examples without accepted exceptions.
 - [x] Complete compiler-verified Rust public documentation and executable rustdoc examples.
 - [ ] Qualify every claimed supported language tutorial against its installed artifact.
-- [ ] Verify browser accessibility, keyboard/search/mobile behavior and performance budgets.
-- [ ] Review scientific claims and tutorial teaching quality against primary references and reader tasks.
+- [~] Verify browser accessibility, keyboard/search/mobile behavior and deterministic resource budgets on the built artifact.
+- [~] Review scientific claims against primary references and record worked reader tasks; human reader validation remains open.
 - [ ] Verify the qualified Astro artifact at the public URL after authorized deployment activation and integration.
+
+## Follow-up implementation — 15 November 2026
+
+- [x] Reconcile receiving main `384ed3b0f42d967f520dc66ef536d8fa0d92df7d`, including merged PRs #610 and #611.
+- [x] Recover twelve migrated current pages and their exact source bindings after the local executor disconnected.
+- [x] Correct the entry/tutorial explanations and retain a scoped primary-source review with worked learner answers.
+- [x] Promote current guides/tutorials in navigation and map all remaining historical current-path routes; preserve the versioned archive.
+- [x] Require bundled Pagefind exclusion for historical current-path pages and retain searchability for current pages.
+- [x] Add a source-freshness and claim-consistency gate for the scoped scientific review record.
+- [~] Run complete contract-derived Chromium desktop/mobile qualification with axe, keyboard/search/version checks, overflow and resource budgets.
+- [~] Qualify the narrow Julia world-age repair with `--depwarn=error` and fresh native receipts.
+- [x] Recover the exact original browser dependency lock after workspace restoration, remove the unused temporary recovery workflow, and pass frozen installation with the existing supply-chain policy.
+- [ ] Verify the final exact revision through the hosted build, browser and native documentation jobs.
+- [ ] Verify the approved Astro publication at the public URL through the existing integration and Pages activation process.
+
+PR #610 merged at `f6c7d058466ae5fe15b9846769cc0e6ba6774847`; PR #611
+merged at `384ed3b0f42d967f520dc66ef536d8fa0d92df7d`.
+The follow-up is [PR #613](https://github.com/edithatogo/innovate/pull/613).
+
+The local executor failed during this follow-up. Recovered edits were read back
+from immutable Git objects, but this recovery is not runtime or build evidence.
+The original results below remain attributed to their original source. See
+[native-runtime-followup.md](native-runtime-followup.md) for verified historical
+native artifacts and the separately tested aggregate repair.
+
+## Follow-up local qualification
+
+The integrated follow-up passes 233 Python contract tests on Python 3.15.2, all
+ten Node tests, frozen dependency installation, the 202-page Astro build, type
+checking, source-bound content checks, and production artifact verification.
+All ten Python examples and eighteen API doctest statements pass. The local
+full-language command correctly remains nonzero without fresh Julia/R receipts.
+
+The hosted #611 documentation job exposed a second aggregate hash-format defect:
+the inventory's example digests are bare SHA-256, whereas its source map labels
+those same digests with `sha256:`. The follow-up fixes only that comparison,
+preserves exact receipt/source-map equality, and adds five complete-receipt
+regressions that reproduce the Julia and R failure before the fix.
+
+Browser discovery enumerates 142 cases. Actual browser execution, fresh hosted
+native qualification, human reader trials and live publication remain separate.
+Only superseded PR documentation runs may now be cancelled; main publication
+retains its ordered queue, both qualification dependencies and explicit activation.
+
+See [followup-qualification.md](followup-qualification.md) and
+[the source-fingerprinted local record](followup-local-evidence.json).
+
+## Observed browser failures and repair
+
+The first full hosted Chromium run executed all 142 cases: 61 passed and 81
+failed. It exposed accessible-name, light-theme contrast and scrollable-table
+defects, plus a search-test assumption about Pagefind's Escape reset.
+The bounded repair preserves the complete suite and thresholds, and adds actual
+arrow-key scrolling checks within the existing page cases. The repaired Astro
+build, type check, Node tests, review gate and artifact verifier pass locally.
+Fresh hosted browser and native results remain required.
+
+The receiving main has advanced to 663002b03ccb92abee2ece934d69116cb4bf3415
+through merged PR #612. Its sole change is the accepted Renovate action update.
+See [the exact browser failure and repair record](browser-repair.md).
 
 ## Evidence
 

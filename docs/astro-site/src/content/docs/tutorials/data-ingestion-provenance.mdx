@@ -1,0 +1,97 @@
+---
+title: Verify dataset re-ingestion and checksum scope
+description: Preserve native dataset artifacts and their declared encoding, reject altered data, and understand the limits of checksum and provenance fields.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_reingestion.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+The native `ingest_dataset` operation validates a dataset and returns an artifact
+that records its dataset, validation report and checksum encoding. Re-ingest that
+artifact as an artifact so the implementation retains and checks the declared
+encoding. This tutorial exercises both supported JSON checksum encodings using
+small synthetic adoption data.
+
+## Learning outcomes
+
+You will preserve an entire dataset artifact across re-ingestion, distinguish
+content identity from serialization encoding, and verify that modifying a data
+value without updating its checksum is rejected. You will state precisely which
+fields the checksum covers and what it cannot establish about a data source.
+
+## Prerequisites
+
+Use the [native development installation](/innovate/user-guide/installation/).
+The example requires the installed package and Python's standard library. It
+uses two synthetic observations at times zero and one, and performs no network
+request or external-file ingestion.
+
+The provenance record declares a synthetic source, a licence label and an
+extraction-time string. Those labels are supplied by the example. They are not
+evidence that a real dataset has those rights, was extracted at that time, or
+has a trustworthy chain of custody.
+
+## Steps
+
+Run the checked source from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_reingestion.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_reingestion.py" />
+
+For each encoding, the script ingests the dataset, re-ingests the complete
+returned artifact and checks equality. It then changes the second adoption value
+from two to three while retaining the original checksum. This change leaves an
+otherwise plausible increasing series, so checksum rejection is the important
+failure being exercised. The original input is also checked for accidental
+mutation.
+
+## Expected results
+
+Successful assertions produce:
+
+<Code code={contentQuality.examples['examples/native_reingestion.py'].expected_stdout} lang="json" />
+
+Both `python_sorted_json_v1` and `rust_sorted_json_v1` are retained during
+re-ingestion, and both modified artifacts are rejected. The example includes a
+non-ASCII source label so the declared string-encoding convention matters.
+The encodings need not produce identical digest values for the same interpreted
+dataset; retain the encoding identifier with its digest.
+
+## Interpretation
+
+The native artifact includes `artifact_kind="innovate.dataset"`, `dataset`,
+`validation` and `checksum_encoding`. Artifact input cannot be combined with a
+separate `dataset` or `encoding` argument. Supplying the complete artifact lets
+the native operation verify the existing content under its declared encoding.
+
+The [checksum implementation](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/provenance.rs)
+computes SHA-256 over the sorted serialized dataset after removing
+`provenance.extraction_time` and `provenance.checksum`. This is **dataset-content
+integrity under a named encoding**, not a hash of every artifact field. In
+particular, the extraction-time field is outside the digest's scope.
+The role of a cryptographic digest in detecting changed content is described by
+[NIST's Secure Hash Standard](https://doi.org/10.6028/NIST.FIPS.180-4).
+
+**Reader task:** would retaining the same digest prove that an extraction-time
+label was unchanged? No: that field is deliberately excluded. Would a digest
+prove who created the dataset? No: an unauthenticated checksum can be recomputed
+by someone who can replace both the content and its recorded digest.
+
+## Limitations
+
+Provenance validation checks implemented field and schema rules. It does not
+independently verify a licence, timestamp, citation, extraction method or the
+completeness of declared transformations. A checksum is not a digital signature,
+permission to use data or evidence of measurement validity.
+
+This fixture checks two-row adoption data and tampering with one numeric value.
+It does not qualify every dataset kind, file parser, external adapter or future
+encoding. For table input, inspect the separate
+[ingest_polars](/innovate/api/generated/ingest-polars/) and
+[ingest_local](/innovate/api/generated/ingest-local/) contracts before choosing
+columns or units. Keep scientific validation, source rights and software
+integrity as separate parts of the analysis record.

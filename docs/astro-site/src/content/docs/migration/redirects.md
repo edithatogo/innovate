@@ -1,6 +1,7 @@
 ---
 title: Redirects
 description: Route inventory and forwarder plan for the docs-site cutover.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

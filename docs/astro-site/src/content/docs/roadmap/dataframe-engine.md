@@ -1,6 +1,7 @@
 ---
 title: DataFrame Engine Experiments
 description: Stable kernel-schema-first DataFrame engine compatibility notes.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

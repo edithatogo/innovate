@@ -11,7 +11,14 @@ import unittest
 from pathlib import Path
 
 WORKFLOW = Path(__file__).resolve().parents[1] / ".github/workflows/docs.yml"
-BUILD_RECEIPTS = ("api.json", "polyglot-api.json", "content.json", "artifact.json")
+BUILD_RECEIPTS = (
+    "api.json",
+    "polyglot-api.json",
+    "content.json",
+    "artifact.json",
+    "scientific-review.json",
+    "browser/qualification.json",
+)
 EXECUTION_RECEIPTS = ("native-api.json", "julia-documentation.json", "r-documentation.json", "execution.json")
 
 
@@ -64,6 +71,43 @@ class DocumentationWorkflowTests(unittest.TestCase):
         self.assertIn("vars.ENABLE_PAGES_ACTIONS_DEPLOY == 'true'", deployment)
         self.assertIn("github.ref == 'refs/heads/main'", deployment)
         self.assertNotIn("always()", deployment)
+
+    def test_only_superseded_pull_request_runs_can_be_cancelled(self):
+        concurrency = self.workflow.split("\nconcurrency:\n", 1)[1].split("\njobs:\n", 1)[0]
+        self.assertIn("  group: docs-${{ github.ref }}\n", concurrency)
+        self.assertIn("  cancel-in-progress: ${{ github.event_name == 'pull_request' }}\n", concurrency)
+
+    def test_browser_gate_qualifies_the_built_artifact_before_publication(self):
+        build = self.workflow.split("\n  examples:\n", 1)[0]
+        browser = self.step("Qualify browser accessibility and interaction")
+        self.assertIn("        run: pnpm test:browser\n", browser)
+        self.assertIn("        timeout-minutes: 22\n", browser)
+        self.assertNotIn("continue-on-error:", browser)
+        self.assertNotIn("        if:", browser)
+        for before in (
+            "Build documentation site",
+            "Verify production documentation contract",
+            "Discover the complete browser qualification suite",
+            "Install Chromium for documentation qualification",
+        ):
+            self.assertLess(build.index(f"- name: {before}"), build.index("- name: Qualify browser"))
+        self.assertLess(build.index("- name: Qualify browser"), build.index("- uses: actions/upload-pages-artifact@"))
+        self.assertIn("pnpm install --frozen-lockfile", self.step("Install dependencies"))
+
+    def test_browser_diagnostics_use_a_bounded_allowlist(self):
+        self.assert_receipt_upload(
+            self.step("Retain browser diagnostics"),
+            "documentation-browser-diagnostics",
+            ("browser/playwright.json", "browser/html/", "browser/test-results/"),
+        )
+
+    def test_review_consistency_and_julia_future_compatibility_are_gates(self):
+        review = self.step("Verify reviewed-source freshness and scoped claims")
+        self.assertIn("check_scientific_review_contract.py --output .reports/scientific-review.json", review)
+        self.assertNotIn("continue-on-error:", review)
+        native = self.step("Execute Julia documentation examples and check runtime docs")
+        self.assertIn("julia --depwarn=error --project=bindings/julia scripts/check_julia_documentation.jl", native)
+        self.assertNotIn("continue-on-error:", native)
 
     def test_hidden_file_omission_and_empty_upload_relaxation_are_rejected(self):
         step = self.step("Retain documentation evidence")

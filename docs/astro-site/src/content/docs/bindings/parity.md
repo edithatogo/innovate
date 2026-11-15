@@ -1,6 +1,7 @@
 ---
 title: Binding parity
 description: Evidence-backed parity status for supported language bindings.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

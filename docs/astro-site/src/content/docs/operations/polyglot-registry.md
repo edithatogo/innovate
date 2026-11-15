@@ -1,6 +1,7 @@
 ---
 title: Polyglot Registry Plan
 description: Registry strategy for package and scientific submissions.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

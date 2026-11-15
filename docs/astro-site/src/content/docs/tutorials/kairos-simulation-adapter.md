@@ -1,6 +1,7 @@
 ---
 title: Kairos Simulation Adapter
 description: Deterministic DES/ABM simulation contracts, telemetry, and legacy Mesa/NDLib migration policy.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

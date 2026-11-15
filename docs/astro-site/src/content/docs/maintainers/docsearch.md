@@ -1,6 +1,7 @@
 ---
 title: DocSearch Gate
 description: Production Algolia DocSearch enablement and fallback policy.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

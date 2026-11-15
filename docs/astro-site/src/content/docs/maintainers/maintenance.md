@@ -1,6 +1,7 @@
 ---
 title: Maintenance Policy
 description: Evidence-backed maintenance policy for Innovate maintainers.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

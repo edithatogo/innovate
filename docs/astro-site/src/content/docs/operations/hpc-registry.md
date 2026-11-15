@@ -1,6 +1,7 @@
 ---
 title: HPC Registry Contract
 description: Contract and constraints for HPC registry submission.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

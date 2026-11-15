@@ -1,6 +1,7 @@
 ---
 title: Scientific and HPC Readiness Roadmap
 description: Evidence and gates for scientific and HPC packaging maturity.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

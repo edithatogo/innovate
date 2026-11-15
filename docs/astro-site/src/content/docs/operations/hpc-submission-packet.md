@@ -1,6 +1,7 @@
 ---
 title: HPC Submission Packet
 description: Targeted evidence packets for remaining HPC registry work.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

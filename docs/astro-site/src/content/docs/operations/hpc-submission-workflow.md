@@ -1,6 +1,7 @@
 ---
 title: HPC Submission Workflow
 description: Per-target execution checklist for HPC registry submission.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

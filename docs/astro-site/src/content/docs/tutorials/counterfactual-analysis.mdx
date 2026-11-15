@@ -1,0 +1,112 @@
+---
+title: Separate scenario contrasts from causal effects
+description: Hand-check a cross-fitted AIPW contrast, inspect overlap, and reject invalid training-fold and cluster designs.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_overlap.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+A modeled “what if” comparison describes outcomes under specified model
+assumptions. Estimating a causal effect from observed outcomes additionally
+requires a design and identification assumptions. Use the
+[scenario tutorial](/innovate/tutorials/scenario-experiment-workflows/) for the
+first task. This tutorial examines a small native cross-fitted contrast and
+makes its calculation and limits explicit.
+
+## Learning outcomes
+
+You will reproduce six held-out nuisance predictions and AIPW scores, understand
+why the estimate differs from a simple difference in sample means, and inspect
+training-arm overlap. You will also verify that insufficient arm counts,
+insufficient distinct clusters and clusters split across folds are rejected.
+
+## Prerequisites
+
+Use the [native development environment](/innovate/user-guide/installation/) and
+basic familiarity with treatment indicators and averages. The six observations
+are deliberately synthetic. They are not clinical or policy data and do not
+identify an empirical treatment effect.
+
+The operation is `summarize_causal` with method `cross_fitted_stratum_ate`.
+All observations share one stratum. Fold one contains observations 1–3; fold two
+contains observations 4–6. Nuisance values for each held-out fold are estimated
+from the other fold. Cross-fitting and orthogonal scores have a broader
+statistical theory described by
+[Chernozhukov and colleagues (2018)](https://doi.org/10.1111/ectj.12097).
+This fixture checks a particular stratum-based calculation; it does not implement
+or validate every estimator discussed in that work.
+
+## Steps
+
+Run the maintained file from the repository root:
+
+```sh
+.venv-native/bin/python -I examples/native_overlap.py
+```
+
+<Code code={exampleSource} lang="python" title="examples/native_overlap.py" />
+
+Read the independent expected values before the native call's result checks.
+The script then repeats the calculation with cluster identifiers and submits
+three deliberately invalid designs. Each invalid design must raise the expected
+native error rather than silently weakening the requested overlap condition.
+
+## Expected results
+
+Successful execution prints:
+
+<Code code={contentQuality.examples['examples/native_overlap.py'].expected_stdout} lang="json" />
+
+The estimate is 5.25, the held-out propensity range is one-third to two-thirds,
+and all three invalid designs are rejected. A minimum arm count of one is
+intentionally small enough to expose the mechanics of this six-row fixture.
+It is not a recommendation for empirical analysis.
+
+## Interpretation
+
+For observation `i`, the checked score is
+`mu1 - mu0 + T * (Y - mu1) / e - (1 - T) * (Y - mu0) / (1 - e)`.
+Here `e` is the training fold's treatment fraction and `mu0`, `mu1` are its
+control and treated outcome means within the stratum.
+
+| Held-out observation | Outcome | Treatment | Training propensity | Training control mean | Training treated mean | Score |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 1 | 0 | 2/3 | 4 | 5.5 | 10.5 |
+| 2 | 2 | 0 | 2/3 | 4 | 5.5 | 7.5 |
+| 3 | 3 | 1 | 2/3 | 4 | 5.5 | -2.25 |
+| 4 | 4 | 0 | 1/3 | 1.5 | 3 | -2.25 |
+| 5 | 5 | 1 | 1/3 | 1.5 | 3 | 7.5 |
+| 6 | 6 | 1 | 1/3 | 1.5 | 3 | 10.5 |
+
+The score average is 5.25. For this unclustered calculation, the example also
+checks the influence standard error against the score-based formula
+`sqrt(sum((score - mean_score)^2) / (n * (n - 1)))`. These calculations validate
+the implemented arithmetic, not the coverage of an interval with six observations.
+
+**Reader task:** recover the first score without calling the library. Its outcome
+regression difference is 1.5. The control residual correction is
+`-(1 - 4) / (1 - 2/3) = 9`, giving 10.5. The large correction illustrates why
+small training samples and limited overlap deserve scrutiny even when a
+threshold passes.
+
+## Limitations
+
+A causal interpretation requires assumptions including consistency, appropriate
+handling of interference, exchangeability given the chosen covariates, and
+positivity. [Cole and Hernán (2008)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2732954/)
+explain the substantive consistency, exchangeability and positivity requirements.
+Passing an overlap-count threshold cannot establish them. The
+stratum-based nuisance estimates here also do not constitute a general-purpose
+machine-learning pipeline or resolve unmeasured confounding.
+
+Cluster identifiers must represent the actual dependence structure. Repeated
+rows from one cluster do not create additional independent training clusters;
+the example checks that distinction and rejects a cluster spanning folds.
+Four synthetic clusters do not establish reliable cluster-based inference.
+
+For a model-based intervention comparison, return to
+[scenario experiments](/innovate/tutorials/scenario-experiment-workflows/).
+For empirical analysis, define the estimand and design before interpreting this
+operation's output. The [native guide](/innovate/native-migration/) records
+remaining scientific acceptance requirements.

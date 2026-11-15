@@ -249,7 +249,10 @@ This synthetic calculation does not establish external empirical validity.
             "reason": "An earlier interface retained with an explicit example declaration.",
             "examples": ["examples/second.py"],
         }
-        self.page.write_text(self.page_text() + "\n:::caution[Pre-0.7 reference]\nHistorical interface.\n:::\n")
+        self.page.write_text(
+            self.page_text().replace("---\ntitle:", "---\npagefind: false\ntitle:", 1)
+            + "\n:::caution[Pre-0.7 reference]\nHistorical interface.\n:::\n"
+        )
         self.assertEqual({"example-source-binding"}, self.rules())
 
     def test_fenced_raw_import_does_not_count_as_live_binding(self) -> None:
@@ -302,6 +305,46 @@ This synthetic calculation does not establish external empirical validity.
     def test_constant_equality_assertion_does_not_count(self) -> None:
         self.example.write_text('assert 1 == 1\nprint("checked")\n')
         self.assertIn("example-assertion", self.rules())
+
+    def test_historical_pages_must_opt_out_of_current_search_in_frontmatter(self) -> None:
+        self.contract["pages"]["user-guide/quickstart.mdx"] = {"kind": "historical", "reason": "Old API retained."}
+        notice = "\n:::caution[Pre-0.7 reference]\nHistorical interface.\n:::\n"
+        for setting in ("", "pagefind: true\n", 'pagefind: "false"\n', "pagefind: false\npagefind: true\n"):
+            with self.subTest(setting=setting):
+                self.page.write_text(self.page_text().replace("---\ntitle:", f"---\n{setting}title:", 1) + notice)
+                self.assertIn("historical-search-visibility", self.rules())
+        for setting in ("pagefind: false\n", "pagefind: false # Retained historical route.\n"):
+            with self.subTest(setting=setting):
+                self.page.write_text(self.page_text().replace("---\ntitle:", f"---\n{setting}title:", 1) + notice)
+                self.assertEqual(set(), self.rules())
+
+    def test_prose_or_hidden_search_flag_does_not_hide_a_historical_page(self) -> None:
+        self.contract["pages"]["user-guide/quickstart.mdx"] = {"kind": "historical", "reason": "Old API retained."}
+        notice = "\n:::caution[Pre-0.7 reference]\nHistorical interface.\n:::\n"
+        for fake in (
+            "pagefind: false",
+            "<!--\npagefind: false\n-->",
+            "{/*\npagefind: false\n*/}",
+            "```yaml\npagefind: false\n```",
+        ):
+            with self.subTest(fake=fake):
+                self.page.write_text(self.page_text() + notice + fake + "\n")
+                self.assertIn("historical-search-visibility", self.rules())
+
+    def test_current_pages_cannot_be_removed_from_search(self) -> None:
+        for setting in ("pagefind: false\n", 'pagefind: "true"\n', "pagefind: true\npagefind: false\n"):
+            with self.subTest(setting=setting):
+                self.page.write_text(self.page_text().replace("---\ntitle:", f"---\n{setting}title:", 1))
+                self.assertIn("current-search-visibility", self.rules())
+        for setting in ("", "pagefind: true\n"):
+            with self.subTest(setting=setting):
+                self.page.write_text(self.page_text().replace("---\ntitle:", f"---\n{setting}title:", 1))
+                self.assertEqual(set(), self.rules())
+
+    def test_search_visibility_debt_cannot_be_grandfathered_into_a_baseline(self) -> None:
+        self.page.write_text(self.page_text().replace("---\ntitle:", "---\npagefind: false\ntitle:", 1))
+        report = self.report()
+        self.assertFalse(checker.evaluate_ratchet(report, checker.make_baseline(report))["passed"])
 
     def test_archived_version_is_counted_but_not_current_evidence(self) -> None:
         archive = self.site / "latest/guide.md"

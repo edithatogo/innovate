@@ -1,6 +1,7 @@
 ---
 title: Julia Bindings
 description: Julia package adapter over the shared kernel bridge.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

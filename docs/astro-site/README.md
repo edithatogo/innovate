@@ -20,6 +20,7 @@ pnpm build
 pnpm check
 ../../.venv-docs/bin/python ../../scripts/check_api_documentation.py --mode strict --output .reports/api.json
 ../../.venv-docs/bin/python ../../scripts/check_polyglot_api_documentation.py --check
+../../.venv-docs/bin/python ../../scripts/check_scientific_review_contract.py --output .reports/scientific-review.json
 ../../.venv-docs/bin/python ../../scripts/check_documentation_content.py --mode ratchet --output .reports/content.json
 ../../.venv-docs/bin/python ../../scripts/verify_production_docs.py
 ```
@@ -63,7 +64,7 @@ cp target/release/libinnovate_ffi.so bindings/r/inst/lib/
 export DOCS_RECEIPT_DIR="$PWD/docs/astro-site/.reports"
 unset INNOVATE_NATIVE_LIBRARY
 julia --project=bindings/julia -e 'using Pkg; Pkg.instantiate()'
-julia --project=bindings/julia scripts/check_julia_documentation.jl
+julia --depwarn=error --project=bindings/julia scripts/check_julia_documentation.jl
 
 export R_LIBS_USER="$DOCS_RECEIPT_DIR/r-library"
 mkdir -p "$R_LIBS_USER"
@@ -100,9 +101,46 @@ The Python content contract bounds execution, checks assertions and exact
 expected stdout, and distinguishes executed outcomes from static inventory.
 The native extension check compares the complete runtime export inventory with
 its stub and validates runtime docstrings. Ten checked Python files cover the
-two tutorials and eight native reference examples; displayed fences or raw
-imports must match their declared executable source exactly. The declared Julia
+current tutorials and native reference examples; displayed fences or raw imports
+must match their declared executable source exactly. The declared Julia
 and R inventories add seven and six native-language example blocks respectively.
+
+## Browser qualification and scientific review records
+
+After the production build, run from `docs/astro-site`:
+
+```sh
+pnpm test:browser:list
+pnpm exec playwright install --with-deps chromium
+pnpm test:browser
+```
+
+The suite starts its own Astro preview server at `127.0.0.1:4321`; stop any
+existing server first. It requires the built Pagefind index and the generated API
+manifest. It discovers every current page from the contracts, checks desktop and
+mobile Chromium, and retains source/artifact fingerprints, served-resource hashes,
+axe findings, interaction results and deterministic resource budgets under
+`.reports/browser/`. The report fails for partial, skipped or retried suites.
+The dependency versions and Chromium revision come from the frozen package lock.
+
+Use the HTML report and retained failure traces to diagnose failures. Automated
+axe checks do not replace manual assistive-technology testing or WCAG conformance
+review. Resource-byte and request-count budgets do not measure real-user loading
+speed. A local browser pass does not verify the public deployment.
+
+`scripts/check_scientific_review_contract.py` checks the scoped review record in
+`docs/contracts/scientific-pedagogical-review.json`. It verifies input freshness,
+references, findings, worked reader tasks and honest scope flags. It fails when a
+reviewed file changes; inspect the changed claims and update the recorded review
+before refreshing its fingerprints. Human reader validation and empirical
+scientific validity are not inferred from a consistent record.
+
+Historical pages retained at current routes use `pagefind: false`, which excludes
+them from the bundled current search index while retaining their URLs. The
+[historical documentation map](src/content/docs/historical-documentation.md)
+records supported replacements, partial replacements and remaining gaps. The
+`latest/` archive is preserved. Optional Algolia indexing needs separate
+qualification.
 
 ## Quality and publication
 

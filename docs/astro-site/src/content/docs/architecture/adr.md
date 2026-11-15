@@ -1,6 +1,7 @@
 ---
 title: ADR
 description: Architecture decision records that support the migration.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]

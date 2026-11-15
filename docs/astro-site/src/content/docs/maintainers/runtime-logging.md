@@ -1,6 +1,7 @@
 ---
 title: Runtime Logging
 description: Runtime observability and runtime diagnostic logging policy.
+pagefind: false
 ---
 
 :::caution[Pre-0.7 reference]
