@@ -7,6 +7,7 @@ import math
 import os
 import random
 import struct
+import tomllib
 from fractions import Fraction
 from itertools import product
 from pathlib import Path
@@ -122,6 +123,43 @@ def test_native_kairos_replay_and_engine_errors():
     payload["simulation_options"]["engine"] = "unknown"
     with pytest.raises(innovate.NativeError):
         innovate.execute("simulate_model", "bass", **payload)
+
+
+@pytest.mark.parametrize("engine", ["kairos_des", "kairos_abm", "kairos_network"])
+def test_kairos_metadata_identifies_the_locked_provider(engine):
+    root = Path(__file__).resolve().parents[2]
+    manifest = tomllib.loads((root / "rust/crates/innovate-core/Cargo.toml").read_text(encoding="utf-8"))
+    lock = tomllib.loads((root / "Cargo.lock").read_text(encoding="utf-8"))
+    direct_names = {"kairo-ecs-core", "kairo-ecs-rng", "kairo-ecs-types", "kairo-ecs-abm", "kairo-ecs-des"}
+    dependencies = [manifest["dependencies"][name] for name in direct_names]
+    revisions = {dependency["rev"] for dependency in dependencies}
+    origins = {dependency["git"] for dependency in dependencies}
+    assert len(revisions) == len(origins) == 1
+    revision = revisions.pop()
+    origin = origins.pop()
+    assert len(revision) == 40 and all(character in "0123456789abcdef" for character in revision)
+    assert origin == "https://github.com/edithatogo/kairos.git"
+    expected_source = f"git+{origin}?rev={revision}#{revision}"
+    names = direct_names | {"kairo-ecs-state"}
+    packages = [
+        package for package in lock["package"] if package["name"] in names and package.get("source") == expected_source
+    ]
+    assert len(packages) == len(names)
+    assert {package["name"] for package in packages} == names
+
+    options = {"engine": engine, "seed": 42, "population": 3, "ticks_per_unit": 1}
+    if engine == "kairos_network":
+        options.update({"edges": [], "capacity": 1, "service_ticks": 5})
+    result = innovate.execute(
+        "simulate_model",
+        "bass",
+        inputs={"time": [0.0, 5.0, 20.0]},
+        parameters={"p": 1e12, "q": 0.0, "m": 3.0},
+        simulation_options=options,
+    )["result"]
+    assert result["counts"] == ([0, 0, 3] if engine == "kairos_network" else [0, 3, 3])
+    assert result["metadata"]["engine"] == engine
+    assert result["metadata"]["kairos_revision"] == revision
 
 
 def test_kairos_abm_forcing_retains_agents_and_restarts_adoption():
