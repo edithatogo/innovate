@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "replicates": 200,
+  "seed": 20261116,
+  "nominal_coverage": 0.95,
+  "coverage_tolerance": 0.06,
+  "mean_rank_tolerance": 0.08,
+  "max_failure_rate": 0.05,
+  "conjugate_normal": {
+    "prior_mean": 0.0,
+    "prior_sd": 2.0,
+    "obs_sd": 1.0,
+    "n_obs": 12,
+    "n_draws": 250
+  }
+}

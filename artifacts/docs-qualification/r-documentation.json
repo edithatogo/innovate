@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "language": "r",
+  "status": "failed",
+  "qualified": false,
+  "runtime": "R version 4.3.0 (2023-04-21)",
+  "platform": "aarch64-apple-darwin20",
+  "runner": "scripts/check_r_documentation.R",
+  "examples": [],
+  "error": "The existing R CI runtime must provide tools::sha256sum; no fallback dependency is installed",
+  "elapsed_seconds": 0.031000000000000028
+}

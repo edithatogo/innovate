@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "cohorts": [
+    {
+      "id": "chat_cer_ev",
+      "domain": "clean_energy",
+      "observation_kind": "Share",
+      "licence": "CC-BY-4.0",
+      "allow_relabel_as_new_adopters": false
+    },
+    {
+      "id": "ibm_dimora_tech",
+      "domain": "technology_diffusion",
+      "observation_kind": "NewAdoption",
+      "licence": "Apache-2.0",
+      "allow_relabel_as_new_adopters": true
+    },
+    {
+      "id": "pubmed_attention",
+      "domain": "bibliometric_attention",
+      "observation_kind": "Attention",
+      "licence": "CC0-1.0",
+      "allow_relabel_as_new_adopters": false
+    }
+  ]
+}

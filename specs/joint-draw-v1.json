@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "title": "Innovate Joint Posterior and Scenario Draw IPC Contract",
+  "required_columns": [
+    {"name": "schema_version", "dtype": "Utf8"},
+    {"name": "dependence", "dtype": "Utf8"},
+    {"name": "draw_id", "dtype": "UInt64"},
+    {"name": "chain_id", "dtype": "UInt64"},
+    {"name": "scenario_id", "dtype": "Utf8"},
+    {"name": "strategy_id", "dtype": "Utf8"},
+    {"name": "product", "dtype": "Utf8"},
+    {"name": "region", "dtype": "Utf8"},
+    {"name": "time", "dtype": "Float64"},
+    {"name": "value", "dtype": "Float64", "nullable": true},
+    {"name": "units", "dtype": "Utf8"},
+    {"name": "fit_status", "dtype": "Utf8", "allowed_values": ["valid"]},
+    {"name": "provenance", "dtype": "Utf8"}
+  ],
+  "unique_key": ["draw_id", "chain_id", "scenario_id", "strategy_id", "product", "region", "time"]
+}
