@@ -31,6 +31,8 @@ module-name = "innovate._native"
 features = ["pyo3/extension-module"]
 include = [
     {path = "LICENSE", format = "sdist"},
+    {path = "rust/crates/innovate-games/Cargo.toml", format = "sdist"},
+    {path = "rust/crates/innovate-games/src/lib.rs", format = "sdist"},
     {path = "tests/native/test_competition.py", format = "sdist"},
     {path = "tests/native/test_multi_generation.py", format = "sdist"},
     {path = "tests/native/test_paired_outcomes.py", format = "sdist"},
