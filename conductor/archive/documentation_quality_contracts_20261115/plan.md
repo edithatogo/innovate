@@ -321,3 +321,26 @@ to qualify the repaired PR.
   manifest must bind distinct recorded baseline and candidate sources; a pinned
   analysis-only support commit may supply the candidate manifest, without
   changing the root workspace or the scientific/offline gates.
+- The scoped browser backport uses the original-response capture helper, its
+  focused tests and support fixture exactly from PR #671 head `070a0442`;
+  main's archived-version navigation remains present and now waits for each
+  navigation's network activity before starting the next. No failed-resource,
+  artifact-identity, accessibility, budget or case-count check was removed.
+  On Node 26.13.1 and pnpm 12.21.0, 47 JavaScript contract tests passed, the
+  site built 202 pages, Astro check reported zero errors or warnings, and
+  browser discovery listed 142 cases. Hosted browser execution remains required.
+- New standalone manifests and locks beside the two historical probes bind
+  the recorded source contexts without modifying the root workspace. The
+  replay candidate is pinned to manifest-only support commit
+  `b0a60804f6bcd407e2548197301a3976011b08e1`, retained by branch
+  `codex/innovate-codeql-historical-candidate`. Both locked Cargo checks passed
+  offline; RustSec audited 104 and 71 dependencies without advisories, and
+  neither analysis lock contains `paste`. The replay ran 160 full-response
+  comparisons and produced SHA-256
+  `47e3e6aeec589cc73ba5a17b4518c192a1db328b4e0b57e8e41e8a515ce99c80`,
+  exactly matching its historical receipt. This synthetic parity is not
+  independent scientific validation.
+- A CodeQL 2.27.4 Rust fixture using the published candidate commit and both
+  historical manifests returned zero extraction-error and zero extraction-
+  warning rows. Full-repository and hosted exact-head results remain required.
+  Scientific readiness and the offline-security boundary remain unchanged.

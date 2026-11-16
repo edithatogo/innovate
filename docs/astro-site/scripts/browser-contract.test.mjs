@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { artifactPath, budgets, caseEvidenceComplete, darkEntryRoutes, expectedCaseTitles, fingerprint, loadInventory, measureArtifact, projectNames, qualificationCoverage, routeForSource, safeRelative, sha256, wcagTags } from './browser-contract.mjs';
+import { artifactPath, budgets, caseEvidenceComplete, darkEntryRoutes, expectedCaseTitles, fingerprint, loadInventory, measureArtifact, prefetchProbePath, projectNames, qualificationCoverage, routeForSource, safeRelative, sha256, wcagTags } from './browser-contract.mjs';
 
 function temporary(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'innovate-browser-contract-'));
@@ -94,16 +94,28 @@ test('missing, filtered, skipped, and duplicated cases cannot qualify', () => {
   assert.equal(qualificationCoverage(inventory, cases.filter((entry) => entry.project === projectNames[0])).missing.length, cases.length / 2);
 });
 
-test('a passing test without its browser, document, and axe receipts cannot qualify', () => {
-  const entry = {
+function homepageEvidence(project = projectNames[0]) {
+  const probe = {
+    url: prefetchProbePath(project), file: 'api/python/index.html', status: 200,
+    bytes: 20, sha256: sha256('original probe bytes'), capture_method: 'cdp-fetch-original-response',
+    fetch_request_id: 'fetch-probe', network_request_id: 'network-probe',
+    capture_complete: true, continued_unchanged: true, network_loading_finished: true,
+  };
+  return {
+    project,
     title: 'current page: /innovate/',
     evidence: {
-      'runtime-observation': { browser_version: 'fixture-version', console_errors: [], page_errors: [], failed_internal_resources: [], responses: [{ file: 'index.html', status: 200 }] },
+      'runtime-observation': { browser_version: 'fixture-version', console_errors: [], page_errors: [], failed_internal_resources: [], responses: [{ file: 'index.html', status: 200, bytes: 50 }, probe] },
       'classified-page': { route: '/innovate/' },
-      'transfer-budget': { decoded_body_bytes: 50, successful_internal_responses: 1, byte_limit: budgets.initialPageBytes, request_limit: budgets.initialPageRequests },
+      'original-prefetch-probe': { trigger: 'link-rel-prefetch', ...probe },
+      'transfer-budget': { decoded_body_bytes: 70, successful_internal_responses: 2, byte_limit: budgets.initialPageBytes, request_limit: budgets.initialPageRequests },
       'axe-light-page': { violations: [], tags: wcagTags },
     },
   };
+}
+
+test('a passing test without its browser, document, and axe receipts cannot qualify', () => {
+  const entry = homepageEvidence();
   assert.equal(caseEvidenceComplete(entry), true);
   const missingAxe = structuredClone(entry);
   delete missingAxe.evidence['axe-light-page'];
@@ -114,6 +126,39 @@ test('a passing test without its browser, document, and axe receipts cannot qual
   const consoleError = structuredClone(entry);
   consoleError.evidence['runtime-observation'].console_errors.push('Uncaught error');
   assert.equal(caseEvidenceComplete(consoleError), false);
+});
+
+test('both homepage projects require a unique original prefetch capture inside the normal budget', () => {
+  for (const project of projectNames) {
+    const entry = homepageEvidence(project);
+    assert.equal(caseEvidenceComplete(entry), true);
+    for (const mutate of [
+      (value) => { delete value.evidence['original-prefetch-probe']; },
+      (value) => { value.evidence['runtime-observation'].responses.pop(); },
+      (value) => { value.evidence['runtime-observation'].responses.push(structuredClone(value.evidence['runtime-observation'].responses[1])); },
+      (value) => { value.evidence['runtime-observation'].responses[0].network_request_id = 'network-probe'; },
+      (value) => { value.evidence['runtime-observation'].responses[0].fetch_request_id = 'fetch-probe'; },
+      (value) => { value.evidence['runtime-observation'].responses[1].sha256 = '0'.repeat(64); },
+      (value) => { value.evidence['transfer-budget'].decoded_body_bytes = 50; },
+      (value) => { value.evidence['transfer-budget'].successful_internal_responses = 1; },
+      (value) => { value.project = 'unqualified-project'; },
+    ]) {
+      const invalid = structuredClone(entry);
+      mutate(invalid);
+      assert.equal(caseEvidenceComplete(invalid), false);
+    }
+    for (const change of [
+      { trigger: 'independent-fetch' }, { bytes: 0 }, { bytes: -1 }, { bytes: '20' },
+      { sha256: 'not-a-hash' }, { file: 'index.html' }, { status: 201 },
+      { url: '/innovate/api/python/' }, { capture_method: 'network-load-resource' },
+      { fetch_request_id: '' }, { network_request_id: '' },
+      { capture_complete: false }, { continued_unchanged: false }, { network_loading_finished: false },
+    ]) {
+      const invalid = structuredClone(entry);
+      Object.assign(invalid.evidence['original-prefetch-probe'], change);
+      assert.equal(caseEvidenceComplete(invalid), false, JSON.stringify(change));
+    }
+  }
 });
 
 test('asset budgets fail on excessive decoded asset bytes', (t) => {

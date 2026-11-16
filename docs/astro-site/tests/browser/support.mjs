@@ -1,7 +1,8 @@
 import { test as base, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import path from 'node:path';
-import { artifactPath, browserOrigin, budgets, fingerprint, sha256, siteRoot, wcagTags } from '../../scripts/browser-contract.mjs';
+import { browserOrigin, budgets, fingerprint, prefetchProbePath, siteRoot, wcagTags } from '../../scripts/browser-contract.mjs';
+import { OriginalResponseCapture, verifiedArtifactResponse } from './original-response-capture.mjs';
 
 export { expect };
 export const test = base.extend({
@@ -14,6 +15,10 @@ export const test = base.extend({
     const failedResources = [];
     const responses = [];
     const pending = [];
+    const capture = new OriginalResponseCapture(await page.context().newCDPSession(page), { origin: browserOrigin });
+    // Prefetch clones the active URL loader at navigation; installation must
+    // finish before the test can navigate or trigger its mandatory probe.
+    await capture.start();
     page.on('console', (message) => {
       if (message.type() === 'error') consoleErrors.push(message.text());
     });
@@ -28,15 +33,8 @@ export const test = base.extend({
       if (url.origin !== browserOrigin) return;
       pending.push((async () => {
         try {
-          const status = response.status();
-          if (status >= 400) throw new Error(`HTTP ${status}`);
-          if (status >= 300) return;
-          const file = artifactPath(url.pathname);
-          const bytes = await response.body();
-          const digest = sha256(bytes);
-          if (!artifactHashes[file]) throw new Error(`Response is not in the qualified artifact: ${file}`);
-          if (digest !== artifactHashes[file]) throw new Error(`Response differs from artifact: ${file}`);
-          responses.push({ url: url.pathname + url.search, file, status, bytes: bytes.length, sha256: digest });
+          const observation = await verifiedArtifactResponse(response, capture, artifactHashes);
+          if (observation) responses.push(observation);
         } catch (error) {
           failedResources.push({ url: url.pathname + url.search, error: String(error) });
         }
@@ -45,21 +43,27 @@ export const test = base.extend({
     const settle = async () => {
       let count;
       do {
-        count = pending.length;
+        count = pending.length + capture.tasks.length;
+        await capture.settle();
         await Promise.all(pending);
-      } while (count !== pending.length);
+      } while (count !== pending.length + capture.tasks.length);
     };
     try {
       await use({ responses, settle });
     } finally {
       await settle();
+      failedResources.push(...await capture.close());
+      await settle();
       await attachJson(testInfo, 'runtime-observation', {
         browser_version: browser.version(),
+        browser_executable: process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE || browser.browserType().executablePath(),
+        browser_executable_override: process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE || null,
         viewport: page.viewportSize(),
         console_errors: consoleErrors,
         page_errors: pageErrors,
         failed_internal_resources: failedResources,
         responses,
+        speculative_capture_scope: 'Original response-stage CDP Fetch bytes, continued unchanged after EOF and matched to Network completion; interception can affect timing/cache behavior. Playwright tracing is separate from this byte source.',
       });
       expect(consoleErrors, 'Browser console errors').toEqual([]);
       expect(pageErrors, 'Uncaught browser exceptions').toEqual([]);
@@ -149,6 +153,31 @@ export async function assertTransferBudget(runtime, testInfo, search = false) {
   await attachJson(testInfo, 'transfer-budget', { decoded_body_bytes: bytes, successful_internal_responses: requests, byte_limit: byteLimit, request_limit: requestLimit });
   expect(bytes, 'Decoded internal response-body budget').toBeLessThanOrEqual(byteLimit);
   expect(requests, 'Internal response count budget').toBeLessThanOrEqual(requestLimit);
+}
+
+/** Exercise real speculative loading, including its ordinary byte/request cost. */
+export async function assertOriginalPrefetchCapture(page, runtime, testInfo) {
+  const relative = prefetchProbePath(testInfo.project.name);
+  const url = new URL(relative, browserOrigin).href;
+  await Promise.all([
+    page.waitForResponse((response) => response.url() === url),
+    page.evaluate((href) => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = href;
+      document.head.append(link);
+    }, url),
+  ]);
+  await runtime.settle();
+  const observed = runtime.responses.filter((response) => response.url === relative);
+  expect(observed, 'The original prefetch must produce exactly one verified response').toHaveLength(1);
+  const receipt = observed[0];
+  expect(receipt.capture_method).toBe('cdp-fetch-original-response');
+  expect(receipt.bytes).toBeGreaterThan(0);
+  expect(receipt.capture_complete).toBe(true);
+  expect(receipt.continued_unchanged).toBe(true);
+  expect(receipt.network_loading_finished).toBe(true);
+  await attachJson(testInfo, 'original-prefetch-probe', { trigger: 'link-rel-prefetch', ...receipt });
 }
 
 export async function focusWithTab(page, target, limit = 30) {
