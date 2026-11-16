@@ -31,7 +31,8 @@ def lint(session):
         "noxfile.py",
         "scripts/check_migration.py",
     )
-    session.run("cargo", "fmt", "--all", "--check", external=True)
+    # The virtual workspace selects all project members without formatting vendored dependencies.
+    session.run("cargo", "fmt", "--check", external=True)
 
 
 @nox.session(python=False)
@@ -106,6 +107,12 @@ def release_reproducibility(session):
 def security(session):
     tool(session, "bandit", "-r", "bindings/python/innovate", "-q")
     session.run("cargo", "audit", "--file", "Cargo.lock", external=True)
+    session.run("cargo", "audit", "--file", "rust/crates/innovate-games/Cargo.lock", external=True)
+    session.run(PYTHON, "scripts/check_vendor_audit.py", external=True)
+    session.run(
+        PYTHON, "-m", "unittest", "discover", "-s", "tests/workflows", "-p", "test_vendor_audit.py", external=True
+    )
+    session.run("cargo", "audit", "--file", "rust/vendor/Cargo.lock", external=True)
 
 
 @nox.session(python=False)

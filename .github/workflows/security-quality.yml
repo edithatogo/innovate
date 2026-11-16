@@ -49,10 +49,29 @@ jobs:
         run: cargo install cargo-audit --version 0.22.2 --locked
       - name: Scan the committed Rust lock
         run: cargo audit --file Cargo.lock
+      - name: Scan the games Rust lock
+        run: cargo audit --file rust/crates/innovate-games/Cargo.lock
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+      - name: Check the vendored advisory inventory
+        run: |
+          uv venv .venv-vendor-audit --python 3.15.2
+          .venv-vendor-audit/bin/python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          .venv-vendor-audit/bin/python scripts/check_vendor_audit.py
+          .venv-vendor-audit/bin/python -m unittest discover -s tests/workflows -p 'test_vendor_audit.py' -v
+      - name: Audit vendored upstream crate versions
+        run: cargo audit --file rust/vendor/Cargo.lock
       - name: Enforce cargo-deny supply-chain policy
         uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
           command: check
+          arguments: --all-features --locked
+      - name: Enforce banned dependencies in the games workspace
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          manifest-path: rust/crates/innovate-games/Cargo.toml
+          arguments: --all-features --locked
+          command: check
+          command-arguments: bans
 
   secret-scan:
     name: Secret Scan

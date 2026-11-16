@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "source": "crates.io original archives; Cargo.lock checksums",
+  "packages": [
+    {
+      "name": "faer",
+      "version": "0.24.4",
+      "license": "MIT",
+      "crate_sha256": "5ab6df3dd147fe8d702a288b95bcd8fcc499ab572fc80da6828f60cd4d524d67",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "0539947ffb757a739d7e703a7d2fa0c792a909c1"
+        },
+        "path_in_vcs": "faer"
+      }
+    },
+    {
+      "name": "faer-traits",
+      "version": "0.24.0",
+      "license": "MIT",
+      "crate_sha256": "b87d23ed7ab1f26c0cba0e5b9e061a796fbb7dc170fa8bee6970055a1308bb0f",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "8dfcceee8eb3d81231366acc9d3f157ac5e7057a"
+        },
+        "path_in_vcs": "faer-traits"
+      }
+    },
+    {
+      "name": "gemm",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "aa0673db364b12263d103b68337a68fbecc541d6f6b61ba72fe438654709eacb",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm"
+      }
+    },
+    {
+      "name": "gemm-c32",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "086936dbdcb99e37aad81d320f98f670e53c1e55a98bee70573e83f95beb128c",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-c32"
+      }
+    },
+    {
+      "name": "gemm-c64",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "20c8aeeeec425959bda4d9827664029ba1501a90a0d1e6228e48bef741db3a3f",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-c64"
+      }
+    },
+    {
+      "name": "gemm-common",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "88027625910cc9b1085aaaa1c4bc46bb3a36aad323452b33c25b5e4e7c8e2a3e",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-common"
+      }
+    },
+    {
+      "name": "gemm-f16",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "e3df7a55202e6cd6739d82ae3399c8e0c7e1402859b30e4cb780e61525d9486e",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-f16"
+      }
+    },
+    {
+      "name": "gemm-f32",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "02e0b8c9da1fbec6e3e3ab2ce6bc259ef18eb5f6f0d3e4edf54b75f9fd41a81c",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-f32"
+      }
+    },
+    {
+      "name": "gemm-f64",
+      "version": "0.19.0",
+      "license": "MIT",
+      "crate_sha256": "056131e8f2a521bfab322f804ccd652520c79700d81209e9d9275bbdecaadc6a",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "86102c5b712737978371ac9ef7a11982f686d7bc"
+        },
+        "path_in_vcs": "gemm-f64"
+      }
+    },
+    {
+      "name": "levenberg-marquardt",
+      "version": "0.15.0",
+      "license": "MIT",
+      "crate_sha256": "8be7a65739a815308eef33a6d8c78e435a7317305d5b0af0c8c465a2d7ac6fc6",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "ab5e16ffaf3b60fae8a73725d0886cda858a56e5"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "nalgebra",
+      "version": "0.34.2",
+      "license": "Apache-2.0",
+      "crate_sha256": "df76ea0ff5c7e6b88689085804d6132ded0ddb9de5ca5b8aeb9eeadc0508a70a",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "8f117be10444d55a3924a35747f7f50e568bbe3c"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "nuts-rs",
+      "version": "0.19.1",
+      "license": "MIT",
+      "crate_sha256": "d17537202afd6af270f0446c9ba4964b49bf4630cf7bc1b6db8bfee48ea47aa8",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "359d075a021dfb3d82f6ad5faa1aff5c277818db"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "ode_solvers",
+      "version": "0.6.2",
+      "license": "Apache-2.0",
+      "crate_sha256": "18501982e08afc982434c92e1a2968d3b696b368c6df40a210475ba447fba8d9",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "ce33c1fb1a2bde5c8d8099e07afd8e50535f873f"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "pulp",
+      "version": "0.22.3",
+      "license": "MIT",
+      "crate_sha256": "046aa45b989642ec2e4717c8e72d677b13edd831a4d3b6cf37d9a3e54912496a",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "5eb07fd7b68edf0a5e19f71737d315f72a510295"
+        },
+        "path_in_vcs": "pulp"
+      }
+    },
+    {
+      "name": "qd",
+      "version": "0.8.0",
+      "license": "MIT",
+      "crate_sha256": "15f1304a5aecdcfe9ee72fbba90aa37b3aa067a69d14cb7f3d9deada0be7c07c",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "e671c42f20d5b9b1bf036172bf74f02c5c91de30"
+        },
+        "path_in_vcs": ""
+      }
+    },
+    {
+      "name": "simba",
+      "version": "0.9.1",
+      "license": "Apache-2.0",
+      "crate_sha256": "c99284beb21666094ba2b75bbceda012e610f5479dfcc2d6e2426f53197ffd95",
+      "upstream_vcs": {
+        "git": {
+          "sha1": "e7fe5c23339f1f3be2ddf76241dbb245b4899859"
+        },
+        "path_in_vcs": ""
+      }
+    }
+  ]
+}

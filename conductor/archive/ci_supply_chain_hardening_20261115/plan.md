@@ -1,5 +1,84 @@
 # Plan: CI & Release Supply-Chain Hardening
 
+## Alert 44 isolated intake — 16 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the bounded candidate in
+`/Volumes/PortableSSD/GitHub/innovate-security-alert-44`, branch
+`codex/security-alert-44`, based on
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`. The allowed candidate paths are
+the root and games Cargo manifests and locks, the core Cargo manifest,
+`rust/vendor/`, `.gitattributes`, `pyproject.toml`, `deny.toml`,
+`osv-scanner.toml`, `.github/workflows/security-quality.yml`,
+`.github/workflows/ci.yml`, `noxfile.py`, any narrowly required dependency
+guard and its tests, the registry-readiness input record and its reassessment,
+the source-derived Julia/R documentation inventory and generated reference
+metadata affected by the CI workflow hash, the remote-worker closed-pipe test
+needed for a deterministic native gate, and this plan. The existing repository integrator retains shared-manifest and
+promotion authority; this isolated lane supplies a reviewable handoff. Other
+owners and historical acceptance records remain unchanged. The next operation
+is to qualify the paste-free source and distribution graphs and reconcile the
+games pin with the accepted Paignia revision; this intake is not release or
+scientific acceptance.
+
+The formatting check now selects all five project workspace members without
+traversing third-party path dependencies. Comparison of the derived Julia/R
+inventory before refresh found only the `.github/workflows/ci.yml` source hash
+changed; its Julia and R qualification commands and all structural fields are
+unchanged. Refreshing that inventory does not assert fresh Julia/R execution
+or validate any earlier receipt against the new hash.
+
+The Python package still declares Apache-2.0 for project-owned code. The copied
+upstream sources and notices include MIT, BSD and MPL terms; a complete review
+of bundled dependency licences and the distribution-level SPDX expression is
+still required before publication. This change does not qualify a release.
+
+The first full native gate found `worker_reports_a_closed_response_pipe`
+returning success in one run. The test closed the pipe reader only after
+spawning the worker, leaving a window in which another concurrent spawn could
+inherit a reader. The test now closes the reader before spawning, while retaining the
+same expected error and exit code; no worker behavior is changed.
+
+### Candidate evidence and remaining gates
+
+- Paignia [PR #27](https://github.com/edithatogo/paignia/pull/27) passed its
+  stable, Rust 1.75 and privacy checks at
+  `6f27257400fb25f44603883615f30447fbc5d4e4`. Its receiving commit is
+  `ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf`; the two trees are identical.
+  The games manifest and lock name the receiving commit. Receiving-main checks
+  must also be verified; the native job was queued at this checkpoint.
+- Root, games and vendored-audit lock SHA-256 values respectively are
+  `63158d51e40f180a34c68bdb614f318b13ffd2de765607871daa7db36a8de4fd`,
+  `307c1c18b5d4e0beee7b9cd4d575c320045b4f71287b8fbfe1976f269d23750e`, and
+  `b72b16b86c389ffb59e79044414b3501d8cfbefcae8fd6b559b17d75f0e20e6b`.
+  Locked all-features metadata found `pastey 0.2.3` and no `paste` in either
+  active graph. Unfiltered OSV scans of both locks and the 16-crate upstream
+  audit inventory returned no findings.
+- The independent review identified that ordinary RustSec checks skip path
+  crates. `scripts/check_vendor_audit.py` verifies the complete upstream
+  inventory and its registry-identity audit lock; the security workflow audits
+  that lock and the games lock as well as the root. A seeded `paste` dependency
+  failed the cargo-deny ban, and a seeded `nalgebra 0.27.0` audit entry produced
+  `RUSTSEC-2021-0070`. Three inventory drift tests passed.
+- Local execution used CPython 3.15.2 and Rust 1.99.1. The combined games suite
+  passed three tests on the merged provider revision. A fresh Git-consumer
+  prototype passed its closed-form control, and a wheel built from an extracted
+  source distribution passed five focused NUTS and multi-generation tests.
+  The development lint, types, documentation, package and security sessions
+  passed. The first full Python run had 373 passes, five capability-based skips
+  and a stale registry digest failure; after the documented reassessment, that
+  exact failed test passed. The first `nox -s native` run failed the closed-pipe
+  case described above; its five-test target passed after repair, followed by a
+  successful full `nox -s native` run with one live-OECD test ignored. The
+  warning-denied `cargo doc --locked --no-deps -p innovate-core -p
+  innovate-tabular -p innovate-ffi` build also passed.
+- Local actionlint 1.7.12 and the checksum-verified CI-pinned 1.7.9 both consumed
+  CPU without producing a result and were interrupted after approximately two
+  minutes and one minute respectively. Neither is a pass. Workflow tests passed;
+  offline zizmor reported no unsuppressed findings. Hosted workflow lint on the
+  exact candidate remains required. Registry publication remains blocked by
+  `innovate-core`'s `publish = false` until paste-free published dependencies
+  exist; release, multi-platform and scientific acceptance remain separate.
+
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
 ## Phase 1: `cargo-deny` & `poutine` in Security Quality Workflow

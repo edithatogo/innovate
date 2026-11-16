@@ -4,9 +4,7 @@
 all-features = true
 
 [advisories]
-ignore = [
-    { id = "RUSTSEC-2024-0436", reason = "paste is unmaintained via simba 0.9.1 / nalgebra 0.34.2; no safe upgrade available" },
-]
+ignore = []
 
 [licenses]
 confidence-threshold = 0.8
@@ -25,6 +23,7 @@ allow = [
 ]
 
 [bans]
+deny = [{ name = "paste", reason = "RUSTSEC-2024-0436: unmaintained proc-macro" }]
 multiple-versions = "warn"
 # Warn until Order #3 publishes kairo-ecs-* to crates.io with explicit semver.
 wildcards = "warn"

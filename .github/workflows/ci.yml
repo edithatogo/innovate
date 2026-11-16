@@ -74,7 +74,8 @@ jobs:
           retention-days: 30
       - run: uv run --no-sync pytest tests/native
       - run: uv run --no-sync python scripts/check_migration.py
-      - run: cargo fmt --all --check
+      # The virtual workspace selects project members without formatting vendored dependencies.
+      - run: cargo fmt --check
       - name: Verify Rust docs.rs documentation build
         if: matrix.os == 'ubuntu-latest'
         env:

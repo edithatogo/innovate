@@ -205,8 +205,6 @@ checksum = "00d174d5400e5e8fd687ad1049e2f578285fa914201b1af7e8b112a4546bd826"
 [[package]]
 name = "faer"
 version = "0.24.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ab6df3dd147fe8d702a288b95bcd8fcc499ab572fc80da6828f60cd4d524d67"
 dependencies = [
  "bytemuck",
  "dyn-stack",
@@ -225,8 +223,6 @@ dependencies = [
 [[package]]
 name = "faer-traits"
 version = "0.24.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b87d23ed7ab1f26c0cba0e5b9e061a796fbb7dc170fa8bee6970055a1308bb0f"
 dependencies = [
  "bytemuck",
  "dyn-stack",
@@ -290,8 +286,6 @@ dependencies = [
 [[package]]
 name = "gemm"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa0673db364b12263d103b68337a68fbecc541d6f6b61ba72fe438654709eacb"
 dependencies = [
  "dyn-stack",
  "gemm-c32",
@@ -301,7 +295,7 @@ dependencies = [
  "gemm-f64",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "raw-cpuid",
  "seq-macro",
 ]
@@ -309,14 +303,12 @@ dependencies = [
 [[package]]
 name = "gemm-c32"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "086936dbdcb99e37aad81d320f98f670e53c1e55a98bee70573e83f95beb128c"
 dependencies = [
  "dyn-stack",
  "gemm-common",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "raw-cpuid",
  "seq-macro",
 ]
@@ -324,14 +316,12 @@ dependencies = [
 [[package]]
 name = "gemm-c64"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20c8aeeeec425959bda4d9827664029ba1501a90a0d1e6228e48bef741db3a3f"
 dependencies = [
  "dyn-stack",
  "gemm-common",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "raw-cpuid",
  "seq-macro",
 ]
@@ -339,8 +329,6 @@ dependencies = [
 [[package]]
 name = "gemm-common"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "88027625910cc9b1085aaaa1c4bc46bb3a36aad323452b33c25b5e4e7c8e2a3e"
 dependencies = [
  "bytemuck",
  "dyn-stack",
@@ -348,7 +336,7 @@ dependencies = [
  "num-complex",
  "num-traits",
  "once_cell",
- "paste",
+ "pastey",
  "pulp",
  "raw-cpuid",
  "seq-macro",
@@ -357,14 +345,12 @@ dependencies = [
 [[package]]
 name = "gemm-f32"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "02e0b8c9da1fbec6e3e3ab2ce6bc259ef18eb5f6f0d3e4edf54b75f9fd41a81c"
 dependencies = [
  "dyn-stack",
  "gemm-common",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "raw-cpuid",
  "seq-macro",
 ]
@@ -372,14 +358,12 @@ dependencies = [
 [[package]]
 name = "gemm-f64"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "056131e8f2a521bfab322f804ccd652520c79700d81209e9d9275bbdecaadc6a"
 dependencies = [
  "dyn-stack",
  "gemm-common",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "raw-cpuid",
  "seq-macro",
 ]
@@ -419,7 +403,7 @@ dependencies = [
  "num-traits",
  "rstar 0.12.2",
  "serde",
- "thiserror",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
@@ -743,7 +727,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-abm"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 dependencies = [
  "geo",
  "kairo-ecs-core",
@@ -752,13 +736,13 @@ dependencies = [
  "kairo-ecs-types",
  "petgraph",
  "rstar 0.13.1",
- "thiserror",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
 name = "kairo-ecs-core"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 dependencies = [
  "kairo-ecs-types",
 ]
@@ -766,7 +750,7 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-des"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 dependencies = [
  "kairo-ecs-core",
  "kairo-ecs-rng",
@@ -777,20 +761,20 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-rng"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 dependencies = [
  "kairo-ecs-types",
  "rand",
  "rand_chacha",
  "rand_distr",
  "serde",
- "thiserror",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
 name = "kairo-ecs-state"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 dependencies = [
  "kairo-ecs-core",
  "kairo-ecs-types",
@@ -799,13 +783,11 @@ dependencies = [
 [[package]]
 name = "kairo-ecs-types"
 version = "0.0.0"
-source = "git+https://github.com/edithatogo/kairos.git?rev=8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36"
+source = "git+https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f6283575ad26918230adc122a99b5c08fc4da3"
 
 [[package]]
 name = "levenberg-marquardt"
 version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8be7a65739a815308eef33a6d8c78e435a7317305d5b0af0c8c465a2d7ac6fc6"
 dependencies = [
  "cfg-if",
  "nalgebra 0.34.2",
@@ -850,8 +832,6 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 [[package]]
 name = "nalgebra"
 version = "0.34.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df76ea0ff5c7e6b88689085804d6132ded0ddb9de5ca5b8aeb9eeadc0508a70a"
 dependencies = [
  "approx",
  "glam 0.14.0",
@@ -1047,8 +1027,6 @@ dependencies = [
 [[package]]
 name = "nuts-rs"
 version = "0.19.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d17537202afd6af270f0446c9ba4964b49bf4630cf7bc1b6db8bfee48ea47aa8"
 dependencies = [
  "anyhow",
  "faer",
@@ -1061,7 +1039,7 @@ dependencies = [
  "rand_distr",
  "serde",
  "serde_json",
- "thiserror",
+ "thiserror 2.0.21",
  "web-time",
 ]
 
@@ -1074,14 +1052,12 @@ checksum = "a9257959045c9682c06b3f993215f1b2896bf276a1fcf39f83ac0755a904dc0d"
 [[package]]
 name = "ode_solvers"
 version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18501982e08afc982434c92e1a2968d3b696b368c6df40a210475ba447fba8d9"
 dependencies = [
  "nalgebra 0.34.2",
  "num-traits",
  "serde",
  "simba 0.9.1",
- "thiserror",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
@@ -1093,21 +1069,25 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 [[package]]
 name = "paignia-core"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=da5e62098b14625411b409419606532762d62122#da5e62098b14625411b409419606532762d62122"
+source = "git+https://github.com/edithatogo/paignia.git?rev=ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf#ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf"
+dependencies = [
+ "thiserror 1.0.69",
+]
 
 [[package]]
 name = "paignia-solve"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=da5e62098b14625411b409419606532762d62122#da5e62098b14625411b409419606532762d62122"
+source = "git+https://github.com/edithatogo/paignia.git?rev=ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf#ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf"
 dependencies = [
  "paignia-core",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
-name = "paste"
-version = "1.0.15"
+name = "pastey"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+checksum = "2ee67f1008b1ba2321834326597b8e186293b049a023cdef258527550b9935b4"
 
 [[package]]
 name = "percent-encoding"
@@ -1154,14 +1134,12 @@ dependencies = [
 [[package]]
 name = "pulp"
 version = "0.22.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "046aa45b989642ec2e4717c8e72d677b13edd831a4d3b6cf37d9a3e54912496a"
 dependencies = [
  "bytemuck",
  "cfg-if",
  "libm",
  "num-complex",
- "paste",
+ "pastey",
  "pulp-wasm-simd-flag",
  "raw-cpuid",
  "reborrow",
@@ -1177,8 +1155,6 @@ checksum = "1d8f70e07b9c3962945a74e59ca1c511bba65b6419468acc217c457d93f3c740"
 [[package]]
 name = "qd"
 version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15f1304a5aecdcfe9ee72fbba90aa37b3aa067a69d14cb7f3d9deada0be7c07c"
 dependencies = [
  "bytemuck",
  "libm",
@@ -1459,13 +1435,11 @@ checksum = "d7f45b8998ced5134fb1d75732c77842a3e888f19c1ff98481822e8fbfbf930b"
 [[package]]
 name = "simba"
 version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c99284beb21666094ba2b75bbceda012e610f5479dfcc2d6e2426f53197ffd95"
 dependencies = [
  "approx",
  "num-complex",
  "num-traits",
- "paste",
+ "pastey",
  "wide 0.7.33",
 ]
 
@@ -1509,7 +1483,7 @@ dependencies = [
  "nalgebra 0.35.0",
  "num-traits",
  "rand",
- "thiserror",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
@@ -1553,11 +1527,31 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6aaf5339b578ea85b50e080feb250a3e8ae8cfcdff9a461c9ec2904bc923f52"
+dependencies = [
+ "thiserror-impl 1.0.69",
+]
+
+[[package]]
+name = "thiserror"
 version = "2.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "09e52cb86a36cede5cb101bf8908837b3e4c6e5e59fe7fd85c23fb56200d189e"
 dependencies = [
- "thiserror-impl",
+ "thiserror-impl 2.0.21",
+]
+
+[[package]]
+name = "thiserror-impl"
+version = "1.0.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
 ]
 
 [[package]]
