@@ -23,6 +23,11 @@ native_library <- function() {
 #' fallback. JSON calls keep a loader reference for process-local registry state, copy
 #' response text into R, and release native response memory.
 #'
+#' Time units, observation quantities and parameter domains follow the selected native
+#' operation. This wrapper does not sort arrays, convert dates to elapsed time, integrate
+#' interval counts or replace missing observations. Use \code{kernel_call_json} when
+#' an operation needs an exact JSON array shape outside the named fields preserved here.
+#'
 #' @param operation Canonical native operation name, such as "discover_models" or
 #'   "predict_model".
 #' @param model_key Native model key; NULL by default for operations without a selected
@@ -34,7 +39,8 @@ native_library <- function() {
 #'   response JSON without replacing its original numeric tokens or array shapes.
 #' @return A complete native response as nested lists when raw is FALSE, or the original
 #'   response string when TRUE. Arrays decode as lists and JSON null as NULL. Successful
-#'   envelopes may omit error; non-null native errors are raised in either mode.
+#'   envelopes may omit error; non-null outer native errors are raised in either mode.
+#'   Errors inside individual batch or scenario result rows remain available to inspect.
 #' @section Errors:
 #' Native errors raise R conditions; dataset errors with validation details have class
 #' innovate_dataset_validation_error and carry code and validation. JSON conversion,
@@ -114,12 +120,17 @@ kernel_call <- function(operation, model_key = NULL, payload = list(), raw = FAL
 #' response tokens. INNOVATE_NATIVE_LIBRARY overrides the installed platform-specific
 #' library in the package lib directory.
 #'
+#' This function passes the supplied request text to Rust without changing its schema,
+#' units, nulls or array shapes. It parses the response to inspect the outer error even
+#' in raw mode; raw mode preserves the returned text, not an unchecked success status.
+#'
 #' @param request Single non-missing character string containing the full schema-2.0
 #'   envelope: schema_version, operation, optional model_key and payload.
 #' @param raw Single non-missing logical value, FALSE by default. TRUE returns the original
 #'   successful response string after native-error inspection.
 #' @return The parsed native envelope as nested lists, or its exact JSON string if raw is
-#'   TRUE. Even raw responses are checked for a native error before being returned.
+#'   TRUE. Even raw responses are checked for a non-null outer native error before being
+#'   returned. Per-item errors inside a successful batch or scenario result are retained.
 #' @section Errors:
 #' Invalid request/raw types, lengths or missing values are rejected before the native
 #' call. Native errors raise R conditions; dataset errors with validation details have
@@ -287,6 +298,10 @@ kernel_discover_models <- function() kernel_call("discover_models")$result
 #' forecast calibration. Inspect the native optimizer and diagnostic fields before
 #' interpreting the fit.
 #'
+#' Time, observations and parameters must use consistent caller-selected units.
+#' Observations must represent the model's fitted quantity; this wrapper does not
+#' integrate interval counts or difference cumulative totals before fitting.
+#'
 #' @param model_key Native model key returned by kernel_discover_models, such as
 #'   "logistic".
 #' @param payload Named list with inputs containing aligned time/t and observed/y arrays.
@@ -303,8 +318,11 @@ kernel_discover_models <- function() kernel_call("discover_models")$result
 kernel_fit_model <- function(model_key, payload) kernel_call("fit_model", model_key, payload)
 #' Predict native levels and rates from explicit parameters or fitted state.
 #'
-#' Levels and rates have different meanings. Deterministic predictions do not provide
-#' calibrated intervals unless an appropriate separate inference operation supplies them.
+#' Levels and rates have different meanings. Where the model returns derivatives, their
+#' units are level units per unit of numeric time. They are instantaneous values, not
+#' counts integrated between observation rows; signed rates can describe declining levels.
+#' Deterministic predictions do not provide calibrated intervals unless an appropriate
+#' separate inference operation supplies them.
 #'
 #' @param model_key Native model identifier matching the supplied parameters or state.
 #' @param payload Named list with inputs.time or inputs.t and either parameters plus

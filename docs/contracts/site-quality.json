@@ -11,7 +11,14 @@
     "/native-migration/",
     "/maintainers/documentation-quality/",
     "/api/generated/julia/",
-    "/api/generated/r/"
+    "/api/generated/r/",
+    "/models/",
+    "/tutorials/",
+    "/historical-documentation/",
+    "/operations/documentation-standards/",
+    "/maintainers/language-conventions/",
+    "/tutorials/public-data-fit/",
+    "/tutorials/marimo/"
   ],
   "source_roots": [
     "docs/astro-site",
@@ -32,14 +39,23 @@
     "scripts/generate_api_reference.py",
     "scripts/check_julia_documentation.jl",
     "scripts/check_r_documentation.R",
-    ".github/workflows/ci.yml"
+    ".github/workflows/ci.yml",
+    "scripts/check_retired_documentation.py",
+    "scripts/check_community_documentation.py",
+    "scripts/generate_learning_catalogue.py",
+    "scripts/check_learning_notebooks.py",
+    "docs/datasets",
+    "notebooks"
   ],
   "exclude_source_parts": [
     "node_modules",
     "dist",
     ".astro",
     ".reports",
-    "__pycache__"
+    "__pycache__",
+    ".venv",
+    "__marimo__"
   ],
-  "max_html_bytes": 2000000
+  "max_html_bytes": 2000000,
+  "retired_documentation": "docs/contracts/retired-documentation.json"
 }

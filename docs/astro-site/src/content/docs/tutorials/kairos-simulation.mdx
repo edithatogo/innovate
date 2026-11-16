@@ -1,0 +1,165 @@
+---
+title: Simulate a seeded Bass adoption path
+description: Run the native Kairos DES engine, distinguish agent counts from scaled levels, and verify replay and observation-grid invariance.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_kairos.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This tutorial simulates one finite-population Bass adoption path. It follows
+100 agents while reporting a market level measured in 250 arbitrary units,
+making the distinction between adopter counts and scaled outcomes explicit.
+The seed fixes this synthetic realization for the tested runtime; it does not
+turn the path into an expected adoption curve.
+
+## Learning outcomes
+
+You will specify the model and execution engine separately, check monotone
+bounded counts, and convert those counts into level units. You will verify
+same-request replay, show that removing early observation times does not restart
+the process, and require an unsupported engine to fail visibly.
+
+## Prerequisites
+
+Install the [current native development package](/innovate/user-guide/installation/)
+with its locked Python and Polars dependencies. Run the example from the same
+checkout used to build that package. It needs no observed dataset or network
+service.
+
+| Input | Value in this example | Meaning |
+| --- | --- | --- |
+| Model key | `bass` | Selects the supported scientific model family |
+| Operation and engine | `simulate_model`, `kairos_des` | Runs the native discrete-event population process |
+| `p`, `q` | `0.2`, `0.3` | Innovation and imitation coefficients per numeric time unit |
+| `m` | `250` | Market level in the chosen output units |
+| `population` | `100` | Number of simulated agents, denoted `N` |
+| `seed` | `42` | Fixes the random stream for this request and runtime |
+| `ticks_per_unit` | `1_000_000` | Scheduler resolution within one numeric time unit |
+
+The observation times are `[0, 1, 5, 20]`. Time is finite, nonnegative and
+strictly increasing. The API does not infer dates or units from those numbers.
+If the unit is a year, for example, `p` and `q` are per year and one tick is
+one millionth of a year. No initial adopters are supplied, so the process starts
+with zero.
+
+## Steps
+
+1. Run the canonical example with the interpreter containing the native package:
+
+   ```sh
+   .venv-native/bin/python -I examples/native_kairos.py
+   ```
+
+2. Confirm that the returned engine metadata is `kairos_des` and compare the
+   complete response with a second execution of the identical request.
+3. Follow the count bounds and independent count-to-level conversion. The
+   resulting Polars table associates each query time with both quantities.
+4. Request only the later query times, then test a zero-innovation limiting
+   case and an unknown engine name.
+
+<Code code={exampleSource} lang="python" title="examples/native_kairos.py" />
+
+The [native simulation implementation](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/simulation.rs)
+describes this as a finite-population pure-birth process. Kairos supplies clock,
+dispatch and random-stream mechanisms. Selecting `kairos_des` is an explicit
+execution choice within this supported model/operation combination; it is not
+a global switch to a different host-language backend.
+
+## Expected results
+
+The script prints this output after all assertions pass. The displayed value
+comes from the same manifest that checks executable example output.
+
+<Code code={contentQuality.examples['examples/native_kairos.py'].expected_stdout} lang="json" />
+
+The adopter counts stay between zero and 100, are nondecreasing, and have one
+entry per query time. `replay_equal` checks the repeated request in the same
+runtime. `sparse_grid_equal` checks that querying only times 5 and 20 returns
+the corresponding suffix of the original counts and levels.
+
+## Interpretation
+
+### Distinguish the process, counts and level units
+
+When `n` of `N` agents have adopted, the total next-adoption hazard is
+`(p + q*n/N) * (N-n)`. The fraction `n/N` measures population adoption for
+imitation; `N-n` counts the remaining susceptible agents. Each event adds one
+adopter. This fixture has no departures or replacement, so its path cannot
+decrease.
+
+The returned `counts` are integer agents. The corresponding `values` use
+`m * count / population`. Here one agent represents `250/100 = 2.5` level
+units, so 27 adopters correspond to 67.5 units. A level of 250 means that all
+100 agents have adopted; it does not mean that the simulation contains 250
+agents. The independent conversion in the example checks each returned level
+with relative and absolute tolerances of `1e-12`.
+
+The returned path is one realization of that event process. With imitation,
+the hazard depends nonlinearly on the random adoption count. Averaging
+finite-population paths therefore need not reproduce the deterministic Bass
+curve exactly. A deterministic prediction and a stochastic path require their
+own interpretations even when both use the model key `bass`.
+
+### Separate query times from simulation time
+
+The process starts at its time origin, rather than at the first requested
+observation. Asking only for times 5 and 20 does not discard the events before
+time five or create a new initial state. The script checks this by comparing
+the later counts and levels with the original run. It does not claim that the
+complete responses are identical, since their requested output shapes differ.
+
+The scheduler rounds sampled waits upward to at least one tick. Query times
+sample events through `floor(time * ticks_per_unit)`. Thus changing the query
+grid and changing `ticks_per_unit` are different operations: the former changes
+where this path is observed, while the latter can change quantization and the
+path itself. The unequal gaps in `[0, 1, 5, 20]` are observation gaps, not
+successive fixed integration steps.
+
+With `p=0` and no initial adopters, there is no innovation and no adopter to
+supply imitation. The zero-count check tests this limiting case. The final
+negative test requests engine `unknown` and requires `NativeError` with code
+`invalid_request`; an unsupported engine must not silently select another
+trajectory mechanism.
+
+## Check your understanding
+
+1. What level corresponds to 40 adopters in the original configuration?
+2. If `population` becomes 200 while `m` remains 250, how many level units does
+   each agent represent? Does that change merely relabel an identical path?
+3. Does omitting the observations at times zero and one mean the simulation
+   starts with zero adopters at time five?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. `250 * 40 / 100 = 100` level units.
+2. Each agent represents `250/200 = 1.25` units. The population size also enters
+   the stochastic hazard and changes the count process, so an identical path
+   is not implied by this rescaling.
+3. No. The process still evolves from its original initial condition. The
+   sparse-grid assertion verifies the existing path's later observations.
+
+</details>
+
+The changed-population case is an interpretation exercise; the canonical script
+runs the original 100-agent configuration and its stated validation cases.
+
+## Limitations
+
+One seed checks a reproducible realization and bounded invariants. It does not
+estimate sampling variability, give prediction intervals, recover parameters or
+validate the model against an observed adoption series. Repeated simulations
+and a justified observation model would be needed for those different tasks.
+
+Replay is qualified here for the identical request and installed runtime.
+Record the source revision, engine, parameters, population, seed, initial state
+and tick resolution with any result. The returned random-stream checkpoint is
+provenance; it is not by itself a complete simulation-resume artifact. This
+example does not exercise the separate event-boundary checkpoint interface or
+claim bitwise identity across future versions and platforms.
+
+Continue with [timed forcing](/innovate/tutorials/forcing-and-time/) to change
+rates during a path, or [network demand and service](/innovate/tutorials/network-scenarios/)
+to examine local exposure and completion delays. Those tutorials introduce
+their own controls and scientific contracts explicitly.

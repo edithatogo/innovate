@@ -81,13 +81,15 @@ Execute a schema-2.0 JSON request in the Rust kernel and decode its response.
 
 The wrapper serializes and copies JSON across the C ABI; it does not call Python or supply a numerical fallback. Native response memory is released after copying its text. Loaded JSON-call handles remain cached to preserve process-local registry state. The library comes from `INNOVATE_NATIVE_LIBRARY` or the bundled `deps` directory. Integer precision after parsing follows the pinned JSON.jl decoder; use the string-accepting Arrow exporters when already holding exact JSON tokens.
 
+Time units, observation quantities and parameter domains belong to the selected native operation. This wrapper does not sort observations, convert dates to elapsed time, integrate interval counts or replace missing values.
+
 # Arguments
 - `operation`: Native operation name, for example `"discover_models"` or `"predict_model"`.
 - `model_key`: Native model identifier, or `nothing` for an operation without a model; defaults to `nothing`.
-- `payload`: JSON-compatible operation-specific dictionary; defaults to an empty `Dict{String,Any}`. Use vectors for arrays even when they contain one value, and `nothing` for JSON null.
+- `payload`: JSON-compatible operation-specific dictionary; defaults to an empty `Dict{String,Any}`. Use vectors for arrays even when they contain one value, and `nothing` for JSON null. Numeric values must satisfy the native operation's finite-value and domain requirements; `missing` is not a substitute for an observed value.
 
 # Returns
-A `Dict{String,Any}` containing the complete successful native envelope, including `result` and any metadata. Successful responses may omit `error`; a non-null error is raised before return. JSON arrays decode as vectors and nulls as `nothing`.
+A `Dict{String,Any}` containing the complete successful native envelope, including `result` and any metadata. Successful responses may omit `error`; a non-null outer error is raised before return. Errors retained inside individual batch or scenario result rows are returned for inspection. JSON arrays decode as vectors and nulls as `nothing`.
 
 # Throws
 `DatasetValidationError` when a native error includes a validation report; `ErrorException` for other native errors, a missing library or a null response allocation. JSON serialization/parsing and dynamic-library loading/symbol errors propagate.
@@ -96,6 +98,7 @@ A `Dict{String,Any}` containing the complete successful native envelope, includi
 ```julia
 using Innovate
 response = kernel_call("discover_models")
+@assert response["schema_version"] == "2.0"
 @assert get(response, "error", nothing) === nothing
 @assert any(model -> model["key"] == "bass", response["result"]["models"])
 ```
@@ -378,6 +381,8 @@ Fit one native model from explicit JSON-compatible observations and options.
 
 Successful execution is not a guarantee of parameter identifiability, global optimality or forecast calibration. Inspect the returned optimizer and diagnostic fields for the selected model.
 
+Time, observations and parameters must use consistent caller-selected units. Observations must represent the model's fitted quantity; the wrapper does not integrate interval counts or difference cumulative totals before fitting.
+
 # Arguments
 - `model`: Model key returned by `kernel_discover_models`, for example `"logistic"`.
 - `payload`: Dictionary with `inputs` containing aligned `time` (or `t`) and `observed` (or `y`). Optional `constructor_kwargs` select the model variant and `fit_options` control initialization, weights and fitting. Multiseries observations use the native model-specific layout.
@@ -408,7 +413,7 @@ kernel_fit_model(model, payload) = kernel_call("fit_model", model, payload)
 
 Evaluate native level and rate predictions from explicit parameters or fitted state.
 
-Levels and rates are different quantities. The output does not supply calibrated prediction intervals merely because a deterministic curve was evaluated.
+Levels and rates are different quantities. Where the model returns derivatives, their units are level units per unit of numeric time; they are instantaneous values, not counts integrated between observation rows. Signed rates can describe declining levels. The output does not supply calibrated prediction intervals merely because a deterministic curve was evaluated.
 
 # Arguments
 - `model`: Native model identifier for the supplied parameters or state.

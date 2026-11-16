@@ -2,12 +2,12 @@
   "counts": {
     "julia_documented_functions": 23,
     "julia_documented_types": 1,
-    "julia_example_assertions": 9,
+    "julia_example_assertions": 10,
     "julia_example_blocks": 7,
     "julia_exported_symbols": 24,
     "r_all_manual_pages": 14,
     "r_documented_functions": 24,
-    "r_example_assertions": 10,
+    "r_example_assertions": 11,
     "r_example_blocks": 6,
     "r_exported_functions": 24,
     "r_manual_pages": 13
@@ -49,6 +49,41 @@
     "status": "configured_pending_execution",
     "workflow": ".github/workflows/ci.yml"
   },
+  "language_conventions": {
+    "julia": {
+      "execution_checker": "scripts/check_julia_documentation.jl",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "argument_names_match_signature": true,
+        "attached_docstrings": true,
+        "explicit_exports_resolve": true,
+        "returns_and_throws_descriptions": true,
+        "reviewed_examples_contain_assertions": true,
+        "signature_and_defaults_match_source": true,
+        "struct_fields_documented": true,
+        "summary_description": true,
+        "unique_sections_and_named_entries": true
+      },
+      "style": "Base.Docs Markdown"
+    },
+    "r": {
+      "execution_checker": "scripts/check_r_documentation.R",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "attached_roxygen_comments": true,
+        "explicit_exports_resolve": true,
+        "rd_aliases_and_usage_match_exports": true,
+        "rd_arguments_and_value_descriptions": true,
+        "rd_signature_defaults_match_source": true,
+        "reviewed_examples_contain_assertions": true,
+        "source_parameters_match_signature": true,
+        "source_return_and_errors_descriptions": true,
+        "summary_description": true,
+        "unique_parameters_return_and_errors": true
+      },
+      "style": "roxygen comments with matching Rd help"
+    }
+  },
   "limitations": [
     "Presence, parameter names and signature/default consistency are structural checks; prose accuracy and scientific quality require review.",
     "This parser does not compile Julia/R, execute documentation examples, load native libraries or qualify numerical behavior.",
@@ -58,13 +93,13 @@
   "native_examples": {
     "julia": [
       {
-        "assertion_count": 2,
-        "code": "using Innovate\nresponse = kernel_call(\"discover_models\")\n@assert get(response, \"error\", nothing) === nothing\n@assert any(model -> model[\"key\"] == \"bass\", response[\"result\"][\"models\"])\n",
-        "code_sha256": "99031215981966d266f692fdafaab9b4914c4a278ebad2afaef5daca81c2f0e9",
+        "assertion_count": 3,
+        "code": "using Innovate\nresponse = kernel_call(\"discover_models\")\n@assert response[\"schema_version\"] == \"2.0\"\n@assert get(response, \"error\", nothing) === nothing\n@assert any(model -> model[\"key\"] == \"bass\", response[\"result\"][\"models\"])\n",
+        "code_sha256": "f28fa54d1620bcbb1ab6d6481d595041f8caa92fa39a116ec115e7d1eaf87dbe",
         "id": "julia:kernel_call:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 96,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 98,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_call"
       },
       {
@@ -73,8 +108,8 @@
         "code_sha256": "e37fe57f914e2d7853a8f4cf34341efc064156565427aae49486c6b04dc86e14",
         "id": "julia:kernel_fit_model:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 392,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 397,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_fit_model"
       },
       {
@@ -83,8 +118,8 @@
         "code_sha256": "fb9bca231f409029a05342cbdf905a20b23397e820dfe0d160d18927e21a4211",
         "id": "julia:kernel_predict_model:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 424,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 429,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_predict_model"
       },
       {
@@ -93,8 +128,8 @@
         "code_sha256": "535fe568ba22c0f1add4030912052def6d537408591f328b41ac43a1ea6c832c",
         "id": "julia:kernel_categorize_adopters:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 539,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 544,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_categorize_adopters"
       },
       {
@@ -103,8 +138,8 @@
         "code_sha256": "6b0826cc7554e3313178e1c8833075e53d7ec10c746212a5996586f6513f5b4c",
         "id": "julia:kernel_cumulative_sum:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 593,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 598,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_cumulative_sum"
       },
       {
@@ -113,8 +148,8 @@
         "code_sha256": "4f82f3a4ed5b4e9ddd2eae128aaeadd02aef50e4613810ce7c88769736256069",
         "id": "julia:kernel_rolling_average:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 618,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 623,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_rolling_average"
       },
       {
@@ -123,8 +158,8 @@
         "code_sha256": "4a8ee6833a8ef509543fd335d7a214f67242751e95609b5cac239d3f5ce08c5c",
         "id": "julia:kernel_aggregate_dates:1",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 645,
-        "source_sha256": "8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+        "source_line": 650,
+        "source_sha256": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
         "symbol": "kernel_aggregate_dates"
       }
     ],
@@ -157,13 +192,13 @@
         "source_sha256": "c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351"
       },
       {
-        "assertion_count": 2,
-        "code": "\ncatalog <- kernel_discover_models()\nstopifnot(any(vapply(catalog$models, function(model) model$key == \"bass\", logical(1))))\nrequest <- '{\"schema_version\":\"2.0\",\"operation\":\"discover_models\",\"payload\":{}}'\nresponse_json <- kernel_call_json(request, raw = TRUE)\nstopifnot(is.character(response_json), length(response_json) == 1L)\n",
-        "code_sha256": "c8fb3d29f5010b29282eeb1c6b5f433d314edb6b3dbaf518e98386298e918c24",
+        "assertion_count": 3,
+        "code": "\ncatalog <- kernel_discover_models()\nstopifnot(any(vapply(catalog$models, function(model) model$key == \"bass\", logical(1))))\nresponse <- kernel_call(\"discover_models\")\nstopifnot(identical(response$schema_version, \"2.0\"), is.null(response$error))\nrequest <- '{\"schema_version\":\"2.0\",\"operation\":\"discover_models\",\"payload\":{}}'\nresponse_json <- kernel_call_json(request, raw = TRUE)\nstopifnot(is.character(response_json), length(response_json) == 1L)\n",
+        "code_sha256": "3b4492918cf628f96ba449231f0a304dc986b0c0636629dc8fc486d35619f58d",
         "id": "r:bindings/r/man/kernel_bridge.Rd:1",
         "source": "bindings/r/man/kernel_bridge.Rd",
-        "source_line": 73,
-        "source_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f"
+        "source_line": 82,
+        "source_sha256": "c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410"
       },
       {
         "assertion_count": 2,
@@ -171,8 +206,8 @@
         "code_sha256": "effedc84cbe9ea27367e89a204534ae5a6bfe7f8c95816c0c300895e771f8cb9",
         "id": "r:bindings/r/man/kernel_models.Rd:1",
         "source": "bindings/r/man/kernel_models.Rd",
-        "source_line": 97,
-        "source_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2"
+        "source_line": 104,
+        "source_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea"
       },
       {
         "assertion_count": 2,
@@ -196,10 +231,10 @@
   "sources": {
     ".github/workflows/ci.yml": "sha256:ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
     "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
-    "bindings/julia/src/Innovate.jl": "sha256:8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
+    "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
     "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",
     "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
-    "bindings/r/R/kernel_bridge.R": "sha256:36292dd1a071422e0fe7406ef03d88eb5c9663c8eca8c1de49dbdb6dea21d560",
+    "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
     "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
     "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
     "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
@@ -207,15 +242,15 @@
     "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
     "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
     "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
-    "bindings/r/man/kernel_bridge.Rd": "sha256:10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
-    "bindings/r/man/kernel_models.Rd": "sha256:d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+    "bindings/r/man/kernel_bridge.Rd": "sha256:c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+    "bindings/r/man/kernel_models.Rd": "sha256:957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
     "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
     "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
     "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
     "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
     "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
     "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
-    "scripts/check_polyglot_api_documentation.py": "sha256:bc9f09f2daae854b549ceff8d874e0f4a596f3d05087e448413c4647848c6980",
+    "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
     "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
   },
   "structural_complete": true,
@@ -245,7 +280,7 @@
         ],
         "signature": "export_ipc_file(input::Vector{UInt8})",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 253
+        "source_line": 256
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -257,7 +292,7 @@
         ],
         "signature": "export_ipc_stream(input::Vector{UInt8})",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 276
+        "source_line": 279
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -271,7 +306,7 @@
         ],
         "signature": "invoke_registered_extension(callback, selection, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 128
+        "source_line": 131
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -285,11 +320,11 @@
         ],
         "signature": "kernel_aggregate_dates(dates, values, frequency)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 652
+        "source_line": 657
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
-        "documentation_sha256": "a98041b5b15656a58acd8ab04272cc47bad2a08f09084a77ccf61c796af94a19",
+        "documentation_sha256": "4541388605a776851aa2ec8abd6653654eb74b6c55414a9861de18779d33b348",
         "kind": "function",
         "name": "kernel_call",
         "parameters": [
@@ -299,7 +334,7 @@
         ],
         "signature": "kernel_call(operation::AbstractString, model_key=nothing, payload=Dict{String,Any}())",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 103
+        "source_line": 106
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -312,7 +347,7 @@
         ],
         "signature": "kernel_categorize_adopters(time, rates)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 546
+        "source_line": 551
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -325,7 +360,7 @@
         ],
         "signature": "kernel_categorize_fitted_adopters(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 566
+        "source_line": 571
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -337,7 +372,7 @@
         ],
         "signature": "kernel_cumulative_sum(values)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 598
+        "source_line": 603
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -350,7 +385,7 @@
         ],
         "signature": "kernel_diagnose_model(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 520
+        "source_line": 525
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -360,7 +395,7 @@
         "parameters": [],
         "signature": "kernel_discover_models()",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 373
+        "source_line": 376
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -374,11 +409,11 @@
         ],
         "signature": "kernel_fit_batch(model, datasets; workers=1)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 449
+        "source_line": 454
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
-        "documentation_sha256": "ec44f300d149e42d06836975841a5b24902b72c6eb432dce5298cfbe9de8c21f",
+        "documentation_sha256": "b1030d7b0f1391c5492344e50a5ab53eb70cd1a53ca713b7a5b13434e50f9811",
         "kind": "function",
         "name": "kernel_fit_model",
         "parameters": [
@@ -387,7 +422,7 @@
         ],
         "signature": "kernel_fit_model(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 405
+        "source_line": 410
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -399,7 +434,7 @@
         ],
         "signature": "kernel_paired_outcomes_ipc(payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 218
+        "source_line": 221
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -413,11 +448,11 @@
         ],
         "signature": "kernel_predict_batch(model, datasets; workers=1)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 466
+        "source_line": 471
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
-        "documentation_sha256": "3da8e62a13c06a35cc86ee3e5dfcd50b3acd3bfe7028b4ee93cc8e82648eb27b",
+        "documentation_sha256": "dacce4e7e2a48e5a7d5ab1ed0cc0ef33e4bbed07a1be9e13ef0e425c9b9d3c74",
         "kind": "function",
         "name": "kernel_predict_model",
         "parameters": [
@@ -426,7 +461,7 @@
         ],
         "signature": "kernel_predict_model(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 432
+        "source_line": 437
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -439,7 +474,7 @@
         ],
         "signature": "kernel_rolling_average(values, window)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 623
+        "source_line": 628
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -454,7 +489,7 @@
         ],
         "signature": "kernel_sarima_fit(values, order; seasonal_order=(0, 0, 0, 0), historical=false)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 715
+        "source_line": 720
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -466,7 +501,7 @@
         ],
         "signature": "kernel_scenario_comparisons_ipc(response)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 200
+        "source_line": 203
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -478,7 +513,7 @@
         ],
         "signature": "kernel_scenario_executions_ipc(response)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 182
+        "source_line": 185
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -491,7 +526,7 @@
         ],
         "signature": "kernel_scenario_grid_ipc(data::Vector{UInt8}, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 160
+        "source_line": 163
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -517,7 +552,7 @@
         ],
         "signature": "kernel_seasonal_decomposition(values, period, trend_span=nothing; robust=false, historical=false, inner_iterations=5, outer_iterations=robust ? 5 : 0, seasonal_span=nothing, low_pass_span=nothing, seasonal_degree=1, seasonal_jump=1, trend_degree=1, trend_jump=1, low_pass_degree=1, low_pass_jump=1)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 685
+        "source_line": 690
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -530,7 +565,7 @@
         ],
         "signature": "kernel_simulate_model(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 484
+        "source_line": 489
       },
       {
         "documentation": "bindings/julia/src/Innovate.jl",
@@ -543,7 +578,7 @@
         ],
         "signature": "kernel_summarize_model(model, payload)",
         "source": "bindings/julia/src/Innovate.jl",
-        "source_line": 502
+        "source_line": 507
       }
     ],
     "r": [
@@ -558,7 +593,7 @@
         "signature": "export_ipc_file(data)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "bfb54bf5734d43a71d7546075228bb86a1e4876063d0c77aed8e547fe68f999a",
-        "source_line": 596
+        "source_line": 614
       },
       {
         "documentation": "bindings/r/man/export_ipc_stream.Rd",
@@ -571,7 +606,7 @@
         "signature": "export_ipc_stream(data)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "124e05627e5bc7b606cc2ab1bb566fdcbca662083466ffa3eda0353635c73c63",
-        "source_line": 613
+        "source_line": 631
       },
       {
         "documentation": "bindings/r/man/invoke_registered_extension.Rd",
@@ -586,7 +621,7 @@
         "signature": "invoke_registered_extension(callback, selection, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "0ca4143a5992ed721425ff2bf940a3b73d04826edad3a14e2d0486dfc59d2ba2",
-        "source_line": 635
+        "source_line": 653
       },
       {
         "documentation": "bindings/r/man/kernel_aggregate_dates.Rd",
@@ -601,12 +636,12 @@
         "signature": "kernel_aggregate_dates(dates, values, frequency)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "fab37b1d2962eb755c942d321b076077f1c07ebc38e5ede8a9f9a4103316b36b",
-        "source_line": 504
+        "source_line": 522
       },
       {
         "documentation": "bindings/r/man/kernel_bridge.Rd",
         "kind": "function",
-        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "manual_sha256": "c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
         "name": "kernel_call",
         "parameters": [
           "operation",
@@ -616,13 +651,13 @@
         ],
         "signature": "kernel_call(operation, model_key = NULL, payload = list(), raw = FALSE)",
         "source": "bindings/r/R/kernel_bridge.R",
-        "source_documentation_sha256": "3d0120bbaf78a1236627896634130dac99da51f6326fb42d56827ea97d358603",
-        "source_line": 43
+        "source_documentation_sha256": "baad63073f787e47e63b2e71a4c694648e24f5464cd52c3326e942298356ad21",
+        "source_line": 49
       },
       {
         "documentation": "bindings/r/man/kernel_bridge.Rd",
         "kind": "function",
-        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "manual_sha256": "c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
         "name": "kernel_call_json",
         "parameters": [
           "request",
@@ -630,8 +665,8 @@
         ],
         "signature": "kernel_call_json(request, raw = FALSE)",
         "source": "bindings/r/R/kernel_bridge.R",
-        "source_documentation_sha256": "2ac258eb439cf5c4e3c76157d263b266c0002201eeedb88bd3bb21ecca6c201c",
-        "source_line": 128
+        "source_documentation_sha256": "bf07b2bfc876c7fa2149fc403cac53ba9e549480ae1b49a5328a44001805c842",
+        "source_line": 139
       },
       {
         "documentation": "bindings/r/man/kernel_adopters.Rd",
@@ -645,7 +680,7 @@
         "signature": "kernel_categorize_adopters(time, rates)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "ca00b9d9d42ba8dd8c81c778055200e36b8716f0f853d27ba5e844d629493cab",
-        "source_line": 423
+        "source_line": 441
       },
       {
         "documentation": "bindings/r/man/kernel_adopters.Rd",
@@ -659,7 +694,7 @@
         "signature": "kernel_categorize_fitted_adopters(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "b2a0946abe6318c777241a16b7da1e045b181d0647c1adfda1e3d04edb5a23e6",
-        "source_line": 441
+        "source_line": 459
       },
       {
         "documentation": "bindings/r/man/kernel_preprocessing.Rd",
@@ -672,12 +707,12 @@
         "signature": "kernel_cumulative_sum(values)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "09cdf3239adc8e95fc1229ae6a0632f427116501037600c8a1552c9d5a45a6c2",
-        "source_line": 463
+        "source_line": 481
       },
       {
         "documentation": "bindings/r/man/kernel_models.Rd",
         "kind": "function",
-        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "manual_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
         "name": "kernel_diagnose_model",
         "parameters": [
           "model_key",
@@ -686,18 +721,18 @@
         "signature": "kernel_diagnose_model(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "90583e1293f85479f6ec5381f9bcc30eaf7ec7e2ef785eeb8b68f1a467cc7d2c",
-        "source_line": 370
+        "source_line": 388
       },
       {
         "documentation": "bindings/r/man/kernel_bridge.Rd",
         "kind": "function",
-        "manual_sha256": "10ee1b2e55e8836e4825b51ea7618ce8e4737ac79cd000ade4ed8299ad629a6f",
+        "manual_sha256": "c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
         "name": "kernel_discover_models",
         "parameters": [],
         "signature": "kernel_discover_models()",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "df1e17c55f4f97d8df51c24c3da8f93bb545b23001ca168f119977c737f1c8c4",
-        "source_line": 283
+        "source_line": 294
       },
       {
         "documentation": "bindings/r/man/kernel_batch.Rd",
@@ -712,12 +747,12 @@
         "signature": "kernel_fit_batch(model_key, datasets, workers = 1L)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "182a1d12dfe63ce34096d9d76cae5c96d03b2b029b2795569355cb2a849c367c",
-        "source_line": 388
+        "source_line": 406
       },
       {
         "documentation": "bindings/r/man/kernel_models.Rd",
         "kind": "function",
-        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "manual_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
         "name": "kernel_fit_model",
         "parameters": [
           "model_key",
@@ -725,8 +760,8 @@
         ],
         "signature": "kernel_fit_model(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
-        "source_documentation_sha256": "dd99ec1bcb86ae45e1f764f49c7dfe8828bf15744b7e56a5b10f75363c0f818f",
-        "source_line": 303
+        "source_documentation_sha256": "c251e2834a4706db9a66657f3e15eff9a734b4620daf973fb978bd0f009364bf",
+        "source_line": 318
       },
       {
         "documentation": "bindings/r/man/kernel_paired_outcomes_ipc.Rd",
@@ -739,7 +774,7 @@
         "signature": "kernel_paired_outcomes_ipc(payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "2f9c4a3fe437253fcb2c122ef560c44fbd7bc62c489d8ad9e5cbd9301c0fd922",
-        "source_line": 220
+        "source_line": 231
       },
       {
         "documentation": "bindings/r/man/kernel_batch.Rd",
@@ -754,12 +789,12 @@
         "signature": "kernel_predict_batch(model_key, datasets, workers = 1L)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "3e727c6e724f8f5a56a31ab0d3ebb229c9cadbb672988cf72a196fd169cf9f23",
-        "source_line": 406
+        "source_line": 424
       },
       {
         "documentation": "bindings/r/man/kernel_models.Rd",
         "kind": "function",
-        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "manual_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
         "name": "kernel_predict_model",
         "parameters": [
           "model_key",
@@ -767,8 +802,8 @@
         ],
         "signature": "kernel_predict_model(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
-        "source_documentation_sha256": "ba2a2cdda3336eb59860fe0f5f344ff586da7c5c82146ac679803b2e44278fd7",
-        "source_line": 321
+        "source_documentation_sha256": "c45217f88167c92e8311293eb1335924666c38e8e668c819598b945025835087",
+        "source_line": 339
       },
       {
         "documentation": "bindings/r/man/kernel_preprocessing.Rd",
@@ -782,7 +817,7 @@
         "signature": "kernel_rolling_average(values, window)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "9142c4d3f98b74cb6cf5b6eb296df300f1d891529a86e67a21f71654824aa133",
-        "source_line": 480
+        "source_line": 498
       },
       {
         "documentation": "bindings/r/man/kernel_sarima_fit.Rd",
@@ -798,7 +833,7 @@
         "signature": "kernel_sarima_fit(values, order, seasonal_order = c(0L, 0L, 0L, 0L), historical = FALSE)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "38089590c0e2098c16ca669fbd91b919758a28e357e177d02587693440c8361c",
-        "source_line": 577
+        "source_line": 595
       },
       {
         "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
@@ -811,7 +846,7 @@
         "signature": "kernel_scenario_comparisons_ipc(response)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "6b5bac89155cb2e119aa9efdf762f84cf0d2bb1e97af42f095b499d3dcf8c545",
-        "source_line": 199
+        "source_line": 210
       },
       {
         "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
@@ -824,7 +859,7 @@
         "signature": "kernel_scenario_executions_ipc(response)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "fd2a67fb7eb8bae62e0625a02f397d918e815a872db7df2003b95aa6420c7647",
-        "source_line": 180
+        "source_line": 191
       },
       {
         "documentation": "bindings/r/man/kernel_scenario_ipc.Rd",
@@ -838,7 +873,7 @@
         "signature": "kernel_scenario_grid_ipc(data, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "1bc764291b2fbee4049397da6672493bfc1987a9840503fc7c65946b6bf6768f",
-        "source_line": 161
+        "source_line": 172
       },
       {
         "documentation": "bindings/r/man/kernel_seasonal_decomposition.Rd",
@@ -865,12 +900,12 @@
         "signature": "kernel_seasonal_decomposition(values, period, trend_span = NULL, robust = FALSE, historical = FALSE, inner_iterations = 5L, outer_iterations = if (isTRUE(robust)) 5L else 0L, seasonal_span = NULL, low_pass_span = NULL, seasonal_degree = 1L, seasonal_jump = 1L, trend_degree = 1L, trend_jump = 1L, low_pass_degree = 1L, low_pass_jump = 1L)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "cee8d68c194cadd6bcee569a8e376ecdda81eb7d43c94df10e0d1134a036f0a8",
-        "source_line": 544
+        "source_line": 562
       },
       {
         "documentation": "bindings/r/man/kernel_models.Rd",
         "kind": "function",
-        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "manual_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
         "name": "kernel_simulate_model",
         "parameters": [
           "model_key",
@@ -879,12 +914,12 @@
         "signature": "kernel_simulate_model(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "cac8147c0958352dd5a2e1f03dd085d8fb75b3413471dbde46b934b24db13b50",
-        "source_line": 339
+        "source_line": 357
       },
       {
         "documentation": "bindings/r/man/kernel_models.Rd",
         "kind": "function",
-        "manual_sha256": "d76caa17e75f6468877cb304be824d685b278b4cf37f4f138eaeb35a63d70de2",
+        "manual_sha256": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
         "name": "kernel_summarize_model",
         "parameters": [
           "model_key",
@@ -893,7 +928,7 @@
         "signature": "kernel_summarize_model(model_key, payload)",
         "source": "bindings/r/R/kernel_bridge.R",
         "source_documentation_sha256": "d31eaef2dd2b20654d953c6f66f67d4a04ed7d66a34378a4fa2c600b5197da07",
-        "source_line": 355
+        "source_line": 373
       }
     ]
   }

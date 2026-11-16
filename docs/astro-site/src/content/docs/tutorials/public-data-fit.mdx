@@ -1,0 +1,119 @@
+---
+title: Fit and challenge a forecast with public data
+description: Fit native Logistic and Gompertz curves to public Internet-use observations, preserve missing years and compare a retrospective calendar holdout with a simple baseline.
+---
+
+import { Code, Steps } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_public_data.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This lesson fits two descriptive curves to Australian Internet-use observations
+from the International Telecommunication Union (ITU), distributed through the
+World Bank's World Development Indicators. It takes you from a frozen public
+dataset through native fitting, prediction and a comparison with a persistence
+baseline. The example runs offline after installation.
+
+## Learning outcomes
+
+You will define the observed quantity and its units, check a dataset's identity,
+retain real calendar time when observations are missing, fit two models using
+only a training period, and score predictions on later years. You will also
+explain why a converged fit can perform worse than a simple baseline.
+
+## Prerequisites
+
+Use the [development installation](/innovate/user-guide/installation/) with the
+supported native extension and Polars. Read the
+[first prediction example](/innovate/user-guide/getting-started/) if the table
+interface is new to you. No account or external data service is needed to run
+this lesson: its attributed extract is committed with the example.
+
+**Observation definition:** `IT.NET.USER.ZS` is the annual percentage of people
+who used the Internet in the preceding three months. It measures recent use,
+not cumulative first adoption or a count of new adopters. The
+[World Bank metadata](https://databank.worldbank.org/metadataglossary/world-development-indicators/series/IT.NET.USER.ZS)
+identifies ITU as the source and specifies CC BY 4.0. Attribute ITU and World Bank
+when reusing the extract; its manifest includes the licence link.
+
+## Steps
+
+<Steps>
+
+1. **Inspect the frozen extract.** The directory
+   `docs/datasets/wdi-aus-internet-20261116` contains the original API response,
+   a derived CSV and a manifest with source URL, retrieval date, revision,
+   attribution, transformation and SHA-256 hashes. The response contains 36
+   calendar years from 1990 through 2025; 32 have observations.
+
+2. **Preserve time and missingness.** The CSV keeps 2002–2004 and 2025 missing.
+   Fitting excludes those rows, while `time = year - 1990` retains the elapsed
+   years. Missing use is not zero use. The example never sums percentages,
+   interpolates observations or compresses the calendar.
+
+3. **Run the checked comparison from the repository root.** Training ends in
+   2015. The example fits native Logistic and Gompertz models to 23 observations,
+   then predicts the nine observed years from 2016 through 2024. The persistence
+   baseline predicts the final training observation for every holdout year.
+
+   ```sh
+   uv run --locked python examples/native_public_data.py
+   ```
+
+4. **Inspect diagnostics and later-year errors.** The script requires successful
+   numerical termination and checks preserved year identity and finite outputs.
+   It calculates MAE, RMSE and signed prediction bias directly from held-out
+   residuals. These errors are in percentage points, not relative percentages.
+   No test observation is supplied to either fit or the baseline.
+
+</Steps>
+
+The complete canonical source is included below. The
+[marimo companion](/innovate/tutorials/marimo/) calls its `run_comparison`
+function, so the interactive path shares the same calculation.
+
+<Code code={exampleSource} lang="python" title="examples/native_public_data.py" />
+
+## Expected results
+
+With the default cutoff and frozen extract, successful checks print:
+
+<Code code={contentQuality.examples['examples/native_public_data.py'].expected_stdout} lang="json" />
+
+Both native fits converge, but the baseline has the smallest later-year MAE.
+The checks deliberately preserve this result. They do not require a more
+elaborate model to outperform the data's actual baseline.
+
+## Interpretation
+
+This is a **retrospective calendar holdout using the November 2026 data
+vintage**. It is not an as-of-2015 real-time backtest: historical observations
+may have been revised after that date. The frozen extract makes this particular
+exercise reproducible, while a real forecasting study also needs the data
+vintage that would have been available at each forecast origin.
+
+The curves estimate a descriptive saturation shape. They do not identify why
+Internet use changed or establish a causal diffusion mechanism. In this split,
+the fitted curves settle below later observations. A high training fit statistic
+or local numerical convergence would therefore be a poor substitute for the
+later-year comparison.
+
+**Reader exercise:** inspect the notebook's predictions, then change the cutoff
+to 2018. Which model's error changes most? Explain why choosing a cutoff or model
+after viewing these results makes the exercise exploratory. A final assessment
+needs an untouched evaluation period or a prespecified rolling-origin design.
+
+## Limitations
+
+One country, one indicator and one historical split do not establish broad model
+performance. Survey definitions, reporting differences and revisions can affect
+the observations. This lesson uses no measurement-error model, observation
+weights or prediction intervals; convergence does not establish identifiability,
+global optimality or calibrated uncertainty. A fitted asymptote is an estimate,
+not an externally established population ceiling.
+
+The manifest's checksums detect changed files against the recorded extract.
+They do not authenticate a provider, prove the licence independently or freeze
+the upstream service. New data should receive a separately reviewed snapshot,
+with the changes and transformation recorded. Continue with
+[dataset integrity](/innovate/tutorials/data-ingestion-provenance/) or the
+[model atlas](/innovate/models/) to choose another supported task.

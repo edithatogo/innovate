@@ -1,10 +1,11 @@
 import path from 'node:path';
-import { budgets, darkEntryRoutes, loadInventory, measureArtifact, siteRoot } from '../../scripts/browser-contract.mjs';
+import { budgets, darkEntryRoutes, loadInventory, measureArtifact, retirementEntryRoutes, siteRoot } from '../../scripts/browser-contract.mjs';
 import { test, expect, openPage, assertNoOverflow, assertTableKeyboardScroll, scanAccessibility, assertTransferBudget, attachJson, focusWithTab, showMobileMenu } from './support.mjs';
 
 const inventory = loadInventory();
 const currentRoutes = new Set(inventory.pages.map((entry) => entry.route));
 const historicalRoutes = new Set(inventory.historical.map((entry) => entry.route));
+const retiredRoutes = new Set(inventory.retired.map((entry) => entry.route));
 
 for (const entry of inventory.pages) {
   test(`current page: ${entry.route}`, async ({ page, runtime }, testInfo) => {
@@ -110,47 +111,70 @@ for (const { query, expectedRoute } of [
   });
 }
 
-test('current navigation and archived version labels', async ({ page, isMobile }, testInfo) => {
-  // Both API versions have sidebars; the archived home is a splash page.
+test('current navigation and retirement boundaries', async ({ page, isMobile, runtime }, testInfo) => {
   await openPage(page, '/innovate/api/python/');
   await showMobileMenu(page, isMobile);
   const sidebar = page.locator('nav.sidebar');
   await expect(sidebar.locator('a[href="/innovate/user-guide/getting-started/"]')).toHaveAccessibleName(/Quickstart/u);
   await expect(sidebar.locator('a[href="/innovate/api/python/"]')).toHaveAccessibleName(/Python API/u);
+  await expect(sidebar.locator('a[href="/innovate/models/"]')).toHaveAccessibleName('Model atlas');
   const navigation = await sidebar.locator('.top-level a[href]').evaluateAll((links) => links.map((link) => ({
     route: new URL(link.href).pathname,
     group: link.closest('details')?.querySelector(':scope > summary .large')?.textContent.trim() ?? '',
   })));
   await attachJson(testInfo, 'primary-navigation', navigation);
-  expect(navigation.filter((entry) => historicalRoutes.has(entry.route)), 'Historical pages must be reached through the historical map, not mixed into primary navigation').toEqual([]);
+  expect(navigation.filter((entry) => historicalRoutes.has(entry.route) || retiredRoutes.has(entry.route)), 'Retired or historical routes must not appear in primary navigation').toEqual([]);
+  expect(navigation.filter((entry) => !currentRoutes.has(entry.route)), 'Primary navigation must use classified current pages').toEqual([]);
   const requiredGroups = {
-    'User Guide': ['/innovate/core/', '/innovate/user-guide/fitting/', '/innovate/user-guide/forecasting/', '/innovate/user-guide/backends/'],
+    'User Guide': ['/innovate/core/', '/innovate/models/', '/innovate/user-guide/fitting/', '/innovate/user-guide/forecasting/', '/innovate/user-guide/backends/'],
     'Tutorials': ['/innovate/tutorials/', '/innovate/tutorials/scenario-experiment-workflows/', '/innovate/tutorials/norton-bass/', '/innovate/tutorials/bayesian-fitter/', '/innovate/tutorials/counterfactual-analysis/', '/innovate/tutorials/arrow-interchange/', '/innovate/tutorials/data-ingestion-provenance/'],
     'API Reference': ['/innovate/api/python/', '/innovate/api/generated/julia/', '/innovate/api/generated/r/', '/innovate/bindings/', '/innovate/core/kernel/', '/innovate/core/arrow-interchange/'],
-    'Historical Reference': ['/innovate/historical-documentation/'],
+    'Migration': ['/innovate/historical-documentation/'],
   };
   for (const [group, routes] of Object.entries(requiredGroups)) {
     for (const route of routes) {
       expect(navigation.filter((entry) => entry.route === route), `${route} must appear once under ${group}`).toEqual([{ route, group }]);
     }
   }
-  const version = page.locator('starlight-version-select select:visible').first();
-  await expect(version.locator('option:checked')).toHaveText('0.7 Development');
-  await expect(version.locator('option')).toHaveText(['0.7 Development', '0.6 Reference']);
-  if (isMobile) await scanAccessibility(page, testInfo, 'light-mobile-menu');
-  await version.selectOption({ label: '0.6 Reference' });
-  await expect(page).toHaveURL((url) => url.pathname === '/innovate/latest/api/python/');
-  await expect(page.getByRole('main')).toContainText('0.6 Reference');
+  await expect(page.locator('starlight-version-select')).toHaveCount(0);
+  await expect(page.getByRole('combobox', { name: /version/iu })).toHaveCount(0);
   await assertNoOverflow(page);
-  await showMobileMenu(page, isMobile);
-  const archived = page.locator('starlight-version-select select:visible').first();
-  await expect(archived.locator('option:checked')).toHaveText('0.6 Reference');
-  await archived.selectOption({ label: '0.7 Development' });
-  await expect(page).toHaveURL((url) => url.pathname === '/innovate/api/python/');
-  await openPage(page, '/innovate/migration/');
-  await expect(page.getByRole('main')).toContainText('Pre-0.7 reference');
-  await expect(page.getByRole('main').getByRole('link', { name: 'native migration guide', exact: true })).toHaveAttribute('href', '/innovate/native-migration/');
+  await scanAccessibility(page, testInfo, 'primary-navigation');
+  await assertTransferBudget(runtime, testInfo);
 });
+
+for (const route of retirementEntryRoutes) {
+  const entry = inventory.retired.find((retired) => retired.route === route);
+  test(`retired page: ${route}`, async ({ page, runtime }, testInfo) => {
+    await openPage(page, route);
+    const main = page.getByRole('main');
+    const notice = main.locator('[data-retired-source]');
+    await expect(page.locator('h1')).toHaveText(/^Retired: /u);
+    await expect(notice).toHaveCount(1);
+    await expect(notice).toHaveAttribute('data-retired-source', entry.source);
+    await expect(notice).toHaveAccessibleName('Documentation retirement');
+    await expect(notice).toContainText('This documentation has been retired.');
+    await expect(notice.getByRole('link', { name: 'Continue to current guidance', exact: true })).toHaveAttribute('href', entry.replacement);
+    await expect(notice.getByRole('link', { name: 'read the exact historical source in Git', exact: true })).toHaveAttribute('href', entry.history_url);
+    await expect(notice.getByRole('link', { name: 'documentation migration guide', exact: true })).toHaveAttribute('href', '/innovate/historical-documentation/');
+    await expect(main.locator('pre, code')).toHaveCount(0);
+    await expect(page.locator('starlight-version-select')).toHaveCount(0);
+    await expect(page.getByRole('combobox', { name: /version/iu })).toHaveCount(0);
+    await expect(page.locator('[data-pagefind-body]')).toHaveCount(0);
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+    await assertNoOverflow(page);
+    await scanAccessibility(page, testInfo, 'retired-page');
+    await assertTransferBudget(runtime, testInfo);
+    await attachJson(testInfo, 'retirement-page', {
+      ...entry,
+      code_elements: await main.locator('pre, code').count(),
+      version_selectors: await page.locator('starlight-version-select').count(),
+      pagefind_bodies: await page.locator('[data-pagefind-body]').count(),
+      robots: await page.locator('meta[name="robots"]').getAttribute('content'),
+    });
+  });
+}
 
 test('deterministic artifact budgets', async ({}, testInfo) => {
   const measurement = measureArtifact(path.join(siteRoot, 'dist'), inventory.sitePolicy.max_html_bytes);

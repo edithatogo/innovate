@@ -1,0 +1,165 @@
+---
+title: Separate network demand from completed adoption
+description: Trace spread through a three-agent network, compare a disconnected graph, and verify FIFO service and resource accounting independently.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_network.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+An agent's demand for adoption and its completed adoption can occur at different
+times. This tutorial separates those events using a small network with one
+service slot. It first checks graph-mediated spread, then uses a separate queue
+fixture to verify service completion and resource accounting. Both fixtures
+are synthetic.
+
+## Learning outcomes
+
+You will distinguish local network exposure from population adoption share,
+explain why pending agents do not transmit, and compare connected and
+disconnected graphs. You will reconstruct FIFO completion times with a simple
+independent recurrence and interpret the denominator of resource utilization.
+
+## Prerequisites
+
+Use the [native development environment](/innovate/user-guide/installation/) and
+read [the seeded Bass simulation tutorial](/innovate/tutorials/kairos-simulation/).
+You need basic Python mappings and the distinction between a rate and a waiting
+time. The example downloads no graph or empirical dataset.
+
+The call uses model key `bass` and engine `kairos_network`. The engine introduces
+the graph, agent states and service resource; choosing a host language does not
+select those mechanisms. The two fixtures deliberately isolate different
+contracts:
+
+| Fixture | Demand mechanism | Initial adoption | Service configuration |
+| --- | --- | --- | --- |
+| Three-agent chain | `p=0`, `q=3`; edges `[0,1]` and `[1,2]` | Agent 0 is already adopted | One slot, five ticks per service |
+| Queue accounting | `p=1e12`, `q=0`; no edges | No initial adopters | The same one-slot, five-tick resource |
+
+Edges are undirected here because the request does not enable directed mode.
+Agent indices are zero-based. `ticks_per_unit=1` makes one tick equal one
+synthetic time unit; `service_ticks=5` therefore lasts five such units. The
+innovation and imitation coefficients have inverse-time units. Both fixtures
+set `population=3` and `m=3`, so counts and scaled levels coincide numerically.
+
+## Steps
+
+1. Run the checked example from the repository root:
+
+   ```sh
+   .venv-native/bin/python -I examples/native_network.py
+   ```
+
+2. Follow the chain's requests and completions. Verify that agent 2 requests
+   adoption only after agent 1 completes its adoption.
+3. Remove all edges while leaving the chain fixture's zero innovation rate and
+   initial adopter unchanged. Check that no further requests or completions occur.
+4. In the separate high-innovation fixture, reconstruct each service start and
+   completion from the request times, then check the resource-accounting totals.
+
+<Code code={exampleSource} lang="python" title="examples/native_network.py" />
+
+The script repeats the original chain request to check same-runtime replay. It
+also supplies an invalid self-loop and requires a native `invalid_request`
+error. The [network implementation](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/network.rs)
+defines the graph validation, local exposure and completion semantics described
+below.
+
+## Expected results
+
+The script prints this output after its assertions pass:
+
+<Code code={contentQuality.examples['examples/native_network.py'].expected_stdout} lang="json" />
+
+The chain begins with one adopted agent and reaches all three by the sampled
+time 20. The disconnected graph remains at its initial count of one. In the
+separate queue fixture, the three completion ticks are 6, 11 and 16; its sampled
+counts are `[0, 0, 3]` at times `[0, 5, 20]`. Pending demand is excluded from
+those adoption counts.
+
+## Interpretation
+
+### Use the local exposure denominator
+
+For the unweighted, homogeneous network in this fixture, a susceptible agent's
+request hazard is `p + q * (adopted neighbors / degree)`. An agent with no
+neighbors has zero imitation contribution. The denominator is that agent's
+degree, not the whole population of three. This differs from the homogeneous
+population process, which uses the population share `n/N`.
+
+At the start, agent 1 has two neighbors, of whom only agent 0 is adopted. Its
+hazard is therefore `0 + 3 * (1/2) = 1.5` per time unit. Agent 2 has one
+neighbor, agent 1, which has not adopted, so its initial hazard is zero. A
+queued or in-service agent still does not transmit. Once agent 1 completes,
+agent 2's adopted-neighbor fraction becomes one and its hazard becomes three.
+The script verifies the ordering of those events, not just the final count.
+
+With all edges removed and `p=0`, there is neither innovation nor local
+imitation. The initial adopter remains, but no new request can start. This
+comparison isolates a mechanism supplied in the simulation; it is not an
+estimated effect of social contact in an observed population.
+
+### Count service time independently
+
+In the queue fixture, a very high innovation rate makes the scheduler's minimum
+one-tick waiting delay visible. It is a test input rather than a calibrated
+adoption coefficient. All three requests must pass through the single slot.
+For each request, the independent FIFO calculation is:
+
+`start = max(request_tick, previous_completion_tick)`
+
+`completion = start + service_ticks`
+
+The observed completion sequence implies these service intervals:
+
+| Completion order | Service starts | Service completes | Occupied slot-ticks |
+| --- | --- | --- | --- |
+| First | 1 | 6 | 5 |
+| Second | 6 | 11 | 5 |
+| Third | 11 | 16 | 5 |
+
+Through time 20, this resource provides `20 * 1 = 20` configured slot-ticks,
+of which 15 are occupied and five idle. Its utilization over that horizon is
+`15/20 = 0.75`. The final adoption fraction is `3/3 = 1`. These have different
+denominators and answer different questions: service occupancy over time and
+adoption status at the endpoint. Neither is a probability that an individual
+will request service.
+
+The script separately checks admitted waiting time, peak simultaneous service,
+configured capacity, and zero over-capacity slot-ticks. Counts include adopted
+agents; the service metrics account for the resource used to reach that state.
+
+## Check your understanding
+
+1. Why does agent 1's initial imitation hazard use `1/2` rather than `1/3`?
+2. If agent 1 has requested service but is still waiting, can it enable agent 2
+   to request through imitation in this fixture?
+3. Why can the queue fixture have 100% final adoption but 75% resource utilization?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. One of agent 1's two neighbors is adopted. The local exposure denominator is
+   its degree; the total number of agents is not used in that fraction.
+2. No. The network engine counts an agent as adopted, and able to transmit,
+   only after service completion. The initial adopter is already in that state.
+3. All three agents have completed by time 16, giving an adoption fraction of
+   one at time 20. The resource was occupied for only 15 of the 20 available
+   slot-ticks across the observation horizon.
+
+</details>
+
+## Limitations
+
+This small unweighted, undirected graph and one-slot queue do not qualify every
+network option, priority policy, abandonment rule or time-varying graph. The
+FIFO recurrence relies on the equal-priority, fixed-service, single-slot
+configuration used here. A different configuration needs its own oracle.
+
+One seed tests replay and concrete invariants, not the distribution of outcomes
+across repeated simulations. The graph and coefficients are assumed, and the
+large innovation coefficient in the queue test is deliberately artificial.
+The example does not infer a network, estimate contagion, measure causal peer
+effects or validate real service demand. Preserve engine, graph order, rates,
+initial state, time resolution and runtime identity when recording an experiment.

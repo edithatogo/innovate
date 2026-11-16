@@ -1,0 +1,71 @@
+---
+title: Model atlas
+description: Compare the native model keys, declared variants and simulation semantics before choosing a learning route.
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+import ModelCatalogue from '../../../components/ModelCatalogue.astro';
+
+Use this atlas to identify a model family and the names used by the native API.
+The cards combine a short reading guide with metadata generated directly from
+the Rust discovery contract. Start with the [quickstart](/innovate/user-guide/getting-started/)
+to learn the table boundary, then use the [tutorial chooser](/innovate/tutorials/)
+to find a worked task.
+
+## Choose the scientific question first
+
+<CardGrid>
+  <Card title="A level or a share over time">
+    Bass, Logistic, Gompertz and Fisher–Pry offer different trajectory shapes and
+    parameter interpretations. State the measured quantity and units before
+    comparing their predictions.
+  </Card>
+  <Card title="Generations and interacting products">
+    Norton–Bass, Lotka–Volterra, multi-product competition, complementary goods
+    and lock-in expose different interaction conventions. Read the variant
+    definition before interpreting a change in one component.
+  </Card>
+  <Card title="A model wrapped around another path">
+    Policy hazard, latent process, regime switching, hierarchical and mixture
+    models add different structure. Their names do not establish an inferential
+    method, calibrated uncertainty or a causal interpretation.
+  </Card>
+  <Card title="Dynamics and simulation engines">
+    Composite ODE trajectories, deterministic network diffusion and Bass Kairos
+    simulation are distinct interfaces. A model key, an engine and an output
+    quantity are separate choices.
+  </Card>
+</CardGrid>
+
+## Read the capability metadata carefully
+
+<Aside type="caution" title="Advertised metadata is a starting point">
+  Discovery lists describe advertised capabilities. They are not results from
+  an execution or scientific review, and independent lists of models, variants,
+  engines and operations do not establish support for every combination.
+  In particular, a family-level rate flag does not resolve the behavior of a
+  specific variant and quantity. Check the [native conventions](/innovate/native-migration/)
+  and the relevant executable example before using that combination.
+</Aside>
+
+An absent variant list entry means that discovery declares no named variant;
+it does not define an extra `default` variant. The key `network_diffusion`
+describes a deterministic spillover model and is separate from the
+`kairos_network` engine advertised for `bass`.
+
+## Browse the current source inventory
+
+<ModelCatalogue />
+
+## Turn a model choice into an analysis
+
+Read the [fitting guide](/innovate/user-guide/fitting/) for estimation and
+diagnostics, and [prediction and forecasting](/innovate/user-guide/forecasting/)
+for levels, rates and time units. A runnable synthetic example checks its
+declared identities and failure behavior; empirical fit and scientific
+interpretation require evidence for the data and question at hand.
+
+The inventory is built from
+[`discovery.json`](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/discovery.json).
+The [documentation quality guide](/innovate/maintainers/documentation-quality/)
+explains how source, execution and scientific-review evidence are distinguished.

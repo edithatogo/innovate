@@ -1,6 +1,10 @@
 import { defineConfig } from '@playwright/test';
 import { browserOrigin, siteRoot } from './scripts/browser-contract.mjs';
 
+// Local diagnosis may explicitly select an installed browser. CI leaves this
+// unset and uses the browser supplied for the pinned Playwright package.
+const executablePath = process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE;
+
 export default defineConfig({
   testDir: './tests/browser',
   testMatch: '**/*.spec.mjs',
@@ -21,6 +25,7 @@ export default defineConfig({
   use: {
     baseURL: `${browserOrigin}/innovate/`,
     browserName: 'chromium',
+    ...(executablePath ? { launchOptions: { executablePath } } : {}),
     locale: 'en-AU',
     timezoneId: 'UTC',
     colorScheme: 'light',

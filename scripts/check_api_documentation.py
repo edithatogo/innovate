@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -22,6 +23,40 @@ CONTRACT_PATH = ROOT / "docs/contracts/api-documentation.json"
 CALLABLES = (ast.FunctionDef, ast.AsyncFunctionDef)
 DEFINITIONS = (*CALLABLES, ast.ClassDef)
 SECTION_ALIASES = {"args": "parameters", "arguments": "parameters", "yields": "returns"}
+LANGUAGE_CONVENTIONS = {
+    "python": {
+        "style": "PEP 257 with Google sections",
+        "accepted_section_styles": ["google", "numpy"],
+        "source_checker": "scripts/check_api_documentation.py",
+        "structurally_enforced": {
+            "summary_description": True,
+            "parameter_names_match_signature": True,
+            "returns_when_applicable": True,
+            "raises_description": True,
+            "direct_raises_documented": True,
+            "public_annotated_attributes_documented": True,
+            "unique_sections": True,
+            "unique_parameter_error_attribute_entries": True,
+            "explicit_exports_resolve": True,
+        },
+        "execution_checker": "scripts/check_native_documentation.py",
+    },
+    "rust": {
+        "style": "rustdoc Markdown",
+        "compiler_lints": [
+            "missing_docs",
+            "rustdoc::broken_intra_doc_links",
+            "rustdoc::invalid_codeblock_attributes",
+        ],
+        "doctest_command": "cargo test --workspace --doc --locked",
+        "review_requirements": {
+            "Errors": "Fallible operations describe error cases and their returned representation.",
+            "Safety": "Unsafe APIs describe caller preconditions, lifetimes and ownership.",
+            "Panics": "APIs with caller-reachable panics describe their conditions.",
+        },
+        "qualified_by_python_audit": False,
+    },
+}
 INVENTORY_ERRORS = {
     "missing_source_root",
     "empty_source_root",
@@ -39,6 +74,30 @@ def default_contract() -> dict[str, Any]:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
 
+def language_conventions() -> dict[str, Any]:
+    """Share Julia/R parser requirements without loading either binding."""
+    path = Path(__file__).with_name("check_polyglot_api_documentation.py")
+    spec = importlib.util.spec_from_file_location("innovate_polyglot_doc_conventions", path)
+    checker = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(checker)
+    return {**LANGUAGE_CONVENTIONS, **checker.LANGUAGE_CONVENTIONS}
+
+
+def _same_policy(actual: Any, expected: Any) -> bool:
+    """Compare policy values without treating integer 1/0 as boolean rules."""
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, dict):
+        return actual.keys() == expected.keys() and all(
+            _same_policy(actual[key], value) for key, value in expected.items()
+        )
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(
+            _same_policy(left, right) for left, right in zip(actual, expected, strict=True)
+        )
+    return actual == expected
+
+
 def _digest(node: ast.AST) -> str:
     """Hash syntax without line offsets so formatting cannot invalidate evidence."""
     return hashlib.sha256(ast.dump(node, include_attributes=False).encode()).hexdigest()
@@ -54,8 +113,8 @@ def _substantive(value: str) -> bool:
     )
 
 
-def _sections(doc: str) -> dict[str, tuple[str, str]]:
-    """Extract Google or NumPy sections, ending at every recognized heading."""
+def _section_records(doc: str) -> list[tuple[str, str, str]]:
+    """Retain every Google/NumPy section so aliases cannot hide duplicates."""
     lines = doc.splitlines()
     headings: list[tuple[int, int, str, str]] = []
     for index, line in enumerate(lines):
@@ -68,41 +127,70 @@ def _sections(doc: str) -> dict[str, tuple[str, str]]:
             and re.fullmatch(r"-{3,}", lines[index + 1].strip())
         ):
             headings.append((index, index + 2, line.lower(), "numpy"))
-    result = {}
+    result = []
     for position, (_, start, name, style) in enumerate(headings):
         end = headings[position + 1][0] if position + 1 < len(headings) else len(lines)
         name = SECTION_ALIASES.get(name, name)
-        result[name] = (style, textwrap.dedent("\n".join(lines[start:end])).strip("\n"))
+        result.append((name, style, textwrap.dedent("\n".join(lines[start:end])).strip("\n")))
     return result
 
 
-def _entries(section: tuple[str, str] | None) -> dict[str, str]:
-    """Read documented names and their descriptions from a structured section."""
+def _sections(doc: str) -> dict[str, tuple[str, str]]:
+    """Expose sections to consumers; audits separately reject ambiguous records."""
+    return {name: (style, body) for name, style, body in _section_records(doc)}
+
+
+def _entry_records(section: tuple[str, str] | None) -> list[tuple[str, str]]:
+    """Retain each named entry, including repeated names in grouped headers."""
     if section is None:
-        return {}
+        return []
     style, body = section
-    entries: dict[str, list[str]] = {}
+    entries: list[tuple[str, str]] = []
     active: list[str] = []
+    parts: list[str] = []
     for line in body.splitlines():
         if not line.strip():
             continue
         if line == line.lstrip():
+            entries.extend((name, " ".join(parts).strip()) for name in active)
+            active = []
+            parts = []
             if style == "google":
                 match = re.fullmatch(r"([*\w., ]+)(?:\s*\([^:]*\))?\s*:\s*(.*)", line)
                 if not match:
-                    active = []
                     continue
                 names, description = match.groups()
             else:
                 names = line.partition(":")[0].strip()
                 description = ""
             active = [name.strip().lstrip("*") for name in names.split(",")]
-            for name in active:
-                entries[name] = [description]
+            parts = [description]
         else:
-            for name in active:
-                entries[name].append(line.strip())
-    return {name: " ".join(parts).strip() for name, parts in entries.items()}
+            parts.append(line.strip())
+    entries.extend((name, " ".join(parts).strip()) for name in active)
+    return entries
+
+
+def _entries(section: tuple[str, str] | None) -> dict[str, str]:
+    """Expose named descriptions after preserving duplicates for audit checks."""
+    return dict(_entry_records(section))
+
+
+def _docstring_issues(doc: str) -> list[tuple[str, str]]:
+    """Reject competing contracts instead of selecting the last occurrence."""
+    issues = []
+    seen_sections = set()
+    for name, style, body in _section_records(doc):
+        if name in seen_sections:
+            issues.append(("duplicate_docstring_section", name))
+        seen_sections.add(name)
+        if name in {"parameters", "raises", "attributes"}:
+            seen_entries = set()
+            for entry, _ in _entry_records((style, body)):
+                if entry in seen_entries:
+                    issues.append(("duplicate_docstring_entry", f"{name}:{entry}"))
+                seen_entries.add(entry)
+    return issues
 
 
 def _has_description(section: tuple[str, str] | None) -> bool:
@@ -174,6 +262,10 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         for name in ("parameters", "returns", "raises", "attributes", "unresolved_exports_fail")
     ):
         raise ValueError("the v1 public documentation rules cannot be disabled")
+    if not _same_policy(contract.get("language_conventions"), language_conventions()):
+        raise ValueError(
+            "the language conventions must match their implemented checkers and separate Rust review gates"
+        )
 
 
 def audit(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
@@ -216,6 +308,8 @@ def audit(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
             gap(symbol, "missing_docstring")
         elif not _substantive(doc.split("\n\n")[0]):
             gap(symbol, "placeholder_docstring")
+        for rule, detail in _docstring_issues(doc):
+            gap(symbol, rule, detail)
         sections = _sections(doc)
         if exposure == "public" and isinstance(node, CALLABLES):
             parameters = [argument.arg for argument in (*node.args.posonlyargs, *node.args.args, *node.args.kwonlyargs)]
@@ -328,6 +422,7 @@ def audit(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
         "inventory_valid": inventory_valid,
         "python_complete": inventory_valid and not gaps,
         "rust_status": "not_executed",
+        "language_conventions": contract["language_conventions"],
         "complete": False,
         "qualification": (
             "Structural Python documentation only; Rust, executable examples "

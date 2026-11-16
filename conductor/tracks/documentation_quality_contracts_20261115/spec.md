@@ -1,6 +1,6 @@
 # Specification: documentation as an executable product contract
 
-## Direction and observed starting point
+## Historical direction and starting point — 15 November 2026
 
 The maintainer requested Astro, complete docstrings and exceptional documentation,
 examples and tutorials on 15 November 2026 (Australia/Brisbane). At inspected main
@@ -13,6 +13,21 @@ security, registry and ecosystem work.
 The current quickstart uses removed Python APIs and pandas; the maintained API
 uses Rust and Polars. The examples validator delegates to the scientific release
 gate without executing examples. Historical JSON reports cannot qualify this build.
+
+## Current planning extension — 16 November 2026
+
+Dylan requested assessment and incorporation of marimo notebooks, maximal useful
+Astro features, and adequate beginner-to-advanced tutorial coverage with public
+datasets. The [learning programme](learning-plan-20261116.md) and its linked
+coverage, design and dataset records are the current specification extension.
+The earlier Sphinx and removed-quickstart observations above describe the starting
+point; the current site is Astro with source-bound native examples.
+
+At inspected main 06b16671b654b4e51f158bf7d605c4286f156755, the maintained content
+contract has eight tutorial pages using six distinct example sources, ten native
+Python examples overall, and no registered public-dataset case. Notebook support,
+the expanded curriculum and the proposed Astro enhancements are not implemented
+by this planning revision. Existing documentation and integration ownership remain.
 
 ## Required outcomes
 
@@ -27,7 +42,10 @@ gate without executing examples. Historical JSON reports cannot qualify this bui
    historical and generated surfaces explicitly. Report the denominator and gaps.
 4. Tutorials specify learning outcomes, prerequisites, executable steps, expected
    results, interpretation and limitations. Display the actual checked example
-   source. Examples use synthetic data and assert independent results and failures.
+   source. Synthetic examples assert independent results and failures. Public-data
+   tutorials are additionally required by the 16 November extension, with explicit
+   dataset admission, attribution, frozen inputs and study-specific interpretation;
+   they supplement rather than replace independent synthetic correctness checks.
 5. Separate strict completion from an explicitly bounded no-regression check.
    An accepted backlog never becomes a claim that the documentation is complete.
 6. Verify the built HTML, canonical/base paths, links/fragments, search assets and
@@ -43,10 +61,21 @@ scientific references, accessible rendering, browser/keyboard/mobile/search chec
 and reader task testing. No `frontier` or `beyond-frontier` acceptance is inferred
 from framework choice, generated prose, historical reports or passing headings.
 
-The implementation repairs the current entry path, completes maintained binding
-documentation, qualifies all current Python examples and establishes enforceable
-discovery, source-derived reference output and regression gates. Rust compiler
-documentation and its two examples have passed locally. Julia/R runtime evidence,
-historical content, scientific appraisal, browser accessibility and verified live
-publication stay open until actually completed. No runtime scientific behavior
-changes are in scope.
+The initial implementation repairs the entry path, completes maintained binding
+documentation, qualifies current Python examples and establishes enforceable
+discovery, source-derived reference output and regression gates. The earlier local
+record qualified Rust documentation and two examples while Julia/R execution
+remained open. At the 16 November inspected revision, hosted run 43804385173 adds
+native documentation execution evidence, including Julia/R, within that job's
+scope. Historical content, wider scientific appraisal, browser qualification,
+public artifact identity and full platform acceptance remain separate. No runtime
+scientific behavior changes are in this planning scope.
+
+For the extended scope, completeness additionally requires the declared model,
+operation, task and language coverage described in the learning programme. Every
+notebook is inventoried; each promoted current notebook is executed against the
+intended native installation.
+An HTML export, a new framework, a public dataset, a model-family checkbox or a
+source hash alone cannot establish that requirement. Browser-native execution,
+new hosting, native scientific changes and external empirical validation retain
+their separate prerequisites and owners.

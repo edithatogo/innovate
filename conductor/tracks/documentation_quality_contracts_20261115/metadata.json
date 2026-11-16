@@ -3,6 +3,6 @@
   "type": "feature",
   "status": "in_progress",
   "created_at": "2026-11-15T00:00:00+10:00",
-  "updated_at": "2026-11-14T23:31:59.664266+00:00",
-  "description": "Qualify the existing Astro site with complete API inventory, executable tutorial contracts and current-build evidence. Full scientific, usability and live publication acceptance remain separate."
+  "updated_at": "2026-11-16T19:35:24+10:00",
+  "description": "Qualify the existing Astro documentation and extend its learning programme with optional native marimo notebooks, fuller Astro/Starlight use, model and operation coverage, current Python/Julia/R lessons and reproducible public-data tutorials. The 16 November extension records planning; implementation, scientific review, reader success and live publication remain separately qualified."
 }

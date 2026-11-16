@@ -55,6 +55,8 @@ export const test = base.extend({
       await settle();
       await attachJson(testInfo, 'runtime-observation', {
         browser_version: browser.version(),
+        browser_executable: process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE || browser.browserType().executablePath(),
+        browser_executable_override: process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE || null,
         viewport: page.viewportSize(),
         console_errors: consoleErrors,
         page_errors: pageErrors,
