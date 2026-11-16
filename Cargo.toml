@@ -1,5 +1,5 @@
 [workspace]
-members = ["rust/crates/innovate-core", "rust/crates/innovate-tabular", "rust/crates/innovate-ffi", "rust/crates/innovate-python", "rust/crates/innovate-kairos"]
+members = ["rust/crates/innovate-core", "rust/crates/innovate-tabular", "rust/crates/innovate-ffi", "rust/crates/innovate-python", "rust/crates/innovate-kairos", "rust/crates/innovate-games"]
 resolver = "3"
 
 [workspace.package]
