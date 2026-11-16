@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition: 16 November 2026; source baseline
-`69b674814513e09a683279c679b1584af8bb4214`; development version `0.7.0a1`.
+Edition: 16 November 2026, reassessed after #656; source baseline
+`57d2916586d107c8affe90355e453abe27f01c26`; development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -17,7 +17,7 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | C04 / State of the field | Mesa, NDlib and PyMC address simulation, network diffusion and Bayesian modelling | Verified primary entries `mesa2025`, `ndlib2018`, `pymc2023`; [reference checks](README.md#reference-verification) | Contextual comparison only. No current-version coverage, speed, accuracy or superiority ranking without an equivalent-workload experiment. |
 | C05 / Software design | Polars tables, copying IPC, LazyFrame collection and current Julia/R transport limitations; source contract | [README](../../../../README.md), [native guide](../../../../docs/astro-site/src/content/docs/native-migration.md), [tabular source](../../../../rust/crates/innovate-tabular/src/lib.rs) | Do not advertise zero-copy or equivalent R/Julia tabular distribution. Recheck when the implementation or distribution changes. |
 | C06 / Software design | Reuse of Rust numerical packages and explicit Kairos/Voiage ownership | [core manifest](../../../../rust/crates/innovate-core/Cargo.toml), [product](../../../product.md), [README](../../../../README.md) | A dependency declaration or data boundary is not accepted provider integration. Current Kairos pin must have its own receipts. |
-| C07 / Software design | Unsupported operations fail explicitly; validation and scientific conventions are documented | [native guide](../../../../docs/astro-site/src/content/docs/native-migration.md), [release gates](../../../release-gates-20261107.md) | This documents the intended/implemented boundary without claiming universal negative-test or scientific coverage. Relevant accepted tests remain necessary. |
+| C07 / Software design | Unsupported operations fail explicitly; validation and scientific conventions are documented | [native guide](../../../../docs/astro-site/src/content/docs/native-migration.md), [release gates](../../../release-gates-20261107.md) | The time-ordering example refers to documented model time grids, not every table or IPC row. This documents the intended/implemented boundary without claiming universal negative-test or scientific coverage. Relevant accepted tests remain necessary. |
 | C08 / AI disclosure | ChatGPT with GPT-6 Astra Pro assisted this draft's source checks and preparation | This preparation work and [README](README.md) | Limited to this increment. Full software/paper history and human verification remain unknown; only authors can confirm their activities. |
 
 ## Claims withheld pending evidence
@@ -32,6 +32,24 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
 
 ## Edition acceptance
+
+The [source reassessment](../evidence/source-reassessment-20261116.md) records the
+comparison with main commit
+[`57d2916586d107c8affe90355e453abe27f01c26`](https://github.com/edithatogo/innovate/commit/57d2916586d107c8affe90355e453abe27f01c26),
+which merged #656. Four of the fourteen tracked source inputs changed. The
+workspace/lock additions and benchmark target preserve C01/C06's limited
+architecture and dependency claims. The appended Rust panel, joint-draw and
+cohort IPC APIs preserve C05's existing binding/distribution limitations; their
+presence does not complete the Julia/R adapters. C07's time-grid sentence was
+made more precise because panel ingestion preserves row order.
+
+C02's sixteen-family inventory and all 38 required migration obligations remain
+unchanged. P01–P06 remain withheld. Merged source, task checkboxes and registry
+entries are not a substitute for accepted empirical, installed-consumer,
+release, author or editorial evidence. The
+[previous snapshot](../evidence/source-reassessment-20261116.previous-snapshot.json)
+and earlier render receipts retain their original source identities; the new
+edition is preparation evidence only.
 
 For a later edition, inspect changed supporting files, update each affected claim
 and preserve this edition's receipt. Do not refresh hashes solely to pass a

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "command": "cargo test --locked -p innovate-tabular --test scenario_exports -j 1",
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)",
+  "source_commit": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "source_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "source_manifest": "build-provenance.json",
+  "source_manifest_sha256": "882a8292b38587ee80468c63d5a4a7be1ce84957aed039911d18da990ee4073a",
+  "source_input_count": 175,
+  "kairos_revision": "a1f6283575ad26918230adc122a99b5c08fc4da3",
+  "environment": {
+    "CARGO_HOME": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/cargo",
+    "CARGO_TARGET_DIR": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target",
+    "CARGO_BUILD_JOBS": "1",
+    "PYO3_PYTHON": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python",
+    "PATH_toolchain": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/rust-1.100.0/bin"
+  },
+  "scope": "Focused existing Rust integration targets on Linux x86_64 / Rust 1.100.0",
+  "test_sources": {
+    "rust/crates/innovate-tabular/tests/scenario_exports.rs": "c2aed4ae09913825e7eb5cdac8ddb48e399dfd3e704e2ff65db917595572473b"
+  },
+  "limitations": [
+    "No full scientific, other-platform, provider publication or release acceptance is inferred."
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 21.333,
+  "all_build_inputs_unchanged": true,
+  "log": "scenario-rust.log",
+  "log_sha256": "6222b4b28857d7ded4d78dd84c36abdc86e06c00ea69b2b41dfb4f1df6248b2e",
+  "targets": [
+    {
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0,
+      "target": "scenario_exports",
+      "status": "ok"
+    }
+  ],
+  "total_passed": 8,
+  "complete_expected_selection": true
+}

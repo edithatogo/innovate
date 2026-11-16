@@ -23,7 +23,7 @@ bibliography: paper.bib
 > metadata are provisional, copied from the repository's citation record.
 > Research-use evidence, declarations, scientific qualification and release
 > acceptance remain outstanding. This draft describes development version
-> 0.7.0a1 at commit `69b674814513e09a683279c679b1584af8bb4214`.
+> 0.7.0a1 at commit `57d2916586d107c8affe90355e453abe27f01c26`.
 
 # Summary
 
@@ -115,7 +115,7 @@ does not by itself establish the correctness of a model, adapter or selected
 provider revision.
 
 Scientific documentation distinguishes numerical execution from inferential
-claims. For example, input validation requires finite, ordered time values;
+claims. For example, the documented model time grids require finite, ordered values;
 model conventions distinguish levels from signed rates; and synthetic parameter
 recovery checks cannot demonstrate performance on an external population.
 Repository tests, examples and retained qualification records are evidence

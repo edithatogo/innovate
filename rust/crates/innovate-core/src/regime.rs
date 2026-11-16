@@ -43,11 +43,22 @@ fn penalty() -> f64 {
 fn jump() -> usize {
     5
 }
-// Independently written exhaustive dynamic programming over a subsampled L2 grid.
-// Each candidate segment uses Welford's centered sum of squares, not raw moments.
+// Exact PELT pruning over a subsampled L2 grid.
+// Each candidate segment uses incremental Welford centered sum of squares, not raw moments.
+const MAX_DETECT_OBSERVATIONS: usize = 100_000;
+
+struct ActiveCandidate {
+    idx: usize,
+    count: usize,
+    mean: f64,
+    sse: f64,
+}
+
 fn detect(y: &[f64], penalty: f64, jump: usize) -> Result<Vec<usize>, String> {
-    if y.len() > 2000 {
-        return Err("automatic detection supports at most 2000 observations; provide split_index for larger fits".into());
+    if y.len() > MAX_DETECT_OBSERVATIONS {
+        return Err(format!(
+            "automatic detection supports at most {MAX_DETECT_OBSERVATIONS} observations; provide split_index for larger fits"
+        ));
     }
     let n = y.len();
     let mut grid = vec![0];
@@ -56,26 +67,50 @@ fn detect(y: &[f64], penalty: f64, jump: usize) -> Result<Vec<usize>, String> {
     let mut scores = vec![f64::INFINITY; grid.len()];
     let mut previous = vec![0; grid.len()];
     scores[0] = 0.;
+    let mut active = vec![ActiveCandidate {
+        idx: 0,
+        count: 0,
+        mean: 0.,
+        sse: 0.,
+    }];
     for i in 1..grid.len() {
-        for j in 0..i {
-            if grid[i] - grid[j] < 2 || !scores[j].is_finite() {
-                continue;
+        let step = &y[grid[i - 1]..grid[i]];
+        for cand in &mut active {
+            for &v in step {
+                cand.count += 1;
+                let delta = v - cand.mean;
+                cand.mean += delta / cand.count as f64;
+                cand.sse += delta * (v - cand.mean);
             }
-            let mut mean = 0.;
-            let mut sse = 0.;
-            for (k, v) in y[grid[j]..grid[i]].iter().enumerate() {
-                let delta = v - mean;
-                mean += delta / (k + 1) as f64;
-                sse += delta * (v - mean);
+            if grid[i] - grid[cand.idx] >= 2 {
+                let cost = scores[cand.idx] + cand.sse.max(0.) + penalty;
+                if !cost.is_finite() {
+                    return Err("changepoint objective overflow".into());
+                }
+                if cost < scores[i] {
+                    scores[i] = cost;
+                    previous[i] = cand.idx;
+                }
             }
-            let cost = scores[j] + sse.max(0.) + penalty;
-            if !cost.is_finite() {
-                return Err("changepoint objective overflow".into());
+        }
+        let best = scores[i];
+        if best.is_finite() {
+            if i + 1 >= grid.len() || grid[i + 1] - grid[i] >= 2 {
+                active.retain(|cand| {
+                    if grid[i] - grid[cand.idx] < 2 {
+                        return true;
+                    }
+                    let sse = cand.sse.max(0.);
+                    let tol = 1e-12 * (best.abs() + sse + 1.0);
+                    scores[cand.idx] + sse <= best + tol
+                });
             }
-            if cost < scores[i] {
-                scores[i] = cost;
-                previous[i] = j;
-            }
+            active.push(ActiveCandidate {
+                idx: i,
+                count: 0,
+                mean: 0.,
+                sse: 0.,
+            });
         }
     }
     if !scores[grid.len() - 1].is_finite() {
@@ -417,7 +452,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     ) {
         predictions
     } else {
-        let mut out = json!({"model_key":"regime_switching","model_name":"RegimeSwitchingDiffusionModel","parameters":parameters,"state":state,"predictions":predictions,"segment_diagnostics":segment_diagnostics,"details":{"changepoint_index":index,"regime_count":o.regime_count,"split_time":o.split_time,"prediction_mode":o.prediction_mode,"detected_breakpoints":o.detected_breakpoints,"detector":"unpruned_penalized_l2_grid; min_size=2; ascending-predecessor tie order","residual_noise":o.residual_noise}});
+        let mut out = json!({"model_key":"regime_switching","model_name":"RegimeSwitchingDiffusionModel","parameters":parameters,"state":state,"predictions":predictions,"segment_diagnostics":segment_diagnostics,"details":{"changepoint_index":index,"regime_count":o.regime_count,"split_time":o.split_time,"prediction_mode":o.prediction_mode,"detected_breakpoints":o.detected_breakpoints,"detector":"pelt_penalized_l2_grid; min_size=2; ascending-predecessor tie order","residual_noise":o.residual_noise}});
         if time.is_empty() {
             out.as_object_mut().unwrap().remove("predictions");
         }
@@ -467,5 +502,124 @@ mod tests {
                 case["name"]
             );
         }
+    }
+
+    fn exhaustive_detect_oracle(y: &[f64], penalty: f64, jump: usize) -> Vec<usize> {
+        let n = y.len();
+        let mut grid = vec![0];
+        grid.extend((jump..n).step_by(jump).filter(|x| *x >= 2));
+        grid.push(n);
+        let mut scores = vec![f64::INFINITY; grid.len()];
+        let mut previous = vec![0; grid.len()];
+        scores[0] = 0.;
+        for i in 1..grid.len() {
+            for j in 0..i {
+                if grid[i] - grid[j] < 2 || !scores[j].is_finite() {
+                    continue;
+                }
+                let mut mean = 0.;
+                let mut sse = 0.;
+                for (k, v) in y[grid[j]..grid[i]].iter().enumerate() {
+                    let delta = v - mean;
+                    mean += delta / (k + 1) as f64;
+                    sse += delta * (v - mean);
+                }
+                let cost = scores[j] + sse.max(0.) + penalty;
+                if cost < scores[i] {
+                    scores[i] = cost;
+                    previous[i] = j;
+                }
+            }
+        }
+        let mut out = vec![];
+        let mut i = grid.len() - 1;
+        while i > 0 {
+            out.push(grid[i]);
+            i = previous[i];
+        }
+        out.reverse();
+        out
+    }
+
+    #[test]
+    fn pelt_matches_exhaustive_dp_across_step_and_tied_series() {
+        let cases: &[(&[f64], f64, usize)] = &[
+            (&[1., 1., 1., 1., 5., 5., 5., 5., 1., 1., 1., 1.], 2.0, 2),
+            (&[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.], 0.5, 3),
+            (
+                &[
+                    10., 10.1, 9.9, 10.0, 20.0, 20.1, 19.9, 20.0, 30.0, 30.1, 29.9, 30.0,
+                ],
+                1.5,
+                4,
+            ),
+            (
+                &[1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12., 13.],
+                3.0,
+                5,
+            ),
+        ];
+        for (y, penalty, jump) in cases {
+            assert_eq!(
+                detect(y, *penalty, *jump).unwrap(),
+                exhaustive_detect_oracle(y, *penalty, *jump)
+            );
+        }
+    }
+
+    #[test]
+    fn pelt_respects_minimum_length_on_dense_grids() {
+        let reported = [0., 2., 0., 2., 2., 0.];
+        assert_eq!(detect(&reported, 1., 1).unwrap(), vec![6]);
+
+        // Enumerate short discrete series and compare the objective with the
+        // exhaustive dynamic program. Compare costs to permit tied partitions.
+        for len in 2..=8_u32 {
+            for encoded in 0..3_usize.pow(len) {
+                let mut value = encoded;
+                let mut y = Vec::with_capacity(len as usize);
+                for _ in 0..len {
+                    y.push((value % 3) as f64);
+                    value /= 3;
+                }
+                for penalty in [0.5, 1.0, 2.0] {
+                    for jump in 1..=3 {
+                        let actual = detect(&y, penalty, jump).unwrap();
+                        let expected = exhaustive_detect_oracle(&y, penalty, jump);
+                        let objective = |breakpoints: &[usize]| {
+                            let mut start = 0;
+                            breakpoints.iter().fold(0.0, |total, &end| {
+                                let segment = &y[start..end];
+                                let mean = segment.iter().sum::<f64>() / segment.len() as f64;
+                                let sse = segment.iter().map(|v| (v - mean).powi(2)).sum::<f64>();
+                                start = end;
+                                total + sse + penalty
+                            })
+                        };
+                        assert!(
+                            (objective(&actual) - objective(&expected)).abs() < 1e-10,
+                            "y={y:?}, penalty={penalty}, jump={jump}, actual={actual:?}, expected={expected:?}"
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn pelt_handles_large_series_above_legacy_2000_cap() {
+        let mut y = Vec::with_capacity(5000);
+        for i in 0..5000 {
+            let base = if i < 1500 {
+                10.0
+            } else if i < 3500 {
+                50.0
+            } else {
+                20.0
+            };
+            y.push(base + ((i % 7) as f64 - 3.0) * 0.01);
+        }
+        let breakpoints = detect(&y, 5.0, 5).unwrap();
+        assert_eq!(breakpoints, vec![1500, 3500, 5000]);
     }
 }

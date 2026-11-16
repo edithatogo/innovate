@@ -29,8 +29,10 @@ No main integration, public release, native deployment or acceptance is implied.
 
 ## Current qualification contract — 16 November 2026
 
-The [current reconciliation](reconciliation-20261116.md) binds this contract to
-main `69b674814513e09a683279c679b1584af8bb4214`. Rust owns scientific
+The [current reassessment](../research_software_registry_readiness_20260721/integration-20261116.md)
+binds this contract to main `57d2916586d107c8affe90355e453abe27f01c26`.
+The [initial reconciliation](reconciliation-20261116.md) retains the earlier
+source receipt. Rust owns scientific
 computation and validation; Polars is the public table interface, with versioned
 Arrow/Parquet interchange. Python, Julia and R remain thin bindings. Kairos owns
 scheduling, state and replay; Voiage owns value-of-information analysis.

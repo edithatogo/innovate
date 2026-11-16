@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-16 11:20:20 UTC",
+  "pr": 662,
+  "pr_head": "a49d453e8786eca78ad89055a442862b3afcf9d2",
+  "combined_checkout": "b4765edda6def0cbfa16722f73d0981383893cca",
+  "combined_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "combined_parents": [
+    "57d2916586d107c8affe90355e453abe27f01c26",
+    "a49d453e8786eca78ad89055a442862b3afcf9d2"
+  ],
+  "observed_jobs": [
+    {
+      "name": "Release Readiness",
+      "run_id": 43855460460,
+      "job_id": 133258448506,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43855460460/job/133258448506",
+      "checkout": "b4765edda6def0cbfa16722f73d0981383893cca",
+      "conclusion": "failure",
+      "exit_code": 1,
+      "failed_step": "Check native migration policy",
+      "remaining_obligations": 38,
+      "interpretation": "The mandatory scientific release gate is retained."
+    },
+    {
+      "name": "Native documentation examples",
+      "run_id": 43855460465,
+      "job_id": 133258448304,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43855460465/job/133258448304",
+      "checkout": "b4765edda6def0cbfa16722f73d0981383893cca",
+      "conclusion": "failure",
+      "exit_code": 101,
+      "failed_step": "Require complete Rust public documentation",
+      "compiler": "1.100.0",
+      "python": "3.15.2",
+      "missing_documentation_diagnostics": 176,
+      "affected_rust_paths": [
+        "rust/crates/innovate-core/src/domain.rs",
+        "rust/crates/innovate-core/src/inference/hype_fit.rs",
+        "rust/crates/innovate-core/src/inference/hype_posterior.rs",
+        "rust/crates/innovate-core/src/likelihood.rs",
+        "rust/crates/innovate-core/src/models/mod.rs",
+        "rust/crates/innovate-core/src/models/competition.rs",
+        "rust/crates/innovate-core/src/models/demand.rs",
+        "rust/crates/innovate-core/src/models/expectation_feedback.rs",
+        "rust/crates/innovate-core/src/models/hierarchical.rs",
+        "rust/crates/innovate-core/src/models/hype.rs",
+        "rust/crates/innovate-core/src/models/hype_effects.rs",
+        "rust/crates/innovate-core/src/models/regimes.rs",
+        "rust/crates/innovate-core/src/models/repeat_use.rs",
+        "rust/crates/innovate-core/src/models/semi_markov.rs",
+        "rust/crates/innovate-kairos/src/lib.rs",
+        "rust/crates/innovate-tabular/src/lib.rs"
+      ],
+      "documentation_pr_659_head": "178779bd21d7fdde2fe4f6b8179444b72a4bc6d1",
+      "affected_paths_in_pr_659": [],
+      "interpretation": "Existing source/documentation owners and sole integrator retain remediation; no threshold relaxation."
+    }
+  ],
+  "limits": [
+    "Read from the actual completed GitHub job logs; these are results for the recorded checkouts, not a later published head.",
+    "Other failures and unexecuted/queued jobs are not classified as passing by this bounded receipt.",
+    "The local integrated execution packet is a separate source/artifact receipt."
+  ]
+}

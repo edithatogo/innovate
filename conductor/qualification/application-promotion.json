@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "promotions": [
+    {
+      "method": "competing_rates",
+      "provider": "innovate-core",
+      "consumers": ["tobac", "careops-sim"],
+      "oracle": "rust/crates/innovate-core/tests/competition_conservation.rs",
+      "acyclic": true
+    },
+    {
+      "method": "step_active_use",
+      "provider": "innovate-core",
+      "consumers": ["tobac", "careops-sim"],
+      "oracle": "rust/crates/innovate-core/tests/repeat_use_balance.rs",
+      "acyclic": true
+    }
+  ]
+}

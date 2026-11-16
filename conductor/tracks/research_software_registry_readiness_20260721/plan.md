@@ -1,5 +1,33 @@
 # Implementation Plan
 
+## Reassessment after the main advance — 16 November 2026
+
+Main is now `57d2916586d107c8affe90355e453abe27f01c26` after the external
+merge of #656. The [integrated-source record](integration-20261116.md) supersedes
+earlier current-main and open-PR wording below while preserving each receipt.
+Allowed edits remain within this track and the scientific qualification track;
+no shared source, pin, workflow, registry or other writer's environment changes.
+
+- [x] REG-16b: consume the merged source in an isolated worktree, verify all
+  four registry input fingerprints against both Git revisions and local bytes,
+  and retain pending provider states. The former three Conductor registry
+  discrepancies are resolved by the upstream merge; local hygiene now passes.
+- [x] JOSS-02d: review the four changed manuscript inputs and each affected
+  claim, retain the prior snapshot, and explicitly bind the new unapproved
+  edition to main. Clarify model time-grid ordering without extending that
+  claim to every newly added table API; preserve scientific and author limits.
+  The new 1,076-word edition passes all 14 source and three edition identities.
+- [x] JOSS-02e: rerun pinned bibliography/TeX processing against the new edition.
+  Attempt 3 passes real bibliography, official TeX and draft-marker checks;
+  PDF still fails on missing `luacode.sty` (Make 2, wrapper 1), with no PDF or
+  visual-review pass. The prior edition and attempts remain preserved.
+- [x] Repeat all four preparation suites against the reassessed integrated
+  tree: **169 passed, zero skips**. Explicit submission mode still exits 1.
+- [ ] Integration: reconcile current hosted checks and hand off exact failures
+  and remaining shared work to #624. Native API documentation, recurring CI,
+  scientific/research-use evidence, author decisions and external outcomes
+  remain separate gates.
+
 ## Executable preparation follow-up — 16 November 2026
 
 The user's follow-up authorises implementing the remaining feasible preparation.

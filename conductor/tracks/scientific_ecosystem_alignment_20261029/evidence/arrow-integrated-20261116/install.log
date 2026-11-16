@@ -1,0 +1,10 @@
+Using Python 3.15.2 environment at: venv
+Resolved 1 package in 2ms
+Prepared 1 package in 173ms
+Uninstalled 1 package in 6ms
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 1 package in 243ms
+ - innovate==0.7.0a1 (from file:///workspace/scratch/e4108ca2b049/innovate-alignment-tools/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl)
+ + innovate==0.7.0a1 (from file:///workspace/scratch/e4108ca2b049/innovate-alignment-tools/wheels-integrated/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl)

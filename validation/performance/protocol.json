@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "workloads": [
+    {
+      "id": "bass_predict_100",
+      "model": "bass",
+      "n_points": 100,
+      "max_rel_error": 1e-10
+    },
+    {
+      "id": "bass_fit_50",
+      "model": "bass",
+      "n_points": 50,
+      "max_rel_error": 1e-3
+    }
+  ]
+}

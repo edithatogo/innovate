@@ -1,5 +1,10 @@
 # Executed scientific and journal preparation — 16 November 2026
 
+**Preserved first execution packet.** Main advanced through #656 after this
+packet was prepared. The [integrated-source reassessment](integration-20261116.md)
+records the new source, reviewed draft edition and affected reruns; its later
+scope takes precedence over the main/PR status and current-result wording below.
+
 This follow-up implements the ready parts of the existing tracks after the
 user requested further execution. It extends draft [#662](https://github.com/edithatogo/innovate/pull/662)
 from published head `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`, whose tree

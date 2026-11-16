@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-16 11:24:11 UTC",
+  "source_commit_observed": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "source_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "assessed_main": "57d2916586d107c8affe90355e453abe27f01c26",
+  "source_state": "Track documents and evidence updated locally on the recorded integration commit; native inputs and tool/test implementation bytes unchanged.",
+  "tests": {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "-m",
+      "pytest",
+      "tests/native/test_registry_readiness.py",
+      "tests/native/test_joss_readiness.py",
+      "tests/native/test_joss_render.py",
+      "tests/native/test_scenario_arrow_qualification.py",
+      "-o",
+      "addopts=",
+      "-q"
+    ],
+    "exit_code": 0,
+    "stdout": "........................................................................ [ 42%]\n........................................................................ [ 85%]\n.........................                                                [100%]\n169 passed in 0.71s\n",
+    "passed": 169,
+    "skipped": 0,
+    "failed": 0,
+    "counts": {
+      "registry": 56,
+      "joss_integrity": 50,
+      "joss_render": 18,
+      "arrow_qualifier": 45
+    }
+  },
+  "integrity_check": {
+    "exit_code": 0,
+    "result": {
+      "snapshot_valid": true,
+      "state": "unapproved_working_draft",
+      "software_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+      "software_version": "0.7.0a1",
+      "source_files_checked": 14,
+      "edition_files_checked": 3,
+      "normalized_text_paths": [],
+      "required_sections_checked": 6,
+      "prose_word_count": 1076,
+      "submission_ready": false,
+      "git_revision_verified": false,
+      "scientific_qualification_performed": false,
+      "online_verification_performed": false,
+      "limits": "Structural and byte-identity checks only; rendering, research use and author/editorial decisions are separate."
+    }
+  },
+  "submission_requirement": {
+    "exit_code": 1,
+    "result": {
+      "snapshot_valid": true,
+      "state": "unapproved_working_draft",
+      "software_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+      "software_version": "0.7.0a1",
+      "source_files_checked": 14,
+      "edition_files_checked": 3,
+      "normalized_text_paths": [],
+      "required_sections_checked": 6,
+      "prose_word_count": 1076,
+      "submission_ready": false,
+      "git_revision_verified": false,
+      "scientific_qualification_performed": false,
+      "online_verification_performed": false,
+      "limits": "Structural and byte-identity checks only; rendering, research use and author/editorial decisions are separate."
+    }
+  },
+  "identity_and_file_checks": {
+    "whole_pr_file_count_before_final_receipt": 86,
+    "continuation_changed_files_before_final_receipt": 41,
+    "scope_valid": true,
+    "historical_scientific_plan_unchanged": true,
+    "prior_snapshot_preserved": true,
+    "earlier_native_and_render_evidence_unchanged": true,
+    "unchanged_tool_and_test_sha256": {
+      "scripts/check_joss_readiness.py": "fe1f4d576d2bf7aa9138eb333596bf9f318479b155837352955574172228b4a2",
+      "scripts/qualify_scenario_arrow.py": "fe894db45329c4fd9906aec6a77f8bd87653b0a7d927ac4aeaed39e6e099b3db",
+      "conductor/tracks/research_software_registry_readiness_20260721/joss/render.py": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+      "tests/native/test_joss_readiness.py": "ec4763a99c5ca5e9afacfdc52795a49cef59ab784703d3c82fd28b19ef3df4c4",
+      "tests/native/test_joss_render.py": "bca989c7e1ded08a9ef85f08c95c3d4d078637d9f0d3f297aa1e1c94e58d3fd8",
+      "tests/native/test_scenario_arrow_qualification.py": "52c45f22b9d2826bfa2661c533ec3016f2ef916480fc1ea9fc4825cb51a1c7a6"
+    },
+    "native_inputs_match_main_git_blobs": 175,
+    "manuscript_source_git_blobs_verified": 14,
+    "edition_hashes_verified": 3,
+    "changed_json_files_validated": 34,
+    "relative_links_checked": 228,
+    "missing_relative_links": [],
+    "whitespace": {
+      "full_staged_diff_exit": 2,
+      "raw_generated_paths_with_verbatim_whitespace": [
+        "conductor/tracks/research_software_registry_readiness_20260721/evidence/joss-render-20261116/attempt-3/paper.tex",
+        "conductor/tracks/research_software_registry_readiness_20260721/evidence/joss-render-20261116/attempt-3/render.log",
+        "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/arrow-integrated-20261116/provider-rust.log",
+        "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/arrow-integrated-20261116/scenario-rust.log"
+      ],
+      "authored_markdown_json_python_and_xml_exit": 0,
+      "treatment": "Raw generated logs and TeX retain their exact hashed bytes; no attributes, quality thresholds or scientific checks were changed."
+    }
+  },
+  "coverage_provenance": {
+    "previous_receipt": "preparation-checks-20261116.json",
+    "code_bytes_verified_unchanged": true,
+    "remeasured_in_this_integration": false,
+    "scope": "Previous measured new-tool statement/branch coverage remains tied to the unchanged six implementation/test hashes; fresh native tests have separate receipts."
+  },
+  "independent_review": {
+    "source_claims_and_receipts": "No remaining blocking finding within the bounded implementation and source reassessment.",
+    "timestamp_finding": "Corrected merge-event versus Git-committer timestamp in source-reassessment records.",
+    "raw_whitespace_scope": "Full staged diff check finds whitespace in verbatim generated artifacts; authored-file check passes. Earlier unstaged checks did not include those then-untracked outputs.",
+    "human_or_scientific_approval": false
+  },
+  "submission_ready": false,
+  "external_outcomes_changed": false,
+  "release_obligations_remaining": 38
+}

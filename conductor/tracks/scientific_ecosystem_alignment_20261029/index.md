@@ -1,7 +1,9 @@
 # innovate: scientific ecosystem alignment
 
 - [Current reconciliation and remaining acceptance — 16 November 2026](reconciliation-20261116.md)
-- [Executed installed Arrow qualification](evidence/arrow-installed-20261116/README.md)
+- [Qualification after the main-branch frontier merge](evidence/arrow-integrated-20261116/README.md)
+- [Earlier installed Arrow qualification](evidence/arrow-installed-20261116/README.md)
+- [Integrated scientific/journal source reassessment](../research_software_registry_readiness_20260721/integration-20261116.md)
 - [Specification](spec.md)
 - [Plan](plan.md)
 - [Metadata](metadata.json)

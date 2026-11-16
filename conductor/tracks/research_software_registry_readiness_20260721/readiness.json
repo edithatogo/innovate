@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "https://github.com/edithatogo/innovate",
   "parent_issue": 398,
-  "assessed_revision": "69b674814513e09a683279c679b1584af8bb4214",
+  "assessed_revision": "57d2916586d107c8affe90355e453abe27f01c26",
   "software_version": "0.7.0a1",
   "input_sha256": {
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "command": "cargo test --locked -p innovate-core --test kairos --test network --test network_diffusion --test network_petgraph -j 1",
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)",
+  "source_commit": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "source_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "source_manifest": "build-provenance.json",
+  "source_manifest_sha256": "882a8292b38587ee80468c63d5a4a7be1ce84957aed039911d18da990ee4073a",
+  "source_input_count": 175,
+  "kairos_revision": "a1f6283575ad26918230adc122a99b5c08fc4da3",
+  "environment": {
+    "CARGO_HOME": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/cargo",
+    "CARGO_TARGET_DIR": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target",
+    "CARGO_BUILD_JOBS": "1",
+    "PYO3_PYTHON": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python",
+    "PATH_toolchain": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/rust-1.100.0/bin"
+  },
+  "scope": "Focused existing Rust integration targets on Linux x86_64 / Rust 1.100.0",
+  "test_sources": {
+    "rust/crates/innovate-core/tests/kairos.rs": "c7477b44ff4b6fb1ddb7b84e816b5f1d7569eb9e55cfea70cad93d12b43bad70",
+    "rust/crates/innovate-core/tests/network.rs": "8df0b193bfb76211c3700a2de43676a32bfab6799e81d77880e1dfa895a9704e",
+    "rust/crates/innovate-core/tests/network_diffusion.rs": "8a290aaf49b641bdaba2f29beca28ec76e36b24925d5f2e33278e37823bb08cb",
+    "rust/crates/innovate-core/tests/network_petgraph.rs": "25d86c7e3b89d1c69cdd184879bcbc9b7f513cb96432297551e22854ad611a7c"
+  },
+  "limitations": [
+    "No full scientific, other-platform, provider publication or release acceptance is inferred."
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 26.641,
+  "all_build_inputs_unchanged": true,
+  "log": "provider-rust.log",
+  "log_sha256": "1fe385203fef37611fba467b3b15f2d28c3365bf0e80026deb05b85181bb96a7",
+  "targets": [
+    {
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0,
+      "target": "kairos",
+      "status": "ok"
+    },
+    {
+      "passed": 37,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0,
+      "target": "network",
+      "status": "ok"
+    },
+    {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0,
+      "target": "network_diffusion",
+      "status": "ok"
+    },
+    {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered": 0,
+      "target": "network_petgraph",
+      "status": "ok"
+    }
+  ],
+  "total_passed": 64,
+  "complete_expected_selection": true
+}

@@ -2,8 +2,9 @@
 
 Status: in progress; external evidence and current JOSS prerequisites pending
 
-Current status: [16 November scientific/journal reconciliation](./reconciliation-20261116.md).
-This includes the five-issue crosswalk, ordered work packages and ownership;
+Current source assessment: [reassessment after the frontier merge](./integration-20261116.md).
+The earlier [16 November scientific/journal reconciliation](./reconciliation-20261116.md)
+includes the five-issue crosswalk, ordered work packages and ownership;
 dated older receipts retain their original scope.
 
 The [executed preparation follow-up](./implementation-20261116.md) records

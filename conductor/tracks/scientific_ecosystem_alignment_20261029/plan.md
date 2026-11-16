@@ -1,5 +1,40 @@
 # Plan
 
+## Requalification after the main advance — 16 November 2026
+
+Main advanced through #656 to `57d2916586d107c8affe90355e453abe27f01c26`
+after the first follow-up was prepared. The isolated integration commit
+`218c5a2f86037bf786d6292c7dbb3673a326d457` has tree
+`81dffc475d082208cb5563747b685b4451cd6397`, equal to GitHub's tested
+merge of that main and our published `a49d453e8786eca78ad89055a442862b3afcf9d2`.
+The [current integrated-source record](../research_software_registry_readiness_20260721/integration-20261116.md)
+supersedes the earlier main/PR-status wording below.
+
+- [x] ALIGN-01b: review the main advance, preserve ownership and old receipts,
+  and distinguish the 175 current build inputs from the earlier 122-input scope.
+  The integrated Conductor registry check passes; all 38 scientific release
+  obligations remain open.
+- [x] ALIGN-02d: build a fresh integrated Linux development wheel and execute
+  all 42 installed cases with all four optional PyArrow cases and zero skips.
+  The [new execution packet](evidence/arrow-integrated-20261116/README.md)
+  binds the changed source, wheel and environment.
+- [x] ALIGN-04b: execute the actual Rust 1.99.1 all-target workspace compile
+  check: all five integrated workspace crates pass on Linux/default features.
+  The excluded standalone
+  games crate, linking/artifacts, tests and other platforms require separate
+  evidence.
+- [x] ALIGN-02e / ALIGN-03b: repeat the eight native scenario-export and 64
+  existing provider/network tests against the integrated source. All pass on
+  Rust 1.100.0 with none failed, ignored or filtered; independent review verifies
+  the new source/artifact/log identities.
+- [ ] Admit the final source/artifact receipts through #624, adopt recurring
+  shared CI where appropriate, and resolve the integrated native documentation
+  gate with its existing owners. No old hosted result is promoted to a new head.
+
+Allowed edits for this continuation are the two existing scientific/journal
+track namespaces. Main's source changes are consumed unchanged. Shared source,
+manifests, pins, workflows and promotion remain with their existing owners.
+
 ## Executable qualification follow-up — 16 November 2026
 
 Starting published head: `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`;

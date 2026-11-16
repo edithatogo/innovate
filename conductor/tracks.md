@@ -2,14 +2,14 @@
 
 This file tracks all major tracks for the project. Each track has its own detailed plan in its respective folder.
 
-- [~] **Track: Bounded local test acceleration (#473)** *(Local qualification; integration pending)*
-  *Link: [./tracks/test_acceleration_20261114/](./tracks/test_acceleration_20261114/)*
+- [x] **Track: Bounded local test acceleration (#473)** *(Completed — Issue #473 closed)*
+  *Link: [./archive/test_acceleration_20261114/](./archive/test_acceleration_20261114/)*
 
-- [~] **Track: Repository security and solo-maintainer context** *(Issue #414; remote enforcement and coverage delivery require live evidence)*
-  *Link: [./tracks/repository_security_context_20261114/](./tracks/repository_security_context_20261114/)*
+- [x] **Track: Repository security and solo-maintainer context** *(Completed — PR #606 merged, Issue #414 closed)*
+  *Link: [./archive/repository_security_context_20261114/](./archive/repository_security_context_20261114/)*
 
-- [~] **Track: Astro documentation quality contracts** *(Implementation in progress; full content and publication acceptance pending)*
-  *Link: [./tracks/documentation_quality_contracts_20261115/](./tracks/documentation_quality_contracts_20261115/)*
+- [x] **Track: Astro documentation quality contracts** *(Archived — 183 Python doc contract tests pass; hosted browser/Pages & `#655` polyglot inventory refresh remain open)*
+  *Link: [./archive/documentation_quality_contracts_20261115/](./archive/documentation_quality_contracts_20261115/)*
 - [ ] **Track: Kairos native consumer and domain boundary** *(Proposed; implementation pending)*
   *Link: [./tracks/kairos_runtime_boundary_20261107/](./tracks/kairos_runtime_boundary_20261107/)*
 
@@ -486,27 +486,27 @@ This file tracks all major tracks for the project. Each track has its own detail
 These tracks are approved for planning; implementation and empirical validation remain open.
 Historical completion labels above do not establish current full-native ownership.
 
-- [ ] **Track: Scientific integrity and honest inference** *(Planned)*
-  *Link: [./tracks/scientific_integrity_20261107/](./tracks/scientific_integrity_20261107/)*
+- [x] **Track: Scientific integrity and honest inference** *(Completed)*
+  *Link: [./archive/scientific_integrity_20261107/](./archive/scientific_integrity_20261107/)*
 
-- [ ] **Track: Rust-core convergence and native acceptance** *(Planned)*
-  *Link: [./tracks/rust_core_convergence_20261107/](./tracks/rust_core_convergence_20261107/)*
+- [x] **Track: Rust-core convergence and native acceptance** *(Completed)*
+  *Link: [./archive/rust_core_convergence_20261107/](./archive/rust_core_convergence_20261107/)*
 
-- [ ] **Track: Empirical validation and publication** *(Planned)*
+- [~] **Track: Empirical validation and publication** *(In Progress — V01–V04, Q01, Q04 complete; M01–M05, V05, Q02–Q03, Q05 pending)*
   *Link: [./tracks/empirical_validation_publication_20261107/](./tracks/empirical_validation_publication_20261107/)*
 
-- [ ] **Track: Advanced diffusion frontier methods** *(Planned)*
-  *Link: [./tracks/advanced_diffusion_frontier_20261107/](./tracks/advanced_diffusion_frontier_20261107/)*
+- [x] **Track: Advanced diffusion frontier methods** *(Archived — A01–A06 complete; G01–G04 & Kairos/Paignia adapters remain open upstream)*
+  *Link: [./archive/advanced_diffusion_frontier_20261107/](./archive/advanced_diffusion_frontier_20261107/)*
 
-- [ ] **Track: Ecosystem adoption-capacity and decision integration** *(Planned)*
-  *Link: [./tracks/ecosystem_decision_integration_20261107/](./tracks/ecosystem_decision_integration_20261107/)*
+- [x] **Track: Ecosystem adoption-capacity and decision integration** *(Archived — E01/E03/E05 & Innovate-side E02 complete; E04 & external Voiage/Paignia remain open upstream)*
+  *Link: [./archive/ecosystem_decision_integration_20261107/](./archive/ecosystem_decision_integration_20261107/)*
 
-- [ ] **Track: Healthcare hype measurement and evaluation** *(Planned)*
-  *Link: [./tracks/healthcare_hype_validation_20261107/](./tracks/healthcare_hype_validation_20261107/)*
+- [x] **Track: Healthcare hype measurement and evaluation** *(Completed)*
+  *Link: [./archive/healthcare_hype_validation_20261107/](./archive/healthcare_hype_validation_20261107/)*
 
 ---
-- [~] **Track: voiage alignment follow-ups (innovate)**
-  *Link: [./tracks/voiage_alignment_followups_20261030/](./tracks/voiage_alignment_followups_20261030/)*
+- [x] **Track: voiage alignment follow-ups (innovate)** *(Completed — PR #614 merged, Issue #559 closed)*
+  *Link: [./archive/voiage_alignment_followups_20261030/](./archive/voiage_alignment_followups_20261030/)*
   Implementation authorised 14 November 2026; normalized-bundle consumer qualification in progress. [Issue #559](https://github.com/edithatogo/innovate/issues/559).
 
 ---
@@ -518,7 +518,7 @@ Historical completion labels above do not establish current full-native ownershi
 
 ---
 
-- [ ] **Track: Semi-Markov tunnel states and competing-risks hazard kernels for tobac** *(Planned)*
+- [~] **Track: Semi-Markov tunnel states and competing-risks hazard kernels for tobac** *(In Progress — SM01/SM02 & Innovate-side SM03 complete; external `tobac` parity pending)*
   *Link: [./tracks/semi_markov_competing_risks_20261110/](./tracks/semi_markov_competing_risks_20261110/)*
 
 ---
@@ -534,11 +534,11 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 
 > **Local Tooling Notes:** If `cargo-audit` is not installed locally, install it (`cargo install cargo-audit`) or verify RustSec cleanliness via the hosted `RustSec advisory audit` CI check (`security-quality.yml`). If local `pytest` is `< 9.2`, run `pytest -o minversion=9.0 tests/native` (or use the CI/Nox `pytest 9.2` environment).
 
-- [ ] **Track: Rust Synchronous HTTP Client Migration (`ureq`)** *(Planned — P0, Order #1; parallelizable with #2–#3)*
-  *Link: [./tracks/rust_http_ureq_20261115/](./tracks/rust_http_ureq_20261115/)*
+- [x] **Track: Rust Synchronous HTTP Client Migration (`ureq`)** *(Completed — P0, Order #1; `ureq 3.5.2` with `rustls`)*
+  *Link: [./archive/rust_http_ureq_20261115/](./archive/rust_http_ureq_20261115/)*
 
-- [ ] **Track: Rust Tabular & Arrow `crates.io` Modernization** *(Planned — P0, Order #2; parallelizable with #1 & #3)*
-  *Link: [./tracks/rust_tabular_crates_io_20261115/](./tracks/rust_tabular_crates_io_20261115/)*
+- [x] **Track: Rust Tabular & Arrow `crates.io` Modernization** *(Completed — P0, Order #2; `polars-core`/`polars-arrow 0.55.2` from `crates.io`, zero `[patch.crates-io]`)*
+  *Link: [./archive/rust_tabular_crates_io_20261115/](./archive/rust_tabular_crates_io_20261115/)*
 
 - [ ] **Track: Rust `kairo-ecs-*` `crates.io` Publishing & Pinning** *(Planned — P0, Order #3; parallelizable with #1–#2; external `edithatogo/kairos` release prerequisite)*
   *Link: [./tracks/rust_kairos_crates_io_20261115/](./tracks/rust_kairos_crates_io_20261115/)*
@@ -546,20 +546,20 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 - [x] **Track: Rust Linear Algebra and Nonlinear Optimization Modernization** *(Completed — P1, Order #4; after #1–#2; parallelizable with #5)*
   *Link: [./archive/rust_linalg_optimization_20261115/](./archive/rust_linalg_optimization_20261115/)*
 
-- [~] **Track: Rust Statistical Distributions and Quantiles Modernization** *(In Progress — P1, Order #5; after #1–#2; parallelizable with #4)*
-  *Link: [./tracks/rust_stats_distributions_20261115/](./tracks/rust_stats_distributions_20261115/)*
+- [x] **Track: Rust Statistical Distributions and Quantiles Modernization** *(Completed — P1, Order #5; `statrs 0.19.1`)*
+  *Link: [./archive/rust_stats_distributions_20261115/](./archive/rust_stats_distributions_20261115/)*
 
 - [x] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Completed — P1, Order #6; after #4)*
-  *Link: [./tracks/rust_ode_integration_20261115/](./tracks/rust_ode_integration_20261115/)*
+  *Link: [./archive/rust_ode_integration_20261115/](./archive/rust_ode_integration_20261115/)*
 
-- [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned — P2, Order #7; after #1–#2; parallelizable with #4–#6)*
-  *Link: [./tracks/rust_network_petgraph_20261115/](./tracks/rust_network_petgraph_20261115/)*
+- [x] **Track: Rust Network Graph Modernization (`petgraph`)** *(Completed — P2, Order #7; PR #623 merged 2026-11-15)*
+  *Link: [./archive/rust_network_petgraph_20261115/](./archive/rust_network_petgraph_20261115/)*
 
 - [x] **Track: Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)** *(Completed — P1, Order #8; after #5)*
-  *Link: [./tracks/rust_nuts_hmc_20261115/](./tracks/rust_nuts_hmc_20261115/)*
+  *Link: [./archive/rust_nuts_hmc_20261115/](./archive/rust_nuts_hmc_20261115/)*
 
-- [ ] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Planned — P1, Order #9; after #4)*
-  *Link: [./tracks/rust_regime_changepoint_20261115/](./tracks/rust_regime_changepoint_20261115/)*
+- [x] **Track: Rust Regime Detection and Changepoint Modernization (`regime.rs`)** *(Completed — P1, Order #9; exact PELT pruning in `regime::detect`)*
+  *Link: [./archive/rust_regime_changepoint_20261115/](./archive/rust_regime_changepoint_20261115/)*
 
 - [x] **Track: CI & Release Supply-Chain Hardening** *(Completed — P1, Order #10; `deny.toml` retains temporary `allow-git` for `kairos.git` until Order #3 publishes `kairo-ecs-*`)*
-  *Link: [./tracks/ci_supply_chain_hardening_20261115/](./tracks/ci_supply_chain_hardening_20261115/)*
+  *Link: [./archive/ci_supply_chain_hardening_20261115/](./archive/ci_supply_chain_hardening_20261115/)*

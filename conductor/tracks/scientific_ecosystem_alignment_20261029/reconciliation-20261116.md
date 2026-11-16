@@ -1,5 +1,13 @@
 # Scientific ecosystem qualification reconciliation — 16 November 2026
 
+**Later main advance:** the [integrated-source reassessment](../research_software_registry_readiness_20260721/integration-20261116.md)
+records #656 merged as `57d2916586d107c8affe90355e453abe27f01c26` and
+[fresh affected native execution](evidence/arrow-integrated-20261116/README.md).
+Those later source/artifact receipts supersede this initial snapshot. Conductor
+registry hygiene now passes; the 38 release obligations and native public-
+documentation failures remain open. Existing source and integration owners
+retain their responsibilities.
+
 **Executed follow-up:** [installed/native qualification evidence](evidence/arrow-installed-20261116/README.md)
 records a fresh Linux development wheel, 42 passing installed cases including
 all four optional Arrow cases, and the separate successful Rust 1.99.1 workspace
@@ -13,7 +21,7 @@ promotion remain with #624 and the existing owners.
 This record reconciles [issue #556](https://github.com/edithatogo/innovate/issues/556)
 against main `69b674814513e09a683279c679b1584af8bb4214`, inspected for the
 scientific/journal update on branch `docs/scientific-journal-reconciliation-20261116`.
-It is the current operational summary for this track. The chronological
+It is the initial 16 November operational summary for this track. The chronological
 [plan](plan.md), original receipts and failed checks remain intact; their old
 next-action or assignment statements do not create new work ownership.
 

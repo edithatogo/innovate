@@ -11,8 +11,11 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- Source baseline: `69b674814513e09a683279c679b1584af8bb4214`, development version
-  `0.7.0a1`. Refresh the draft when its implementation evidence changes.
+- Source baseline: `57d2916586d107c8affe90355e453abe27f01c26`, development version
+  `0.7.0a1`, reassessed after #656 merged on 16 November 2026. The
+  [source reassessment](../evidence/source-reassessment-20261116.md) explains the
+  changed inputs, claim decisions and retained limitations. Refresh the draft
+  when its implementation evidence changes.
 
 ## Scope and evidence
 
@@ -143,11 +146,12 @@ release, archive deposit or registry registration was performed for this packet.
 
 ## Draft checks performed
 
-An inline Python source check counted **1,074 prose words** from Summary through
-Acknowledgements, excluding section headings and citation tokens. Including the
-visible draft notice and headings, the body contains **1,136 words** under that
-word-token rule. Both are within the current guidance; this is not the JOSS
-renderer or an editorial word-count decision.
+For the initial `69b6748` edition, an inline Python source check counted
+**1,074 prose words** from Summary through Acknowledgements, excluding section
+headings and citation tokens. Including the visible draft notice and headings,
+that edition contained **1,136 words** under the same word-token rule. The
+post-merge edition's current count is recorded by the integrity check and render
+receipt below; neither count is an editorial word-count decision.
 
 The original drafting increment parsed the YAML front matter with PyYAML,
 checked the six required section headings, matched all five cited keys to the
@@ -243,32 +247,36 @@ the pinned checkout's unmodified Dockerfile provides its intended package
 environment; record the resulting image identity and use draft mode. No Docker
 build or run was executed in this workspace, where Docker is unavailable.
 
-### Retained attempt: 16 November 2026
+### Retained current attempt: 16 November 2026, after #656
 
-The [render receipt](../evidence/joss-render-20261116/attempt-2/receipt.json) records Pandoc
+The [render receipt](../evidence/joss-render-20261116/attempt-3/receipt.json) binds
+the reassessed `57d2916586d107c8affe90355e453abe27f01c26` edition. It records Pandoc
 3.6.4, GNU Make 4.4.1, latexmk 4.86 and LuaHBTeX 1.18.0 (TeX Live
 2025/dev/Debian), with the pinned Inara source above. The complete
-[command log](../evidence/joss-render-20261116/attempt-2/render.log) preserves the failure.
-This final wrapper attempt supersedes the
-[earlier attempt](../evidence/joss-render-20261116/receipt.json), which is preserved
-unchanged with the hash of the earlier script that actually generated it.
+[command log](../evidence/joss-render-20261116/attempt-3/render.log) preserves the failure.
+The [prior edition's attempt](../evidence/joss-render-20261116/attempt-2/receipt.json)
+and [initial wrapper attempt](../evidence/joss-render-20261116/receipt.json) are
+preserved unchanged with their actual script and input identities. Their checks
+do not establish the changed edition's identity or build result.
 
 | Stage | Executed result |
 | --- | --- |
-| Offline integrity prerequisite | Passed with all 14 source and three edition hashes matching, six required sections and 1,074 prose words. Submission readiness remains false. |
-| Actual BibTeX parse | Passed with five records and no Pandoc warnings; retained [CSL-JSON](../evidence/joss-render-20261116/attempt-2/bibliography.json). The parser preserved the `Sîrbu` diacritic and the literal author `Rht`. |
-| Official template and citeproc | Passed; retained [draft TeX](../evidence/joss-render-20261116/attempt-2/paper.tex) contains all five resolved references, the working-draft notice and the draft watermark/line-numbering commands. |
+| Offline integrity prerequisite | Passed with all 14 source and three edition hashes matching, six required sections and 1,076 prose words. Submission readiness remains false. |
+| Actual BibTeX parse | Passed with five records and no Pandoc warnings; retained [CSL-JSON](../evidence/joss-render-20261116/attempt-3/bibliography.json). The parser preserved the `Sîrbu` diacritic and the literal author `Rht`. |
+| Official template and citeproc | Passed; retained [draft TeX](../evidence/joss-render-20261116/attempt-3/paper.tex) contains all five resolved references, the working-draft notice and the draft watermark/line-numbering commands. |
 | PDF compilation | **Blocked**: LuaLaTeX reported `File luacode.sty not found`; upstream Make returned 2 and the wrapper returned 1. No PDF was produced. |
 | PDF visual inspection | **Not performed** because there is no PDF. Source-level draft markers are not visual inspection. |
 
-The installed system Pandoc 3.1.11.1 initially lacked an Inara template partial;
+During the earlier setup, system Pandoc 3.1.11.1 lacked an Inara template partial;
 the isolated official Pandoc 3.6.4 binary resolved that mismatch. The workspace's
 TeX image also lacked its file database, format, Lua support packages and some
 fonts. A bounded, isolated setup used the installed distribution's files,
 packages from the historic TeX Live 2024 repository named in Inara's Dockerfile,
 and Hack v3.003. A process-local `TEXMFCACHE=.` allowed font-cache creation in the
 isolated Inara checkout. Setup stopped at the remaining `luacode.sty` dependency;
-no global TeX configuration or other worker's environment was changed. The next
+no global TeX configuration or other worker's environment was changed. The
+post-merge attempt reused that environment without installing more dependencies.
+The next
 attempt should use a complete supported TeX environment or the official
 container, retain a new receipt, and finish the PDF visual review.
 

@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "families": ["no_cycle", "ordered_cycle", "unrestricted_wave"],
+  "train_fraction": 0.7,
+  "seed": 20261116,
+  "no_peak_bic_margin": 2.0
+}
