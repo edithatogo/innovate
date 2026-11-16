@@ -22,6 +22,11 @@ jobs:
     permissions:
       id-token: write
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Exchange GitHub identity for a short-lived TestPyPI token
         shell: bash
         run: |
@@ -45,6 +50,11 @@ jobs:
     permissions:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Checkout code
         uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:

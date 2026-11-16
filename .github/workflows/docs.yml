@@ -26,6 +26,11 @@ jobs:
       ASTRO_TELEMETRY_DISABLED: '1'
       INNOVATE_DOCS_PYTHON: ${{ github.workspace }}/.venv-docs/bin/python
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Checkout code
         uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
@@ -136,6 +141,11 @@ jobs:
       RUSTC_WRAPPER: "sccache"
       DOCS_RECEIPT_DIR: ${{ github.workspace }}/docs/astro-site/.reports
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
@@ -218,6 +228,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128

@@ -22,6 +22,11 @@ jobs:
       issues: read
       pull-requests: read
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: JuliaRegistries/TagBot@87cc4cc2b4639f6c743f5772f376a32914060732
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

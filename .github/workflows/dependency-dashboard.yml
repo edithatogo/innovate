@@ -12,6 +12,11 @@ jobs:
   dependency-dashboard:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false

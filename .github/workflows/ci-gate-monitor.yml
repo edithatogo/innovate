@@ -16,6 +16,11 @@ jobs:
     if: ${{ contains(fromJSON('["failure", "success"]'), github.event.workflow_run.conclusion) }}
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Check for existing failure issue
         id: incident
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
