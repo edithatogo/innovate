@@ -5,6 +5,6 @@ pub mod hype_posterior;
 pub mod status;
 
 pub use status::{
-    DeterministicFitResult, FitFailure, FitOutcome, FitResult, InferenceSession, InnovationError, ObservationSeries,
-    PosteriorDraws, log_density, posterior,
+    DeterministicFitResult, FitFailure, FitOutcome, FitResult, InferenceSession, InnovationError,
+    ObservationSeries, PosteriorDraws, log_density, posterior,
 };

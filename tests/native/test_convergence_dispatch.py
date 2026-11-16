@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import tomllib
 from pathlib import Path
@@ -33,10 +34,58 @@ def test_python_binding_dispatches_natively_without_pandas_or_xarray():
         innovate.fit("bass", {"not": "a_dataframe"})  # type: ignore[arg-type]
 
 
+def _native_cli_from_cargo_output(output: str) -> Path:
+    """Select the executable reported by Cargo, irrespective of target directory or OS."""
+    for line in output.splitlines():
+        try:
+            message = json.loads(line)
+        except json.JSONDecodeError:
+            continue  # A build tool or procedural macro may also write to stdout.
+        if not isinstance(message, dict):
+            continue
+        target = message.get("target", {})
+        if (
+            message.get("reason") == "compiler-artifact"
+            and target.get("name") == "innovate-native"
+            and "bin" in target.get("kind", [])
+            and message.get("executable")
+        ):
+            return Path(message["executable"])
+    raise AssertionError("Cargo did not report the innovate-native executable")
+
+
+@pytest.mark.parametrize("name", ["innovate-native", "innovate-native.exe"])
+def test_native_cli_artifact_is_selected_from_cargo_output(tmp_path: Path, name: str):
+    executable = tmp_path / "custom-target" / "debug" / name
+    output = "build output outside Cargo's JSON stream\n" + "\n".join(
+        json.dumps(message)
+        for message in [
+            {"reason": "compiler-artifact", "target": {"name": "other", "kind": ["bin"]}, "executable": "wrong"},
+            {
+                "reason": "compiler-artifact",
+                "target": {"name": "innovate-native", "kind": ["bin"]},
+                "executable": str(executable),
+            },
+        ]
+    )
+    assert _native_cli_from_cargo_output(output) == executable
+    with pytest.raises(AssertionError, match="Cargo did not report"):
+        _native_cli_from_cargo_output('{"reason": "build-finished", "success": true}')
+
+
 def test_innovate_native_cli_executes_without_python_on_path(tmp_path: Path):
-    """R07: Execute compiled innovate-native binary with PATH stripped of Python."""
-    binary = Path("target/debug/innovate-native").resolve()
-    assert binary.exists(), f"missing compiled binary at {binary}"
+    """R07: Build the locked native CLI and execute it without Python on PATH."""
+    build = subprocess.run(
+        ["cargo", "build", "--locked", "-p", "innovate-core", "--bin", "innovate-native", "--message-format=json"],
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+    )
+    binary = _native_cli_from_cargo_output(build.stdout)
+    assert binary.is_file(), f"missing compiled binary at {binary}"
+    child_env = {"PATH": ""}
+    if "SystemRoot" in os.environ:
+        child_env["SystemRoot"] = os.environ["SystemRoot"]
 
     req_file = tmp_path / "predict_req.json"
     out_file = tmp_path / "predict_out.json"
@@ -55,7 +104,7 @@ def test_innovate_native_cli_executes_without_python_on_path(tmp_path: Path):
 
     proc = subprocess.run(
         [str(binary), "predict", "--request", str(req_file), "--output", str(out_file)],
-        env={"PATH": ""},
+        env=child_env,
         capture_output=True,
         text=True,
         check=False,
@@ -83,7 +132,7 @@ def test_innovate_native_cli_executes_without_python_on_path(tmp_path: Path):
     )
     fit_proc = subprocess.run(
         [str(binary), "fit", "--request", str(fit_req), "--output", str(fit_out)],
-        env={"PATH": ""},
+        env=child_env,
         capture_output=True,
         text=True,
         check=False,
@@ -101,7 +150,7 @@ def test_innovate_native_cli_executes_without_python_on_path(tmp_path: Path):
     )
     bad_proc = subprocess.run(
         [str(binary), "predict", "--request", str(bad_req), "--output", str(bad_out)],
-        env={"PATH": ""},
+        env=child_env,
         capture_output=True,
         text=True,
         check=False,
