@@ -61,6 +61,24 @@ class VendorAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "audit lock differs"):
             AUDIT.check_inventory(self.vendor)
 
+    def test_bundle_preserves_distinct_notices_and_detects_later_changes(self):
+        (self.crate / "LICENSE").write_text("Shared licence and copyright\n")
+        second = self.vendor / "second-1.0.0"
+        second.mkdir()
+        (second / "LICENSE").write_text("Shared licence and copyright\n")
+        (second / "COPYING.extra").write_text("Additional notice\n")
+        bundle = AUDIT.license_bundle(self.vendor)
+        self.assertEqual(bundle.count(b"Shared licence and copyright"), 1)
+        self.assertIn(b"example-1.2.3/LICENSE", bundle)
+        self.assertIn(b"second-1.0.0/LICENSE", bundle)
+        self.assertIn(b"Additional notice", bundle)
+        bundle_path = self.vendor.parent / "THIRD-PARTY-LICENSES"
+        bundle_path.write_bytes(bundle)
+        AUDIT.check_license_bundle(self.vendor, bundle_path)
+        (second / "COPYING.extra").write_text("Updated notice\n")
+        with self.assertRaisesRegex(ValueError, "licence bundle differs"):
+            AUDIT.check_license_bundle(self.vendor, bundle_path)
+
 
 if __name__ == "__main__":
     unittest.main()

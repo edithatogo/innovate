@@ -12,7 +12,8 @@ import sys
 import tomllib
 from pathlib import Path
 
-VENDOR = Path(__file__).resolve().parents[1] / "rust/vendor"
+ROOT = Path(__file__).resolve().parents[1]
+VENDOR = ROOT / "rust/vendor"
 REGISTRY = "registry+https://github.com/rust-lang/crates.io-index"
 
 
@@ -66,9 +67,44 @@ def check_inventory(vendor: Path) -> None:
         raise ValueError("vendored audit lock differs from upstream inventory")
 
 
+def license_bundle(vendor: Path) -> bytes:
+    """Group byte-identical upstream notices without dropping attribution."""
+    groups: dict[bytes, list[str]] = {}
+    for crate in sorted(path for path in vendor.iterdir() if path.is_dir()):
+        if not (crate / "LICENSE").is_file():
+            raise ValueError(f"missing upstream licence for {crate.name}")
+        notices = sorted(
+            path
+            for path in crate.iterdir()
+            if path.is_file() and path.name.upper().startswith(("LICENSE", "COPYING", "NOTICE"))
+        )
+        for path in notices:
+            content = path.read_bytes()
+            if not content.strip():
+                raise ValueError(f"empty upstream licence or notice: {path}")
+            content.decode("utf-8")
+            groups.setdefault(content, []).append(f"rust/vendor/{crate.name}/{path.name}")
+    if not groups:
+        raise ValueError("no upstream licences or notices")
+    result = bytearray(b"Vendored third-party licences and notices\n\n")
+    for content, names in groups.items():
+        result.extend(("Applies to:\n" + "\n".join(names) + "\n\n").encode())
+        result.extend(content)
+        if not content.endswith(b"\n"):
+            result.extend(b"\n")
+        result.extend(b"\n")
+    return bytes(result)
+
+
+def check_license_bundle(vendor: Path, bundle: Path) -> None:
+    if bundle.read_bytes() != license_bundle(vendor):
+        raise ValueError("vendored licence bundle differs from upstream notices")
+
+
 def main() -> int:
     try:
         check_inventory(VENDOR)
+        check_license_bundle(VENDOR, ROOT / "THIRD-PARTY-LICENSES")
     except (OSError, ValueError, KeyError, TypeError, tomllib.TOMLDecodeError) as error:
         print(f"Vendored advisory inventory: FAIL: {error}", file=sys.stderr)
         return 1

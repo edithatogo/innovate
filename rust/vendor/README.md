@@ -12,12 +12,15 @@ Cargo advisory tools skip path dependencies. `Cargo.lock` in this directory is
 therefore an **audit inventory**, not a build lock: it records the original
 crates.io identities of these vendored sources so RustSec can monitor them.
 The security workflow checks that the inventory, crate manifests and audit
-lock agree before auditing it. After reviewing any upstream change, update the
-inventory and regenerate the audit lock from the repository root with the
-repository-local Python interpreter:
+lock agree before auditing it. The wheel carries `THIRD-PARTY-LICENSES`, which
+groups byte-identical notices and identifies every source file they cover;
+the source distribution also retains the individual upstream files. The same
+check detects when the bundle needs to be refreshed. After reviewing any
+upstream change, update the inventory and regenerate both files from the
+repository root with the repository-local Python interpreter:
 
 ```sh
-.venv-native/bin/python -c 'from scripts.check_vendor_audit import VENDOR, audit_lock; (VENDOR / "Cargo.lock").write_text(audit_lock(VENDOR), encoding="utf-8")'
+.venv-native/bin/python -c 'from scripts.check_vendor_audit import ROOT, VENDOR, audit_lock, license_bundle; (VENDOR / "Cargo.lock").write_text(audit_lock(VENDOR), encoding="utf-8"); (ROOT / "THIRD-PARTY-LICENSES").write_bytes(license_bundle(VENDOR))'
 ```
 
 `innovate-core` is marked `publish = false`: publishing a Cargo dependency with

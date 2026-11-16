@@ -21,6 +21,15 @@ Software Heritage, RRID and JOSS remain pending, and the release and scientific
 gates remain open. No external lookup, submission or acceptance is inferred
 from this packaging reassessment.
 
+The subsequent wheel-content check found identical upstream licence texts in
+separate wheel paths. The manifest now includes the project licence and a
+generated third-party bundle that maps each upstream path to its unmodified
+notice text, grouping only byte-identical copies. Individual upstream licence
+files remain in the source distribution. The reassessed manifest digest is
+now `9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05`;
+identity, version, project licence and the three pending registry dispositions
+are unchanged. This metadata review does not establish publication rights.
+
 ## Phase 1: Readiness and prerequisites
 
 - [x] Inspect the current native repository and registry-specific prerequisites.

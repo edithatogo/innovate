@@ -7,7 +7,7 @@ Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the bounded candidate in
 `codex/security-alert-44`, based on
 `b29a1d27f54fdd08d77881ee999772fceab7c03a`. The allowed candidate paths are
 the root and games Cargo manifests and locks, the core Cargo manifest,
-`rust/vendor/`, `.gitattributes`, `pyproject.toml`, `deny.toml`,
+`rust/vendor/`, `THIRD-PARTY-LICENSES`, `.gitattributes`, `pyproject.toml`, `deny.toml`,
 `osv-scanner.toml`, `.github/workflows/security-quality.yml`,
 `.github/workflows/ci.yml`, `noxfile.py`, any narrowly required dependency
 guard and its tests, the registry-readiness input record and its reassessment,
@@ -44,8 +44,8 @@ same expected error and exit code; no worker behavior is changed.
   stable, Rust 1.75 and privacy checks at
   `6f27257400fb25f44603883615f30447fbc5d4e4`. Its receiving commit is
   `ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf`; the two trees are identical.
-  The games manifest and lock name the receiving commit. Receiving-main checks
-  must also be verified; the native job was queued at this checkpoint.
+  The games manifest and lock name the receiving commit. The same three checks
+  passed on receiving main in runs `43878846017` and `43878846026`.
 - Root, games and vendored-audit lock SHA-256 values respectively are
   `63158d51e40f180a34c68bdb614f318b13ffd2de765607871daa7db36a8de4fd`,
   `307c1c18b5d4e0beee7b9cd4d575c320045b4f71287b8fbfe1976f269d23750e`, and
@@ -58,7 +58,7 @@ same expected error and exit code; no worker behavior is changed.
   inventory and its registry-identity audit lock; the security workflow audits
   that lock and the games lock as well as the root. A seeded `paste` dependency
   failed the cargo-deny ban, and a seeded `nalgebra 0.27.0` audit entry produced
-  `RUSTSEC-2021-0070`. Three inventory drift tests passed.
+  `RUSTSEC-2021-0070`. Four inventory and licence-bundle tests passed.
 - Local execution used CPython 3.15.2 and Rust 1.99.1. The combined games suite
   passed three tests on the merged provider revision. A fresh Git-consumer
   prototype passed its closed-form control, and a wheel built from an extracted
@@ -70,7 +70,14 @@ same expected error and exit code; no worker behavior is changed.
   case described above; its five-test target passed after repair, followed by a
   successful full `nox -s native` run with one live-OECD test ignored. The
   warning-denied `cargo doc --locked --no-deps -p innovate-core -p
-  innovate-tabular -p innovate-ffi` build also passed.
+  innovate-tabular -p innovate-ffi` build also passed. A subsequent full
+  Python run passed 374 tests with the same five capability-based skips.
+- The initial wheel-content check rejected duplicate identical upstream
+  licence files. The source distribution now retains each original file; the
+  wheel carries a generated bundle that maps each source notice to its exact
+  text, grouping only identical bytes. `check-wheel-contents` and `twine check`
+  passed for the rebuilt wheel and source distribution, and five installed
+  consumer tests passed. Bundle-drift tests preserve this mapping.
 - Local actionlint 1.7.12 and the checksum-verified CI-pinned 1.7.9 both consumed
   CPU without producing a result and were interrupted after approximately two
   minutes and one minute respectively. Neither is a pass. Workflow tests passed;
@@ -78,6 +85,12 @@ same expected error and exit code; no worker behavior is changed.
   exact candidate remains required. Registry publication remains blocked by
   `innovate-core`'s `publish = false` until paste-free published dependencies
   exist; release, multi-platform and scientific acceptance remain separate.
+- On the first PR head, hosted workflow lint passed. Privacy run `43881472468`
+  failed after Gitleaks reported zero findings; the privacy scanner emitted no
+  result before the step exited, so its cause is not established. Release
+  readiness run `43881472447` failed on the 38 open scientific obligations;
+  the same gate failed on base `b29a1d27` in run `43864696589`. Neither is
+  waived. Repeat required checks on the final head and preserve the release hold.
 
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 

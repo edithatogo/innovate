@@ -4,7 +4,7 @@ version = "0.7.0a1"
 description = "Rust-native innovation diffusion modelling with Polars"
 requires-python = ">=3.15.2,<3.16"
 license = "Apache-2.0"
-license-files = ["LICENSE*", "rust/vendor/*/LICENSE", "rust/vendor/*/COPYING.*"]
+license-files = ["LICENSE*", "THIRD-PARTY-LICENSES"]
 readme = "README.md"
 authors = [{name = "Dylan A Mordaunt", email = "dylan.mordaunt@vuw.ac.nz"}]
 dependencies = ["polars==2.1.0"]
