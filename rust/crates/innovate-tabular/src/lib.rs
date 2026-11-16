@@ -660,3 +660,412 @@ pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
     )?;
     write_ipc_file(&mut frame)
 }
+
+/// Explicit column mapping for [`bind_panel`] (R03).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ColumnBinding {
+    pub time: String,
+    pub product: String,
+    pub measure: String,
+    pub unit: String,
+    pub value: String,
+    pub denominator: Option<String>,
+}
+
+/// One validated observation row extracted by [`bind_panel`].
+#[derive(Debug, Clone, PartialEq)]
+pub struct PanelRow {
+    pub time: f64,
+    pub product: String,
+    pub measure: String,
+    pub unit: String,
+    pub value: Option<f64>,
+    pub denominator: Option<f64>,
+}
+
+/// Normalized observation panel produced by [`bind_panel`].
+#[derive(Debug, Clone, PartialEq)]
+pub struct ObservationPanel {
+    pub rows: Vec<PanelRow>,
+}
+
+/// Bind a Polars `DataFrame` into an [`ObservationPanel`] using explicit column names (R03).
+///
+/// Preserves `null` observations as `None` distinct from `Some(0.0)`, is invariant to
+/// column permutation, and rejects missing columns, wrong types, duplicate `(time, product, measure)`
+/// keys, non-finite values, or ambiguous units within a `(product, measure)` series.
+///
+/// # Errors
+/// Returns `PolarsError` on schema mismatches, duplicate keys, ambiguous units, or non-finite values.
+pub fn bind_panel(frame: DataFrame, binding: &ColumnBinding) -> PolarsResult<ObservationPanel> {
+    let n = frame.height();
+    let time_col = frame.column(&binding.time)?;
+    if !time_col.dtype().is_numeric() {
+        polars_bail!(SchemaMismatch: "time column must be numeric");
+    }
+    let time_cast = time_col.cast(&DataType::Float64)?;
+    let time_arr = time_cast.f64()?;
+    if time_arr.null_count() != 0 {
+        polars_bail!(ComputeError: "time column must not contain nulls");
+    }
+
+    let prod_col = frame.column(&binding.product)?.str()?;
+    if prod_col.null_count() != 0 {
+        polars_bail!(ComputeError: "product column must not contain nulls");
+    }
+    let meas_col = frame.column(&binding.measure)?.str()?;
+    if meas_col.null_count() != 0 {
+        polars_bail!(ComputeError: "measure column must not contain nulls");
+    }
+    let unit_col = frame.column(&binding.unit)?.str()?;
+    if unit_col.null_count() != 0 {
+        polars_bail!(ComputeError: "unit column must not contain nulls");
+    }
+
+    let val_col = frame.column(&binding.value)?;
+    if !val_col.dtype().is_numeric() {
+        polars_bail!(SchemaMismatch: "value column must be numeric");
+    }
+    let val_cast = val_col.cast(&DataType::Float64)?;
+    let val_arr = val_cast.f64()?;
+
+    let denom_arr = if let Some(ref denom_name) = binding.denominator {
+        let dcol = frame.column(denom_name)?;
+        if !dcol.dtype().is_numeric() {
+            polars_bail!(SchemaMismatch: "denominator column must be numeric");
+        }
+        Some(dcol.cast(&DataType::Float64)?)
+    } else {
+        None
+    };
+    let denom_f64 = denom_arr.as_ref().map(|c| c.f64()).transpose()?;
+
+    let mut seen_keys = std::collections::HashSet::with_capacity(n);
+    let mut series_units = std::collections::HashMap::<(String, String), String>::new();
+    let mut rows = Vec::with_capacity(n);
+
+    for i in 0..n {
+        let t = time_arr.get(i).unwrap();
+        if !t.is_finite() {
+            polars_bail!(ComputeError: "time values must be finite");
+        }
+        let product = prod_col.get(i).unwrap().to_string();
+        let measure = meas_col.get(i).unwrap().to_string();
+        let unit = unit_col.get(i).unwrap().to_string();
+        if product.trim().is_empty() || measure.trim().is_empty() || unit.trim().is_empty() {
+            polars_bail!(SchemaMismatch: "product, measure, and unit must be nonempty");
+        }
+        if !seen_keys.insert((t.to_bits(), product.clone(), measure.clone())) {
+            polars_bail!(Duplicate: "duplicate (time, product, measure) key in panel");
+        }
+        if let Some(prev_unit) =
+            series_units.insert((product.clone(), measure.clone()), unit.clone())
+            && prev_unit != unit
+        {
+            polars_bail!(SchemaMismatch: "ambiguous units for ({product}, {measure})");
+        }
+        let value = val_arr.get(i);
+        if let Some(v) = value
+            && !v.is_finite()
+        {
+            polars_bail!(ComputeError: "observation values must be finite when present");
+        }
+        let denominator = denom_f64.as_ref().and_then(|arr| arr.get(i));
+        if let Some(d) = denominator
+            && (!d.is_finite() || d <= 0.0)
+        {
+            polars_bail!(ComputeError: "denominator values must be finite and positive when present");
+        }
+        rows.push(PanelRow {
+            time: t,
+            product,
+            measure,
+            unit,
+            value,
+            denominator,
+        });
+    }
+    Ok(ObservationPanel { rows })
+}
+
+/// One row of a versioned [`JointDrawBundle`] (R04).
+#[derive(Debug, Clone, PartialEq)]
+pub struct JointDrawRow {
+    pub draw_id: u64,
+    pub chain_id: u64,
+    pub scenario_id: String,
+    pub strategy_id: String,
+    pub product: String,
+    pub region: String,
+    pub time: f64,
+    pub value: Option<f64>,
+    pub units: String,
+    pub fit_status: String,
+    pub provenance: String,
+}
+
+/// Versioned joint posterior/scenario draw bundle (`specs/joint-draw-v1.json`, R04).
+#[derive(Debug, Clone, PartialEq)]
+pub struct JointDrawBundle {
+    pub schema_version: String,
+    pub dependence: String,
+    pub rows: Vec<JointDrawRow>,
+}
+
+fn validate_joint_draw_bundle(bundle: &JointDrawBundle) -> PolarsResult<()> {
+    if bundle.schema_version != "1.0" {
+        polars_bail!(SchemaMismatch: "unsupported joint-draw schema_version");
+    }
+    if bundle.dependence.trim().is_empty() {
+        polars_bail!(SchemaMismatch: "joint-draw bundle requires explicit dependence label");
+    }
+    if bundle.rows.is_empty() {
+        polars_bail!(ComputeError: "joint-draw bundle must contain at least one row");
+    }
+    let mut keys = std::collections::HashSet::with_capacity(bundle.rows.len());
+    for row in &bundle.rows {
+        if row.units.trim().is_empty() {
+            polars_bail!(SchemaMismatch: "joint-draw row requires non-empty units");
+        }
+        if row.fit_status != "valid" {
+            polars_bail!(ComputeError: "joint-draw bundle rejects invalid fit_status");
+        }
+        if row.provenance.trim().is_empty() || !row.time.is_finite() {
+            polars_bail!(ComputeError: "joint-draw row requires finite time and provenance");
+        }
+        if let Some(v) = row.value
+            && !v.is_finite()
+        {
+            polars_bail!(ComputeError: "joint-draw value must be finite when present");
+        }
+        let key = (
+            row.draw_id,
+            row.chain_id,
+            row.scenario_id.clone(),
+            row.strategy_id.clone(),
+            row.product.clone(),
+            row.region.clone(),
+            row.time.to_bits(),
+        );
+        if !keys.insert(key) {
+            polars_bail!(Duplicate: "duplicate joint-draw key");
+        }
+    }
+    Ok(())
+}
+
+/// Encode a [`JointDrawBundle`] to Arrow IPC file bytes (R04).
+///
+/// # Errors
+/// Returns `PolarsError` if validation or Arrow IPC encoding fails.
+pub fn encode_joint_draws(bundle: &JointDrawBundle) -> PolarsResult<Vec<u8>> {
+    validate_joint_draw_bundle(bundle)?;
+    let draw_ids: Vec<u64> = bundle.rows.iter().map(|r| r.draw_id).collect();
+    let chain_ids: Vec<u64> = bundle.rows.iter().map(|r| r.chain_id).collect();
+    let scenario_ids: Vec<&str> = bundle.rows.iter().map(|r| r.scenario_id.as_str()).collect();
+    let strategy_ids: Vec<&str> = bundle.rows.iter().map(|r| r.strategy_id.as_str()).collect();
+    let products: Vec<&str> = bundle.rows.iter().map(|r| r.product.as_str()).collect();
+    let regions: Vec<&str> = bundle.rows.iter().map(|r| r.region.as_str()).collect();
+    let times: Vec<f64> = bundle.rows.iter().map(|r| r.time).collect();
+    let values: Vec<Option<f64>> = bundle.rows.iter().map(|r| r.value).collect();
+    let units: Vec<&str> = bundle.rows.iter().map(|r| r.units.as_str()).collect();
+    let fit_statuses: Vec<&str> = bundle.rows.iter().map(|r| r.fit_status.as_str()).collect();
+    let provenances: Vec<&str> = bundle.rows.iter().map(|r| r.provenance.as_str()).collect();
+    let dependencies: Vec<&str> = vec![bundle.dependence.as_str(); bundle.rows.len()];
+    let versions: Vec<&str> = vec![bundle.schema_version.as_str(); bundle.rows.len()];
+
+    let mut frame = df!(
+        "schema_version" => versions,
+        "dependence" => dependencies,
+        "draw_id" => draw_ids,
+        "chain_id" => chain_ids,
+        "scenario_id" => scenario_ids,
+        "strategy_id" => strategy_ids,
+        "product" => products,
+        "region" => regions,
+        "time" => times,
+        "value" => values,
+        "units" => units,
+        "fit_status" => fit_statuses,
+        "provenance" => provenances
+    )?;
+    write_ipc_file(&mut frame)
+}
+
+/// Decode and validate Arrow IPC bytes into a [`JointDrawBundle`] (R04).
+///
+/// # Errors
+/// Returns `PolarsError` if IPC decoding fails or the bundle violates `joint-draw-v1.json`.
+pub fn decode_joint_draws(bytes: &[u8]) -> PolarsResult<JointDrawBundle> {
+    let frame = read_ipc(bytes)?;
+    let n = frame.height();
+    if n == 0 {
+        polars_bail!(ComputeError: "joint-draw IPC contains no rows");
+    }
+    let versions = frame.column("schema_version")?.str()?;
+    let dependencies = frame.column("dependence")?.str()?;
+    let draw_ids = frame.column("draw_id")?.u64()?;
+    let chain_ids = frame.column("chain_id")?.u64()?;
+    let scenario_ids = frame.column("scenario_id")?.str()?;
+    let strategy_ids = frame.column("strategy_id")?.str()?;
+    let products = frame.column("product")?.str()?;
+    let regions = frame.column("region")?.str()?;
+    let times = frame.column("time")?.f64()?;
+    let values = frame.column("value")?.f64()?;
+    let units = frame.column("units")?.str()?;
+    let fit_statuses = frame.column("fit_status")?.str()?;
+    let provenances = frame.column("provenance")?.str()?;
+
+    let schema_version = versions
+        .get(0)
+        .ok_or_else(|| polars_err!(SchemaMismatch: "missing schema_version"))?
+        .to_string();
+    let dependence = dependencies
+        .get(0)
+        .ok_or_else(|| polars_err!(SchemaMismatch: "missing dependence"))?
+        .to_string();
+
+    let mut rows = Vec::with_capacity(n);
+    for i in 0..n {
+        rows.push(JointDrawRow {
+            draw_id: draw_ids
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null draw_id"))?,
+            chain_id: chain_ids
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null chain_id"))?,
+            scenario_id: scenario_ids
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null scenario_id"))?
+                .to_string(),
+            strategy_id: strategy_ids
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null strategy_id"))?
+                .to_string(),
+            product: products
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null product"))?
+                .to_string(),
+            region: regions
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null region"))?
+                .to_string(),
+            time: times
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null time"))?,
+            value: values.get(i),
+            units: units
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null units"))?
+                .to_string(),
+            fit_status: fit_statuses
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null fit_status"))?
+                .to_string(),
+            provenance: provenances
+                .get(i)
+                .ok_or_else(|| polars_err!(ComputeError: "null provenance"))?
+                .to_string(),
+        });
+    }
+    let bundle = JointDrawBundle {
+        schema_version,
+        dependence,
+        rows,
+    };
+    validate_joint_draw_bundle(&bundle)?;
+    Ok(bundle)
+}
+
+/// One row of a semi-Markov cohort occupancy/transition trajectory (SM03).
+#[derive(Debug, Clone, PartialEq)]
+pub struct CohortOccupancyRow {
+    pub draw_id: u64,
+    pub scenario_id: String,
+    pub cohort_id: String,
+    pub subgroup: String,
+    pub state: String,
+    pub duration_bin: u32,
+    pub time: f64,
+    pub occupancy: f64,
+    pub transition_flow: f64,
+}
+
+/// Encode cohort occupancy/transition rows to Arrow IPC bytes (SM03).
+///
+/// # Errors
+/// Returns `PolarsError` if `rows` is empty, values are non-finite/negative, or IPC encoding fails.
+pub fn cohort_occupancy_ipc(rows: &[CohortOccupancyRow]) -> PolarsResult<Vec<u8>> {
+    if rows.is_empty() {
+        polars_bail!(ComputeError: "cohort occupancy rows must be nonempty");
+    }
+    for row in rows {
+        if !row.time.is_finite()
+            || !row.occupancy.is_finite()
+            || row.occupancy < 0.0
+            || !row.transition_flow.is_finite()
+            || row.transition_flow < 0.0
+            || row.scenario_id.trim().is_empty()
+            || row.cohort_id.trim().is_empty()
+            || row.state.trim().is_empty()
+        {
+            polars_bail!(ComputeError: "cohort occupancy row contains invalid keys or values");
+        }
+    }
+    let draw_ids: Vec<u64> = rows.iter().map(|r| r.draw_id).collect();
+    let scenario_ids: Vec<&str> = rows.iter().map(|r| r.scenario_id.as_str()).collect();
+    let cohort_ids: Vec<&str> = rows.iter().map(|r| r.cohort_id.as_str()).collect();
+    let subgroups: Vec<&str> = rows.iter().map(|r| r.subgroup.as_str()).collect();
+    let states: Vec<&str> = rows.iter().map(|r| r.state.as_str()).collect();
+    let duration_bins: Vec<u32> = rows.iter().map(|r| r.duration_bin).collect();
+    let times: Vec<f64> = rows.iter().map(|r| r.time).collect();
+    let occupancies: Vec<f64> = rows.iter().map(|r| r.occupancy).collect();
+    let flows: Vec<f64> = rows.iter().map(|r| r.transition_flow).collect();
+
+    let mut frame = df!(
+        "draw_id" => draw_ids,
+        "scenario_id" => scenario_ids,
+        "cohort_id" => cohort_ids,
+        "subgroup" => subgroups,
+        "state" => states,
+        "duration_bin" => duration_bins,
+        "time" => times,
+        "occupancy" => occupancies,
+        "transition_flow" => flows
+    )?;
+    write_ipc_file(&mut frame)
+}
+
+/// Decode cohort occupancy/transition rows from Arrow IPC bytes (SM03).
+///
+/// # Errors
+/// Returns `PolarsError` if IPC decoding or column extraction fails.
+pub fn decode_cohort_occupancy_ipc(bytes: &[u8]) -> PolarsResult<Vec<CohortOccupancyRow>> {
+    let frame = read_ipc(bytes)?;
+    let n = frame.height();
+    let draw_ids = frame.column("draw_id")?.u64()?;
+    let scenario_ids = frame.column("scenario_id")?.str()?;
+    let cohort_ids = frame.column("cohort_id")?.str()?;
+    let subgroups = frame.column("subgroup")?.str()?;
+    let states = frame.column("state")?.str()?;
+    let duration_bins = frame.column("duration_bin")?.u32()?;
+    let times = frame.column("time")?.f64()?;
+    let occupancies = frame.column("occupancy")?.f64()?;
+    let flows = frame.column("transition_flow")?.f64()?;
+
+    let mut out = Vec::with_capacity(n);
+    for i in 0..n {
+        out.push(CohortOccupancyRow {
+            draw_id: draw_ids.get(i).unwrap(),
+            scenario_id: scenario_ids.get(i).unwrap().to_string(),
+            cohort_id: cohort_ids.get(i).unwrap().to_string(),
+            subgroup: subgroups.get(i).unwrap().to_string(),
+            state: states.get(i).unwrap().to_string(),
+            duration_bin: duration_bins.get(i).unwrap(),
+            time: times.get(i).unwrap(),
+            occupancy: occupancies.get(i).unwrap(),
+            transition_flow: flows.get(i).unwrap(),
+        });
+    }
+    Ok(out)
+}

@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0",
+  "title": "Acyclic StudyDesign and PolicyScenario Feedback Contract",
+  "allowed_study_types": ["rct", "observational_cohort"],
+  "acyclic_flow": ["innovate_fit", "voiage_evsi", "study_design_artifact", "orchestrated_simulation"]
+}

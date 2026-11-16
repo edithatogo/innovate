@@ -16,6 +16,10 @@ description = "Rust-owned innovation diffusion scientific kernel"
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
+[[bench]]
+name = "workloads"
+harness = false
+
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true

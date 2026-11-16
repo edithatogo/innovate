@@ -940,6 +940,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "innovate-kairos"
+version = "0.7.0-alpha.1"
+dependencies = [
+ "innovate-core",
+ "serde_json",
+]
+
+[[package]]
 name = "innovate-python"
 version = "0.7.0-alpha.1"
 dependencies = [

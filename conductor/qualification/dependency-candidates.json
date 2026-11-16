@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-16T16:51:00+10:00",
+  "candidates": [
+    {
+      "name": "ureq",
+      "version": "3.5.2",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "na", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "polars-core",
+      "version": "0.55.2",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "polars-arrow",
+      "version": "0.55.2",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "nalgebra",
+      "version": "0.35.0",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "statrs",
+      "version": "0.19.1",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "ode_solvers",
+      "version": "0.6.2",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "nuts-rs",
+      "version": "0.19.1",
+      "source": "crates.io",
+      "status": "qualified",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    },
+    {
+      "name": "kairo-ecs-*",
+      "version": "0.1.0",
+      "source": "git+https://github.com/edithatogo/kairos.git#8b51431eaf8d9b7a8ebda6f8d8f7451f1be55e36",
+      "status": "bounded_exception",
+      "exception": "deny.toml retains temporary allow-git for kairos.git until crates.io release (Order #3)",
+      "checks": {"security": "pass", "build": "pass", "numerical": "pass", "consumer": "pass", "resource": "pass"}
+    }
+  ]
+}
