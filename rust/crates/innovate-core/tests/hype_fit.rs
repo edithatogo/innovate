@@ -42,7 +42,7 @@ fn hype_fit_recovers_noiseless_curve_and_flags_overlapping_pulses() {
         initial_guesses: vec![guess],
         max_iterations: 200,
     });
-    assert!(posterior(&outcome).is_err());
+    assert_eq!(posterior(&outcome).unwrap_err().code, "deterministic_fit");
     let row = match &outcome {
         innovate_core::inference::FitOutcome::Deterministic(res) => &res.values,
         other => panic!("expected deterministic fit, got {other:?}"),
@@ -89,7 +89,8 @@ fn hype_fit_recovers_noiseless_curve_and_flags_overlapping_pulses() {
         initial_guesses: vec![overlap_guess],
         max_iterations: 10,
     });
-    if let innovate_core::inference::FitOutcome::Valid(res) = overlap_out {
-        assert!(res.diagnostics.contains("overlapping_pulses=true"));
-    }
+    let innovate_core::inference::FitOutcome::Deterministic(res) = overlap_out else {
+        panic!("expected a deterministic overlap fit");
+    };
+    assert!(res.diagnostics.contains("overlapping_pulses=true"));
 }

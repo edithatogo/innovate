@@ -246,10 +246,10 @@ impl InferenceSession {
         &self.outcome
     }
 
-    /// Fail-closed posterior accessor; rejects any [`FitOutcome::Invalid`] state.
+    /// Fail-closed posterior accessor; rejects invalid and deterministic states.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] if the current outcome is [`FitOutcome::Invalid`].
+    /// Returns [`InnovationError`] if the current outcome is invalid or deterministic.
     pub fn posterior(&self) -> Result<&PosteriorDraws, InnovationError> {
         posterior(&self.outcome)
     }
@@ -258,7 +258,7 @@ impl InferenceSession {
 /// Fail-closed accessor that exposes posterior draws only for [`FitOutcome::Valid`].
 ///
 /// # Errors
-/// Returns [`InnovationError`] when `outcome` is [`FitOutcome::Invalid`].
+/// Returns [`InnovationError`] when `outcome` is invalid or deterministic.
 pub fn posterior(outcome: &FitOutcome) -> Result<&PosteriorDraws, InnovationError> {
     match outcome {
         FitOutcome::Valid(result) => Ok(&result.posterior),

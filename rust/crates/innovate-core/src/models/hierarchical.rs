@@ -1,6 +1,6 @@
 //! Hierarchical partial-pooling model with non-centred group effects (A03).
 
-use crate::inference::{FitFailure, FitOutcome, FitResult, InnovationError, PosteriorDraws};
+use crate::inference::{FitFailure, FitOutcome, InnovationError};
 
 /// Group-level observation panel for [`fit_hierarchical`].
 #[derive(Debug, Clone, PartialEq)]

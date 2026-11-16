@@ -18,7 +18,7 @@ pub mod semi_markov;
 
 use crate::KernelBinding;
 use crate::domain::TimeGrid;
-use crate::inference::{FitFailure, FitOutcome, FitResult, InnovationError, PosteriorDraws};
+use crate::inference::{FitFailure, FitOutcome, InnovationError};
 use serde_json::json;
 
 /// Supported classical scalar diffusion families (A01).

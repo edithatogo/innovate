@@ -1,7 +1,7 @@
 //! Joint constrained multistart fitting for composite hype curves (H02).
 
 use crate::domain::TimeGrid;
-use crate::inference::{FitFailure, FitOutcome, FitResult, PosteriorDraws};
+use crate::inference::{FitFailure, FitOutcome};
 use crate::models::hype::{HypeConfiguration, HypeParameters, HypePulse, hype_mean};
 
 /// Request for [`fit_hype`].
