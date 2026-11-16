@@ -22,7 +22,11 @@ fn classical_predict_and_fit_recover_noiseless_families() {
         time: time.clone(),
         observed: bass_pred.values.clone(),
     });
-    assert!(posterior(&bass_fit).is_ok());
+    assert!(matches!(
+        bass_fit,
+        innovate_core::inference::FitOutcome::Deterministic(_)
+    ));
+    assert!(posterior(&bass_fit).is_err());
 
     // Logistic, Gompertz, Fisher-Pry predictions
     let log_pred = predict_classical(&PredictionRequest {
@@ -58,7 +62,7 @@ fn classical_flags_short_pre_inflection_and_rejects_invalid_inputs() {
         time: short_time.clone(),
         observed: vec![0.0, 5.0, 12.0],
     });
-    if let innovate_core::inference::FitOutcome::Valid(res) = short_fit {
+    if let innovate_core::inference::FitOutcome::Deterministic(res) = short_fit {
         assert!(res.diagnostics.contains("weakly_identified"));
     }
 

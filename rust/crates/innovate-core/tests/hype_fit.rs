@@ -42,8 +42,11 @@ fn hype_fit_recovers_noiseless_curve_and_flags_overlapping_pulses() {
         initial_guesses: vec![guess],
         max_iterations: 200,
     });
-    let draws = posterior(&outcome).unwrap();
-    let row = &draws.draws()[0];
+    assert!(posterior(&outcome).is_err());
+    let row = match &outcome {
+        innovate_core::inference::FitOutcome::Deterministic(res) => &res.values,
+        other => panic!("expected deterministic fit, got {other:?}"),
+    };
     let fitted = HypeParameters {
         baseline: row[0],
         maturity_amplitude: row[1],

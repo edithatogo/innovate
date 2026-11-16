@@ -87,16 +87,17 @@ pub fn fit_hierarchical(request: &PanelFitRequest) -> FitOutcome {
     names.push("unseen_group_sd".to_string());
     vals.push(mu_sd.hypot(request.tau));
 
-    match PosteriorDraws::new(names, vec![vals]) {
-        Ok(posterior) => FitOutcome::Valid(FitResult {
-            posterior,
-            diagnostics: format!("converged; groups={}", groups.len()),
-        }),
-        Err(err) => FitOutcome::Invalid(FitFailure {
-            code: err.code.into(),
-            message: err.message,
-        }),
+    if vals.iter().any(|v| !v.is_finite()) {
+        return FitOutcome::Invalid(FitFailure {
+            code: "non_finite_estimate".into(),
+            message: "fitted parameters contain non-finite values".into(),
+        });
     }
+    FitOutcome::Deterministic(crate::inference::DeterministicFitResult {
+        names,
+        values: vals,
+        diagnostics: format!("converged; groups={}", groups.len()),
+    })
 }
 
 /// Draw a deterministic predictive mean/sd tuple for an unseen group (A03).
@@ -104,8 +105,16 @@ pub fn fit_hierarchical(request: &PanelFitRequest) -> FitOutcome {
 /// # Errors
 /// Returns [`InnovationError`] if `outcome` is invalid.
 pub fn unseen_group_predictive(outcome: &FitOutcome) -> Result<(f64, f64), InnovationError> {
-    let draws = crate::inference::posterior(outcome)?;
-    let row = &draws.draws()[0];
+    let row = match outcome {
+        FitOutcome::Valid(res) => &res.posterior.draws()[0],
+        FitOutcome::Deterministic(res) => &res.values,
+        FitOutcome::Invalid(failure) => {
+            return Err(InnovationError::new(
+                "invalid_inference",
+                format!("{}: {}", failure.code, failure.message),
+            ));
+        }
+    };
     let mu = row[0];
     let unseen_sd = *row.last().unwrap();
     Ok((mu, unseen_sd))

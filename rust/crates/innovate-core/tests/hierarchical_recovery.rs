@@ -19,8 +19,11 @@ fn hierarchical_recovers_pooling_limits_and_shrinks_sparse_groups() {
         obs_sd: 1.0,
         tau: 1.0,
     });
-    let draws = posterior(&outcome).unwrap();
-    let row = &draws.draws()[0];
+    assert!(posterior(&outcome).is_err());
+    let row = match &outcome {
+        innovate_core::inference::FitOutcome::Deterministic(res) => &res.values,
+        other => panic!("expected deterministic fit, got {other:?}"),
+    };
     let mu_hat = row[0];
     let theta_dense = row[2];
     let theta_sparse = row[3];
@@ -44,7 +47,10 @@ fn hierarchical_recovers_pooling_limits_and_shrinks_sparse_groups() {
         obs_sd: 1.0,
         tau: 0.0,
     });
-    let p_row = &posterior(&pooled).unwrap().draws()[0];
+    let p_row = match &pooled {
+        innovate_core::inference::FitOutcome::Deterministic(res) => &res.values,
+        other => panic!("expected deterministic fit, got {other:?}"),
+    };
     assert!((p_row[2] - p_row[0]).abs() < 1e-12);
     assert!((p_row[3] - p_row[0]).abs() < 1e-12);
 }
