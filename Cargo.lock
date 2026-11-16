@@ -920,6 +920,7 @@ dependencies = [
  "libm",
  "nalgebra 0.34.2",
  "nuts-rs",
+ "ode_solvers",
  "petgraph",
  "rand",
  "serde",
@@ -1382,6 +1383,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2e5a6c098c7a3b6547378093f5cc30bc54fd361ce711e05293a5cc589562739b"
 dependencies = [
  "memchr",
+]
+
+[[package]]
+name = "ode_solvers"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18501982e08afc982434c92e1a2968d3b696b368c6df40a210475ba447fba8d9"
+dependencies = [
+ "nalgebra 0.34.2",
+ "num-traits",
+ "serde",
+ "simba 0.9.1",
+ "thiserror",
 ]
 
 [[package]]
