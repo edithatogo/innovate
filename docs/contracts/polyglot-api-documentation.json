@@ -194,7 +194,7 @@
   "schema_version": 1,
   "scope": "Explicit Julia and R public exports in the current thin native binding source files.",
   "sources": {
-    ".github/workflows/ci.yml": "sha256:4b7d8651638661fb19dbaa18f75eeaaa966aa63f2e06ace7e99aa5a1ecb7f61b",
+    ".github/workflows/ci.yml": "sha256:0f3876cbb7d746dc2c6a5c0d35280d706270adcd0c21f67f4692b68543ec158c",
     "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
     "bindings/julia/src/Innovate.jl": "sha256:8c7794eef8027cc89172cdd91d005cf5c0ec722a72716195a8ee19afb817ed02",
     "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",

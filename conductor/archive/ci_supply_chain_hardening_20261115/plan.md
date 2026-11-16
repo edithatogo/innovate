@@ -7,7 +7,7 @@ Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the bounded candidate in
 `codex/security-alert-44`, based on
 `b29a1d27f54fdd08d77881ee999772fceab7c03a`. The allowed candidate paths are
 the root and games Cargo manifests and locks, the core Cargo manifest,
-`rust/vendor/`, `THIRD-PARTY-LICENSES`, `.gitattributes`, `pyproject.toml`, `deny.toml`,
+`rust/vendor/`, `THIRD-PARTY-LICENSES`, `.gitattributes`, `Dockerfile`, `pyproject.toml`, `deny.toml`,
 `osv-scanner.toml`, `.github/workflows/security-quality.yml`,
 `.github/workflows/ci.yml`, `noxfile.py`, any narrowly required dependency
 guard and its tests, the registry-readiness input record and its reassessment,
@@ -78,6 +78,14 @@ same expected error and exit code; no worker behavior is changed.
   text, grouping only identical bytes. `check-wheel-contents` and `twine check`
   passed for the rebuilt wheel and source distribution, and five installed
   consumer tests passed. Bundle-drift tests preserve this mapping.
+- Container review found that the source build context omitted the newly
+  required notice bundle. The Dockerfile now copies it into both build stages
+  and the remote-worker image; the scheduled container check includes and
+  verifies it. No Docker client or running qualified container service was
+  available locally, so container build and execution remain unverified here.
+  The resulting CI workflow change alters only the archived container inputs
+  and notice assertion; a structural comparison found no Julia/R inventory
+  change other than the workflow hash before refreshing that inventory.
 - Local actionlint 1.7.12 and the checksum-verified CI-pinned 1.7.9 both consumed
   CPU without producing a result and were interrupted after approximately two
   minutes and one minute respectively. Neither is a pass. Workflow tests passed;
