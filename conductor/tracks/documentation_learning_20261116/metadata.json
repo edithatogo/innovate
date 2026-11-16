@@ -3,7 +3,7 @@
   "type": "feature",
   "status": "in_progress",
   "created_at": "2026-11-16T21:45:00+10:00",
-  "updated_at": "2026-11-16T12:18:56+00:00",
-  "description": "Implement and qualify source-derived Astro model/tutorial catalogues, optional native marimo learning, a frozen public-data lesson, advanced examples, language documentation conventions, community standards and legacy retirement. The integrated base 5821d8a has fresh local source, Python/native, five-crate Rust, marimo and static-site artifact evidence. Earlier hosted Python/Julia/R receipts remain historical. Current all-language aggregation, managed-browser execution, Windows CI, broader curriculum, human reader success and live publication remain under qualification; the excluded standalone games documentation is blocked by upstream dependency resolution.",
+  "updated_at": "2026-11-16T12:42:09.050153+00:00",
+  "description": "Implement and qualify source-derived Astro catalogues, optional native marimo learning, a frozen public-data lesson, advanced examples, language documentation contracts, community standards and legacy retirement. Draft PR #671 supersedes closed PR #659. At merged head b2ed945 the documentation workflow, all 164 browser cases, installed Python/Julia/R aggregate and Windows/macOS/Linux native CI pass. Upstream tests and historical receipts are preserved. Scientific release obligations, standalone games dependency resolution, offline runner qualification, broader curriculum, human reader evaluation and live publication remain open.",
   "predecessor": "../../archive/documentation_quality_contracts_20261115/"
 }

@@ -9,6 +9,27 @@ New source receives fresh qualification; earlier receipts keep their actual
 revisions and limitations. Shared dependency, workflow, merge and publication
 ownership remains with the coordinator.
 
+## Published integration follow-up — PR #671
+
+- [x] Publish the implementation as draft PR #671 and close superseded PR #659.
+- [x] Integrate upstream `b29a1d` by ordinary merge `b2ed945`, preserving all five
+  independent upstream paths and the 16 reviewed implementation Rust blobs.
+  Non-documentation source bytes equal upstream in every conflicted file.
+- [x] Run the three new upstream core test targets: nine tests pass, with no
+  failures, ignored or filtered cases. Retain the exact command and raw log.
+- [x] Recheck scientific/notebook source consistency and the production artifact:
+  source/artifact fingerprints are unchanged, with 211 pages, 11,361 local links
+  and zero errors. Keep the compact comparison separate from full producer JSON.
+- [x] Retain the two clean scanner results for ordinary candidate tree `dc4a4ec`;
+  do not attribute that scan to the later merge or evidence-only follow-up.
+- [x] Record documentation run 43866570433 and native CI 43866570444 as passing
+  at `b2ed945`: 164/164 browser cases, both original-response probes, installed
+  Python/Julia/R aggregation and all operating-system lanes. The
+  [hosted receipts](evidence-20261116/hosted-b2ed945/README.md) preserve actual
+  results separately from the unchanged pre-result integration snapshot.
+- [ ] Resolve owner-held standalone games, scientific release and offline runner
+  holds; retain the confirmed 16-model/22-capability release failure meanwhile.
+
 ## Final integrated qualification — base 5821d8a
 
 - [x] Retain fresh receipts for the frozen source at
@@ -31,18 +52,17 @@ ownership remains with the coordinator.
 - [!] Qualify standalone games documentation after its upstream dependency
   resolution conflict is resolved by the dependency owner. The strict command
   stopped before rustdoc; doctests were not run and no pins were changed here.
-- [ ] Obtain current hosted Julia/R receipts and an all-language aggregate pass.
-  The local Python checks pass; missing current Julia/R receipts correctly keep
-  aggregate `gate_passed` and `complete` false.
-- [ ] Qualify the original-response browser repair and Windows checkout repair
-  on the published integrated head, retaining all 164 browser cases and existing
-  budgets, identity requirements and exact frozen-data checks.
+- [x] Obtain current hosted Julia/R receipts and an all-language aggregate pass
+  at `b2ed945`; retain the locally incomplete receipt with its original scope.
+- [x] Qualify the original-response browser repair and Windows checkout repair
+  at `b2ed945`, retaining all 164 browser cases and existing budgets, identities
+  and exact frozen-data checks. No documentation/public-data Windows case skips.
 - [ ] Complete live revision/publication checks and the remaining human,
   scientific and curriculum acceptance in DOC-01–08.
 
-Read-only main observation `45e33cd` contains only two Renovate workflow updates
-after the qualified base. The checkout and receipts remain bound to `5821d8a`;
-no rebase or requalification is inferred from that observation.
+The earlier read-only main observation `45e33cd` contained only two Renovate
+workflow updates after the qualified base. Those receipts remain bound to their
+recorded source; the later ordinary merge is qualified separately above.
 
 ## Authorised implementation follow-up — 16 November 2026
 

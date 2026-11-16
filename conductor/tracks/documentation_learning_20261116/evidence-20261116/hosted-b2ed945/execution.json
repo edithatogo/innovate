@@ -1,0 +1,996 @@
+{
+  "api_doctest_status": "passed",
+  "complete": true,
+  "contract_sha256": "354ee38da7313908287f953031d8b4dc4c367d83193b323f5de2cdf23ebf9e61",
+  "counts": {
+    "current_pages": 69,
+    "examples": 11,
+    "generated_api_pages": 34,
+    "historical_pages": 0,
+    "pages": 69,
+    "unbound_python_blocks": 0,
+    "versioned_archive_pages": 0,
+    "violations": 0
+  },
+  "current_content_complete": true,
+  "current_python_content_complete": true,
+  "current_structure_complete": true,
+  "example_execution_status": "passed",
+  "examples": [
+    {
+      "classification": "runnable",
+      "path": "examples/native_batch.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_bayesian.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_forcing.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_forecast.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_kairos.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_network.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_norton_bass.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_overlap.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_public_data.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_reingestion.py"
+    },
+    {
+      "classification": "runnable",
+      "path": "examples/native_scenarios.py"
+    }
+  ],
+  "execution_status": "passed",
+  "executions": [
+    {
+      "executed_assertion_lines": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        26
+      ],
+      "path": "examples/native_batch.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "5425dbd50552179e39ed65c06b8de9846f50cdb9e20742ac05ecea68781309dc",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"batch_items\": 2, \"invalid_workers_rejected\": true, \"worker_invariant\": true}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        32,
+        33,
+        35,
+        36,
+        37,
+        39,
+        45,
+        46,
+        47,
+        49,
+        50,
+        52,
+        55
+      ],
+      "path": "examples/native_bayesian.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"chains\": 4, \"draws\": 16000, \"posterior_oracle_passed\": true}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        30,
+        34,
+        35,
+        36,
+        37,
+        39,
+        40,
+        41,
+        42,
+        54,
+        73,
+        77
+      ],
+      "path": "examples/native_forcing.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "81f98614b5ec25b57b02ffecf99cae36d15e0ba49d1201b5c6e67f735938d2d4",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"counts\": [0, 0, 0, 50, 64, 96], \"equivalent_forcing\": true, \"invalid_forcing_rejected\": 2, \"tracked_agents\": 100}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        25,
+        29,
+        30,
+        31,
+        32,
+        40
+      ],
+      "path": "examples/native_forecast.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"duplicate_time_rejected\": true, \"ids\": [\"a\", \"b\", \"c\"], \"predictions\": [26.894142, 50.0, 73.105858]}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        25,
+        26,
+        30,
+        31,
+        32,
+        33,
+        37,
+        42,
+        47,
+        51,
+        59
+      ],
+      "path": "examples/native_kairos.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "f6e9fa77aabacd0ce18b099949cc6663680783abd8f9688ea70f7198f3297782",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"counts\": [0, 27, 82, 100], \"levels\": [0.0, 67.5, 205.0, 250.0], \"replay_equal\": true, \"sparse_grid_equal\": true, \"unknown_engine_rejected\": true}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        30,
+        31,
+        32,
+        37,
+        38,
+        39,
+        43,
+        44,
+        55,
+        56,
+        64,
+        65,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        82
+      ],
+      "path": "examples/native_network.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "845e798b85e94aa64a64850ffa39361835626d0c09cb1af616ba0924d1f69904",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"chain_counts\": [1, 1, 3, 3], \"disconnected_counts\": [1, 1, 1, 1], \"fifo_completions\": [6, 11, 16], \"invalid_edges_rejected\": true}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        37,
+        38,
+        41,
+        42,
+        44,
+        49,
+        50,
+        51,
+        52,
+        56,
+        58
+      ],
+      "path": "examples/native_norton_bass.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"converged\": true, \"forecast_rows\": 3, \"parameters_checked\": 6}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        36,
+        38,
+        39,
+        40,
+        41,
+        48,
+        49,
+        50,
+        55,
+        56,
+        57,
+        72,
+        76
+      ],
+      "path": "examples/native_overlap.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"ate\": 5.25, \"minimum_training_arm_clusters\": 1, \"minimum_training_arm_count\": 1, \"propensity_range\": [0.333333, 0.666667], \"rejected_designs\": 3}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        111,
+        112,
+        113,
+        123,
+        126,
+        128,
+        159,
+        160,
+        164
+      ],
+      "path": "examples/native_public_data.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"cutoff_year\": 2015, \"holdout_mae\": {\"gompertz\": 12.916, \"logistic\": 15.994, \"persistence\": 8.41}, \"holdout_rows\": 9, \"missing_years\": [2002, 2003, 2004, 2025], \"training_rows\": 23}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        25,
+        27,
+        28,
+        29,
+        37,
+        39
+      ],
+      "path": "examples/native_reingestion.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"encodings\": [\"python_sorted_json_v1\", \"rust_sorted_json_v1\"], \"tampered_artifacts_rejected\": 2}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "executed_assertion_lines": [
+        115,
+        120,
+        121,
+        122,
+        124,
+        125,
+        131,
+        134,
+        136,
+        145,
+        148
+      ],
+      "path": "examples/native_scenarios.py",
+      "python": "/home/runner/work/innovate/innovate/.venv/bin/python",
+      "returncode": 0,
+      "source_sha256": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+      "status": "passed",
+      "stderr": "",
+      "stdout": "{\"policy_counts\": [0, 0], \"replacement_total\": 100.0, \"replayed\": 4, \"scenario_ids\": [\"baseline\", \"pause-innovation\", \"two-products\", \"replacement\"]}\n",
+      "stdout_matches_contract": true
+    },
+    {
+      "attempted": 19,
+      "expected_attempts": 19,
+      "failed": 0,
+      "installed_source": "/home/runner/work/innovate/innovate/bindings/python/innovate/__init__.py",
+      "installed_source_sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+      "kind": "api_doctests",
+      "module": "innovate",
+      "path": "bindings/python/innovate/__init__.py",
+      "python_version": "3.15.2",
+      "returncode": 0,
+      "source_sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+      "status": "passed",
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "full_scope_complete": true,
+  "full_scope_structure_complete": true,
+  "gate_passed": true,
+  "generated_api_status": "verified",
+  "historical_scope": "Historical pages are inventoried and visibly distinguished; their scientific accuracy, migration and executable qualification remain unverified.",
+  "language_contract_sha256": "49ca6d881b4194a357e2aa444841baafb9d3feb93bad80817bb50a8ea0025a42",
+  "language_receipts": {
+    "julia": {
+      "path": "docs/astro-site/.reports/julia-documentation.json",
+      "qualified": true,
+      "receipt": {
+        "assertions_executed": 10,
+        "docstrings_checked": 24,
+        "elapsed_seconds": 6.198637008666992,
+        "examples": [
+          {
+            "assertions_executed": 3,
+            "code_sha256": "f28fa54d1620bcbb1ab6d6481d595041f8caa92fa39a116ec115e7d1eaf87dbe",
+            "elapsed_seconds": 1.0390980243682861,
+            "id": "julia:kernel_call:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 98,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "e37fe57f914e2d7853a8f4cf34341efc064156565427aae49486c6b04dc86e14",
+            "elapsed_seconds": 2.7315948009490967,
+            "id": "julia:kernel_fit_model:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 397,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "fb9bca231f409029a05342cbdf905a20b23397e820dfe0d160d18927e21a4211",
+            "elapsed_seconds": 0.038314104080200195,
+            "id": "julia:kernel_predict_model:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 429,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "535fe568ba22c0f1add4030912052def6d537408591f328b41ac43a1ea6c832c",
+            "elapsed_seconds": 0.10115385055541992,
+            "id": "julia:kernel_categorize_adopters:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 544,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "6b0826cc7554e3313178e1c8833075e53d7ec10c746212a5996586f6513f5b4c",
+            "elapsed_seconds": 0.09876894950866699,
+            "id": "julia:kernel_cumulative_sum:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 598,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "4f82f3a4ed5b4e9ddd2eae128aaeadd02aef50e4613810ce7c88769736256069",
+            "elapsed_seconds": 0.09825611114501953,
+            "id": "julia:kernel_rolling_average:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 623,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 2,
+            "code_sha256": "4a8ee6833a8ef509543fd335d7a214f67242751e95609b5cac239d3f5ce08c5c",
+            "elapsed_seconds": 0.3783531188964844,
+            "id": "julia:kernel_aggregate_dates:1",
+            "source": "bindings/julia/src/Innovate.jl",
+            "source_line": 650,
+            "status": "passed"
+          }
+        ],
+        "examples_executed": 7,
+        "exported_names_checked": [
+          "DatasetValidationError",
+          "export_ipc_file",
+          "export_ipc_stream",
+          "invoke_registered_extension",
+          "kernel_aggregate_dates",
+          "kernel_call",
+          "kernel_categorize_adopters",
+          "kernel_categorize_fitted_adopters",
+          "kernel_cumulative_sum",
+          "kernel_diagnose_model",
+          "kernel_discover_models",
+          "kernel_fit_batch",
+          "kernel_fit_model",
+          "kernel_paired_outcomes_ipc",
+          "kernel_predict_batch",
+          "kernel_predict_model",
+          "kernel_rolling_average",
+          "kernel_sarima_fit",
+          "kernel_scenario_comparisons_ipc",
+          "kernel_scenario_executions_ipc",
+          "kernel_scenario_grid_ipc",
+          "kernel_seasonal_decomposition",
+          "kernel_simulate_model",
+          "kernel_summarize_model"
+        ],
+        "inventory_sha256": "857399a2e44a6a9905e5aa8e3ac3d442c77134acfa9f98f08a4d6a7feeb0c179",
+        "json_version": "1.13.4",
+        "language": "julia",
+        "native_library": {
+          "path": "/home/runner/work/innovate/innovate/bindings/julia/deps/libinnovate_ffi.so",
+          "sha256": "238e04a416a8a46b693363b2ae36b15c8687c05d44aac3680b8dbb602e7d950d"
+        },
+        "package_version": "0.7.0-DEV",
+        "platform": "Linux-x86_64",
+        "qualified": true,
+        "runner": "scripts/check_julia_documentation.jl",
+        "runtime": "1.13.4",
+        "schema_version": 1,
+        "source_sha256": {
+          ".github/workflows/ci.yml": "sha256:ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+          "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
+          "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+          "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",
+          "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
+          "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+          "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+          "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+          "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+          "bindings/r/man/invoke_registered_extension.Rd": "sha256:f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+          "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+          "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+          "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+          "bindings/r/man/kernel_bridge.Rd": "sha256:c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+          "bindings/r/man/kernel_models.Rd": "sha256:957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
+          "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+          "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+          "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+          "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+          "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+          "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+          "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
+          "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
+        },
+        "status": "passed"
+      },
+      "status": "passed"
+    },
+    "r": {
+      "path": "docs/astro-site/.reports/r-documentation.json",
+      "qualified": true,
+      "receipt": {
+        "assertions_executed": 11,
+        "elapsed_seconds": 0.42200000000000004,
+        "examples": [
+          {
+            "assertions_executed": 1,
+            "code_sha256": "af02a45c64a33c52a4aa885ef81106a40765c8c4fe95f32ea6a07d011afeb1a0",
+            "elapsed_seconds": 0.0040000000000000036,
+            "id": "r:bindings/r/man/kernel_adopters.Rd:1",
+            "source": "bindings/r/man/kernel_adopters.Rd",
+            "source_line": 52,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 1,
+            "code_sha256": "4574b77a193698c164cda87d8e407cf639dac74c0044e2c3eca3e19e88de872f",
+            "elapsed_seconds": 0.0010000000000000009,
+            "id": "r:bindings/r/man/kernel_aggregate_dates.Rd:1",
+            "source": "bindings/r/man/kernel_aggregate_dates.Rd",
+            "source_line": 34,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 2,
+            "code_sha256": "70fa7bdb5383ef41269884494abcb9bce98ceac644995b1f0f680c8d2157b7c7",
+            "elapsed_seconds": 0.0020000000000000018,
+            "id": "r:bindings/r/man/kernel_batch.Rd:1",
+            "source": "bindings/r/man/kernel_batch.Rd",
+            "source_line": 55,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 3,
+            "code_sha256": "3b4492918cf628f96ba449231f0a304dc986b0c0636629dc8fc486d35619f58d",
+            "elapsed_seconds": 0.0030000000000000027,
+            "id": "r:bindings/r/man/kernel_bridge.Rd:1",
+            "source": "bindings/r/man/kernel_bridge.Rd",
+            "source_line": 82,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 2,
+            "code_sha256": "effedc84cbe9ea27367e89a204534ae5a6bfe7f8c95816c0c300895e771f8cb9",
+            "elapsed_seconds": 0.0050000000000000044,
+            "id": "r:bindings/r/man/kernel_models.Rd:1",
+            "source": "bindings/r/man/kernel_models.Rd",
+            "source_line": 104,
+            "status": "passed"
+          },
+          {
+            "assertions_executed": 2,
+            "code_sha256": "e9320f253e8fdce5276e591475ec7993d19d030aede8569656567711b4d7d766",
+            "elapsed_seconds": 0.0020000000000000018,
+            "id": "r:bindings/r/man/kernel_preprocessing.Rd:1",
+            "source": "bindings/r/man/kernel_preprocessing.Rd",
+            "source_line": 54,
+            "status": "passed"
+          }
+        ],
+        "examples_executed": 6,
+        "exported_names_checked": [
+          "export_ipc_file",
+          "export_ipc_stream",
+          "invoke_registered_extension",
+          "kernel_aggregate_dates",
+          "kernel_call",
+          "kernel_call_json",
+          "kernel_categorize_adopters",
+          "kernel_categorize_fitted_adopters",
+          "kernel_cumulative_sum",
+          "kernel_diagnose_model",
+          "kernel_discover_models",
+          "kernel_fit_batch",
+          "kernel_fit_model",
+          "kernel_paired_outcomes_ipc",
+          "kernel_predict_batch",
+          "kernel_predict_model",
+          "kernel_rolling_average",
+          "kernel_sarima_fit",
+          "kernel_scenario_comparisons_ipc",
+          "kernel_scenario_executions_ipc",
+          "kernel_scenario_grid_ipc",
+          "kernel_seasonal_decomposition",
+          "kernel_simulate_model",
+          "kernel_summarize_model"
+        ],
+        "installed_code_sha256": {
+          "/home/runner/work/_temp/Library/innovate.R/R/innovate.R.rdb": "9c2ae89db75bccabd02b4ac515652918679299fc5e8d82fb56a72c2b289dbf15",
+          "/home/runner/work/_temp/Library/innovate.R/R/innovate.R.rdx": "55994880a6f4b2cd69b36e2061eaa916344f5d84f0646c48e3661437f9a3a279"
+        },
+        "inventory_sha256": "857399a2e44a6a9905e5aa8e3ac3d442c77134acfa9f98f08a4d6a7feeb0c179",
+        "jsonlite_version": "2.0.0",
+        "language": "r",
+        "manuals_checked": [
+          "bindings/r/man/export_ipc_file.Rd",
+          "bindings/r/man/export_ipc_stream.Rd",
+          "bindings/r/man/innovate.R-package.Rd",
+          "bindings/r/man/invoke_registered_extension.Rd",
+          "bindings/r/man/kernel_adopters.Rd",
+          "bindings/r/man/kernel_aggregate_dates.Rd",
+          "bindings/r/man/kernel_batch.Rd",
+          "bindings/r/man/kernel_bridge.Rd",
+          "bindings/r/man/kernel_models.Rd",
+          "bindings/r/man/kernel_paired_outcomes_ipc.Rd",
+          "bindings/r/man/kernel_preprocessing.Rd",
+          "bindings/r/man/kernel_sarima_fit.Rd",
+          "bindings/r/man/kernel_scenario_ipc.Rd",
+          "bindings/r/man/kernel_seasonal_decomposition.Rd"
+        ],
+        "native_library": {
+          "path": "/home/runner/work/_temp/Library/innovate.R/lib/libinnovate_ffi.so",
+          "sha256": "238e04a416a8a46b693363b2ae36b15c8687c05d44aac3680b8dbb602e7d950d"
+        },
+        "package_version": "0.7.0.9000",
+        "platform": "x86_64-pc-linux-gnu",
+        "qualified": true,
+        "runner": "scripts/check_r_documentation.R",
+        "runtime": "R version 4.6.2 (2026-10-29)",
+        "schema_version": 1,
+        "source_sha256": {
+          ".github/workflows/ci.yml": "sha256:ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+          "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
+          "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+          "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",
+          "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
+          "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+          "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+          "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+          "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+          "bindings/r/man/invoke_registered_extension.Rd": "sha256:f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+          "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+          "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+          "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+          "bindings/r/man/kernel_bridge.Rd": "sha256:c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+          "bindings/r/man/kernel_models.Rd": "sha256:957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
+          "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+          "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+          "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+          "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+          "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+          "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+          "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
+          "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
+        },
+        "status": "passed"
+      },
+      "status": "passed"
+    }
+  },
+  "mode": "ratchet",
+  "pages": [
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/aggregate-time-series.md",
+      "source_sha256": "2d488a4b03e47ffb823e7cb452b5cc6080e833e59b775d8c30097cff97e6b95f"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/aggregate-weekly.md",
+      "source_sha256": "09fbaf84af65a4713eb02ae6487e2f4faaf47c947c8d529506b2e918012411b3"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/bootstrap-forecast-frame.md",
+      "source_sha256": "676cda4f8d719de9ee31ab901c3710386c4ddcbeab369bbc77ecd56c6b15f5e3"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/capabilities.md",
+      "source_sha256": "c14ae8bfa2988dc78c073594d7764416401c629008543563b455bd2d858f6e6b"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/categorize-adopters.md",
+      "source_sha256": "ecb85957f150f08995669984600d40fd423eb75df8f715853be4e8af8bf94cdc"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/cumulative-sum.md",
+      "source_sha256": "8c3140aa6fd1229eb846938b688e3bfa78bf11ed150767c458e831c4b301cfd8"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/execute-scenario-grid.md",
+      "source_sha256": "3996de42fcd1c8c4ef23c2f814b5d3d9f4775dd640cd1b5405e635d91a3c7f03"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/execute.md",
+      "source_sha256": "017a89c14d45e6dec951421752915ab073fd63780c08d944a1abece8b5bb5190"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/export-ipc-file.md",
+      "source_sha256": "99788d256f952579b738b5b2137384119722024c031b200977f498ac2bdeb1cd"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/export-ipc-stream.md",
+      "source_sha256": "b71fa6b9881bee1c8dc80e2673b00646f5ed260593b7fce52cdcf3870bfe34d2"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/fetch-oecd-dataset.md",
+      "source_sha256": "3df70ba90f2dff2dbea16428b49f0ad1d9cd9525f9fc93bad9682159bafa780f"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/fit-batch.md",
+      "source_sha256": "3adaf4161460a4f9d443682cca244c48843fa75239825c8dc2ea162da6139af4"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/fit-frames.md",
+      "source_sha256": "fab4633501fcfe34b97e5b174ff51b1e21771f97ee0d4d86022269599d6bd4cc"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/fit-result.md",
+      "source_sha256": "e4d7dab04bbba6d1dbcc7902a0adffda7c93bff6a2d09a60a63bb6ab7163c246"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/fit.md",
+      "source_sha256": "a04a6f26b0490412cf4ec7bac266a1907040a9af1db918afa6b60e70d7c9bf57"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/index.md",
+      "source_sha256": "3d160b02bc2614ee7b1e67db2fdfc40babf12e9c32ecb38036a90a543659b076"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/ingest-local.md",
+      "source_sha256": "39a0a3d1f54cc30fa8da9aef4c3071640d439c4ac4d5b9fccb5e2187dd5c0282"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/ingest-polars.md",
+      "source_sha256": "8c500df3794b05b0400197d09df71cdd9a22e1cba71fd530641d15542138d527"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/invoke-registered-extension.md",
+      "source_sha256": "a5ef07a840db14aa45f4e54ff44e9f5406f27d7026089c6574951c1cb5739836"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/julia.md",
+      "source_sha256": "488afcfae4b84f9b964077f9fa2ba82724aa37ba45a6055a21d854122180c65f"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/native-error.md",
+      "source_sha256": "9a4ed42958ae456bb8fa03fe3bf607c4aa369eff69d8a667324ef8e7a754ab77"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/paired-outcomes.md",
+      "source_sha256": "69464e3074276531909bf71eeedd4ff46bdf428a438907a006de749e5ad3aa37"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/policy-metadata-frame.md",
+      "source_sha256": "00f26ef4ffe323836cdb75812579fc71e61d2c19e25b72435e8e846e553a1bd0"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/predict-batch.md",
+      "source_sha256": "d453d69cf600f42aa1236498a190895695a4bdc04a29856244fa373071727f11"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/predict-frames.md",
+      "source_sha256": "474a5db76486454e07d9728bff3a26eb4d62705dcff9f807f09b5f8cdf6c8fe5"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/predict.md",
+      "source_sha256": "8a5b2c9c7e5f259a1e5db2e92c6cda36c2a746698b575dde0cbb6e975c4f039f"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/r.md",
+      "source_sha256": "77b06593cc4c5a1824b0d554cb195e6d40b974d924f608e0dc8a29c1587a1dc3"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/rolling-average.md",
+      "source_sha256": "a01b854046178f1dbb7f9db1ae996e385600a4e8b143a96b108f60c0cd7d4b6d"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/sarima-fit.md",
+      "source_sha256": "4fedb40858930061ca54ff4e19cc5792a801de08cfe1ce94d6fe8d487d60a538"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/scenario-comparisons.md",
+      "source_sha256": "a4ff9109ee347805a739f5a3b7ba49d704486bce79ed72191109886e74fa3289"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/scenario-executions.md",
+      "source_sha256": "3eb0fd0d92c77d9801847e147ab320db5b3e961e887543a80b970c661b86874b"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/seasonal-decomposition.md",
+      "source_sha256": "c99dcc0e646a5cbe69c9561fc1ebda6bd842268d0f65dfb6477b3bb1deba4adf"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/staggered-att-polars.md",
+      "source_sha256": "8bbca9816dc7126623426f65c14a8d13708506363e372317a01cf25fefceab1e"
+    },
+    {
+      "classification": "generated_api",
+      "path": "docs/astro-site/src/content/docs/api/generated/treatment-contrast-frame.md",
+      "source_sha256": "846a673d5980b753a4f7b2e5c52980c66b1ca6b396897ea2bfcebd7fb284c435"
+    },
+    {
+      "classification": "index",
+      "path": "docs/astro-site/src/content/docs/api/python.md",
+      "source_sha256": "e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/bindings/csharp.md",
+      "source_sha256": "2c3864ad7169ed29759e568100ce6be896e03c02ad86cb6be1bdf6f8f89da2a5"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/bindings/go.md",
+      "source_sha256": "65c8762f56c779b7a5571cc3a720c5dd4c479683c0f4ee3225ffd12e11579343"
+    },
+    {
+      "classification": "index",
+      "path": "docs/astro-site/src/content/docs/bindings/index.md",
+      "source_sha256": "d414a6e2422e376dd06c5741454d3b3607312b1b908bbb4adf016baf0d1cbf30"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/bindings/rust.md",
+      "source_sha256": "429d4419ed0388958e5497a6ec68a2b67bf36a8fea74f03d8d10a89382e68a2c"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/core/arrow-interchange.md",
+      "source_sha256": "513150b1658e0215b839bf0608eea9271488979a122f532ce2b9095298af842d"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/core/index.md",
+      "source_sha256": "d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/core/kernel.md",
+      "source_sha256": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84"
+    },
+    {
+      "classification": "index",
+      "path": "docs/astro-site/src/content/docs/historical-documentation.md",
+      "source_sha256": "4c119872b24c567272b7f6fe5a70ce9f4d12e54891e368bc01c7993cfabfc74b"
+    },
+    {
+      "classification": "index",
+      "path": "docs/astro-site/src/content/docs/index.md",
+      "source_sha256": "ab2407ed7ab7b83395b2c99f794e9bf00e65ca61cf788222cf749a89e8dc73e9"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/maintainers/documentation-quality.md",
+      "source_sha256": "7ccd4dd7d508211e0b3c3c6452c26eb733e0c7ee0208d1b5c3c718991dceef60"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/maintainers/language-conventions.md",
+      "source_sha256": "283b4d43d367fc8e6ac2ef00b0b2d22e161acf26e62e1901c1f614518a1ec6b8"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/maintainers/test-acceleration.md",
+      "source_sha256": "65d6cdec1ccdd80d920ba7dbf44a730d777a6dacf00ce2253b025109ade0ee4c"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/models/index.mdx",
+      "source_sha256": "3dd74df861495b979d98fa3285ed6f65802aeb10d5747179993f5a8aab02e25b"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/native-migration.md",
+      "source_sha256": "345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/operations/documentation-standards.md",
+      "source_sha256": "519278148d106ac99a019c08b420f6cdee5d18b2de753561f9b04d63d3d89d21"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/operations/registry-readiness.md",
+      "source_sha256": "91a812dec69fb023b111e5ca3308967d3c8af688778470775ea5c88463684aeb"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+      "source_sha256": "39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+      "source_sha256": "b6700b4067512c40d4e63b72728b24d869f0d0463aafed97e128a88c341be6fa"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+      "source_sha256": "033e6c825d794ad32b94a9121f8aee7a9c6c8223e3a3952706188e2fb464fea4"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+      "source_sha256": "ab9292f71a1565d3bb6c1fda1e52dc0f7a4e5e3a78a5f647068021c5c570292c"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+      "source_sha256": "b3febf58fa4df831c428d945e705828f6deb85376766bad2f1c6c39e995e1101"
+    },
+    {
+      "classification": "index",
+      "path": "docs/astro-site/src/content/docs/tutorials/index.mdx",
+      "source_sha256": "d95454e89d851f88fe39edc0e41e0d37f7a27a55ce23aa372611a63777c636df"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+      "source_sha256": "02b9a786232c9947d363d47fdfe459a668d872cf47dc64e5d74ae38dbe25ea56"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+      "source_sha256": "86d2d6228b863b0517e2e6f4af182a83b114ab334d9b7112ac4ca557307ef57f"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+      "source_sha256": "973c65ac494b25279682b0c90584e1dad4e6b476bc3a24750ecd9a0b3c656ada"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+      "source_sha256": "eae6d0b973fbb1cb7f1d9cab17730c7ce428d093f8b3fd3b1afcb1067788e0d3"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+      "source_sha256": "29d81c07c7013b9d4b8c7dc33c0fd84461ff7f102e3547990a8acf1edb53ffb6"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "source_sha256": "1839904d1fee7040bb1926cea22e2921f7422374621c57497c3ee5dc434abfba"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "source_sha256": "579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/user-guide/backends.md",
+      "source_sha256": "9b3d66329409da00a4bdecfdb77cce000d69171e65d7f6929b8c739a618f91b4"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/user-guide/fitting.md",
+      "source_sha256": "7b61084efd85ade52e1f078f71005103778a623b15881043040472c643b0b130"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+      "source_sha256": "f0dfaf4eb5e46435b460ec2b8c51fc50b9150a5fe56e55eb6d14da2f0e0db290"
+    },
+    {
+      "classification": "tutorial",
+      "path": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "source_sha256": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288"
+    },
+    {
+      "classification": "reference",
+      "path": "docs/astro-site/src/content/docs/user-guide/installation.md",
+      "source_sha256": "2186362a372a03aae091671a930c09e35d109c0fa520f32156df4684c109a689"
+    }
+  ],
+  "python_execution_status": "passed",
+  "quality_claim": "Structural evidence only; expert review and executable outcomes remain separate.",
+  "ratchet": {
+    "new_or_changed": [],
+    "passed": true,
+    "reason": "No new structural debt; completeness is reported separately.",
+    "stale": []
+  },
+  "required_languages": [
+    "python",
+    "julia",
+    "r"
+  ],
+  "schema_version": 1,
+  "violations": []
+}

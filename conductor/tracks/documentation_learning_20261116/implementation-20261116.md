@@ -59,6 +59,36 @@ lossless SHA-256 representation where needed, preserving paths and original
 record identity. Scanner rules, allowlists and thresholds are unchanged. The
 new ordinary integration commit will receive a complete fresh scan.
 
+## Hosted completion of browser, language and platform repairs
+
+At merged head `b2ed945f9ffede3bdd00c29437636c0bf1eba03d`,
+[documentation run 43866570433](https://github.com/edithatogo/innovate/actions/runs/43866570433)
+and [native CI 43866570444](https://github.com/edithatogo/innovate/actions/runs/43866570444)
+pass. The [hosted receipts](evidence-20261116/hosted-b2ed945/README.md) retain the
+actual inputs, artifact IDs, ZIP hashes, execution results and qualification limits.
+
+Managed Chromium executes all 164 cases: 82 desktop and 82 mobile, with zero
+failed, skipped, flaky or retried cases. Both mandatory homepage probes capture
+36,326 original response bytes matching the uploaded API page. Each probe counts
+once in its case's 249,902 measured bytes and ten responses, within the unchanged
+1,500,000-byte/40-response budgets. The formerly failing mobile dark-entry case
+passes without retry. Automated checks do not substitute for human accessibility
+or reader evaluation.
+
+Installed documentation passes all 11 Python examples and 19 public doctests,
+seven Julia examples/ten assertions, six R examples/11 assertions, strict Rust
+documentation and four Rust doctests. The combined current-content gate is true
+with zero violations. All native CI operating-system lanes pass; Windows reports
+422 Python passes and seven declared non-documentation skips. No public-data or
+catalogue regression is skipped. The earlier source-only/local incomplete receipts
+and failed hosted results remain historical evidence.
+
+The Pages bundle has 311 files against the browser inventory's 312; only the empty
+`.nojekyll` marker is omitted by the pinned upload action's hidden-file default.
+All uploaded content hashes match. Deployment is skipped. The separate scientific
+release hold, excluded games dependency conflict, offline-runner qualification,
+broader curriculum and live publication remain open.
+
 ## Final integrated qualification
 
 Fresh source and native qualification covers the frozen integrated working tree
@@ -423,3 +453,64 @@ inferred from an archive label. This successor remains `in_progress`.
 Rollback uses ordinary commits for the bounded changes. The retirement manifest
 and immutable history retain recoverable sources. A notebook/browser problem does
 not require restoring removed numerical APIs or a Python fallback implementation.
+
+## Publication and upstream integration follow-up — PR #671
+
+[PR #671](https://github.com/edithatogo/innovate/pull/671) is the current draft
+implementation; the superseded [PR #659](https://github.com/edithatogo/innovate/pull/659)
+is closed. Published implementation `ab997d711038675e3fa7aaeb1e286fe19455cb04`
+was integrated with upstream `b29a1d27f54fdd08d77881ee999772fceab7c03a` by the
+ordinary two-parent merge `b2ed945f9ffede3bdd00c29437636c0bf1eba03d`.
+The [integration receipt](evidence-20261116/integration-followup/integration-followup.json)
+records the exact parents, retained paths, comparison method and raw receipts.
+
+The merge preserves all five independent upstream paths: three new core test
+files, the archived predecessor-plan addition and the Renovate workflow update.
+All 16 overlapping Rust source files retain the reviewed implementation blobs
+byte-for-byte. Removing only whole-line `///` and `//!` documentation comments
+leaves exact non-documentation bytes equal to upstream in every file. The sole
+non-documentation difference from base `5821d8a` remains the previously authorised
+likelihood field formatting and three trailing commas, shared by both branches.
+The richer comments preserve upstream meanings and clarify model units,
+validation, engine behavior and inference limits. No algorithm, public signature
+or dependency pin changed in this conflict resolution.
+
+The three newly merged test targets pass **nine tests**: three inference-failure
+contracts, one native CLI contract and five public-contract edge cases, with zero
+failures, ignored tests or filtered cases. Their
+[raw Cargo log](evidence-20261116/integration-followup/upstream-b29-targeted-tests.log)
+and exact command are retained separately from the earlier four-doctest result.
+This bounded invocation is not a new full-workspace test run.
+
+Fresh scientific-record and notebook-source checks pass. They establish declared
+source consistency; they do not execute the notebook or certify scientific
+acceptance. The fresh production verifier returns the same source fingerprint
+`cf3ea0712e66f7512c76f248d1eddfab75edf1bb14c88e3466af5a742b9b21ca`
+and artifact fingerprint
+`adfc2087fa55fa9e3605da5db9604650d8a2531865c1e37a4c11ed2365a4169b`:
+211 HTML pages, 11,361 checked local links and zero errors. The compact comparison
+records the fresh producer's original `/tmp` path, size and SHA256; its full JSON
+is not duplicated here. The earlier full producer receipt remains retained in
+its verified reversible archive envelope. Equal fingerprints alone do not prove
+an independent source-to-build attestation or live deployment.
+
+The copied secret-scan receipts qualify one ordinary candidate tree,
+`dc4a4ec77eff920fc8167fb03c5e7efa674ce3ff`, represented by detached commit
+`c3f441dc6478114695fab8e36e94a0a35804c057`. Both scanner versions, 8.24.3 and
+8.30.1, report zero findings over all 499 candidate path entries without rename
+elision. These receipts do not qualify the later merge or this evidence-only
+follow-up. No baseline, scanner-rule, exclusion or allowlist changes were used.
+The 13 copied files, totalling 86,698 raw bytes, were verified byte-identical before
+any subsequent reviewed archival envelope; their original identities remain
+separate from stored-envelope identities.
+
+At this pre-result snapshot, the exact-head
+[documentation run 43866570433](https://github.com/edithatogo/innovate/actions/runs/43866570433)
+is running and remains **unqualified** in this record. A later hosted receipt
+must state its actual outcome. The
+[release log](evidence-20261116/integration-followup/hosted-b2ed945-release.log)
+confirms the existing scientific migration/acceptance hold: 16 model entries and
+22 capability entries, exit 1. Standalone games dependency resolution, offline
+security-runner infrastructure, remaining hosted checks, human/curriculum
+acceptance and live publication remain separate holds. The track stays
+`in_progress`; the merge does not waive any of them.

@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "recorded_at": "2026-11-16T12:19:10.329930+00:00",
+  "recorded_at": "2026-11-16T12:43:32.425369+00:00",
   "scope": "Evidence index for the current documentation-learning increment. Historical and integrated qualification remain separate; overlapping test counts are never summed.",
   "active_track": "documentation_learning_20261116",
   "track_status": "in_progress",
@@ -51,8 +51,8 @@
     "content_ratchet_passed": true,
     "content_violations": 0,
     "aggregate_all_language_content_gate": "incomplete locally: current Julia/R native execution receipts not supplied",
-    "browser_execution": "not run locally after original-response repair; hosted qualification pending",
-    "windows_native_execution": "not run locally; hosted qualification pending"
+    "browser_execution": "Not run locally after repair; separately qualified in hosted-b2ed945.",
+    "windows_native_execution": "Not run locally; separately qualified by actual hosted Windows in hosted-b2ed945."
   },
   "content_inventory": {
     "models_discovery_records": 16,
@@ -91,11 +91,18 @@
     }
   },
   "publication": {
-    "preserved_prior_draft": "https://github.com/edithatogo/innovate/pull/659",
-    "new_branch": "docs/documentation-learning-20261116",
-    "new_draft": "pending creation",
-    "complete_candidate_scan": "pending",
-    "hosted_integrated_qualification": "pending",
+    "prior_draft": "https://github.com/edithatogo/innovate/pull/659",
+    "prior_draft_state": "closed_superseded_history_preserved",
+    "draft": "https://github.com/edithatogo/innovate/pull/671",
+    "branch": "docs/documentation-learning-20261116",
+    "complete_candidate_scan": {
+      "status": "passed",
+      "tree": "dc4a4ec77eff920fc8167fb03c5e7efa674ce3ff",
+      "record": "integration-followup/candidate-scan/verification.json",
+      "scope": "original ordinary candidate only; not reattributed to this evidence-only follow-up"
+    },
+    "hosted_integrated_qualification": "passed_for_documentation_and_native_CI_at_b2ed945",
+    "evidence_only_followup": "Records qualification without changing source, contracts, package inputs or site assets; its own CI is not inferred from the prior head.",
     "merged": false,
     "deployed": false
   },
@@ -105,7 +112,8 @@
     "curriculum": "Additional public sources, model-family chapters, installed R/Julia teaching pathways and reader evaluation remain in DOC-01–08.",
     "notebook": "Interactive browser change/reset, WASM and published static preview remain unqualified.",
     "community": "External registry resolution, JOSS readiness and community acceptance remain open; documentation traceability is not certification.",
-    "human_and_scientific": "Agent review and declared-source freshness do not establish human reader success or whole-library scientific qualification."
+    "human_and_scientific": "Agent review and declared-source freshness do not establish human reader success or whole-library scientific qualification.",
+    "publication": "Live build identity and post-publication verification remain open. Browser inventory312 vs uploadedPages311 differs only by empty .nojekyll; uploaded bodies match and deployment was skipped."
   },
   "archive_representation": {
     "contract": "archive-format/README.md",
@@ -144,8 +152,8 @@
       "stored_sha256": "sha256:e7aba8b04cec4345bde86fac5c6a698d5e7bcabffeaac12c581fdd47d0ee5c1a"
     },
     "README.md": {
-      "bytes": 13853,
-      "stored_sha256": "sha256:cfb17c37a8832949c5fa6f486e093d1b9c1d1bb62b19671203d3ea438ab13a2e"
+      "bytes": 16704,
+      "stored_sha256": "sha256:e1c7b1ba4cc490d2243c371e6b05f245c0881243c7bb5a429d54eebc23272706"
     },
     "archive-format/README.md": {
       "bytes": 6845,
@@ -266,6 +274,38 @@
     "hosted-5ee03ddc.json": {
       "bytes": 3069,
       "stored_sha256": "sha256:d9eca34f7eb819d5db76697f07bd9a76203bda7179f852468d3462cbd63847c7"
+    },
+    "hosted-b2ed945/README.md": {
+      "bytes": 2905,
+      "stored_sha256": "sha256:4fce68edb38993910d06697add29ed17247e490c23595d2e14941cd9bbf236cb"
+    },
+    "hosted-b2ed945/browser-qualification.json": {
+      "bytes": 14236,
+      "stored_sha256": "sha256:60b5be1491c7901107d43a09f9ff88a7ac45583e8881ab8bb65bc31d982d8e7c"
+    },
+    "hosted-b2ed945/check-snapshot.json": {
+      "bytes": 10573,
+      "stored_sha256": "sha256:1c03d5af10bc0e7458c72c8d757dbb58ff0bafa78bcf4a43d8fb020d62a38084"
+    },
+    "hosted-b2ed945/execution.json": {
+      "bytes": 41047,
+      "stored_sha256": "sha256:d455b99846885101c3e544fda715bc63ba08f794fe1bca7bac4add56def1a98f"
+    },
+    "hosted-b2ed945/julia-documentation.json": {
+      "bytes": 5610,
+      "stored_sha256": "sha256:30fd8b5ab0a63be58a43ab47071c3a65e1724b401267ff227c90ee78e3c18603"
+    },
+    "hosted-b2ed945/native-api.json": {
+      "bytes": 2280,
+      "stored_sha256": "sha256:5e0b48684f7a19871218234d9de24d81bb530bbe03600cd4bf7618b8f6a362a2"
+    },
+    "hosted-b2ed945/r-documentation.json": {
+      "bytes": 6976,
+      "stored_sha256": "sha256:8bf7c386dccfd978f27348917ee37067a60b7588bea6ee5972b82bebff0bc067"
+    },
+    "hosted-b2ed945/runtime-qualification.json": {
+      "bytes": 13604,
+      "stored_sha256": "sha256:0ee073f173fbf2bd751867994d5b144edf38f7bdd2016ddec34dec7505a996c8"
     },
     "integrated-5821d8a/copy-manifest.json": {
       "bytes": 20738,
@@ -527,6 +567,62 @@
       "bytes": 3311,
       "stored_sha256": "sha256:2336d492af0e5ad78cce9aea7c776a7b6a1f6d81b9a5e140363483bdf13da2ea"
     },
+    "integration-followup/candidate-scan/candidate.json": {
+      "bytes": 1332,
+      "stored_sha256": "sha256:8ccb65e489606929dc846481170c97bce90f5b198e6413556873d107e5e9bac8"
+    },
+    "integration-followup/candidate-scan/empty.gitleaksignore": {
+      "bytes": 0,
+      "stored_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "integration-followup/candidate-scan/result-8.24.3.json": {
+      "bytes": 1210,
+      "stored_sha256": "sha256:5032c92c89269fd1cfd88e38b0b11502e8d2f49d6051c1eaf5646e3f40fc8625"
+    },
+    "integration-followup/candidate-scan/result-8.30.1.json": {
+      "bytes": 1406,
+      "stored_sha256": "sha256:6fa9d69bf78747e0826ceb96a2f8c86be2101aa3f1f69802c217525016936643"
+    },
+    "integration-followup/candidate-scan/scan-8.24.3.json": {
+      "bytes": 3,
+      "stored_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "integration-followup/candidate-scan/scan-8.24.3.log": {
+      "bytes": 827,
+      "stored_sha256": "sha256:2b8a1dbf7c864e2b0cffad18cbca620d114647d341efafe26eb6f79a7c4b2e4f"
+    },
+    "integration-followup/candidate-scan/scan-8.30.1.json": {
+      "bytes": 3,
+      "stored_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "integration-followup/candidate-scan/scan-8.30.1.log": {
+      "bytes": 52088,
+      "stored_sha256": "sha256:3b40dac9a404a221f90b636905ebe46314c8fc9487c8c9e77f0c32b8f4d595b4"
+    },
+    "integration-followup/candidate-scan/verification.json": {
+      "bytes": 5238,
+      "stored_sha256": "sha256:512613215920c4975b9fd6bfb70f5aacf0537bcce630e8b1df61a7c6eeaa1a1a"
+    },
+    "integration-followup/hosted-b2ed945-release.log": {
+      "bytes": 18140,
+      "stored_sha256": "sha256:d84fdc2946d412ef5027fda2b17e252f9ce374fe08e431ed20b7b45f3ae584a3"
+    },
+    "integration-followup/integration-followup.json": {
+      "bytes": 19031,
+      "stored_sha256": "sha256:2fa48615d6c07691158eed97cab247be95c0a677573719e1e054433831032cf9"
+    },
+    "integration-followup/merge-notebook-source.json": {
+      "bytes": 1466,
+      "stored_sha256": "sha256:31afd8b5e809fd4d1e240e8bb436ca03db04e05e19a0a8808caa3f39fe9d0623"
+    },
+    "integration-followup/merge-scientific.json": {
+      "bytes": 333,
+      "stored_sha256": "sha256:e15f8656367157b993cfed59b50dee288e6e45c28beb01894150d2820010202f"
+    },
+    "integration-followup/upstream-b29-targeted-tests.log": {
+      "bytes": 4652,
+      "stored_sha256": "sha256:74bd4692c63dcc196d08da67b0945e0ed9f5aefbd371058897375642a269d030"
+    },
     "managed-browser-install.log": {
       "bytes": 6158,
       "stored_sha256": "sha256:4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832"
@@ -627,5 +723,34 @@
       "bytes": 105,
       "stored_sha256": "sha256:86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8"
     }
+  },
+  "integration": {
+    "published_implementation_commit": "ab997d711038675e3fa7aaeb1e286fe19455cb04",
+    "integrated_main": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+    "qualified_merge_head": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "qualified_tree": "f826196927cc994410f9391b4381929d3641bf1a",
+    "record": "integration-followup/integration-followup.json",
+    "preserved_rust_source_blobs": 16,
+    "received_upstream_paths": 5,
+    "new_upstream_tests_passed": 9,
+    "qualified_documentation_source_inputs_unchanged": true
+  },
+  "hosted_qualification": {
+    "head": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "documentation_run": 43866570433,
+    "native_ci_run": 43866570444,
+    "index": "hosted-b2ed945/README.md",
+    "browser_record": "hosted-b2ed945/browser-qualification.json",
+    "runtime_record": "hosted-b2ed945/runtime-qualification.json",
+    "check_snapshot": "hosted-b2ed945/check-snapshot.json",
+    "browser_cases_passed": 164,
+    "browser_failed_skipped_flaky_retried": 0,
+    "mandatory_original_response_probes": 2,
+    "all_language_content_gate_passed": true,
+    "native_OS_matrix_passed": true,
+    "windows_python_passed": 422,
+    "windows_python_skipped": 7,
+    "windows_documentation_or_public_data_skipped": 0,
+    "scope": "Current declared documentation and native CI acceptance; not complete curriculum, human evaluation, scientific release readiness or live publication."
   }
 }

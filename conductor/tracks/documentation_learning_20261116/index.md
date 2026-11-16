@@ -35,9 +35,20 @@ links. Counts overlap across invocations. The
 [integrated qualification record](evidence-20261116/integrated-5821d8a/integrated-qualification.json)
 preserves exact source/artifact identities, fresh native Python and notebook
 results, and the separate standalone games dependency block. Current local
-Julia/R aggregation remains incomplete; hosted browser and Windows qualification
-and live publication remain pending. Earlier hosted passes keep their original
-head identities.
+Julia/R aggregation remains incomplete in its original receipt. Later hosted
+qualification on `b2ed945` passes the combined Python/Julia/R gate, all 164 browser
+cases and the full native Windows/macOS/Linux matrix. Live publication remains
+pending; earlier receipts keep their original identities.
+
+
+The current implementation is [draft PR #671](https://github.com/edithatogo/innovate/pull/671);
+superseded PR #659 is closed. The
+[merge follow-up](evidence-20261116/integration-followup/integration-followup.json)
+records merge `b2ed945` with upstream `b29a1d`, preserves all five independent
+upstream paths and all 16 reviewed Rust source blobs, and adds nine passing core
+tests. Fresh source/artifact fingerprints remain unchanged. Its pre-result
+snapshot remains unchanged. The [hosted qualification](evidence-20261116/hosted-b2ed945/README.md)
+records the subsequent passing outcomes and their exact source identities.
 
 The linked implementation record identifies executed checks and remaining work.
 DOC-01–08 and the overall track remain in progress: additional empirical sources,

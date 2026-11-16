@@ -1,6 +1,8 @@
 # Qualification receipts — 16 November 2026
 
-Current qualification is grouped under
+Current hosted qualification is recorded in
+[hosted-b2ed945](hosted-b2ed945/README.md): the full documentation workflow and
+Windows/macOS/Linux native CI pass. Fresh local qualification is grouped under
 [integrated-5821d8a](integrated-5821d8a/integrated-qualification.json), for the frozen
 working tree based on `5821d8a38fbc6cbf3822a63474b79c07b18b5bc0`.
 [qualification-summary.json](qualification-summary.json) indexes current and
@@ -32,9 +34,9 @@ completed work, limitations and remaining DOC-01–08 acceptance.
 
 The test counts overlap across invocations and are not a unique combined total.
 The fresh notebook HTML remains under the evidence directory and is not promoted
-to the Astro site. Interactive notebook controls, WASM, current hosted browser
-and Windows execution, human reader evaluation, broader scientific acceptance and
-live publication remain unqualified.
+to the Astro site. Interactive notebook controls, WASM, human reader evaluation, broader scientific
+acceptance and live publication remain unqualified. The later hosted-b2ed945
+receipts qualify the site browser repair and actual Windows execution.
 
 Raw copies were verified byte-for-byte before selected checksum-only scanner
 matches received reversible [archive envelopes](archive-format/README.md).
@@ -191,3 +193,37 @@ and static-artifact scopes. Historical hosted evidence adds installed Julia/R
 and aggregate execution success only at its earlier head, while preserving the
 one full-suite browser failure. Current hosted-language/browser/Windows gates,
 human evaluation, broader scientific acceptance and publication remain open.
+
+## Publication and merge follow-up — pending hosted result
+
+The current draft implementation is [PR #671](https://github.com/edithatogo/innovate/pull/671);
+PR #659 is closed. The
+[integration follow-up](integration-followup/integration-followup.json) records the
+ordinary merge `b2ed945f9ffede3bdd00c29437636c0bf1eba03d` with upstream `b29a1d`,
+its five preserved upstream paths, and the 16 audited Rust source blobs retained
+exactly. All 16 have exact non-documentation byte equality with upstream.
+
+| Retained record | Evidence and scope |
+| --- | --- |
+| [Integration receipt](integration-followup/integration-followup.json) | Merge identities, source comparisons, compact unchanged artifact fingerprints and raw-copy manifest |
+| [Candidate scan verification](integration-followup/candidate-scan/verification.json) | Both scanner versions return zero findings for ordinary candidate tree `dc4a4ec`; this is not a scan of the later merge |
+| [New upstream tests](integration-followup/upstream-b29-targeted-tests.log) | Nine tests pass across the three newly merged core targets; not the full workspace suite |
+| [Scientific source check](integration-followup/merge-scientific.json) | 66 declared source files remain fresh; scientific quality is not certified |
+| [Notebook source check](integration-followup/merge-notebook-source.json) | Source contract passes without notebook execution or export publication |
+| [Hosted release hold](integration-followup/hosted-b2ed945-release.log) | Existing 16-model and 22-capability scientific migration/acceptance hold, exit 1 |
+
+The fresh artifact check retains source `cf3ea071…` and artifact `adfc2087…`,
+211 pages and 11,361 local links with zero errors. Exact digests and the original
+fresh `/tmp` producer path/size/SHA256 are in the compact integration receipt;
+the full fresh artifact JSON is not copied. The earlier full producer receipt
+remains [retained](integrated-5821d8a/final-source/artifact.json) in its verified
+reversible envelope. These are distinct records with equal declared source and
+artifact fingerprints, not interchangeable producer files.
+
+All 13 copied files (86,698 raw bytes) were verified before any subsequent reviewed
+archival envelope. Their raw hashes refer to decoded originals, with stored
+archive identities indexed separately. Hosted documentation run
+[43866570433](https://github.com/edithatogo/innovate/actions/runs/43866570433) is
+pending in this pre-result snapshot; a later exact-head receipt must record the
+outcome separately. Standalone games, release acceptance, offline runner and
+remaining programme/publication holds remain in place.

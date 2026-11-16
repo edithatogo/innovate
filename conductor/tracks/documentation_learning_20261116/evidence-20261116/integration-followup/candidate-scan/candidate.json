@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-11-16T12:20:25.842509+00:00",
+  "repository": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "staged_tree": "dc4a4ec77eff920fc8167fb03c5e7efa674ce3ff",
+  "detached_scan_commit": "c3f441dc6478114695fab8e36e94a0a35804c057",
+  "scan_range": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057",
+  "ordinary_commit_count": 1,
+  "delta_entries_no_renames": 499,
+  "delta_entries_default_rename_detection": 498,
+  "rename_note": "Default Git detection identifies one empty deleted file and one empty added log as an R100 rename; scans disable rename detection to retain all499 delete/add path entries.",
+  "head_unchanged_before_scan": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "index_path": "/workspace/scratch/5e94e22858cb/innovate-docs-plan/.git/worktrees/innovate-docs-integrated/index",
+  "index_sha256_before": "sha256:2e90c46e5cc066c3f9c9e2bec831d5cb69f4b9da3e8851015185b59b7926a194",
+  "refs_sha256_before": "sha256:a31b2e107f6a88e1be2d8fab496ee6389317b942853c50ea98fd53285c3b03d3",
+  "index_matches_supplied_tree": true,
+  "unstaged_changes": false,
+  "untracked_nonignored_files": false,
+  "configuration": "No baseline, exclusions, allowlist additions, rule changes or source mutations."
+}

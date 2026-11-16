@@ -1,0 +1,31 @@
+{
+  "version": "8.30.1",
+  "started_utc": "2026-11-16T12:20:51.742478+00:00",
+  "finished_utc": "2026-11-16T12:20:54.713930+00:00",
+  "command": [
+    "/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.30.1",
+    "detect",
+    "--source",
+    "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+    "--no-banner",
+    "--redact=100",
+    "--log-level=debug",
+    "--gitleaks-ignore-path",
+    "/tmp/innovate-final-candidate-scan-k405hvfz/empty.gitleaksignore",
+    "--report-format=json",
+    "--report-path",
+    "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.30.1.json",
+    "--config",
+    "/tmp/innovate-digest-scan-yew0s1u2/trusted-gitleaks.toml",
+    "--ignore-gitleaks-allow",
+    "--exit-code=1",
+    "--log-opts=--full-history --no-ext-diff --no-textconv --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057"
+  ],
+  "exit_code": 0,
+  "finding_count": 0,
+  "binary_sha256": "sha256:88f91962aa2f93ac6ab281d553b9e125f5197bbbce38f9f2437f7299c32e5509",
+  "trusted_config_sha256": "sha256:20734071fce254738e1d519eaa28ac1a746cc482c9129484c61aee630b6ebd45",
+  "empty_ignore_file_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "report_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "log_sha256": "sha256:3b40dac9a404a221f90b636905ebe46314c8fc9487c8c9e77f0c32b8f4d595b4"
+}

@@ -39,15 +39,18 @@ it does not change default library dependencies or shared CI.
 
 ### Delivered increment and next acceptance
 
+The [hosted b2ed945 receipts](evidence-20261116/hosted-b2ed945/README.md) qualify
+the implemented browser and language/platform repairs; DOC-01–08 remain partial.
+
 | Package | Implemented and checked | Still required for the package |
 | --- | --- | --- |
-| DOC-01 | Production artifact/source identities; 211 built pages and checked links; full hosted 164-case observation and source-bound prefetch repair | Complete repaired-head browser qualification, public build identity and post-publication check |
+| DOC-01 | Production artifact/source identities; 211 built pages and checked links; 164/164 hosted browser cases and both original-response probes pass at `b2ed945` | Public build identity and post-publication check |
 | DOC-02 | Typed discovery for 16 model keys, 14 tutorials and 11 canonical examples; drift checks; complete legacy inventory | Full variant/operation/quantity reconciliation, explanatory model chapters and long-guide restructuring |
 | DOC-03 | One locked native marimo notebook; real execution at two cutoffs; ordinary-example parity; strict lint and successful export | Interactive browser change/reset, published static preview, further notebooks; WASM remains a separate investigation |
 | DOC-04 | D01 frozen WDI/ITU case; chronological fitting/comparison, independent persistence baseline, offline provenance checks | D02/D03 admission, calendar/multiseries courses, broader diagnostics and rolling-origin assessment |
-| DOC-05 | Typed Astro collections, generated cards/tables, Starlight components/search and migration routes | Qualified browser behaviour, scientific figures/math, useful search facets, public artifact verification |
+| DOC-05 | Typed Astro collections, generated cards/tables, Starlight components/search and migration routes; implemented browser behaviour qualified at `b2ed945` | Scientific figures/math, useful search facets and public artifact verification |
 | DOC-06 | Four focused lessons: batch, forcing/time, network-engine and Kairos simulation | Remaining coupled/wrapper/inference chapters and accepted operation coverage |
-| DOC-07 | Stronger Python/Rust/Julia/R conventions and contracts; hosted Python/Julia/R example aggregation and Rust compilation at `178779bd`; checked migration notices | Fresh integrated-head qualification, installed R/Julia course execution and equivalent first-result pathways; substantive R vignette |
+| DOC-07 | Stronger Python/Rust/Julia/R conventions and contracts; fresh hosted all-language aggregation, five-crate strict rustdoc, four doctests and full OS matrix at `b2ed945`; checked notices | Installed R/Julia course execution and equivalent first-result pathways; substantive R vignette |
 | DOC-08 | Scoped independent source/claim review, worked answers, resolved unit/vintage/evaluation findings and separate evidence scopes | Human reader/assistive-technology evaluation, broader scientific assessment, external-link maintenance and publication |
 
 The marimo sequence was deliberately revised: the first notebook combines the
@@ -120,9 +123,9 @@ preparation, ordinary examples and Astro presentation can proceed independently.
 
 ### DOC-01 — Delivery and reproducible documentation identity
 
-- [ ] Inspect retained traces from run 43804385173 at the pinned base. Explain the
-  two mobile resource/artifact failures and repair the cause without weakening
-  the artifact-identity or failed-resource assertions.
+- [x] Diagnose the current mobile resource/artifact failure using retained run
+  43855078677 and repair original-response capture. Run 43866570433 qualifies all
+  164 cases and both mandatory probes without weakening identity/resource checks.
 - [ ] Add package version, source commit and build identity to the site and a
   machine-readable build record. Pin generated source links and reproducible
   checkout instructions to the documented revision; retain source-file hashes.
@@ -236,8 +239,9 @@ These are learning cases, not a blanket empirical qualification of the library.
   historical exclusions. Legacy version content and its selector are removed;
   retirement notices are excluded from indexing. Keep the catalogue usable without
   client JavaScript; add small progressive filters only where useful.
-- [~] Test keyboard/mobile/theme/zoom behaviour and existing size/request budgets.
-  Measure any notebook/math/figure cost and review a proposed exception explicitly.
+- [~] Qualify implemented keyboard/mobile/theme/zoom behaviour and existing
+  size/request budgets: all 164 hosted cases pass at `b2ed945`. Future notebook,
+  math and figure additions still require measurement and explicit exception review.
 - [ ] Review static output and live artifact identities after integration.
 
 Acceptance: the same authoritative records drive navigation, capability labels,
@@ -283,7 +287,9 @@ examples. No supported-looking page substitutes for a missing native capability.
 - [x] Remove obsolete active notebook/documentation sources and retain immutable
   Git history with checked hashes and current migration notices. Promote only
   independently reviewed current examples; review material before export.
-- [~] Verify language examples, migration links and current/retired search behaviour.
+- [~] Verify current language examples, migration links and current/retired
+  search behaviour: the all-language gate and 164 browser cases pass at `b2ed945`.
+  Additional language courses still require their own installed execution.
 
 Acceptance: each maintained language has a complete route to an interpreted result;
 marimo remains a Python interface rather than a claim of R/Julia notebook execution.
