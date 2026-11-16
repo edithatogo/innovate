@@ -549,7 +549,7 @@ Recommended execution order (Phase A: #1–#3 unblock `crates.io`, `cargo audit`
 - [~] **Track: Rust Statistical Distributions and Quantiles Modernization** *(In Progress — P1, Order #5; after #1–#2; parallelizable with #4)*
   *Link: [./tracks/rust_stats_distributions_20261115/](./tracks/rust_stats_distributions_20261115/)*
 
-- [ ] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Planned — P1, Order #6; after #4)*
+- [x] **Track: Rust Adaptive ODE/IVP Integration Modernization** *(Completed — P1, Order #6; after #4)*
   *Link: [./tracks/rust_ode_integration_20261115/](./tracks/rust_ode_integration_20261115/)*
 
 - [ ] **Track: Rust Network Graph Modernization (`petgraph`)** *(Planned — P2, Order #7; after #1–#2; parallelizable with #4–#6)*

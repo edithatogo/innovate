@@ -10,3 +10,7 @@ Replace the hand-rolled fixed-step `numerics::rk4` integrator in `rust/crates/in
 
 ## Non-Goals
 - Altering discrete-event / agent-based stepping owned by `kairo-ecs-des` and `kairo-ecs-abm`.
+
+## Crate Selection Decision
+- **Selected:** `ode_solvers = "=0.6.2"` (`Apache-2.0`, `Dopri5` Dormand-Prince 5(4) with `ContinuousOutputModel` dense output over `nalgebra::DVector<f64>`).
+- **Rationale:** Reuses `nalgebra 0.34.x` / `simba 0.9.x` / `serde` already in `Cargo.lock` with zero extra dependency bloat, supports arbitrary-length runtime state vectors via `DVector<f64>`, and provides exact 4th-order dense interpolation at caller-requested irregular `times` without re-integrating per point. All existing ODE callers (`competition.rs`, `composite.rs`, `events.rs`, `mechanistic.rs`) route through `numerics::integrate`.
