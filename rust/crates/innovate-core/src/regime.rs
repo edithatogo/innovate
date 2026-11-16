@@ -93,20 +93,18 @@ fn detect(y: &[f64], penalty: f64, jump: usize) -> Result<Vec<usize>, String> {
                 }
             }
         }
-        let best_eligible = if i + 1 < grid.len() && grid[i + 1] - grid[i] < 2 {
-            scores[i - 1]
-        } else {
-            scores[i]
-        };
-        if best_eligible.is_finite() {
-            active.retain(|cand| {
-                if grid[i] - grid[cand.idx] < 2 {
-                    return true;
-                }
-                let sse = cand.sse.max(0.);
-                let tol = 1e-12 * (best_eligible.abs() + sse + 1.0);
-                scores[cand.idx] + sse <= best_eligible + tol
-            });
+        let best = scores[i];
+        if best.is_finite() {
+            if i + 1 >= grid.len() || grid[i + 1] - grid[i] >= 2 {
+                active.retain(|cand| {
+                    if grid[i] - grid[cand.idx] < 2 {
+                        return true;
+                    }
+                    let sse = cand.sse.max(0.);
+                    let tol = 1e-12 * (best.abs() + sse + 1.0);
+                    scores[cand.idx] + sse <= best + tol
+                });
+            }
             active.push(ActiveCandidate {
                 idx: i,
                 count: 0,
