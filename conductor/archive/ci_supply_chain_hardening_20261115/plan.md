@@ -59,7 +59,8 @@ same expected error and exit code; no worker behavior is changed.
   that lock and the games lock as well as the root. A seeded `paste` dependency
   failed the cargo-deny ban, and a seeded `nalgebra 0.27.0` audit entry produced
   `RUSTSEC-2021-0070`. Four inventory and licence-bundle tests passed.
-- Local execution used CPython 3.15.2 and Rust 1.99.1. The combined games suite
+- Local execution used CPython 3.15.2; the follow-up below explicitly verifies
+  the Rust toolchain. The combined games suite
   passed three tests on the merged provider revision. A fresh Git-consumer
   prototype passed its closed-form control, and a wheel built from an extracted
   source distribution passed five focused NUTS and multi-generation tests.
@@ -152,14 +153,23 @@ the change; the `--locked --offline` rerun passed afterward. Five Python
 inventory tests and repository policy passed. `nox -s security` passed its
 three RustSec audits and inventory checks; `cargo deny --all-features --locked
 check` and the games `check bans` both passed with existing duplicate warnings.
-The full `nox -s native` session also passed on Rust 1.99.1, with its one
-live-OECD test ignored; `nox -s lint` passed.
+The full `nox -s native` session also passed with the host Rust 1.100.0
+compiler, with its one live-OECD test ignored; `nox -s lint` passed. The
+required rerun explicitly selected and verified both Cargo 1.99.1 and rustc
+1.99.1 before running `nox -s native`; it passed with the same one ignored
+live-OECD test.
 The root and games all-features metadata remain paste-free. The first offline
 games metadata attempt lacked the Paignia checkout; the locked online retry
 passed. The root lock gained only the existing faer package as a test dependency;
 all 285 package identities are unchanged, so the prior unfiltered OSV result
 for that package set remains applicable. CodeQL and all relevant hosted gates
 must run again on the new candidate; the findings have not been dismissed.
+
+A fresh external Git consumer of `364d69e52a8e8ce04be05f796968128738c4d9ef`
+resolved 197 packages with Cargo and rustc both verified at 1.99.1. Its lock
+contains `pastey 0.2.3` and no `paste`; `cargo-audit` found no advisories. Its
+closed-form Bass control passed and an invalid time was rejected. The same
+consumer control also passed with the host Rust 1.100.0 compiler.
 
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
