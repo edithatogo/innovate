@@ -1,5 +1,47 @@
 # Plan
 
+## Scientific and journal reconciliation — 16 November 2026
+
+- [x] ALIGN-01: reconcile issue #556, current native contracts, historical
+  receipts and journal/registry dependencies within this track's documentation.
+  Whitespace, metadata JSON, relative-link targets and preservation of the
+  historical plan were checked locally; integration remains pending.
+
+This bounded documentation pass is based on
+`69b674814513e09a683279c679b1584af8bb4214`. It does not reassign native,
+shared-integration or publication work. Historical entries below are preserved.
+
+**Read the [current reconciliation](reconciliation-20261116.md) first.** It
+supersedes old next-action and assignment wording below while retaining each
+receipt's original source and limits. Shared integration remains with #624.
+
+- [x] Record that #554 and #602 are merged source changes; distinguish the
+  reported 38 Arrow passes on `44cb9635` from current-source acceptance.
+- [ ] ALIGN-02: qualify the installed optional Arrow consumer at the selected
+  source/artifact, with all four PyArrow cases executed and none skipped.
+- [ ] ALIGN-03: reconcile and qualify the current Kairos pin and its lawful
+  distribution/publishability route with the existing provider/integration owners.
+- [ ] ALIGN-04: obtain exact-candidate native/platform, scheduled-consumer,
+  supply-chain, coverage/mutation and security receipts through existing owners.
+- [ ] ALIGN-05: connect truthful software scope and installed examples to the
+  existing empirical V01–V05 work and registry/JOSS preparation.
+- [ ] ALIGN-06: obtain the integrator's exact-artifact release disposition and
+  separate author/journal decisions after their mandatory prerequisites pass.
+
+The [shared intake](reconciliation-20261116.md#shared-integration-intake) requests
+recurring optional Arrow execution, explicit Rust minimum/compiler qualification,
+provider reconciliation and preservation of active work across #656/#659. These
+are pending handoffs, not implemented CI changes. All 38 scientific obligations,
+the four historical manual scenario checks and current provider/consumer/release
+holds remain open. See the [registry reconciliation](../research_software_registry_readiness_20260721/reconciliation-20261116.md)
+for #398–#401; the empirical and documentation plans retain their existing owners.
+
+## Historical execution record
+
+The material below is preserved unchanged from the inspected baseline. Its
+checkboxes and runtime/pin statements apply to the source and scope stated in
+each entry; they must not be interpreted as current whole-track acceptance.
+
 ## Issue #556 continuation — 14 November 2026
 
 Base: `276c2e505a0ce26910820fe8a94a6a498f505700`; branch:

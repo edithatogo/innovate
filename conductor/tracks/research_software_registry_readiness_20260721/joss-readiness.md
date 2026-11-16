@@ -2,6 +2,15 @@
 
 Status: `blocked_prerequisites`; no submission or acceptance claimed.
 
+**16 November update:** a separate [JOSS working draft](joss/paper.md),
+[checked bibliography](joss/paper.bib), [claim register](joss/claim-evidence.md)
+and [source snapshot](joss/source-snapshot.json) now implement the preparation
+outline below. They remain unapproved and not submission-ready. The
+[current reconciliation](reconciliation-20261116.md) records source
+`69b674814513e09a683279c679b1584af8bb4214`, current dependencies and remaining
+gates. The following 14 November assessment is preserved as a dated baseline;
+its statement that no new paper existed describes that earlier inspection.
+
 Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
 [#398](https://github.com/edithatogo/innovate/issues/398).
 Repository baseline inspected: `276c2e505a0ce26910820fe8a94a6a498f505700`.

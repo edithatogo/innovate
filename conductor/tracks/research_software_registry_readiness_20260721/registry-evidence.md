@@ -1,5 +1,13 @@
 # Software Heritage and RRID evidence dossier
 
+**16 November update:** [fresh read-only observations](evidence/provider-lookups-20261116.json)
+again returned 404 for the two exact Software Heritage origins and 403/non-JSON
+for SciCrunch search. These are observations, not archival or curator receipts;
+the duplicate check remains incomplete. The
+[current reconciliation](reconciliation-20261116.md) clarifies parallel RRID
+assessment, release/source citation identity and JOSS dependencies. The dated
+14 November dossier and responses below remain intact.
+
 Parent: [#398](https://github.com/edithatogo/innovate/issues/398). Deliverables:
 [Software Heritage #399](https://github.com/edithatogo/innovate/issues/399) and
 [RRID #400](https://github.com/edithatogo/innovate/issues/400).

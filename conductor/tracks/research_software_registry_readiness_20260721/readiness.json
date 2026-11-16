@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "https://github.com/edithatogo/innovate",
   "parent_issue": 398,
-  "assessed_revision": "276c2e505a0ce26910820fe8a94a6a498f505700",
+  "assessed_revision": "69b674814513e09a683279c679b1584af8bb4214",
   "software_version": "0.7.0a1",
   "input_sha256": {
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
@@ -17,7 +17,7 @@
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md",
       "outstanding": [
         "Select a release/tag and record its exact commit and publication/rights prerequisites; no current release qualification is implied.",
-        "The two tested origin URLs were not found; retain an actual archive-request receipt and successful visit/snapshot for the selected release.",
+        "The two exact origin lookups returned 404 again on 16 November 2026; retain an actual archive-request receipt and successful visit/snapshot for the selected release.",
         "Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion."
       ],
       "state": "pending",
@@ -29,7 +29,7 @@
       "issue": 400,
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md",
       "outstanding": [
-        "Complete a live duplicate check by resource name and canonical repository identity; the observed provider challenge did not establish absence.",
+        "Complete a live duplicate check by resource name and canonical repository identity; the 16 November 2026 HTTP 403/non-JSON response did not establish absence.",
         "Retain the actual submission receipt and curator decision for the root Innovate resource.",
         "Verify the assigned RRID resolver identifies this repository before advertising an identifier."
       ],
@@ -42,7 +42,7 @@
       "issue": 401,
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md",
       "outstanding": [
-        "Create and verify a current JOSS-format paper.md and bibliography; legacy manuscripts and readiness inventories do not qualify native 0.7.",
+        "Review and render the current unapproved joss/paper.md draft and verified bibliography; resolve its claim register against accepted source, research-use evidence and author declarations. Structural checks alone are not JOSS readiness.",
         "Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.",
         "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
         "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."

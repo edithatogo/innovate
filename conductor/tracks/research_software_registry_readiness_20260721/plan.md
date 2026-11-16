@@ -1,5 +1,31 @@
 # Implementation Plan
 
+## Scientific and journal reconciliation — 16 November 2026
+
+Current work packet: `REG-16`, based on
+`69b674814513e09a683279c679b1584af8bb4214`. This section and
+[the current reconciliation](reconciliation-20261116.md) supersede operational
+status in the dated receipts below; those receipts remain historical evidence.
+Allowed changes are this track and the existing scientific ecosystem alignment
+track. The shared integrator in #624 retains promotion, root registry, workflows,
+pins and scientific acceptance. #656 owns the overlapping empirical plan and
+#659 retains documentation work.
+
+- [x] Reconcile the five requested issues, merged/closed PRs, current metadata,
+  scientific dependencies and the actual native issue hierarchy.
+- [x] Prepare a separate JOSS-format draft, checked bibliography and claim/source
+  register; preserve the legacy manuscript and V05-owned scholarly corrections.
+- [x] Refresh bounded read-only provider lookups and distinguish absent tested
+  origins, inaccessible results, submission and verified external outcomes.
+- [x] Verify the updated pending record, manuscript structure/citations/links,
+  exact changed-file scope and independent review; retain real failing gates.
+- [~] Publish the bounded PR and reconcile all five issue descriptions with its
+  exact source/evidence. Integration and external completion remain separate.
+
+The remaining executable packages and their completion evidence are in the
+[current reconciliation](reconciliation-20261116.md#ordered-work-and-acceptance).
+No new scientific implementation owner is assigned by this packet.
+
 ## Phase 1: Readiness and prerequisites
 
 - [x] Inspect the current native repository and registry-specific prerequisites.

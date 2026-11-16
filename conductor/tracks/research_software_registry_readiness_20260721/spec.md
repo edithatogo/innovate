@@ -34,6 +34,35 @@ Make innovate's appropriate registry, archival, identifier, or research-software
 - Exercise the contract and the real repository record in `tests/native`, using
   synthetic positive/negative fixtures without making network requests.
 
+## Current manuscript and dependency contract — 16 November 2026
+
+The [current reconciliation](reconciliation-20261116.md) defines the ordered
+packages for #398–#401 and their #556 qualification dependency. Extend these
+existing tracks; do not create another journal roadmap or replace the empirical
+publication owner's V01–V05/M01–M05/Q01–Q05 work.
+
+- Maintain a separate JOSS working draft and checked bibliography within this
+  track until its edition is accepted for the publication package. Legacy
+  `paper.qmd` and `references.bib` remain under V05's scientific/rights contract.
+- Record exact permitted claims, source revision and relevant file fingerprints,
+  supporting references, limitations and withdrawal triggers. Implemented source,
+  measured numerical validity, research use and editorial acceptance are distinct
+  evidence classes. No manuscript claim may waive a required migration feature.
+- Retain the current six JOSS sections and word-count guidance, while recognising
+  that correct format does not satisfy research-use, public-development, software,
+  author or editorial requirements. Recheck official rules at submission.
+- RRID identity assessment may proceed in parallel with native qualification;
+  register the root resource if eligible. Archive release identity is distinct
+  from a contextual source-citation SWHID. Neither RRID nor SWHID is a mandatory
+  prerequisite to initial JOSS submission under the inspected guidance.
+- Keep the final software archive DOI at its applicable JOSS acceptance stage;
+  retain the repository's independently required scientific and release gates.
+- Never generate author consent, funding/COI absence, research adoption or a
+  human-review attestation. Record actual AI assistance and remaining history
+  gaps. JOSS editor/reviewer correspondence follows its human-interaction policy.
+- Keep all external states pending until real, verified provider events exist.
+  Source fingerprints and local preparation checks do not promote those states.
+
 ## GitHub hierarchy
 
 Parent: [#398](https://github.com/edithatogo/innovate/issues/398)
