@@ -313,3 +313,11 @@ to qualify the repaired PR.
   setup, scientific release readiness, coverage thresholds and offline-security
   workflows unchanged. Qualify the historical harness with real source,
   lockfile audits and observed CodeQL diagnostics before proposing integration.
+- CodeQL's real-file fixture did not associate manifests under
+  `tools/codeql-evidence` with Rust probes outside those manifest directories.
+  This lane's allowed scope therefore also includes new standalone
+  `Cargo.toml` and `Cargo.lock` files beside the two named evidence probes.
+  The existing historical files and their hashes remain unchanged. The replay
+  manifest must bind distinct recorded baseline and candidate sources; a pinned
+  analysis-only support commit may supply the candidate manifest, without
+  changing the root workspace or the scientific/offline gates.
