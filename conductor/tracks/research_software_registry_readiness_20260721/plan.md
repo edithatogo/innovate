@@ -19,8 +19,11 @@ pins and scientific acceptance. #656 owns the overlapping empirical plan and
   origins, inaccessible results, submission and verified external outcomes.
 - [x] Verify the updated pending record, manuscript structure/citations/links,
   exact changed-file scope and independent review; retain real failing gates.
-- [~] Publish the bounded PR and reconcile all five issue descriptions with its
-  exact source/evidence. Integration and external completion remain separate.
+- [x] Publish the bounded PR and reconcile all five issue descriptions with its
+  exact source/evidence. Published as draft [#662](https://github.com/edithatogo/innovate/pull/662),
+  initial head `0b5751002c7fd6cfe6ebd60b16208c94597cfad2`; all five issue bodies
+  were updated and read back on 16 November 2026. Integration and external
+  completion remain separate.
 
 The remaining executable packages and their completion evidence are in the
 [current reconciliation](reconciliation-20261116.md#ordered-work-and-acceptance).
