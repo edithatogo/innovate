@@ -239,3 +239,26 @@ to qualify the repaired PR.
   Git tree as `ca9739d5`; the unpushed packet was rebased onto that commit as a
   follow-up to main. Historical PR checks remain historical, and final-head
   hosted documentation and coverage evidence is still required.
+
+## Main browser and CodeQL follow-up — 16 November 2026
+
+- Owner: chat `01a1e3e9-537d-72a0-acc9-56b9ba954680`; worktree
+  `/Users/doughnut/.codex/worktrees/innovate-pr656-doc-coverage/innovate`;
+  branch `codex/innovate-main-quality-20261116`; base
+  `b29a1d27f54fdd08d77881ee999772fceab7c03a`. Initial write scope is this
+  evidence entry only. Any source path requires exact diagnostic identification
+  and ownership reconciliation before editing. No native authentication or
+  tenant object is assigned to this lane.
+- PR #659 was closed in favor of draft #671. Its owner retains the overlapping
+  browser test files; the successor's hosted documentation workflow passed
+  164/164 browser cases on `b2ed945f9ffede3bdd00c29437636c0bf1eba03d`.
+  That is evidence for the successor head, not a main-branch pass.
+- Main CodeQL reported 129 Rust files extracted without errors and two with
+  errors. The exact `b29a1d27` database was downloaded read-only (archive
+  SHA-256 `6d36cf420d666e7b6b542d299a1c34feca9549dd8e710c33fdc76447bf3e1fee`)
+  and inspected with CodeQL CLI 2.27.4 and the matching `codeql/rust-queries`
+  0.1.46 pack. The source-file `ExtractionErrors.ql` query returned zero rows.
+  Its summary metric also counts warnings, which are being queried separately.
+- Next operation: identify the warnings and their source ownership, then make
+  the smallest qualified repair. Scientific release readiness and the dedicated
+  offline-security lane remain unchanged and independently unqualified.
