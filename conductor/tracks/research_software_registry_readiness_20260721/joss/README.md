@@ -11,11 +11,13 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- Source baseline: `57d2916586d107c8affe90355e453abe27f01c26`, development version
-  `0.7.0a1`, reassessed after #656 merged on 16 November 2026. The
-  [source reassessment](../evidence/source-reassessment-20261116.md) explains the
-  changed inputs, claim decisions and retained limitations. Refresh the draft
-  when its implementation evidence changes.
+- Source baseline: `b29a1d27f54fdd08d77881ee999772fceab7c03a`, development version
+  `0.7.0a1`, reassessed after #668 merged on 16 November 2026. The
+  [current source reassessment](../evidence/evidence-acquisition-20261116/source-reassessment.md)
+  explains the added tabular field documentation, unchanged claims and retained
+  limitations. The [preceding assessment](../evidence/source-reassessment-20261116.md)
+  remains evidence for its earlier revision. Refresh the draft when its
+  implementation evidence changes.
 
 ## Scope and evidence
 
@@ -63,6 +65,15 @@ The old `mordaunt2020budget` citation is deliberately not reused. The parent
 dossier records its bibliographic mismatch; a corrected background citation
 would still require independent evidence before being represented as Innovate
 research use.
+
+Actual PDF inspection exposed one name-formatting issue: Pandoc treated `ter`
+in the Mesa author's surname as a dropping particle. The publisher's citation
+explicitly uses `ter Hoeven et al.`. BibTeX brace protection now preserves that
+form as a non-dropping particle, verified by a fresh parse, citeproc and PDF
+inspection. The reference identity and scientific claim are unchanged; the
+[prior inputs](../evidence/evidence-acquisition-20261116/render/attempt-3/inputs/)
+and [visual finding](../evidence/evidence-acquisition-20261116/render/attempt-3/visual-review.json)
+remain available with the render evidence.
 
 ## Bounded research-use and development-history inspection
 
@@ -130,10 +141,10 @@ interactions; this packet does not authorise or automate journal correspondence.
    Existing empirical-study owners retain their protocols and acceptance duties.
 3. Confirm authorship, affiliations, funding, conflicts, rights and the full AI
    disclosure. Replace draft-specific pending statements only with verified facts.
-4. Render the manuscript with the current JOSS-supported toolchain and inspect
-   the PDF, citations and metadata. Record tool versions, source revision and
-   output hash. The bounded follow-up below completed the bibliography parse and
-   official TeX generation; PDF compilation and visual inspection remain open.
+4. Preserve the current render and visual evidence and repeat it when source or
+   manuscript inputs change. The current edition has completed actual BibTeX,
+   official TeX/PDF and four-page inspection. Template layout/metadata limitations
+   are recorded below; author and publication-layout review remain separate.
 5. Re-run relevant installation, scientific, documentation and release gates on
    the selected source/artifacts. Structural manuscript checks do not establish
    submission readiness, scientific validity or a qualified software release.
@@ -247,7 +258,41 @@ the pinned checkout's unmodified Dockerfile provides its intended package
 environment; record the resulting image identity and use draft mode. No Docker
 build or run was executed in this workspace, where Docker is unavailable.
 
-### Retained current attempt: 16 November 2026, after #656
+### Current completed draft render: 16 November 2026, after #668
+
+The [render evidence packet](../evidence/evidence-acquisition-20261116/render/README.md)
+contains the [current four-page PDF](../evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf),
+its [unchanged generated receipt](../evidence/evidence-acquisition-20261116/render/attempt-4/receipt.json),
+the [separate visual review](../evidence/evidence-acquisition-20261116/render/attempt-4/visual-review.json)
+and a [reproduction recipe](../evidence/evidence-acquisition-20261116/render/reproduce.md).
+The PDF is 207,798 bytes, SHA-256
+`14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0`.
+
+Source/edition integrity passed with fourteen source inputs, three edition
+fingerprints, six required sections and **1,076 prose words**. Actual bibliography
+parsing, official TeX and PDF compilation passed, including the corrected
+`ter Hoeven` citation. All four pages were visually inspected after rasterizing
+at 150 dpi. The draft/source notices, five reference DOI links, `Sîrbu` diacritic
+and literal `Rht` author are present and readable.
+
+The official template's line numbers crowd/overlap the license sidebar around
+lines 16–19, and the last reference continues alone onto page four. Dummy DOI,
+submitted date, editorial and footer fields remain placeholders; the visible
+author metadata remain provisional and the PDF Info Author field is empty.
+These observations are retained explicitly. This is a readable working draft,
+not a zero-overlap or submission-layout pass. The generated receipt remains
+`rendered_draft_visual_review_pending`; the later visual record supplies its
+separate result without rewriting the renderer's generated facts.
+
+The successful environment uses the pinned Inara/Pandoc versions above, a
+complete selected TeX Live 2024 base/recommended LaTeX environment, LuaHBTeX
+1.18.0 and latexmk 4.86a. All 241 official package archives were checksum checked.
+The original helper versions and environment are preserved; subsequently guarded
+reproduction helpers passed fifteen focused guard tests and an actual fresh
+setup replay. That replay is separate from the PDF's original build identity.
+No scientific, release, author or editorial gate changes follow from these results.
+
+### Earlier blocked attempt: 16 November 2026, after #656
 
 The [render receipt](../evidence/joss-render-20261116/attempt-3/receipt.json) binds
 the reassessed `57d2916586d107c8affe90355e453abe27f01c26` edition. It records Pandoc
@@ -276,9 +321,9 @@ and Hack v3.003. A process-local `TEXMFCACHE=.` allowed font-cache creation in t
 isolated Inara checkout. Setup stopped at the remaining `luacode.sty` dependency;
 no global TeX configuration or other worker's environment was changed. The
 post-merge attempt reused that environment without installing more dependencies.
-The next
-attempt should use a complete supported TeX environment or the official
-container, retain a new receipt, and finish the PDF visual review.
+The later acquisition pass above used a complete isolated LaTeX base, retained
+new receipts and completed the draft's page inspection. This earlier failure
+remains an accurate record of its own environment and edition.
 
 The wrapper's 18 focused tests in
 [test_joss_render.py](../../../../tests/native/test_joss_render.py) passed using

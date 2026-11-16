@@ -1,0 +1,3331 @@
+{
+  "acquisition_native_jobs": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133267199039,
+        "run_id": 43857612980,
+        "name": "package",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run uv sync --locked --no-install-project --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run .venv/bin/python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Build the wheel from the source distribution and validate both",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          }
+        ]
+      },
+      {
+        "id": 133267199399,
+        "run_id": 43857612980,
+        "name": "julia-r (ubuntu-latest, libinnovate_ffi.so)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 15
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 34
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 35
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 36
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 37
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 38
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 39
+          }
+        ]
+      },
+      {
+        "id": 133267199616,
+        "run_id": 43857612980,
+        "name": "native-python (ubuntu-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 18
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 20
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 21
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 22
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 23
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 43
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 44
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 45
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 46
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 47
+          }
+        ]
+      },
+      {
+        "id": 133267199642,
+        "run_id": 43857612980,
+        "name": "julia-r (macos-latest, libinnovate_ffi.dylib)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 14
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 34
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 35
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 36
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 37
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 38
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 39
+          }
+        ]
+      },
+      {
+        "id": 133267199772,
+        "run_id": 43857612980,
+        "name": "native-python (macos-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 15
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 18
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 20
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 21
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 22
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 23
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 43
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 44
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 45
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 46
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 47
+          }
+        ]
+      },
+      {
+        "id": 133267199899,
+        "run_id": 43857612980,
+        "name": "julia-r (windows-latest, innovate_ffi.dll)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 15
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 34
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 35
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 36
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 37
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 38
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 39
+          }
+        ]
+      },
+      {
+        "id": 133267199946,
+        "run_id": 43857612980,
+        "name": "native-python (windows-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 15
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 18
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 20
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 21
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 22
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 23
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 43
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 44
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 45
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 46
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 47
+          }
+        ]
+      },
+      {
+        "id": 133277410629,
+        "run_id": 43857612980,
+        "name": "lint",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Require the native matrix, including Rust formatting and Python lint",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          }
+        ]
+      },
+      {
+        "id": 133277410690,
+        "run_id": 43857612980,
+        "name": "unit-tests-base (3.15.1)",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Require native Rust and Python tests on every platform",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          }
+        ]
+      }
+    ]
+  },
+  "acquisition_coverage_jobs": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133265814316,
+        "run_id": 43857613073,
+        "name": "Python binding line coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Verify the measured binding source",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Measure the Python binding through native consumer tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Validate the binding report",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Enforce the binding line-coverage floor",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Upload Python binding line coverage with OIDC",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Retain the Python binding coverage evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 28
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29
+          }
+        ]
+      },
+      {
+        "id": 133265814859,
+        "run_id": 43857613073,
+        "name": "Rust line coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": null,
+        "started_at": null,
+        "completed_at": null,
+        "html_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Install the pinned native coverage tool",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Run instrumented native tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Generate the native line report",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Enforce the native line-coverage floor",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Upload native line coverage with OIDC",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Retain the native coverage evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23
+          }
+        ]
+      }
+    ]
+  },
+  "acquisition_jobs_main_docs": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133290138712,
+        "run_id": 43864696778,
+        "name": "Native documentation examples",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the locked native development package",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Generate source-bound reference",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify native extension runtime docstrings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Rust public documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute Rust documentation examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and stage the C ABI for language documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the existing Julia project dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute Julia documentation examples and check runtime docs",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the existing R package",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute R documentation examples and check installed help",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Qualify current examples across all maintained languages",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain executed-example evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290139096,
+        "run_id": 43864696778,
+        "name": "build",
+        "status": "completed",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout code",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install pnpm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install uv",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up isolated documentation interpreter",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test documentation contracts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Python docstrings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Julia and R public documentation structure",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify reviewed-source freshness and scoped claims",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test content transforms",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build documentation site",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Type-check documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require no new documentation debt",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify production documentation contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Discover the complete browser qualification suite",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install Chromium for documentation qualification",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Qualify browser accessibility and interaction",
+            "status": "completed",
+            "conclusion": "failure"
+          },
+          {
+            "name": "Retain browser diagnostics",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain documentation evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Install uv",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Set up Node.js",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Install pnpm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout code",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133293046723,
+        "run_id": 43864696778,
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  },
+  "acquisition_jobs_main_ci": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133290315587,
+        "run_id": 43864696663,
+        "name": "package",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv sync --locked --no-install-project --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run .venv/bin/python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build the wheel from the source distribution and validate both",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290315898,
+        "run_id": 43864696663,
+        "name": "native-python (ubuntu-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290316169,
+        "run_id": 43864696663,
+        "name": "julia-r (macos-latest, libinnovate_ffi.dylib)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290316229,
+        "run_id": 43864696663,
+        "name": "julia-r (ubuntu-latest, libinnovate_ffi.so)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290316231,
+        "run_id": 43864696663,
+        "name": "julia-r (windows-latest, innovate_ffi.dll)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo build --release --locked -p innovate-ffi -j 2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Stage native library in both bindings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check Julia documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run R CMD INSTALL bindings/r",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and install the macOS R binary archive",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run unset INNOVATE_NATIVE_LIBRARY",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check R documentation and execute examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload native documentation execution receipts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify R loads the Windows DLL from a Unicode path",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290316418,
+        "run_id": 43864696663,
+        "name": "native-python (macos-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290316505,
+        "run_id": 43864696663,
+        "name": "native-python (windows-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run native tests with replay evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain native test evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync pytest tests/native",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python scripts/check_migration.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run cargo fmt --all --check",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust docs.rs documentation build",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify Rust and Python consumers from source distribution",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify the native remote worker container",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Run scheduled native benchmarks",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain native benchmark results",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Verify local MPI benchmark shards",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Retain MPI benchmark receipts",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133294086341,
+        "run_id": 43864696663,
+        "name": "unit-tests-base (3.15.1)",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require native Rust and Python tests on every platform",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133294086392,
+        "run_id": 43864696663,
+        "name": "lint",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require the native matrix, including Rust formatting and Python lint",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "acquisition_jobs_main_coverage": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133290142068,
+        "run_id": 43864696637,
+        "name": "Python binding line coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv sync --locked --python 3.15.2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run uv run --no-sync python -c \"import sys; assert sys.version_info[:3] == (3, 15, 2)\"",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify the measured binding source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Measure the Python binding through native consumer tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate the binding report",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Enforce the binding line-coverage floor",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload Python binding line coverage with OIDC",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain the Python binding coverage evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133290142620,
+        "run_id": 43864696637,
+        "name": "Rust line coverage",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the pinned native coverage tool",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run instrumented native tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Generate the native line report",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Enforce the native line-coverage floor",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload native line coverage with OIDC",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain the native coverage evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "acquisition_jobs_main_voiage": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133290137529,
+        "run_id": 43864696535,
+        "name": "Installed Voiage normalized input",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the locked build tools",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build the native wheel from its source distribution",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Download the Voiage wheel for artifact verification",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the consumer wheels outside the checkout",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test the normalized bundle consumer",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Qualify both installed artifacts and retain the receipt",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain consumer evidence after success or failure",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "acquisition_jobs_docs671": {
+    "recorded_utc": "2026-11-16 13:31:46 UTC",
+    "jobs": [
+      {
+        "id": 133296524820,
+        "run_id": 43866570433,
+        "name": "build",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checkout code",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install pnpm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install uv",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up isolated documentation interpreter",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test documentation contracts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Python docstrings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Julia and R public documentation structure",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify reviewed-source freshness and scoped claims",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Test content transforms",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build documentation site",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Type-check documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require no new documentation debt",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify production documentation contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Discover the complete browser qualification suite",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install Chromium for documentation qualification",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Qualify browser accessibility and interaction",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain browser diagnostics",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain documentation evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Install uv",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Install pnpm",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Checkout code",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133296525320,
+        "run_id": 43866570433,
+        "name": "Native documentation examples",
+        "status": "completed",
+        "conclusion": "success",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the locked native development package",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Generate source-bound reference",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify native extension runtime docstrings",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Require complete Rust public documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute Rust documentation examples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build and stage the C ABI for language documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the existing Julia project dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute Julia documentation examples and check runtime docs",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install the existing R package",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Execute R documentation examples and check installed help",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Qualify current examples across all maintained languages",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Retain executed-example evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run julia-actions/cache@d10a6fd8f31b12404a54613ebad242900567f2b9",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run Mozilla-Actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 133299664001,
+        "run_id": 43866570433,
+        "name": "deploy",
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    ]
+  }
+}

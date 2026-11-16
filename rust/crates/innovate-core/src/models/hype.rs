@@ -5,26 +5,37 @@ use crate::inference::InnovationError;
 /// Single Gaussian pulse in a composite hype expectation curve.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypePulse {
+    /// Signed height of the Gaussian pulse.
     pub amplitude: f64,
+    /// Time at which the pulse is centered.
     pub center: f64,
+    /// Positive Gaussian width in the same units as time.
     pub width: f64,
 }
 
 /// Structural configuration separating ordered hype cycles from unrestricted waves.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HypeConfiguration {
+    /// Require pulse centers to be strictly increasing.
     OrderedCycle,
+    /// Allow pulse centers without an ordering constraint.
     UnrestrictedWave,
 }
 
 /// Parameters for [`hype_mean`] and [`hype_derivative`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypeParameters {
+    /// Constant baseline of the composite curve.
     pub baseline: f64,
+    /// Amplitude of the logistic maturity component.
     pub maturity_amplitude: f64,
+    /// Positive growth rate of the logistic maturity component.
     pub growth: f64,
+    /// Midpoint time of the logistic maturity component.
     pub t_maturity: f64,
+    /// Gaussian pulses added to the maturity component.
     pub pulses: Vec<HypePulse>,
+    /// Ordering rule applied to pulse centers.
     pub configuration: HypeConfiguration,
 }
 

@@ -1,5 +1,10 @@
 # Scientific ecosystem qualification reconciliation — 16 November 2026
 
+**Latest continuation:** [separate evidence acquisition and concrete integration](../research_software_registry_readiness_20260721/evidence-acquisition-20261116.md).
+It records current main b29a1d27, new historical archives, public history, actual
+current-main installed qualification, the completed PDF build and the #671
+documentation handoff. Dated observations below retain their original scope.
+
 **Later main advance:** the [integrated-source reassessment](../research_software_registry_readiness_20260721/integration-20261116.md)
 records #656 merged as `57d2916586d107c8affe90355e453abe27f01c26` and
 [fresh affected native execution](evidence/arrow-integrated-20261116/README.md).

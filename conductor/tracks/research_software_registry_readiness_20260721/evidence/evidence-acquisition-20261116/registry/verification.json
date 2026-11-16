@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-11-16T13:32:17.341267+00:00",
+  "result": "pass_with_scope_limits",
+  "checks": {
+    "raw_response_receipts_verified": 15,
+    "response_sha256_and_byte_count_verified": true,
+    "json_parse": true,
+    "origin_full_visit_snapshot_linkage": true,
+    "snapshot_complete_no_next_branch": true,
+    "two_release_objects_and_resolvers_match": true,
+    "synthetic_directory_targets_preserved": true,
+    "two_original_artifact_records_match_pypi_urls_filenames_sha256": true,
+    "both_pypi_version_metadata_homepages_identify_repository": true
+  },
+  "receipt_files": [
+    "swh-pypi-authorities-0.5.0.receipt.json",
+    "swh-pypi-authorities-0.6.0.receipt.json",
+    "swh-pypi-directory-0.6.0.receipt.json",
+    "swh-pypi-forge-metadata-0.6.0.receipt.json",
+    "swh-pypi-original-artifacts-0.5.0.receipt.json",
+    "swh-pypi-original-artifacts-0.6.0.receipt.json",
+    "swh-pypi-registry-metadata-0.5.0.receipt.json",
+    "swh-pypi-registry-metadata-0.6.0.receipt.json",
+    "swh-pypi-release-0.5.0.receipt.json",
+    "swh-pypi-release-0.6.0.receipt.json",
+    "swh-pypi-resolve-0.5.0.receipt.json",
+    "swh-pypi-resolve-0.6.0.receipt.json",
+    "swh-pypi-snapshot.receipt.json",
+    "swh-pypi-visit-3.receipt.json",
+    "swh-pypi-visits.receipt.json"
+  ],
+  "scope": "Local consistency of the retained public provider evidence; not current native release acceptance, rights clearance or Git commit equivalence."
+}

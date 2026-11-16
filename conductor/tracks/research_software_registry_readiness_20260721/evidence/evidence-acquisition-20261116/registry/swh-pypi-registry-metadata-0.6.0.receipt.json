@@ -1,0 +1,13 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:dir:03ce01ed9f43a580277665e01a806db8d2b5d061/?authority=registry%20https://softwareheritage.org/",
+  "requested_at_utc": "2026-11-16T13:29:43.147061+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:29:50 GMT",
+  "content_type": "application/json",
+  "final_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:dir:03ce01ed9f43a580277665e01a806db8d2b5d061/?authority=registry%20https://softwareheritage.org/",
+  "link": null,
+  "body_bytes": 604,
+  "response_file": "swh-pypi-registry-metadata-0.6.0.response.json",
+  "response_sha256": "8d439bdd2449b94dfefcec9f3129fe6ef3e08ad42c981162f64de919fc2fc1aa"
+}

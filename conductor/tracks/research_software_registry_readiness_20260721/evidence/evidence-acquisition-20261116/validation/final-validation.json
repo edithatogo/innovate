@@ -1,0 +1,19 @@
+{
+  "json_files_parsed": 94,
+  "markdown_files_checked": 26,
+  "relative_link_failures": [],
+  "relocated_historical_input_handling": [
+    {
+      "retained_snapshot": "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-3/inputs/claim-evidence.md",
+      "original_link_base": "conductor/tracks/research_software_registry_readiness_20260721/joss",
+      "method": "Preserve exact historical input bytes; validate its relative links from the original source directory."
+    }
+  ],
+  "authored_whitespace_failures": [],
+  "historical_scientific_plan_tail_preserved": true,
+  "final_test_input_drift": [],
+  "final_pdf_sha256": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+  "final_focused_tests": 208,
+  "test_skips": 0,
+  "limitations": "Raw hashed logs, generated TeX and preserved executed scripts are retained verbatim, not rewritten for style. The whole historical PR diff retains prior raw-output whitespace findings. Validation does not promote external, scientific or release readiness."
+}

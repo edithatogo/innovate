@@ -1,5 +1,31 @@
 # Plan
 
+## Separate evidence and integration acquisition — 16 November 2026
+
+Base PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; main
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`. The isolated merge is
+`2748084292e5e57c181c1665a686ad3a291145bf` (tree
+`787eb4cd175b7343026cdad88143e8879e0b3062`). This packet answers the user's
+request to acquire remaining evidence and integration.
+
+- [x] ALIGN-02f: provide and execute an owned build-record helper and a complete
+  recurring Arrow/MSRV workflow candidate for the existing integrator; bind a
+  fresh installed qualification to the current native inputs.
+  The 178-input fresh wheel passed all 42 cases, including four optional
+  Arrow cases; the independent Rust 1.99.1 compile also passed. The helper has
+  24 guard tests, and the combined preparation suite has 208 passes/no skips.
+- [x] ALIGN-04c: replace pending hosted observations with completed exact-source
+  platform/coverage/consumer receipts, and reconcile main's documentation repair
+  with the active documentation owner in #671 (superseding closed #659).
+- [ ] Integrator adoption of the candidate root workflow and final promotion.
+
+Allowed edits: this track's `integration/`, evidence and records; the companion
+journal/registry track; and `tests/native/test_scenario_wheel_build.py` for
+negative tests of the new track-local executor. Existing native source, tests,
+shared workflows/manifests, provider pins and migration obligations are retained.
+The workflow candidate is inert until #624 adopts it; local execution is not
+hosted adoption or release acceptance.
+
 ## Requalification after the main advance — 16 November 2026
 
 Main advanced through #656 to `57d2916586d107c8affe90355e453abe27f01c26`

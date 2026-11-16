@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "state": "unapproved_working_draft",
-  "software_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
   "software_version": "0.7.0a1",
   "submission_ready": false,
   "source_sha256": {
@@ -17,13 +17,13 @@
     "docs/astro-site/src/content/docs/native-migration.md": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
     "rust/crates/innovate-core/Cargo.toml": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
     "rust/crates/innovate-tabular/Cargo.toml": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
-    "rust/crates/innovate-tabular/src/lib.rs": "8ad9814f9aa80d7778b00f8c7eb57814b6e5c01935ea232c7334bb54950f59d9",
+    "rust/crates/innovate-tabular/src/lib.rs": "40625938163f5c9dc0be0d280ab49643d6fb6807372e3fc84bb94971a0c15117",
     ".github/workflows/ci.yml": "ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d"
   },
   "edition_sha256": {
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "9dbd5388174e0de702b4eb53beee038295f35f07f0eeb274cd66be0c46839108",
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "10435dffd8b50cac968d37819232f8e1bdcd76ac62cbafb95fd7e505fabe0f0e"
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "1257a2b4c8a18deb00f5a79484c6ff9a9d0d0ededf1701c3ba221a27383ffd4f"
   },
   "limitations": [
     "Source hashes bind this scoped assessment, not complete implementation coverage or scientific validity.",

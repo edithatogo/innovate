@@ -1,0 +1,8 @@
+    Checking innovate-core v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/rust/crates/innovate-core)
+    Checking innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/rust/crates/innovate-tabular)
+   Compiling pyo3-ffi v0.30.1
+   Compiling pyo3 v0.30.1
+    Checking innovate-ffi v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/rust/crates/innovate-ffi)
+    Checking innovate-kairos v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/rust/crates/innovate-kairos)
+    Checking innovate-python v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/rust/crates/innovate-python)
+    Finished `dev` profile [unoptimized] target(s) in 26.22s

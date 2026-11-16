@@ -1,5 +1,21 @@
 # Software Heritage and RRID evidence dossier
 
+## Newly acquired provider evidence — 16 November 2026
+
+The [new authoritative provider packet](evidence/evidence-acquisition-20261116/registry/README.md)
+verifies existing Software Heritage archives for **PyPI 0.5.0 and 0.6.0**, including
+origin, full visit, snapshot, synthetic release objects, resolving SWHIDs and
+original-artifact checksums matching PyPI. The earlier exact Git-origin negatives
+below remain valid for their tested URLs; they do not mean that Innovate has no
+archive. These historical distribution identifiers are not the Git commit/tag
+identities or a current native 0.7 archive.
+
+The same packet records the still-incomplete RRID lookup, excludes two indexed
+false matches, and supplies concrete unsubmitted request metadata. Selected-target,
+rights, current-version archival, live duplicate discovery and curator outcomes
+remain separate requirements. [Current acquisition and integration](evidence-acquisition-20261116.md)
+is the operational entry point; all earlier dated receipts below are retained.
+
 ## Executed target inventory — 16 November 2026 follow-up
 
 The [read-only target inventory](evidence/archive-target-inventory-20261116.json)

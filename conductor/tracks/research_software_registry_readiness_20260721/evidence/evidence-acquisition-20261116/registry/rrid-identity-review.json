@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-11-16",
+  "resource_identity": {
+    "resource_name": "Innovate",
+    "package_name": "innovate",
+    "canonical_repository": "https://github.com/edithatogo/innovate",
+    "pypi_project": "https://pypi.org/project/innovate/",
+    "owner_search_term": "edithatogo",
+    "author_search_terms": [
+      "Dylan A Mordaunt",
+      "Mordaunt"
+    ],
+    "identity_basis": "Repository CITATION.cff and the public PyPI 0.6.0 page. These are identity/search clues, not author consent, current contact confirmation or an ownership attestation."
+  },
+  "capability_inventory": {
+    "dedicated_swh_or_rrid_connector_found": false,
+    "read_only_routes_used": [
+      "Primary-source web search results",
+      "Public web page retrieval",
+      "Anonymous direct HTTP GET"
+    ],
+    "login_or_challenge_bypass": false
+  },
+  "query_batches": [
+    {
+      "engine": "system1",
+      "queries": [
+        "site:archive.softwareheritage.org \"edithatogo\" \"innovate\"",
+        "\"github.com/edithatogo/innovate\" (site:scicrunch.org OR site:rrid.site OR site:identifiers.org)",
+        "\"Innovate\" \"Mordaunt\" (site:scicrunch.org OR site:rrid.site)"
+      ]
+    },
+    {
+      "engine": "system1",
+      "queries": [
+        "site:rrid.site \"Innovate\" \"diffusion\"",
+        "site:scicrunch.org \"Innovate\" \"edithatogo\"",
+        "site:rrid.site \"Mordaunt\""
+      ]
+    },
+    {
+      "engine": "system1",
+      "queries": [
+        "site:rrid.site \"innovate\" \"Software\" \"diffusion\"",
+        "site:scicrunch.org \"github.com/edithatogo/innovate\"",
+        "site:rrid.site \"SCR_029085\"",
+        "site:rrid.site \"SCR_029073\""
+      ]
+    },
+    {
+      "engine": "system2",
+      "queries": [
+        "site:rrid.site \"innovate\" \"policy\"",
+        "site:scicrunch.org \"Innovate\" \"diffusion\"",
+        "site:scicrunch.org \"edithatogo\" \"innovate\""
+      ]
+    },
+    {
+      "engine": "system1",
+      "queries": [
+        "\"pypi.org/project/innovate\" (site:rrid.site OR site:scicrunch.org)",
+        "\"Dylan A Mordaunt\" \"Innovate\" (site:rrid.site OR site:scicrunch.org)"
+      ]
+    }
+  ],
+  "search_result_interpretation": "The returned first-party registry results did not provide a record identifying the canonical Innovate repository. This is a bounded indexed search, not a complete live registry duplicate check; per-query result totals were not exposed by the batched search output. Results outside the registry/provider domains were not used as RRID matches.",
+  "disambiguated_indexed_records": [
+    {
+      "rrid": "RRID:SCR_029085",
+      "resource_name": "KairoECS",
+      "synonym": "kairos",
+      "resource_url": "https://github.com/edithatogo/kairos",
+      "record_url": "https://rrid.site/data/record/nlx_144509-1/SCR_029085/resolver?i=rrid%3Ascr_029085&q=",
+      "source_kind": "Search-indexed first-party registry record",
+      "search_crawl_label": "6 days ago",
+      "live_record_retrieval_http_status": 403,
+      "live_response_date": null,
+      "matches_innovate": false,
+      "reason": "Same GitHub owner, different repository and simulation resource; shared ownership does not identify Innovate."
+    },
+    {
+      "rrid": "RRID:SCR_029073",
+      "resource_name": "Children's Hospital of Philadelphia Innovate, Design, Engineer, and Accelerate IDEA Lab Core Facility",
+      "resource_url": "https://www.research.chop.edu/idea-lab",
+      "record_url": "https://rrid.site/data/record/nlx_144509-1/SCR_029073/resolver",
+      "source_kind": "Search-indexed first-party registry record",
+      "search_crawl_label": "last month",
+      "live_record_retrieval_http_status": 403,
+      "live_response_date": null,
+      "matches_innovate": false,
+      "reason": "The matching word is part of a physical core facility's name. Its canonical URL and resource type differ from the Innovate software."
+    }
+  ],
+  "direct_registry_searches": [
+    {
+      "url": "https://rrid.site/data/source/nlx_144509-1/search?q=edithatogo&l=edithatogo",
+      "http_status": 403,
+      "response_date": "Mon, 16 Nov 2026 13:23:53 GMT",
+      "receipt": "public-lookup-observations.json"
+    },
+    {
+      "url": "https://rrid.site/data/source/nlx_144509-1/search?q=innovate&l=innovate",
+      "http_status": 403,
+      "response_date": "Mon, 16 Nov 2026 13:23:53 GMT",
+      "receipt": "public-lookup-observations.json"
+    }
+  ],
+  "other_provider_pages": [
+    {
+      "url": "https://rrid.site/about/resource",
+      "route": "public web retrieval",
+      "observed_http_status": 403,
+      "response_date": null
+    },
+    {
+      "url": "https://scicrunch.org/create/resource",
+      "route": "public web retrieval",
+      "observed_http_status": 403,
+      "response_date": null
+    }
+  ],
+  "outcome": {
+    "duplicate_check_complete": false,
+    "matching_rrid": null,
+    "curator_eligibility_outcome": null,
+    "registration_performed": false,
+    "curator_contact_performed": false,
+    "resolver_identity_verified": false,
+    "provider_state": "pending"
+  }
+}

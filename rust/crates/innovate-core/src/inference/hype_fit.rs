@@ -7,9 +7,13 @@ use crate::models::hype::{HypeConfiguration, HypeParameters, HypePulse, hype_mea
 /// Request for [`fit_hype`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypeFitRequest {
+    /// Validated times aligned with the observed values.
     pub time: TimeGrid,
+    /// Finite observations to fit.
     pub observed: Vec<f64>,
+    /// Candidate starting parameter sets for the multistart fit.
     pub initial_guesses: Vec<HypeParameters>,
+    /// Positive iteration limit for each starting point.
     pub max_iterations: usize,
 }
 

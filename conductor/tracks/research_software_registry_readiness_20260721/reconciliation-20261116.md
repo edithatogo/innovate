@@ -1,5 +1,10 @@
 # Scientific, registry and journal reconciliation — 16 November 2026
 
+**Latest continuation:** [separate evidence acquisition and concrete integration](evidence-acquisition-20261116.md).
+It records current main b29a1d27, new historical archives, public history, actual
+current-main installed qualification, the completed PDF build and the #671
+documentation handoff. Dated observations below retain their original scope.
+
 **Later main advance:** [the integrated-source reassessment](integration-20261116.md)
 records the external merge of #656 at `57d2916586d107c8affe90355e453abe27f01c26`,
 the reviewed manuscript update and fresh affected execution. It supersedes

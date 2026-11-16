@@ -15,7 +15,7 @@
   "external_evidence_required": true,
   "readiness_record": "conductor/tracks/research_software_registry_readiness_20260721/readiness.json",
   "current_reconciliation": "conductor/tracks/research_software_registry_readiness_20260721/reconciliation-20261116.md",
-  "current_execution_record": "conductor/tracks/research_software_registry_readiness_20260721/integration-20261116.md",
-  "assessed_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "current_execution_record": "conductor/tracks/research_software_registry_readiness_20260721/evidence-acquisition-20261116.md",
+  "assessed_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
   "manuscript_draft": "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md"
 }

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "prepared_on": "2026-11-16",
+  "status": "draft_fields_only",
+  "repository": "https://github.com/edithatogo/innovate",
+  "scope": "Reviewable provider inputs and exact unresolved facts; no request, registration or correspondence has been sent.",
+  "software_heritage": {
+    "canonical_git_request": {
+      "method": "POST",
+      "endpoint": "https://archive.softwareheritage.org/api/1/origin/save/git/url/https://github.com/edithatogo/innovate/",
+      "visit_type": "git",
+      "origin_url": "https://github.com/edithatogo/innovate",
+      "executed": false,
+      "api_documentation": "https://archive.softwareheritage.org/api/1/origin/save/doc/"
+    },
+    "existing_distribution_archive": {
+      "origin": "https://pypi.org/project/innovate/",
+      "already_observed_versions": [
+        "0.5.0",
+        "0.6.0"
+      ],
+      "new_request_needed_to_establish_the_observed_existing_archive": false,
+      "proof_summary": "swh-chain-summary.json",
+      "git_commit_equivalence_verified": false,
+      "current_native_archival_verified": false
+    },
+    "selected_target": null,
+    "rights_assessed": false,
+    "candidate_git_targets": [
+      {
+        "version": "v0.5.0",
+        "reference_kind": "lightweight tag",
+        "commit": "6b673832c6024f5332c971ac35172a96615f75f9",
+        "source": "../../archive-target-inventory-20261116.json"
+      },
+      {
+        "version": "v0.6.0",
+        "reference_kind": "annotated tag",
+        "tag_object": "86eceddcfa17362d05afa34a6f224e7eac5d561b",
+        "commit": "3459f4528c11ceba8d1e5840d3da852dfb8d58bd",
+        "source": "../../archive-target-inventory-20261116.json"
+      }
+    ],
+    "unresolved_decisions": [
+      "Select the deliverable's source scope explicitly: a historical PyPI source distribution, a historical Git release/reference, or a later qualified native release. These are distinct source objects.",
+      "Confirm the applicable rights and publication constraints for any source/history newly requested for archival; Apache-2.0 repository metadata does not attest every third-party artifact.",
+      "If Git archival is desired, authorise that specific new archive request. Existing PyPI ingestion needs no new submission to report the observed facts.",
+      "After any Git request, retain its real receipt, then verify full visit/snapshot, named reference, source object and resolver identity. Request acceptance alone is insufficient."
+    ],
+    "api_payload_scope": "The documented Save Code Now request is origin-level. The chosen tag/commit belongs in the qualification record and subsequent snapshot verification; it is not asserted as an undocumented request parameter."
+  },
+  "rrid": {
+    "suggestion_url": "https://scicrunch.org/create/resource",
+    "submitted": false,
+    "provider_form_available_on_this_pass": false,
+    "provider_field_names_or_constraints_verified": false,
+    "proposed_resource_fields": {
+      "resource_name": "Innovate",
+      "canonical_url": "https://github.com/edithatogo/innovate",
+      "known_package_name": "innovate",
+      "additional_identity_url": "https://pypi.org/project/innovate/",
+      "resource_type_candidates": [
+        "software library",
+        "source code"
+      ],
+      "description": "Research software for modelling innovation adoption, technology substitution, competition and policy diffusion. The active 0.7 development line uses a Rust scientific core, Polars tables and thin Python, Julia and R bindings. Earlier PyPI 0.5.0 and 0.6.0 packages belong to the historical Python line. Native migration, scientific qualification and release acceptance remain in progress.",
+      "keywords": [
+        "innovation diffusion",
+        "policy diffusion",
+        "technology adoption",
+        "competition",
+        "substitution",
+        "forecasting",
+        "Rust",
+        "Polars"
+      ],
+      "licence_scope": "Apache-2.0 for project-owned code; preserve applicable third-party licences and notices.",
+      "existing_rrid": null
+    },
+    "identity_checks_required": [
+      "Use the canonical GitHub URL and PyPI identity in the live duplicate check.",
+      "Exclude KairoECS SCR_029085 and CHOP IDEA Lab SCR_029073; the observed indexed records identify different resources.",
+      "If a true matching entry exists, review/update it through the provider instead of creating a duplicate.",
+      "Verify the assigned resolver record identifies Innovate before using an identifier in citation metadata."
+    ],
+    "missing_decisions_or_user_facts": [
+      "Confirm the root-resource display name and factual description for the actual suggestion.",
+      "Identify the submitter and current contact details that may be supplied to the provider. Existing public author/contact metadata has not been confirmed for this new submission.",
+      "Disclose any earlier private submission, pending suggestion or known RRID/alias not discoverable through this public pass, if one exists.",
+      "Authorise the actual suggestion once duplicate discovery and the final form are reviewable."
+    ],
+    "remaining_provider_evidence": [
+      "Accessible identity-aware duplicate search",
+      "Actual suggestion receipt, if a new suggestion is appropriate",
+      "Curator eligibility/approval/rejection or questions",
+      "Resolving identifier matched to the canonical resource"
+    ],
+    "curator_eligibility_outcome": null,
+    "registration_ready": false
+  },
+  "constraints": [
+    "No invented identifier, consent, contact authority, licence clearance, eligibility, adoption or release acceptance.",
+    "No login probing, access-challenge bypass, archive request, registration or curator contact.",
+    "The existing readiness record and Conductor plan are untouched by this packet; the integrator must reconcile actual outcomes."
+  ]
+}

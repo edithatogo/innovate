@@ -5,15 +5,20 @@ use crate::inference::InnovationError;
 /// Current market state for competing products.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketState {
+    /// Current adoption for each product, in the same order as the parameters.
     pub adoption: Vec<f64>,
 }
 
 /// Parameters for competing-product diffusion rates.
 #[derive(Debug, Clone, PartialEq)]
 pub struct CompetitionParameters {
+    /// Shared market capacity across products.
     pub market_capacity: f64,
+    /// Time at which each product enters the market.
     pub entry_times: Vec<f64>,
+    /// Per-product innovation coefficients.
     pub p: Vec<f64>,
+    /// Per-product imitation coefficients.
     pub q: Vec<f64>,
     /// Interaction matrix `alpha[i][j]` (product `j` effect on product `i`).
     pub interaction: Vec<Vec<f64>>,
@@ -22,13 +27,15 @@ pub struct CompetitionParameters {
 /// Instantaneous adoption rates returned by [`competing_rates`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketRates {
+    /// Instantaneous adoption rate for each product.
     pub rates: Vec<f64>,
 }
 
 /// Compute instantaneous adoption rates for competing products under a shared market capacity (A04).
 ///
 /// # Errors
-/// Returns [`InnovationError`] on mismatched dimensions, negative states, or non-finite inputs.
+/// Returns [`InnovationError`] on mismatched dimensions, invalid time or capacity,
+/// or non-finite or negative state and `p`/`q` values.
 pub fn competing_rates(
     t: f64,
     state: &MarketState,

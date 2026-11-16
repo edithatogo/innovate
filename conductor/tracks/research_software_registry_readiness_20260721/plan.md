@@ -1,5 +1,44 @@
 # Implementation Plan
 
+## Separate evidence acquisition — 16 November 2026
+
+Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`, consumed in the isolated integration
+commit `2748084292e5e57c181c1665a686ad3a291145bf`.
+
+- [x] JOSS-02f: review the changed source input, complete the official draft PDF
+  in an isolated, pinned TeX dependency closure, and visually inspect the result.
+  Final attempt4 is a four-page official draft; compilation and all-page visual
+  review pass, with the template placeholders/sidebar caveat explicitly retained.
+- [x] JOSS-02g: protect the Mesa author family name `ter Hoeven` in the
+  BibTeX after actual PDF review found its particle dropped in citations. This
+  narrow publisher-supported correction extends the allowed edition scope to
+  `joss/paper.bib` and its reviewed fingerprint; preserve attempt 3 and create
+  a fresh render, without changing scientific prose or author attestations.
+- [x] JOSS-02h: harden the reproducible environment helpers after independent
+  review reproduced unsafe reuse of an existing setup root. Require a pinned
+  database before writes, clean copied-font sources and absolute owned TeX
+  executables; preserve original executed helper bytes and verify the corrected
+  setup in fresh directories. Scope includes `tests/native/test_joss_environment.py`.
+  All 15 guard tests and an actual cached replay pass; 241 archives, 24 fonts
+  and owned binaries match the original environment. The final six-suite run
+  records 208 passes/no skips. Original PDF provenance remains separate.
+- [x] JOSS-01b: acquire primary public distribution/development history and
+  investigate identifiable version-bound research use without treating teaching
+  examples or unexecuted downstream plans as research use.
+- [x] SWH-01b / RRID-01b: follow public provider identifiers and distinguish
+  package archival evidence from the selected release and canonical resource.
+  Existing PyPI 0.5.0/0.6.0 archives and resolving SWHIDs are verified;
+  downloaded sdists match their recorded hashes and canonical metadata.
+  Actual research use and an Innovate RRID remain unverified.
+- [x] REG-16c: reconcile #668/main and the new #671 documentation ownership,
+  update actual readiness findings and prepare a concrete integration handoff.
+
+Allowed edits remain the two owning track namespaces and separately scoped
+scientific tooling. All prior attempts and receipts are preserved. External
+correspondence, submission, registration, release and main promotion remain
+separate from this evidence acquisition.
+
 ## Reassessment after the main advance — 16 November 2026
 
 Main is now `57d2916586d107c8affe90355e453abe27f01c26` after the external

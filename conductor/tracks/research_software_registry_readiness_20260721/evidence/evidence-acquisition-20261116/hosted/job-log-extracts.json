@@ -1,0 +1,1128 @@
+[
+  {
+    "key": "docs671_browser",
+    "run_id": 43866570433,
+    "job_id": 133296524820,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133296524820",
+    "log_sha256": "f6a9c313a108394c497ad79da6008135b04beca82bb0b31c00e51f5d93134db8",
+    "log_line_count": 2548,
+    "log_excerpts": [
+      {
+        "line": 128,
+        "text": "2026-11-16T12:26:25.1500748Z HEAD is now at 96a02ac Merge b2ed945f9ffede3bdd00c29437636c0bf1eba03d into b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 131,
+        "text": "2026-11-16T12:26:25.1570458Z 96a02acc63a757bf6d07f679527c79bc1e1014a0"
+      },
+      {
+        "line": 264,
+        "text": "2026-11-16T12:26:38.1492343Z Using CPython 3.15.2"
+      },
+      {
+        "line": 381,
+        "text": "2026-11-16T12:26:49.9604160Z   \"status\": \"passed\","
+      },
+      {
+        "line": 382,
+        "text": "2026-11-16T12:26:49.9604702Z   \"scope\": \"review_record_consistency_and_declared_source_freshness\","
+      },
+      {
+        "line": 882,
+        "text": "2026-11-16T12:27:07.3570214Z       \"status\": \"not_run\""
+      },
+      {
+        "line": 886,
+        "text": "2026-11-16T12:27:07.3571125Z       \"status\": \"not_run\""
+      },
+      {
+        "line": 1847,
+        "text": "2026-11-16T12:32:15.6634302Z   164 passed (4.8m)"
+      },
+      {
+        "line": 1880,
+        "text": "2026-11-16T12:32:16.8224521Z Artifact documentation-browser-diagnostics.zip successfully finalized. Artifact ID 14225907924"
+      },
+      {
+        "line": 1881,
+        "text": "2026-11-16T12:32:16.8225736Z Artifact documentation-browser-diagnostics has been successfully uploaded! Final size is 635257 bytes. Artifact ID is 14225907924"
+      },
+      {
+        "line": 1917,
+        "text": "2026-11-16T12:32:17.7162587Z Artifact documentation-build-evidence.zip successfully finalized. Artifact ID 14225583583"
+      },
+      {
+        "line": 1918,
+        "text": "2026-11-16T12:32:17.7163398Z Artifact documentation-build-evidence has been successfully uploaded! Final size is 132220 bytes. Artifact ID is 14225583583"
+      },
+      {
+        "line": 2519,
+        "text": "2026-11-16T12:32:18.7914616Z Artifact github-pages successfully finalized. Artifact ID 14225563563"
+      },
+      {
+        "line": 2520,
+        "text": "2026-11-16T12:32:18.7915679Z Artifact github-pages has been successfully uploaded! Final size is 1493890 bytes. Artifact ID is 14225563563"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "docs671_native_docs",
+    "run_id": 43866570433,
+    "job_id": 133296525320,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133296525320",
+    "log_sha256": "779236c3ba3843e24e278a99eac0ff17fc2a18a75b5fa79c7fd463d9c96b4971",
+    "log_line_count": 7712,
+    "log_excerpts": [
+      {
+        "line": 139,
+        "text": "2026-11-16T12:26:31.5464053Z HEAD is now at 96a02ac Merge b2ed945f9ffede3bdd00c29437636c0bf1eba03d into b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 142,
+        "text": "2026-11-16T12:26:31.5536508Z 96a02acc63a757bf6d07f679527c79bc1e1014a0"
+      },
+      {
+        "line": 582,
+        "text": "2026-11-16T12:26:57.7736046Z Using CPython 3.15.2"
+      },
+      {
+        "line": 800,
+        "text": "2026-11-16T12:27:44.7794341Z   \"scope\": \"Actual public module callables, including underscore names in __all__; runtime docstring structure and exact installed Python binding source. Noncallable exports are inventoried separately. This does not qualify Rust compiler docs, scientific accuracy, class-member runtime docs, or attest that the native binary was built from this checkout.\","
+      },
+      {
+        "line": 805,
+        "text": "2026-11-16T12:27:44.7799120Z   \"status\": \"passed\","
+      },
+      {
+        "line": 819,
+        "text": "2026-11-16T12:27:44.8277276Z ##[group]Run cargo doc --workspace --no-deps --locked -j 4"
+      },
+      {
+        "line": 837,
+        "text": "2026-11-16T12:27:44.8367201Z   RUSTDOCFLAGS: -D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes"
+      },
+      {
+        "line": 6543,
+        "text": "2026-11-16T12:30:07.7404111Z {"
+      },
+      {
+        "line": 6544,
+        "text": "2026-11-16T12:30:07.7404815Z   \"api_doctest_status\": \"passed\","
+      },
+      {
+        "line": 6545,
+        "text": "2026-11-16T12:30:07.7405319Z   \"complete\": true,"
+      },
+      {
+        "line": 6546,
+        "text": "2026-11-16T12:30:07.7406027Z   \"contract_sha256\": \"354ee38da7313908287f953031d8b4dc4c367d83193b323f5de2cdf23ebf9e61\","
+      },
+      {
+        "line": 6547,
+        "text": "2026-11-16T12:30:07.7406686Z   \"counts\": {"
+      },
+      {
+        "line": 6548,
+        "text": "2026-11-16T12:30:07.7407062Z     \"current_pages\": 69,"
+      },
+      {
+        "line": 6549,
+        "text": "2026-11-16T12:30:07.7407514Z     \"examples\": 11,"
+      },
+      {
+        "line": 6550,
+        "text": "2026-11-16T12:30:07.7408019Z     \"generated_api_pages\": 34,"
+      },
+      {
+        "line": 6551,
+        "text": "2026-11-16T12:30:07.7408482Z     \"historical_pages\": 0,"
+      },
+      {
+        "line": 6552,
+        "text": "2026-11-16T12:30:07.7408954Z     \"pages\": 69,"
+      },
+      {
+        "line": 6553,
+        "text": "2026-11-16T12:30:07.7409411Z     \"unbound_python_blocks\": 0,"
+      },
+      {
+        "line": 6554,
+        "text": "2026-11-16T12:30:07.7410114Z     \"versioned_archive_pages\": 0,"
+      },
+      {
+        "line": 6555,
+        "text": "2026-11-16T12:30:07.7410461Z     \"violations\": 0"
+      },
+      {
+        "line": 6556,
+        "text": "2026-11-16T12:30:07.7410674Z   },"
+      },
+      {
+        "line": 6557,
+        "text": "2026-11-16T12:30:07.7410926Z   \"current_content_complete\": true,"
+      },
+      {
+        "line": 6558,
+        "text": "2026-11-16T12:30:07.7411324Z   \"current_python_content_complete\": true,"
+      },
+      {
+        "line": 6559,
+        "text": "2026-11-16T12:30:07.7411670Z   \"current_structure_complete\": true,"
+      },
+      {
+        "line": 6560,
+        "text": "2026-11-16T12:30:07.7411992Z   \"example_execution_status\": \"passed\","
+      },
+      {
+        "line": 6622,
+        "text": "2026-11-16T12:30:07.7428958Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6647,
+        "text": "2026-11-16T12:30:07.7436074Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6671,
+        "text": "2026-11-16T12:30:07.7443175Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6689,
+        "text": "2026-11-16T12:30:07.7448835Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6712,
+        "text": "2026-11-16T12:30:07.7471611Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6743,
+        "text": "2026-11-16T12:30:07.7480750Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6766,
+        "text": "2026-11-16T12:30:07.7487637Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6791,
+        "text": "2026-11-16T12:30:07.7494722Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6812,
+        "text": "2026-11-16T12:30:07.7501806Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6830,
+        "text": "2026-11-16T12:30:07.7507961Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6853,
+        "text": "2026-11-16T12:30:07.7514807Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6870,
+        "text": "2026-11-16T12:30:07.7522950Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6897,
+        "text": "2026-11-16T12:30:07.7532740Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6906,
+        "text": "2026-11-16T12:30:07.7535836Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6915,
+        "text": "2026-11-16T12:30:07.7538943Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6924,
+        "text": "2026-11-16T12:30:07.7542488Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6933,
+        "text": "2026-11-16T12:30:07.7545535Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6942,
+        "text": "2026-11-16T12:30:07.7548627Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6951,
+        "text": "2026-11-16T12:30:07.7551797Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7019,
+        "text": "2026-11-16T12:30:07.7586858Z         \"status\": \"passed\""
+      },
+      {
+        "line": 7021,
+        "text": "2026-11-16T12:30:07.7587347Z       \"status\": \"passed\""
+      },
+      {
+        "line": 7037,
+        "text": "2026-11-16T12:30:07.7592957Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7046,
+        "text": "2026-11-16T12:30:07.7596345Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7055,
+        "text": "2026-11-16T12:30:07.7599545Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7064,
+        "text": "2026-11-16T12:30:07.7602860Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7073,
+        "text": "2026-11-16T12:30:07.7606195Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7082,
+        "text": "2026-11-16T12:30:07.7609354Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7170,
+        "text": "2026-11-16T12:30:07.7654102Z         \"status\": \"passed\""
+      },
+      {
+        "line": 7172,
+        "text": "2026-11-16T12:30:07.7654609Z       \"status\": \"passed\""
+      },
+      {
+        "line": 7588,
+        "text": "2026-11-16T12:30:09.1118539Z Artifact documentation-execution-evidence.zip successfully finalized. Artifact ID 14226341369"
+      },
+      {
+        "line": 7589,
+        "text": "2026-11-16T12:30:09.1120005Z Artifact documentation-execution-evidence has been successfully uploaded! Final size is 15207 bytes. Artifact ID is 14226341369"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "main_browser",
+    "run_id": 43864696778,
+    "job_id": 133290139096,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43864696778/job/133290139096",
+    "log_sha256": "77428bbae4f2c9c2644370bcf38a08238ba44a7ace5aacad3e2144ec9611cb82",
+    "log_line_count": 2440,
+    "log_excerpts": [
+      {
+        "line": 115,
+        "text": "2026-11-16T12:14:15.3498024Z b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 258,
+        "text": "2026-11-16T12:14:32.6889684Z Using CPython 3.15.2"
+      },
+      {
+        "line": 375,
+        "text": "2026-11-16T12:14:44.0834105Z   \"status\": \"passed\","
+      },
+      {
+        "line": 376,
+        "text": "2026-11-16T12:14:44.0834548Z   \"scope\": \"review_record_consistency_and_declared_source_freshness\","
+      },
+      {
+        "line": 805,
+        "text": "2026-11-16T12:15:02.0423661Z       \"status\": \"not_run\""
+      },
+      {
+        "line": 809,
+        "text": "2026-11-16T12:15:02.0424475Z       \"status\": \"not_run\""
+      },
+      {
+        "line": 2304,
+        "text": "2026-11-16T12:19:31.8998775Z "
+      },
+      {
+        "line": 2305,
+        "text": "2026-11-16T12:19:31.9003665Z "
+      },
+      {
+        "line": 2306,
+        "text": "2026-11-16T12:19:31.9013058Z   1) [chromium-desktop] › tests/browser/documentation.spec.mjs:113:1 › current navigation and archived version labels "
+      },
+      {
+        "line": 2307,
+        "text": "2026-11-16T12:19:31.9013756Z "
+      },
+      {
+        "line": 2308,
+        "text": "2026-11-16T12:19:31.9014004Z     Error: Internal resource or artifact-identity failures"
+      },
+      {
+        "line": 2309,
+        "text": "2026-11-16T12:19:31.9014292Z "
+      },
+      {
+        "line": 2310,
+        "text": "2026-11-16T12:19:31.9014512Z     expect(received).toEqual(expected) // deep equality"
+      },
+      {
+        "line": 2311,
+        "text": "2026-11-16T12:19:31.9014783Z "
+      },
+      {
+        "line": 2312,
+        "text": "2026-11-16T12:19:31.9014908Z     - Expected  - 1"
+      },
+      {
+        "line": 2313,
+        "text": "2026-11-16T12:19:31.9015172Z     + Received  + 6"
+      },
+      {
+        "line": 2314,
+        "text": "2026-11-16T12:19:31.9015316Z "
+      },
+      {
+        "line": 2315,
+        "text": "2026-11-16T12:19:31.9015419Z     - Array []"
+      },
+      {
+        "line": 2316,
+        "text": "2026-11-16T12:19:31.9015647Z     + Array ["
+      },
+      {
+        "line": 2317,
+        "text": "2026-11-16T12:19:31.9015866Z     +   Object {"
+      },
+      {
+        "line": 2318,
+        "text": "2026-11-16T12:19:31.9016669Z     +     \"error\": \"net::ERR_ABORTED\","
+      },
+      {
+        "line": 2319,
+        "text": "2026-11-16T12:19:31.9017200Z     +     \"url\": \"http://127.0.0.1:4321/innovate/_astro/ui-core.D6xEXLGp.js\","
+      },
+      {
+        "line": 2320,
+        "text": "2026-11-16T12:19:31.9017656Z     +   },"
+      },
+      {
+        "line": 2321,
+        "text": "2026-11-16T12:19:31.9017898Z     + ]"
+      },
+      {
+        "line": 2322,
+        "text": "2026-11-16T12:19:31.9018037Z "
+      },
+      {
+        "line": 2323,
+        "text": "2026-11-16T12:19:31.9018169Z        at support.mjs:66"
+      },
+      {
+        "line": 2324,
+        "text": "2026-11-16T12:19:31.9018305Z "
+      },
+      {
+        "line": 2325,
+        "text": "2026-11-16T12:19:31.9018571Z       64 |       expect(consoleErrors, 'Browser console errors').toEqual([]);"
+      },
+      {
+        "line": 2326,
+        "text": "2026-11-16T12:19:31.9019221Z       65 |       expect(pageErrors, 'Uncaught browser exceptions').toEqual([]);"
+      },
+      {
+        "line": 2327,
+        "text": "2026-11-16T12:19:31.9019986Z     > 66 |       expect(failedResources, 'Internal resource or artifact-identity failures').toEqual([]);"
+      },
+      {
+        "line": 2328,
+        "text": "2026-11-16T12:19:31.9020705Z          |                                                                                  ^"
+      },
+      {
+        "line": 2329,
+        "text": "2026-11-16T12:19:31.9021110Z       67 |     }"
+      },
+      {
+        "line": 2330,
+        "text": "2026-11-16T12:19:31.9021407Z       68 |   }, { auto: true }],"
+      },
+      {
+        "line": 2331,
+        "text": "2026-11-16T12:19:31.9021713Z       69 | });"
+      },
+      {
+        "line": 2332,
+        "text": "2026-11-16T12:19:31.9022451Z         at Object.base.extend.runtime.auto (/home/runner/work/innovate/innovate/docs/astro-site/tests/browser/support.mjs:66:82)"
+      },
+      {
+        "line": 2333,
+        "text": "2026-11-16T12:19:31.9023110Z "
+      },
+      {
+        "line": 2334,
+        "text": "2026-11-16T12:19:31.9023755Z     attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────"
+      },
+      {
+        "line": 2335,
+        "text": "2026-11-16T12:19:31.9024725Z     .reports/browser/test-results/documentation-current-navigation-and-archived-version-labels-chromium-desktop/test-failed-1.png"
+      },
+      {
+        "line": 2336,
+        "text": "2026-11-16T12:19:31.9025753Z     ────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+        "line": 2337,
+        "text": "2026-11-16T12:19:31.9026074Z "
+      },
+      {
+        "line": 2338,
+        "text": "2026-11-16T12:19:31.9026725Z     Error Context: .reports/browser/test-results/documentation-current-navigation-and-archived-version-labels-chromium-desktop/error-context.md"
+      },
+      {
+        "line": 2339,
+        "text": "2026-11-16T12:19:31.9027355Z "
+      },
+      {
+        "line": 2340,
+        "text": "2026-11-16T12:19:31.9027693Z     attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────"
+      },
+      {
+        "line": 2341,
+        "text": "2026-11-16T12:19:31.9028353Z     .reports/browser/test-results/documentation-current-navigation-and-archived-version-labels-chromium-desktop/trace.zip"
+      },
+      {
+        "line": 2342,
+        "text": "2026-11-16T12:19:31.9028836Z     Usage:"
+      },
+      {
+        "line": 2343,
+        "text": "2026-11-16T12:19:31.9028932Z "
+      },
+      {
+        "line": 2344,
+        "text": "2026-11-16T12:19:31.9029445Z         pnpm exec playwright show-trace .reports/browser/test-results/documentation-current-navigation-and-archived-version-labels-chromium-desktop/trace.zip"
+      },
+      {
+        "line": 2345,
+        "text": "2026-11-16T12:19:31.9029934Z "
+      },
+      {
+        "line": 2346,
+        "text": "2026-11-16T12:19:31.9030216Z     ────────────────────────────────────────────────────────────────────────────────────────────────"
+      },
+      {
+        "line": 2347,
+        "text": "2026-11-16T12:19:31.9030441Z "
+      },
+      {
+        "line": 2348,
+        "text": "2026-11-16T12:19:31.9030513Z   1 failed"
+      },
+      {
+        "line": 2349,
+        "text": "2026-11-16T12:19:31.9031013Z     [chromium-desktop] › tests/browser/documentation.spec.mjs:113:1 › current navigation and archived version labels "
+      },
+      {
+        "line": 2350,
+        "text": "2026-11-16T12:19:31.9031437Z   141 passed (4.2m)"
+      },
+      {
+        "line": 2351,
+        "text": "2026-11-16T12:19:32.0683148Z Browser qualification: failed; 142/142 cases; /home/runner/work/innovate/innovate/docs/astro-site/.reports/browser/qualification.json"
+      },
+      {
+        "line": 2352,
+        "text": "2026-11-16T12:19:32.0867304Z [ELIFECYCLE] Command failed with exit code 1."
+      },
+      {
+        "line": 2353,
+        "text": "2026-11-16T12:19:32.0898570Z ##[error]Process completed with exit code 1."
+      },
+      {
+        "line": 2354,
+        "text": "2026-11-16T12:19:32.0954333Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"
+      },
+      {
+        "line": 2355,
+        "text": "2026-11-16T12:19:32.0954709Z with:"
+      },
+      {
+        "line": 2356,
+        "text": "2026-11-16T12:19:32.0954903Z   name: documentation-browser-diagnostics"
+      },
+      {
+        "line": 2357,
+        "text": "2026-11-16T12:19:32.0955409Z   path: docs/astro-site/.reports/browser/playwright.json"
+      },
+      {
+        "line": 2358,
+        "text": "docs/astro-site/.reports/browser/html/"
+      },
+      {
+        "line": 2359,
+        "text": "docs/astro-site/.reports/browser/test-results/"
+      },
+      {
+        "line": 2360,
+        "text": ""
+      },
+      {
+        "line": 2361,
+        "text": "2026-11-16T12:19:32.0955901Z   include-hidden-files: true"
+      },
+      {
+        "line": 2362,
+        "text": "2026-11-16T12:19:32.0956112Z   if-no-files-found: error"
+      },
+      {
+        "line": 2363,
+        "text": "2026-11-16T12:19:32.0956321Z   compression-level: 6"
+      },
+      {
+        "line": 2364,
+        "text": "2026-11-16T12:19:32.0956506Z   overwrite: false"
+      },
+      {
+        "line": 2365,
+        "text": "2026-11-16T12:19:32.0956678Z env:"
+      },
+      {
+        "line": 2366,
+        "text": "2026-11-16T12:19:32.0956857Z   ASTRO_TELEMETRY_DISABLED: 1"
+      },
+      {
+        "line": 2385,
+        "text": "2026-11-16T12:19:34.0019781Z Artifact documentation-browser-diagnostics.zip successfully finalized. Artifact ID 14225665652"
+      },
+      {
+        "line": 2386,
+        "text": "2026-11-16T12:19:34.0021050Z Artifact documentation-browser-diagnostics has been successfully uploaded! Final size is 3033863 bytes. Artifact ID is 14225665652"
+      },
+      {
+        "line": 2422,
+        "text": "2026-11-16T12:19:35.5518091Z Artifact documentation-build-evidence.zip successfully finalized. Artifact ID 14225895471"
+      },
+      {
+        "line": 2423,
+        "text": "2026-11-16T12:19:35.5519248Z Artifact documentation-build-evidence has been successfully uploaded! Final size is 133646 bytes. Artifact ID is 14225895471"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "main_native_docs",
+    "run_id": 43864696778,
+    "job_id": 133290138712,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43864696778/job/133290138712",
+    "log_sha256": "0127aa120273751d0e926d1c0fc2347f5b50255ba5a89ed492955f97e17405d7",
+    "log_line_count": 8253,
+    "log_excerpts": [
+      {
+        "line": 126,
+        "text": "2026-11-16T12:14:16.0011824Z b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 567,
+        "text": "2026-11-16T12:14:47.2415447Z Using CPython 3.15.2"
+      },
+      {
+        "line": 783,
+        "text": "2026-11-16T12:15:28.5866540Z   \"scope\": \"Actual public module callables, including underscore names in __all__; runtime docstring structure and exact installed Python binding source. Noncallable exports are inventoried separately. This does not qualify Rust compiler docs, scientific accuracy, class-member runtime docs, or attest that the native binary was built from this checkout.\","
+      },
+      {
+        "line": 788,
+        "text": "2026-11-16T12:15:28.5868836Z   \"status\": \"passed\","
+      },
+      {
+        "line": 802,
+        "text": "2026-11-16T12:15:28.6276091Z ##[group]Run cargo doc --workspace --no-deps --locked -j 4"
+      },
+      {
+        "line": 820,
+        "text": "2026-11-16T12:15:28.6342192Z   RUSTDOCFLAGS: -D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes"
+      },
+      {
+        "line": 6495,
+        "text": "2026-11-16T12:17:26.4265491Z {"
+      },
+      {
+        "line": 6496,
+        "text": "2026-11-16T12:17:26.4266382Z   \"api_doctest_status\": \"passed\","
+      },
+      {
+        "line": 6497,
+        "text": "2026-11-16T12:17:26.4267004Z   \"complete\": false,"
+      },
+      {
+        "line": 6498,
+        "text": "2026-11-16T12:17:26.4268106Z   \"contract_sha256\": \"bd9baf0d2693603f0d8e385d6bff5fd273e2554c2292d9089fcb49b0faa09cc4\","
+      },
+      {
+        "line": 6499,
+        "text": "2026-11-16T12:17:26.4268935Z   \"counts\": {"
+      },
+      {
+        "line": 6500,
+        "text": "2026-11-16T12:17:26.4269323Z     \"current_pages\": 60,"
+      },
+      {
+        "line": 6501,
+        "text": "2026-11-16T12:17:26.4269848Z     \"examples\": 10,"
+      },
+      {
+        "line": 6502,
+        "text": "2026-11-16T12:17:26.4270333Z     \"generated_api_pages\": 34,"
+      },
+      {
+        "line": 6503,
+        "text": "2026-11-16T12:17:26.4270886Z     \"historical_pages\": 61,"
+      },
+      {
+        "line": 6504,
+        "text": "2026-11-16T12:17:26.4271379Z     \"pages\": 201,"
+      },
+      {
+        "line": 6505,
+        "text": "2026-11-16T12:17:26.4271863Z     \"unbound_python_blocks\": 0,"
+      },
+      {
+        "line": 6506,
+        "text": "2026-11-16T12:17:26.4272418Z     \"versioned_archive_pages\": 80,"
+      },
+      {
+        "line": 6507,
+        "text": "2026-11-16T12:17:26.4272870Z     \"violations\": 0"
+      },
+      {
+        "line": 6508,
+        "text": "2026-11-16T12:17:26.4273260Z   },"
+      },
+      {
+        "line": 6509,
+        "text": "2026-11-16T12:17:26.4273653Z   \"current_content_complete\": true,"
+      },
+      {
+        "line": 6510,
+        "text": "2026-11-16T12:17:26.4274221Z   \"current_python_content_complete\": true,"
+      },
+      {
+        "line": 6511,
+        "text": "2026-11-16T12:17:26.4274855Z   \"current_structure_complete\": true,"
+      },
+      {
+        "line": 6512,
+        "text": "2026-11-16T12:17:26.4275478Z   \"example_execution_status\": \"passed\","
+      },
+      {
+        "line": 6570,
+        "text": "2026-11-16T12:17:26.4342628Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6595,
+        "text": "2026-11-16T12:17:26.4350534Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6619,
+        "text": "2026-11-16T12:17:26.4358303Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6637,
+        "text": "2026-11-16T12:17:26.4364296Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6660,
+        "text": "2026-11-16T12:17:26.4372911Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6691,
+        "text": "2026-11-16T12:17:26.4382720Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6714,
+        "text": "2026-11-16T12:17:26.4390087Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6739,
+        "text": "2026-11-16T12:17:26.4395286Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6757,
+        "text": "2026-11-16T12:17:26.4399759Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6780,
+        "text": "2026-11-16T12:17:26.4404542Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6797,
+        "text": "2026-11-16T12:17:26.4409735Z       \"status\": \"passed\","
+      },
+      {
+        "line": 6824,
+        "text": "2026-11-16T12:17:26.4416859Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6833,
+        "text": "2026-11-16T12:17:26.4419194Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6842,
+        "text": "2026-11-16T12:17:26.4421436Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6851,
+        "text": "2026-11-16T12:17:26.4423677Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6860,
+        "text": "2026-11-16T12:17:26.4425933Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6869,
+        "text": "2026-11-16T12:17:26.4428404Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6878,
+        "text": "2026-11-16T12:17:26.4430641Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6946,
+        "text": "2026-11-16T12:17:26.4455541Z         \"status\": \"passed\""
+      },
+      {
+        "line": 6948,
+        "text": "2026-11-16T12:17:26.4455952Z       \"status\": \"passed\""
+      },
+      {
+        "line": 6964,
+        "text": "2026-11-16T12:17:26.4460408Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6973,
+        "text": "2026-11-16T12:17:26.4462744Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6982,
+        "text": "2026-11-16T12:17:26.4464992Z             \"status\": \"passed\""
+      },
+      {
+        "line": 6991,
+        "text": "2026-11-16T12:17:26.4467253Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7000,
+        "text": "2026-11-16T12:17:26.4469808Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7009,
+        "text": "2026-11-16T12:17:26.4472145Z             \"status\": \"passed\""
+      },
+      {
+        "line": 7097,
+        "text": "2026-11-16T12:17:26.4504253Z         \"status\": \"passed\""
+      },
+      {
+        "line": 7099,
+        "text": "2026-11-16T12:17:26.4504662Z       \"status\": \"passed\""
+      },
+      {
+        "line": 8095,
+        "text": "2026-11-16T12:17:27.4635783Z Artifact documentation-execution-evidence.zip successfully finalized. Artifact ID 14224819110"
+      },
+      {
+        "line": 8096,
+        "text": "2026-11-16T12:17:27.4636721Z Artifact documentation-execution-evidence has been successfully uploaded! Final size is 18126 bytes. Artifact ID is 14224819110"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "main_voiage",
+    "run_id": 43864696535,
+    "job_id": 133290137529,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43864696535/job/133290137529",
+    "log_sha256": "d86409a03f69eb74a5ef64f70a430af013330dad379be88496c99ccbd61930ae",
+    "log_line_count": 1248,
+    "log_excerpts": [
+      {
+        "line": 124,
+        "text": "2026-11-16T12:14:12.4699862Z b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 515,
+        "text": "2026-11-16T12:14:26.9202135Z Using CPython 3.15.2"
+      },
+      {
+        "line": 994,
+        "text": "2026-11-16T12:18:07.6655902Z Using CPython 3.15.2 interpreter at: .venv/bin/python"
+      },
+      {
+        "line": 1137,
+        "text": "2026-11-16T12:18:16.5481846Z Artifact voiage-consumer-b29a1d27f54fdd08d77881ee999772fceab7c03a.zip successfully finalized. Artifact ID 14224129369"
+      },
+      {
+        "line": 1138,
+        "text": "2026-11-16T12:18:16.5484089Z Artifact voiage-consumer-b29a1d27f54fdd08d77881ee999772fceab7c03a has been successfully uploaded! Final size is 2375 bytes. Artifact ID is 14224129369"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "pr662_macos",
+    "run_id": 43857612980,
+    "job_id": 133267199772,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43857612980/job/133267199772",
+    "log_sha256": "d2f3c6ac5feea084ff8e6520e765cf68b99ef0e00a81173f9f62e79072e890a2",
+    "log_line_count": 1544,
+    "log_excerpts": [
+      {
+        "line": 126,
+        "text": "2026-11-16T11:33:24.7727870Z HEAD is now at cc48aaa Merge d36c33f6b4fb480828ddb9aae0121f3379667015 into 57d2916586d107c8affe90355e453abe27f01c26"
+      },
+      {
+        "line": 129,
+        "text": "2026-11-16T11:33:24.8061040Z cc48aaa0cfbad8830aff4a2feebcbec3cf4b2665"
+      },
+      {
+        "line": 625,
+        "text": "2026-11-16T11:33:57.0103490Z Using CPython 3.15.2 interpreter at: /opt/homebrew/opt/python@3.15/bin/python3.15"
+      },
+      {
+        "line": 1262,
+        "text": "2026-11-16T11:39:01.0721500Z \u001b[32;1m     Summary\u001b[0m [ 199.767s] \u001b[1m457\u001b[0m tests run: \u001b[1m457\u001b[0m \u001b[32;1mpassed\u001b[0m (\u001b[1m1\u001b[0m \u001b[33;1mslow\u001b[0m), \u001b[1m1\u001b[0m \u001b[33;1mskipped\u001b[0m"
+      },
+      {
+        "line": 1341,
+        "text": "2026-11-16T11:39:06.2961520Z Artifact native-test-evidence-macos-latest.zip successfully finalized. Artifact ID 14222612762"
+      },
+      {
+        "line": 1342,
+        "text": "2026-11-16T11:39:06.2963590Z Artifact native-test-evidence-macos-latest has been successfully uploaded! Final size is 15551 bytes. Artifact ID is 14222612762"
+      },
+      {
+        "line": 1369,
+        "text": "2026-11-16T11:39:42.7581430Z SKIPPED [1] tests/native/test_python_consumer.py:2248: requires the live OECD SDMX endpoint"
+      },
+      {
+        "line": 1370,
+        "text": "2026-11-16T11:39:42.7582300Z SKIPPED [4] tests/native/test_scenario_exports.py:139: requires the locked optional Arrow extra"
+      },
+      {
+        "line": 1371,
+        "text": "2026-11-16T11:39:42.7633340Z 487 passed, 5 skipped in 34.75s"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "pr662_rust_coverage",
+    "run_id": 43857613073,
+    "job_id": 133265814859,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43857613073/job/133265814859",
+    "log_sha256": "7325fe10a742b9a3466d80c5342680a7d151dfe90c96db017a17f4adac267d22",
+    "log_line_count": 2009,
+    "log_excerpts": [
+      {
+        "line": 131,
+        "text": "2026-11-16T11:28:19.8131559Z HEAD is now at d36c33f docs(qualification): reconcile merged native source and requalify artifacts"
+      },
+      {
+        "line": 134,
+        "text": "2026-11-16T11:28:19.8249187Z d36c33f6b4fb480828ddb9aae0121f3379667015"
+      },
+      {
+        "line": 1400,
+        "text": "2026-11-16T11:33:43.3618249Z Filename                                             Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover"
+      },
+      {
+        "line": 1401,
+        "text": "2026-11-16T11:33:43.3619963Z ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+      },
+      {
+        "line": 1402,
+        "text": "2026-11-16T11:33:43.3621370Z innovate-core/src/adopters.rs                            217                 3    98.62%          19                 0   100.00%         149                 3    97.99%           0                 0         -"
+      },
+      {
+        "line": 1472,
+        "text": "2026-11-16T11:33:43.3688398Z TOTAL                                                  31547              3873    87.72%        2976               445    85.05%       24089              3043    87.37%           0                 0         -"
+      },
+      {
+        "line": 1911,
+        "text": "2026-11-16T11:33:49.2304301Z Artifact rust-line-coverage.zip successfully finalized. Artifact ID 14221632713"
+      },
+      {
+        "line": 1912,
+        "text": "2026-11-16T11:33:49.2305520Z Artifact rust-line-coverage has been successfully uploaded! Final size is 165827 bytes. Artifact ID is 14221632713"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "pr662_ubuntu",
+    "run_id": 43857612980,
+    "job_id": 133267199616,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43857612980/job/133267199616",
+    "log_sha256": "ca41e12acbbc685d1f25bc0c7b60f0794efa979f080e13d6fd4e910d1115ca28",
+    "log_line_count": 1627,
+    "log_excerpts": [
+      {
+        "line": 142,
+        "text": "2026-11-16T11:32:17.6898087Z HEAD is now at cc48aaa Merge d36c33f6b4fb480828ddb9aae0121f3379667015 into 57d2916586d107c8affe90355e453abe27f01c26"
+      },
+      {
+        "line": 145,
+        "text": "2026-11-16T11:32:17.7002729Z cc48aaa0cfbad8830aff4a2feebcbec3cf4b2665"
+      },
+      {
+        "line": 636,
+        "text": "2026-11-16T11:32:49.1685480Z Using CPython 3.15.2"
+      },
+      {
+        "line": 1301,
+        "text": "2026-11-16T11:36:09.6503611Z \u001b[32;1m     Summary\u001b[0m [ 170.832s] \u001b[1m457\u001b[0m tests run: \u001b[1m457\u001b[0m \u001b[32;1mpassed\u001b[0m (\u001b[1m1\u001b[0m \u001b[33;1mslow\u001b[0m), \u001b[1m1\u001b[0m \u001b[33;1mskipped\u001b[0m"
+      },
+      {
+        "line": 1380,
+        "text": "2026-11-16T11:36:11.8900545Z Artifact native-test-evidence-ubuntu-latest.zip successfully finalized. Artifact ID 14221807690"
+      },
+      {
+        "line": 1381,
+        "text": "2026-11-16T11:36:11.8902064Z Artifact native-test-evidence-ubuntu-latest has been successfully uploaded! Final size is 15278 bytes. Artifact ID is 14221807690"
+      },
+      {
+        "line": 1408,
+        "text": "2026-11-16T11:36:34.2572868Z SKIPPED [1] tests/native/test_python_consumer.py:2248: requires the live OECD SDMX endpoint"
+      },
+      {
+        "line": 1409,
+        "text": "2026-11-16T11:36:34.2574405Z SKIPPED [4] tests/native/test_scenario_exports.py:139: requires the locked optional Arrow extra"
+      },
+      {
+        "line": 1410,
+        "text": "2026-11-16T11:36:34.2575668Z 487 passed, 5 skipped in 21.61s"
+      },
+      {
+        "line": 1446,
+        "text": "2026-11-16T11:36:35.2188259Z ##[group]Run cargo doc --locked --no-deps -p innovate-core -p innovate-tabular -p innovate-ffi"
+      },
+      {
+        "line": 1462,
+        "text": "2026-11-16T11:36:35.2279899Z   RUSTDOCFLAGS: --cfg docsrs -D warnings"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "pr662_windows",
+    "run_id": 43857612980,
+    "job_id": 133267199946,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43857612980/job/133267199946",
+    "log_sha256": "ec0855673343761e9f084d7f6588da4dff5dc0c52d2414ba620754e9988e0b04",
+    "log_line_count": 1891,
+    "log_excerpts": [
+      {
+        "line": 129,
+        "text": "2026-11-16T11:32:55.3876244Z HEAD is now at cc48aaa Merge d36c33f6b4fb480828ddb9aae0121f3379667015 into 57d2916586d107c8affe90355e453abe27f01c26"
+      },
+      {
+        "line": 132,
+        "text": "2026-11-16T11:32:55.4688633Z cc48aaa0cfbad8830aff4a2feebcbec3cf4b2665"
+      },
+      {
+        "line": 644,
+        "text": "2026-11-16T11:33:20.7887156Z Using CPython 3.15.2 interpreter at: C:\\hostedtoolcache\\windows\\Python\\3.15.2\\x64\\python.exe"
+      },
+      {
+        "line": 1536,
+        "text": "2026-11-16T11:46:15.4897222Z \u001b[32;1m     Summary\u001b[0m [ 184.052s] \u001b[1m457\u001b[0m tests run: \u001b[1m457\u001b[0m \u001b[32;1mpassed\u001b[0m (\u001b[1m1\u001b[0m \u001b[33;1mslow\u001b[0m), \u001b[1m1\u001b[0m \u001b[33;1mskipped\u001b[0m"
+      },
+      {
+        "line": 1617,
+        "text": "2026-11-16T11:46:19.2410235Z Artifact native-test-evidence-windows-latest.zip successfully finalized. Artifact ID 14221784254"
+      },
+      {
+        "line": 1618,
+        "text": "2026-11-16T11:46:19.2411320Z Artifact native-test-evidence-windows-latest has been successfully uploaded! Final size is 17466 bytes. Artifact ID is 14221784254"
+      },
+      {
+        "line": 1647,
+        "text": "2026-11-16T11:48:00.1365829Z SKIPPED [1] tests\\native\\test_python_consumer.py:2248: requires the live OECD SDMX endpoint"
+      },
+      {
+        "line": 1648,
+        "text": "2026-11-16T11:48:00.1366644Z SKIPPED [4] tests\\native\\test_scenario_exports.py:139: requires the locked optional Arrow extra"
+      },
+      {
+        "line": 1649,
+        "text": "2026-11-16T11:48:00.1367526Z SKIPPED [2] tests\\native\\test_test_acceleration_process.py:20: POSIX process groups and SIGINT; Windows uses taskkill"
+      },
+      {
+        "line": 1650,
+        "text": "2026-11-16T11:48:00.1368260Z 485 passed, 7 skipped in 99.17s (0:01:39)"
+      }
+    ],
+    "retrieved_date_utc": "2026-11-16",
+    "retrieval_note": "Retrieved from the GitHub job-log API before the timestamp in job-observations.json; excerpt line numbers refer to the complete decoded response whose SHA-256 is retained."
+  },
+  {
+    "key": "main_rust_coverage",
+    "run_id": 43864696637,
+    "job_id": 133290142620,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43864696637/job/133290142620",
+    "retrieved_date_utc": "2026-11-16",
+    "log_sha256": "011a7ae911717678c9473f2bde993f9fb95a64c7b73c22a37023b81a55b1a7d9",
+    "log_line_count": 2036,
+    "log_excerpts": [
+      {
+        "line": 131,
+        "text": "2026-11-16T12:14:14.5447161Z HEAD is now at b29a1d2 fix(ci): restore Rust documentation and coverage (#668)"
+      },
+      {
+        "line": 134,
+        "text": "2026-11-16T12:14:14.5576875Z b29a1d27f54fdd08d77881ee999772fceab7c03a"
+      },
+      {
+        "line": 1427,
+        "text": "2026-11-16T12:17:42.0818145Z Filename                                             Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover"
+      },
+      {
+        "line": 1499,
+        "text": "2026-11-16T12:17:42.0871796Z TOTAL                                                  31547              3684    88.32%        2976               435    85.38%       24089              2800    88.38%           0                 0         -"
+      }
+    ]
+  },
+  {
+    "key": "pr662_python_coverage",
+    "run_id": 43857613073,
+    "job_id": 133265814316,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43857613073/job/133265814316",
+    "retrieved_date_utc": "2026-11-16",
+    "log_sha256": "dae8ac70fedbae5c59cc222c7ec4df7122bfeeac8ceba51c74d73425bac08b00",
+    "log_line_count": 1374,
+    "log_excerpts": [
+      {
+        "line": 131,
+        "text": "2026-11-16T11:27:44.9853552Z HEAD is now at d36c33f docs(qualification): reconcile merged native source and requalify artifacts"
+      },
+      {
+        "line": 134,
+        "text": "2026-11-16T11:27:44.9973824Z d36c33f6b4fb480828ddb9aae0121f3379667015"
+      },
+      {
+        "line": 760,
+        "text": "2026-11-16T11:28:36.2466448Z TOTAL                                    237     31    87%"
+      },
+      {
+        "line": 765,
+        "text": "2026-11-16T11:28:36.2469005Z 487 passed, 5 skipped in 17.78s"
+      },
+      {
+        "line": 813,
+        "text": "2026-11-16T11:28:36.5738258Z TOTAL                                    237     31    87%"
+      }
+    ]
+  }
+]

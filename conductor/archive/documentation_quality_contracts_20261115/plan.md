@@ -186,3 +186,56 @@ tests passed using `.venv-native/bin/python -m unittest discover -s tests -p`
 with `test_documentation_source_hash_contract.py`, `test_documentation_content_contract.py`,
 and `test_documentation_workflow.py`. Fresh hosted native receipts are required
 to qualify the repaired PR.
+
+## PR 656 documentation and coverage repair — 16 November 2026
+
+- [~] Restore the existing strict Rust documentation check and add independent
+  native tests for uncovered changed behavior; retain all coverage thresholds.
+- Ownership: chat `01a1e3e9-537d-72a0-acc9-56b9ba954680`, worktree
+  `/Users/doughnut/.codex/worktrees/innovate-pr656-doc-coverage/innovate`, branch
+  `codex/pr656-doc-coverage`, base `8244d1eb23fec915c0ce93f4da93e3cae44d6ddb`.
+  Initial allowed paths are public-item documentation in `innovate-core` source
+  files outside PR #665's active paths, new focused `innovate-core` integration
+  tests, and this plan. PR #665 retains its existing files until its handoff is
+  integrated or ownership is otherwise reconciled. No tenant object or native
+  authentication scope is assigned to this lane.
+- Next operation: use the retained exact-head Rust coverage report to select
+  behavioral and negative tests, and document public items with semantics
+  supported by their implementation. Keep scientific-readiness, offline-security
+  and coverage configuration unchanged. Hosted acceptance remains pending.
+- PR #665 was integrated as `ca9739d59d7467180ddce2eb5c411021ddb706f9`;
+  this owned branch advanced to that commit with the plan edit preserved.
+  The documentation scope now includes the previously overlapping public items.
+  The retained `8244d1eb` coverage report is a targeting baseline, not a
+  coverage result for the advanced source.
+- The first strict workspace Rustdoc run cleared the reported core errors and
+  exposed undocumented public fields in `innovate-tabular` and `innovate-kairos`.
+  This lane also owns documentation comments on those two source files; their
+  interfaces and runtime behavior remain unchanged.
+- Local qualification on macOS: Rust/Cargo 1.100.0, `cargo-llvm-cov 0.9.1`
+  (official release asset SHA-256 `7e821a6c90c0884f79f759f5d9be50799ade67bb82515186d922f26032ef43b8`),
+  and repo-local Python 3.15.2. Strict `cargo doc --workspace --no-deps --locked`
+  passed with the CI `-D missing_docs`, broken-link and invalid-codeblock flags.
+  `cargo fmt --all --check`, `git diff --check`, repository policy, polyglot
+  documentation inventory and scientific-review freshness checks passed.
+  `cargo test --workspace --doc --locked` ran and passed two core doctests;
+  the remaining crates reported zero doctests. Both Rust documentation commands
+  selected this worktree's Python 3.15.2 interpreter for PyO3.
+- The three new focused Rust test targets passed nine tests under
+  `cargo llvm-cov --locked -p innovate-core --test native_cli_contract --test
+  public_contract_edges --test inference_failure_contracts --lcov`. Their local
+  report SHA-256 is `4bbfbc12607953ca684810f86dfe04c353abdfc1af23c59ab0335ad92e343bfc`.
+  The retained [coverage run](https://github.com/edithatogo/innovate/actions/runs/43853557986)
+  on `ca9739d5` reported 1,653/2,047 changed Rust lines; its LCOV SHA-256 is
+  `17ad521baca98c41cebddb06a232e0b32de40e884fce2b72e2f19b1721a89bf4`.
+  Mapping documentation-only line shifts and combining the local hits with that
+  report gives an estimated 1,901/2,047 (92.87%). This is a local estimate, not
+  a full coverage run or a Codecov decision for the eventual PR head.
+- `scripts/check_migration.py --release` still exits 1 for incomplete scientific
+  migration and acceptance. Release readiness and the dedicated offline-security
+  runner remain separate, unwaived gates.
+- PR #656 was squash-merged and its branch deleted while this packet was in
+  progress. Main commit `57d2916586d107c8affe90355e453abe27f01c26` has the same
+  Git tree as `ca9739d5`; the unpushed packet was rebased onto that commit as a
+  follow-up to main. Historical PR checks remain historical, and final-head
+  hosted documentation and coverage evidence is still required.

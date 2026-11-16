@@ -1,5 +1,9 @@
 # research_software_registry_readiness_20260721
 
+- [Current evidence acquisition and integration](./evidence-acquisition-20261116.md)
+- [Verified historical PyPI Software Heritage archives](./evidence/evidence-acquisition-20261116/registry/README.md)
+- [Public history and research-use investigation](./evidence/evidence-acquisition-20261116/research-history/README.md)
+
 Status: in progress; external evidence and current JOSS prerequisites pending
 
 Current source assessment: [reassessment after the frontier merge](./integration-20261116.md).

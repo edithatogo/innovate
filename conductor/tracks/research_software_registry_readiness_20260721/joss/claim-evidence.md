@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition: 16 November 2026, reassessed after #656; source baseline
-`57d2916586d107c8affe90355e453abe27f01c26`; development version `0.7.0a1`.
+Edition: 16 November 2026, reassessed after #668; source baseline
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`; development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -33,7 +33,24 @@ Hash equality preserves identity, not truth or scientific acceptance.
 
 ## Edition acceptance
 
-The [source reassessment](../evidence/source-reassessment-20261116.md) records the
+The [current source reassessment](../evidence/evidence-acquisition-20261116/source-reassessment.md)
+compares the previous `57d2916` assessment with main commit
+[`b29a1d27f54fdd08d77881ee999772fceab7c03a`](https://github.com/edithatogo/innovate/commit/b29a1d27f54fdd08d77881ee999772fceab7c03a).
+Only one of the fourteen tracked source inputs changed: the tabular crate gained
+36 field-documentation comments, with the remaining source text unchanged.
+C05's copying IPC, collection and binding/distribution limitations and C07's
+model-time-grid qualification therefore remain unchanged. The manuscript's only
+text change in this reassessment is its visible assessed commit identifier.
+
+The broader main advance includes Rust documentation and tests, Renovate updates
+and a Paignia pin update in the excluded games crate. These changes do not
+establish accepted provider integration, empirical validation, research impact
+or a qualified release. C01–C08 retain their bounded wording and P01–P06 remain
+withheld. All 38 migration obligations remain required. The
+[preceding snapshot](../evidence/evidence-acquisition-20261116/source-reassessment.previous-snapshot.json)
+and earlier render attempts retain their original identities.
+
+The [preceding source reassessment](../evidence/source-reassessment-20261116.md) records the
 comparison with main commit
 [`57d2916586d107c8affe90355e453abe27f01c26`](https://github.com/edithatogo/innovate/commit/57d2916586d107c8affe90355e453abe27f01c26),
 which merged #656. Four of the fourteen tracked source inputs changed. The

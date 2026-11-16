@@ -75,13 +75,21 @@ pub fn transform_unconstrained_hype(
 /// Request for [`sample_hype_posterior`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypePosteriorRequest {
+    /// Validated times aligned with the observations.
     pub time: TimeGrid,
+    /// Finite observed values at the requested times.
     pub observed: Vec<f64>,
+    /// Initial coordinates in the unconstrained parameterization.
     pub initial_unconstrained: Vec<f64>,
+    /// Number of Gaussian pulses represented in the coordinates.
     pub n_pulses: usize,
+    /// Whether transformed pulse centers must be ordered.
     pub ordered_centers: bool,
+    /// Positive Gaussian observation scale.
     pub sigma: f64,
+    /// Number of retained draws after an equally long warm-up.
     pub n_draws: usize,
+    /// Seed used for the Metropolis proposal generator.
     pub seed: u64,
 }
 

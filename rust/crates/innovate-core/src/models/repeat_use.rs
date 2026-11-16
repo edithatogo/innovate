@@ -5,22 +5,29 @@ use crate::inference::InnovationError;
 /// Active-user stock vector across products/states.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ActiveUseState {
+    /// Active-user stock for each product or state.
     pub active: Vec<f64>,
+    /// Accumulated start flows for each product or state.
     pub cumulative_starts: Vec<f64>,
+    /// Accumulated stop flows for each product or state.
     pub cumulative_stops: Vec<f64>,
 }
 
 /// Flow rates per unit time: starts, abandonment/stops, and pairwise switching matrix `switch[from][to]`.
 #[derive(Debug, Clone, PartialEq)]
 pub struct UseRates {
+    /// Start flow per unit time for each product or state.
     pub starts: Vec<f64>,
+    /// Stop flow per unit time for each product or state.
     pub stops: Vec<f64>,
+    /// Switching flow per unit time, indexed by source then destination.
     pub switch: Vec<Vec<f64>>,
 }
 
 /// Supply intensity (transactions per active user per unit time) separating transactions from actor counts.
 #[derive(Debug, Clone, PartialEq)]
 pub struct SupplyIntensity {
+    /// Expected prescriptions per active user per unit time, by product.
     pub prescriptions_per_active: Vec<f64>,
 }
 

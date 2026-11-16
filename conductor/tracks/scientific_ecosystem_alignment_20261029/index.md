@@ -1,5 +1,9 @@
 # innovate: scientific ecosystem alignment
 
+- [New evidence acquisition and concrete integration handoff](../research_software_registry_readiness_20260721/evidence-acquisition-20261116.md)
+- [Current-main installed qualification](evidence/evidence-acquisition-20261116/README.md)
+- [Complete recurring Arrow/MSRV workflow candidate](integration/README.md)
+
 - [Current reconciliation and remaining acceptance — 16 November 2026](reconciliation-20261116.md)
 - [Qualification after the main-branch frontier merge](evidence/arrow-integrated-20261116/README.md)
 - [Earlier installed Arrow qualification](evidence/arrow-installed-20261116/README.md)

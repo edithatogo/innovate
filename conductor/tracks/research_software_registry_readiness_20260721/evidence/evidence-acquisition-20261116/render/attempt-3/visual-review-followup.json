@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-16T13:55:24.354140+00:00",
+  "scope": "Clarification of the historical attempt-3 visual inspection after detailed inspection of the unchanged official page-one template layout",
+  "prior_visual_receipt_sha256": "3e0876f057fbedf79d49829df615f439800854fc6e21fc32c47b86985660657e",
+  "pdf_sha256": "7fe134f4f14541d5aab263bee1f9e254669c8d0262eb6d3dd8e4bb7e4c56206f",
+  "observation": "The later detailed inspection found draft line-number crowding/overlap at the license sidebar, also present in the historical first-page layout. This supersedes the earlier broad no-unintended-overlap observation; it does not change the bibliography finding or PDF bytes.",
+  "current_visual_record": "../attempt-4/visual-review.json",
+  "submission_ready": false
+}

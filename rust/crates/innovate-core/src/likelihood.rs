@@ -7,24 +7,44 @@ use statrs::function::gamma::ln_gamma;
 /// Declared observation likelihood family.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LikelihoodFamily {
+    /// Poisson count likelihood parameterized by its mean.
     Poisson,
-    NegativeBinomial { dispersion: f64 },
-    Gaussian { sigma: f64 },
-    StudentT { sigma: f64, df: f64 },
+    /// Negative-binomial count likelihood parameterized by mean and dispersion.
+    NegativeBinomial {
+        /// Positive dispersion (size) parameter.
+        dispersion: f64,
+    },
+    /// Gaussian likelihood parameterized by mean and standard deviation.
+    Gaussian {
+        /// Positive observation standard deviation.
+        sigma: f64,
+    },
+    /// Student-t likelihood parameterized by location, scale and degrees of freedom.
+    StudentT {
+        /// Positive observation scale.
+        sigma: f64,
+        /// Positive degrees of freedom.
+        df: f64,
+    },
 }
 
 /// Observation scale guard preventing cumulative counts from being treated as independent increments.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationScale {
+    /// Counts for separate observation intervals.
     IncidenceCounts,
+    /// Cumulative counts, which cannot be treated as independent count increments.
     CumulativeCounts,
+    /// Observations measured on a continuous scale.
     Continuous,
 }
 
 /// Configuration for [`log_likelihood`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LikelihoodConfig {
+    /// Distribution used to evaluate each present observation.
     pub family: LikelihoodFamily,
+    /// Declared observation scale used by the cumulative-count guard.
     pub scale: ObservationScale,
 }
 

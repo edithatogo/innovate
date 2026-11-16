@@ -29,8 +29,8 @@ No main integration, public release, native deployment or acceptance is implied.
 
 ## Current qualification contract — 16 November 2026
 
-The [current reassessment](../research_software_registry_readiness_20260721/integration-20261116.md)
-binds this contract to main `57d2916586d107c8affe90355e453abe27f01c26`.
+The [current acquisition](../research_software_registry_readiness_20260721/evidence-acquisition-20261116.md)
+binds this contract to main `b29a1d27f54fdd08d77881ee999772fceab7c03a`.
 The [initial reconciliation](reconciliation-20261116.md) retains the earlier
 source receipt. Rust owns scientific
 computation and validation; Polars is the public table interface, with versioned
@@ -98,3 +98,17 @@ release, all provider behaviour, or the 38 scientific obligations. Separate
 execution on Rust 1.99.1 may establish a bounded minimum-compiler check; a build
 on 1.100.0 cannot substitute for it. Root CI adoption and promotion remain with
 #624 and the existing owners.
+
+## Recurring evidence candidate — current continuation
+
+The track-local `integration/build_scenario_wheel.py` executes a real locked
+Maturin development build and records exact source, toolchain, log and artifact
+identities for the existing installed qualifier. Successful records require
+committed native/build inputs, unchanged inputs after execution, a successful
+process and one regular wheel. Failure logs and earlier evidence are preserved.
+The complete `integration/scenario-arrow-msrv.yml` candidate proposes a separate
+installed-Arrow job and actual minimum-Rust compile job, with pinned actions
+and retained evidence. It is not active root CI until the existing integrator
+adopts and executes it. The scoped negative tests live in
+`tests/native/test_scenario_wheel_build.py`; no scientific implementation,
+tolerance, shared pin or required quality gate is changed.

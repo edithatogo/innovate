@@ -1,5 +1,25 @@
 # JOSS submission readiness
 
+## Evidence acquired in the current continuation — 16 November 2026
+
+The [current acquisition record](evidence-acquisition-20261116.md) binds this
+assessment to main `b29a1d27f54fdd08d77881ee999772fceab7c03a`. The manuscript's
+changed tabular input was reviewed; it adds 36 Rustdoc comments and leaves
+executable text unchanged. The 1,076-word unapproved edition passes all 14 source
+and three edition fingerprints.
+
+The [public history and research-use review](evidence/evidence-acquisition-20261116/research-history/README.md)
+now documents public PyPI distributions since July 2025, dated iterative development,
+and the much newer native rewrite. Actual version-bound research use was not
+established by the inspected public sources. The active documentation owner's
+public-data example is executed teaching/exploratory evidence, not an author
+attestation of research use. Historical package archival has independently
+verified Software Heritage evidence. Current scientific/release qualification,
+authorship, declarations and journal decisions retain their own gates.
+
+The complete current render result is recorded in the linked acquisition record;
+the older blocked attempts below remain historical receipts.
+
 Status: `blocked_prerequisites`; no submission or acceptance claimed.
 
 The [executed follow-up](implementation-20261116.md) adds the offline manuscript
