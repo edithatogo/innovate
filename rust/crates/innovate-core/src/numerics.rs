@@ -427,30 +427,46 @@ where
 }
 
 /// Adaptive Dormand-Prince 5(4) IVP solver via `ode_solvers::Dopri5`.
-fn rk4_single_step<F>(f: &F, t: f64, y: &[f64], h: f64) -> Vec<f64>
+fn solve_dopri5<F>(
+    f: &F,
+    t0: f64,
+    t1: f64,
+    state: ode_solvers::DVector<f64>,
+) -> Result<ode_solvers::DVector<f64>, String>
 where
     F: Fn(f64, &[f64]) -> Vec<f64>,
 {
-    let k1 = f(t, y);
-    let half_h = 0.5 * h;
-    let y2: Vec<f64> = y
-        .iter()
-        .zip(&k1)
-        .map(|(yi, k1i)| yi + half_h * k1i)
-        .collect();
-    let k2 = f(t + half_h, &y2);
-    let y3: Vec<f64> = y
-        .iter()
-        .zip(&k2)
-        .map(|(yi, k2i)| yi + half_h * k2i)
-        .collect();
-    let k3 = f(t + half_h, &y3);
-    let y4: Vec<f64> = y.iter().zip(&k3).map(|(yi, k3i)| yi + h * k3i).collect();
-    let k4 = f(t + h, &y4);
-    y.iter()
-        .enumerate()
-        .map(|(i, yi)| yi + (h / 6.0) * (k1[i] + 2.0 * k2[i] + 2.0 * k3[i] + k4[i]))
-        .collect()
+    use ode_solvers::{Dopri5, OutputType};
+
+    let mut solver = Dopri5::from_param(
+        ClosureSystem(f),
+        t0,
+        t1,
+        0.0,
+        state,
+        1e-8,
+        1e-8,
+        0.9,
+        0.04,
+        0.2,
+        10.0,
+        t1 - t0,
+        0.0,
+        100000,
+        1000,
+        OutputType::Sparse,
+    );
+    solver
+        .integrate()
+        .map_err(|err| format!("ODE integration failed: {err}"))?;
+    let next = solver
+        .y_out()
+        .last()
+        .ok_or_else(|| "ODE solver produced no final state".to_string())?;
+    if next.iter().any(|x| !x.is_finite()) {
+        return Err("ODE left the finite numerical domain".into());
+    }
+    Ok(next.clone())
 }
 
 /// Integrate from an explicit origin, never from the first requested sample.
@@ -463,7 +479,7 @@ pub(crate) fn integrate<F>(
 where
     F: Fn(f64, &[f64]) -> Vec<f64>,
 {
-    use ode_solvers::{DVector, Dopri5, OutputType};
+    use ode_solvers::DVector;
 
     if times.is_empty() {
         return Ok(Vec::new());
@@ -495,45 +511,18 @@ where
         if target > t_prev {
             let span = target - t_prev;
             let tiny_tol = 64.0 * f64::EPSILON * target.abs().max(t_prev.abs()).max(1.0);
-            if span <= tiny_tol {
-                let next = rk4_single_step(&f, t_prev, state.as_slice(), span);
-                if next.iter().any(|x| !x.is_finite()) {
-                    return Err("ODE left the finite numerical domain".into());
-                }
-                state = DVector::from_vec(next);
-                t_prev = target;
+            state = if span <= tiny_tol {
+                // Rescale tiny intervals onto [0, 1] so Dopri5 retains adaptive error control
+                // without hitting floating-point step-size underflow near t_prev.
+                let rescaled = |s: f64, y: &[f64]| {
+                    let t = (t_prev + s * span).min(target);
+                    f(t, y).into_iter().map(|dy| dy * span).collect()
+                };
+                solve_dopri5(&rescaled, 0.0, 1.0, state)?
             } else {
-                let mut solver = Dopri5::from_param(
-                    ClosureSystem(&f),
-                    t_prev,
-                    target,
-                    0.0,
-                    state.clone(),
-                    1e-8,
-                    1e-8,
-                    0.9,
-                    0.04,
-                    0.2,
-                    10.0,
-                    span,
-                    0.0,
-                    100000,
-                    1000,
-                    OutputType::Sparse,
-                );
-                solver
-                    .integrate()
-                    .map_err(|err| format!("ODE integration failed: {err}"))?;
-                let next = solver
-                    .y_out()
-                    .last()
-                    .ok_or_else(|| "ODE solver produced no final state".to_string())?;
-                if next.iter().any(|x| !x.is_finite()) {
-                    return Err("ODE left the finite numerical domain".into());
-                }
-                state = next.clone();
-                t_prev = target;
-            }
+                solve_dopri5(&f, t_prev, target, state)?
+            };
+            t_prev = target;
         }
         rows.push(state.as_slice().to_vec());
     }
@@ -826,5 +815,22 @@ mod tests {
                 row[0]
             );
         }
+    }
+
+    #[test]
+    fn dopri5_retains_error_control_on_short_interval_with_fast_dynamics() {
+        let rows = integrate(&[1e-14], 0.0, &[0.0], |_t, y| vec![1e15 * (1.0 - y[0])])
+            .expect("rescaled short-interval integration should succeed");
+        let expected = 1.0 - (-10.0_f64).exp();
+        assert!(
+            (rows[0][0] - expected).abs() < 1e-7,
+            "short-interval fast Bass mismatch: got {}, expected {expected}",
+            rows[0][0]
+        );
+
+        let origin = 2.0 - f64::EPSILON;
+        let sub_ulp = integrate(&[2.0], origin, &[0.5], |_t, y| vec![1.0 - y[0]])
+            .expect("sub-ULP bisection step should succeed");
+        assert!((sub_ulp[0][0] - 0.5).abs() < 1e-14);
     }
 }
