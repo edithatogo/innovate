@@ -940,15 +940,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "innovate-games"
-version = "0.7.0-alpha.1"
-dependencies = [
- "innovate-core",
- "paignia-core",
- "paignia-solve",
-]
-
-[[package]]
 name = "innovate-kairos"
 version = "0.7.0-alpha.1"
 dependencies = [
@@ -1420,19 +1411,6 @@ name = "once_cell"
 version = "1.21.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
-
-[[package]]
-name = "paignia-core"
-version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=da5e62098b14625411b409419606532762d62122#da5e62098b14625411b409419606532762d62122"
-
-[[package]]
-name = "paignia-solve"
-version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=da5e62098b14625411b409419606532762d62122#da5e62098b14625411b409419606532762d62122"
-dependencies = [
- "paignia-core",
-]
 
 [[package]]
 name = "parking_lot"
