@@ -100,7 +100,8 @@
   "source_sha256": {
     "docs/astro-site/playwright.config.mjs": "c7b302ac928f3d49c19663df141fc884f27df064e03dff36fdda911793fc9c26",
     "docs/contracts/site-quality.json": "bd7f1a2151d32f37af925a41c8b80bf6372b36fbe4f2599caccbe246610850eb",
-    "docs/contracts/scientific-pedagogical-review.json": "8f7bf2ad89d88a6e1a91b7aab8bd0a75f265eeb0221c03d81909447de6a1214d"
+    "docs/contracts/scientific-pedagogical-review.json": "8f7bf2ad89d88a6e1a91b7aab8bd0a75f265eeb0221c03d81909447de6a1214d",
+    "docs/contracts/content-baseline.json": "ee50f92285ccc030ff588ba864e018cbd8c592a568ddf34a5122275141af4f4b"
   },
   "retained_record_sha256": {
     "69b6748-cargo-doc.log": "f6148ed0053e90bc81e621487069d1404b1fd77a3833eb32f0ab6ca6f5748b4a",
@@ -110,7 +111,8 @@
     "69b6748-python-execution.json": "61b875ef3a6352354e8006091c414d987ad63efd2856554059ea9c392aaae9f7",
     "69b6748-python-execution.log": "fe75b95bb65ad5874a59b9962e4ca2f75cd2388bcec8eff84292895c5b9ea859",
     "69b6748-summary.json": "e7aba8b04cec4345bde86fac5c6a698d5e7bcabffeaac12c581fdd47d0ee5c1a",
-    "README.md": "4ca368240eeed8f6fa2c2492db1a11e42ff331af768c838d7420efd3d0ecc2e2",
+    "README.md": "836cad6906f9e3926629e95550d62f0b5380a78f232e2d1ae2683e3e95a7cb13",
+    "artifact-after-baseline.json": "84e46ae2bbc3720558d9cb117ffa355329b80dcdfb90abd8998996b09fe429af",
     "artifact.json": "71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483",
     "astro-build.log": "c8686ddd083e355bf22854fc9d04d98946b0c4fe03a89fafc4c3dbc2ab92d6a1",
     "astro-check.log": "1b933bd962dcc3e00c9d7d0a01a7d849b3a5d03c8b8fc9bddfaf58cadd3b6d70",
@@ -120,10 +122,13 @@
     "browser-launch-failure-artifacts.json": "ff7873581f3bd9f684f4fa2b994d864084a16492db695c07818c6cb3319419d4",
     "browser-launch-failure.log": "773b03b845de89120ddeb76ff1c26e3bd71242396e2db254bdf30dc8d841cc38",
     "content-structure.json": "99c416fdfe551323c1292c4acd24a4f0ba97b8d5878c08e04f3da5dd56dcaa77",
+    "hosted-5ee03ddc.json": "d9eca34f7eb819d5db76697f07bd9a76203bda7179f852468d3462cbd63847c7",
     "managed-browser-install.log": "4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832",
     "notebook-qualification.json": "24245d511027a3874b0612d68f0ea938c864b55c8ca474475b9988ab418b148b",
     "notebook-structure.json": "79f982de6d55a82733f9ab6c0ed4551581cda5f43c691f8424742e340aee03f4",
     "polyglot-source.json": "274b7f1259a0290e38b2cb003de9c87e7d78d3e0df971f3fe35d2c594c084737",
+    "ratchet-regressions.log": "b90c77dea3f69a9854b14230702bcf5c1141e634ff6b3efc8b24f400c9551330",
+    "ratchet-repair.json": "4769af5e7450ff997adb437b2b0ac96031f183df792b371a1d9be30b0923270c",
     "registry-hygiene.json": "cdb7784e548cec0836ba373732d8617833746709ed621707ee28cc77d71050a6",
     "retirement.json": "e8f12210d8d0f1226d59b0619d786da3076d8d9b79303e48d6a9da2c111a49e1",
     "scientific-review.json": "16c1b3daa63b1a37f6f2ed01d1dc63effae2ff4471accf4ca1417f916a8b81d8",
@@ -148,5 +153,16 @@
     "native_results_reattributed": false,
     "concurrent_pr_656_head": "8244d1eb23fec915c0ce93f4da93e3cae44d6ddb",
     "documentation_archive_handoff": "Still unresolved; retain active unfinished DOC-01\u201308 obligations."
+  },
+  "hosted_followup": {
+    "record": "hosted-5ee03ddc.json",
+    "head": "5ee03ddc073b9c3bcf91efdcd62923d87748920f",
+    "all_maintained_language_examples_executed": true,
+    "aggregate_gate_passed": false,
+    "failure": "Stale content policy baseline binding; zero content violations.",
+    "browser_attempted": false,
+    "repair_record": "ratchet-repair.json",
+    "repair_independent_review": "Digest independently confirmed against canonical policy; zero accepted debt and unchanged gate implementation.",
+    "repaired_head_hosted_status": "pending"
   }
 }

@@ -222,6 +222,42 @@ not performed and remain explicitly unclaimed.
 
 ## Remaining work and reconciliation
 
+### Hosted follow-up and baseline binding repair
+
+After publication of `5ee03ddc`,
+[documentation run 43853246809](https://github.com/edithatogo/innovate/actions/runs/43853246809)
+executed the maintained language examples successfully: all 11 Python examples
+and 19 API doctests, seven Julia examples with ten assertions on Julia 1.13.4,
+and six R examples with 11 assertions on R 4.6.2. Rust documentation/doctests,
+the Astro build/type check and source-contract tests also passed. These hosted
+results close the missing installed-language **example execution** evidence at
+that source; they do not deliver the wider R/Julia curriculum.
+
+Both aggregate jobs nevertheless failed the policy ratchet because
+`content-baseline.json` still named the old content-policy digest. The new
+69-page inventory had zero violations, and native aggregation reported no
+execution failure, but its final `gate_passed` remained false. Browser discovery,
+installation and tests were skipped; the subsequent missing browser-upload
+failure was secondary. Deployment was skipped. See the
+[exact-head hosted record](evidence-20261116/hosted-5ee03ddc.json).
+
+The repair updates only the reviewed baseline's policy digest to
+`354ee38da7313908287f953031d8b4dc4c367d83193b323f5de2cdf23ebf9e61`, retaining
+an empty accepted-violations list. The exact source ratchet reproduced failure
+before the change and passes afterwards; all 65 content-contract regressions pass
+with isolated, dependency-free discovery. No rule, threshold or runtime
+requirement changes. The [repair record](evidence-20261116/ratchet-repair.json)
+preserves both results. The artifact verifier was refreshed without rebuilding
+unchanged HTML; its artifact hash is identical and only the baseline source hash
+changes. Hosted qualification must run again at the repaired PR head.
+
+Workflow/policy lint and secrets checks passed on `5ee03ddc`. Release Readiness
+correctly remains failed for the unchanged scientific migration ledger: 16 model
+and 22 feature-area obligations still block release. That hold is unrelated to
+the documentation repair and is preserved.
+
+### Outstanding programme acceptance
+
 DOC-01–08 remain in progress. The next bounded work is:
 
 1. Obtain hosted browser/native documentation results on the published PR head;

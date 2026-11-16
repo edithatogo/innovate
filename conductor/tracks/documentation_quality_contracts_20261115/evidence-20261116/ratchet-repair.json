@@ -1,0 +1,64 @@
+{
+  "before": {
+    "exit_code": 1,
+    "baseline": {
+      "schema_version": 1,
+      "contract_sha256": "bd9baf0d2693603f0d8e385d6bff5fd273e2554c2292d9089fcb49b0faa09cc4",
+      "violations": []
+    },
+    "ratchet": {
+      "new_or_changed": [],
+      "passed": false,
+      "reason": "Content policy changed; explicit baseline review is required."
+    },
+    "counts": {
+      "current_pages": 69,
+      "examples": 11,
+      "generated_api_pages": 34,
+      "historical_pages": 0,
+      "pages": 69,
+      "unbound_python_blocks": 0,
+      "versioned_archive_pages": 0,
+      "violations": 0
+    }
+  },
+  "reviewed_policy": {
+    "schema_version": 1,
+    "contract_sha256": "354ee38da7313908287f953031d8b4dc4c367d83193b323f5de2cdf23ebf9e61",
+    "violations": []
+  },
+  "review_basis": "Delivered sources and zero-debt inventory were independently reviewed; update only the stale policy binding, with no accepted violations or weakened checks.",
+  "recorded_at": "2026-11-16T11:05:42.185726+00:00",
+  "failed_head": "5ee03ddc073b9c3bcf91efdcd62923d87748920f",
+  "hosted_run": 43853246809,
+  "source_only_command": ".venv-docs/bin/python scripts/check_documentation_content.py --mode ratchet --output /tmp/innovate-ratchet-after.json",
+  "after": {
+    "exit_code": 0,
+    "ratchet": {
+      "new_or_changed": [],
+      "passed": true,
+      "reason": "No new structural debt; completeness is reported separately.",
+      "stale": []
+    },
+    "counts": {
+      "current_pages": 69,
+      "examples": 11,
+      "generated_api_pages": 34,
+      "historical_pages": 0,
+      "pages": 69,
+      "unbound_python_blocks": 0,
+      "versioned_archive_pages": 0,
+      "violations": 0
+    },
+    "gate_passed": true,
+    "complete": false,
+    "execution_status": "not_run"
+  },
+  "regressions": {
+    "command": ".venv-docs/bin/python -I -S -m unittest discover -s tests -p test_documentation_content_contract.py",
+    "tests": 65,
+    "status": "passed",
+    "log": "ratchet-regressions.log"
+  },
+  "source_only_is_not_execution_or_browser_acceptance": true
+}

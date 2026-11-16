@@ -3,6 +3,6 @@
   "type": "feature",
   "status": "in_progress",
   "created_at": "2026-11-15T00:00:00+10:00",
-  "updated_at": "2026-11-16T20:53:57+10:00",
+  "updated_at": "2026-11-16T21:06:17+10:00",
   "description": "Implement and qualify source-derived Astro model/tutorial catalogues, optional native marimo learning, a frozen public-data lesson, advanced examples, language documentation conventions, community standards and legacy retirement. The 16 November increment has executed Python/Rust and source/build evidence; broader curriculum, installed R/Julia pathways, human reader success and live publication remain open."
 }

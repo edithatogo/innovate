@@ -10,6 +10,21 @@ language completion, full scientific acceptance or live deployment.
 The [implementation record](../implementation-20261116.md) explains decisions,
 completed work, limitations and remaining DOC-01–08 acceptance.
 
+## Hosted follow-up and repair
+
+[hosted-5ee03ddc.json](hosted-5ee03ddc.json) records the first hosted implementation
+run: all maintained language examples passed, while both aggregate jobs correctly
+failed a stale content-policy baseline binding. Browser steps were not reached.
+This later hosted evidence does not rewrite the local unavailable-language record.
+
+[ratchet-repair.json](ratchet-repair.json) records the exact failing and passing
+source-only commands after explicit review of the zero-debt inventory. The
+baseline still accepts no violations. Its [65 regression results](ratchet-regressions.log)
+pass. [artifact-after-baseline.json](artifact-after-baseline.json) records identical
+HTML/artifact hashes with only the baseline's source fingerprint changed. It is
+separate from the earlier artifact receipt. The corrected PR head still requires
+its own hosted aggregate/browser result.
+
 ## Results and primary records
 
 | Record | Evidence and limits |

@@ -71,6 +71,20 @@ Native execution was refreshed after main advanced to `69b6748`; code snapshot
 records and the foreground browser-harness correction are recorded separately.
 Existing scientific, security, release and deployment holds remain.
 
+### Hosted baseline repair — 16 November 2026
+
+- [x] Inspect exact-head run 43853246809 at `5ee03ddc`: Python, Julia and R
+  examples pass, but both jobs reject the stale content-baseline policy digest.
+- [x] Reproduce the exact ratchet failure locally, review the zero-violation
+  inventory and refresh only the baseline digest. Keep accepted debt empty.
+- [x] Run the exact source ratchet and 65 isolated content-contract regressions;
+  verify unchanged HTML with the updated source fingerprint.
+- [ ] Qualify the repaired head through hosted aggregate and browser gates.
+
+The [hosted follow-up](implementation-20261116.md#hosted-follow-up-and-baseline-binding-repair)
+distinguishes actual all-language execution from the failed aggregate policy gate,
+the unattempted browser stage and the separate scientific release hold.
+
 ### Planning-baseline hosted evidence versus current receipts
 
 At the planning baseline, [documentation run 43804385173](https://github.com/edithatogo/innovate/actions/runs/43804385173)
