@@ -8,6 +8,13 @@ export const repositoryRoot = fileURLToPath(new URL('../../../', import.meta.url
 export const siteRoot = path.join(repositoryRoot, 'docs/astro-site');
 export const browserOrigin = 'http://127.0.0.1:4321';
 export const projectNames = ['chromium-desktop', 'chromium-mobile-390'];
+export const prefetchProbeRoute = '/innovate/api/python/';
+
+/** A separate cache identity makes the original-response probe mandatory. */
+export function prefetchProbePath(project) {
+  assert(projectNames.includes(project), 'Unknown browser qualification project');
+  return `${prefetchProbeRoute}?documentation-capture-probe=${project}`;
+}
 export const wcagTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 export const darkEntryRoutes = [
   '/innovate/',
@@ -179,6 +186,28 @@ export function caseEvidenceComplete(entry) {
     scan = evidence['axe-light-page'];
     route = entry.title.slice('current page: '.length);
     if (evidence['classified-page']?.route !== route || !evidence['transfer-budget']) return false;
+    if (route === '/innovate/') {
+      if (!projectNames.includes(entry.project)) return false;
+      const probe = evidence['original-prefetch-probe'];
+      if (!probe || probe.trigger !== 'link-rel-prefetch' || probe.url !== prefetchProbePath(entry.project)
+        || probe.file !== artifactPath(prefetchProbeRoute) || probe.status !== 200
+        || !Number.isSafeInteger(probe.bytes) || probe.bytes <= 0 || !/^[a-f0-9]{64}$/u.test(probe.sha256 ?? '')
+        || probe.capture_method !== 'cdp-fetch-original-response' || probe.capture_complete !== true
+        || probe.continued_unchanged !== true || probe.network_loading_finished !== true
+        || typeof probe.fetch_request_id !== 'string' || !probe.fetch_request_id.trim()
+        || typeof probe.network_request_id !== 'string' || !probe.network_request_id.trim()) return false;
+      const observations = runtime.responses.filter((response) => response.url === probe.url);
+      if (observations.length !== 1) return false;
+      for (const key of ['url', 'file', 'status', 'bytes', 'sha256', 'capture_method', 'capture_complete',
+        'continued_unchanged', 'network_loading_finished', 'fetch_request_id', 'network_request_id']) {
+        if (observations[0][key] !== probe[key]) return false;
+      }
+      if (runtime.responses.filter((response) => response.fetch_request_id === probe.fetch_request_id).length !== 1
+        || runtime.responses.filter((response) => response.network_request_id === probe.network_request_id).length !== 1) return false;
+      const measurement = evidence['transfer-budget'];
+      if (measurement.successful_internal_responses !== runtime.responses.length
+        || measurement.decoded_body_bytes !== runtime.responses.reduce((total, response) => total + response.bytes, 0)) return false;
+    }
   } else if (entry.title.startsWith('dark entry: ')) {
     scan = evidence['axe-dark-page'];
     route = entry.title.slice('dark entry: '.length);
