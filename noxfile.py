@@ -6,12 +6,22 @@ from pathlib import Path
 import nox
 
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ["lint", "types", "tests", "native", "package"]
+nox.options.sessions = ["lint", "types", "tests", "validation", "native", "package"]
 ENVIRONMENT = Path(
     os.environ.get("UV_PROJECT_ENVIRONMENT", ".venv-native" if Path(".venv-native").exists() else ".venv")
 ).resolve()
 BIN = ENVIRONMENT / ("Scripts" if os.name == "nt" else "bin")
 PYTHON = str(BIN / ("python.exe" if os.name == "nt" else "python"))
+VALIDATION_TESTS = (
+    "tests/validation/test_pbs_manifest.py",
+    "tests/unit/test_capability_claims.py",
+    "tests/validation/test_release_claims.py",
+)
+VALIDATION_FILES = (
+    "scripts/validate_pbs_source_manifest.py",
+    "scripts/validate_capability_claims.py",
+    *VALIDATION_TESTS,
+)
 
 
 def tool(session, name, *args):
@@ -20,7 +30,16 @@ def tool(session, name, *args):
 
 @nox.session(python=False)
 def lint(session):
-    tool(session, "ruff", "check", "bindings/python", "tests/native", "noxfile.py", "scripts/check_migration.py")
+    tool(
+        session,
+        "ruff",
+        "check",
+        "bindings/python",
+        "tests/native",
+        "noxfile.py",
+        "scripts/check_migration.py",
+        *VALIDATION_FILES,
+    )
     tool(
         session,
         "ruff",
@@ -30,6 +49,7 @@ def lint(session):
         "tests/native",
         "noxfile.py",
         "scripts/check_migration.py",
+        *VALIDATION_FILES,
     )
     session.run("cargo", "fmt", "--all", "--check", external=True)
 
@@ -42,6 +62,11 @@ def types(session):
 @nox.session(python=False)
 def tests(session):
     session.run(PYTHON, "-m", "pytest", "tests/native", *session.posargs, external=True)
+
+
+@nox.session(python=False)
+def validation(session):
+    session.run(PYTHON, "-m", "pytest", *VALIDATION_TESTS, *session.posargs, external=True)
 
 
 @nox.session(python=False)

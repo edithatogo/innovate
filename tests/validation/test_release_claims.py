@@ -1,21 +1,18 @@
-"""Q04 executable release-claim truth tests."""
+"""Q04 must not confuse source references with release evidence."""
 
-from __future__ import annotations
-
-import copy
+import importlib.util
 import json
-from pathlib import Path
+import pathlib
 
-from scripts.validate_capability_claims import validate_capabilities
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+SPEC = importlib.util.spec_from_file_location("capability_claims", ROOT / "scripts/validate_capability_claims.py")
+assert SPEC is not None and SPEC.loader is not None
+claims = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(claims)
 
 
-def test_release_claims_reject_stale_revision_and_missing_native_receipt():
-    caps = json.loads(Path("conductor/capabilities.json").read_text(encoding="utf-8"))
-    assert validate_capabilities(caps) == []
-
-    stale = copy.deepcopy(caps)
-    assert validate_capabilities(stale, expected_revision="stale_sha")
-
-    unbacked = copy.deepcopy(caps)
-    unbacked["capabilities"][0]["evidence"]["native_receipt"] = None
-    assert validate_capabilities(unbacked)
+def test_unqualified_checked_in_release_claims_fail_closed():
+    data = json.loads((ROOT / "conductor/capabilities.json").read_text())
+    errors = claims.validate_capabilities(data, root=ROOT)
+    assert any("native_receipt" in error and "source-bound" in error for error in errors)
+    assert any("revision" in error for error in errors)

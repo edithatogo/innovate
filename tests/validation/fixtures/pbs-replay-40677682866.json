@@ -1,0 +1,55 @@
+{
+  "boundaries": {
+    "m112_consumer_canary_performed": false,
+    "public_dataset_mutation": false,
+    "source_values_or_rows_included": false,
+    "v4_admission_performed": false
+  },
+  "candidate_only": true,
+  "hosted_workflow": {
+    "commit": "8343d511179e71adea825a5f46e7c6cd60b16373",
+    "repository": "edithatogo/global-medicines-atlas",
+    "run_attempt": 1,
+    "run_id": 40677682866,
+    "run_url": "https://github.com/edithatogo/global-medicines-atlas/actions/runs/40677682866"
+  },
+  "replay": {
+    "partition_id": "8fd01208a1ef1e8709d088b86b2c6b559d71b7a327a5e27c1b48cebe6223d3e1",
+    "plan_sha256": "edfdcad0445b4b68578d354f179cdb394bbf2d6f4a4ea173b617c0eea2e0c725",
+    "registration": {
+      "archive_period": "filename-derived:Expenditure-prescriptions-report-tables-2023-24.XLSX",
+      "byte_count": 372149,
+      "idempotency_key": null,
+      "logical_asset_id": "929a0b9e2a32d96f36b41b99f150d44af25294152c1bc2c0081921ac42607334",
+      "metadata_sha256": "688d383422d6c71ef80d06993cda72a72e382fbb6e454e49c081ecc52a35f309",
+      "operation": "append_only_idempotent_raw_b2_registration",
+      "partition_id": "8fd01208a1ef1e8709d088b86b2c6b559d71b7a327a5e27c1b48cebe6223d3e1",
+      "payload_sha256": "32ea64558d43531fed4bb395787bbc9279fdf45a2ddc6481ce8234aac676306b",
+      "payload_values_read": false,
+      "rights_state": "maintainer_attested_exact_public_release_permission_for_pbs_utilisation_raw_object",
+      "schema_version": "m112-raw-b2-replay-registration-v1",
+      "snapshot_id": "36e86044dd52044ca04f92a5cb008b79594b14122cc3f485de03dd42ba6461e1",
+      "source_id": "au-pbs-expenditure",
+      "source_version_id": "expenditure-prescriptions-report-1-july-2023-30-june-2024"
+    },
+    "registration_sha256": "0f88efd41f1dd85ff5a39a608e2e35c44fbddbdf1dd941e9764bca915f7cfeb0",
+    "snapshot_id": "36e86044dd52044ca04f92a5cb008b79594b14122cc3f485de03dd42ba6461e1",
+    "vocabulary_version": "3.0.0"
+  },
+  "schema_id": "global-medicines-atlas.m112-v3-replay-execution-receipt",
+  "schema_version": 1,
+  "scope": {
+    "byte_count": 372149,
+    "dataset": "edithatogo/australian-pbs-utilisation-archive",
+    "path": "raw/pbs/expenditure/Expenditure-prescriptions-report-tables-2023-24.XLSX",
+    "revision": "9f1d53cd50eea251b326da42a96f3ac72ebce97a",
+    "sha256": "32ea64558d43531fed4bb395787bbc9279fdf45a2ddc6481ce8234aac676306b"
+  },
+  "status": "passed",
+  "verification": {
+    "anonymous": true,
+    "payload_values_read": false,
+    "temporary_source_bytes_removed": true,
+    "token_free": true
+  }
+}

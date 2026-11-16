@@ -22,23 +22,30 @@ As-of leakage; script/patient confusion; summary/detail double counting; correla
 
 Read [taskbook](../../innovation-taskbook-20261107.md).
 
-- [ ] M01 — exact six-object PBS manifest and receipts.
+- [~] M01 — exact six-object PBS manifest and receipts; [source packet](m01-source-qualification-20261116.md) needs integrated CI and acceptance.
 - [ ] M02 — source-faithful qualified Polars projection.
 - [ ] M03 — temporal mapping, panel grain and coverage.
 - [ ] M04 — generic utilisation identifiability/observation fixture.
 - [ ] M05 — frozen medicines forecasting cohort.
-- [x] V01 — independent model-oracle registry (`validation/oracles/manifest.json`, `tests/validation/test_oracle_manifest.py`).
-- [x] V02 — leakage-safe benchmark runner (`validation/benchmarks/protocol.py`, `tests/validation/test_temporal_benchmark.py`).
-- [x] V03 — cross-domain and early-stage validation (`validation/cross-domain/protocol.json`, `tests/validation/test_cross_domain_protocol.py`).
-- [x] V04 — accuracy-controlled performance evaluation (`validation/performance/protocol.json`, `benches/workloads.rs`, `tests/validation/test_performance_receipts.py`).
-- [x] Q01 — input/property/fuzz/FFI safety (`rust/crates/innovate-core/tests/properties.rs`, `rust/crates/innovate-ffi/tests/adversarial.rs`).
+- [~] V01 — independent model-oracle registry; source scaffolding exists, but input-bound independent oracle qualification remains open.
+- [~] V02 — leakage-safe benchmark runner; source scaffolding exists, but split validity and the required benchmark evidence remain open.
+- [~] V03 — cross-domain and early-stage validation; cohort labels exist, but qualified source-bound comparisons and calibration remain open.
+- [~] V04 — accuracy-controlled performance evaluation; partial receipts exist, but their integrity and required measured workloads remain open.
+- [~] Q01 — input/property/fuzz/FFI safety; partial native tests exist, but the named corpus, fuzz and sanitizer evidence requires reconciliation.
 - [ ] Q02 — actual native/no-legacy installed CI matrix.
 - [ ] Q03 — supply-chain and distributable-artifact evidence.
-- [x] Q04 — executable scientific/docs release truth (`tests/validation/test_release_claims.py`).
+- [~] Q04 — executable scientific/docs release truth; the [fail-closed claim guard](q04-claim-review-20261116.md) is partial and the source-bound receipt contract remains open.
 - [ ] V05 — clean reproduction and distinct publication packages.
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
+evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
+established by this review. The reproduced findings and scope of correction
+are recorded in the [M01 handoff](m01-source-qualification-20261116.md#review-of-merged-empirical-track-status)
+and [integration review](integration-review-20261117.md). Partial source does
+not satisfy dependent task acceptance.
 
 ## Issue #413 — warranted testing and CI gaps
 

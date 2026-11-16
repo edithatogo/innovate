@@ -1,0 +1,119 @@
+{
+  "schema": "innovate.pbs-source-manifest.v1",
+  "source": {
+    "dataset": "edithatogo/australian-pbs-utilisation-archive",
+    "revision": "9f1d53cd50eea251b326da42a96f3ac72ebce97a"
+  },
+  "upstream": {
+    "repository": "edithatogo/global-medicines-atlas",
+    "commit": "c6d289685ff5712c64e2ab62a6974e20ddaf4712",
+    "historical_rights": {
+      "path": "quality/qualifications/australian-pbs-utilisation-landed-lineage-20261019.json",
+      "sha256": "758db3eb852dafae15da6979d4ae6638f245a94e23232d901d3d9dde4322bd58",
+      "rights_state": "unknown",
+      "reviewer_status": "unreviewed"
+    },
+    "rights_attestation": {
+      "path": "quality/qualifications/australian-pbs-utilisation-six-object-rights-attestation-20261020.json",
+      "sha256": "903c42f29ac7518a8be0525f0c1488b78d21f25ad051c9d108bfb2b3736b2968",
+      "state": "maintainer_attested_exact_public_release_permission_for_pbs_utilisation_raw_object",
+      "permission_instrument_independently_reviewed": false
+    },
+    "role_readiness": {
+      "path": "quality/qualifications/australian-m112-pbs-utilisation-role-readiness-20261028.json",
+      "sha256": "fb680271214008a850416151529a51933b16cb8b1521ec156c360872cd46d4b2",
+      "sensitivity": "non_sensitive_source_profile_assessment",
+      "exhaustive_personal_data_clearance": false,
+      "personal_data_absence_proven": false
+    },
+    "replay_manifest": {
+      "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/replay-manifest.json",
+      "sha256": "181877c25380042f277ae7e652b178cea50f3b59f0fcb82f4b38923ee380a770"
+    },
+    "raw_admission_cohort": {
+      "path": "quality/qualifications/australian-m112-pbs-v4-admission-readers-20261028/manifest.json",
+      "sha256": "fb09cd52d1d61796af070cbfc29bfe66683206fc5195b9f7c8b6e084e1a7cd0e"
+    },
+    "effective_raw_delivery": {
+      "path": "quality/qualifications/australian-m112-effective-raw-delivery-reconciliation-20261115-august.json",
+      "sha256": "759984c23dd557a536463ad4cacee5c2ac6360cd2f74bf619fa03dc3712f351a"
+    }
+  },
+  "qualification": {
+    "evidence_as_of": "2026-11-15",
+    "byte_status": "upstream_hosted_replay_passed",
+    "semantic_status": "not_qualified",
+    "raw_v4_admission": "six_raw_objects_admitted",
+    "raw_reader_canary": "six_passed",
+    "modelling_consumer_canary": "not_evidenced",
+    "independent_recovery": "not_qualified"
+  },
+  "objects": [
+    {
+      "path": "raw/pbs/expenditure/Expenditure-prescriptions-report-tables-2023-24.XLSX",
+      "sha256": "32ea64558d43531fed4bb395787bbc9279fdf45a2ddc6481ce8234aac676306b",
+      "byte_count": 372149,
+      "source_profile": "aggregate_annual_expenditure_workbook",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40677682866/gma-m112-v3-replay-receipt-40677682866-1.json",
+        "sha256": "18f0101937e34aaa10f19387cd1d5b1fcc67933bd9bf4928ca9fab561d89754a",
+        "run_id": 40677682866
+      }
+    },
+    {
+      "path": "raw/pbs/expenditure/Expenditure-prescriptions-report-tables-2024-25.XLSX",
+      "sha256": "147f4c5392e256d85beb3e47dfd8445085e5a8f0ecbbd330b535774d81aadf99",
+      "byte_count": 468764,
+      "source_profile": "aggregate_annual_expenditure_workbook",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40678419501/gma-m112-v3-replay-receipt-40678419501-1.json",
+        "sha256": "499ccc5f6a22f9d34da12504466b4246a14eb1228a31796bc8adf5586f40f95d",
+        "run_id": 40678419501
+      }
+    },
+    {
+      "path": "raw/pbs/utilisation/dos/dos-jul-2024-to-jun-2025-phrmcy-type.csv",
+      "sha256": "4a961d1d128e3aa9449a1d3a38c27f1b742d1c13dc07d12553134e04e701a6a4",
+      "byte_count": 35384567,
+      "source_profile": "aggregate_date_of_supply_supplementary_csv",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40678703243/gma-m112-v3-replay-receipt-40678703243-1.json",
+        "sha256": "f810698bea1996661b412d76e09b9f908a1631f20d76b2a4d34f633535f53616",
+        "run_id": 40678703243
+      }
+    },
+    {
+      "path": "raw/pbs/utilisation/dos/dos-jul-2025-to-jun-2026-phrmcy-type.csv",
+      "sha256": "f502a61a472ef6db2986c5ca36a6f73b264cac1156830c38a5cf02f17bf59be8",
+      "byte_count": 36381946,
+      "source_profile": "aggregate_date_of_supply_supplementary_csv",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40679077698/gma-m112-v3-replay-receipt-40679077698-1.json",
+        "sha256": "7ff834aa16bf056f7120b00d7e30ea5f978443619b0198ec8a07bbfe547403f6",
+        "run_id": 40679077698
+      }
+    },
+    {
+      "path": "raw/pbs/utilisation/reference/pbs-item-drug-map.csv",
+      "sha256": "51adf3c80df2c2d526bfe88d2d96199e545579ced1b32e7ba3550dfc15f358a8",
+      "byte_count": 1063694,
+      "source_profile": "item_drug_reference_map",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40679177671/gma-m112-v3-replay-receipt-40679177671-1.json",
+        "sha256": "121efc1d1b1f02185af6bab0d9badd0be990c2389b835c7dc0b4d8be965170c4",
+        "run_id": 40679177671
+      }
+    },
+    {
+      "path": "raw/pbs/utilisation/summary/dos-jul-2021-to-jun-2026.xlsx",
+      "sha256": "48678536ddb71f9e7e4e6d654a0a90e6b242c22105e6864af1c6ef47318980ca",
+      "byte_count": 117376499,
+      "source_profile": "aggregate_multiyear_date_of_supply_workbook",
+      "receipt": {
+        "path": "quality/qualifications/australian-m112-pbs-v3-replays-20261028/40679271451/gma-m112-v3-replay-receipt-40679271451-1.json",
+        "sha256": "e035b6fea7dd5dd581abd612b8880e53fafd43841040349116948dec18554bef",
+        "run_id": 40679271451
+      }
+    }
+  ]
+}

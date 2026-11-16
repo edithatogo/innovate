@@ -73,6 +73,8 @@ jobs:
           if-no-files-found: error
           retention-days: 30
       - run: uv run --no-sync pytest tests/native
+      - name: Verify source and capability evidence guards
+        run: uv run --no-sync nox -s validation
       - run: uv run --no-sync python scripts/check_migration.py
       - run: cargo fmt --all --check
       - name: Verify Rust docs.rs documentation build
@@ -81,6 +83,10 @@ jobs:
           RUSTDOCFLAGS: "--cfg docsrs -D warnings"
         run: cargo doc --locked --no-deps -p innovate-core -p innovate-tabular -p innovate-ffi
       - run: uv run --no-sync ruff check bindings/python tests/native noxfile.py scripts/check_migration.py scripts/run_native_benchmarks.py scripts/check_benchmark_shards.py
+      - name: Lint source and capability evidence guards
+        run: uv run --no-sync ruff check scripts/validate_pbs_source_manifest.py scripts/validate_capability_claims.py tests/validation/test_pbs_manifest.py tests/unit/test_capability_claims.py tests/validation/test_release_claims.py
+      - name: Check source and capability evidence formatting
+        run: uv run --no-sync ruff format --check scripts/validate_pbs_source_manifest.py scripts/validate_capability_claims.py tests/validation/test_pbs_manifest.py tests/unit/test_capability_claims.py tests/validation/test_release_claims.py
       - run: |
           uv run --no-sync python -c "import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'basedpyright', '--pythonpath', sys.executable])"
       - name: Verify Rust and Python consumers from source distribution
