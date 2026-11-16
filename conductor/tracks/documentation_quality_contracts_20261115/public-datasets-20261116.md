@@ -5,14 +5,42 @@
 This is the DOC-04/06 shortlist for the
 [learning programme](learning-plan-20261116.md) and
 [curriculum](tutorial-coverage-20261116.md), researched on 16 November 2026.
-Publisher pages and terms were inspected; no dataset has been downloaded,
-normalized, fitted or admitted by this planning change. Pin the actual artifact
-and inspect its embedded notes during admission. A current landing page is not a
-frozen data edition.
+The original shortlist inspected publisher pages and terms. The implementation
+has now admitted **D01 only**, downloaded its exact raw response, retained a frozen
+normalized fixture and executed the teaching analysis. D02–D05 remain candidates.
+Pin each actual artifact and inspect its notes during admission; a current landing
+page is not a frozen data edition.
 
-| ID | Candidate | Proposed teaching use | Publisher terms observed; admission still pending |
+### D01 admission and executed result
+
+The [dataset manifest](../../../docs/datasets/wdi-aus-internet-20261116/manifest.json)
+identifies `wdi-aus-internet-20261116`: Australia, `IT.NET.USER.ZS`, 1990–2025,
+retrieved 16 November 2026 from the WDI API with source update 11 November 2026.
+ITU attribution and the indicator's CC BY 4.0 terms accompany the raw response,
+CSV, ordinary lesson and notebook. The 36 annual rows contain 32 observations;
+2002, 2003, 2004 and 2025 remain missing. Values remain percentages and elapsed
+time remains `year - 1990`, including gaps.
+
+The canonical [example](../../../examples/native_public_data.py) checks country,
+indicator, units, year origin, licence, raw/CSV hashes and exact normalization
+before fitting. Native Logistic and Gompertz fits use only the 23 observations
+through 2015. Predictions and the last-training-value baseline are compared on
+the nine later observations. Mean absolute errors are 15.994, 12.916 and 8.410
+percentage points respectively: the simple persistence baseline wins this case.
+The lesson retains this result to teach interpretation of poor extrapolation.
+
+This is a retrospective evaluation using the November 2026 data vintage, not an
+as-of-2015 real-time backtest. Repeated cutoff exploration is not an untouched
+model-selection experiment. The observed measure is recent Internet use, not
+cumulative first adoption; the curve does not identify a causal diffusion process.
+The [native receipt](evidence-20261116/69b6748-python-execution.json) and
+[notebook receipt](evidence-20261116/notebook-qualification.json) record execution.
+Nineteen focused native regressions include independently calculated baseline
+metrics, held-out perturbation, corrupted identity, calendar gaps and unit errors.
+
+| ID | Dataset and current admission | Teaching use | Publisher terms and remaining scope |
 | --- | --- | --- | --- |
-| D01 | ITU internet-use indicator distributed through World Bank WDI | B03–B05, I04, I07: scalar fitting, comparison, grouped trajectories and batch work | Indicator metadata specifies CC BY 4.0 and ITU attribution |
+| D01 | WDI/ITU Internet use: Australia excerpt admitted | B03–B05 scalar comparison delivered; grouped trajectories and country batches remain pending | CC BY 4.0 and ITU attribution retained with the frozen artifact |
 | D02 | UK DESNZ solar deployment, Energy Trends ET 6.3 | B02, I06: monthly calendars, capacity, revisions, forecasting and parameter scenarios | GOV.UK states Open Government Licence v3.0 except where otherwise stated |
 | D03 | UK DfT/DVLA vehicle licensing and first registrations | B02, I01: multiseries analysis and stock/flow distinctions | GOV.UK states Open Government Licence v3.0 except where otherwise stated |
 | D04 | SocioPatterns workplace contacts | A01: empirical graph inputs with explicitly synthetic adoption outcomes | Publisher links CC0 1.0 and requests citation of the associated paper |

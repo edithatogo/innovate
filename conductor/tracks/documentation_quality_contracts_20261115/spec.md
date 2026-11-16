@@ -14,7 +14,7 @@ The current quickstart uses removed Python APIs and pandas; the maintained API
 uses Rust and Polars. The examples validator delegates to the scientific release
 gate without executing examples. Historical JSON reports cannot qualify this build.
 
-## Current planning extension — 16 November 2026
+## Planning baseline — 16 November 2026
 
 Dylan requested assessment and incorporation of marimo notebooks, maximal useful
 Astro features, and adequate beginner-to-advanced tutorial coverage with public
@@ -28,6 +28,33 @@ contract has eight tutorial pages using six distinct example sources, ten native
 Python examples overall, and no registered public-dataset case. Notebook support,
 the expanded curriculum and the proposed Astro enhancements are not implemented
 by this planning revision. Existing documentation and integration ownership remain.
+
+## Authorised implementation extension — 16 November 2026
+
+The maintainer subsequently authorised implementation, maximal useful docstrings
+and language conventions, updated executable contracts, removal of obsolete
+content, and alignment with the open-science communities identified in issues.
+The [implementation record](implementation-20261116.md) supersedes planning-only
+status; the original coverage targets and unfinished acceptance remain binding.
+
+The implementation is based on main
+`69b674814513e09a683279c679b1584af8bb4214`. It strengthens Python, Rust, Julia and
+R documentation in each language's existing conventions; derives Astro discovery
+from current native/content records; adds an offline WDI/ITU analysis and optional
+marimo adapter; promotes four advanced native examples; and removes obsolete
+documentation sources with immutable history and checked migration notices.
+
+Documentation conventions are repository policy informed by community guidance.
+The issue-linked standards contract distinguishes current commitments, adopted
+guidance and historical aspirations. It must not infer JOSS acceptance, registry
+identifiers, community membership or scientific validity from structural checks.
+
+The optional locked notebook project is confined to `notebooks/`, as recorded in
+[ADR 0008](../../../docs/adr/0008-current-documentation-and-learning-resources.md).
+Shared root dependencies, CI, registry and publication remain with the existing
+integrator. Runtime scientific algorithms and public native interfaces are outside
+this documentation increment. All maintained examples still use the public
+Rust-backed interface and Polars.
 
 ## Required outcomes
 
@@ -69,7 +96,7 @@ remained open. At the 16 November inspected revision, hosted run 43804385173 add
 native documentation execution evidence, including Julia/R, within that job's
 scope. Historical content, wider scientific appraisal, browser qualification,
 public artifact identity and full platform acceptance remain separate. No runtime
-scientific behavior changes are in this planning scope.
+scientific behavior changes are authorised by this documentation scope.
 
 For the extended scope, completeness additionally requires the declared model,
 operation, task and language coverage described in the learning programme. Every

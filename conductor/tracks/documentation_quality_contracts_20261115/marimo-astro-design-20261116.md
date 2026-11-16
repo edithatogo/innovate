@@ -2,11 +2,44 @@
 
 This record supports DOC-03 and DOC-05 in the
 [learning programme](learning-plan-20261116.md). Research is current to
-16 November 2026, against Innovate source
-06b16671b654b4e51f158bf7d605c4286f156755. These are implementation recommendations;
-no dependency, notebook runtime, browser port or hosting change is accepted here.
+16 November 2026. The original recommendations were researched against
+06b16671b654b4e51f158bf7d605c4286f156755; the implemented increment was refreshed
+onto main 69b674814513e09a683279c679b1584af8bb4214. The status below supersedes
+the original provisional adoption decision while retaining unfinished acceptance.
 
-## 1. Adopt marimo provisionally for native Python learning
+## Implemented decision and qualified boundary
+
+The optional native notebook is now implemented in `notebooks/public_data_fit.py`.
+Its separate `pyproject.toml` and `uv.lock` pin marimo 0.25.2 and install this
+checkout's Innovate package. Python 3.15.2, Polars 2.1.0 and Innovate 0.7.0a1 were
+actually installed and executed. The notebook calls the canonical public-data
+workflow; default cutoff 2015 and changed cutoff 2018 both reproduce the ordinary
+example exactly and yield different held-out predictions. Strict marimo lint and
+HTML export pass; the recorded export is 54,901 bytes. Native binary, fixture,
+source and environment identities are in the
+[notebook receipt](evidence-20261116/notebook-qualification.json).
+
+The first notebook combines the original N01 compatibility intent with the
+N02-style observed-data comparison. It is not two completed notebooks. The
+synthetic first-result script remains available. Interactive browser change/reset,
+the full original N01 unit/rejection controls and static-preview publication are
+still pending. No WASM, Pyodide or hosted Python service is qualified.
+
+Astro now uses typed learning collections and build-time model/tutorial components
+derived from native discovery and the content contract. Starlight components
+present the learning routes; its native search component supplies the search UI.
+The obsolete version selector and `starlight-versions` dependency are removed.
+Supported custom pages render 141 short migration notices without old code or
+search indexing. New client-side frameworks or notebook runtimes are not loaded
+on ordinary documentation pages. Scientific figures/math rendering and richer
+facets remain later work, subject to the existing browser budgets.
+
+[ADR 0008](../../../docs/adr/0008-current-documentation-and-learning-resources.md)
+records the scoped decision. Shared tech-stack/root dependency reconciliation
+remains with the integrator. The complete current acceptance record is in
+[implementation and verification](implementation-20261116.md).
+
+## 1. Native Python learning: rationale and remaining acceptance
 
 Marimo is a good candidate for parameter exploration, fit diagnostics, scenario
 comparison and reproducible data preparation. Its Python-file format is suitable
@@ -15,10 +48,9 @@ native request and its displayed result. Retain readable Astro lessons and ordin
 examples so the notebook interface is optional.
 
 The official [0.25.2 release](https://github.com/marimo-team/marimo/releases/tag/0.25.2)
-adds Python 3.15 support. This makes a compatibility spike reasonable, but does
-not prove the exact Innovate combination works. DOC-03 must execute candidate
-0.25.2 with Python 3.15.2, Polars 2.1.0 and the actual locked native artifact,
-including its dependency resolution, import path and supported platform.
+adds Python 3.15 support. The completed compatibility run qualifies the recorded
+Linux environment only; the release announcement itself is not that evidence.
+Other platforms require their own dependency/import/native execution results.
 
 ### Execution modes
 
@@ -61,10 +93,10 @@ selects recorded native outputs rather than fitting or simulating live.
 
 ### Environment and execution contract
 
-Use the existing project environment with a locked optional notebook tooling
-group, added through the integrator after the spike. Keep marimo out of the
-default library runtime dependency set. Record the accepted decision in shared
-tech-stack context. The official
+The implemented choice is a separately locked optional `notebooks/` project,
+using the same checkout and native package. This replaces the proposed root
+tooling-group edit and keeps marimo outside default library dependencies. The
+integrator retains shared tech-stack reconciliation. The official
 [package-management guide](https://docs.marimo.io/guides/package_management/)
 distinguishes projects and isolated sandboxes; a standalone sandbox must explicitly
 install the intended pinned native artifact instead of accidentally using another
@@ -120,20 +152,22 @@ and any embedded notes. Preserve dataset attribution and avoid publishing materi
 that is not admitted for the intended distribution. This is especially relevant
 to the restricted optional D05 case.
 
-N01 adapts the existing Logistic result for control/units exploration. N02 follows
-B03's observed-data fit after D01 admission. Later notebooks can present generations,
+The original N01 proposal adapted the existing Logistic result for control/units
+exploration, followed by N02's observed-data fit. The implemented first notebook
+uses the admitted D01 comparison as described above. Later notebooks can present generations,
 uncertainty, forcing/network scenarios, provenance and batch diagnostics once the
 corresponding scientific lessons and native operations are qualified.
 
 ## 2. Make fuller use of the existing Astro/Starlight site
 
-The active [Astro configuration](../../../docs/astro-site/astro.config.mjs) already
-provides Starlight, versions, MDX/source examples, Pagefind with a custom accessible
-search component, optional Algolia, link validation and `/innovate/` static base-path
-handling. The [content schema](../../../docs/astro-site/src/content.config.ts)
-uses `docsLoader`/`docsSchema` and currently extends the schema with a required
-description. Expressive Code, build checks and Playwright/axe are existing assets.
-The recommendations extend these rather than introduce another documentation stack.
+The [Astro configuration](../../../docs/astro-site/astro.config.mjs) provides
+Starlight, MDX/source examples, Pagefind with native Starlight search and the
+existing accessible-label repair, optional Algolia, link validation and
+`/innovate/` static base-path handling. The
+[content schema](../../../docs/astro-site/src/content.config.ts) retains
+`docsLoader`/`docsSchema` and now adds typed model/tutorial learning collections.
+Expressive Code, build checks and Playwright/axe are existing assets. The obsolete
+version archive and selector have been retired under the checked manifest.
 
 ### Feature decisions
 
@@ -149,9 +183,9 @@ The recommendations extend these rather than introduce another documentation sta
 | Build-time equations | Consistent model cards and parameter definitions | Review and lock `remark-math`/`rehype-katex` increment; local assets, overflow and accessible output checks |
 | Scientific SVG and appropriate image assets | Observed/fitted/forecast curves, residuals, intervals and model comparisons | Generate from checked outputs; captions, units, labels, provenance and accessible alternative data |
 | Build-time Mermaid where useful | Branching model choice or provenance relationships | Qualified build dependency; use static output rather than a global diagram runtime |
-| Pagefind metadata and filters | Find lessons by reader task, model, language and level | Preserve current/archive filtering and verify actual result relevance |
+| Pagefind metadata and filters | Find lessons by reader task, model, language and level | Preserve retirement exclusion and verify actual result relevance; richer facets remain pending |
 | Small progressive browser interactions | Catalogue filters or selection among precomputed native scenarios | Clear execution mode, static fallback, keyboard/zoom checks and resource budgets |
-| Existing versioning and edit/source links | Exact documented package/source/build identity and migration navigation | Pin scientific source links and record live artifact identity separately from main |
+| Edit/source links and migration routes | Exact documented package/source/build identity and current migration navigation | Legacy version selector removed; full public build identity remains pending |
 
 Use the existing native residual-diagnostic SVG facility where appropriate and
 generate other figures from native outputs. Select a plotting dependency only

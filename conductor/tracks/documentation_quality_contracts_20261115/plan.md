@@ -8,7 +8,7 @@ and contracts, obsolete-content removal, and open-science issue alignment. The
 actual verification, partial completion and remaining dependencies. Earlier
 planning-only wording below describes the previous increment.
 
-## Current learning-programme intake — 16 November 2026
+## Learning-programme intake and current status — 16 November 2026
 
 - [x] Reconcile main 06b16671b654b4e51f158bf7d605c4286f156755, open PRs,
   documentation-owner handoff #613 and coordinator issue #624 for this planning
@@ -23,31 +23,57 @@ planning-only wording below describes the previous increment.
   compatibility tests, coverage targets, ordered work and ownership boundaries.
 - [x] Incorporate the recommendations in the linked programme, curriculum, design
   and dataset records. This checks completion of planning only.
-- [ ] DOC-01: resolve existing browser delivery failures and publish reproducible
+- [~] DOC-01: resolve existing browser delivery failures and publish reproducible
   documentation revision identity through the existing owner/integrator.
-- [ ] DOC-02: derive the model/operation/tutorial catalogue, reconcile variant
+- [~] DOC-02: derive the model/operation/tutorial catalogue, reconcile variant
   metadata and classify legacy notebooks before promoting current coverage.
-- [ ] DOC-03: qualify optional marimo tooling with the exact native environment,
+- [~] DOC-03: qualify optional marimo tooling with the exact native environment,
   then execute and export the first notebook through existing contracts.
-- [ ] DOC-04: admit frozen public datasets and deliver beginner/intermediate
+- [~] DOC-04: admit frozen public datasets and deliver beginner/intermediate
   fitting, model-choice, forecasting and reproducibility lessons.
-- [ ] DOC-05: use typed Astro collections, Starlight components, scientific figures,
+- [~] DOC-05: use typed Astro collections, Starlight components, scientific figures,
   equations and targeted search to present the shared catalogue and examples.
-- [ ] DOC-06: complete advanced model/mechanism tutorials against accepted native
+- [~] DOC-06: complete advanced model/mechanism tutorials against accepted native
   capabilities, including explicit unsupported-case teaching.
-- [ ] DOC-07: deliver equivalent Python/Julia/R starting routes and practical
+- [~] DOC-07: deliver equivalent Python/Julia/R starting routes and practical
   old-to-current migration recipes without claiming unsupported parity.
-- [ ] DOC-08: complete reader tasks, scoped scientific review, browser/search
+- [~] DOC-08: complete reader tasks, scoped scientific review, browser/search
   follow-ups and live artifact verification for the expanded learning programme.
 
 Dependencies, ownership boundaries and acceptance are in the
-[ordered work packages](learning-plan-20261116.md). All implementation markers
-above remain pending. Existing scientific, security, release and deployment holds
-remain; no notebook dependency or dataset is installed or admitted by this plan.
+[ordered work packages](learning-plan-20261116.md). The subsequent implementation
+delivers bounded parts of every package; none meets its whole-programme acceptance
+yet. The current [implementation record](implementation-20261116.md) and
+[receipts](evidence-20261116/README.md) bind results to the implemented source.
 
-### Current evidence versus historical receipts
+- [x] Strengthen language documentation conventions and negative-case contracts;
+  complete current Python runtime and Rust documentation checks.
+- [x] Generate typed Astro catalogues for 16 model keys and 14 tutorial pages,
+  covering all 11 registered canonical examples without inferred capability pairs.
+- [x] Admit and execute the frozen Australian WDI/ITU Internet-use case, preserving
+  calendar gaps, units, provenance and a baseline that outperforms both fitted curves.
+- [x] Execute the optional marimo notebook on Python 3.15.2, marimo 0.25.2 and
+  Polars 2.1.0; verify two cutoff states, exact ordinary-example parity and HTML export.
+- [x] Promote batch, forcing/time, network-engine and Kairos simulation examples
+  to focused advanced tutorials with worked tasks and limitations.
+- [x] Remove 263 obsolete source files, including 17 legacy notebooks; verify
+  immutable history and 141 non-indexed retirement notices at their previous URLs.
+- [x] Map issue-linked community documentation requirements to checked evidence,
+  retaining unmet registration/submission and substantive vignette obligations.
+- [x] Complete scoped independent review and resolve unit, vintage and evaluation
+  interpretation findings; retain unperformed human and empirical evaluation.
+- [~] Finish browser qualification and hosted revision checks, then hand publication
+  and the active-track/archive reconciliation to the sole integrator. Local browser
+  launch is blocked by the workspace's socket restriction; no page test passed.
 
-At the inspected main, [documentation run 43804385173](https://github.com/edithatogo/innovate/actions/runs/43804385173)
+Native execution was refreshed after main advanced to `69b6748`; code snapshot
+`7bd5aa8` records the integrated implementation. Subsequent review/qualification
+records and the foreground browser-harness correction are recorded separately.
+Existing scientific, security, release and deployment holds remain.
+
+### Planning-baseline hosted evidence versus current receipts
+
+At the planning baseline, [documentation run 43804385173](https://github.com/edithatogo/innovate/actions/runs/43804385173)
 passed native documentation examples, Astro build/type checks and local artifact
 checks. Browser qualification executed 142 cases: 140 passed and two mobile cases
 failed (artifact-response mismatch and aborted script request); deployment was

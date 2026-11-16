@@ -45,7 +45,8 @@
     "scripts/generate_learning_catalogue.py",
     "scripts/check_learning_notebooks.py",
     "docs/datasets",
-    "notebooks"
+    "notebooks",
+    "rust/crates/innovate-core/src/discovery.json"
   ],
   "exclude_source_parts": [
     "node_modules",

@@ -43,7 +43,7 @@ export default defineConfig({
   // Preview the built artifact: Astro dev deliberately does not serve Pagefind.
   // Reject an existing server to avoid qualifying another build accidentally.
   webServer: {
-    command: 'pnpm exec astro preview --host 127.0.0.1 --port 4321',
+    command: 'pnpm exec astro preview --host 127.0.0.1 --port 4321 --ignore-lock',
     cwd: siteRoot,
     url: `${browserOrigin}/innovate/`,
     reuseExistingServer: false,

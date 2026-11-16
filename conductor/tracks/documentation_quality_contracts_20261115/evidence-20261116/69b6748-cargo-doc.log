@@ -1,0 +1,36 @@
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-core/Cargo.toml:8:12
+  |
+7 | repository.workspace = true
+  | ----------
+8 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-core` (manifest) generated 1 warning
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-tabular/Cargo.toml:9:12
+  |
+8 | repository.workspace = true
+  | ----------
+9 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-tabular` (manifest) generated 1 warning
+    Checking kairo-ecs-types v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking kairo-ecs-core v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking kairo-ecs-state v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking kairo-ecs-des v0.1.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+    Checking innovate-core v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-core)
+ Documenting innovate-core v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-core)
+    Checking innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-tabular)
+ Documenting innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-tabular)
+ Documenting innovate-python v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-python)
+ Documenting innovate-ffi v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-ffi)
+    Finished `dev` profile [unoptimized] target(s) in 8.10s
+   Generated /workspace/scratch/5e94e22858cb/innovate-docs-implementation/target/doc/innovate_core/index.html and 4 other files

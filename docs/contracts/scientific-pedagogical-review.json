@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "review_date": "2026-11-15",
-  "review_timezone": "Australia/Brisbane",
-  "base_commit": "f6c7d058466ae5fe15b9846769cc0e6ba6774847",
+  "review_date": "2026-11-16",
+  "review_timezone": "UTC",
+  "base_commit": "69b674814513e09a683279c679b1584af8bb4214",
   "reviewer": {
     "kind": "agent",
     "role": "scientific and pedagogical review",
@@ -21,18 +21,28 @@
       "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
       "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
       "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
-      "docs/astro-site/src/content/docs/tutorials/index.md",
+      "docs/astro-site/src/content/docs/tutorials/index.mdx",
       "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
       "docs/astro-site/src/content/docs/user-guide/backends.md",
       "docs/astro-site/src/content/docs/user-guide/fitting.md",
-      "docs/astro-site/src/content/docs/user-guide/forecasting.mdx"
+      "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+      "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+      "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+      "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+      "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+      "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+      "docs/astro-site/src/content/docs/models/index.mdx",
+      "docs/astro-site/src/content/docs/historical-documentation.md",
+      "docs/astro-site/src/content/docs/api/python.md",
+      "docs/astro-site/src/content/docs/maintainers/documentation-quality.md"
     ],
     "native_guide_sections": [
       "Current scope",
       "Choose a task",
       "Units and denominators",
       "Polars fitting and prediction",
-      "Norton\u2013Bass conventions",
+      "Norton–Bass conventions",
       "Fit quality and numerical limits",
       "Julia and R",
       "Ecosystem alignment",
@@ -49,7 +59,10 @@
       "uncertainty and identification",
       "synthetic demonstrations versus empirical evidence",
       "provenance integrity boundaries",
-      "independent source review of twelve migrated current pages"
+      "independent source review of twelve migrated current pages",
+      "independent review of the November 2026 public-data vintage and chronological holdout",
+      "source-derived catalogue semantics and retired-source navigation",
+      "four standalone advanced lessons with task-specific denominators, time and error boundaries"
     ],
     "exclusions": [
       "exhaustive review of every native-model section",
@@ -63,33 +76,67 @@
   },
   "fingerprint_encoding": "sha256 of UTF-8 bytes with CRLF normalized to LF",
   "source_files": {
-    "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
-    "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx": "579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572",
-    "docs/astro-site/src/content/docs/native-migration.md": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
-    "examples/native_forecast.py": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
-    "examples/native_scenarios.py": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
-    "examples/native_norton_bass.py": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
-    "examples/native_bayesian.py": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
-    "examples/native_overlap.py": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
-    "examples/native_reingestion.py": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
-    "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
-    "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
-    "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
-    "rust/crates/innovate-core/src/bayesian.rs": "d94f2bfab395411fa20fd381978caf8f903ca97c42850cfa0185473496ae70df",
-    "docs/astro-site/src/content/docs/core/arrow-interchange.md": "ed2abe399f302a06279fba2ccb1c6377ef2426c9a2531f089ecfb641cbaf5545",
-    "docs/astro-site/src/content/docs/core/index.md": "cbf523434caf031247f002ff10ef2958003d681039469035f3c293cec0495db7",
+    "bindings/julia/src/Innovate.jl": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+    "bindings/python/innovate/__init__.py": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+    "bindings/r/R/kernel_bridge.R": "45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+    "bindings/r/man/kernel_bridge.Rd": "c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+    "bindings/r/man/kernel_models.Rd": "957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
+    "docs/astro-site/src/components/ModelCatalogue.astro": "e64221e75f574d87d342539056e34bdcc61d1e056060c38a4ef7567a3e23abe6",
+    "docs/astro-site/src/components/TutorialCatalogue.astro": "d6e990dd4c8885cfbd330c49365e0804554c95aec2860d934fcdc33a4feb453c",
+    "docs/astro-site/src/content/docs/api/python.md": "e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3",
+    "docs/astro-site/src/content/docs/core/arrow-interchange.md": "513150b1658e0215b839bf0608eea9271488979a122f532ce2b9095298af842d",
+    "docs/astro-site/src/content/docs/core/index.md": "d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
+    "docs/astro-site/src/content/docs/historical-documentation.md": "4c119872b24c567272b7f6fe5a70ce9f4d12e54891e368bc01c7993cfabfc74b",
+    "docs/astro-site/src/content/docs/maintainers/documentation-quality.md": "7ccd4dd7d508211e0b3c3c6452c26eb733e0c7ee0208d1b5c3c718991dceef60",
+    "docs/astro-site/src/content/docs/models/index.mdx": "3dd74df861495b979d98fa3285ed6f65802aeb10d5747179993f5a8aab02e25b",
+    "docs/astro-site/src/content/docs/native-migration.md": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
     "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx": "39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614",
     "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx": "b6700b4067512c40d4e63b72728b24d869f0d0463aafed97e128a88c341be6fa",
     "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx": "033e6c825d794ad32b94a9121f8aee7a9c6c8223e3a3952706188e2fb464fea4",
     "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx": "ab9292f71a1565d3bb6c1fda1e52dc0f7a4e5e3a78a5f647068021c5c570292c",
-    "docs/astro-site/src/content/docs/tutorials/index.md": "2655298db76969b5346333b8b4ebc6364df747340d07338acf09b6461154692e",
+    "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx": "b3febf58fa4df831c428d945e705828f6deb85376766bad2f1c6c39e995e1101",
+    "docs/astro-site/src/content/docs/tutorials/index.mdx": "d95454e89d851f88fe39edc0e41e0d37f7a27a55ce23aa372611a63777c636df",
+    "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx": "02b9a786232c9947d363d47fdfe459a668d872cf47dc64e5d74ae38dbe25ea56",
+    "docs/astro-site/src/content/docs/tutorials/marimo.mdx": "86d2d6228b863b0517e2e6f4af182a83b114ab334d9b7112ac4ca557307ef57f",
+    "docs/astro-site/src/content/docs/tutorials/native-batch.mdx": "973c65ac494b25279682b0c90584e1dad4e6b476bc3a24750ecd9a0b3c656ada",
+    "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx": "eae6d0b973fbb1cb7f1d9cab17730c7ce428d093f8b3fd3b1afcb1067788e0d3",
     "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx": "29d81c07c7013b9d4b8c7dc33c0fd84461ff7f102e3547990a8acf1edb53ffb6",
-    "docs/astro-site/src/content/docs/user-guide/backends.md": "4ba50a9b2138990ada589341af0bf62a54a5f27a4c2bdc14a3f515c1a9f46c3c",
-    "docs/astro-site/src/content/docs/user-guide/fitting.md": "ada2ded44c663840b06d14a2b3084206c0ac0fe5e6865da3beaf2ac8e2b189d5",
+    "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx": "1839904d1fee7040bb1926cea22e2921f7422374621c57497c3ee5dc434abfba",
+    "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx": "579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572",
+    "docs/astro-site/src/content/docs/user-guide/backends.md": "9b3d66329409da00a4bdecfdb77cce000d69171e65d7f6929b8c739a618f91b4",
+    "docs/astro-site/src/content/docs/user-guide/fitting.md": "7b61084efd85ade52e1f078f71005103778a623b15881043040472c643b0b130",
     "docs/astro-site/src/content/docs/user-guide/forecasting.mdx": "f0dfaf4eb5e46435b460ec2b8c51fc50b9150a5fe56e55eb6d14da2f0e0db290",
-    "bindings/python/innovate/__init__.py": "e19040f632f3fd19a3d7989bfa36a80bc47ae174dd4f4b4a62d0734f4b283698",
-    "docs/contracts/content-quality.json": "d40f71aa6bab6dd38ba27079e135ff786a26e59a38f87b13cdba05b99f73dcb4"
+    "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
+    "docs/astro-site/src/pages/[...retired].astro": "f3a81c10193421d2a22e858a055afd4a2d96b772d774dd1ceabca214692b472a",
+    "docs/contracts/content-quality.json": "978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+    "docs/contracts/learning-catalogue.json": "40b1f27c10d98ebf53e93eef43f9ab64f53ee8f189ab4fc384125b544810a1ed",
+    "docs/contracts/retired-documentation.json": "3db2c79fdaab74b0067e31938683a09c2d9bf1e61b92c54fce3250dab28b7aba",
+    "docs/datasets/wdi-aus-internet-20261116/manifest.json": "e8d7718a3be7b39caf5f7e592f318bd2912b3f225b5c74b8593a5b0691f2e8a6",
+    "docs/datasets/wdi-aus-internet-20261116/observations.csv": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+    "docs/datasets/wdi-aus-internet-20261116/raw.json": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+    "examples/native_batch.py": "5425dbd50552179e39ed65c06b8de9846f50cdb9e20742ac05ecea68781309dc",
+    "examples/native_bayesian.py": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+    "examples/native_forcing.py": "81f98614b5ec25b57b02ffecf99cae36d15e0ba49d1201b5c6e67f735938d2d4",
+    "examples/native_forecast.py": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+    "examples/native_kairos.py": "f6e9fa77aabacd0ce18b099949cc6663680783abd8f9688ea70f7198f3297782",
+    "examples/native_network.py": "845e798b85e94aa64a64850ffa39361835626d0c09cb1af616ba0924d1f69904",
+    "examples/native_norton_bass.py": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+    "examples/native_overlap.py": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+    "examples/native_public_data.py": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+    "examples/native_reingestion.py": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+    "examples/native_scenarios.py": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+    "notebooks/public_data_fit.py": "acf980c7688cee71024b179c9b3a434fa66527b696f8e190cac43ea36c096c24",
+    "rust/crates/innovate-core/src/bayesian.rs": "d94f2bfab395411fa20fd381978caf8f903ca97c42850cfa0185473496ae70df",
+    "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
+    "rust/crates/innovate-core/src/discovery.json": "935a5f0ca05209f6f74e859d629356b4f7dda338e38208f21e7a695abd31ff2b",
+    "rust/crates/innovate-core/src/forcing.rs": "37c9e509bcc84b580dda3003d6e169cab69f352c0bacb4ddaafa3a8a3a261d8d",
+    "rust/crates/innovate-core/src/lib.rs": "5b7357116f747e936d278d7e7383e0d08b5c0784ee1acb116932d20160a05192",
+    "rust/crates/innovate-core/src/network.rs": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
+    "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
+    "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
+    "rust/crates/innovate-core/src/simulation.rs": "e8ab3ab618ba87ca0b0a217cc251bd3edfffdd355d285beffd65ffd87d7e7178",
+    "rust/crates/innovate-ffi/src/lib.rs": "af0c0513e5658d18dc6958b0d1edc1753e5c02bd290d5369c208b1edc785afc7"
   },
   "references": [
     {
@@ -115,15 +162,15 @@
       "title": "When Should Nintendo Launch its Wii? Insights From a Bivariate Successive Generation Model",
       "authors": [
         "Philip Hans Franses",
-        "Carlos Hern\u00e1ndez-Mireles"
+        "Carlos Hernández-Mireles"
       ],
       "year": 2006,
       "identifier": "ERS-2006-032-MKT",
       "url": "https://repub.eur.nl/pub/7867/ERS-2006-032-MKT.pdf",
       "source_type": "primary research institutional manuscript",
       "inspected_locations": [
-        "PDF pages 13\u201315",
-        "equations 1\u20132"
+        "PDF pages 13–15",
+        "equations 1–2"
       ],
       "supports": "The two-generation level equations and transfer interpretation used in the independent analytic example.",
       "limits": "Does not validate numerical recovery, arbitrary generation counts, or the empirical fit of these examples."
@@ -136,7 +183,7 @@
         "Andrew Gelman",
         "Daniel Simpson",
         "Bob Carpenter",
-        "Paul-Christian B\u00fcrkner"
+        "Paul-Christian Bürkner"
       ],
       "year": 2021,
       "doi": "10.1214/20-BA1221",
@@ -202,7 +249,7 @@
       "title": "Constructing Inverse Probability Weights for Marginal Structural Models",
       "authors": [
         "Stephen R. Cole",
-        "Miguel A. Hern\u00e1n"
+        "Miguel A. Hernán"
       ],
       "year": 2008,
       "doi": "10.1093/aje/kwn164",
@@ -274,6 +321,19 @@
       ],
       "supports": "The file writer used by the checked example and its BytesIO result when file is None.",
       "limits": "The documentation is a live stable reference; runtime behavior remains tied to the repository's pinned environment and executable contract."
+    },
+    {
+      "id": "wdi-internet-definition",
+      "title": "Individuals using the Internet (% of population), IT.NET.USER.ZS",
+      "url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/IT.NET.USER.ZS",
+      "source_type": "primary provider indicator metadata",
+      "inspected_locations": [
+        "definition, units and annual frequency",
+        "ITU attribution and CC BY4.0 licence",
+        "comparability and reporting limitations"
+      ],
+      "supports": "Recent-use prevalence, annual percentage units, attribution and declared licence for the frozen Australian extract.",
+      "limits": "The metadata do not establish a causal diffusion mechanism, real-time data vintage availability, model adequacy or general forecast skill."
     }
   ],
   "findings": [
@@ -396,9 +456,42 @@
       "page": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
       "status": "resolved_in_prose",
       "finding": "The identification-assumption paragraph needed a directly adjacent primary reference.",
-      "resolution": "Added Cole and Hern\u00e1n beside the consistency, exchangeability and positivity requirements.",
+      "resolution": "Added Cole and Hernán beside the consistency, exchangeability and positivity requirements.",
       "references": [
         "cole-hernan-2008"
+      ]
+    },
+    {
+      "id": "public-data-time-unit",
+      "page": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "severity": "medium",
+      "status": "resolved_in_prose",
+      "finding": "The loader accepted month-labelled metadata despite calculating elapsed years.",
+      "resolution": "Require time_unit=year; a negative regression failed before the repair and passes after it.",
+      "references": [
+        "wdi-internet-definition"
+      ]
+    },
+    {
+      "id": "public-data-vintage",
+      "page": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "severity": "medium",
+      "status": "resolved_in_prose",
+      "finding": "The chronological split could be mistaken for an as-of2015 forecast evaluation.",
+      "resolution": "The lesson explicitly identifies the November2026 retrospective data vintage and possible revisions.",
+      "references": [
+        "wdi-internet-definition"
+      ]
+    },
+    {
+      "id": "public-data-cutoff-selection",
+      "page": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "severity": "medium",
+      "status": "resolved_in_prose",
+      "finding": "Repeated interactive cutoff selection could be mistaken for untouched evaluation.",
+      "resolution": "The notebook and lesson identify exploration and retain the need for a prespecified or untouched assessment.",
+      "references": [
+        "wdi-internet-definition"
       ]
     }
   ],
@@ -533,7 +626,7 @@
     },
     {
       "id": "tutorial-route-choice",
-      "page": "docs/astro-site/src/content/docs/tutorials/index.md",
+      "page": "docs/astro-site/src/content/docs/tutorials/index.mdx",
       "prompt": "Which tutorial fits a supplied model intervention, and which explains an observational contrast?",
       "expected_answer": "Use scenario experiments for the specified model comparison and counterfactual/causal analysis for the observational estimator and its assumptions.",
       "answer_review": "agent_checked",
@@ -570,15 +663,95 @@
       "expected_answer": "Multiply time and x0 by 12 and divide k by 12, keeping L fixed; forecast validation additionally needs an information window, held-out outcomes and uncertainty assessment.",
       "answer_review": "agent_checked",
       "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-public-data-fit",
+      "page": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "prompt": "Explain the default holdout and what the data vintage permits.",
+      "expected_answer": "The retrospective split has23 training and9 holdout observations, with missing years retained in elapsed time. November2026-vintage data are not information available as of2015. Persistence has MAE8.410 percentage points, lower than Gompertz12.916 and Logistic15.994; convergence does not certify forecasts.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-marimo",
+      "page": "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+      "prompt": "Change the final training year to2018; what changes and what has been qualified?",
+      "expected_answer": "The shared native computation leaves6 holdout observations and fresh predictions. Headless default/changed-control parity and successful export are distinct from browser interaction, WASM delivery, untouched confirmatory evaluation and empirical validation.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-native-batch",
+      "page": "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+      "prompt": "Reverse the two requests and compare one versus two workers; how do failures appear?",
+      "expected_answer": "Reversing inputs puts the L=200 single prediction100 first. Workers change concurrency without changing numerical values or input order. Inspect every per-item error even when the outer operation succeeds.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-forcing-and-time",
+      "page": "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+      "prompt": "Explain the zero count at the restoration boundary and convert years to months.",
+      "expected_answer": "Before3 the covariate cancels p and q. A positive scheduler wait keeps the exact boundary count zero. Multiply coordinates by12 and divide inverse-time coefficients/deltas by12; ticks per year divided by12 must remain an admissible integer and can alter quantization.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-network-scenarios",
+      "page": "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+      "prompt": "Derive agent1 exposure and reconcile final adoption with resource utilization.",
+      "expected_answer": "Its initial hazard is3 times1/2=1.5 per time unit, using degree rather than population. Pending requests do not transmit. Final adoption is3/3=100%, while occupied capacity is15/20=75%.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-tutorials-kairos-simulation",
+      "page": "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+      "prompt": "Convert40 adopters at m250,N100; does omitting early query times restart the process?",
+      "expected_answer": "The level is250*40/100=100. Increasing N changes both count scaling and the stochastic process. Sparse observation grids sample the ongoing path; they do not restart it.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-models-index",
+      "page": "docs/astro-site/src/content/docs/models/index.mdx",
+      "prompt": "Does a model card establish every combination of advertised operation, variant and engine?",
+      "expected_answer": "No. The16 cards reproduce advertised discovery metadata. Exact combinations and scientific qualification require operation-specific evidence; network_diffusion is distinct from Bass kairos_network.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-historical-documentation",
+      "page": "docs/astro-site/src/content/docs/historical-documentation.md",
+      "prompt": "What remains after retiring263 files and141 former web routes?",
+      "expected_answer": "Old executable instructions are removed. Short non-searchable migration notices link current guidance and immutable source history. Historical receipts and scientific obligations remain; retirement is not feature acceptance.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-api-python",
+      "page": "docs/astro-site/src/content/docs/api/python.md",
+      "prompt": "Which reference describes the installed development API?",
+      "expected_answer": "The generated current source/stub reference describes it; the pinned historical0.6 file documents earlier interfaces without making them available in the native package.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
+    },
+    {
+      "id": "implementation-maintainers-documentation-quality",
+      "page": "docs/astro-site/src/content/docs/maintainers/documentation-quality.md",
+      "prompt": "Which results are distinct from source and structural consistency?",
+      "expected_answer": "Installed-language execution, native notebook parity, static export, browser/a11y qualification, human reader trials, empirical scientific validation and live publication need their own evidence.",
+      "answer_review": "agent_checked",
+      "human_execution": "not_run"
     }
   ],
   "verification": {
     "python_fences": "unchanged against f6c7d058466ae5fe15b9846769cc0e6ba6774847; rechecked after recovery",
     "raw_example_imports": "unchanged against f6c7d058466ae5fe15b9846769cc0e6ba6774847; rechecked after recovery",
-    "independent_arithmetic": "passed before environment loss using Python 3.12 standard library: Logistic levels/unit conversion/slope, replacement levels/hazard probability, Gaussian posterior, AIPW mean and exact sign-flip count",
-    "native_execution": "not run by this review",
-    "astro_build": "not run by this review",
-    "citation_review": "manual primary-source inspection; SourceRight executable was unavailable",
+    "independent_arithmetic": "Retained prior analytical checks. Added independent persistence metrics, held-out-value perturbation with unchanged fitted predictions, network1/2 exposure,15/20 utilization and250*40/100 level conversion.",
+    "native_execution": "At the refreshed69b6748 base, all11 canonical examples executed with117 observed assertion lines and exact stdout;19 public Python doctests and3 Rust doctests passed. The public-data review independently tested all11 offered cutoffs and19 negative/semantic cases. Julia/R execution remains not run locally.",
+    "astro_build": "The integrated211-page build and current artifact checks passed before final receipt publication; final source/artifact/browser evidence is retained separately in the Conductor implementation record.",
+    "citation_review": "Prior primary-source reviews remain for unchanged lessons. The16November review additionally inspected official WDI/ITU definition, annual units, limitations and licence; advanced explanations were checked against canonical examples and native source.",
     "human_participants": 0,
     "human_task_trials": 0,
     "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
@@ -609,10 +782,14 @@
     "Human reader trials for the recorded tasks, with observed outcomes and revisions.",
     "Astro build, browser, accessibility and native-runtime qualification on the integrated commit.",
     "Empirical data and study-specific scientific validation before using examples as evidence for a real population.",
-    "Run the review consistency checker and its seven regression cases in the integrated CI environment."
+    "Run the review consistency checker and its seven regression cases in the integrated CI environment.",
+    "Complete the remaining model/variant chapters and additional public datasets in DOC-04/DOC-06.",
+    "Qualify native Julia/R examples and a substantial installed R vignette on this revision.",
+    "Qualify managed-browser CI and deployed documentation separately from any local system-Chromium run.",
+    "Retain human reader, assistive-technology and empirical scientific review as uncompleted work."
   ],
   "independent_reviews": {
-    "source_commit": "d7329997538e2362e0d30ec9366d0e20d9222088",
+    "source_commit": "7bd5aa89b0798abaab4132df8096bbc683cbb553",
     "reviewer_kind": "agent",
     "independent_of_page_author": true,
     "results": [
@@ -731,14 +908,14 @@
         ]
       },
       {
-        "page": "docs/astro-site/src/content/docs/tutorials/index.md",
+        "page": "docs/astro-site/src/content/docs/tutorials/index.mdx",
         "outcome": "no_blocking_findings_in_scoped_read",
         "checks": [
-          "Reviewed task-to-tutorial routing and asserted evidence boundaries.",
-          "Checked that remaining historical specialist routes are acknowledged rather than classified as current examples."
+          "Reviewed the task routes and all six new lesson links against the current content inventory.",
+          "Checked the separation of tutorial counts, unique example counts and source-only catalogue generation; historical sources are retired."
         ],
         "source_paths": [
-          "docs/astro-site/src/content/docs/tutorials/index.md",
+          "docs/astro-site/src/content/docs/tutorials/index.mdx",
           "examples/native_scenarios.py",
           "examples/native_overlap.py",
           "docs/contracts/content-quality.json"
@@ -804,8 +981,142 @@
           "docs/contracts/content-quality.json"
         ],
         "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+          "examples/native_public_data.py"
+        ],
+        "references": [
+          "wdi-internet-definition"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+          "examples/native_public_data.py"
+        ],
+        "references": [
+          "wdi-internet-definition"
+        ]
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+          "examples/native_batch.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+          "examples/native_forcing.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+          "examples/native_network.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+          "examples/native_kairos.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/models/index.mdx",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/models/index.mdx",
+          "rust/crates/innovate-core/src/discovery.json"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/historical-documentation.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/historical-documentation.md",
+          "docs/contracts/retired-documentation.json"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/api/python.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/api/python.md",
+          "bindings/python/innovate/__init__.py"
+        ],
+        "references": []
+      },
+      {
+        "page": "docs/astro-site/src/content/docs/maintainers/documentation-quality.md",
+        "outcome": "no_blocking_findings_in_scoped_read",
+        "checks": [
+          "Independent source/text review of the stated observation, units, assumptions, examples and limits.",
+          "Checked the worked reader answer against its named source and the observed scope; no empirical or human acceptance inferred."
+        ],
+        "source_paths": [
+          "docs/astro-site/src/content/docs/maintainers/documentation-quality.md",
+          "docs/contracts/content-quality.json"
+        ],
+        "references": []
       }
     ],
-    "limits": "Independent agent source/text review of twelve migrated pages, with two small prose additions. No human trial, native execution, Astro build, empirical validation or exhaustive model qualification was performed."
+    "limits": "Source snapshot7bd5aa89 contains the reviewed implementation. Prior15November independent findings remain for unchanged lessons. The16November independent agent review covers the new public-data and advanced lessons, catalogues, migration prose and binding documentation delta. It did not repeat the four advanced native executions, review every historical passage, run a human trial or establish empirical scientific validity. Runtime/export/browser evidence is recorded separately in the Conductor implementation receipt."
   }
 }

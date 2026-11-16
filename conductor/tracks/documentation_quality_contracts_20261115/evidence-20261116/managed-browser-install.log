@@ -1,0 +1,41 @@
+Downloading Chrome for Testing 159.0.8154.6 (playwright chromium v1255)[2m from https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip[22m
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31441:18
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31967:9
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:30864:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:932:5)
+Downloading Chrome for Testing 159.0.8154.6 (playwright chromium v1255)[2m from https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip[22m
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31441:18
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31967:9
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:30864:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:932:5)
+Downloading Chrome for Testing 159.0.8154.6 (playwright chromium v1255)[2m from https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip[22m
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31441:18
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31967:9
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:30864:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:932:5)
+Downloading Chrome for Testing 159.0.8154.6 (playwright chromium v1255)[2m from https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip[22m
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31441:18
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31967:9
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:30864:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:932:5)
+Downloading Chrome for Testing 159.0.8154.6 (playwright chromium v1255)[2m from https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip[22m
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 0 MiB
+Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31441:18
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:31967:9
+    at /workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/utilsBundle.js:30864:11
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:932:5)
+Failed to install browsers
+Error: Failed to download Chrome for Testing 159.0.8154.6 (playwright chromium v1255), caused by
+Error: Download failure, code=1
+    at ChildProcess.<anonymous> (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/docs/astro-site/node_modules/.pnpm/playwright-core@1.65.1/node_modules/playwright-core/lib/coreBundle.js:34127:32)
+    at ChildProcess.emit (node:events:514:20)
+    at ChildProcess._handle.onexit (node:internal/child_process:323:12)

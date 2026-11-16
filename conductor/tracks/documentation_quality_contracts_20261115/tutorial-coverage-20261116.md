@@ -1,12 +1,59 @@
-# Tutorial coverage audit and proposed curriculum
+# Tutorial coverage audit and implementation curriculum
 
-## Scope and baseline
+## Implemented coverage — 16 November 2026
+
+The implementation snapshot `7bd5aa89b0798abaab4132df8096bbc683cbb553`, based on
+main `69b674814513e09a683279c679b1584af8bb4214`, changes the current denominator:
+
+| Measure | Planning baseline | Implemented inventory |
+| --- | --- | --- |
+| Current tutorial pages | 8 | 14 |
+| Distinct canonical examples used by tutorials | 6 | 11 |
+| Registered ordinary Python examples | 10 | 11 |
+| Executed optional marimo notebooks | 0 | 1 |
+| Admitted empirical datasets | 0 | 1 |
+| Model discovery keys represented in the generated atlas | No generated atlas | 16 |
+| Current pages including generated API references | 60 | 69, including 34 generated API pages |
+
+All eleven ordinary examples execute against the installed native package with
+their exact stdout contracts; fourteen pages do not mean fourteen distinct
+scientific workflows. The marimo page shares `native_public_data.py` with the
+ordinary public-data lesson. The
+[generated learning contract](../../../docs/contracts/learning-catalogue.json)
+is the source-derived inventory, and the
+[qualification receipts](evidence-20261116/README.md) record separate execution.
+
+| Added current tutorial | Canonical example | Curriculum contribution and limit |
+| --- | --- | --- |
+| `tutorials/public-data-fit.mdx` | `native_public_data.py` | B02–B05 subset: frozen annual data, missing years, Logistic/Gompertz fits, chronological holdout and persistence baseline; no full calendar/multiseries or uncertainty course |
+| `tutorials/marimo.mdx` | `native_public_data.py` through `notebooks/public_data_fit.py` | Optional native exploration of the same case; browser UI and published preview remain pending |
+| `tutorials/native-batch.mdx` | `native_batch.py` | I07 foundation: order, worker invariance and error boundaries; empirical country batches remain pending |
+| `tutorials/forcing-and-time.mdx` | `native_forcing.py` | I06/A02 foundation: forcing, right-continuous covariates, time conversion and tick rounding; policy/regime families remain distinct |
+| `tutorials/network-scenarios.mdx` | `native_network.py` | A01/A02 foundation: Bass/Kairos network engine, queues and completed adoption; D04 and deterministic `network_diffusion` course remain pending |
+| `tutorials/kairos-simulation.mdx` | `native_kairos.py` | A02 foundation: finite population, levels, clocks and replay; does not qualify every simulation engine or platform |
+
+The 16 atlas records expose current metadata and missing teaching routes without
+inventing supported model/variant/operation combinations. Remaining competition,
+complementarity, lock-in, latent, mixture, hierarchical, regime and composite
+chapters are still work items. D02–D05 remain unadmitted. R/Julia source conventions
+and examples are documented, but fresh installed-language course execution was
+not available in this local environment. Human reader outcomes and full scientific
+coverage remain open.
+
+All 17 obsolete root/`old_notebooks` files have been inventoried and removed from
+the active tree. Their immutable source identities and dispositions are retained
+in the [retirement contract](../../../docs/contracts/retired-documentation.json).
+They contribute no current tutorial coverage.
+
+## Historical scope and planning baseline
 
 This is the DOC-02/04/06/07 curriculum for the
 [learning programme](learning-plan-20261116.md), inspected at
 06b16671b654b4e51f158bf7d605c4286f156755 on 16 November 2026.
 The following counts describe the maintained source inventory, not every page on
-the public site or every notebook in the repository. Proposed lessons are pending.
+the public site or every notebook in the repository. The tables in this historical
+section retain the planning baseline; the implemented delta above is authoritative
+for current counts. Curriculum rows below remain targets unless explicitly covered.
 
 Authoritative inspected records:
 
@@ -95,7 +142,7 @@ capability table. Record that ambiguity; do not silently choose one interpretati
 IDs below are content work items within the existing documentation track, not new
 Conductor tracks or promises of one notebook per row. Reuse canonical examples
 and thin notebook adapters. Dataset IDs resolve to the
-[admission shortlist](public-datasets-20261116.md); none is admitted by this plan.
+[admission shortlist](public-datasets-20261116.md); only D01 is now admitted.
 Controlled fixtures remain essential for independent expected results.
 
 ### Beginner: complete one defensible analysis
@@ -209,7 +256,7 @@ or synthetic recovery alone is not an adequate curriculum score.
   identity. Re-run affected examples when those inputs change.
 - Run normal examples offline on frozen fixtures. Dataset updates and dependency
   changes are separate reviewable increments with a recorded semantic comparison.
-- Preserve current/historical/version labels in navigation and Pagefind. Legacy
-  content never contributes to current coverage solely because its URL exists.
+- Preserve current/retired status in navigation and Pagefind. The obsolete version
+  archive is removed; a retained retirement URL never contributes current coverage.
 - Record the last executed revision and review state per lesson; avoid manually
   maintained freshness badges that can drift from the actual evidence.
