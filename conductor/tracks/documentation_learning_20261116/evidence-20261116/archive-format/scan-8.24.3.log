@@ -1,0 +1,13 @@
+Command: ["/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.24.3", "detect", "--source", "/tmp/innovate-evidence-tagged/scan-input", "--redact", "--exit-code=2", "--report-format=json", "--report-path", "/tmp/innovate-evidence-tagged/scan-8.24.3.json", "--log-level=error", "--log-opts=--no-merges --first-parent HEAD"]
+Exit code: 0
+Findings: 0
+Captured stdout:
+
+Captured stderr:
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+

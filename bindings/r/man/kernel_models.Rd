@@ -52,12 +52,19 @@ Fit a native model using observations and explicit fitting controls.
 A successful request does not establish global optimality, parameter identifiability or
 forecast calibration. Inspect the native optimizer and diagnostic fields before
 interpreting the fit.
+
+Time, observations and parameters must use consistent caller-selected units.
+Observations must represent the model's fitted quantity; this wrapper does not
+integrate interval counts or difference cumulative totals before fitting.
 }
 \subsection{\code{kernel_predict_model}}{
 Predict native levels and rates from explicit parameters or fitted state.
 
-Levels and rates have different meanings. Deterministic predictions do not provide
-calibrated intervals unless an appropriate separate inference operation supplies them.
+Levels and rates have different meanings. Where the model returns derivatives, their
+units are level units per unit of numeric time. They are instantaneous values, not
+counts integrated between observation rows; signed rates can describe declining levels.
+Deterministic predictions do not provide calibrated intervals unless an appropriate
+separate inference operation supplies them.
 }
 \subsection{\code{kernel_simulate_model}}{
 Run a native stochastic model with an explicit simulation engine.

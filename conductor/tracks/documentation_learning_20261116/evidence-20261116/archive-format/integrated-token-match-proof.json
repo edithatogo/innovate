@@ -1,0 +1,126 @@
+{
+  "helper_path": "/tmp/innovate-rust-executable-tokens-20261116",
+  "helper_sha256": "sha256:87a48eb8a618b20fd316692e1662d49ef9071f37a273cd74dabb597605c3efc2",
+  "retained_source_sha256": "sha256:d4cbf8230cb4359d6f1ab4edc2b9cfb4aad7001fa7bb82c2302d873c5486cd83",
+  "records": [
+    {
+      "source": "rust/crates/innovate-core/src/domain.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/inference/hype_fit.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/inference/hype_posterior.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/likelihood.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/competition.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/demand.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/expectation_feedback.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/hierarchical.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/hype.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/hype_effects.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/mod.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/regimes.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/repeat_use.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-core/src/models/semi_markov.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-games/src/lib.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-kairos/src/lib.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    },
+    {
+      "source": "rust/crates/innovate-tabular/src/lib.rs",
+      "current_bytes_match_after_sha256": true,
+      "token_digest_matches_current_helper_output": [
+        "exact_stdout"
+      ]
+    }
+  ]
+}

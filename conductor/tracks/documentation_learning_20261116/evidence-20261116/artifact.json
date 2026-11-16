@@ -1,0 +1,2451 @@
+{
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_record": {
+    "repository_path": "conductor/tracks/documentation_learning_20261116/evidence-20261116/artifact.json",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 57030,
+    "serialized_sha256": "sha256:71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483",
+    "semantic_sha256": "sha256:a6d677a1c3ac0887d185648567e96c564993272319c39cbf28bb15f92179750f",
+    "semantic_encoding": "python-json:sort_keys=true,ensure_ascii=false,separators=(',',':'),allow_nan=false;UTF-8;no-final-newline",
+    "serialization": {
+      "indent": 2,
+      "ensure_ascii": true,
+      "separators": "default",
+      "line_ending": "\n",
+      "final_newline": "\n",
+      "preserve_object_order": true
+    }
+  },
+  "tagged_digest_paths": [
+    [
+      "artifact_files",
+      ".nojekyll"
+    ],
+    [
+      "artifact_files",
+      "404.html"
+    ],
+    [
+      "artifact_files",
+      "_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.C3fM4Kra.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/Search.astro_astro_type_script_index_0_lang.BZ3ghVIL.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/TableOfContents.astro_astro_type_script_index_0_lang.BpJaGz7G.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/ec.0vx5m.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/ec.w36nc.css"
+    ],
+    [
+      "artifact_files",
+      "_astro/middleware.BpaiMPdV.css"
+    ],
+    [
+      "artifact_files",
+      "_astro/page.cNngjUgL.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/print.C9eyqPGL.css"
+    ],
+    [
+      "artifact_files",
+      "_astro/starlight-toc.D4UDIxQL.js"
+    ],
+    [
+      "artifact_files",
+      "_astro/ui-core.C8erNanT.js"
+    ],
+    [
+      "artifact_files",
+      "api/generated/aggregate-time-series/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/aggregate-weekly/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/bootstrap-forecast-frame/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/capabilities/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/categorize-adopters/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/cumulative-sum/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/execute-scenario-grid/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/execute/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/export-ipc-file/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/export-ipc-stream/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/fetch-oecd-dataset/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/fit-batch/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/fit-frames/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/fit-result/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/fit/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/ingest-local/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/ingest-polars/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/invoke-registered-extension/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/julia/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/native-error/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/paired-outcomes/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/policy-metadata-frame/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/predict-batch/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/predict-frames/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/predict/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/r/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/rolling-average/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/sarima-fit/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/scenario-comparisons/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/scenario-executions/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/seasonal-decomposition/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/staggered-att-polars/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/generated/treatment-contrast-frame/index.html"
+    ],
+    [
+      "artifact_files",
+      "api/python/index.html"
+    ],
+    [
+      "artifact_files",
+      "architecture/adr/index.html"
+    ],
+    [
+      "artifact_files",
+      "architecture/index.html"
+    ],
+    [
+      "artifact_files",
+      "architecture/polyglot-repo/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/csharp/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/go/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/julia/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/parity/index.html"
+    ],
+    [
+      "artifact_files",
+      "bindings/rust/index.html"
+    ],
+    [
+      "artifact_files",
+      "core/arrow-interchange/index.html"
+    ],
+    [
+      "artifact_files",
+      "core/diagnostics-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "core/index.html"
+    ],
+    [
+      "artifact_files",
+      "core/kernel/index.html"
+    ],
+    [
+      "artifact_files",
+      "historical-documentation/index.html"
+    ],
+    [
+      "artifact_files",
+      "index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/api/python/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/architecture/adr/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/architecture/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/architecture/polyglot-repo/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/csharp/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/go/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/julia/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/parity/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/bindings/rust/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/core/arrow-interchange/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/core/diagnostics-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/core/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/core/kernel/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/binding-conformance/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/compatibility/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/deployment-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/deprecation/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/docsearch/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/maintenance/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/package-health/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/plugins/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/publication/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/release-notes/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/release-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/runtime-logging/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/stability/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/maintainers/support/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/migration/archive/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/migration/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/migration/redirects/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/migration/references/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/migration/validation/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/abi-compatibility/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/accelerator-parallel-execution/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/community-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/governance/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/hpc-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/hpc-registry/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/hpc-submission-packet/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/hpc-submission-workflow/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/polyglot-registry/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/registry-submissions/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/release-maturity/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/remote-execution/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/roadmap/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/rust-core/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/scientific-hpc/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/submission-dossiers/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/operations/xla-backend/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/roadmap/dataframe-engine/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/roadmap/diagnostics-uncertainty/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/roadmap/probabilistic-inference/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/advanced-diffusion-inference/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/advanced-runtime/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/arrow-interchange/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/bayesian-fitter/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/benchmark-workflows/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/counterfactual-analysis/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/data-ingestion-provenance/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/decision-reports/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/diagnostics-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/functional-kernel-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/jax-backend/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/kairos-simulation-adapter/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/multi-product/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/ndlib-integration/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/norton-bass/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/plugin-api-stability/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/tutorials/seasonal-data/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/advanced-modeling/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/backends/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/fitting/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/forecasting/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/getting-started/index.html"
+    ],
+    [
+      "artifact_files",
+      "latest/user-guide/installation/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/binding-conformance/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/compatibility/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/deployment-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/deprecation/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/docsearch/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/documentation-quality/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/language-conventions/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/maintenance/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/package-health/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/plugins/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/publication/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/release-notes/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/release-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/runtime-logging/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/stability/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/support/index.html"
+    ],
+    [
+      "artifact_files",
+      "maintainers/test-acceleration/index.html"
+    ],
+    [
+      "artifact_files",
+      "migration/archive/index.html"
+    ],
+    [
+      "artifact_files",
+      "migration/index.html"
+    ],
+    [
+      "artifact_files",
+      "migration/redirects/index.html"
+    ],
+    [
+      "artifact_files",
+      "migration/references/index.html"
+    ],
+    [
+      "artifact_files",
+      "migration/validation/index.html"
+    ],
+    [
+      "artifact_files",
+      "models/index.html"
+    ],
+    [
+      "artifact_files",
+      "native-migration/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/abi-compatibility/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/accelerator-parallel-execution/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/community-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/documentation-standards/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/governance/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/hpc-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/hpc-registry/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/hpc-submission-packet/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/hpc-submission-workflow/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/polyglot-registry/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/registry-readiness/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/registry-submissions/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/release-maturity/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/remote-execution/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/roadmap/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/runtime-logging/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/rust-core/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/scientific-hpc/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/submission-dossiers/index.html"
+    ],
+    [
+      "artifact_files",
+      "operations/xla-backend/index.html"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_1293e9a.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_142e8ba.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_179afdf.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_18951f5.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_1e6aa23.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_1fcf3eb.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_2485a89.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_288ae3b.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_2b0186d.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_2b912fd.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_2eac74c.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_2fb9fa8.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_3263319.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_343a347.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_3548f17.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_37af573.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_3cc8ffa.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_4bdaedc.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_529bbd3.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_54157e5.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_582fc7a.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_5dcfb39.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_621d62b.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_62f43b1.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_6c15675.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_6fefc8c.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_78a0904.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_79b6ac4.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_7fb22de.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_80bbe87.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_84459f7.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_8481756.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_8782649.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_8b188b5.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_8d8b1fe.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_8d8e946.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_90c0942.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_946465f.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_9f73971.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_a019c07.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_a1eed42.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_a65ff5f.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_a6dfbb1.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ad2f9e3.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_b489882.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_b9c3828.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ba15ecb.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_bcfa411.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_bebcc0a.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_befe918.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_c4b7e57.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_c70834e.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_c783a71.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_cc74138.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ccdc7a1.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_d1e97f2.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_d62f424.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_d63d4d4.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_db69713.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_e283519.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_e64133e.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ea2865a.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ec1ca46.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ed8e7fa.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_f0db9bd.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_f7dfdcd.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_f8c6b8f.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_fd769eb.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/fragment/en_ff1e58b.pf_fragment"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_545b19d.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_812939e.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_8b538bd.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_9aa6b14.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_9e1bc49.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/index/en_f02ef97.pf_index"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-component-ui.css"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-component-ui.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-entry.json"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-highlight.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-modular-ui.css"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-modular-ui.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-ui.css"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-ui.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind-worker.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind.en_8d339ebfb8.pf_meta"
+    ],
+    [
+      "artifact_files",
+      "pagefind/pagefind.js"
+    ],
+    [
+      "artifact_files",
+      "pagefind/wasm.en.pagefind"
+    ],
+    [
+      "artifact_files",
+      "pagefind/wasm.unknown.pagefind"
+    ],
+    [
+      "artifact_files",
+      "roadmap/dataframe-engine/index.html"
+    ],
+    [
+      "artifact_files",
+      "roadmap/diagnostics-uncertainty/index.html"
+    ],
+    [
+      "artifact_files",
+      "roadmap/probabilistic-inference/index.html"
+    ],
+    [
+      "artifact_files",
+      "sitemap-0.xml"
+    ],
+    [
+      "artifact_files",
+      "sitemap-index.xml"
+    ],
+    [
+      "artifact_files",
+      "tutorials/advanced-diffusion-inference/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/advanced-runtime/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/arrow-interchange/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/bayesian-fitter/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/benchmark-workflows/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/counterfactual-analysis/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/data-ingestion-provenance/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/decision-reports/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/diagnostics-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/forcing-and-time/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/functional-kernel-contract/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/jax-backend/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/kairos-simulation-adapter/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/kairos-simulation/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/marimo/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/multi-product/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/native-batch/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/ndlib-integration/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/network-scenarios/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/norton-bass/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/plugin-api-stability/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/public-data-fit/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/scenario-experiment-workflows/index.html"
+    ],
+    [
+      "artifact_files",
+      "tutorials/seasonal-data/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/advanced-modeling/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/backends/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/fitting/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/forecasting/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/getting-started/index.html"
+    ],
+    [
+      "artifact_files",
+      "user-guide/installation/index.html"
+    ],
+    [
+      "artifact_sha256"
+    ],
+    [
+      "contract_sha256"
+    ],
+    [
+      "source_files",
+      ".github/workflows/ci.yml"
+    ],
+    [
+      "source_files",
+      ".github/workflows/docs.yml"
+    ],
+    [
+      "source_files",
+      "bindings/julia/src/Innovate.jl"
+    ],
+    [
+      "source_files",
+      "bindings/python/innovate/__init__.py"
+    ],
+    [
+      "source_files",
+      "bindings/python/innovate/_native.cpython-315-x86_64-linux-gnu.so"
+    ],
+    [
+      "source_files",
+      "bindings/python/innovate/_native.pyi"
+    ],
+    [
+      "source_files",
+      "bindings/python/innovate/py.typed"
+    ],
+    [
+      "source_files",
+      "bindings/r/NAMESPACE"
+    ],
+    [
+      "source_files",
+      "bindings/r/R/kernel_bridge.R"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/export_ipc_file.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/export_ipc_stream.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/innovate.R-package.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/invoke_registered_extension.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_adopters.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_aggregate_dates.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_batch.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_bridge.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_models.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_paired_outcomes_ipc.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_preprocessing.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_sarima_fit.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_scenario_ipc.Rd"
+    ],
+    [
+      "source_files",
+      "bindings/r/man/kernel_seasonal_decomposition.Rd"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/README.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/astro.config.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/migration-manifest.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/package.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/playwright.config.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/pnpm-lock.yaml"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/pnpm-workspace.yaml"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/public/.nojekyll"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/browser-contract.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/browser-contract.test.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/browser-report.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/documentation-contracts.test.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/generate-api.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/rehype-focusable-tables.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/remark-single-title.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/scripts/remark-single-title.test.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/components/AccessibleSearch.astro"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/components/ModelCatalogue.astro"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/components/TutorialCatalogue.astro"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content.config.ts"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/aggregate-time-series.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/aggregate-weekly.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/bootstrap-forecast-frame.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/capabilities.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/categorize-adopters.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/cumulative-sum.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/execute-scenario-grid.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/execute.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/export-ipc-file.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/export-ipc-stream.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/fetch-oecd-dataset.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/fit-batch.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/fit-frames.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/fit-result.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/fit.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/index.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/ingest-local.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/ingest-polars.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/invoke-registered-extension.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/julia.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/manifest.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/native-error.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/paired-outcomes.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/policy-metadata-frame.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/predict-batch.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/predict-frames.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/predict.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/r.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/rolling-average.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/sarima-fit.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/scenario-comparisons.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/scenario-executions.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/seasonal-decomposition.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/staggered-att-polars.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/generated/treatment-contrast-frame.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/api/python.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/bindings/csharp.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/bindings/go.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/bindings/index.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/bindings/rust.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/core/arrow-interchange.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/core/index.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/core/kernel.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/historical-documentation.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/index.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/maintainers/documentation-quality.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/maintainers/language-conventions.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/maintainers/test-acceleration.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/models/index.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/native-migration.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/operations/documentation-standards.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/operations/registry-readiness.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/index.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/marimo.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/native-batch.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/user-guide/backends.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/user-guide/fitting.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/user-guide/forecasting.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/docs/user-guide/installation.md"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/content/versions/latest.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/pages/[...retired].astro"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/src/styles/custom.css"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/starlight.config.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/tests/browser/documentation.spec.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/tests/browser/support.mjs"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/tsconfig.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/vendor/starlight-polyglot/package.json"
+    ],
+    [
+      "source_files",
+      "docs/astro-site/vendor/starlight-polyglot/scripts/python_extract.py"
+    ],
+    [
+      "source_files",
+      "docs/contracts/api-documentation.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/community-documentation.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/content-baseline.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/content-quality.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/learning-catalogue.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/learning-notebooks.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/polyglot-api-documentation.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/retired-documentation.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/scientific-pedagogical-review.json"
+    ],
+    [
+      "source_files",
+      "docs/contracts/site-quality.json"
+    ],
+    [
+      "source_files",
+      "docs/datasets/wdi-aus-internet-20261116/manifest.json"
+    ],
+    [
+      "source_files",
+      "docs/datasets/wdi-aus-internet-20261116/observations.csv"
+    ],
+    [
+      "source_files",
+      "docs/datasets/wdi-aus-internet-20261116/raw.json"
+    ],
+    [
+      "source_files",
+      "examples/native_batch.py"
+    ],
+    [
+      "source_files",
+      "examples/native_bayesian.py"
+    ],
+    [
+      "source_files",
+      "examples/native_forcing.py"
+    ],
+    [
+      "source_files",
+      "examples/native_forecast.py"
+    ],
+    [
+      "source_files",
+      "examples/native_kairos.py"
+    ],
+    [
+      "source_files",
+      "examples/native_network.py"
+    ],
+    [
+      "source_files",
+      "examples/native_norton_bass.py"
+    ],
+    [
+      "source_files",
+      "examples/native_overlap.py"
+    ],
+    [
+      "source_files",
+      "examples/native_public_data.py"
+    ],
+    [
+      "source_files",
+      "examples/native_reingestion.py"
+    ],
+    [
+      "source_files",
+      "examples/native_scenarios.py"
+    ],
+    [
+      "source_files",
+      "notebooks/.gitignore"
+    ],
+    [
+      "source_files",
+      "notebooks/README.md"
+    ],
+    [
+      "source_files",
+      "notebooks/public_data_fit.py"
+    ],
+    [
+      "source_files",
+      "notebooks/pyproject.toml"
+    ],
+    [
+      "source_files",
+      "notebooks/uv.lock"
+    ],
+    [
+      "source_files",
+      "rust/crates/innovate-core/src/discovery.json"
+    ],
+    [
+      "source_files",
+      "scripts/check_api_documentation.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_community_documentation.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_documentation_content.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_julia_documentation.jl"
+    ],
+    [
+      "source_files",
+      "scripts/check_learning_notebooks.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_native_documentation.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_polyglot_api_documentation.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_r_documentation.R"
+    ],
+    [
+      "source_files",
+      "scripts/check_retired_documentation.py"
+    ],
+    [
+      "source_files",
+      "scripts/check_scientific_review_contract.py"
+    ],
+    [
+      "source_files",
+      "scripts/generate_api_reference.py"
+    ],
+    [
+      "source_files",
+      "scripts/generate_learning_catalogue.py"
+    ],
+    [
+      "source_files",
+      "scripts/verify_production_docs.py"
+    ],
+    [
+      "source_sha256"
+    ]
+  ],
+  "record": {
+    "artifact_files": {
+      ".nojekyll": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "404.html": "sha256:6295b3d328a22c98cd3d0ce2e4010ebbe7f9509378d578a771bdf2d89a3d4c8a",
+      "_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.C3fM4Kra.js": "sha256:bc57dccfe8dec8aaf9d9eeb8a1cfdf255d0cdf784cd79f606ed5a63eb4f08414",
+      "_astro/Search.astro_astro_type_script_index_0_lang.BZ3ghVIL.js": "sha256:47e68c030d10d19a37ca758393c4d1a901d7808858458169ffea41ed95638e40",
+      "_astro/TableOfContents.astro_astro_type_script_index_0_lang.BpJaGz7G.js": "sha256:b80a41c167d0d90fc2f38a27bb4772ec220613dbd07093bfe6b9c3d44f628b77",
+      "_astro/ec.0vx5m.js": "sha256:182e98b9acfcfd358ea486967bd17dcaddd5930b8d092bc0653fd26ddbb11e37",
+      "_astro/ec.w36nc.css": "sha256:1db272cd2e2bc5dfbc63c332f5d5f04bb4ba104065e894f951405e7bdddf5dcb",
+      "_astro/middleware.BpaiMPdV.css": "sha256:f52b59b6c06ffc518b2658b5e747862a7d34a486c147927a992d407c541d85a0",
+      "_astro/page.cNngjUgL.js": "sha256:04c3f1b2cba171b387e6485f6b6dc6cf94cd91ae1278d6b9ed1fac7d8f14546f",
+      "_astro/print.C9eyqPGL.css": "sha256:0ae481c0e8a802b193cc8eeea6f0aad2f79b759959485da8ba98fe10178790be",
+      "_astro/starlight-toc.D4UDIxQL.js": "sha256:5d6d8e252d7fd83f14914b8164580f615e7e2a33a39ec87e31582dc12659f0db",
+      "_astro/ui-core.C8erNanT.js": "sha256:07f3d1772ad31e83aa42a3ca7f4e2c0440855d3494865bd4775f84377a4b1010",
+      "api/generated/aggregate-time-series/index.html": "sha256:6bab509a70a38204ba9ea5631dff9e4b53e2863b719086f4e782b611e6ec858c",
+      "api/generated/aggregate-weekly/index.html": "sha256:8f52fdca30dee96fa1df02fbf2cdda9eed2355c4f87e065856863b46b58df0b2",
+      "api/generated/bootstrap-forecast-frame/index.html": "sha256:f4c44ac353ac5e171b9fd3689b9e898f374cdf8706e726199ed7907cb7f5bd0c",
+      "api/generated/capabilities/index.html": "sha256:0444ec82fd1dfc47bef09e5c1475e4024c0d4267e17e923163c5fde46c4546f7",
+      "api/generated/categorize-adopters/index.html": "sha256:899296d6c3b18e5e654c4ba8a412b2f4f42c2ba071ea584123c7b64428c6ba1c",
+      "api/generated/cumulative-sum/index.html": "sha256:7e4543d660fbf82bf2ed29f318dd5e7cac451d5ad58725269c55c9800aba9185",
+      "api/generated/execute-scenario-grid/index.html": "sha256:fb9ce468241e24ef6d3d6aa6fb5e300c9bec22a513ba6a84cf2281d341ff670a",
+      "api/generated/execute/index.html": "sha256:44ab785faf9c224711dd2ce0ac6d25fac635bcb3440fa41f8b557c086536f8e5",
+      "api/generated/export-ipc-file/index.html": "sha256:5d7f9e7c9065e1a736e05840b8303289fa75ed9aea7847fee92af38b70a7896b",
+      "api/generated/export-ipc-stream/index.html": "sha256:9d54cae54ac62bb43ebc69d6e216a84468b5508127e0387c28f1b604a2b28f3a",
+      "api/generated/fetch-oecd-dataset/index.html": "sha256:c09c93b50a919f58e34d450046c59d1bbc93e9712beb6142688addf0b0f35f9e",
+      "api/generated/fit-batch/index.html": "sha256:b77fdcf6f2e8c412442b99d33c11c7557522ae1da2000ee3d1c3363a2cfb7d98",
+      "api/generated/fit-frames/index.html": "sha256:70d3877a4672fd398a320e7305bacd13847431ef19a9911ba6c5a03b4e9e470d",
+      "api/generated/fit-result/index.html": "sha256:e52e871e144dfa335627130f9732c79f8f706889566c6798cc10d8d81e297266",
+      "api/generated/fit/index.html": "sha256:e0bbb18f7322f356f00d90dd2f3617a94507edd384953a7bddd0e9e8d35efc0c",
+      "api/generated/index.html": "sha256:198272acc1f8009950b03ebc940d5a0664c7af283ebb14cc0a68cc3919999869",
+      "api/generated/ingest-local/index.html": "sha256:1891dbeeffdbd58b7d31e6effb4f7da704cfc86179fd6f48741e491ca40464ef",
+      "api/generated/ingest-polars/index.html": "sha256:879d2d1c7fb657ec945a3a2392af63bcf79d8ea2e0a531d5b4ee3a94bc8073a3",
+      "api/generated/invoke-registered-extension/index.html": "sha256:d74213153221dd3c5f14aaf2cea1f55ec7eb133e1b4f889187fc1849fc28b0cc",
+      "api/generated/julia/index.html": "sha256:ea005b18b6f2d28cdac06a401c30b3ec6675fbf1696a85452da5b5818ca58a42",
+      "api/generated/native-error/index.html": "sha256:007a1de2261f88576dbe1b4ec9f3b26dc952c6cff0e2a694b005b73d87ac799c",
+      "api/generated/paired-outcomes/index.html": "sha256:6ce7b6976e337e8783231f18c47df863f2f99f86e552185768876d8afb5365ba",
+      "api/generated/policy-metadata-frame/index.html": "sha256:88a2e4939aa6980dd9f7484be6acfaa36e986abda44f93b69253dc7fdc624e7a",
+      "api/generated/predict-batch/index.html": "sha256:50fe95a68b755812f11ecbc09dc403e1fa9a8e75ec3814afa5873c5ca5e0cb48",
+      "api/generated/predict-frames/index.html": "sha256:8f0048fc04c2372a2abd12fa2c6dd0374c76ada774692dc9f73eaa21f3a35a7a",
+      "api/generated/predict/index.html": "sha256:e24286592b4eedb07718304fe4aa79225420fd19c4cbc5a7e06cab62ca389013",
+      "api/generated/r/index.html": "sha256:a5d92cb19ba989bddf1b1270a39c1bdc462cde446270db59db49bf1a302f6f90",
+      "api/generated/rolling-average/index.html": "sha256:897d1161dea52cb1bab7817697cd1c24d85575e2e80e713fcadd1782d6a03a12",
+      "api/generated/sarima-fit/index.html": "sha256:8ab54415c68b83a44d0a3a12b607af4a55abc998daeedd8f1011e71951fdfade",
+      "api/generated/scenario-comparisons/index.html": "sha256:02f09fe9e004b9d94739eadef81281054ff39cd37f1699f2f00e312a68d6a8d1",
+      "api/generated/scenario-executions/index.html": "sha256:258f9c6323e8c0b4e94b8f09f7ce6ed4109aca68b6d657eea2c13202deaee530",
+      "api/generated/seasonal-decomposition/index.html": "sha256:815bb13ad9150114082837c0c49f858aca953b4e5c029615cf36bf9c89915048",
+      "api/generated/staggered-att-polars/index.html": "sha256:9f8fffe8134e7679a0c0fb1e299898d90202eaeb0fc9e47415544021fbd804a9",
+      "api/generated/treatment-contrast-frame/index.html": "sha256:030b7e9df41aa47916f68685c4394bedff2a0c018c18dbe9f8a0dc53fee490f3",
+      "api/python/index.html": "sha256:51e6ad3923741179f43ed8d6c5f9352544c133f3f02983484eb5b8a1651014e4",
+      "architecture/adr/index.html": "sha256:7450050458a10a94dbd153817e313eee636ec836ce5eac9a4aabd0ed8a3b2ed5",
+      "architecture/index.html": "sha256:e1757b5048739c37ece35a281bd8f46af401ff83a238072f1fb16f205604d846",
+      "architecture/polyglot-repo/index.html": "sha256:13e04eb09da00b0bc3ef77ef62e0484d23b4ccf1f0f06239f36a1bcfff90c41f",
+      "bindings/csharp/index.html": "sha256:41fa9cd5d66e10ac705e7d7d562cd8b980d1a9591bd66d8f33369fb060248358",
+      "bindings/go/index.html": "sha256:81f31e905acbc71a85c9c1341266e4c5c26de42dbbbf9f74153e3ffc4beed468",
+      "bindings/index.html": "sha256:ec9b28e88f22dd5e22fdcacf842c3ee813663aac2e57e6ac3fa8c63edc02f8fd",
+      "bindings/julia/index.html": "sha256:9f80feba0b55a39feddd305a206b126da0438b2614a855091dd0cba734df92b1",
+      "bindings/parity/index.html": "sha256:ce72491ec8c1d84996d6f6e087065af5a45f42c4b0f0d3f60d2b591f60721576",
+      "bindings/rust/index.html": "sha256:8496dda9ef7ae3ea1fe0f1b956f5e4fae716f5800ef6fd2a2f633b4d7a2c40f5",
+      "core/arrow-interchange/index.html": "sha256:e91dcf02af70031d777f2cb6e5c457e83a7a548e1bd0af4afbdad0c7d1fb9f19",
+      "core/diagnostics-contract/index.html": "sha256:500f6486ff8e9033673251d94c1a20d80ef254e7fac7b864f91ae890013b3eb9",
+      "core/index.html": "sha256:ce31ded826b69dd872e6dc6c247418dbc1404bdbafc823f8dce27d41b958d460",
+      "core/kernel/index.html": "sha256:7ee53d91946cddd26a5d6023ab47d8faa92ac91dd515024abad9a5a2a803de33",
+      "historical-documentation/index.html": "sha256:881fa425e413ea2a7735c03b3042c9def971b222949453ee44240d4071c3445b",
+      "index.html": "sha256:6dee159e60eb2f3f9a5a6742a12e6a7b437900692b7f35c7d4d6271adc8ef96a",
+      "latest/api/python/index.html": "sha256:b9ea8f9d11360f60a19f7d9f8c14f5d4d4aeb286eabf01d91e5cd2078f7e4400",
+      "latest/architecture/adr/index.html": "sha256:27c2477188db0e37d4e599903d257ba1ecf391f59814e8b621f48c6daac9c55b",
+      "latest/architecture/index.html": "sha256:a4c52e33f12e7c9826f5c80701f7eff2865a916804a6cb14cf411ebefb888284",
+      "latest/architecture/polyglot-repo/index.html": "sha256:a4a4f6f79c9b47ac060ebdd2023b56b97f14df45f2e30b51cae5c3a755790b4e",
+      "latest/bindings/csharp/index.html": "sha256:8a8b9a83c1e459c63409df2c45f988f7eae01cf29cb5f8eeb7003f7789ed8373",
+      "latest/bindings/go/index.html": "sha256:4f24715fbfbbaccc12bff603a46cf3607ac288e8f6bdf2907ac598a14871dd0a",
+      "latest/bindings/index.html": "sha256:098192d610edd67ce5bdce6da24d503f91268b819f365b4a7402e50703ec58e4",
+      "latest/bindings/julia/index.html": "sha256:b0ca6a5c1d3f28cbb196e19e8ca7c6a4cf81957bcd5ab51f38f93dd3fa1c6dff",
+      "latest/bindings/parity/index.html": "sha256:9e27da7094a9bb8e6249377e34b9b7ad836a92bd187348632d93bfd7742f8975",
+      "latest/bindings/rust/index.html": "sha256:8058b11fe858ab7b318d2deced4f2fd590501c65cbcb01033a6760f6349981c4",
+      "latest/core/arrow-interchange/index.html": "sha256:15bdbfe9f43752ea60fd06b71531faeb3a618a26922c9d686191872cf60804ac",
+      "latest/core/diagnostics-contract/index.html": "sha256:eb22fbdc150219229145cf75fd28199f18e9b36dec4835584766ded7db65bfa4",
+      "latest/core/index.html": "sha256:b992e64c009368b39a38a6a48f35f7ff9bdcdc1a0b79c9c76ec755bcf1c0e1f1",
+      "latest/core/kernel/index.html": "sha256:0038d043e7679c68fde73cf4c2ce965d5470fa81c9c773e3944cd1d876427365",
+      "latest/index.html": "sha256:eefc582e75162198ad0146bf2864bd68141aeb8401bb3a53c2897dac5899896d",
+      "latest/maintainers/binding-conformance/index.html": "sha256:d96ea160d08acaa5da9db40d6b89c6eeb7585deb193581067c4b51fe1055625f",
+      "latest/maintainers/compatibility/index.html": "sha256:75674bc157af5775faab4d4866acf794022c0766eb892339a88f336e9da22489",
+      "latest/maintainers/deployment-readiness/index.html": "sha256:9015c6ff84ba70004c8058638ae7184824f636609bf94572002928bb1cbc9c42",
+      "latest/maintainers/deprecation/index.html": "sha256:c0615114e686b1b58fd929b7751d79b38b120629ace640becdd5450fb5f615dc",
+      "latest/maintainers/docsearch/index.html": "sha256:68363171dd24dd84063ae809f323b509628fc500413456b8b8e4d6dd50af6333",
+      "latest/maintainers/index.html": "sha256:1b946f213b942297be3cbac82db3c6f15ffca779d606373399f817828d95b552",
+      "latest/maintainers/maintenance/index.html": "sha256:fce00e717a8abcba49c425dac0761feed9799b0e297fdf66f3710c7ac93d459d",
+      "latest/maintainers/package-health/index.html": "sha256:f18228bd87b744d91ebec87c015e6f5cd934f22a322a4c9e7095fd456a2357ad",
+      "latest/maintainers/plugins/index.html": "sha256:e57ab277bb60bb60cf6b088b8adc8e137fea3808d4fa74d83d420cf852583041",
+      "latest/maintainers/publication/index.html": "sha256:6d2106c019959790dcdf0999ebb7692556f0e8818c35ff5718f28c39c13114c8",
+      "latest/maintainers/release-notes/index.html": "sha256:6dceee85dcf9a7941fff9cb45788de7f2886c9a0fabc7eb1644457aee8062d0a",
+      "latest/maintainers/release-readiness/index.html": "sha256:4ccf7bcf39e28041ad4273a307968327beb745caee61dd8cb61b8cb5d838013a",
+      "latest/maintainers/runtime-logging/index.html": "sha256:82847f804d8aaf1d2aa1ac5085a09c9f7d3d73e23b865219128e4fca2af89b7f",
+      "latest/maintainers/stability/index.html": "sha256:bf35e8cccb54860b7cbdf3ca3b3c270680a738ea06ae03b72f66395c4d3d6c14",
+      "latest/maintainers/support/index.html": "sha256:8c8273908efc855bbbf92b290a06d6faef1437cfeba6fe6264b1d6729bc01fae",
+      "latest/migration/archive/index.html": "sha256:67042fba0186e9cea8829d0c39bf6e903a1778f8cbeab7b831806327d4feb27f",
+      "latest/migration/index.html": "sha256:3f8547d5b23a219723b14a326d5e3ac7f64525f2abdfd31e8cdafa38391ee447",
+      "latest/migration/redirects/index.html": "sha256:baaa17c1c8faa3cd09051b4da8f8a97ac663e1e27ca52abdcb9471b5a76eb7a3",
+      "latest/migration/references/index.html": "sha256:c8f6901ec6b3be30faf86b70f675ace1843f2858c3b56178f98638682d898328",
+      "latest/migration/validation/index.html": "sha256:446c3df2afde64389886bd9ca7a3278fbfdf559289af696efe2e472d5ac2199d",
+      "latest/operations/abi-compatibility/index.html": "sha256:857d121b85ce8cab31931f2c3ea557d965b37f11fbd336c5e79ae242c4cf8499",
+      "latest/operations/accelerator-parallel-execution/index.html": "sha256:15d4e23b8734355c86d02ed4f664f25fdd1536f016388b6c6cc5e6c96a755892",
+      "latest/operations/community-readiness/index.html": "sha256:c09ea936dd1ae185cc20f2320c49dc3d40fbceae02a4c52d1f681d0de86148c6",
+      "latest/operations/governance/index.html": "sha256:08d58061ab832c7205718cc50b59ce0ba3e0192bd42b294282bc8aca7f547cee",
+      "latest/operations/hpc-readiness/index.html": "sha256:1a1d99cde487eb75186af0bcaf2624001eb7deb671e57246f293c7c3efbef50e",
+      "latest/operations/hpc-registry/index.html": "sha256:e945cb13948dffc21e719d4e2f8f04b6b9727b60e60ccc340969256d182ad260",
+      "latest/operations/hpc-submission-packet/index.html": "sha256:ebb9bfbd1480217039249a0ac977f69858fe600e12e595858578e065e1c67ceb",
+      "latest/operations/hpc-submission-workflow/index.html": "sha256:cbc8700d24f99ea32890a1c3b0993ee980f4669296f25785193652d42f649ab3",
+      "latest/operations/index.html": "sha256:4ee9e9d43ad588271cb6b9f82a321b166f62086c9567cfa5fb5bec7c143d3ed4",
+      "latest/operations/polyglot-registry/index.html": "sha256:093f3ae30a01c6b4806481930abdf59fa219e2cddc0008222b742f5315629ec0",
+      "latest/operations/registry-submissions/index.html": "sha256:cad969767d59fd85b42d08a71e545ba3cb9f734a156b8fd54bdd7d2e3afcece8",
+      "latest/operations/release-maturity/index.html": "sha256:34d78f9609a069be25b2f6134cc7a5079f82a02d261b64bc496f0b797ce39806",
+      "latest/operations/remote-execution/index.html": "sha256:e66faec24eb71bfe7751ea18974405c57b84c93ae039b3cdaaa80d3bfde9d4ea",
+      "latest/operations/roadmap/index.html": "sha256:83ec80754aaad15fa79d959ab58100f8e8ea3d0a8bccb35b91b9b80bdd786a4f",
+      "latest/operations/rust-core/index.html": "sha256:a9904dcc60e9eccf927b6f708740881cce497ae9381a0de6813cb1be6a42e678",
+      "latest/operations/scientific-hpc/index.html": "sha256:8b2baa09dd9d3347fd0a50553ed236ea3d9f5f4b24c2001c93fb57613b8b0d6a",
+      "latest/operations/submission-dossiers/index.html": "sha256:429f016c427687ebe8d1adb557f23635ca36599218e81ec26695f2b911c128c7",
+      "latest/operations/xla-backend/index.html": "sha256:1a9edf1d3495fb2663f0af44b5c9f67cfa514d78e8773908ab10af2c3b644bee",
+      "latest/roadmap/dataframe-engine/index.html": "sha256:82b76eff883f1f2834dc4002826973cd289598017b7143d3c34dd8b0c18f3038",
+      "latest/roadmap/diagnostics-uncertainty/index.html": "sha256:364f664c1bf90a1e95a1e3fcfc14372c38fa239e6ab3b44887ec8ba60b50f13b",
+      "latest/roadmap/probabilistic-inference/index.html": "sha256:225018c33d52f36e2b78842458a18987502d04f7cd62e193bec81c5de415b92a",
+      "latest/tutorials/advanced-diffusion-inference/index.html": "sha256:414715bea923c341f9d669836bc45cae5905f5561e019455174dedd78c8ee319",
+      "latest/tutorials/advanced-runtime/index.html": "sha256:48f382d38a9d12ed1d317d7c1f3ba6bec34e6d9c5441dc4497a91ee9eb61823c",
+      "latest/tutorials/arrow-interchange/index.html": "sha256:fd42fac74dd21400c64a95709c53b9092c77854a10a7887ddbbd6c4e0343fa64",
+      "latest/tutorials/bayesian-fitter/index.html": "sha256:3642e4274e6e8831e8a9622ba0943855cad298f2f7d9b04aeb02307d61f8f836",
+      "latest/tutorials/benchmark-workflows/index.html": "sha256:232966105fd8d2b7640e2796a99cea8c1571c27a55cc7342d856c1155d56b7ae",
+      "latest/tutorials/counterfactual-analysis/index.html": "sha256:eb1cca0ea138a3fa1a8b4d0d5bb29bd1d90ed2e9f6f57d8464e5dac95a6cc54c",
+      "latest/tutorials/data-ingestion-provenance/index.html": "sha256:2a149dce99020f72342ac8ef252fb51a114772ec0e3e41a3c2b7615e80d0ef66",
+      "latest/tutorials/decision-reports/index.html": "sha256:c703ccc3c77eea7c4beba3475f3fd1697d0b6b1e5b7f3f4cc45a2e7f821aabc3",
+      "latest/tutorials/diagnostics-contract/index.html": "sha256:6f54d50a324d4157231c3a17f34fbc1a091f5da4eaa02e5d67b15f0ae26115f7",
+      "latest/tutorials/functional-kernel-contract/index.html": "sha256:30ec56122608b88eb57046a35f2055fb91d2c92b3c9c8547215c0bd8861712e0",
+      "latest/tutorials/index.html": "sha256:d7cac44f464794d9e7fd26dbeeb0b7892a75381ba6bec0bd3eb02e52227132a0",
+      "latest/tutorials/jax-backend/index.html": "sha256:a7e2306269449163150a580eda168bc68506d4e9ddb43c5f160d93a3cb1e8051",
+      "latest/tutorials/kairos-simulation-adapter/index.html": "sha256:30d9bb22c870e3d7de692b7981da07aa8526f991e3218d722b1f4d0970d1c8c4",
+      "latest/tutorials/multi-product/index.html": "sha256:660475d78a7f8c10e3849c55f224eff42fa7c0a74278f27ffe7de37546aabe6b",
+      "latest/tutorials/ndlib-integration/index.html": "sha256:baa708b527c0bfd0002c6726a43c543f69bf172e600e8636a6d764717175369f",
+      "latest/tutorials/norton-bass/index.html": "sha256:d3f7dbca78426270b8ea7a9314d149ecd8a03f2820fdfcab04651c2c6a91540a",
+      "latest/tutorials/plugin-api-stability/index.html": "sha256:8a24b3d50fc8c7ad6ec6cdd0b99b218972dab83353f3a29810661a02b8ebb1a9",
+      "latest/tutorials/seasonal-data/index.html": "sha256:f862e3d3ff594c82149dd7db3d0a84e877d7c66d266f6e8a27df5bc2db18ed78",
+      "latest/user-guide/advanced-modeling/index.html": "sha256:786910567223a5be16225add298e488360d116c172293b650bab1d7964a6a431",
+      "latest/user-guide/backends/index.html": "sha256:29569bd1ffd0c67fe964dd231d51f619e2f76e1dfb5f3adfdbce652af40886c9",
+      "latest/user-guide/fitting/index.html": "sha256:ba6eb26c4c48a1ab4d6659508ab2a3d2be824c9391db3e4dabf4faaa87ee05cd",
+      "latest/user-guide/forecasting/index.html": "sha256:506524e386cd292a954e2946a3215bd241f0011b11a268ef54ac866c0db15318",
+      "latest/user-guide/getting-started/index.html": "sha256:ecb96dd3a62b05fb813bd2b05bfd03a696953888c957dee940e37087722cd5e0",
+      "latest/user-guide/installation/index.html": "sha256:76e10c349d81f5486523157772cb02a8052e12c8d308f44a6284f74738f56e3f",
+      "maintainers/binding-conformance/index.html": "sha256:8fbd5e45e65e11d199f1d71c954f645cb14d6b25f4b0eb68da54bc4fc7e6d319",
+      "maintainers/compatibility/index.html": "sha256:55ada547259ac6e4944bef94768f3c338b462d2db0cf4b0c31d92618342402f7",
+      "maintainers/deployment-readiness/index.html": "sha256:d1a4b04407d5408cfb188f17c6ae75fd5e096f430eacf2c40a20c05d67762046",
+      "maintainers/deprecation/index.html": "sha256:7b485d27e6c21501b316a80ca25ecee245a0ad12e9477efe3d69be7b823eded7",
+      "maintainers/docsearch/index.html": "sha256:b093e4990c55982eb65e60c44f70fa051997342b66695c65a9ee23cf491ed4a9",
+      "maintainers/documentation-quality/index.html": "sha256:6e912a83c28ebefa158fb934e7cba3290eddcf4c20f5f57df6cfd91df654f073",
+      "maintainers/index.html": "sha256:35edf6c4d082ae3b2e564b29c895900975681be99dbb0c5ee993e1c116acf0a5",
+      "maintainers/language-conventions/index.html": "sha256:e771a850aa4656b8040130ead603ac459062589d3603fc3b04ab8b2fbc9d1007",
+      "maintainers/maintenance/index.html": "sha256:555bbb09e0508d0f977a8b33bcaa8294a07a4a29cab5ee74bfae55fb30f660a6",
+      "maintainers/package-health/index.html": "sha256:6b85f73b2874b5575f06460ff0ffd7c8337f47609630fc6435b19dc6df87c5cd",
+      "maintainers/plugins/index.html": "sha256:5d67e039865959a5d07e2e13c2f44b0ccceca3cc39dd8c435044025d8496edb4",
+      "maintainers/publication/index.html": "sha256:e103704e501e317d1a396ef3b54ccc401cd29d350889fd31b72dddfb453b3155",
+      "maintainers/release-notes/index.html": "sha256:8dfff6da88730ee9073c98dfd1466667054ddf43b7d3b934c29f416776be4230",
+      "maintainers/release-readiness/index.html": "sha256:b7caae711ac8994a667325fd08ca1c303552657161fc92059179735b80049726",
+      "maintainers/runtime-logging/index.html": "sha256:1bd0538929e57119c03b4f45ab32e1bec40145efeb4068d45d36464f8b8921f9",
+      "maintainers/stability/index.html": "sha256:01cc66774fba8ae352c1858b5384a8fdcf99b9e20102786633c8edd68c7f3381",
+      "maintainers/support/index.html": "sha256:a91baee4015df49879b6de25d051136511403a65aaab60913874c0232e206827",
+      "maintainers/test-acceleration/index.html": "sha256:5f7b339026024fbb756f6f9f88cab0f18712ee66b0b25c0a1854b85d4cc0c3d4",
+      "migration/archive/index.html": "sha256:49f47c2197c68cb0f18b9af287314c26a821ab9122bbbe50fe3bbad82e9a5c5d",
+      "migration/index.html": "sha256:f07308d973367bd42c8b838e2ed430d73f5f42a8d611769a90cf54f578f2cf8c",
+      "migration/redirects/index.html": "sha256:1efeaf7794134f9209978b3566dba183de53f8bbf4a6b49690de50e9537b702f",
+      "migration/references/index.html": "sha256:0101ecbcba3476659558f3ffc4e2a9e6c08b56a7016dd9d3d0e6a6a67d88beaf",
+      "migration/validation/index.html": "sha256:388e4239d46d48a9e6b870c6070f27a25bacb140a9cb1c29ac0c7301f30c14a7",
+      "models/index.html": "sha256:aeff7cfdb0a30e8c5b34c6ba75867b5a574dfe878d72740cd7c59c31668e4af3",
+      "native-migration/index.html": "sha256:5f03d84c8143b1d07618c007fe3618373aaaf5fa01c4ea8e8d2d418d66a01e16",
+      "operations/abi-compatibility/index.html": "sha256:86cb07298504f7295e4e358215e3d8691c55a6aae9506fc40126771daa37cf31",
+      "operations/accelerator-parallel-execution/index.html": "sha256:6d12e415f6f9d3b38588fcb89f011f08e570cb06130209877003a22a900f5ac8",
+      "operations/community-readiness/index.html": "sha256:464648f57dc2b6d5bdaae6c1106c2f96203f4e733da29d344c4ee9edb5df950b",
+      "operations/documentation-standards/index.html": "sha256:d07e8a1fe2251d29d6bdc3b313de8676dce45e4b54dbbc5d396008fd452573fe",
+      "operations/governance/index.html": "sha256:2ce1a5f9d27a691e8ed14eddd1755c86bfcc5663cc39fb1ef6a9ba11e0ff2ea9",
+      "operations/hpc-readiness/index.html": "sha256:e7ffc5aa809f8a4b13bc0d2fb466c39c135bc9f7fa78b02da792e9c004714e11",
+      "operations/hpc-registry/index.html": "sha256:d3bddc16334ed1d9648345b5cc2123ad54e9fe93cce9aeba03876080349b28b1",
+      "operations/hpc-submission-packet/index.html": "sha256:eafe8df952b77bfb380e2135e1dfdf6cad1368866466f38dce50f574027dbb97",
+      "operations/hpc-submission-workflow/index.html": "sha256:69892d3c946f56a14d7870e38fe8d8186fa0f88763702ea7babd6ce76e30485c",
+      "operations/index.html": "sha256:8685eb3f92deb89c100e7401f9054f4aa5d9d641769663d7c1cb26ede8eae4ee",
+      "operations/polyglot-registry/index.html": "sha256:af00d6a63d4782eada6d5e3be157a976c0f9418c0415683c4832ca034be3e0a1",
+      "operations/registry-readiness/index.html": "sha256:bc732b18a3ce198c784c7bcc6c8a57098910184c98aa20bfe6969b9b56fe2517",
+      "operations/registry-submissions/index.html": "sha256:c255cf1da111d1a48432c2c7a323cea5a9a7adc1b2ea17fe5f7700c9b9ac1b68",
+      "operations/release-maturity/index.html": "sha256:d9824931c77f6c9e5ea42106fe16cfa805eb58bd323157cc20ce4ef5c8427712",
+      "operations/remote-execution/index.html": "sha256:05a2269b6d3a883e40b3d134a9f3535b83ab297a3a0b3d0f2ae3346227dc143c",
+      "operations/roadmap/index.html": "sha256:8480ee9f4a27f90acdda8fe6432552cdd4c6828e14d6298c985b4f762b89f980",
+      "operations/runtime-logging/index.html": "sha256:2ba309f10fdbe51e7f4a6f5c736ca919952725eef4d2477544012b89f5fc0806",
+      "operations/rust-core/index.html": "sha256:c96b36f77dc687be211f1ac61e6a9ae369ea081b1d199f0ebdf2c19e77103568",
+      "operations/scientific-hpc/index.html": "sha256:e871c607434d870ce785b9c3b4335a18833a5b896608404c5831bd65f8ebcbd3",
+      "operations/submission-dossiers/index.html": "sha256:9943e5d3e56f9c4f6c2830e90776fc99ce3856dc461ea271e4e6192a454baecf",
+      "operations/xla-backend/index.html": "sha256:2cd6f8becdfd0ea18761f84e998c4dc6d513c33cbbad2e4dcac545678d2d41c9",
+      "pagefind/fragment/en_1293e9a.pf_fragment": "sha256:765ab3e4911cd0c092a1f3e3c88bedd9074062ae22bc0422ab4dac834373f87d",
+      "pagefind/fragment/en_142e8ba.pf_fragment": "sha256:7f3eaf2a34f33683a76577711ed0cbfa8b190be6361e72ddb428b714954b8036",
+      "pagefind/fragment/en_179afdf.pf_fragment": "sha256:ea1de826b3f06c495d22cea7b7140c5ff3c9890f21d9732e11ce3fba5dbe04e0",
+      "pagefind/fragment/en_18951f5.pf_fragment": "sha256:2f7a002855ef0a76835d2cc7591ba29f1eb6fd96dcff927a27f8e3d64f6db05c",
+      "pagefind/fragment/en_1e6aa23.pf_fragment": "sha256:b1323caf3ca5dcad596e7e0310aab7c24bb96e79f62662304e70ed4c7f7aff33",
+      "pagefind/fragment/en_1fcf3eb.pf_fragment": "sha256:0ea460482888fef4b2f744ced9aa472af6c3ab8e2abe603d3705fae909ce1e3d",
+      "pagefind/fragment/en_2485a89.pf_fragment": "sha256:4054bc23f988aa42f5e6583e7b422974af12d9cdd615a2c904a4a30fbc48d01e",
+      "pagefind/fragment/en_288ae3b.pf_fragment": "sha256:5b47c193b1b9d52b4caad432cd780951414f29f101c3a60ea363fe35af15de8b",
+      "pagefind/fragment/en_2b0186d.pf_fragment": "sha256:a8238148efd4d655a1e2091abc79bc95bcd40825199d6782f3655be9fa1a8858",
+      "pagefind/fragment/en_2b912fd.pf_fragment": "sha256:33f331b178fb88964cc6df238d3dafce25e7b8937bceb19fbce5f8d1b418fc26",
+      "pagefind/fragment/en_2eac74c.pf_fragment": "sha256:42dc6750a18e1857286035f5aed25ef9b28ca2be5593eecb8ea14985823fcd35",
+      "pagefind/fragment/en_2fb9fa8.pf_fragment": "sha256:adffb9a0381c3d1ec3cf83913854778d25331af83036d860a548d3eb036c5c21",
+      "pagefind/fragment/en_3263319.pf_fragment": "sha256:2507f88213b5cdc3995082347b56c54d320bb5593d7dd9be3d6847b5c0dc7dd5",
+      "pagefind/fragment/en_343a347.pf_fragment": "sha256:dc9e03d096193e40a9a711d98bb4fbe27e16ed93a4289421139c797f67bcbe76",
+      "pagefind/fragment/en_3548f17.pf_fragment": "sha256:58ff874c9a2da273598e6a5c34fb40ca5c448cda5235c7a25a6da46f5a04666b",
+      "pagefind/fragment/en_37af573.pf_fragment": "sha256:74939fa580f610076b033b18a4911df9bd18eb20f6d9d9a13d579ad37e64b52c",
+      "pagefind/fragment/en_3cc8ffa.pf_fragment": "sha256:645f581f890b27ba565b241d91f244fc916edd6ed687cff0f2a035ed85b7fdf1",
+      "pagefind/fragment/en_4bdaedc.pf_fragment": "sha256:e3a19471e5dfe5581e87093b7c0c1eafe2623d0f8b3fae930905c42ec82f3dbd",
+      "pagefind/fragment/en_529bbd3.pf_fragment": "sha256:ecf1dca12141b3c534e298c6a4838e166b763bd15af5197332069d2c2febb9b5",
+      "pagefind/fragment/en_54157e5.pf_fragment": "sha256:26b449d61acad38941d7c135c1e2a99a0804ee9ef89bb2a04e9cbfc7c3a57649",
+      "pagefind/fragment/en_582fc7a.pf_fragment": "sha256:6493dae9ba393ebf27e5343630ace09ca7dbe9b037f2baef8905a316bf7b47df",
+      "pagefind/fragment/en_5dcfb39.pf_fragment": "sha256:43a01e5533a7b12797a72d9cec85c8a94a311880dadbcfb6caa9dfb22bd005f1",
+      "pagefind/fragment/en_621d62b.pf_fragment": "sha256:eeb79831f49258fb75073fde8142c99d1f296187319cd21c7051087e49d66b68",
+      "pagefind/fragment/en_62f43b1.pf_fragment": "sha256:08e00b2433aa50665e64391e049a8d095c3a8fac75c477d41666154232cd6c99",
+      "pagefind/fragment/en_6c15675.pf_fragment": "sha256:b7587a4f0e0ff69ec2b3711819f1f01a6fc3bf23b22ada75d818bbcb1e50a668",
+      "pagefind/fragment/en_6fefc8c.pf_fragment": "sha256:1ae0181ba8f42d049a2b9e22644a29be6112726c432cf17a69e203ba99660f62",
+      "pagefind/fragment/en_78a0904.pf_fragment": "sha256:67ae1a354fa90286a8cfd4113dd0be5706dff65f70d489306f0417adc4907e7e",
+      "pagefind/fragment/en_79b6ac4.pf_fragment": "sha256:dd39bf1d4b1665ba656b210f257560737f855f12316a557023dbc5d17399ba80",
+      "pagefind/fragment/en_7fb22de.pf_fragment": "sha256:ea5c19c1a8ef8137b610d62b205c5fe7ccbcf4d8ca9fb9b452184aff383dcb1c",
+      "pagefind/fragment/en_80bbe87.pf_fragment": "sha256:295186d2d204ca314ccce8b5286bf06587497eb66b048ed5f80c436ca0db25b1",
+      "pagefind/fragment/en_84459f7.pf_fragment": "sha256:0c722af273dac1723de482f4d86d68bbb3d8a47ddc54c4e03799fdfba6566077",
+      "pagefind/fragment/en_8481756.pf_fragment": "sha256:f1e3ae5e2d6a1083a5026e208f2ec9a5d1d5be1dc31c02bbd8c9a686ebdaf4db",
+      "pagefind/fragment/en_8782649.pf_fragment": "sha256:da2538d00d78ed0b32767d45aa68ce8ecb1df77c7d01fc9afe5704f0404e68d1",
+      "pagefind/fragment/en_8b188b5.pf_fragment": "sha256:2c4efba02db0973f1978b6177d786f5e63ebc1b4c9406aad20633dd7f3425f27",
+      "pagefind/fragment/en_8d8b1fe.pf_fragment": "sha256:e8a736ae0b93daf34c2e272b9a0088f94af86346ce4a2b5a279d8984ebe69255",
+      "pagefind/fragment/en_8d8e946.pf_fragment": "sha256:89155ed21ceb403999146632546b28ad0db73023fdd65e813c74efec373080dc",
+      "pagefind/fragment/en_90c0942.pf_fragment": "sha256:254e377d4c7d49ce82ee08a0aeef602c35ff39fb34f4b426f54f409c919a5901",
+      "pagefind/fragment/en_946465f.pf_fragment": "sha256:9c0a8fb56fff9c20a86d6e06c032be882e8ed6ac898f820ac9890d1aa40554d8",
+      "pagefind/fragment/en_9f73971.pf_fragment": "sha256:66b369ebaced156fafcba7225c33db4a7e189713ac5f8522737d866dc52c95c3",
+      "pagefind/fragment/en_a019c07.pf_fragment": "sha256:f79720ea0ab95790c4e383b3789d0624f0c15cbb3e38095a93368fe1ae361acd",
+      "pagefind/fragment/en_a1eed42.pf_fragment": "sha256:b047cbfbda14e3dc5999bcd906f7acc33a61147ff9a3a67ff041ed7e19c459f0",
+      "pagefind/fragment/en_a65ff5f.pf_fragment": "sha256:a3e52d6a9353377b3f8e2593f6627aa9e83a0e44c70bc087f1f01928222a8f40",
+      "pagefind/fragment/en_a6dfbb1.pf_fragment": "sha256:fc76ea21659ba74779c94f7d6aa36cc0aaaa812390cd16e454c43b05f6d6e346",
+      "pagefind/fragment/en_ad2f9e3.pf_fragment": "sha256:2bb01bb5e3c9d6ad5bb67701340ada7ccc9ffdb2e8be3a639932cd68c2b3e896",
+      "pagefind/fragment/en_b489882.pf_fragment": "sha256:6c920ebb8dc7d9a40d5e78f80d63b359425c093ea85f76d991372070b1e246f1",
+      "pagefind/fragment/en_b9c3828.pf_fragment": "sha256:6b64d6172044aa5e0e751750f022dd1bf4d43e047c0fa448ec6258664cfb11e3",
+      "pagefind/fragment/en_ba15ecb.pf_fragment": "sha256:11c66f0c10efc38b48b5ea0ae4bb86a15c9a9b45a794cc5c2229c0bda73e8029",
+      "pagefind/fragment/en_bcfa411.pf_fragment": "sha256:4b5749322f82d1597d976620a59365fd2175e3438c7df429fbc280e4c2ec5d87",
+      "pagefind/fragment/en_bebcc0a.pf_fragment": "sha256:2b3deff4748e162bff40721686abcb2782f3090a4cbfafcd2b95a7129f41aba9",
+      "pagefind/fragment/en_befe918.pf_fragment": "sha256:461f9693f76d865f9a6a883c17b651ef689ca47747fcb097f465a986e7470536",
+      "pagefind/fragment/en_c4b7e57.pf_fragment": "sha256:b960b656e1559b8335242e9d3e16274c13f60a221f86e66cf73337b2dfbbc4f1",
+      "pagefind/fragment/en_c70834e.pf_fragment": "sha256:60315cbb32efe701b56bd7127a22f21f901488d88678e0873844dd41e7d26449",
+      "pagefind/fragment/en_c783a71.pf_fragment": "sha256:b8fb60fd83b934628bb9f3522bd51ecba70940b96dffe7d5fd1ac8831a1bba05",
+      "pagefind/fragment/en_cc74138.pf_fragment": "sha256:b9883171f896e346baa6bca395238f46559aa0669e3a67e537138e35a49d3faa",
+      "pagefind/fragment/en_ccdc7a1.pf_fragment": "sha256:32024614ee1e3aaacd34e1a77807b871d47def4ed92199b135ec0e8f9fbfc792",
+      "pagefind/fragment/en_d1e97f2.pf_fragment": "sha256:9e4a5ea8577f0363c876c0ac8683114afb518c35ef887ad51e6622e19ee4c047",
+      "pagefind/fragment/en_d62f424.pf_fragment": "sha256:597f323192c637eebd7bffd7f7eb2e149a0dbb87ad13551bd670b8b0b737b4fa",
+      "pagefind/fragment/en_d63d4d4.pf_fragment": "sha256:c1cc921e2ecfb5750224be6318e5a962de63b85f8a5e62a1f97290c868491bcf",
+      "pagefind/fragment/en_db69713.pf_fragment": "sha256:dcfb04c3bd825445e133f7083065c20b60da732eb7198b3adba8a381eb5ee64f",
+      "pagefind/fragment/en_e283519.pf_fragment": "sha256:c3a5304cb2a39cd29f2647386c29366aaa9b4bc454b2382e1350af8dc4562787",
+      "pagefind/fragment/en_e64133e.pf_fragment": "sha256:e550aba4d968e1d6137e11018f67abf1ab48f987b1b25df19b1b6d6b54c6dcbc",
+      "pagefind/fragment/en_ea2865a.pf_fragment": "sha256:8f7480b8240466e4d1594e5f30e6ab394dc743b0873d9071b58a2fa6e7a74de8",
+      "pagefind/fragment/en_ec1ca46.pf_fragment": "sha256:a0d462aef46688ae7e6c4b2606db0f6a3c3f3f03391de1e9b160af05f0452fe3",
+      "pagefind/fragment/en_ed8e7fa.pf_fragment": "sha256:afd5a9b7f1c9b3a922f2dbd43ba714709315cda048598b7607cfa10a179aa118",
+      "pagefind/fragment/en_f0db9bd.pf_fragment": "sha256:70a8c5cfbc1c14a689908e668e9a6320b8ce803b4f949f5c2c8f95e08f4b537a",
+      "pagefind/fragment/en_f7dfdcd.pf_fragment": "sha256:41aa36ba9c9b0e8e60e70e2a023c69d744bf704606d6986876a281b9093f3e2e",
+      "pagefind/fragment/en_f8c6b8f.pf_fragment": "sha256:bf8a46980be5bada6b8079aa9d99e26c821a57f7516f4bcb039cebf9bc372ac0",
+      "pagefind/fragment/en_fd769eb.pf_fragment": "sha256:83950cf8c36c0f59e435bec60ab531ec0a37022a63c6755e86031df4ef57b142",
+      "pagefind/fragment/en_ff1e58b.pf_fragment": "sha256:5b7ad06b92e18fdaa8d5c3a7b791e7f3632e65f54a564f6b9e41e33e691a2a87",
+      "pagefind/index/en_545b19d.pf_index": "sha256:e117b1e97cc60ec07c15ca0fa56df2a4b5dc768604345153ae4516c9580fd0fa",
+      "pagefind/index/en_812939e.pf_index": "sha256:bddbc4686a9fafc660fdfb3690deafc33d7d8d5b863a5f1c5aa1df5b6cdc4580",
+      "pagefind/index/en_8b538bd.pf_index": "sha256:9f63eae433c5bac68d4a6b54fe6507a22710e879747a6a040537da3b2aeeaa4b",
+      "pagefind/index/en_9aa6b14.pf_index": "sha256:c11f7d15b6392d34c2d499f6aae445a4c7d6c84974d5cb11d0a98f73b2d7ce15",
+      "pagefind/index/en_9e1bc49.pf_index": "sha256:8cdc32fdc11e1e6d01282fda5245ef1f964f65bde3f453f6ade54156d8e815ff",
+      "pagefind/index/en_f02ef97.pf_index": "sha256:bab0e19dfca399ae0b2545660d100f807f5ad3098e34adb3a0a5fcba74e65ff3",
+      "pagefind/pagefind-component-ui.css": "sha256:12a3ae7abdba2f00a7617b861f7e0f915ce54c17c47d568e1108103ecb228325",
+      "pagefind/pagefind-component-ui.js": "sha256:f7a4ba1403c0dfb23e84e18b4480f95785035d21e5b45a05a08191bd87c84944",
+      "pagefind/pagefind-entry.json": "sha256:f4775a8ae792b699b1ba1b4ad649fd5cb69c3b48956b83171a5b534e33cf5d02",
+      "pagefind/pagefind-highlight.js": "sha256:7aab88a3c64047708f6ecabe1f094ecc48fb76b0895e64d56593f335c5d2ea0a",
+      "pagefind/pagefind-modular-ui.css": "sha256:653ab29e4de5629f6ddf5f6fcdf5d2b3eb539a8c07fff8a56b8ce2156a570788",
+      "pagefind/pagefind-modular-ui.js": "sha256:f3efa0f74b305ccab0bc9edc7c09ab69867180b4c43093d84bb9b508ac4ec32c",
+      "pagefind/pagefind-ui.css": "sha256:e113b816110ed07b017613e901addfe635350f2a5b84990aa76c91a74b158084",
+      "pagefind/pagefind-ui.js": "sha256:07b2a55750c180546523435461fd44f0612531bcdc0e8a069fe00eef7741d1f7",
+      "pagefind/pagefind-worker.js": "sha256:78115e3651f11d29f03a1f3eb2776a7901c22532bdfa23b7ae73c693c0867bda",
+      "pagefind/pagefind.en_8d339ebfb8.pf_meta": "sha256:7753b471e6e206e0f3d209d941c5259cda80d313dfebf831132a820f8ff00b2c",
+      "pagefind/pagefind.js": "sha256:02746cc529f88f853275720dcb1c2b6a18b0c7a92b73fae82ca2738e64500bcd",
+      "pagefind/wasm.en.pagefind": "sha256:ccf429efc12b42cf2131ebe40fab328559bf0091f06c8f8b8b06a117edf4fcaa",
+      "pagefind/wasm.unknown.pagefind": "sha256:7add525659192e7baf940ef743cc052098e5fc45c94462179a59376d5d1bdc74",
+      "roadmap/dataframe-engine/index.html": "sha256:2be2e235ba10af7396bde4b2bcc0ef0cb2e0d01653b5e05f42ec18bac802d8b9",
+      "roadmap/diagnostics-uncertainty/index.html": "sha256:a8a5ea949ccb5e3d4f1ec034562744d40b0a6f465e54506b423d3becbe49bf89",
+      "roadmap/probabilistic-inference/index.html": "sha256:56c1a304aed1f6d289e51c8fee5ade240ac9a40fe3042519cf8d889789bbe345",
+      "sitemap-0.xml": "sha256:fe7db672a563de8195b5e3910653e5129e572d3c9793aa350b8301ad3e8e4292",
+      "sitemap-index.xml": "sha256:ec2dad9cfc52cb3cd0575c839a390e7d9567174f887029a80cf92f260bb28087",
+      "tutorials/advanced-diffusion-inference/index.html": "sha256:c29f9c8aec7b8497e7f3d1ee3c2653d74ec2d15cc3b063ec27aeaface7eabe04",
+      "tutorials/advanced-runtime/index.html": "sha256:d4e6b335e6bd7d4a2533e8c1d3e0bbeec331bc33caf2aac8fc0b28e3ae728bc5",
+      "tutorials/arrow-interchange/index.html": "sha256:11f8ba18a1c1047df1e0210715fb072beccebcb366b2df551f619c044e1dc51b",
+      "tutorials/bayesian-fitter/index.html": "sha256:12dc3e8d2d62f28ecf90496c738db1c9177b377934321ea4156bcb9b9b595ff0",
+      "tutorials/benchmark-workflows/index.html": "sha256:1464968b0f35952859a7ff8384c201629f8d87148382863514210f3ff8ff0860",
+      "tutorials/counterfactual-analysis/index.html": "sha256:2bbc9afae872ad3a70c2a3b671c71475cff2fcbfc8b7b692db53ed029657ba7c",
+      "tutorials/data-ingestion-provenance/index.html": "sha256:49e0b6c4d7cf194c078408104287b6ed96a47611f2858c978d14f19f48f443c7",
+      "tutorials/decision-reports/index.html": "sha256:28b16d8492374833ed206f29461b306ce871c57004bbdbf53b5095e0d2970522",
+      "tutorials/diagnostics-contract/index.html": "sha256:cd27503cf7de97650b1d1cef055bc6f5a9bd6b8b8feda95629b9bd1e28dd9a06",
+      "tutorials/forcing-and-time/index.html": "sha256:4145cdbdc22fa6ec394178b6ac27b2d88288c5b030d0d0ed66736b21384385d5",
+      "tutorials/functional-kernel-contract/index.html": "sha256:996c0c4cc05812dc621f8bb12a95d2cd6ef3955c049d8fd75af900fc4e9f89b6",
+      "tutorials/index.html": "sha256:c2d9db3c64055819a573567dafb2e29b4298d6013eb581e68aeea4b856b79b33",
+      "tutorials/jax-backend/index.html": "sha256:0d8b5fed4f3230bee8ae351cac685f4fdbbf48cdad37475f85d333c82943fbbf",
+      "tutorials/kairos-simulation-adapter/index.html": "sha256:b8053b295388d97f87e0329144adfb597e6c9036d504dbda6eb32cf60bb5e06f",
+      "tutorials/kairos-simulation/index.html": "sha256:07d4462dfc920c169a272ffb1f7b5963737a580a888f7da0336be0eb0cd4e9ce",
+      "tutorials/marimo/index.html": "sha256:c9bd6b9db52510c0e985dce5c34042dc33bdc63eb27c97fdd74c6e247ac631f1",
+      "tutorials/multi-product/index.html": "sha256:9580ae4a107226bc98e091e9d243c1f0957dc652a0e5f59e1d6b3454df7dd981",
+      "tutorials/native-batch/index.html": "sha256:a22f79633705658eace38f1e755d16091402ef31fc46c1eaf4fff908e9c12887",
+      "tutorials/ndlib-integration/index.html": "sha256:d06f372942d9d6b7781eb6303f18da10ec9e2ba8c17819472fde9b8a46355ff6",
+      "tutorials/network-scenarios/index.html": "sha256:c985f69179d65dd5644c36eff66795d867d490f511375828b21e7773aca6f259",
+      "tutorials/norton-bass/index.html": "sha256:51edcbcb2dc7a7b2d3f49aa441cba0f32fe9a4c8e4583c93a6e835c3616bfa65",
+      "tutorials/plugin-api-stability/index.html": "sha256:4273eb9334ebb159e8a1d7ea0582f8e21fc0da8522d82cb52acfa196c008cd1b",
+      "tutorials/public-data-fit/index.html": "sha256:c62ae529d0e137e902b224e9da9d30f555c636f3c5322f5247683ef9e268b6a5",
+      "tutorials/scenario-experiment-workflows/index.html": "sha256:316b462a1f2bb6ca9755c2ff9bd2741e58d33fa2cd0d466a8bd7ffc6d5f5af19",
+      "tutorials/seasonal-data/index.html": "sha256:976a25d77b9bc091d6f376d8f56ab3b70b590db795d2a7d2555aad0fea85a29f",
+      "user-guide/advanced-modeling/index.html": "sha256:38dc4a8a2dea8a8a8d90c9d9e78e63f66ef75367d13416146e35fdf9618a9002",
+      "user-guide/backends/index.html": "sha256:cbd9e4210f867924f6bdc1a21214378469e21c3424188bfa598752c3ad431455",
+      "user-guide/fitting/index.html": "sha256:7fcfc5574e4b3ad76ebb58aadc4c4e376209ec7b853c10cee9df28579178a2c2",
+      "user-guide/forecasting/index.html": "sha256:465bf20cd681a8c1003c9f60cb6d8eb45db7ecbc6fcbd89fc6e81df245ecd2e3",
+      "user-guide/getting-started/index.html": "sha256:d853ec6e4a7362d9103d40430405a2023e9cf25e0b047305cf55bcb0e4d4bcc0",
+      "user-guide/installation/index.html": "sha256:5cc34cc24f17ef31b53e1c856be3548a0ed8441b3f474bd907db4694d1754541"
+    },
+    "artifact_sha256": "sha256:3ba25e835523128c356202105b3e0617fe1f98c3945079b9d219d3833e5271e6",
+    "browser_accessibility_verified": false,
+    "commit": "7bd5aa89b0798abaab4132df8096bbc683cbb553",
+    "content_complete": false,
+    "contract_sha256": "sha256:bd7f1a2151d32f37af925a41c8b80bf6372b36fbe4f2599caccbe246610850eb",
+    "counts": {
+      "checked_local_links": 11360,
+      "errors": 0,
+      "external_urls_not_checked": 413,
+      "html_pages": 211
+    },
+    "errors": [],
+    "fingerprint_scope": "Contemporaneous source and artifact fingerprints; these hashes alone do not prove the artifact was built from this source.",
+    "generated_at": "2026-11-16T10:45:26.834503+00:00",
+    "live_deployment_verified": false,
+    "retired_documentation": {
+      "git_history_checked": false,
+      "migration_routes": 141,
+      "removed_sources": 263,
+      "rendered_notices_checked": 141,
+      "schema_version": 1,
+      "scientific_acceptance": false,
+      "status": "passed"
+    },
+    "schema_version": 2,
+    "scope": "Current static artifact only; API/content/execution/scientific/browser/live gates remain separate.",
+    "source_artifact_binding_verified": false,
+    "source_files": {
+      ".github/workflows/ci.yml": "sha256:ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+      ".github/workflows/docs.yml": "sha256:7f37dda6ee3abbc48968560d190e55b38c08875920fbe80b7224dbdc7745e2b5",
+      "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+      "bindings/python/innovate/__init__.py": "sha256:522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+      "bindings/python/innovate/_native.cpython-315-x86_64-linux-gnu.so": "sha256:1a89bb479ffc5800681bbc20e06ea653e630a8e65bf1d125bb3b8dcb86c7840b",
+      "bindings/python/innovate/_native.pyi": "sha256:299ef58b667caa8fa712a6f600e5bfc79fddb31dc58022f335dec1d818617282",
+      "bindings/python/innovate/py.typed": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
+      "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+      "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+      "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+      "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+      "bindings/r/man/invoke_registered_extension.Rd": "sha256:f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+      "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+      "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+      "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+      "bindings/r/man/kernel_bridge.Rd": "sha256:c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+      "bindings/r/man/kernel_models.Rd": "sha256:957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
+      "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+      "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+      "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+      "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+      "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+      "docs/astro-site/README.md": "sha256:4b076f44a514ab7f219d0f036739643f08bd42dd07ed977b87def715542a4697",
+      "docs/astro-site/astro.config.mjs": "sha256:66b322f5f83cebf95609fdcff950c644cc4789de42b7488e7423417611c2a9d1",
+      "docs/astro-site/migration-manifest.json": "sha256:5d1ad2f8c13c3a0ed51367717b7f9358b6b410cbe04f73e219944c79eb40c194",
+      "docs/astro-site/package.json": "sha256:196d68a8ec290714a55d060a7d97c4498d9ad4e8865fedcd26c588951fd99524",
+      "docs/astro-site/playwright.config.mjs": "sha256:c7b302ac928f3d49c19663df141fc884f27df064e03dff36fdda911793fc9c26",
+      "docs/astro-site/pnpm-lock.yaml": "sha256:17bef22df127cab558cae199a180afbf3effa63a5f7f73fb7bb976d5da7f0826",
+      "docs/astro-site/pnpm-workspace.yaml": "sha256:107efd0946d89e3dfce2859200a910ce5870fbc3e8e18855d056009b21532842",
+      "docs/astro-site/public/.nojekyll": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "docs/astro-site/scripts/browser-contract.mjs": "sha256:4466b8de13133d9755ffbec48470f5b1bf5faad9b7bd213b440f0911c2edd654",
+      "docs/astro-site/scripts/browser-contract.test.mjs": "sha256:28e24356867f325cb3055ca215f9eed3de160a62cdc875387617377650c4493a",
+      "docs/astro-site/scripts/browser-report.mjs": "sha256:37618f584980ab11beb9d2d81a0f7989366764457ed04795b7b4ba954b9e1ae2",
+      "docs/astro-site/scripts/documentation-contracts.test.mjs": "sha256:ba3588c2948523c5bef05fec8e0ea315f1c848bd214067c57db0b4596898cdb3",
+      "docs/astro-site/scripts/generate-api.mjs": "sha256:19e739dd91ba0c5b2502909784fa63de80a3050d958d845366f8d1eab266afb5",
+      "docs/astro-site/scripts/rehype-focusable-tables.mjs": "sha256:40b36d07e9f246de1bc3103c8b65db5e35a7c19f719087822eac7d9a3467d7a8",
+      "docs/astro-site/scripts/remark-single-title.mjs": "sha256:4e4807aa1330c99ec3b15c9adce901a90812fe4332ec4d51feeaf2ba5371ba3b",
+      "docs/astro-site/scripts/remark-single-title.test.mjs": "sha256:85860e01f56e56ad45df6adca5516cfa7847006c34482a7c7ce3470063167bdf",
+      "docs/astro-site/src/components/AccessibleSearch.astro": "sha256:285935aa05d74663f736bbafed3e9e02135ea21807d0cd262ad3ab1dc05d3431",
+      "docs/astro-site/src/components/ModelCatalogue.astro": "sha256:e64221e75f574d87d342539056e34bdcc61d1e056060c38a4ef7567a3e23abe6",
+      "docs/astro-site/src/components/TutorialCatalogue.astro": "sha256:d6e990dd4c8885cfbd330c49365e0804554c95aec2860d934fcdc33a4feb453c",
+      "docs/astro-site/src/content.config.ts": "sha256:86617d92bd7e5f219119057f3a235b12f3024e4d99199abb20b2b03c00671f97",
+      "docs/astro-site/src/content/docs/api/generated/aggregate-time-series.md": "sha256:2d488a4b03e47ffb823e7cb452b5cc6080e833e59b775d8c30097cff97e6b95f",
+      "docs/astro-site/src/content/docs/api/generated/aggregate-weekly.md": "sha256:09fbaf84af65a4713eb02ae6487e2f4faaf47c947c8d529506b2e918012411b3",
+      "docs/astro-site/src/content/docs/api/generated/bootstrap-forecast-frame.md": "sha256:676cda4f8d719de9ee31ab901c3710386c4ddcbeab369bbc77ecd56c6b15f5e3",
+      "docs/astro-site/src/content/docs/api/generated/capabilities.md": "sha256:c14ae8bfa2988dc78c073594d7764416401c629008543563b455bd2d858f6e6b",
+      "docs/astro-site/src/content/docs/api/generated/categorize-adopters.md": "sha256:ecb85957f150f08995669984600d40fd423eb75df8f715853be4e8af8bf94cdc",
+      "docs/astro-site/src/content/docs/api/generated/cumulative-sum.md": "sha256:8c3140aa6fd1229eb846938b688e3bfa78bf11ed150767c458e831c4b301cfd8",
+      "docs/astro-site/src/content/docs/api/generated/execute-scenario-grid.md": "sha256:3996de42fcd1c8c4ef23c2f814b5d3d9f4775dd640cd1b5405e635d91a3c7f03",
+      "docs/astro-site/src/content/docs/api/generated/execute.md": "sha256:017a89c14d45e6dec951421752915ab073fd63780c08d944a1abece8b5bb5190",
+      "docs/astro-site/src/content/docs/api/generated/export-ipc-file.md": "sha256:99788d256f952579b738b5b2137384119722024c031b200977f498ac2bdeb1cd",
+      "docs/astro-site/src/content/docs/api/generated/export-ipc-stream.md": "sha256:b71fa6b9881bee1c8dc80e2673b00646f5ed260593b7fce52cdcf3870bfe34d2",
+      "docs/astro-site/src/content/docs/api/generated/fetch-oecd-dataset.md": "sha256:3df70ba90f2dff2dbea16428b49f0ad1d9cd9525f9fc93bad9682159bafa780f",
+      "docs/astro-site/src/content/docs/api/generated/fit-batch.md": "sha256:3adaf4161460a4f9d443682cca244c48843fa75239825c8dc2ea162da6139af4",
+      "docs/astro-site/src/content/docs/api/generated/fit-frames.md": "sha256:fab4633501fcfe34b97e5b174ff51b1e21771f97ee0d4d86022269599d6bd4cc",
+      "docs/astro-site/src/content/docs/api/generated/fit-result.md": "sha256:e4d7dab04bbba6d1dbcc7902a0adffda7c93bff6a2d09a60a63bb6ab7163c246",
+      "docs/astro-site/src/content/docs/api/generated/fit.md": "sha256:a04a6f26b0490412cf4ec7bac266a1907040a9af1db918afa6b60e70d7c9bf57",
+      "docs/astro-site/src/content/docs/api/generated/index.md": "sha256:3d160b02bc2614ee7b1e67db2fdfc40babf12e9c32ecb38036a90a543659b076",
+      "docs/astro-site/src/content/docs/api/generated/ingest-local.md": "sha256:39a0a3d1f54cc30fa8da9aef4c3071640d439c4ac4d5b9fccb5e2187dd5c0282",
+      "docs/astro-site/src/content/docs/api/generated/ingest-polars.md": "sha256:8c500df3794b05b0400197d09df71cdd9a22e1cba71fd530641d15542138d527",
+      "docs/astro-site/src/content/docs/api/generated/invoke-registered-extension.md": "sha256:a5ef07a840db14aa45f4e54ff44e9f5406f27d7026089c6574951c1cb5739836",
+      "docs/astro-site/src/content/docs/api/generated/julia.md": "sha256:488afcfae4b84f9b964077f9fa2ba82724aa37ba45a6055a21d854122180c65f",
+      "docs/astro-site/src/content/docs/api/generated/manifest.json": "sha256:4ccc3b04acbdedccff3c98fc8803c01e96b4d4d271045779502aa12b513810e4",
+      "docs/astro-site/src/content/docs/api/generated/native-error.md": "sha256:9a4ed42958ae456bb8fa03fe3bf607c4aa369eff69d8a667324ef8e7a754ab77",
+      "docs/astro-site/src/content/docs/api/generated/paired-outcomes.md": "sha256:69464e3074276531909bf71eeedd4ff46bdf428a438907a006de749e5ad3aa37",
+      "docs/astro-site/src/content/docs/api/generated/policy-metadata-frame.md": "sha256:00f26ef4ffe323836cdb75812579fc71e61d2c19e25b72435e8e846e553a1bd0",
+      "docs/astro-site/src/content/docs/api/generated/predict-batch.md": "sha256:d453d69cf600f42aa1236498a190895695a4bdc04a29856244fa373071727f11",
+      "docs/astro-site/src/content/docs/api/generated/predict-frames.md": "sha256:474a5db76486454e07d9728bff3a26eb4d62705dcff9f807f09b5f8cdf6c8fe5",
+      "docs/astro-site/src/content/docs/api/generated/predict.md": "sha256:8a5b2c9c7e5f259a1e5db2e92c6cda36c2a746698b575dde0cbb6e975c4f039f",
+      "docs/astro-site/src/content/docs/api/generated/r.md": "sha256:77b06593cc4c5a1824b0d554cb195e6d40b974d924f608e0dc8a29c1587a1dc3",
+      "docs/astro-site/src/content/docs/api/generated/rolling-average.md": "sha256:a01b854046178f1dbb7f9db1ae996e385600a4e8b143a96b108f60c0cd7d4b6d",
+      "docs/astro-site/src/content/docs/api/generated/sarima-fit.md": "sha256:4fedb40858930061ca54ff4e19cc5792a801de08cfe1ce94d6fe8d487d60a538",
+      "docs/astro-site/src/content/docs/api/generated/scenario-comparisons.md": "sha256:a4ff9109ee347805a739f5a3b7ba49d704486bce79ed72191109886e74fa3289",
+      "docs/astro-site/src/content/docs/api/generated/scenario-executions.md": "sha256:3eb0fd0d92c77d9801847e147ab320db5b3e961e887543a80b970c661b86874b",
+      "docs/astro-site/src/content/docs/api/generated/seasonal-decomposition.md": "sha256:c99dcc0e646a5cbe69c9561fc1ebda6bd842268d0f65dfb6477b3bb1deba4adf",
+      "docs/astro-site/src/content/docs/api/generated/staggered-att-polars.md": "sha256:8bbca9816dc7126623426f65c14a8d13708506363e372317a01cf25fefceab1e",
+      "docs/astro-site/src/content/docs/api/generated/treatment-contrast-frame.md": "sha256:846a673d5980b753a4f7b2e5c52980c66b1ca6b396897ea2bfcebd7fb284c435",
+      "docs/astro-site/src/content/docs/api/python.md": "sha256:e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3",
+      "docs/astro-site/src/content/docs/bindings/csharp.md": "sha256:2c3864ad7169ed29759e568100ce6be896e03c02ad86cb6be1bdf6f8f89da2a5",
+      "docs/astro-site/src/content/docs/bindings/go.md": "sha256:65c8762f56c779b7a5571cc3a720c5dd4c479683c0f4ee3225ffd12e11579343",
+      "docs/astro-site/src/content/docs/bindings/index.md": "sha256:d414a6e2422e376dd06c5741454d3b3607312b1b908bbb4adf016baf0d1cbf30",
+      "docs/astro-site/src/content/docs/bindings/rust.md": "sha256:c4afb713f980304c22d2c709257d2f5c37797a50d1749177ed11ffc7ef7f83d9",
+      "docs/astro-site/src/content/docs/core/arrow-interchange.md": "sha256:513150b1658e0215b839bf0608eea9271488979a122f532ce2b9095298af842d",
+      "docs/astro-site/src/content/docs/core/index.md": "sha256:d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f",
+      "docs/astro-site/src/content/docs/core/kernel.md": "sha256:13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
+      "docs/astro-site/src/content/docs/historical-documentation.md": "sha256:4c119872b24c567272b7f6fe5a70ce9f4d12e54891e368bc01c7993cfabfc74b",
+      "docs/astro-site/src/content/docs/index.md": "sha256:ab2407ed7ab7b83395b2c99f794e9bf00e65ca61cf788222cf749a89e8dc73e9",
+      "docs/astro-site/src/content/docs/maintainers/documentation-quality.md": "sha256:7ccd4dd7d508211e0b3c3c6452c26eb733e0c7ee0208d1b5c3c718991dceef60",
+      "docs/astro-site/src/content/docs/maintainers/language-conventions.md": "sha256:283b4d43d367fc8e6ac2ef00b0b2d22e161acf26e62e1901c1f614518a1ec6b8",
+      "docs/astro-site/src/content/docs/maintainers/test-acceleration.md": "sha256:65d6cdec1ccdd80d920ba7dbf44a730d777a6dacf00ce2253b025109ade0ee4c",
+      "docs/astro-site/src/content/docs/models/index.mdx": "sha256:3dd74df861495b979d98fa3285ed6f65802aeb10d5747179993f5a8aab02e25b",
+      "docs/astro-site/src/content/docs/native-migration.md": "sha256:910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
+      "docs/astro-site/src/content/docs/operations/documentation-standards.md": "sha256:519278148d106ac99a019c08b420f6cdee5d18b2de753561f9b04d63d3d89d21",
+      "docs/astro-site/src/content/docs/operations/registry-readiness.md": "sha256:91a812dec69fb023b111e5ca3308967d3c8af688778470775ea5c88463684aeb",
+      "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx": "sha256:39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614",
+      "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx": "sha256:b6700b4067512c40d4e63b72728b24d869f0d0463aafed97e128a88c341be6fa",
+      "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx": "sha256:033e6c825d794ad32b94a9121f8aee7a9c6c8223e3a3952706188e2fb464fea4",
+      "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx": "sha256:ab9292f71a1565d3bb6c1fda1e52dc0f7a4e5e3a78a5f647068021c5c570292c",
+      "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx": "sha256:b3febf58fa4df831c428d945e705828f6deb85376766bad2f1c6c39e995e1101",
+      "docs/astro-site/src/content/docs/tutorials/index.mdx": "sha256:d95454e89d851f88fe39edc0e41e0d37f7a27a55ce23aa372611a63777c636df",
+      "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx": "sha256:02b9a786232c9947d363d47fdfe459a668d872cf47dc64e5d74ae38dbe25ea56",
+      "docs/astro-site/src/content/docs/tutorials/marimo.mdx": "sha256:86d2d6228b863b0517e2e6f4af182a83b114ab334d9b7112ac4ca557307ef57f",
+      "docs/astro-site/src/content/docs/tutorials/native-batch.mdx": "sha256:973c65ac494b25279682b0c90584e1dad4e6b476bc3a24750ecd9a0b3c656ada",
+      "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx": "sha256:eae6d0b973fbb1cb7f1d9cab17730c7ce428d093f8b3fd3b1afcb1067788e0d3",
+      "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx": "sha256:29d81c07c7013b9d4b8c7dc33c0fd84461ff7f102e3547990a8acf1edb53ffb6",
+      "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx": "sha256:1839904d1fee7040bb1926cea22e2921f7422374621c57497c3ee5dc434abfba",
+      "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx": "sha256:579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572",
+      "docs/astro-site/src/content/docs/user-guide/backends.md": "sha256:9b3d66329409da00a4bdecfdb77cce000d69171e65d7f6929b8c739a618f91b4",
+      "docs/astro-site/src/content/docs/user-guide/fitting.md": "sha256:7b61084efd85ade52e1f078f71005103778a623b15881043040472c643b0b130",
+      "docs/astro-site/src/content/docs/user-guide/forecasting.mdx": "sha256:f0dfaf4eb5e46435b460ec2b8c51fc50b9150a5fe56e55eb6d14da2f0e0db290",
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "sha256:f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
+      "docs/astro-site/src/content/docs/user-guide/installation.md": "sha256:2186362a372a03aae091671a930c09e35d109c0fa520f32156df4684c109a689",
+      "docs/astro-site/src/content/versions/latest.json": "sha256:4c5b54b3b580487702629c9c2bbe1f4583e16b1e74a0ef0b2814dae235f1987e",
+      "docs/astro-site/src/pages/[...retired].astro": "sha256:f3a81c10193421d2a22e858a055afd4a2d96b772d774dd1ceabca214692b472a",
+      "docs/astro-site/src/styles/custom.css": "sha256:db026d6fe42168a9d3759cf9133a1bc8542986ab49d079ab7fed400456cd6288",
+      "docs/astro-site/starlight.config.mjs": "sha256:4f1d1274d5b4f4f657575bfe85a6cacf640b012f3163e4ae13b6f3438a0780c9",
+      "docs/astro-site/tests/browser/documentation.spec.mjs": "sha256:a47b0245e9fd97f0a6df96c4ef8c716a6d3da1a18514d4bfe8c3e7d23c47e0bd",
+      "docs/astro-site/tests/browser/support.mjs": "sha256:653a648cb8ece23ef37cbf11a6fc7de964d491b0a51b7c2baa8c8a36974a7f9b",
+      "docs/astro-site/tsconfig.json": "sha256:876546abe586b1f2d3eef1a60dbbb25d9ea174d71a5f7cd79becb96cb2e39cf5",
+      "docs/astro-site/vendor/starlight-polyglot/package.json": "sha256:f9feae2e4b49bf2e18682e45cacd7347f76c74918bec1fe7a28bce38f6ad6c97",
+      "docs/astro-site/vendor/starlight-polyglot/scripts/python_extract.py": "sha256:035c1c3bfa4339bf6237a310e51bb376b0729c47c111b68186245f9fdb0be27d",
+      "docs/contracts/api-documentation.json": "sha256:701024c7222bb239b77f502f33455fe9ac81dcda9addeeea0393968baca5f796",
+      "docs/contracts/community-documentation.json": "sha256:6f9cc5fd46715e67dd85f14ed5cd711c44be92b49fc2de2836454325f004f756",
+      "docs/contracts/content-baseline.json": "sha256:21e2128c1ddd559101660176180cc4a78158691c5518b50f36cc8817899c520c",
+      "docs/contracts/content-quality.json": "sha256:978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+      "docs/contracts/learning-catalogue.json": "sha256:40b1f27c10d98ebf53e93eef43f9ab64f53ee8f189ab4fc384125b544810a1ed",
+      "docs/contracts/learning-notebooks.json": "sha256:23ed73f40ce5dda2502e61e82f531b64a9b9c438ddbbc81bc65cbfc7ccc94a5e",
+      "docs/contracts/polyglot-api-documentation.json": "sha256:857399a2e44a6a9905e5aa8e3ac3d442c77134acfa9f98f08a4d6a7feeb0c179",
+      "docs/contracts/retired-documentation.json": "sha256:3db2c79fdaab74b0067e31938683a09c2d9bf1e61b92c54fce3250dab28b7aba",
+      "docs/contracts/scientific-pedagogical-review.json": "sha256:8f7bf2ad89d88a6e1a91b7aab8bd0a75f265eeb0221c03d81909447de6a1214d",
+      "docs/contracts/site-quality.json": "sha256:bd7f1a2151d32f37af925a41c8b80bf6372b36fbe4f2599caccbe246610850eb",
+      "docs/datasets/wdi-aus-internet-20261116/manifest.json": "sha256:e8d7718a3be7b39caf5f7e592f318bd2912b3f225b5c74b8593a5b0691f2e8a6",
+      "docs/datasets/wdi-aus-internet-20261116/observations.csv": "sha256:f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+      "docs/datasets/wdi-aus-internet-20261116/raw.json": "sha256:4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+      "examples/native_batch.py": "sha256:5425dbd50552179e39ed65c06b8de9846f50cdb9e20742ac05ecea68781309dc",
+      "examples/native_bayesian.py": "sha256:3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+      "examples/native_forcing.py": "sha256:81f98614b5ec25b57b02ffecf99cae36d15e0ba49d1201b5c6e67f735938d2d4",
+      "examples/native_forecast.py": "sha256:b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+      "examples/native_kairos.py": "sha256:f6e9fa77aabacd0ce18b099949cc6663680783abd8f9688ea70f7198f3297782",
+      "examples/native_network.py": "sha256:845e798b85e94aa64a64850ffa39361835626d0c09cb1af616ba0924d1f69904",
+      "examples/native_norton_bass.py": "sha256:9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+      "examples/native_overlap.py": "sha256:94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+      "examples/native_public_data.py": "sha256:90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+      "examples/native_reingestion.py": "sha256:47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+      "examples/native_scenarios.py": "sha256:7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+      "notebooks/.gitignore": "sha256:fed1e5fbbb65c5766cf9e517cd8260ca5a01939ce25f1b3175b97afe564a917a",
+      "notebooks/README.md": "sha256:bc505e21bd37aa190a361b432c25d3dd9c904e37548964688e9a87465a820df8",
+      "notebooks/public_data_fit.py": "sha256:acf980c7688cee71024b179c9b3a434fa66527b696f8e190cac43ea36c096c24",
+      "notebooks/pyproject.toml": "sha256:5fa65fe9f275743686e15e8674ea5d32525295aff0eeba1a9f958889573f5340",
+      "notebooks/uv.lock": "sha256:74ef857b36916beb77cdc6f4ed49469df937d9959e24a530cade4474884d43cf",
+      "rust/crates/innovate-core/src/discovery.json": "sha256:935a5f0ca05209f6f74e859d629356b4f7dda338e38208f21e7a695abd31ff2b",
+      "scripts/check_api_documentation.py": "sha256:6c1fdd60ef7476746f42cfb7f016c4052eb5419ee1eacd2785817a9d790d9df2",
+      "scripts/check_community_documentation.py": "sha256:a8cc6a265444f63f83ba34a42d4c5898adb50a57b9422f003603c1bd07c9f5f0",
+      "scripts/check_documentation_content.py": "sha256:9f8ff8afd3422379431ea8f9f54bff189c117928e46a50d89bbe030f1990b7db",
+      "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+      "scripts/check_learning_notebooks.py": "sha256:6b152ab17b77c6e6244c70701495177a0eb7cc4b3fbf9bd370c51a20c85c78d2",
+      "scripts/check_native_documentation.py": "sha256:03a7d12b0f21cced537650898cbea0c24ee8bcee2afe3c56d6ea1c97a56935ef",
+      "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
+      "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9",
+      "scripts/check_retired_documentation.py": "sha256:93c7a2db9b1015f7182175c66de34753e75343b3fb60b44a3eb5b6fe948d99e2",
+      "scripts/check_scientific_review_contract.py": "sha256:4cf3b5a097f9fca1ce75ac1ce27c14dadf4b3dc68b96935fa2f94181de6845e8",
+      "scripts/generate_api_reference.py": "sha256:81db7bfa50f871cd4c8c5a7b6a74e4243df18a9a825482aa113de65b1e90984d",
+      "scripts/generate_learning_catalogue.py": "sha256:1db28459a8a9f50b59bde1a5a33a5cc3f84bbd0d1996ba4dfd2aaa29ddbba982",
+      "scripts/verify_production_docs.py": "sha256:fb29c9b3024bf4bb748858a08022e93b8859b8c66aecacaf7464611d866446d1"
+    },
+    "source_sha256": "sha256:e0feabd53cba12cfaa0c259e48531c9bff9a6c481f9c7de34ba43a5368671cee",
+    "status": "passed"
+  }
+}

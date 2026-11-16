@@ -178,6 +178,8 @@ def inspect_runtime(module: ModuleType, stub_source: str) -> dict[str, Any]:
 
     if not substantive(module.__doc__):
         add("missing_module_docstring", module.__name__, "Native module needs a substantive runtime description.")
+    for rule, detail in checker._docstring_issues(inspect.cleandoc(module.__doc__ or "")):
+        add(rule.replace("docstring", "runtime_docstring"), module.__name__, detail)
     for name, value in sorted(actual.items()):
         doc = getattr(value, "__doc__", None)
         if not substantive(doc):
@@ -186,7 +188,10 @@ def inspect_runtime(module: ModuleType, stub_source: str) -> dict[str, Any]:
                 name,
                 "A signature, missing text or placeholder is not documentation.",
             )
-        sections = _runtime_sections(inspect.cleandoc(doc or ""), checker)
+        clean_doc = inspect.cleandoc(doc or "")
+        for rule, detail in checker._docstring_issues(clean_doc):
+            add(rule.replace("docstring", "runtime_docstring"), name, detail)
+        sections = _runtime_sections(clean_doc, checker)
         functions = [
             node for node in declarations.get(name, []) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
         ]

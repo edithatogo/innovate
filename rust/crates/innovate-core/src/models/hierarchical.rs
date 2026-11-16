@@ -1,19 +1,31 @@
-//! Hierarchical partial-pooling model with non-centred group effects (A03).
+//! Conjugate normal partial-pooling summaries with fixed observation and group scales (A03).
 
 use crate::inference::{FitFailure, FitOutcome, InnovationError};
 
 /// Group-level observation panel for [`fit_hierarchical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PanelFitRequest {
+    /// Nonempty group labels, one per observation; repeated labels identify the same group.
     pub group_ids: Vec<String>,
+    /// Finite measurements aligned with `group_ids`.
     pub values: Vec<f64>,
+    /// Finite prior mean for the common hypermean.
     pub prior_mean: f64,
+    /// Finite positive prior standard deviation of the hypermean.
     pub prior_sd: f64,
+    /// Finite positive observation standard deviation, shared by all groups.
     pub obs_sd: f64,
+    /// Finite nonnegative between-group standard deviation; zero gives complete pooling.
     pub tau: f64,
 }
 
-/// Fit a conjugate hierarchical normal partial-pooling model with non-centred effects (A03).
+/// Compute conjugate hierarchical normal partial-pooling summaries (A03).
+///
+/// Returns named deterministic summaries, including the hypermean standard
+/// deviation and the standard deviation of an unseen group's latent mean. The
+/// latter is `sqrt(hypermean_sd² + tau²)` and excludes observation variance
+/// `obs_sd²`. It does not sample posterior chains or estimate the request's
+/// fixed observation and between-group scales.
 ///
 /// For group $g$ with $n_g$ observations and sample mean $\bar{y}_g$:
 /// - Precision $w_g = n_g / \sigma^2$, group prior precision $1 / \tau^2$
@@ -100,10 +112,21 @@ pub fn fit_hierarchical(request: &PanelFitRequest) -> FitOutcome {
     })
 }
 
-/// Draw a deterministic predictive mean/sd tuple for an unseen group (A03).
+/// Read the mean/standard-deviation tuple for an unseen group's latent mean (A03).
+///
+/// The standard deviation includes hypermean uncertainty and between-group
+/// variation. It excludes observation noise and therefore does not describe an
+/// individual future observation's predictive interval.
+///
+/// Expects the output layout of [`fit_hierarchical`]. For a generic valid-posterior
+/// outcome, it reads only the first draw and interprets its first/last coordinates
+/// in that layout; it does not compute a Monte Carlo predictive distribution.
 ///
 /// # Errors
 /// Returns [`InnovationError`] if `outcome` is invalid.
+///
+/// # Panics
+/// Can panic if a caller supplies a deterministic payload with no values.
 pub fn unseen_group_predictive(outcome: &FitOutcome) -> Result<(f64, f64), InnovationError> {
     let row = match outcome {
         FitOutcome::Valid(res) => &res.posterior.draws()[0],

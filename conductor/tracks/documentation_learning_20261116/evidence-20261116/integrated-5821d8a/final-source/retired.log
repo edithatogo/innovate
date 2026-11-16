@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "removed_sources": 263,
+  "migration_routes": 141,
+  "rendered_notices_checked": 141,
+  "git_history_checked": true,
+  "scientific_acceptance": false
+}

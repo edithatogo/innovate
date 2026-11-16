@@ -112,6 +112,9 @@ def execute(operation: str, model: str | None = None, **payload: Any) -> dict[st
     Use this low-level interface for operations that do not have a table wrapper.
     Payload fields are operation-specific and must obey the native contract;
     unsupported operations and model features fail rather than falling back.
+    The wrapper adds the schema version and serializes the request. It does not
+    infer time units, convert observations between levels and interval counts,
+    sort arrays, or repair missing values.
 
     Args:
         operation: Native operation name, such as ``discover_models`` or
@@ -119,12 +122,16 @@ def execute(operation: str, model: str | None = None, **payload: Any) -> dict[st
         model: Native model key, such as ``bass`` or ``logistic``. Use the default
             ``None`` for operations that do not select a model.
         **payload: JSON-compatible keyword fields placed in the request's
-            ``payload`` object. All numeric values must be finite.
+            ``payload`` object. Use lists for arrays, including singletons, and
+            ``None`` for JSON null. All numeric values must be finite; their
+            units and allowed ranges follow the selected native operation.
 
     Returns:
         Decoded response envelope, including ``result`` and native metadata.
-        Successful envelopes may omit ``error``. A non-null native error is
-        raised before this value is returned.
+        JSON objects become dictionaries, arrays become lists and null becomes
+        ``None``. Successful envelopes may omit ``error``. A non-null outer
+        native error is raised before return; errors stored inside batch or
+        scenario result rows remain available for the caller to inspect.
 
     Raises:
         NativeError: If the kernel rejects the request or cannot execute it.
@@ -134,6 +141,7 @@ def execute(operation: str, model: str | None = None, **payload: Any) -> dict[st
     Examples:
         >>> import innovate
         >>> response = innovate.execute("discover_models")
+        >>> assert response["schema_version"] == "2.0"
         >>> assert response.get("error") is None
         >>> assert "bass" in {model["key"] for model in response["result"]["models"]}
     """
@@ -451,6 +459,9 @@ def predict(
     execution and IPC transport copies buffers. Numeric time and parameters must
     use consistent caller-selected units. A rate can be signed for models with
     declining levels; it is not automatically a measure of gross incidence.
+    Native derivatives use level units per unit of ``time``, even on an irregular
+    grid. They are instantaneous rates, not counts integrated over the gap
+    between two rows.
 
     Args:
         model: Native model key, such as ``bass`` or ``logistic``.
@@ -660,7 +671,10 @@ def fit(
     A LazyFrame is collected when fitting begins. The frame is serialized to
     Arrow IPC, so this interface copies buffers. Numeric time, observations and
     parameters must use consistent caller-specified units. Inspect diagnostics
-    and model assumptions before interpreting a returned fit.
+    and model assumptions before interpreting a returned fit. Observations must
+    represent the selected model's fitted quantity; this wrapper does not
+    integrate interval counts or difference cumulative totals to make them fit
+    a different observation contract.
 
     Args:
         model: Native model key supported for fitting.

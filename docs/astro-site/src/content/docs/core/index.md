@@ -75,4 +75,4 @@ synthetic model. Next choose between [scenario experiments](/innovate/tutorials/
 your task. Keep the expected result and failure case visible when adapting an
 example to your own analysis.
 
-The [earlier core page](/innovate/latest/core/) remains in the versioned archive.
+The [earlier core page](https://github.com/edithatogo/innovate/blob/6c226f92f14f01e771b1490c7fb3a7c77f4bc74a/docs/astro-site/src/content/docs/latest/core/index.md) remains in the source history.

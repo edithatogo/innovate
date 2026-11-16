@@ -1,0 +1,23 @@
+{"executed_assertion_lines": [16, 17, 18, 19, 20, 26], "returncode": 0, "source": "examples/native_batch.py", "status": "passed", "stdout_matches_contract": true}
+{"batch_items": 2, "invalid_workers_rejected": true, "worker_invariant": true}
+{"executed_assertion_lines": [32, 33, 35, 36, 37, 39, 45, 46, 47, 49, 50, 52, 55], "returncode": 0, "source": "examples/native_bayesian.py", "status": "passed", "stdout_matches_contract": true}
+{"chains": 4, "draws": 16000, "posterior_oracle_passed": true}
+{"executed_assertion_lines": [30, 34, 35, 36, 37, 39, 40, 41, 42, 54, 73, 77], "returncode": 0, "source": "examples/native_forcing.py", "status": "passed", "stdout_matches_contract": true}
+{"counts": [0, 0, 0, 50, 64, 96], "equivalent_forcing": true, "invalid_forcing_rejected": 2, "tracked_agents": 100}
+{"executed_assertion_lines": [25, 29, 30, 31, 32, 40], "returncode": 0, "source": "examples/native_forecast.py", "status": "passed", "stdout_matches_contract": true}
+{"duplicate_time_rejected": true, "ids": ["a", "b", "c"], "predictions": [26.894142, 50.0, 73.105858]}
+{"executed_assertion_lines": [25, 26, 30, 31, 32, 33, 37, 42, 47, 51, 59], "returncode": 0, "source": "examples/native_kairos.py", "status": "passed", "stdout_matches_contract": true}
+{"counts": [0, 27, 82, 100], "levels": [0.0, 67.5, 205.0, 250.0], "replay_equal": true, "sparse_grid_equal": true, "unknown_engine_rejected": true}
+{"executed_assertion_lines": [30, 31, 32, 37, 38, 39, 43, 44, 55, 56, 64, 65, 69, 70, 71, 72, 73, 74, 82], "returncode": 0, "source": "examples/native_network.py", "status": "passed", "stdout_matches_contract": true}
+{"chain_counts": [1, 1, 3, 3], "disconnected_counts": [1, 1, 1, 1], "fifo_completions": [6, 11, 16], "invalid_edges_rejected": true}
+{"executed_assertion_lines": [37, 38, 41, 42, 44, 49, 50, 51, 52, 56, 58], "returncode": 0, "source": "examples/native_norton_bass.py", "status": "passed", "stdout_matches_contract": true}
+{"converged": true, "forecast_rows": 3, "parameters_checked": 6}
+{"executed_assertion_lines": [36, 38, 39, 40, 41, 48, 49, 50, 55, 56, 57, 72, 76], "returncode": 0, "source": "examples/native_overlap.py", "status": "passed", "stdout_matches_contract": true}
+{"ate": 5.25, "minimum_training_arm_clusters": 1, "minimum_training_arm_count": 1, "propensity_range": [0.333333, 0.666667], "rejected_designs": 3}
+{"executed_assertion_lines": [111, 112, 113, 123, 126, 128, 159, 160, 164], "returncode": 0, "source": "examples/native_public_data.py", "status": "passed", "stdout_matches_contract": true}
+{"cutoff_year": 2015, "holdout_mae": {"gompertz": 12.916, "logistic": 15.994, "persistence": 8.41}, "holdout_rows": 9, "missing_years": [2002, 2003, 2004, 2025], "training_rows": 23}
+{"executed_assertion_lines": [25, 27, 28, 29, 37, 39], "returncode": 0, "source": "examples/native_reingestion.py", "status": "passed", "stdout_matches_contract": true}
+{"encodings": ["python_sorted_json_v1", "rust_sorted_json_v1"], "tampered_artifacts_rejected": 2}
+{"executed_assertion_lines": [115, 120, 121, 122, 124, 125, 131, 134, 136, 145, 148], "returncode": 0, "source": "examples/native_scenarios.py", "status": "passed", "stdout_matches_contract": true}
+{"policy_counts": [0, 0], "replacement_total": 100.0, "replayed": 4, "scenario_ids": ["baseline", "pause-innovation", "two-products", "replacement"]}
+{"attempted": 19, "expected_attempts": 19, "failed": 0, "installed_source": "/workspace/scratch/5e94e22858cb/innovate-docs-implementation/bindings/python/innovate/__init__.py", "installed_source_sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4", "kind": "api_doctests", "module": "innovate", "path": "bindings/python/innovate/__init__.py", "python_version": "3.15.2", "returncode": 0, "source_sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4", "status": "passed", "stderr": "", "stdout": ""}

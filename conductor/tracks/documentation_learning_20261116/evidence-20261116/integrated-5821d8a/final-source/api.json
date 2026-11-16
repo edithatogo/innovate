@@ -1,0 +1,623 @@
+{
+  "command_passed": true,
+  "complete": false,
+  "counts": {
+    "files": 2,
+    "gaps": 0,
+    "public_symbols": 40,
+    "symbols": 55
+  },
+  "files": {
+    "bindings/python/innovate/__init__.py": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+    "bindings/python/innovate/_native.pyi": "299ef58b667caa8fa712a6f600e5bfc79fddb31dc58022f335dec1d818617282"
+  },
+  "gaps": [],
+  "inventory_valid": true,
+  "language_conventions": {
+    "julia": {
+      "execution_checker": "scripts/check_julia_documentation.jl",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "argument_names_match_signature": true,
+        "attached_docstrings": true,
+        "explicit_exports_resolve": true,
+        "returns_and_throws_descriptions": true,
+        "reviewed_examples_contain_assertions": true,
+        "signature_and_defaults_match_source": true,
+        "struct_fields_documented": true,
+        "summary_description": true,
+        "unique_sections_and_named_entries": true
+      },
+      "style": "Base.Docs Markdown"
+    },
+    "python": {
+      "accepted_section_styles": [
+        "google",
+        "numpy"
+      ],
+      "execution_checker": "scripts/check_native_documentation.py",
+      "source_checker": "scripts/check_api_documentation.py",
+      "structurally_enforced": {
+        "direct_raises_documented": true,
+        "explicit_exports_resolve": true,
+        "parameter_names_match_signature": true,
+        "public_annotated_attributes_documented": true,
+        "raises_description": true,
+        "returns_when_applicable": true,
+        "summary_description": true,
+        "unique_parameter_error_attribute_entries": true,
+        "unique_sections": true
+      },
+      "style": "PEP 257 with Google sections"
+    },
+    "r": {
+      "execution_checker": "scripts/check_r_documentation.R",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "attached_roxygen_comments": true,
+        "explicit_exports_resolve": true,
+        "rd_aliases_and_usage_match_exports": true,
+        "rd_arguments_and_value_descriptions": true,
+        "rd_signature_defaults_match_source": true,
+        "reviewed_examples_contain_assertions": true,
+        "source_parameters_match_signature": true,
+        "source_return_and_errors_descriptions": true,
+        "summary_description": true,
+        "unique_parameters_return_and_errors": true
+      },
+      "style": "roxygen comments with matching Rd help"
+    },
+    "rust": {
+      "compiler_lints": [
+        "missing_docs",
+        "rustdoc::broken_intra_doc_links",
+        "rustdoc::invalid_codeblock_attributes"
+      ],
+      "doctest_command": "cargo test --workspace --doc --locked",
+      "qualified_by_python_audit": false,
+      "review_requirements": {
+        "Errors": "Fallible operations describe error cases and their returned representation.",
+        "Panics": "APIs with caller-reachable panics describe their conditions.",
+        "Safety": "Unsafe APIs describe caller preconditions, lifetimes and ownership."
+      },
+      "style": "rustdoc Markdown"
+    }
+  },
+  "mode": "strict",
+  "python_complete": true,
+  "qualification": "Structural Python documentation only; Rust, executable examples and scientific prose require separate evidence.",
+  "rust_status": "not_executed",
+  "rust_workspace_scope": {
+    "compiler_and_doctests": "not_executed",
+    "excluded_crates": {
+      "innovate-games": "rust/crates/innovate-games/Cargo.toml"
+    },
+    "excluded_crates_qualification": "not_qualified_by_workspace_commands",
+    "hashing": "SHA-256 of UTF-8 manifest text with CRLF and CR normalized to LF.",
+    "limitations": "Explicit manifest membership only; dependency resolution and compiler qualification are separate.",
+    "source_files": {
+      "Cargo.toml": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+      "rust/crates/innovate-core/Cargo.toml": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+      "rust/crates/innovate-ffi/Cargo.toml": "bd3ca718022c1605a9a9b02f3fb337f1a10a6ace4a48cee8647b106cac002582",
+      "rust/crates/innovate-games/Cargo.toml": "54ced568be3dcfdd36d18ea9be13df4bf313bfda8d67e38a71abc4dc86eafb71",
+      "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1",
+      "rust/crates/innovate-python/Cargo.toml": "60081b1f949ef16aea0c9d81ec67cfb65fdf6f9f73077f9ef134baaca5b80f9d",
+      "rust/crates/innovate-tabular/Cargo.toml": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664"
+    },
+    "status": "source_membership_matches",
+    "workspace_crates": {
+      "innovate-core": "rust/crates/innovate-core/Cargo.toml",
+      "innovate-ffi": "rust/crates/innovate-ffi/Cargo.toml",
+      "innovate-kairos": "rust/crates/innovate-kairos/Cargo.toml",
+      "innovate-python": "rust/crates/innovate-python/Cargo.toml",
+      "innovate-tabular": "rust/crates/innovate-tabular/Cargo.toml"
+    }
+  },
+  "schema_version": 1,
+  "scope": {
+    "python_extensions": [
+      ".py",
+      ".pyi"
+    ],
+    "python_roots": [
+      "bindings/python/innovate"
+    ]
+  },
+  "symbols": [
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate",
+      "kind": "module",
+      "line": 1,
+      "name": "innovate",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "423d53eb2790994649f9b550d5ade21f8513eba72acee4c50be2ba909ffb2201"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult",
+      "kind": "class",
+      "line": 509,
+      "name": "innovate.FitResult",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "acc461bc2515eee7f10bb9f2d2ea135ee0d187cab23013ac3ca60c0415227dfc"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.categorize_adopters",
+      "kind": "callable",
+      "line": 639,
+      "name": "innovate.FitResult.categorize_adopters",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "086e0745cf12e660f5aa3fe9ede2451ee6a1f885b74e4aeb650e3fb06bc44f06"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.diagnostics",
+      "kind": "callable",
+      "line": 542,
+      "name": "innovate.FitResult.diagnostics",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "3777595818da1f9bf57f3a35301cb4e49eb384329214897ca56fe98efb53d7ed"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.event_profile",
+      "kind": "callable",
+      "line": 556,
+      "name": "innovate.FitResult.event_profile",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "85cf7c715e3c8a1d80fc0a625123d1666f8d8cdab468c3a64a1d66fd2f411c84"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.joint_time_profile",
+      "kind": "callable",
+      "line": 586,
+      "name": "innovate.FitResult.joint_time_profile",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "0d4dd05256d5f447dc26370ec8fa882255ce82b0d3ae8dae00b5ce56e9a180e9"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.launch_profile",
+      "kind": "callable",
+      "line": 571,
+      "name": "innovate.FitResult.launch_profile",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "2f7b6e49676a9bf4afeac01dd9210ec83c458275c864e67363d51dc0d9f52b25"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.parameters",
+      "kind": "callable",
+      "line": 528,
+      "name": "innovate.FitResult.parameters",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "79b3db3743d4c3649b252972e89a3d789eb867d731a5d3e72c5a06d1c7313461"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.FitResult.predict",
+      "kind": "callable",
+      "line": 600,
+      "name": "innovate.FitResult.predict",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "e6cc9b1e3cbb2a4ec458a846c7dbcd52547bb8cf404833bf86daa100a35bf251"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.NativeError",
+      "kind": "class",
+      "line": 73,
+      "name": "innovate.NativeError",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "853cbc683a3489c88e319b58145e0d8f070e84b19520d5fbfb0fe235036c2b87"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.NativeError.__init__",
+      "kind": "callable",
+      "line": 82,
+      "name": "innovate.NativeError.__init__",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "adfda67813f92f279240f2c76a7639f3039d347ee264699fc40b788b76e34fa1"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/__init__.py::innovate._decode",
+      "kind": "callable",
+      "line": 97,
+      "name": "innovate._decode",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "826ca989c7d2074b1462b4027aa348628a75558c060e8ec6e4409de30d5aab3f"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/__init__.py::innovate._execute_payload",
+      "kind": "callable",
+      "line": 151,
+      "name": "innovate._execute_payload",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "47549e78a5474d818a4ad1e57457d880cd364c1cc827654625d7eb1bfb80e9f1"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/__init__.py::innovate._ipc",
+      "kind": "callable",
+      "line": 263,
+      "name": "innovate._ipc",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "16c695046b45903b6248a181ac6cc05f58015f0872bb66f331ccce6f0d5fb158"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.aggregate_time_series",
+      "kind": "callable",
+      "line": 913,
+      "name": "innovate.aggregate_time_series",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "64dbe21a3275d50ba662716a7c6928b19b0a0e1e9d6a261d8d0faa15727f043b"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.aggregate_weekly",
+      "kind": "callable",
+      "line": 890,
+      "name": "innovate.aggregate_weekly",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "dfe7e18a07669c7084978772887b3721f6fd7c4b9f3ee65962b0161e353a0b96"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.bootstrap_forecast_frame",
+      "kind": "callable",
+      "line": 1097,
+      "name": "innovate.bootstrap_forecast_frame",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "ee36c6d380bfa22acb47f68419cab2b50784915cf6c2b60ef3ca6b3d493219a2"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.capabilities",
+      "kind": "callable",
+      "line": 248,
+      "name": "innovate.capabilities",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "f80fe16c708558ea62ed7757ae36b8c3329571d120bf5c9a6216af8d9058cb67"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.categorize_adopters",
+      "kind": "callable",
+      "line": 809,
+      "name": "innovate.categorize_adopters",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "43f115c2078bc97b39f6ca477ba1ebef19854ca461ee6d97e962da2feffe26d3"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.cumulative_sum",
+      "kind": "callable",
+      "line": 835,
+      "name": "innovate.cumulative_sum",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "51c2b62488e000a1b1ef71a96f9eccc3fbac228644caaee8718a891718b8270f"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.execute",
+      "kind": "callable",
+      "line": 109,
+      "name": "innovate.execute",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "f50280d2f722628bf3cfeffe608c39ddb89177b81a8b71f9bd5cf382705d4be4"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.execute_scenario_grid",
+      "kind": "callable",
+      "line": 357,
+      "name": "innovate.execute_scenario_grid",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "a6a8340de2f7588be19a5d9c52d82df1795c5f4eee837f99c6e5111ec14f38ab"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.export_ipc_file",
+      "kind": "callable",
+      "line": 276,
+      "name": "innovate.export_ipc_file",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "f0cc3edf2041bd5b416af36a7cf1f5becf7933dcadbccfb1efd6e0557e5d2d62"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.export_ipc_stream",
+      "kind": "callable",
+      "line": 298,
+      "name": "innovate.export_ipc_stream",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "f65f1fb4fcdf1ab7d069f13f6faa1a98695dd6faf9a8a0af6417fd496843d70e"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.fetch_oecd_dataset",
+      "kind": "callable",
+      "line": 318,
+      "name": "innovate.fetch_oecd_dataset",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "3ce39337bb13e719eeb462b3aa922d147d318290c44aa1cb9ae3f3084c4b9812"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.fit",
+      "kind": "callable",
+      "line": 661,
+      "name": "innovate.fit",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "2bd95ef42afc400674c44dd40d9c3bd8cca48b009dd4c7abf72611c77c26b092"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.fit_batch",
+      "kind": "callable",
+      "line": 202,
+      "name": "innovate.fit_batch",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "52ef5e46bbbe4b33b96d5471fbcd4b1a5ca583a575c97e9b8dcd2ee6b8a94af5"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.fit_frames",
+      "kind": "callable",
+      "line": 723,
+      "name": "innovate.fit_frames",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "a8341d2e9737617c29ef9618eb8d8a888903b9798928ef0086f50f79cda9f223"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.ingest_local",
+      "kind": "callable",
+      "line": 1340,
+      "name": "innovate.ingest_local",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "789989c3d42c1279149118ba92b515e29c4619dafa630b0dcb9128ee085b8644"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.ingest_polars",
+      "kind": "callable",
+      "line": 1244,
+      "name": "innovate.ingest_polars",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "30033b2217be7a202c412e7f642e72de2a8ba04e34c2ea62307ea3f113102fd2"
+    },
+    {
+      "exposure": "nested",
+      "id": "bindings/python/innovate/__init__.py::innovate.ingest_polars.column",
+      "kind": "callable",
+      "line": 1292,
+      "name": "innovate.ingest_polars.column",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "415a9f5d9af207cec2665a1cff6d15d28e26d29aa83a6d9b1d786b4982ca9114"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.invoke_registered_extension",
+      "kind": "callable",
+      "line": 162,
+      "name": "innovate.invoke_registered_extension",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "8598326382a04af80ef1486f7f964ca63114553991a42187a024532f289d61d2"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.paired_outcomes",
+      "kind": "callable",
+      "line": 423,
+      "name": "innovate.paired_outcomes",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "38eddba099030322c26d7a55f09a95bce80e93ccf93613ffa3b6ea0b9df70f56"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.policy_metadata_frame",
+      "kind": "callable",
+      "line": 1173,
+      "name": "innovate.policy_metadata_frame",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "8e6df6bf67dbedbc66b678fea9fe95e00e480f0ed6f3c47b9deb8401b5fed9cb"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.predict",
+      "kind": "callable",
+      "line": 447,
+      "name": "innovate.predict",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "f70fd76dd8fb2ec1b27f23655ee3d0adaeb98d4292c5bf9b26ba2f24a150afa5"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.predict_batch",
+      "kind": "callable",
+      "line": 226,
+      "name": "innovate.predict_batch",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "475ce3982ba34b752f5d773c3e8aaa4acdabebb118630c13a22e68c3f4d6a251"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.predict_frames",
+      "kind": "callable",
+      "line": 772,
+      "name": "innovate.predict_frames",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "12553f0e2adf2ed963bda844ab7e10bf900ddd85f7b8af01d264dad270237bfd"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.rolling_average",
+      "kind": "callable",
+      "line": 853,
+      "name": "innovate.rolling_average",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "5dcda19108aa6bf722ef905b3b86d8d2b9d7032554e2516f59a7061b130ea81a"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.sarima_fit",
+      "kind": "callable",
+      "line": 1052,
+      "name": "innovate.sarima_fit",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "1e13773ae1e715229ad977a765dacad3f8af2491c69df7742b7ba2e7de6ef09a"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.scenario_comparisons",
+      "kind": "callable",
+      "line": 402,
+      "name": "innovate.scenario_comparisons",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "b478ebb442e344c01be360ff720bfd87f0d70dfa7f3638fe370234aeec38628d"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.scenario_executions",
+      "kind": "callable",
+      "line": 381,
+      "name": "innovate.scenario_executions",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "68918ddfecc182ab88d5510b425de605906ce448bedfb12d038cde27175f76f1"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.seasonal_decomposition",
+      "kind": "callable",
+      "line": 971,
+      "name": "innovate.seasonal_decomposition",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "4bf4328c5e34785601fec360e7a74706f90785919266b94f0b10d805f2522949"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.staggered_att_polars",
+      "kind": "callable",
+      "line": 1202,
+      "name": "innovate.staggered_att_polars",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "fb45b116d9f38636a6b433020637eaffc6b3a987d69f3ac15ad32daf45649d77"
+    },
+    {
+      "exposure": "public",
+      "id": "bindings/python/innovate/__init__.py::innovate.treatment_contrast_frame",
+      "kind": "callable",
+      "line": 1138,
+      "name": "innovate.treatment_contrast_frame",
+      "path": "bindings/python/innovate/__init__.py",
+      "source_sha256": "03bc142a839a9a4ce3194bbd2b262ae80f00811ee9277f1ecafe493b68a1631d"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native",
+      "kind": "module",
+      "line": 1,
+      "name": "innovate._native",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "aa978c6d18558a51c8aa44f273f86244416f0d6868e9bca96f7141b71e000bb3"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.categorize_adopters_ipc",
+      "kind": "callable",
+      "line": 101,
+      "name": "innovate._native.categorize_adopters_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "c93f92647c8766e1101f304dda007256d5347cd85edf0a419a9745cf55090507"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.execute",
+      "kind": "callable",
+      "line": 13,
+      "name": "innovate._native.execute",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "071b5cce62165b8231435c6f2d5b27712236d98f99482ad67d8d03c06447ce9c"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.export_ipc_file",
+      "kind": "callable",
+      "line": 28,
+      "name": "innovate._native.export_ipc_file",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "1e9471a67f08ea2450b9a43a79fbaa840f9b446d4863239482499db0699e7639"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.export_ipc_stream",
+      "kind": "callable",
+      "line": 44,
+      "name": "innovate._native.export_ipc_stream",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "ab5675b289b212ac07fbd01b4a7b2d2d9f0ad0a4e2af3da59084a78b00223495"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.fit_ipc",
+      "kind": "callable",
+      "line": 81,
+      "name": "innovate._native.fit_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "6626206959fd22671783bb0a82c896947c86c28f8f388487fda0ec615b11c568"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.paired_outcomes_ipc",
+      "kind": "callable",
+      "line": 168,
+      "name": "innovate._native.paired_outcomes_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "231f0979c7ef168bcff7b0126d6c07df7079e7d280fdb7caf436bf46f69ba3b0"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.predict_ipc",
+      "kind": "callable",
+      "line": 60,
+      "name": "innovate._native.predict_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "fbb9fa7c0b59134336b7ce7faa9c8dd372bd2957976778644abb9e1ba78dcc45"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.scenario_comparisons_ipc",
+      "kind": "callable",
+      "line": 152,
+      "name": "innovate._native.scenario_comparisons_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "0cdc4e0ae39e2cd76634c5982e8327624540ecc38eaca9d851a08a8c40de6dd2"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.scenario_executions_ipc",
+      "kind": "callable",
+      "line": 136,
+      "name": "innovate._native.scenario_executions_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "eb8719665b1e10431f9289ab94e1743d35615a0edef57a99f5dd83287e515579"
+    },
+    {
+      "exposure": "private",
+      "id": "bindings/python/innovate/_native.pyi::innovate._native.scenario_grid_ipc",
+      "kind": "callable",
+      "line": 118,
+      "name": "innovate._native.scenario_grid_ipc",
+      "path": "bindings/python/innovate/_native.pyi",
+      "source_sha256": "510f2153104cdee528fe9d79fef202f1722d7618232e1324cd29c9d718e26beb"
+    }
+  ]
+}

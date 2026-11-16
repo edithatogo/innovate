@@ -1,0 +1,12 @@
+[project]
+name = "innovate-learning-notebooks"
+version = "0.1.0"
+description = "Optional native marimo learning environment for Innovate"
+requires-python = ">=3.15.2,<3.16"
+dependencies = ["innovate", "marimo==0.25.2"]
+
+[tool.uv.sources]
+innovate = { path = "..", editable = true }
+
+[tool.uv]
+package = false

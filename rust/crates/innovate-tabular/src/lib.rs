@@ -664,28 +664,41 @@ pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
 /// Explicit column mapping for [`bind_panel`] (R03).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ColumnBinding {
+    /// Name of the non-null numeric time column; coordinates must be finite.
     pub time: String,
+    /// Name of the non-null string column identifying each product.
     pub product: String,
+    /// Name of the non-null string column identifying the observed measure.
     pub measure: String,
+    /// Name of the non-null string column carrying the observation unit label.
     pub unit: String,
+    /// Name of the numeric observation column; nulls remain missing values.
     pub value: String,
+    /// Optional numeric denominator column; present values must be positive and finite.
     pub denominator: Option<String>,
 }
 
 /// One validated observation row extracted by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PanelRow {
+    /// Finite time coordinate in the caller's chosen time units.
     pub time: f64,
+    /// Nonempty product label retained without normalization.
     pub product: String,
+    /// Nonempty measure label used with product and time to identify a row.
     pub measure: String,
+    /// Nonempty unit label, consistent within each product/measure series.
     pub unit: String,
+    /// Finite observation when present; `None` is distinct from an observed zero.
     pub value: Option<f64>,
+    /// Positive finite denominator, or `None` for a missing value or unbound column.
     pub denominator: Option<f64>,
 }
 
 /// Normalized observation panel produced by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct ObservationPanel {
+    /// Validated observations in input row order; binding does not sort by time.
     pub rows: Vec<PanelRow>,
 }
 
@@ -789,26 +802,43 @@ pub fn bind_panel(frame: DataFrame, binding: &ColumnBinding) -> PolarsResult<Obs
 }
 
 /// One row of a versioned [`JointDrawBundle`] (R04).
+///
+/// The encoder validates structural fields and unique keys; labels supplied by
+/// the caller do not establish posterior convergence or scientific validity.
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawRow {
+    /// Draw identifier, retained with the chain identifier for alignment.
     pub draw_id: u64,
+    /// Caller-supplied chain identifier; no chain diagnostics are calculated here.
     pub chain_id: u64,
+    /// Scenario label forming part of the unique row key.
     pub scenario_id: String,
+    /// Strategy label forming part of the unique row key.
     pub strategy_id: String,
+    /// Product label forming part of the unique row key.
     pub product: String,
+    /// Region label forming part of the unique row key.
     pub region: String,
+    /// Finite time coordinate; this bundle does not store a separate time-unit field.
     pub time: f64,
+    /// Finite draw value when present; missingness survives the IPC round trip.
     pub value: Option<f64>,
+    /// Nonempty value-unit label; encoding performs no unit conversion.
     pub units: String,
+    /// Caller-supplied status, required to equal `"valid"` by the encoder.
     pub fit_status: String,
+    /// Nonempty caller-supplied provenance description, retained verbatim.
     pub provenance: String,
 }
 
 /// Versioned joint posterior/scenario draw bundle (`specs/joint-draw-v1.json`, R04).
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawBundle {
+    /// Wire-schema version; the current encoder and decoder accept only `"1.0"`.
     pub schema_version: String,
+    /// Nonempty dependence label; the codec preserves but does not verify its meaning.
     pub dependence: String,
+    /// Nonempty draw rows in caller order, with unique draw/chain/scenario/strategy/product/region/time keys.
     pub rows: Vec<JointDrawRow>,
 }
 
@@ -978,16 +1008,28 @@ pub fn decode_joint_draws(bytes: &[u8]) -> PolarsResult<JointDrawBundle> {
 }
 
 /// One row of a semi-Markov cohort occupancy/transition trajectory (SM03).
+///
+/// Units and time-step width are supplied by the caller's cohort model. The IPC
+/// codec neither converts occupancy/flow scales nor checks conservation totals.
 #[derive(Debug, Clone, PartialEq)]
 pub struct CohortOccupancyRow {
+    /// Draw identifier used to align cohort trajectories.
     pub draw_id: u64,
+    /// Scenario identifier; the encoder rejects an empty or whitespace-only label.
     pub scenario_id: String,
+    /// Cohort identifier; the encoder rejects an empty or whitespace-only label.
     pub cohort_id: String,
+    /// Subgroup label retained as supplied; the encoder permits an empty label.
     pub subgroup: String,
+    /// Nonempty state label identifying the occupied compartment.
     pub state: String,
+    /// Duration-bin index within the caller's state-history discretization.
     pub duration_bin: u32,
+    /// Finite observation time in the caller's chosen time units.
     pub time: f64,
+    /// Nonnegative finite occupied mass, in the caller's count or proportion scale.
     pub occupancy: f64,
+    /// Nonnegative finite transition-flow value on the caller's chosen step and scale.
     pub transition_flow: f64,
 }
 
@@ -1039,7 +1081,10 @@ pub fn cohort_occupancy_ipc(rows: &[CohortOccupancyRow]) -> PolarsResult<Vec<u8>
 /// Decode cohort occupancy/transition rows from Arrow IPC bytes (SM03).
 ///
 /// # Errors
-/// Returns `PolarsError` if IPC decoding or column extraction fails.
+/// Returns `PolarsError` if IPC decoding or column extraction fails, including
+/// nulls in required columns. This decoder does not repeat the encoder's checks
+/// for finite, nonnegative values or nonempty labels; callers must validate
+/// those properties when reading untrusted IPC data.
 pub fn decode_cohort_occupancy_ipc(bytes: &[u8]) -> PolarsResult<Vec<CohortOccupancyRow>> {
     let frame = read_ipc(bytes)?;
     let n = frame.height();

@@ -444,7 +444,13 @@ def build_report(root: Path, contract: dict[str, Any] | None = None) -> dict[str
         report["generated_api_status"] = "not_configured"
     pages = sorted((root / SITE).rglob("*"))
     pages = [path for path in pages if path.is_file() and path.suffix in {".md", ".mdx"}]
-    examples = sorted(path for path in (root / "examples").rglob("*") if path.is_file() and path.name != ".gitkeep")
+    examples = sorted(
+        path
+        for path in (root / "examples").rglob("*")
+        if path.is_file()
+        and path.name != ".gitkeep"
+        and not (path.suffix == ".pyc" and "__pycache__" in path.relative_to(root / "examples").parts)
+    )
     if not pages:
         add(str(SITE), "empty-page-inventory", "No documentation source pages were discovered.")
     if not examples:

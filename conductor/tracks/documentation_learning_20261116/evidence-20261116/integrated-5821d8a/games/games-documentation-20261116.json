@@ -1,0 +1,42 @@
+{
+  "scope": "standalone innovate-games documentation only; excluded from root workspace qualification",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "before": {
+    "Cargo.toml": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+    "rust/crates/innovate-core/Cargo.toml": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+    "rust/crates/innovate-games/Cargo.toml": "54ced568be3dcfdd36d18ea9be13df4bf313bfda8d67e38a71abc4dc86eafb71",
+    "rust/crates/innovate-games/Cargo.lock": "85af674efa423b8493db14e794efeeeb465d57ee600cba88cbf7f86b4f63fa8c",
+    "rust/crates/innovate-games/src/lib.rs": "1be0660f2243a8610d4c4cb7cfb015c710d2dd2c96db6ae83e5922eb23a05841"
+  },
+  "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+  "commands": [
+    {
+      "kind": "doc",
+      "argv": [
+        "/workspace/scratch/5e94e22858cb/innovate-toolchains/cargo/bin/cargo",
+        "doc",
+        "--manifest-path",
+        "rust/crates/innovate-games/Cargo.toml",
+        "--no-deps",
+        "--locked"
+      ],
+      "rustdocflags": "-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes",
+      "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/games-doc-20261116.log",
+      "timeout_seconds": 180,
+      "exit_code": 101,
+      "status": "failed",
+      "elapsed_seconds": 16.848
+    }
+  ],
+  "scientific_tests": "not_run",
+  "target_dir": "/workspace/scratch/5e94e22858cb/innovate-toolchains/games-target",
+  "after": {
+    "Cargo.toml": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+    "rust/crates/innovate-core/Cargo.toml": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+    "rust/crates/innovate-games/Cargo.toml": "54ced568be3dcfdd36d18ea9be13df4bf313bfda8d67e38a71abc4dc86eafb71",
+    "rust/crates/innovate-games/Cargo.lock": "85af674efa423b8493db14e794efeeeb465d57ee600cba88cbf7f86b4f63fa8c",
+    "rust/crates/innovate-games/src/lib.rs": "1be0660f2243a8610d4c4cb7cfb015c710d2dd2c96db6ae83e5922eb23a05841"
+  },
+  "inputs_unchanged": true,
+  "doctests_status": "not_run"
+}

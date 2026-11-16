@@ -1,0 +1,68 @@
+$ node --test scripts/*.test.mjs
+✔ source routes preserve index directories and MDX paths (1.623466ms)
+✔ resource mapping rejects base escapes and decoded traversal (1.716366ms)
+✔ the route inventory includes classified and generated pages and rejects stale generation (20.79281ms)
+✔ retirement inventory rejects mutable history, redirected identities, missing samples and current targets (6.74624ms)
+✔ artifact qualification requires every retired route, not just the browser samples (8.20632ms)
+✔ fingerprints bind paths and bytes, exclude reports, and reject symlinks (2.981602ms)
+✔ missing, filtered, skipped, and duplicated cases cannot qualify (1.171726ms)
+✔ a passing test without its browser, document, and axe receipts cannot qualify (0.998164ms)
+✔ both homepage projects require a unique original prefetch capture inside the normal budget (2.109098ms)
+✔ retirement cases require notice identity, search exclusion, no code, accessibility and budget receipts (0.686585ms)
+✔ asset budgets fail on excessive decoded asset bytes (7.712571ms)
+✔ receipt budgets reject oversized, invalid, or substituted measurements and limits (0.770501ms)
+✔ documentation contract: test_retired_documentation.py (248.201872ms)
+✔ documentation contract: test_community_documentation.py (359.064063ms)
+✔ documentation contract: test_learning_notebooks.py (160.338598ms)
+✔ documentation contract: test_learning_catalogue.py (697.939445ms)
+✔ documentation contract: test_documentation_conventions.py (268.40561ms)
+✔ a speculative response uses captured original bytes despite an empty renderer body (2.244592ms)
+✔ ordinary browser response bytes retain the artifact equality check (0.401756ms)
+✔ installs response interception before use and returns original IDs with complete bytes (5.326435ms)
+✔ body EOF and unchanged-continuation acknowledgement both precede a successful claim (7.792782ms)
+✔ missing and ambiguous captures never fall back to a second fetch or renderer body (1.180489ms)
+✔ each capture can be claimed only once (0.712444ms)
+▶ network identity must be present, unique, and match the actual response
+  ✔ {"missingNetworkId":true} (0.558161ms)
+  ✔ {"noRequest":true} (0.422186ms)
+  ✔ {"duplicateRequest":true} (0.478791ms)
+  ✔ {"noResponse":true} (0.73634ms)
+  ✔ {"responseUrl":"http://127.0.0.1:4321/innovate/wrong/"} (1.787974ms)
+  ✔ {"responseStatus":201} (0.348795ms)
+✔ network identity must be present, unique, and match the actual response (5.403742ms)
+▶ failed, missing, or duplicated terminal events reject incomplete capture
+  ✔ {"failed":true} (0.510038ms)
+  ✔ {"unfinished":true} (24.89687ms)
+  ✔ {"duplicateFinish":true} (0.74991ms)
+✔ failed, missing, or duplicated terminal events reject incomplete capture (26.763241ms)
+✔ a later successful terminal event releases a completed original body (3.048794ms)
+✔ a missing Fetch identity cannot produce a captured response (0.596519ms)
+▶ empty, malformed, or absent protocol bodies fail closed
+  ✔ {} (0.635788ms)
+  ✔ {"body":"abc"} (0.248274ms)
+  ✔ {"body":"","base64Encoded":true} (0.39186ms)
+  ✔ {"body":"bad!","base64Encoded":true} (0.239471ms)
+✔ empty, malformed, or absent protocol bodies fail closed (2.133314ms)
+✔ UTF-8 protocol text is counted as decoded bytes, not characters (0.455907ms)
+▶ protocol and continuation rejections are observed and retained during cleanup
+  ✔ body (0.451481ms)
+  ✔ continue (0.23933ms)
+✔ protocol and continuation rejections are observed and retained during cleanup (0.925024ms)
+✔ an early session close cannot qualify a response with no terminal completion (0.553274ms)
+✔ ordinary responses and redirects continue unchanged without speculative-body capture (0.475346ms)
+✔ duplicate Fetch IDs and late responses remain failures, with no unhandled callback rejection (0.713435ms)
+✔ setup errors detach the session and do not leave event listeners (0.399622ms)
+✔ speculative detection recognizes header names and tokens without broad substring matches (0.259631ms)
+✔ prefetch provenance never invokes Playwright body fallback, even when it could return data (0.380003ms)
+✔ original captured bytes still reject empty, mismatched, or unknown artifacts (0.426382ms)
+✔ the original HTTP failure and redirect treatment remains intact (0.254103ms)
+✔ demotes body headings together without changing their text or IDs (1.401301ms)
+✔ a hash inside code does not change existing heading hierarchy (0.441456ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 55
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1862.743094

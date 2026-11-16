@@ -1,0 +1,112 @@
+[
+  {
+    "suite": "test_api_documentation_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 29 tests in 0.240s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_native_documentation_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 28 tests in 0.043s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_content_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 65 tests in 1.311s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_source_hash_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 14 tests in 0.021s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_production_docs_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 21 tests in 0.070s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_api_reference_generation",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 22 tests in 10.212s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_polyglot_api_documentation",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 38 tests in 0.102s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_workflow",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 10 tests in 0.006s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_scientific_review_contract",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 7 tests in 0.008s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_retired_documentation",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 14 tests in 0.078s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_community_documentation",
+    "exit_code": 0,
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 24 tests in 0.212s",
+      "",
+      "OK"
+    ]
+  }
+]

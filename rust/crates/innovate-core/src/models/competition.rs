@@ -5,15 +5,20 @@ use crate::inference::InnovationError;
 /// Current market state for competing products.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketState {
+    /// Nonnegative adopted amounts in the shared product order.
     pub adoption: Vec<f64>,
 }
 
 /// Parameters for competing-product diffusion rates.
 #[derive(Debug, Clone, PartialEq)]
 pub struct CompetitionParameters {
+    /// Finite positive capacity shared by all products.
     pub market_capacity: f64,
+    /// Entry time for each product; its rate is zero before this time.
     pub entry_times: Vec<f64>,
+    /// Nonnegative external-adoption coefficients per product and time unit.
     pub p: Vec<f64>,
+    /// Nonnegative imitation coefficients multiplying each product's own share.
     pub q: Vec<f64>,
     /// Interaction matrix `alpha[i][j]` (product `j` effect on product `i`).
     pub interaction: Vec<Vec<f64>>,
@@ -22,13 +27,17 @@ pub struct CompetitionParameters {
 /// Instantaneous adoption rates returned by [`competing_rates`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketRates {
+    /// Adoption amounts per time unit, aligned with [`MarketState::adoption`].
     pub rates: Vec<f64>,
 }
 
 /// Compute instantaneous adoption rates for competing products under a shared market capacity (A04).
 ///
 /// # Errors
-/// Returns [`InnovationError`] on mismatched dimensions, negative states, or non-finite inputs.
+/// Returns [`InnovationError`] on mismatched dimensions, non-finite time, invalid
+/// capacity, or non-finite/negative adoption and `p`/`q` values. Entry times and
+/// interaction coefficients are caller-supplied; this function does not
+/// independently validate their finiteness.
 pub fn competing_rates(
     t: f64,
     state: &MarketState,

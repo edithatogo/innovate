@@ -1,0 +1,10 @@
+Resolved 101 packages in 4ms
+   Building innovate @ file:///workspace/scratch/5e94e22858cb/innovate-docs-integrated
+      Built innovate @ file:///workspace/scratch/5e94e22858cb/innovate-docs-integrated
+Prepared 1 package in 33.18s
+Uninstalled 1 package in 0.44ms
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 1 package in 1ms
+ ~ innovate==0.7.0a1 (from file:///workspace/scratch/5e94e22858cb/innovate-docs-integrated)

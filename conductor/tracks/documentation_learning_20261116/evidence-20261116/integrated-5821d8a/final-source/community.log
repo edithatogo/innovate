@@ -1,0 +1,286 @@
+{
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_record": {
+    "repository_path": "conductor/tracks/documentation_learning_20261116/evidence-20261116/integrated-5821d8a/final-source/community.log",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 7462,
+    "serialized_sha256": "sha256:f28a2735bb52b304c4c97c8e4d7e4ead21c9b2f4bc457ba7029370deed4bab0c",
+    "semantic_sha256": "sha256:2ae5e77ddfb809b49a7c3a4819c0d59235d9896183c824eb43e6604b85782add",
+    "semantic_encoding": "python-json:sort_keys=true,ensure_ascii=false,separators=(',',':'),allow_nan=false;UTF-8;no-final-newline",
+    "serialization": {
+      "indent": 2,
+      "ensure_ascii": true,
+      "separators": "default",
+      "line_ending": "\n",
+      "final_newline": "\n",
+      "preserve_object_order": true
+    }
+  },
+  "tagged_digest_paths": [
+    [
+      "mapping_sha256"
+    ],
+    [
+      "observed_source_sha256",
+      "CITATION.cff"
+    ],
+    [
+      "observed_source_sha256",
+      "CODE_OF_CONDUCT.md"
+    ],
+    [
+      "observed_source_sha256",
+      "CONTRIBUTING.md"
+    ],
+    [
+      "observed_source_sha256",
+      "LICENSE"
+    ],
+    [
+      "observed_source_sha256",
+      "README.md"
+    ],
+    [
+      "observed_source_sha256",
+      "bindings/julia/src/Innovate.jl"
+    ],
+    [
+      "observed_source_sha256",
+      "bindings/python/innovate/__init__.py"
+    ],
+    [
+      "observed_source_sha256",
+      "bindings/r/R/kernel_bridge.R"
+    ],
+    [
+      "observed_source_sha256",
+      "bindings/r/man/innovate.R-package.Rd"
+    ],
+    [
+      "observed_source_sha256",
+      "bindings/r/vignettes/innovate-r-kernel.Rmd"
+    ],
+    [
+      "observed_source_sha256",
+      "conductor/archive/community_submission_readiness_20260507/spec.md"
+    ],
+    [
+      "observed_source_sha256",
+      "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md"
+    ],
+    [
+      "observed_source_sha256",
+      "conductor/tracks/research_software_registry_readiness_20260721/readiness.json"
+    ],
+    [
+      "observed_source_sha256",
+      "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/astro-site/src/content/docs/native-migration.md"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/astro-site/src/content/docs/operations/documentation-standards.md"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/astro-site/src/content/docs/user-guide/installation.md"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/contracts/api-documentation.json"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/contracts/content-quality.json"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/contracts/polyglot-api-documentation.json"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/contracts/scientific-pedagogical-review.json"
+    ],
+    [
+      "observed_source_sha256",
+      "docs/registry-readiness.md"
+    ],
+    [
+      "observed_source_sha256",
+      "migration-ledger.json"
+    ],
+    [
+      "observed_source_sha256",
+      "rust/crates/innovate-core/src/lib.rs"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_api_documentation.py"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_documentation_content.py"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_julia_documentation.jl"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_native_documentation.py"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_polyglot_api_documentation.py"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_r_documentation.R"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_registry_readiness.py"
+    ],
+    [
+      "observed_source_sha256",
+      "scripts/check_scientific_review_contract.py"
+    ]
+  ],
+  "record": {
+    "assessment": "documentation_traceability_only",
+    "checks_not_run": [
+      "scripts/check_api_documentation.py",
+      "scripts/check_documentation_content.py",
+      "scripts/check_julia_documentation.jl",
+      "scripts/check_native_documentation.py",
+      "scripts/check_polyglot_api_documentation.py",
+      "scripts/check_r_documentation.R",
+      "scripts/check_scientific_review_contract.py"
+    ],
+    "external_acceptance_assessed": false,
+    "mapping_sha256": "sha256:a0af2a4218393472a6842b13e2a2c541af77f0cbf00beb0e87ad65481bd9908d",
+    "native_execution_performed": false,
+    "observed_source_sha256": {
+      "CITATION.cff": "sha256:76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "CODE_OF_CONDUCT.md": "sha256:072ec6070aa91ed2f77d42d3358de370461213e7f6790e6dbcbdcfdaf40dc9f8",
+      "CONTRIBUTING.md": "sha256:8975facc7dfe52bb5428d3d56125fa4ffc0e4ca88f5b27fb80592d31c1443c62",
+      "LICENSE": "sha256:7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "README.md": "sha256:35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be",
+      "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+      "bindings/python/innovate/__init__.py": "sha256:522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+      "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+      "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+      "bindings/r/vignettes/innovate-r-kernel.Rmd": "sha256:547b16a93e6d3a9f37131e38355d0b4d30a0515e590453279f20b21d1d3afb22",
+      "conductor/archive/community_submission_readiness_20260507/spec.md": "sha256:bf213ebc8720a120dd5afd9da99255f11ef9309320f0bb049f7a232b627eccae",
+      "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md": "sha256:de250f85da81c5d56d5f8b5d9b3b35487e4644c6640994a339c0867b44715c63",
+      "conductor/tracks/research_software_registry_readiness_20260721/readiness.json": "sha256:b650347bd6f34c94406f7f2b2207e5c77988d795e5c312d93020f52021b1a07b",
+      "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md": "sha256:385a40fda91b5255b221bf0cc2edfddb625a0cf66d787edbbc4f705637356780",
+      "docs/astro-site/src/content/docs/native-migration.md": "sha256:345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763",
+      "docs/astro-site/src/content/docs/operations/documentation-standards.md": "sha256:519278148d106ac99a019c08b420f6cdee5d18b2de753561f9b04d63d3d89d21",
+      "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "sha256:f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
+      "docs/astro-site/src/content/docs/user-guide/installation.md": "sha256:2186362a372a03aae091671a930c09e35d109c0fa520f32156df4684c109a689",
+      "docs/contracts/api-documentation.json": "sha256:49ca6d881b4194a357e2aa444841baafb9d3feb93bad80817bb50a8ea0025a42",
+      "docs/contracts/content-quality.json": "sha256:978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+      "docs/contracts/polyglot-api-documentation.json": "sha256:857399a2e44a6a9905e5aa8e3ac3d442c77134acfa9f98f08a4d6a7feeb0c179",
+      "docs/contracts/scientific-pedagogical-review.json": "sha256:869f4346af7c198a4946600ca0c1b940ef0469d5300619efcde8773698749349",
+      "docs/registry-readiness.md": "sha256:54af360913c41a2f42b6ef7bda793ef398c59ba67e05a11e2b8717f84594872b",
+      "migration-ledger.json": "sha256:124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "rust/crates/innovate-core/src/lib.rs": "sha256:36faf35baa3804ab2374543693a05815cb6fc0f56112f6e6c9531b22fb11632f",
+      "scripts/check_api_documentation.py": "sha256:4c7402295d1b34516ddd181ce75092c99b02ecbdaa7515805c2af9bb5d3f2b79",
+      "scripts/check_documentation_content.py": "sha256:9f8ff8afd3422379431ea8f9f54bff189c117928e46a50d89bbe030f1990b7db",
+      "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+      "scripts/check_native_documentation.py": "sha256:03a7d12b0f21cced537650898cbea0c24ee8bcee2afe3c56d6ea1c97a56935ef",
+      "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
+      "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9",
+      "scripts/check_registry_readiness.py": "sha256:b1d984bff0f694d0db238809b47c3b8cd554b036258b8fb4e25fc75f68f37b7d",
+      "scripts/check_scientific_review_contract.py": "sha256:4cf3b5a097f9fca1ce75ac1ce27c14dadf4b3dc68b96935fa2f94181de6845e8"
+    },
+    "online_verification_performed": false,
+    "page_matches_mapping": true,
+    "record_valid": true,
+    "registry": {
+      "assessed_revision": "276c2e505a0ce26910820fe8a94a6a498f505700",
+      "destinations": [
+        {
+          "issue": 399,
+          "key": "software_heritage",
+          "outstanding": [
+            "Select a release/tag and record its exact commit and publication/rights prerequisites; no current release qualification is implied.",
+            "The two tested origin URLs were not found; retain an actual archive-request receipt and successful visit/snapshot for the selected release.",
+            "Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion."
+          ],
+          "state": "pending"
+        },
+        {
+          "issue": 400,
+          "key": "rrid",
+          "outstanding": [
+            "Complete a live duplicate check by resource name and canonical repository identity; the observed provider challenge did not establish absence.",
+            "Retain the actual submission receipt and curator decision for the root Innovate resource.",
+            "Verify the assigned RRID resolver identifies this repository before advertising an identifier."
+          ],
+          "state": "pending"
+        },
+        {
+          "issue": 401,
+          "key": "joss",
+          "outstanding": [
+            "Create and verify a current JOSS-format paper.md and bibliography; legacy manuscripts and readiness inventories do not qualify native 0.7.",
+            "Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.",
+            "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
+            "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."
+          ],
+          "state": "pending"
+        }
+      ],
+      "online_verification_performed": false,
+      "pending_issues": [
+        399,
+        400,
+        401
+      ],
+      "record_valid": true,
+      "recorded_complete": false,
+      "schema_version": 1,
+      "software_version": "0.7.0a1"
+    },
+    "release_qualification_assessed": false,
+    "requirements_mapped": [
+      "software_heritage_archival",
+      "rrid_identity",
+      "joss_documentation",
+      "joss_submission_evidence",
+      "python_review_documentation",
+      "r_review_documentation",
+      "scientific_reporting",
+      "python_conventions",
+      "rust_conventions",
+      "julia_conventions",
+      "community_stewardship"
+    ],
+    "requirements_with_pending_work": [
+      "software_heritage_archival",
+      "rrid_identity",
+      "joss_documentation",
+      "joss_submission_evidence",
+      "python_review_documentation",
+      "r_review_documentation",
+      "scientific_reporting",
+      "python_conventions",
+      "rust_conventions",
+      "julia_conventions",
+      "community_stewardship"
+    ],
+    "reviewed_on": "2026-11-16",
+    "schema_version": 1,
+    "scientific_validation_assessed": false
+  }
+}

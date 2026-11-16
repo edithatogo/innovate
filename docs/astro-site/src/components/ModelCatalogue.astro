@@ -1,0 +1,95 @@
+---
+/** Render discovery declarations as a static, keyboard-readable model atlas. */
+import { getCollection } from 'astro:content';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+const models = (await getCollection('learningModels')).sort((a, b) => a.id.localeCompare(b.id, 'en'));
+if (models.length === 0) throw new Error('The generated model catalogue is empty.');
+
+const flags = (advertised: Record<string, unknown>) => Object.entries(advertised)
+  .filter(([key]) => key.startsWith('supports_'))
+  .sort(([a], [b]) => a.localeCompare(b, 'en'));
+---
+
+<p>
+  The native discovery contract currently advertises <strong>{models.length} model keys</strong>.
+  Choose an orientation below, then read the exact conventions in the
+  <a href="/innovate/native-migration/">native capability guide</a> before choosing parameters,
+  quantities or a simulation engine.
+</p>
+
+<div class="model-overview">
+  <table tabindex="0">
+    <caption>Advertised model keys and variants from native discovery</caption>
+    <thead>
+      <tr><th scope="col">Model key</th><th scope="col">Family</th><th scope="col">Stability</th><th scope="col">Variants</th></tr>
+    </thead>
+    <tbody>
+      {models.map(({ id, data }) => (
+        <tr>
+          <th scope="row"><a href={`#model-${id}`}><code>{id}</code></a></th>
+          <td>{data.advertised.family}</td>
+          <td>{data.advertised.stability}</td>
+          <td>{data.advertised.variants.length > 0
+            ? <ul>{data.advertised.variants.map((variant) => <li><code>{variant}</code></li>)}</ul>
+            : 'No named variant declared'}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<div class="model-cards">
+  <CardGrid>
+    {models.map(({ id, data }) => (
+      <section id={`model-${id}`} aria-label={`${data.title} advertised metadata`}>
+        <Card title={data.title}>
+          <p>{data.summary}</p>
+          <dl>
+            <dt>Model key</dt><dd><code>{id}</code></dd>
+            <dt>Declared stability</dt><dd>{data.advertised.stability}</dd>
+            <dt>Simulation semantics</dt><dd><code>{data.advertised.simulation_semantics}</code></dd>
+            <dt>Simulation engines</dt>
+            <dd><ul>{data.advertised.simulation_engines.map((engine) => <li><code>{engine}</code></li>)}</ul></dd>
+          </dl>
+          <details>
+            <summary>Advertised operations and capability flags</summary>
+            <p>These are independent discovery fields. They do not certify every operation, variant, engine or quantity combination.</p>
+            <dl>
+              <dt>Operations</dt>
+              <dd><ul>{data.advertised.supported_operations.map((operation) => <li><code>{operation}</code></li>)}</ul></dd>
+              <dt>Backends</dt>
+              <dd><ul>{data.advertised.supported_backends.map((backend) => <li><code>{backend}</code></li>)}</ul></dd>
+              {flags(data.advertised).map(([key, value]) => (
+                <><dt><code>{key}</code></dt><dd>{String(value)}</dd></>
+              ))}
+            </dl>
+            <p>A missing flag is undeclared. A family-level flag alone is insufficient to establish a variant-specific rate or other quantity contract.</p>
+          </details>
+        </Card>
+      </section>
+    ))}
+  </CardGrid>
+</div>
+
+<style>
+  .model-overview {
+    max-width: 100%;
+    margin-block: 1.5rem;
+  }
+  table:focus-visible {
+    outline: 2px solid var(--sl-color-text-accent);
+    outline-offset: 3px;
+  }
+  table { display: block; width: 100%; max-width: 100%; overflow-x: auto; }
+  caption { text-align: start; font-weight: 600; margin-block-end: 0.75rem; }
+  th, td { vertical-align: top; }
+  ul { margin-block: 0; padding-inline-start: 1.25rem; }
+  li + li { margin-block-start: 0.2rem; }
+  .model-cards section { min-width: 0; scroll-margin-top: 6rem; }
+  .model-cards code { overflow-wrap: anywhere; }
+  dt { font-weight: 600; margin-block-start: 0.75rem; }
+  dd { margin-inline-start: 0; }
+  details { margin-block-start: 1rem; }
+  summary { cursor: pointer; }
+</style>

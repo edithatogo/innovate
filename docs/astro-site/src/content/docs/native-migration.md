@@ -940,15 +940,19 @@ selects a zero-based boundary inside the observed series. Alternatively,
 `split_time` selects the first observation at or after that time and retains the
 exact time for fixed-time continuity, including boundaries between samples.
 Do not supply both; each must leave observations on both sides. Without either, native
-unpruned dynamic programming minimizes penalized L2 segment error on a grid:
+PELT pruning minimizes penalized L2 segment error on a grid:
 `detector_penalty=3`, `detector_jump=5`, minimum segment length two. It selects
 the first detected boundary, with midpoint fallback when no valid interior
 boundary is detected. This independently implemented grid objective aligns with
 the historical [ruptures Pelt defaults](https://centre-borelli.github.io/ruptures-docs/code-reference/detection/pelt-reference/).
 Fixtures from ruptures 1.1.10 qualify constant, multiple-step, off-grid, short,
-trend, small-step and smooth-curve cases; universal floating-point/tie or PELT performance
-parity is not asserted. Native detection supports at most 2000 observations;
-provide an explicit split for larger fits. Jump is 1–2000 and penalty positive.
+trend, small-step and smooth-curve cases. The native implementation also includes
+an exhaustive dynamic-programming oracle for short discrete series and a
+5,000-observation regression. These checks do not establish universal
+floating-point/tie equivalence or a runtime bound. Native automatic detection
+accepts at most 100,000 observations; provide an explicit split for larger fits.
+The separate jump limit remains 1–2000, and penalty must be positive. Result
+metadata identifies this detector as `pelt_penalized_l2_grid`.
 
 Prediction mode is explicit:
 

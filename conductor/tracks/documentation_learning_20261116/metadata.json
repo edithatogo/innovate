@@ -1,0 +1,9 @@
+{
+  "track_id": "documentation_learning_20261116",
+  "type": "feature",
+  "status": "in_progress",
+  "created_at": "2026-11-16T21:45:00+10:00",
+  "updated_at": "2026-11-16T12:18:56+00:00",
+  "description": "Implement and qualify source-derived Astro model/tutorial catalogues, optional native marimo learning, a frozen public-data lesson, advanced examples, language documentation conventions, community standards and legacy retirement. The integrated base 5821d8a has fresh local source, Python/native, five-crate Rust, marimo and static-site artifact evidence. Earlier hosted Python/Julia/R receipts remain historical. Current all-language aggregation, managed-browser execution, Windows CI, broader curriculum, human reader success and live publication remain under qualification; the excluded standalone games documentation is blocked by upstream dependency resolution.",
+  "predecessor": "../../archive/documentation_quality_contracts_20261115/"
+}

@@ -1,0 +1,73 @@
+{
+  "active_root": "conductor/tracks",
+  "archive_root": "conductor/archive",
+  "missing_active_directories": [],
+  "missing_archive_directories": [
+    "ci_supply_chain_hardening_20261115",
+    "rust_nuts_hmc_20261115",
+    "rust_ode_integration_20261115"
+  ],
+  "missing_links": [],
+  "orphan_archive_directories": [],
+  "registered_active_directories": [
+    "advanced_diffusion_frontier_20261107",
+    "documentation_quality_contracts_20261115",
+    "ecosystem_decision_integration_20261107",
+    "empirical_validation_publication_20261107",
+    "healthcare_hype_validation_20261107",
+    "kairos_runtime_boundary_20261107",
+    "repository_security_context_20261114",
+    "research_software_registry_readiness_20260721",
+    "rust_core_convergence_20261107",
+    "rust_http_ureq_20261115",
+    "rust_kairos_crates_io_20261115",
+    "rust_network_petgraph_20261115",
+    "rust_regime_changepoint_20261115",
+    "rust_stats_distributions_20261115",
+    "rust_tabular_crates_io_20261115",
+    "scientific_ecosystem_alignment_20261029",
+    "scientific_integrity_20261107",
+    "semi_markov_competing_risks_20261110",
+    "test_acceleration_20261114",
+    "tobac_consumer_qualification_20261025",
+    "voiage_alignment_followups_20261030"
+  ],
+  "registry": "conductor/tracks.md",
+  "schema_version": 1,
+  "stale_active_directories": [
+    "ci_supply_chain_hardening_20261115",
+    "rust_nuts_hmc_20261115",
+    "rust_ode_integration_20261115"
+  ],
+  "summary": {
+    "active_directories": 24,
+    "missing_active_directories": 0,
+    "missing_archive_directories": 3,
+    "missing_links": 0,
+    "orphan_archive_directories": 0,
+    "registered_active_entries": 21,
+    "registry_entries": 118,
+    "stale_active_directories": 3,
+    "wrong_link_targets": 3
+  },
+  "wrong_link_targets": [
+    {
+      "link": "./tracks/rust_ode_integration_20261115/",
+      "name": "Rust Adaptive ODE/IVP Integration Modernization",
+      "reason": "completed_not_archive",
+      "status": "x"
+    },
+    {
+      "link": "./tracks/rust_nuts_hmc_20261115/",
+      "name": "Rust HMC/NUTS Posterior Sampling Migration (`nuts-rs`)",
+      "reason": "completed_not_archive",
+      "status": "x"
+    },
+    {
+      "link": "./tracks/ci_supply_chain_hardening_20261115/",
+      "name": "CI & Release Supply-Chain Hardening",
+      "reason": "completed_not_archive",
+      "status": "x"
+    }
+  ]
+}

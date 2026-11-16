@@ -148,7 +148,7 @@ Contracts are in `../contracts/`. Audit, ratchet and strict completion have
 different meanings: a ratchet pass does not erase the documented backlog or
 qualify historical reference pages. See the
 [maintainer guide](src/content/docs/maintainers/documentation-quality.md) and
-[Conductor track](../../conductor/tracks/documentation_quality_contracts_20261115/index.md).
+[Conductor track](../../conductor/tracks/documentation_learning_20261116/index.md).
 
 A source-only run can report `current_structure_complete: true` while execution
 remains `not_run`. A successful Python run sets `python_execution_status` and can

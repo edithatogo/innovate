@@ -7,9 +7,14 @@ use crate::models::hype::{HypeConfiguration, HypeParameters, HypePulse, hype_mea
 /// Request for [`fit_hype`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypeFitRequest {
+    /// Validated observation coordinates, also used to report origin/span metadata.
     pub time: TimeGrid,
+    /// Finite observations aligned with `time`; signed hype levels are permitted.
     pub observed: Vec<f64>,
+    /// Candidate starting configurations; invalid candidates are skipped, and
+    /// the finite valid fit with the smallest training SSE is retained.
     pub initial_guesses: Vec<HypeParameters>,
+    /// Positive maximum number of coordinate-search sweeps for each valid start.
     pub max_iterations: usize,
 }
 
@@ -59,8 +64,10 @@ fn sse(time: &[f64], observed: &[f64], p: &HypeParameters) -> Option<f64> {
 
 /// Jointly fit composite hype parameters from multiple starting points (H02).
 ///
-/// Stores training-only time normalization metadata and flags overlapping/non-identifiable
-/// pulse decompositions in `diagnostics` while preserving predictive total accuracy.
+/// Returns a deterministic point estimate or an invalid outcome, without posterior
+/// draws. Diagnostics record training-grid origin/span and whether fitted pulse
+/// centers are closer than the smaller of their widths. This overlap flag does
+/// not establish identifiability, convergence, or out-of-sample accuracy.
 #[must_use]
 pub fn fit_hype(request: &HypeFitRequest) -> FitOutcome {
     if request.observed.len() != request.time.len()

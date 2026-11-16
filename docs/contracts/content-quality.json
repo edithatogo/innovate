@@ -4,18 +4,6 @@
     "api/python.md": {
       "kind": "index"
     },
-    "architecture/adr.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "architecture/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "architecture/polyglot-repo.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
     "bindings/csharp.md": {
       "kind": "reference"
     },
@@ -25,23 +13,11 @@
     "bindings/index.md": {
       "kind": "index"
     },
-    "bindings/julia.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "bindings/parity.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
     "bindings/rust.md": {
       "kind": "reference"
     },
     "core/arrow-interchange.md": {
       "kind": "reference"
-    },
-    "core/diagnostics-contract.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
     },
     "core/index.md": {
       "kind": "reference"
@@ -49,94 +25,23 @@
     "core/kernel.md": {
       "kind": "reference"
     },
-    "index.md": {
+    "historical-documentation.md": {
       "kind": "index"
     },
-    "maintainers/binding-conformance.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/compatibility.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/deployment-readiness.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/deprecation.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/docsearch.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+    "index.md": {
+      "kind": "index"
     },
     "maintainers/documentation-quality.md": {
       "kind": "reference"
     },
-    "maintainers/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/maintenance.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/package-health.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/plugins.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/publication.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/release-notes.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/release-readiness.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/runtime-logging.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/stability.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "maintainers/support.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+    "maintainers/language-conventions.md": {
+      "kind": "reference"
     },
     "maintainers/test-acceleration.md": {
       "kind": "reference"
     },
-    "migration/archive.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "migration/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "migration/redirects.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "migration/references.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "migration/validation.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+    "models/index.mdx": {
+      "kind": "reference"
     },
     "native-migration.md": {
       "kind": "reference",
@@ -151,176 +56,15 @@
         "examples/native_reingestion.py"
       ]
     },
-    "operations/abi-compatibility.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/accelerator-parallel-execution.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/community-readiness.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/governance.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/hpc-readiness.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/hpc-registry.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/hpc-submission-packet.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/hpc-submission-workflow.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/index.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/polyglot-registry.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
+    "operations/documentation-standards.md": {
+      "kind": "reference"
     },
     "operations/registry-readiness.md": {
       "kind": "reference"
     },
-    "operations/registry-submissions.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/release-maturity.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/remote-execution.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/roadmap.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/runtime-logging.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/rust-core.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/scientific-hpc.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/submission-dossiers.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "operations/xla-backend.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "roadmap/dataframe-engine.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "roadmap/diagnostics-uncertainty.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "roadmap/probabilistic-inference.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/advanced-diffusion-inference.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/advanced-runtime.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/benchmark-workflows.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/decision-reports.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/diagnostics-contract.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/functional-kernel-contract.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/index.md": {
-      "kind": "index"
-    },
-    "tutorials/jax-backend.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/kairos-simulation-adapter.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/multi-product.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/ndlib-integration.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/plugin-api-stability.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "tutorials/scenario-experiment-workflows.mdx": {
+    "tutorials/arrow-interchange.mdx": {
       "kind": "tutorial",
       "example": "examples/native_scenarios.py"
-    },
-    "tutorials/seasonal-data.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "user-guide/advanced-modeling.md": {
-      "kind": "historical",
-      "reason": "Retained pre-0.7 reference with a visible migration notice; not evidence for the current Rust/Polars API."
-    },
-    "user-guide/backends.md": {
-      "kind": "reference"
-    },
-    "user-guide/fitting.md": {
-      "kind": "reference"
-    },
-    "user-guide/getting-started.mdx": {
-      "kind": "tutorial",
-      "example": "examples/native_forecast.py"
-    },
-    "user-guide/installation.md": {
-      "kind": "reference"
-    },
-    "user-guide/forecasting.mdx": {
-      "kind": "tutorial",
-      "example": "examples/native_forecast.py"
-    },
-    "tutorials/norton-bass.mdx": {
-      "kind": "tutorial",
-      "example": "examples/native_norton_bass.py"
     },
     "tutorials/bayesian-fitter.mdx": {
       "kind": "tutorial",
@@ -330,16 +74,61 @@
       "kind": "tutorial",
       "example": "examples/native_overlap.py"
     },
-    "tutorials/arrow-interchange.mdx": {
-      "kind": "tutorial",
-      "example": "examples/native_scenarios.py"
-    },
     "tutorials/data-ingestion-provenance.mdx": {
       "kind": "tutorial",
       "example": "examples/native_reingestion.py"
     },
-    "historical-documentation.md": {
+    "tutorials/forcing-and-time.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_forcing.py"
+    },
+    "tutorials/index.mdx": {
       "kind": "index"
+    },
+    "tutorials/kairos-simulation.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_kairos.py"
+    },
+    "tutorials/marimo.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_public_data.py"
+    },
+    "tutorials/native-batch.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_batch.py"
+    },
+    "tutorials/network-scenarios.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_network.py"
+    },
+    "tutorials/norton-bass.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_norton_bass.py"
+    },
+    "tutorials/public-data-fit.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_public_data.py"
+    },
+    "tutorials/scenario-experiment-workflows.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_scenarios.py"
+    },
+    "user-guide/backends.md": {
+      "kind": "reference"
+    },
+    "user-guide/fitting.md": {
+      "kind": "reference"
+    },
+    "user-guide/forecasting.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_forecast.py"
+    },
+    "user-guide/getting-started.mdx": {
+      "kind": "tutorial",
+      "example": "examples/native_forecast.py"
+    },
+    "user-guide/installation.md": {
+      "kind": "reference"
     }
   },
   "examples": {
@@ -412,6 +201,13 @@
       "network": false,
       "timeout_seconds": 60,
       "expected_stdout": "{\"encodings\": [\"python_sorted_json_v1\", \"rust_sorted_json_v1\"], \"tampered_artifacts_rejected\": 2}\n"
+    },
+    "examples/native_public_data.py": {
+      "status": "runnable",
+      "language": "python",
+      "network": false,
+      "timeout_seconds": 60,
+      "expected_stdout": "{\"cutoff_year\": 2015, \"holdout_mae\": {\"gompertz\": 12.916, \"logistic\": 15.994, \"persistence\": 8.41}, \"holdout_rows\": 9, \"missing_years\": [2002, 2003, 2004, 2025], \"training_rows\": 23}\n"
     }
   },
   "generated_api": {

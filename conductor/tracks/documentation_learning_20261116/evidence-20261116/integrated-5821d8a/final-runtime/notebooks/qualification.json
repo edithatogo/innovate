@@ -1,0 +1,70 @@
+{
+  "browser_wasm_qualified": false,
+  "environment": {
+    "innovate": "0.7.0a1",
+    "marimo": "0.25.2",
+    "polars": "2.1.0",
+    "python": "3.15.2"
+  },
+  "executed": true,
+  "generated_at": "2026-11-16T12:04:53.908842+00:00",
+  "native_binary_sha256": "fae743379e41993343496eb0fab04ae4a9f7994c937eb724403337af50ed7aaa",
+  "native_binary_source_binding_verified": false,
+  "runs": [
+    {
+      "cutoffs": [
+        2015,
+        2018
+      ],
+      "default_scores": [
+        {
+          "converged": true,
+          "holdout_bias": -15.99389039086351,
+          "holdout_mae": 15.99389039086351,
+          "holdout_rmse": 16.473585795389813,
+          "model": "logistic"
+        },
+        {
+          "converged": true,
+          "holdout_bias": -12.916266716072734,
+          "holdout_mae": 12.916266716072734,
+          "holdout_rmse": 13.46547584917368,
+          "model": "gompertz"
+        },
+        {
+          "converged": null,
+          "holdout_bias": -8.410123487267725,
+          "holdout_mae": 8.410123487267725,
+          "holdout_rmse": 9.292633480442127,
+          "model": "persistence"
+        }
+      ],
+      "exact_example_parity": true,
+      "export_bytes": 54901,
+      "export_exit_code": 0,
+      "export_sha256": "ec0cc62abf3f5fe2ac6e5dfe78726107418a12202ff444a00ba02c658cc6b121",
+      "holdout_rows": [
+        9,
+        6
+      ],
+      "id": "public-data-fit"
+    }
+  ],
+  "schema_version": 1,
+  "scientific_acceptance": false,
+  "source_files": {
+    "docs/contracts/content-quality.json": "978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+    "docs/contracts/learning-notebooks.json": "23ed73f40ce5dda2502e61e82f531b64a9b9c438ddbbc81bc65cbfc7ccc94a5e",
+    "docs/datasets/wdi-aus-internet-20261116/manifest.json": "e8d7718a3be7b39caf5f7e592f318bd2912b3f225b5c74b8593a5b0691f2e8a6",
+    "docs/datasets/wdi-aus-internet-20261116/observations.csv": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+    "docs/datasets/wdi-aus-internet-20261116/raw.json": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+    "examples/native_public_data.py": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+    "notebooks/public_data_fit.py": "acf980c7688cee71024b179c9b3a434fa66527b696f8e190cac43ea36c096c24",
+    "notebooks/pyproject.toml": "5fa65fe9f275743686e15e8674ea5d32525295aff0eeba1a9f958889573f5340",
+    "notebooks/uv.lock": "74ef857b36916beb77cdc6f4ed49469df937d9959e24a530cade4474884d43cf",
+    "pyproject.toml": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+    "scripts/check_learning_notebooks.py": "6b152ab17b77c6e6244c70701495177a0eb7cc4b3fbf9bd370c51a20c85c78d2"
+  },
+  "static_export_published": false,
+  "status": "passed"
+}

@@ -14,88 +14,155 @@ use paignia_solve::{
     backward_induction_with_config, pure_nash_equilibria,
 };
 
+/// Solver provider name recorded in [`AlgorithmIdentity`].
 pub const PROVIDER_NAME: &str = "paignia-solve";
+/// Version of the `innovate-games` adapter crate recorded in solution identity.
+///
+/// The resolved Paignia dependency revision is recorded separately by Cargo.
 pub const PROVIDER_VERSION: &str = env!("CARGO_PKG_VERSION");
 
+/// Finite game representation associated with a reported solution.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum GameClass {
+    /// Simultaneous choices represented by a strategy-profile payoff table.
     NormalForm,
+    /// Sequential decisions represented by a perfect-information game graph.
     ExtensiveFormPerfectInformation,
 }
 
+/// Information available to players in the reported game class.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum InformationStructure {
+    /// Players choose actions simultaneously.
     Simultaneous,
+    /// Each decision node identifies the state observed by its acting player.
     PerfectInformation,
 }
 
+/// Requested equilibrium concept, including concepts rejected explicitly.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum SolutionConcept {
+    /// Enumerate pure-strategy Nash equilibria of a finite normal-form game.
     PureNash,
+    /// Obtain one perfect-information solution by backward induction.
     SubgamePerfectBackwardInduction,
+    /// Mixed-strategy Nash request; unsupported by this adapter.
     MixedNash,
+    /// Correlated-equilibrium request; unsupported by this adapter.
     CorrelatedEquilibrium,
 }
 
+/// Extent of the solution search declared by the selected adapter route.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum CompletenessClaim {
+    /// Enumerate the pure profiles in the declared finite normal-form game.
+    ///
+    /// The scope is pure-strategy equilibria under the supplied solver tolerance.
     ExhaustiveWithinDeclaredScope,
+    /// Return one backward-induction solution under the supplied tie policy.
     OneFound,
 }
 
+/// Outcome of a completed supported solver call.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum SolutionStatus {
+    /// At least one pure equilibrium or a backward-induction solution was returned.
     Solved,
+    /// The pure-strategy search returned no equilibrium in its declared scope.
     NoEquilibriumFound,
 }
 
+/// Provider, algorithm and scope metadata attached to a static solution.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AlgorithmIdentity {
+    /// Solver provider identifier, set to [`PROVIDER_NAME`].
     pub provider: &'static str,
+    /// Provider entry point, either `pure_nash_equilibria` or `backward_induction`.
     pub algorithm: &'static str,
+    /// Adapter crate version from [`PROVIDER_VERSION`].
     pub version: &'static str,
+    /// Representation used for the solved game.
     pub game_class: GameClass,
+    /// Information structure corresponding to the solver route.
     pub information_structure: InformationStructure,
+    /// Equilibrium concept actually requested from the provider.
     pub solution_concept: SolutionConcept,
+    /// Scope of the returned search result.
     pub completeness_claim: CompletenessClaim,
 }
 
+/// One firm's product, price and cost choice in a static pricing game.
+///
+/// Use a consistent monetary unit for price and costs. The preference
+/// coefficients convert quality and price into dimensionless utility.
 #[derive(Clone, Debug, PartialEq)]
 pub struct PricingOffer {
+    /// Strategy label; choose distinct labels within each firm's offer list.
+    ///
+    /// The builder uses these labels as payoff-table keys.
     pub action: String,
+    /// Finite product quality in the unit used by the quality preference coefficient.
     pub quality: f64,
+    /// Finite price per unit of demand, in the caller's monetary unit.
     pub price: f64,
+    /// Finite variable cost per unit of demand, in the same unit as `price`.
     pub unit_cost: f64,
+    /// Finite total fixed cost for selecting this offer, in the monetary unit.
     pub fixed_cost: f64,
 }
 
+/// Two firms' offers and shared demand assumptions for a simultaneous game.
 #[derive(Clone, Debug, PartialEq)]
 pub struct DuopolyPricingSpec {
+    /// Positive finite potential demand, in units consistent with per-unit prices.
     pub market_size: f64,
+    /// Shared coefficients for quality and price in multinomial-logit utility.
     pub preferences: PreferenceParameters,
+    /// Nonempty action list assigned to player `firm_a`.
     pub firm_a_offers: Vec<PricingOffer>,
+    /// Nonempty action list assigned to player `firm_b`.
     pub firm_b_offers: Vec<PricingOffer>,
 }
 
+/// Static solver result with an explicit solution concept and search scope.
 #[derive(Clone, Debug, PartialEq)]
 pub struct StaticGameSolution {
+    /// Provider entry point and the scope attached to this result.
     pub identity: AlgorithmIdentity,
+    /// Whether the completed supported search returned a solution.
     pub status: SolutionStatus,
+    /// Numeric comparison tolerance reported for the provider call.
     pub tolerance: f64,
+    /// Provider tie-resolution policy used by the call.
     pub tie_policy: TiePolicy,
+    /// Enumerated pure profiles for normal-form games; empty for extensive games.
     pub pure_equilibria: Vec<StrategyProfile>,
+    /// Selected action by decision node for extensive games; empty for normal form.
     pub extensive_choices: BTreeMap<NodeId, ActionId>,
+    /// Payoffs of the first returned pure profile, or the extensive-game root result.
+    ///
+    /// A normal-form result with no pure equilibrium has an empty map. Multiple
+    /// pure equilibria are retained in `pure_equilibria`; their payoffs are not
+    /// averaged into this field. Units are inherited from the supplied game.
     pub expected_payoffs: PayoffVector,
+    /// Original normal-form payoff table; empty for an extensive-game solution.
     pub payoff_table: BTreeMap<StrategyProfile, PayoffVector>,
 }
 
+/// Input, demand-model, provider or unsupported-concept failure.
 #[derive(Clone, Debug, PartialEq)]
 pub enum StaticGameError {
+    /// Invalid market size, empty offer lists or non-finite offer costs.
     InvalidInput(String),
+    /// Error returned by the native multinomial-logit demand calculation.
     DemandModel(InnovationError),
+    /// Validation or execution error returned by Paignia.
     Solver(SolveError),
+    /// A requested solution concept has no supported adapter route for this game.
     Unsupported {
+        /// Rejected solution concept.
         concept: SolutionConcept,
+        /// Explanation of the unsupported concept or representation combination.
         reason: String,
     },
 }
@@ -129,8 +196,16 @@ impl From<SolveError> for StaticGameError {
 
 /// Build a two-firm simultaneous innovation pricing game backed by `innovate_core::models::demand::choice_shares`.
 ///
+/// The players are `firm_a` and `firm_b`. For every pair of offers, the demand
+/// calculation includes an outside option with utility zero. Firm `i` receives
+/// payoff `market_size * share_i * (price_i - unit_cost_i) - fixed_cost_i`, in the
+/// caller's monetary unit. The returned table contains the offer combinations;
+/// equilibrium search is a separate call to [`solve_normal_form_innovation_game`].
+///
 /// # Errors
-/// Returns [`StaticGameError`] on empty strategy sets, non-finite market size/costs, or invalid demand parameters.
+/// Returns [`StaticGameError::InvalidInput`] for a nonpositive or non-finite market
+/// size, empty offer lists, or non-finite costs. Non-finite quality, price or
+/// preference inputs are reported through [`StaticGameError::DemandModel`].
 pub fn build_duopoly_pricing_game(
     spec: &DuopolyPricingSpec,
 ) -> Result<NormalFormGame, StaticGameError> {
@@ -208,9 +283,16 @@ pub fn build_duopoly_pricing_game(
 
 /// Solve a static normal-form innovation game under the requested [`SolutionConcept`].
 ///
+/// The supported route is [`SolutionConcept::PureNash`], delegated to Paignia.
+/// All returned pure profiles are retained. An empty result returns
+/// [`SolutionStatus::NoEquilibriumFound`] with an empty `expected_payoffs` map;
+/// it does not establish the absence of mixed equilibria. With multiple pure
+/// profiles, `expected_payoffs` contains the first profile's payoffs.
+///
 /// # Errors
-/// Returns [`StaticGameError::Unsupported`] for concepts not yet qualified in `paignia-solve`
-/// (e.g. `MixedNash`, `CorrelatedEquilibrium`, or `SubgamePerfectBackwardInduction` on a normal-form game).
+/// Returns [`StaticGameError::Unsupported`] for mixed Nash, correlated equilibrium
+/// or backward induction on a normal-form game. Provider validation and execution
+/// failures are propagated through [`StaticGameError::Solver`].
 pub fn solve_normal_form_innovation_game(
     game: &NormalFormGame,
     concept: SolutionConcept,
@@ -262,8 +344,15 @@ pub fn solve_normal_form_innovation_game(
 
 /// Solve a finite, acyclic, perfect-information extensive-form innovation game via backward induction.
 ///
+/// Returns the provider's chosen action map and root payoff vector, with
+/// [`CompletenessClaim::OneFound`]. The supplied tie policy determines choices
+/// when the provider regards alternatives as tied; this route does not enumerate
+/// all equilibria. Normal-form profile and payoff-table fields are empty.
+///
 /// # Errors
-/// Returns [`StaticGameError`] on invalid games, non-finite tolerances, or solver limits.
+/// Provider validation and execution failures, including invalid games, invalid
+/// tolerances and exceeded solver limits, are propagated through
+/// [`StaticGameError::Solver`].
 pub fn solve_extensive_innovation_game(
     game: &Game,
     config: SolverConfig,

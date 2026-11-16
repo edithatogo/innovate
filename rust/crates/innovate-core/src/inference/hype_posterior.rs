@@ -75,17 +75,33 @@ pub fn transform_unconstrained_hype(
 /// Request for [`sample_hype_posterior`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypePosteriorRequest {
+    /// Validated time coordinates for the observed hype series.
     pub time: TimeGrid,
+    /// Finite hype levels aligned with `time`.
     pub observed: Vec<f64>,
+    /// Starting coordinates in the layout of [`transform_unconstrained_hype`].
     pub initial_unconstrained: Vec<f64>,
+    /// Number of Gaussian pulses; the coordinate vector has `4 + 3 * n_pulses` entries.
     pub n_pulses: usize,
+    /// Whether later pulse centers are positive increments from the previous center.
     pub ordered_centers: bool,
+    /// Fixed, finite positive Gaussian observation standard deviation.
     pub sigma: f64,
+    /// Positive retained draw count; an equal number of initial iterations is discarded.
     pub n_draws: usize,
+    /// Seed for the Rust `StdRng` proposal and acceptance draws.
     pub seed: u64,
 }
 
 /// Sample a composite hype posterior with ordered parameter transforms and fail-closed status (H03).
+///
+/// Uses one random-walk Metropolis chain with joint proposals whose independent
+/// increments per coordinate are uniform in `[-0.05, 0.05]`; the whole vector is
+/// accepted or rejected together. The implemented target combines Gaussian residual terms,
+/// `-0.005 * sum(u²)`, and the transform log-Jacobian. Returned draws use the
+/// constrained parameter coordinates. A valid outcome requires finite draws and
+/// at least one accepted proposal; it does not establish chain convergence or
+/// effective sample size. Diagnostics report the proposal acceptance count only.
 #[must_use]
 pub fn sample_hype_posterior(request: &HypePosteriorRequest) -> FitOutcome {
     if request.observed.len() != request.time.len()

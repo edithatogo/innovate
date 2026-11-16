@@ -133,6 +133,10 @@ impl CompetingRisksGenerator {
 }
 
 /// Multiply two square matrices of identical dimension.
+///
+/// # Panics
+/// Can panic when the matrices have incompatible or undersized rows; dimensions
+/// are a caller precondition and are not checked by this low-level helper.
 #[must_use]
 pub fn mat_mul(a: &[Vec<f64>], b: &[Vec<f64>]) -> Vec<Vec<f64>> {
     let s = a.len();
@@ -170,8 +174,11 @@ fn normalize_rows(matrix: &mut [Vec<f64>]) -> Result<(), InnovationError> {
 /// Bi-exponential excess-risk / frailty decay kernel $w(\tau) = \alpha e^{-\lambda_1 \tau} + (1 - \alpha) e^{-\lambda_2 \tau}$ (SM02).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BiExponentialKernel {
+    /// Finite mixture weight in `[0, 1]` for the first exponential component.
     pub alpha: f64,
+    /// Finite nonnegative decay rate of the first component per duration unit.
     pub lambda1: f64,
+    /// Finite nonnegative decay rate of the second component per duration unit.
     pub lambda2: f64,
 }
 
@@ -203,9 +210,13 @@ impl BiExponentialKernel {
 /// Semi-Markov duration-since-transition tunnel-state model $\tau \in \{0, \dots, K\}$ (SM02).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct TunnelStateModel {
+    /// Largest discrete duration bin; survivors reaching it remain in that bin.
     pub max_tunnel: usize,
+    /// Finite nonnegative baseline hazard per unit step, before conversion to a probability.
     pub baseline_relapse: f64,
+    /// Finite nonnegative excess hazard at duration zero.
     pub frailty_amplitude: f64,
+    /// Finite nonnegative exponential decay coefficient per duration step.
     pub decay_rate: f64,
 }
 
@@ -240,7 +251,9 @@ impl TunnelStateModel {
     /// returning `(next_occupancy, total_relapsed)`.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] on length mismatch, negative occupancy/entry, or hazard > 1.
+    /// Returns [`InnovationError`] on length mismatch, non-finite/negative
+    /// occupancy or entry, or invalid hazard parameters. Hazards are converted
+    /// to step probabilities as `1 - exp(-hazard)`; they need not be at most one.
     pub fn step_cohort(
         &self,
         occupancy: &[f64],

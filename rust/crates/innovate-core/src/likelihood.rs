@@ -7,24 +7,44 @@ use statrs::function::gamma::ln_gamma;
 /// Declared observation likelihood family.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LikelihoodFamily {
+    /// Poisson counts with variance equal to the supplied mean.
     Poisson,
-    NegativeBinomial { dispersion: f64 },
-    Gaussian { sigma: f64 },
-    StudentT { sigma: f64, df: f64 },
+    /// Negative-binomial counts with variance `mean + mean² / dispersion`.
+    NegativeBinomial {
+        /// Positive inverse overdispersion.
+        dispersion: f64,
+    },
+    /// Gaussian observations with the supplied mean and standard deviation.
+    Gaussian {
+        /// Positive standard deviation.
+        sigma: f64,
+    },
+    /// Student-t observations; `sigma` is a scale, not the standard deviation.
+    StudentT {
+        /// Positive scale.
+        sigma: f64,
+        /// Positive degrees of freedom.
+        df: f64,
+    },
 }
 
 /// Observation scale guard preventing cumulative counts from being treated as independent increments.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationScale {
+    /// Interval counts that may enter an independent count likelihood.
     IncidenceCounts,
+    /// Accumulated counts; rejected by Poisson and negative-binomial likelihoods.
     CumulativeCounts,
+    /// Continuous measurements on the scale of the supplied mean vector.
     Continuous,
 }
 
 /// Configuration for [`log_likelihood`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LikelihoodConfig {
+    /// Observation distribution and its fixed scale or dispersion parameters.
     pub family: LikelihoodFamily,
+    /// Declared data scale used to reject cumulative-count independence misuse.
     pub scale: ObservationScale,
 }
 

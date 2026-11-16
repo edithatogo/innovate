@@ -1,0 +1,137 @@
+[
+  {
+    "receipt": "final-source/community.log",
+    "line": 34,
+    "key": "docs/contracts/api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.log",
+    "line": 36,
+    "key": "docs/contracts/polyglot-api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.log",
+    "line": 41,
+    "key": "scripts/check_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.log",
+    "line": 45,
+    "key": "scripts/check_polyglot_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.json",
+    "line": 34,
+    "key": "docs/contracts/api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.json",
+    "line": 36,
+    "key": "docs/contracts/polyglot-api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.json",
+    "line": 41,
+    "key": "scripts/check_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/community.json",
+    "line": 45,
+    "key": "scripts/check_polyglot_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 381,
+    "key": "docs/astro-site/scripts/generate-api.mjs",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 386,
+    "key": "docs/astro-site/src/components/AccessibleSearch.astro",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 470,
+    "key": "docs/contracts/api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 476,
+    "key": "docs/contracts/polyglot-api-documentation.json",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 582,
+    "key": "scripts/check_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 588,
+    "key": "scripts/check_polyglot_api_documentation.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  },
+  {
+    "receipt": "final-source/artifact.json",
+    "line": 592,
+    "key": "scripts/generate_api_reference.py",
+    "is_sha256_length_hex": true,
+    "source_exists": true,
+    "exact_source_sha256_match": true,
+    "lf_normalized_source_sha256_match": true
+  }
+]

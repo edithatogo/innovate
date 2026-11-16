@@ -1,8 +1,17 @@
 {
   "schema_version": 1,
-  "generated_reference_languages": ["python", "julia", "r"],
-  "python_roots": ["bindings/python/innovate"],
-  "python_extensions": [".py", ".pyi"],
+  "generated_reference_languages": [
+    "python",
+    "julia",
+    "r"
+  ],
+  "python_roots": [
+    "bindings/python/innovate"
+  ],
+  "python_extensions": [
+    ".py",
+    ".pyi"
+  ],
   "inventory": "All source-defined modules, classes and callables, including private and nested symbols; no import-time execution.",
   "public_contract": {
     "parameters": true,
@@ -13,10 +22,91 @@
   },
   "rust": {
     "status": "compiler_qualification_required",
+    "workspace_manifest": "Cargo.toml",
     "command": "RUSTDOCFLAGS='-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes' cargo doc --workspace --no-deps --locked",
     "doctest_command": "cargo test --workspace --doc --locked",
-    "required_crates": ["innovate-core", "innovate-tabular", "innovate-ffi", "innovate-python"],
-    "limitations": "The Python AST checker does not qualify Rust. Rust public API presence and links require the pinned compiler; passing documentation lints does not establish scientific validity or prose quality. PyO3-exported functions also need source doc comments because Rust visibility alone does not identify the Python API."
+    "required_crates": [
+      "innovate-core",
+      "innovate-tabular",
+      "innovate-ffi",
+      "innovate-python",
+      "innovate-kairos"
+    ],
+    "excluded_crates": {
+      "innovate-games": "rust/crates/innovate-games/Cargo.toml"
+    },
+    "excluded_crates_qualification": "not_qualified_by_workspace_commands",
+    "limitations": "The source checker verifies explicit Cargo workspace membership but does not qualify Rust execution. Rust public API presence and links require the pinned compiler; passing documentation lints does not establish scientific validity or prose quality. PyO3-exported functions also need source doc comments because Rust visibility alone does not identify the Python API. innovate-games has a separate workspace and lockfile; the root workspace documentation and doctest commands do not qualify it."
   },
-  "qualification": "A ratchet pass only prevents documented legacy gaps from growing or changing without review. Full acceptance also requires strict Python completeness, Rust compiler and doctest results, executable tutorial evidence, and human review of scientific explanation."
+  "qualification": "A ratchet pass only prevents documented legacy gaps from growing or changing without review. Full acceptance also requires strict Python completeness, Rust compiler and doctest results, executable tutorial evidence, and human review of scientific explanation.",
+  "language_conventions": {
+    "python": {
+      "style": "PEP 257 with Google sections",
+      "accepted_section_styles": [
+        "google",
+        "numpy"
+      ],
+      "source_checker": "scripts/check_api_documentation.py",
+      "structurally_enforced": {
+        "summary_description": true,
+        "parameter_names_match_signature": true,
+        "returns_when_applicable": true,
+        "raises_description": true,
+        "direct_raises_documented": true,
+        "public_annotated_attributes_documented": true,
+        "unique_sections": true,
+        "unique_parameter_error_attribute_entries": true,
+        "explicit_exports_resolve": true
+      },
+      "execution_checker": "scripts/check_native_documentation.py"
+    },
+    "rust": {
+      "style": "rustdoc Markdown",
+      "compiler_lints": [
+        "missing_docs",
+        "rustdoc::broken_intra_doc_links",
+        "rustdoc::invalid_codeblock_attributes"
+      ],
+      "doctest_command": "cargo test --workspace --doc --locked",
+      "review_requirements": {
+        "Errors": "Fallible operations describe error cases and their returned representation.",
+        "Safety": "Unsafe APIs describe caller preconditions, lifetimes and ownership.",
+        "Panics": "APIs with caller-reachable panics describe their conditions."
+      },
+      "qualified_by_python_audit": false
+    },
+    "julia": {
+      "style": "Base.Docs Markdown",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "attached_docstrings": true,
+        "explicit_exports_resolve": true,
+        "summary_description": true,
+        "signature_and_defaults_match_source": true,
+        "argument_names_match_signature": true,
+        "returns_and_throws_descriptions": true,
+        "struct_fields_documented": true,
+        "unique_sections_and_named_entries": true,
+        "reviewed_examples_contain_assertions": true
+      },
+      "execution_checker": "scripts/check_julia_documentation.jl"
+    },
+    "r": {
+      "style": "roxygen comments with matching Rd help",
+      "source_checker": "scripts/check_polyglot_api_documentation.py",
+      "structurally_enforced": {
+        "attached_roxygen_comments": true,
+        "explicit_exports_resolve": true,
+        "summary_description": true,
+        "source_parameters_match_signature": true,
+        "source_return_and_errors_descriptions": true,
+        "unique_parameters_return_and_errors": true,
+        "rd_aliases_and_usage_match_exports": true,
+        "rd_signature_defaults_match_source": true,
+        "rd_arguments_and_value_descriptions": true,
+        "reviewed_examples_contain_assertions": true
+      },
+      "execution_checker": "scripts/check_r_documentation.R"
+    }
+  }
 }

@@ -3,6 +3,10 @@
 use crate::inference::InnovationError;
 
 /// Strictly increasing, finite, non-empty time grid.
+///
+/// Construct with [`TryFrom<Vec<f64>>`]. Coordinates may be negative; individual
+/// models can impose a narrower domain. The caller chooses the time unit and
+/// uses that same unit for rates, pulse widths, delays, and dated interventions.
 #[derive(Debug, Clone, PartialEq)]
 pub struct TimeGrid {
     times: Vec<f64>,
@@ -57,28 +61,41 @@ impl TryFrom<Vec<f64>> for TimeGrid {
 /// Semantic kind of observed series; observations do not infer an underlying actor count.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationKind {
+    /// Newly recorded adoption during each observation interval.
     NewAdoption,
+    /// Amount in active use at each observation time.
     ActiveStock,
+    /// Recorded transactions, which may include repeat use by the same actor.
     Transactions,
+    /// A rate or normalized rate measurement.
     Rate,
+    /// A proportion of an explicitly described population or market.
     Share,
+    /// An attention or interest measurement.
     Attention,
 }
 
 /// Measurement units for an observation series.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Units {
+    /// Count units; integrality is checked by the selected count likelihood.
     Count,
+    /// Dimensionless proportion units.
     Proportion,
+    /// Amount per caller-defined time unit.
     RatePerUnitTime,
+    /// Monetary amount in a currency and price basis supplied by the caller.
     Currency,
+    /// Index values on a caller-defined reference scale.
     Index,
 }
 
 /// Optional explicit denominator accompanying normalized or share observations.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Denominator {
+    /// Declared population used to normalize the observations.
     Population(f64),
+    /// Declared attainable market size used to normalize the observations.
     MarketPotential(f64),
 }
 
@@ -194,26 +211,31 @@ impl DomainObservationSeries {
         })
     }
 
+    /// Borrow the validated coordinates aligned with [`Self::values`].
     #[must_use]
     pub fn grid(&self) -> &TimeGrid {
         &self.grid
     }
 
+    /// Borrow observations in grid order, retaining missing values as `None`.
     #[must_use]
     pub fn values(&self) -> &[Option<f64>] {
         &self.values
     }
 
+    /// Return the declared observation meaning without inferring actor counts.
     #[must_use]
     pub fn kind(&self) -> ObservationKind {
         self.kind
     }
 
+    /// Return the declared units; construction does not rescale the values.
     #[must_use]
     pub fn units(&self) -> Units {
         self.units
     }
 
+    /// Return the optional denominator, validated as finite and positive at construction.
     #[must_use]
     pub fn denominator(&self) -> Option<Denominator> {
         self.denominator
