@@ -37,4 +37,4 @@ jobs:
           # Renovate 44.239.0 supports ^24.11.0 or ^26.13.0.
           node-version: 24.22.1
       - name: Validate the local repository configuration
-        run: npx --yes --package=renovate@44.243.1 renovate-config-validator --strict --no-global .github/renovate.json
+        run: npx --yes --package=renovate@44.243.2 renovate-config-validator --strict --no-global .github/renovate.json
