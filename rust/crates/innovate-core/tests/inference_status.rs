@@ -1,5 +1,6 @@
 use innovate_core::inference::{
-    FitFailure, FitOutcome, FitResult, InferenceSession, PosteriorDraws, posterior,
+    DeterministicFitResult, FitFailure, FitOutcome, FitResult, InferenceSession, PosteriorDraws,
+    posterior,
 };
 
 fn valid_outcome() -> FitOutcome {
@@ -50,6 +51,19 @@ fn failed_refit_and_reset_clear_prior_posterior_draws() {
     assert!(session.posterior().is_ok());
     session.reset();
     assert_eq!(session.posterior().unwrap_err().code, "invalid_inference");
+}
+
+#[test]
+fn deterministic_refit_clears_previous_posterior() {
+    let mut session = InferenceSession::new();
+    session.record(valid_outcome());
+    session.record(FitOutcome::Deterministic(DeterministicFitResult {
+        names: vec!["mu".into()],
+        values: vec![1.0],
+        diagnostics: "point estimate".into(),
+    }));
+    assert_eq!(session.posterior().unwrap_err().code, "deterministic_fit");
+    assert!(matches!(session.outcome(), FitOutcome::Deterministic(_)));
 }
 
 #[test]

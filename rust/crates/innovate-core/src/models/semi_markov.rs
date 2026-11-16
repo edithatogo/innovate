@@ -15,7 +15,8 @@ impl CompetingRisksGenerator {
     /// Diagonal entries are overwritten with $-\sum_{j \ne i} q_{ij}$ so rows sum to zero.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] if `rates` is empty, non-square, or has negative/non-finite off-diagonal hazards.
+    /// Returns [`InnovationError`] if `rates` is empty, non-square, has
+    /// negative/non-finite off-diagonal hazards, or an exit-rate sum overflows.
     pub fn new(mut rates: Vec<Vec<f64>>) -> Result<Self, InnovationError> {
         let s = rates.len();
         if s == 0 || rates.iter().any(|row| row.len() != s) {
@@ -36,6 +37,12 @@ impl CompetingRisksGenerator {
                         ));
                     }
                     off_sum += *val;
+                    if !off_sum.is_finite() {
+                        return Err(InnovationError::new(
+                            "invalid_hazard",
+                            "sum of off-diagonal hazards must be finite",
+                        ));
+                    }
                 }
             }
             row[i] = -off_sum;
@@ -55,10 +62,12 @@ impl CompetingRisksGenerator {
 
     /// Compute $P(\Delta t) = \exp(Q\,\Delta t)$ via uniformization (SM01).
     ///
-    /// Guarantees non-negative entries, exact row-sum conservation, and semigroup composition.
+    /// Produces non-negative entries and conserves row sums to floating-point accuracy.
+    /// Semigroup composition is subject to rounding and Poisson-series truncation.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] if `dt < 0` or `dt` is non-finite.
+    /// Returns [`InnovationError`] if `dt < 0`, `dt` is non-finite, or numerical
+    /// normalization fails.
     pub fn uniformization_step(&self, dt: f64) -> Result<Vec<Vec<f64>>, InnovationError> {
         if !dt.is_finite() || dt < 0.0 {
             return Err(InnovationError::new(
@@ -76,12 +85,16 @@ impl CompetingRisksGenerator {
         }
 
         let lambda = self.max_exit_rate;
-        let alpha = lambda * dt;
-        if alpha > 20.0 {
-            let steps = (alpha / 20.0).ceil() as usize;
-            let sub_p = self.uniformization_step(dt / (steps as f64))?;
-            return Ok(mat_pow(&sub_p, steps));
+        // Halve the duration until the Poisson series is safely representable.
+        // Unlike a float-to-usize step count, this also handles an overflowing
+        // product of two otherwise finite inputs.
+        let mut sub_dt = dt;
+        let mut squarings = 0;
+        while lambda * sub_dt > 20.0 {
+            sub_dt *= 0.5;
+            squarings += 1;
         }
+        let alpha = lambda * sub_dt;
         let mut r_mat = vec![vec![0.0; s]; s];
         for i in 0..s {
             for j in 0..s {
@@ -108,14 +121,12 @@ impl CompetingRisksGenerator {
             pois_weight *= alpha / ((k + 1) as f64);
             r_pow = mat_mul(&r_pow, &r_mat);
         }
-        // Renormalize tiny truncation remainder (<1e-15) to preserve exact row sum 1.0.
-        for row in &mut p_mat {
-            let sum: f64 = row.iter().sum();
-            if sum > 0.0 {
-                for v in row {
-                    *v /= sum;
-                }
-            }
+        normalize_rows(&mut p_mat)?;
+        // Normalize after each square so tiny rounding errors in row sums do
+        // not compound exponentially over very large rate-time products.
+        for _ in 0..squarings {
+            p_mat = mat_mul(&p_mat, &p_mat);
+            normalize_rows(&mut p_mat)?;
         }
         Ok(p_mat)
     }
@@ -140,23 +151,20 @@ pub fn mat_mul(a: &[Vec<f64>], b: &[Vec<f64>]) -> Vec<Vec<f64>> {
     out
 }
 
-fn mat_pow(base: &[Vec<f64>], mut exp: usize) -> Vec<Vec<f64>> {
-    let s = base.len();
-    let mut result = vec![vec![0.0; s]; s];
-    for i in 0..s {
-        result[i][i] = 1.0;
-    }
-    let mut power = base.to_vec();
-    while exp > 0 {
-        if exp & 1 == 1 {
-            result = mat_mul(&result, &power);
+fn normalize_rows(matrix: &mut [Vec<f64>]) -> Result<(), InnovationError> {
+    for row in matrix {
+        let sum: f64 = row.iter().sum();
+        if !sum.is_finite() || sum <= 0.0 || row.iter().any(|v| !v.is_finite() || *v < 0.0) {
+            return Err(InnovationError::new(
+                "numerical_overflow",
+                "transition probabilities could not be normalized",
+            ));
         }
-        exp >>= 1;
-        if exp > 0 {
-            power = mat_mul(&power, &power);
+        for value in row {
+            *value /= sum;
         }
     }
-    result
+    Ok(())
 }
 
 /// Bi-exponential excess-risk / frailty decay kernel $w(\tau) = \alpha e^{-\lambda_1 \tau} + (1 - \alpha) e^{-\lambda_2 \tau}$ (SM02).

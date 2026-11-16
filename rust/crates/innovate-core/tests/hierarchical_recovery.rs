@@ -19,7 +19,7 @@ fn hierarchical_recovers_pooling_limits_and_shrinks_sparse_groups() {
         obs_sd: 1.0,
         tau: 1.0,
     });
-    assert!(posterior(&outcome).is_err());
+    assert_eq!(posterior(&outcome).unwrap_err().code, "deterministic_fit");
     let row = match &outcome {
         innovate_core::inference::FitOutcome::Deterministic(res) => &res.values,
         other => panic!("expected deterministic fit, got {other:?}"),

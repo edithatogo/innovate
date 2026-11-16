@@ -568,6 +568,45 @@ mod tests {
     }
 
     #[test]
+    fn pelt_respects_minimum_length_on_dense_grids() {
+        let reported = [0., 2., 0., 2., 2., 0.];
+        assert_eq!(detect(&reported, 1., 1).unwrap(), vec![6]);
+
+        // Enumerate short discrete series and compare the objective with the
+        // exhaustive dynamic program. Compare costs to permit tied partitions.
+        for len in 2..=8_u32 {
+            for encoded in 0..3_usize.pow(len) {
+                let mut value = encoded;
+                let mut y = Vec::with_capacity(len as usize);
+                for _ in 0..len {
+                    y.push((value % 3) as f64);
+                    value /= 3;
+                }
+                for penalty in [0.5, 1.0, 2.0] {
+                    for jump in 1..=3 {
+                        let actual = detect(&y, penalty, jump).unwrap();
+                        let expected = exhaustive_detect_oracle(&y, penalty, jump);
+                        let objective = |breakpoints: &[usize]| {
+                            let mut start = 0;
+                            breakpoints.iter().fold(0.0, |total, &end| {
+                                let segment = &y[start..end];
+                                let mean = segment.iter().sum::<f64>() / segment.len() as f64;
+                                let sse = segment.iter().map(|v| (v - mean).powi(2)).sum::<f64>();
+                                start = end;
+                                total + sse + penalty
+                            })
+                        };
+                        assert!(
+                            (objective(&actual) - objective(&expected)).abs() < 1e-10,
+                            "y={y:?}, penalty={penalty}, jump={jump}, actual={actual:?}, expected={expected:?}"
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    #[test]
     fn pelt_handles_large_series_above_legacy_2000_cap() {
         let mut y = Vec::with_capacity(5000);
         for i in 0..5000 {

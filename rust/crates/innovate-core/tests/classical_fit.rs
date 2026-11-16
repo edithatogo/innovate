@@ -26,7 +26,7 @@ fn classical_predict_and_fit_recover_noiseless_families() {
         bass_fit,
         innovate_core::inference::FitOutcome::Deterministic(_)
     ));
-    assert!(posterior(&bass_fit).is_err());
+    assert_eq!(posterior(&bass_fit).unwrap_err().code, "deterministic_fit");
 
     // Logistic, Gompertz, Fisher-Pry predictions
     let log_pred = predict_classical(&PredictionRequest {
