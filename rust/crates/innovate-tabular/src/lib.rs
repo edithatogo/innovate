@@ -664,28 +664,41 @@ pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
 /// Explicit column mapping for [`bind_panel`] (R03).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ColumnBinding {
+    /// Name of the numeric time column.
     pub time: String,
+    /// Name of the product identifier column.
     pub product: String,
+    /// Name of the measurement identifier column.
     pub measure: String,
+    /// Name of the measurement unit column.
     pub unit: String,
+    /// Name of the numeric observation column.
     pub value: String,
+    /// Optional name of the numeric denominator column.
     pub denominator: Option<String>,
 }
 
 /// One validated observation row extracted by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PanelRow {
+    /// Finite observation time.
     pub time: f64,
+    /// Product identifier.
     pub product: String,
+    /// Measurement identifier.
     pub measure: String,
+    /// Declared unit for the product and measurement series.
     pub unit: String,
+    /// Observed value, or `None` for a missing observation.
     pub value: Option<f64>,
+    /// Optional positive denominator when supplied and present.
     pub denominator: Option<f64>,
 }
 
 /// Normalized observation panel produced by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct ObservationPanel {
+    /// Validated rows in input order.
     pub rows: Vec<PanelRow>,
 }
 
@@ -791,24 +804,38 @@ pub fn bind_panel(frame: DataFrame, binding: &ColumnBinding) -> PolarsResult<Obs
 /// One row of a versioned [`JointDrawBundle`] (R04).
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawRow {
+    /// Draw identifier used to preserve alignment across rows.
     pub draw_id: u64,
+    /// Identifier of the draw's chain.
     pub chain_id: u64,
+    /// Scenario identifier.
     pub scenario_id: String,
+    /// Strategy identifier within the scenario.
     pub strategy_id: String,
+    /// Product identifier.
     pub product: String,
+    /// Region identifier.
     pub region: String,
+    /// Time associated with the value.
     pub time: f64,
+    /// Draw value, or `None` when the value is missing.
     pub value: Option<f64>,
+    /// Declared measurement units.
     pub units: String,
+    /// Fit status associated with the draw.
     pub fit_status: String,
+    /// Provenance label supplied with the draw.
     pub provenance: String,
 }
 
 /// Versioned joint posterior/scenario draw bundle (`specs/joint-draw-v1.json`, R04).
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawBundle {
+    /// Version of the joint-draw interchange schema.
     pub schema_version: String,
+    /// Explicit label describing the declared draw dependence.
     pub dependence: String,
+    /// Rows forming the joint draw bundle.
     pub rows: Vec<JointDrawRow>,
 }
 
@@ -980,14 +1007,23 @@ pub fn decode_joint_draws(bytes: &[u8]) -> PolarsResult<JointDrawBundle> {
 /// One row of a semi-Markov cohort occupancy/transition trajectory (SM03).
 #[derive(Debug, Clone, PartialEq)]
 pub struct CohortOccupancyRow {
+    /// Draw identifier for the trajectory.
     pub draw_id: u64,
+    /// Scenario identifier.
     pub scenario_id: String,
+    /// Cohort identifier.
     pub cohort_id: String,
+    /// Subgroup label within the cohort.
     pub subgroup: String,
+    /// State occupied by the cohort.
     pub state: String,
+    /// Discrete duration bin within the state.
     pub duration_bin: u32,
+    /// Time associated with the row.
     pub time: f64,
+    /// Nonnegative cohort occupancy at that time.
     pub occupancy: f64,
+    /// Nonnegative transition flow associated with the row.
     pub transition_flow: f64,
 }
 

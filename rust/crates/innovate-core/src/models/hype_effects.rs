@@ -5,32 +5,44 @@ use crate::inference::InnovationError;
 /// State separating cumulative first adoption from active use.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct InnovationState {
+    /// Cumulative number of first adopters.
     pub cumulative_first_adoption: f64,
+    /// Current active-use stock.
     pub active_use: f64,
 }
 
 /// Exogenous or observed hype level at time `t`.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypeSignal {
+    /// Hype level used by the log-linear effects.
     pub level: f64,
 }
 
 /// Separate log-linear hype effect coefficients on `p`, `q`, and cessation hazard.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypeEffectParameters {
+    /// Positive baseline innovation coefficient.
     pub p0: f64,
+    /// Nonnegative baseline imitation coefficient.
     pub q0: f64,
+    /// Positive market potential.
     pub m: f64,
+    /// Log-linear hype coefficient for innovation.
     pub beta_p: f64,
+    /// Log-linear hype coefficient for imitation.
     pub beta_q: f64,
+    /// Nonnegative baseline cessation hazard.
     pub h0_stop: f64,
+    /// Log-linear hype coefficient for cessation.
     pub beta_stop: f64,
 }
 
 /// Instantaneous rates returned by [`innovation_rates`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct InnovationRates {
+    /// Instantaneous first-adoption flow.
     pub first_adoption_rate: f64,
+    /// Net instantaneous active-use change after cessation.
     pub active_use_rate: f64,
 }
 

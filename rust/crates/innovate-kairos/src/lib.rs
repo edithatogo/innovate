@@ -7,27 +7,39 @@ use innovate_core::{KernelBinding, json};
 /// Explicit Kairos runtime configuration enforcing one clock, RNG seed, and population.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct KairosRuntime {
+    /// Native simulation engine name; this adapter accepts `kairos_des`.
     pub engine: String,
+    /// Seed supplied to the Kairos random-number generator.
     pub seed: u64,
+    /// Positive simulated population size.
     pub population: u64,
+    /// Positive number of simulation clock ticks per time unit.
     pub ticks_per_unit: u64,
 }
 
 /// Typed innovation simulation request for [`run_innovation`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct SimulationRequest {
+    /// Innovation model key passed to the native kernel.
     pub model_key: String,
+    /// Validated times at which simulation results are requested.
     pub time: TimeGrid,
+    /// Innovation coefficient passed to the selected model.
     pub p: f64,
+    /// Imitation coefficient passed to the selected model.
     pub q: f64,
+    /// Market potential passed to the selected model.
     pub m: f64,
 }
 
 /// Typed simulation output returned by [`run_innovation`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SimulationResult {
+    /// Name of the engine used for execution.
     pub engine: String,
+    /// Simulated counts returned for the requested times.
     pub counts: Vec<u64>,
+    /// Number of Kairos events dispatched during execution.
     pub dispatched_events: u64,
 }
 

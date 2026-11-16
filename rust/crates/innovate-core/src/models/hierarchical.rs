@@ -5,11 +5,17 @@ use crate::inference::{FitFailure, FitOutcome, InnovationError};
 /// Group-level observation panel for [`fit_hierarchical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PanelFitRequest {
+    /// Group identifier for each observation in `values`.
     pub group_ids: Vec<String>,
+    /// Observed values aligned with `group_ids`.
     pub values: Vec<f64>,
+    /// Prior mean for the shared hypermean.
     pub prior_mean: f64,
+    /// Positive prior standard deviation for the hypermean.
     pub prior_sd: f64,
+    /// Positive observation standard deviation.
     pub obs_sd: f64,
+    /// Nonnegative standard deviation of group effects.
     pub tau: f64,
 }
 
