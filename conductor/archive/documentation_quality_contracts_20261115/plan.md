@@ -294,3 +294,22 @@ to qualify the repaired PR.
   the affected files. Main's own browser failure is not thereby repaired.
   PR #668's description was updated and read back with the corrected CodeQL
   finding and the successor's exact-head evidence.
+
+### Continuation: scoped browser and historical-scan repair
+
+- The user directed this lane to continue until both issues are resolved on
+  main while coordinating with PR #671. The source branch remains
+  `codex/innovate-main-quality-20261116` at base `b29a1d27`; the owned
+  preflight checkout will temporarily hold an independent historical analysis
+  support branch at `ff7e077a`, then return to target preflight use.
+- Allowed source scope is the browser qualification helper, its focused tests
+  and contracts under `docs/astro-site/{tests/browser,scripts}`, a new
+  non-production historical-analysis harness under `tools/codeql-evidence`,
+  and this plan. The support branch may add only a standalone candidate-analysis
+  manifest against the already recorded historical source. PR #671 retains its
+  branch and worktree; any browser backport must preserve its committed source
+  identity and be reconciled with its current head.
+- Keep active root Cargo manifests, production dependency pins, CodeQL default
+  setup, scientific release readiness, coverage thresholds and offline-security
+  workflows unchanged. Qualify the historical harness with real source,
+  lockfile audits and observed CodeQL diagnostics before proposing integration.
