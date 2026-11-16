@@ -32,7 +32,7 @@
       "Choose a task",
       "Units and denominators",
       "Polars fitting and prediction",
-      "Norton–Bass conventions",
+      "Norton\u2013Bass conventions",
       "Fit quality and numerical limits",
       "Julia and R",
       "Ecosystem alignment",
@@ -75,7 +75,7 @@
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
     "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
-    "rust/crates/innovate-core/src/bayesian.rs": "c4dd036f563423d3ac440a6fb7afcf1154010e1fc551886e5fc9b23697feea10",
+    "rust/crates/innovate-core/src/bayesian.rs": "d94f2bfab395411fa20fd381978caf8f903ca97c42850cfa0185473496ae70df",
     "docs/astro-site/src/content/docs/core/arrow-interchange.md": "ed2abe399f302a06279fba2ccb1c6377ef2426c9a2531f089ecfb641cbaf5545",
     "docs/astro-site/src/content/docs/core/index.md": "cbf523434caf031247f002ff10ef2958003d681039469035f3c293cec0495db7",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
@@ -115,15 +115,15 @@
       "title": "When Should Nintendo Launch its Wii? Insights From a Bivariate Successive Generation Model",
       "authors": [
         "Philip Hans Franses",
-        "Carlos Hernández-Mireles"
+        "Carlos Hern\u00e1ndez-Mireles"
       ],
       "year": 2006,
       "identifier": "ERS-2006-032-MKT",
       "url": "https://repub.eur.nl/pub/7867/ERS-2006-032-MKT.pdf",
       "source_type": "primary research institutional manuscript",
       "inspected_locations": [
-        "PDF pages 13–15",
-        "equations 1–2"
+        "PDF pages 13\u201315",
+        "equations 1\u20132"
       ],
       "supports": "The two-generation level equations and transfer interpretation used in the independent analytic example.",
       "limits": "Does not validate numerical recovery, arbitrary generation counts, or the empirical fit of these examples."
@@ -136,7 +136,7 @@
         "Andrew Gelman",
         "Daniel Simpson",
         "Bob Carpenter",
-        "Paul-Christian Bürkner"
+        "Paul-Christian B\u00fcrkner"
       ],
       "year": 2021,
       "doi": "10.1214/20-BA1221",
@@ -202,7 +202,7 @@
       "title": "Constructing Inverse Probability Weights for Marginal Structural Models",
       "authors": [
         "Stephen R. Cole",
-        "Miguel A. Hernán"
+        "Miguel A. Hern\u00e1n"
       ],
       "year": 2008,
       "doi": "10.1093/aje/kwn164",
@@ -396,7 +396,7 @@
       "page": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
       "status": "resolved_in_prose",
       "finding": "The identification-assumption paragraph needed a directly adjacent primary reference.",
-      "resolution": "Added Cole and Hernán beside the consistency, exchangeability and positivity requirements.",
+      "resolution": "Added Cole and Hern\u00e1n beside the consistency, exchangeability and positivity requirements.",
       "references": [
         "cole-hernan-2008"
       ]
