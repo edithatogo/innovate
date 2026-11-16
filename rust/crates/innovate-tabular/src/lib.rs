@@ -1054,17 +1054,18 @@ pub fn decode_cohort_occupancy_ipc(bytes: &[u8]) -> PolarsResult<Vec<CohortOccup
     let flows = frame.column("transition_flow")?.f64()?;
 
     let mut out = Vec::with_capacity(n);
+    let null_err = || PolarsError::ComputeError("null value in cohort occupancy column".into());
     for i in 0..n {
         out.push(CohortOccupancyRow {
-            draw_id: draw_ids.get(i).unwrap(),
-            scenario_id: scenario_ids.get(i).unwrap().to_string(),
-            cohort_id: cohort_ids.get(i).unwrap().to_string(),
-            subgroup: subgroups.get(i).unwrap().to_string(),
-            state: states.get(i).unwrap().to_string(),
-            duration_bin: duration_bins.get(i).unwrap(),
-            time: times.get(i).unwrap(),
-            occupancy: occupancies.get(i).unwrap(),
-            transition_flow: flows.get(i).unwrap(),
+            draw_id: draw_ids.get(i).ok_or_else(null_err)?,
+            scenario_id: scenario_ids.get(i).ok_or_else(null_err)?.to_string(),
+            cohort_id: cohort_ids.get(i).ok_or_else(null_err)?.to_string(),
+            subgroup: subgroups.get(i).ok_or_else(null_err)?.to_string(),
+            state: states.get(i).ok_or_else(null_err)?.to_string(),
+            duration_bin: duration_bins.get(i).ok_or_else(null_err)?,
+            time: times.get(i).ok_or_else(null_err)?,
+            occupancy: occupancies.get(i).ok_or_else(null_err)?,
+            transition_flow: flows.get(i).ok_or_else(null_err)?,
         });
     }
     Ok(out)

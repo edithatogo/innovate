@@ -181,11 +181,24 @@ pub struct FitFailure {
     pub message: String,
 }
 
+/// Successful deterministic point-estimate fit payload (not a posterior).
+#[derive(Debug, Clone, PartialEq)]
+pub struct DeterministicFitResult {
+    /// Parameter names in order.
+    pub names: Vec<String>,
+    /// Fitted point-estimate values in the same order as `names`.
+    pub values: Vec<f64>,
+    /// Human-readable convergence/diagnostic note.
+    pub diagnostics: String,
+}
+
 /// Explicit inference status preventing invalid or stale posteriors from being exposed.
 #[derive(Debug, Clone, PartialEq)]
 pub enum FitOutcome {
     /// Inference succeeded and produced validated posterior draws.
     Valid(FitResult),
+    /// Deterministic optimization succeeded and produced a point estimate (no posterior draws).
+    Deterministic(DeterministicFitResult),
     /// Inference failed or was reset; no posterior draws are available.
     Invalid(FitFailure),
 }
@@ -252,6 +265,10 @@ pub fn posterior(outcome: &FitOutcome) -> Result<&PosteriorDraws, InnovationErro
         FitOutcome::Invalid(failure) => Err(InnovationError::new(
             "invalid_inference",
             format!("{}: {}", failure.code, failure.message),
+        )),
+        FitOutcome::Deterministic(_) => Err(InnovationError::new(
+            "deterministic_fit",
+            "deterministic point-estimate fit has no posterior draws",
         )),
     }
 }

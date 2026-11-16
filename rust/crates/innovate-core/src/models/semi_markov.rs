@@ -77,7 +77,11 @@ impl CompetingRisksGenerator {
 
         let lambda = self.max_exit_rate;
         let alpha = lambda * dt;
-        // Uniformized discrete-time transition matrix R = I + Q / lambda.
+        if alpha > 20.0 {
+            let steps = (alpha / 20.0).ceil() as usize;
+            let sub_p = self.uniformization_step(dt / (steps as f64))?;
+            return Ok(mat_pow(&sub_p, steps));
+        }
         let mut r_mat = vec![vec![0.0; s]; s];
         for i in 0..s {
             for j in 0..s {
@@ -134,6 +138,25 @@ pub fn mat_mul(a: &[Vec<f64>], b: &[Vec<f64>]) -> Vec<Vec<f64>> {
         }
     }
     out
+}
+
+fn mat_pow(base: &[Vec<f64>], mut exp: usize) -> Vec<Vec<f64>> {
+    let s = base.len();
+    let mut result = vec![vec![0.0; s]; s];
+    for i in 0..s {
+        result[i][i] = 1.0;
+    }
+    let mut power = base.to_vec();
+    while exp > 0 {
+        if exp & 1 == 1 {
+            result = mat_mul(&result, &power);
+        }
+        exp >>= 1;
+        if exp > 0 {
+            power = mat_mul(&power, &power);
+        }
+    }
+    result
 }
 
 /// Bi-exponential excess-risk / frailty decay kernel $w(\tau) = \alpha e^{-\lambda_1 \tau} + (1 - \alpha) e^{-\lambda_2 \tau}$ (SM02).

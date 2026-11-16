@@ -167,14 +167,15 @@ pub fn fit_hype(request: &HypeFitRequest) -> FitOutcome {
     let diag = format!(
         "converged; sse={best_sse:.6}; norm_origin={t_min:.6}; norm_span={t_span:.6}; overlapping_pulses={overlapping}"
     );
-    match PosteriorDraws::new(names, vec![vals]) {
-        Ok(posterior) => FitOutcome::Valid(FitResult {
-            posterior,
-            diagnostics: diag,
-        }),
-        Err(err) => FitOutcome::Invalid(FitFailure {
-            code: err.code.into(),
-            message: err.message,
-        }),
+    if vals.iter().any(|v| !v.is_finite()) {
+        return FitOutcome::Invalid(FitFailure {
+            code: "non_finite_estimate".into(),
+            message: "fitted parameters contain non-finite values".into(),
+        });
     }
+    FitOutcome::Deterministic(crate::inference::DeterministicFitResult {
+        names,
+        values: vals,
+        diagnostics: diag,
+    })
 }
