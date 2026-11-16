@@ -5,8 +5,12 @@
     ":dependencyDashboard",
     ":semanticCommits"
   ],
-  "baseBranchPatterns": ["main"],
-  "schedule": ["* * * * 1"],
+  "baseBranchPatterns": [
+    "main"
+  ],
+  "schedule": [
+    "* * * * 1"
+  ],
   "prCreation": "immediate",
   "prHourlyLimit": 5,
   "prConcurrentLimit": 10,
@@ -14,26 +18,41 @@
   "platformCommit": "enabled",
   "platformAutomerge": true,
   "automergeType": "pr",
-  "labels": ["dependencies", "renovate"],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.github/workflows/renovate-config\\.yml$/"],
-      "matchStrings": ["--package=renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "managerFilePatterns": [
+        "/^\\.github/workflows/renovate-config\\.yml$/"
+      ],
+      "matchStrings": [
+        "--package=renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
       "depNameTemplate": "renovate",
       "datasourceTemplate": "npm"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.github/workflows/coverage\\.yml$/"],
-      "matchStrings": ["cargo install cargo-llvm-cov --version (?<currentValue>\\d+\\.\\d+\\.\\d+) --locked"],
+      "managerFilePatterns": [
+        "/^\\.github/workflows/coverage\\.yml$/"
+      ],
+      "matchStrings": [
+        "cargo install cargo-llvm-cov --version (?<currentValue>\\d+\\.\\d+\\.\\d+) --locked"
+      ],
       "depNameTemplate": "cargo-llvm-cov",
       "datasourceTemplate": "crate"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.github/workflows/coverage\\.yml$/"],
-      "matchStrings": ["version: v(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "managerFilePatterns": [
+        "/^\\.github/workflows/coverage\\.yml$/"
+      ],
+      "matchStrings": [
+        "version: v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
       "depNameTemplate": "codecov/codecov-cli",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
@@ -42,48 +61,81 @@
   "packageRules": [
     {
       "description": "Group all dev dependencies together",
-      "matchDepTypes": ["dev"],
+      "matchDepTypes": [
+        "dev"
+      ],
       "groupName": "dev dependencies",
       "groupSlug": "dev-deps"
     },
     {
       "description": "Group all production dependencies together",
-      "matchDepTypes": ["dependencies"],
+      "matchDepTypes": [
+        "dependencies"
+      ],
       "groupName": "production dependencies",
       "groupSlug": "prod-deps"
     },
     {
       "description": "Group GitHub Actions updates and require immutable pins",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
       "pinDigests": true
     },
     {
       "description": "Auto-merge patch updates after all protected checks pass",
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "automerge": true
     },
     {
       "description": "Auto-merge minor development updates after all protected checks pass",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchDepTypes": ["dev"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchDepTypes": [
+        "dev"
+      ],
       "automerge": true
     },
     {
       "description": "Keep major updates review-only",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false
     },
     {
       "description": "Include changelogs in PR descriptions",
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
       "changelogUrl": "https://github.com/{{depName}}"
+    },
+    {
+      "description": "Hold nalgebra below 0.35.0 while levenberg-marquardt 0.15.0 requires nalgebra 0.34.x",
+      "matchManagers": [
+        "cargo"
+      ],
+      "matchPackageNames": [
+        "nalgebra"
+      ],
+      "allowedVersions": "<0.35.0"
     }
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
     "automerge": true,
-    "labels": ["security", "dependencies", "renovate"]
+    "labels": [
+      "security",
+      "dependencies",
+      "renovate"
+    ]
   }
 }
