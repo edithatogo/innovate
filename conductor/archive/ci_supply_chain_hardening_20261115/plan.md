@@ -92,6 +92,29 @@ same expected error and exit code; no worker behavior is changed.
   the same gate failed on base `b29a1d27` in run `43864696589`. Neither is
   waived. Repeat required checks on the final head and preserve the release hold.
 
+### Main-base and privacy follow-up — 17 November 2026
+
+Main advanced to `cc2e4da4af9c848043b31f1191c9d96212048276` with no
+overlapping paths. The read-only integration preflight compared it to candidate
+`68707bddcaee4abc47f3faa9dcfbfad06490a6b2`: both worktrees were clean, with
+zero overlaps, staged deletions, missing files or warnings. The app-managed
+worktree request did not return a result; the verified repository's standard Git
+fallback is the detached, read-only target
+`/Volumes/PortableSSD/GitHub/innovate-alert44-main-preflight`. It is not an
+app-managed checkout. This source branch incorporates the newer main commit;
+promotion remains with the existing integrator.
+
+Privacy run `43883637179` on the second PR head scanned all 770 selected files
+without skips. Gitleaks reported no findings; Presidio reported three blocking
+credit-card-pattern matches in public upstream complex-number test data.
+Those fixture bytes match the published upstream crate, but the findings have
+not been admitted through the shared scanner's exact nonidentifier review.
+No scanner exclusion or finding waiver is applied. The hosted privacy action
+also selected Python 3.12.16, whereas this repository requires Python 3.15.2;
+the current [Presidio analyzer 2.2.366 metadata](https://pypi.org/project/presidio-analyzer/2.2.366/)
+declares Python below 3.15. A qualified 3.15-compatible privacy route and
+review of the exact nonidentifiers remain open. Do not count this job as a pass.
+
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
 ## Phase 1: `cargo-deny` & `poutine` in Security Quality Workflow
