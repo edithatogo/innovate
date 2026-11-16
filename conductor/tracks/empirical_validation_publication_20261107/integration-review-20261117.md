@@ -62,8 +62,10 @@ No hosted result is inferred for this branch.
   null placeholder and the test reconstructs the original metadata bytes from
   those public IDs, checking the original pinned receipt SHA-256 before use.
   The source payload is not included. This avoids a scanner exemption while
-  retaining the exact-byte receipt check; the original local candidate branch
-  is preserved for its history and is not the proposed branch to publish.
+  retaining the exact-byte receipt check. Gitleaks 8.30.1 reported no leaks on
+  the resulting staged changes and, after commit, on the candidate's complete
+  change range. The original local candidate branch is preserved for its
+  history and is not the proposed branch to publish.
 - The proposed registry, plan, index and metadata describe V01–V04, Q01 and
   Q04 as partial, rather than completed. Q01 still needs its complete corpus,
   fuzz and sanitizer evidence assessed; this review does not say it failed.
