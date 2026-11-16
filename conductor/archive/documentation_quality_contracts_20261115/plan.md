@@ -262,3 +262,35 @@ to qualify the repaired PR.
 - Next operation: identify the warnings and their source ownership, then make
   the smallest qualified repair. Scientific release readiness and the dedicated
   offline-security lane remain unchanged and independently unqualified.
+- The main database's `ExtractionErrors.ql` returned zero source-file rows.
+  Its `ExtractionWarnings.ql` returned two rows: the archived
+  `rust_network_petgraph_20261115/evidence/replay_probe.rs` and the active-track
+  `scientific_ecosystem_alignment_20261029/evidence/scenario-parity-20261113/
+  historical_producer.rs` have no semantic analyzer because neither is in a
+  Cargo manifest. The CodeQL summary counts warnings as well as errors. The
+  CSV receipts and database archive are in
+  `/Volumes/PortableSSD/.innovate-pr668-diagnostics.keHDMl/codeql/receipts/`
+  and its parent; the main-warning CSV SHA-256 is
+  `ceb7fd6e950c0ee52955924a0bad534350e1783aa39465c509f1184629359462`.
+- In an isolated source fixture, a nested manifest eliminated the warning.
+  The scenario probe type-checked against historical commit `3681c8a8` with
+  its original resolved dependency versions and hashbrown source; its lock
+  passed a local RustSec audit. The replay probe type-checked offline against
+  baseline `07d6d897` and a separately generated `ff7e077a` candidate overlay
+  with the recorded `network.rs` hash and `petgraph` configuration. Its lock
+  had no `paste` and passed the local audit. CodeQL 2.27.4 over both temporary
+  contexts returned zero extraction-error and zero extraction-warning rows.
+  These are isolated-fixture results, not a new main-branch CodeQL run.
+- A naive candidate alias to later commit `ead7d5e5` also type-checked but
+  changed other core sources and pulled in unmaintained `paste` 1.0.15; it was
+  rejected. No analysis manifest, historical source, dependency pin, scanner
+  configuration or security exemption has been committed to main by this lane.
+  A durable repair must provide the exact historical overlay before GitHub's
+  default scan without changing the scientific evidence or undermining the
+  concurrent dependency-remediation lane.
+- Draft PR #671's current head `070a04424dfb084758d1c0b201bf2980002ea81d`
+  passed [hosted documentation qualification](https://github.com/edithatogo/innovate/actions/runs/43869447887),
+  including 164/164 browser cases; the PR remains draft and its owner retains
+  the affected files. Main's own browser failure is not thereby repaired.
+  PR #668's description was updated and read back with the corrected CodeQL
+  finding and the successor's exact-head evidence.
