@@ -5,6 +5,7 @@ import importlib.util
 import json
 import pathlib
 import subprocess
+import sys
 
 import pytest
 
@@ -121,3 +122,49 @@ def test_historical_source_commit_can_be_named_without_claiming_qualification(in
 def test_nonexistent_source_commit_cannot_be_verified(invented_claim):
     errors = claims.validate_capabilities(invented_claim, expected_revision="1" * 40, root=ROOT)
     assert any("revision" in error for error in errors)
+
+
+def test_malformed_matrix_and_claims_fail_closed(invented_claim, tmp_path):
+    assert claims.validate_capabilities(None, root=tmp_path) == ["capability matrix must be an object"]
+    data = copy.deepcopy(invented_claim)
+    data.update(schema_version="unknown", revision="not-a-commit", capabilities=[])
+    errors = claims.validate_capabilities(data, expected_revision="bad", root=tmp_path)
+    assert any("schema_version" in error for error in errors)
+    assert any("full source commit" in error for error in errors)
+    assert any("non-empty list" in error for error in errors)
+
+    data = copy.deepcopy(invented_claim)
+    del data["capabilities"][0]["model"]
+    data["capabilities"][0]["evidence"] = None
+    errors = claims.validate_capabilities(data, expected_revision=data["revision"], root=tmp_path)
+    assert any("missing model" in error for error in errors)
+    assert any("missing evidence object" in error for error in errors)
+
+
+def test_nested_directory_cannot_masquerade_as_checkout_root():
+    assert claims._checkout_revision(ROOT / "tests") is None
+
+
+def test_missing_git_cannot_validate_source_commit(tmp_path, monkeypatch):
+    def unavailable(*args, **kwargs):
+        raise OSError("git unavailable")
+
+    monkeypatch.setattr(claims.subprocess, "run", unavailable)
+    assert not claims._has_source_commit(tmp_path, "1" * 40)
+
+
+def test_cli_rejects_unqualified_claims(monkeypatch, capsys):
+    matrix = ROOT / "conductor/capabilities.json"
+    monkeypatch.setattr(sys, "argv", ["claims", str(matrix), "--root", str(ROOT)])
+    assert claims.main() == 1
+    assert "source-bound" in capsys.readouterr().out
+
+
+def test_cli_rejects_invalid_json(tmp_path, monkeypatch, capsys):
+    matrix = tmp_path / "matrix.json"
+    matrix.write_text("not json")
+    monkeypatch.setattr(sys, "argv", ["claims", str(matrix), "--root", str(tmp_path)])
+    with pytest.raises(SystemExit) as exc:
+        claims.main()
+    assert exc.value.code == 2
+    assert "Cannot read capability matrix" in capsys.readouterr().err

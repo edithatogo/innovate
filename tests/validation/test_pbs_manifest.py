@@ -6,6 +6,7 @@ import importlib.util
 import io
 import json
 import pathlib
+import sys
 
 import pytest
 
@@ -226,3 +227,66 @@ def test_source_payload_rejects_changed_bytes_for_a_known_object(manifest):
             manifest["objects"][0]["path"],
             manifest["source"]["revision"],
         )
+
+
+@pytest.mark.parametrize("mutation", ["root", "source", "upstream", "object"])
+def test_manifest_rejects_missing_or_unknown_fields(manifest, mutation):
+    if mutation == "root":
+        manifest["unexpected"] = True
+    elif mutation == "source":
+        del manifest["source"]["dataset"]
+    elif mutation == "upstream":
+        del manifest["upstream"]["rights_attestation"]
+    else:
+        manifest["objects"][0]["unexpected"] = True
+    with pytest.raises(ValueError):
+        pbs_manifest.validate_manifest(manifest)
+
+
+@pytest.mark.parametrize(
+    ("raw", "message"), [(b"[", "invalid JSON"), (b"NaN", "invalid JSON constant"), (b"[]", "not an object")]
+)
+def test_replay_receipt_rejects_malformed_json(manifest, replay_fixture, raw, message):
+    obj, _, _ = replay_fixture
+    with pytest.raises(ValueError, match=message):
+        pbs_manifest.validate_replay_receipt(raw, manifest, obj)
+
+
+@pytest.mark.parametrize(
+    ("field", "message"),
+    [("scope", "scope is invalid"), ("hosted_workflow", "workflow is invalid"), ("replay", "registration is invalid")],
+)
+def test_replay_receipt_rejects_missing_nested_objects(manifest, replay_fixture, field, message):
+    obj, receipt, _ = replay_fixture
+    receipt[field] = None
+    with pytest.raises(ValueError, match=message):
+        pbs_manifest.validate_replay_receipt(json.dumps(receipt).encode(), manifest, obj)
+
+
+@pytest.mark.parametrize(("digest", "size"), [("bad", 1), ("0" * 64, -1), ("0" * 64, True)])
+def test_payload_rejects_invalid_expectations(digest, size):
+    with pytest.raises(ValueError):
+        pbs_manifest.validate_payload(io.BytesIO(b"x"), digest, size)
+
+
+def test_upstream_evidence_path_cannot_leave_supplied_root(tmp_path):
+    with pytest.raises(ValueError, match="remain under"):
+        pbs_manifest._read_under(tmp_path, "../outside")
+
+
+def test_cli_validates_frozen_manifest_without_claiming_model_readiness(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["pbs-manifest", "--manifest", str(MANIFEST)])
+    pbs_manifest.main()
+    output = capsys.readouterr().out
+    assert "metadata only" in output
+    assert "semantic and modelling qualification remain open" in output
+
+
+def test_cli_rejects_invalid_manifest(tmp_path, monkeypatch, capsys):
+    bad_manifest = tmp_path / "manifest.json"
+    bad_manifest.write_text("not json")
+    monkeypatch.setattr(sys, "argv", ["pbs-manifest", "--manifest", str(bad_manifest)])
+    with pytest.raises(SystemExit) as exc:
+        pbs_manifest.main()
+    assert exc.value.code == 1
+    assert "PBS manifest validation failed" in capsys.readouterr().err

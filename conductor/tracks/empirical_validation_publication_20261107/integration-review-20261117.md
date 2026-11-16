@@ -8,7 +8,8 @@
   empirical-track status and exercise their offline tests in CI and Nox.
 - Allowed files: the two source packets and their lane receipts; this receipt;
   `conductor/tracks.md`; this track's `index.md`, `metadata.json` and `plan.md`;
-  `.github/workflows/ci.yml`; and `noxfile.py`.
+  `.github/workflows/ci.yml`; `noxfile.py`; and the new offline raw-admission
+  regression test `tests/validation/test_pbs_upstream_receipts.py`.
 - Native object scope: none. This branch is an integration proposal; the
   existing sole integrator retains shared-branch promotion, shared workflow
   ownership and any required acceptance of the common registry changes.
@@ -40,11 +41,21 @@ No hosted result is inferred for this branch.
   historical source commit and a newer commit. The same synthetic-checkout
   reproduction then passed, retaining the historical-revision assertion and
   the requirement that self-declared receipts remain unqualified.
-- `uv run --no-sync nox -s validation` now executes the three M01/Q04 test
-  files using this worktree's `.venv/bin/python` (CPython 3.15.2): **39 passed**
-  on macOS arm64. CI proposes this same session for each existing native-Python
-  platform and separate lint/format checks for the affected source and tests.
-  This is not a hosted-platform or installed-artifact receipt.
+- The expanded offline tests construct six synthetic metadata chains and check
+  duplicate/missing objects, unproved semantic claims, failed runs, changed
+  object identities and receipt digests. They contain no source payloads.
+  `uv run --no-sync nox -s validation_coverage` now executes the four M01/Q04
+  test files using this worktree's `.venv/bin/python` (CPython 3.15.2):
+  **68 passed** on macOS arm64. Per-file combined line/branch coverage was
+  **94.39%** for the PBS validator and **96.67%** for the capability guard;
+  statement coverage was 197/205 and 97/100 respectively. The session enforces
+  90% combined coverage for each validator. CI proposes this session for each
+  existing native-Python platform and separate lint/format checks. These are
+  focused validator results, not a hosted-platform, installed-artifact or
+  full-repository coverage receipt.
+  A separate capability-absence simulation deselected the symlink test and
+  produced 67 passes, one deselection and 95.33% guard coverage; it is not a
+  Windows run or a substitute for executing the symlink case where supported.
 - `ruff check` and `ruff format --check` passed for the five M01/Q04 files and
   `noxfile.py`; the complete local `nox -s lint` session, including
   `cargo fmt --all --check`, also passed. `scripts/check_repository_policy.py`,
@@ -71,6 +82,11 @@ No hosted result is inferred for this branch.
   fuzz and sanitizer evidence assessed; this review does not say it failed.
   M01 is partial until the selected CI and integration are accepted. See the
   individual source receipts for the original findings and review limits.
+- The final branch re-ran `scripts/validate_pbs_source_manifest.py` against
+  the existing read-only Atlas receipt checkout: the manifest and all named
+  upstream receipt files passed byte validation. This does not qualify source
+  semantics or a modelling consumer. The 81 selected migration-policy and
+  mutation tests also passed under the local Python 3.15.2 environment.
 
 ## Open acceptance
 
@@ -82,3 +98,10 @@ to block release with 38 unqualified obligations. A shared evidence contract
 and the Q02/Q03/Q04 gates remain open; this proposal does not create a receipt
 schema or assert release readiness. M02–M05, V05, scientific review and
 publication depend on further source, consumer and validation work.
+
+At the last successful GitHub read in this pass, main was still the base
+`cc2e4da4af9c848043b31f1191c9d96212048276`. Subsequent exact-main and branch
+protection reads timed out; bounded HTTPS probes to both GitHub endpoints and
+the GitHub connector also failed. No branch push, pull request, hosted
+candidate check or merge occurred. Refresh main, ownership and checks before
+any promotion; the existing sole integrator retains that operation.
