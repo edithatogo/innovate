@@ -1,5 +1,13 @@
 # Scientific ecosystem qualification reconciliation — 16 November 2026
 
+**Executed follow-up:** [installed/native qualification evidence](evidence/arrow-installed-20261116/README.md)
+records a fresh Linux development wheel, 42 passing installed cases including
+all four optional Arrow cases, and the separate successful Rust 1.99.1 workspace
+compile check. The linked packet and current plan supersede the initial
+unexecuted-command status below only within those source/artifact scopes.
+Shared CI adoption, broader scientific/platform/provider acceptance and release
+promotion remain with #624 and the existing owners.
+
 ## Scope and authority
 
 This record reconciles [issue #556](https://github.com/edithatogo/innovate/issues/556)

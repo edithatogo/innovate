@@ -2,6 +2,11 @@
 
 Status: `blocked_prerequisites`; no submission or acceptance claimed.
 
+The [executed follow-up](implementation-20261116.md) adds the offline manuscript
+integrity command and actual bibliographic/rendering evidence. A passing
+structural check keeps `submission_ready` false; research-use, author, scientific
+and editorial requirements below remain open.
+
 **16 November update:** a separate [JOSS working draft](joss/paper.md),
 [checked bibliography](joss/paper.bib), [claim register](joss/claim-evidence.md)
 and [source snapshot](joss/source-snapshot.json) now implement the preparation

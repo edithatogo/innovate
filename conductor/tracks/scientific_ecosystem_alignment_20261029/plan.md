@@ -1,5 +1,45 @@
 # Plan
 
+## Executable qualification follow-up — 16 November 2026
+
+Starting published head: `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`;
+local tree-equivalent receipt: `0c718cea3eb982717ce940560868004d71261e9b`.
+Latest inspected main `18c467e18b71d972060365c68865aa405a69949c` only adds
+a Renovate workflow update to the assessed scientific source.
+
+- [x] ALIGN-02a: implement a repeatable installed Arrow qualifier that requires
+  the declared optional dependency, all four PyArrow cases and no skipped or
+  incomplete selection; include independent negative tests of the qualification
+  command and retain exact wheel/source/environment identities. Forty-five
+  tooling tests and independent review pass.
+- [x] ALIGN-02b: build in an owned isolated environment and execute the installed
+  scenario-export and relevant Kairos/producer checks, recording real failures
+  and limitations if the current build cannot complete. The identified Linux
+  development wheel passes all 42 selected cases, including all four optional
+  Arrow cases, with no skips. The retained build/consumer receipt binds 122
+  native inputs and the exact artifact bytes.
+- [x] ALIGN-04a: execute `cargo check --locked --workspace --all-targets -j 1`
+  on actual Rust 1.99.1 in an owned environment. All four workspace crates pass
+  for Linux/default features; test execution, linking/artifact and other-platform
+  acceptance are not inferred from compile checking.
+- [x] ALIGN-02c: execute the existing native `scenario_exports` target on Rust
+  1.100.0; eight cases pass with none failed, ignored or filtered.
+- [x] ALIGN-03a: execute the existing `kairos`, `network`, `network_diffusion`
+  and `network_petgraph` targets at the frozen current provider pin; 64 cases
+  pass (17/37/5/5), with none failed, ignored or filtered. Provider publication,
+  other platforms and broader scientific acceptance remain open.
+- [x] Reconcile observed hosted evidence and explicit minimum-compiler limits;
+  independently review this packet and prepare shared CI/provider/release
+  intake for #624. Exact publication/current-head receipts belong in #662;
+  integrator acceptance and recurring hosted adoption remain open.
+
+Allowed files: `scripts/qualify_scenario_arrow.py`,
+`tests/native/test_scenario_arrow_qualification.py`, this track's evidence and
+records. Existing science/test implementations, shared manifests/locks, root
+workflows/registries and other owners' files are not part of this packet.
+This execution implements test tooling and qualifies bounded behaviour; it
+does not reassign scientific model ownership or complete the 38 obligations.
+
 ## Scientific and journal reconciliation — 16 November 2026
 
 - [x] ALIGN-01: reconcile issue #556, current native contracts, historical
@@ -17,8 +57,9 @@ receipt's original source and limits. Shared integration remains with #624.
 
 - [x] Record that #554 and #602 are merged source changes; distinguish the
   reported 38 Arrow passes on `44cb9635` from current-source acceptance.
-- [ ] ALIGN-02: qualify the installed optional Arrow consumer at the selected
-  source/artifact, with all four PyArrow cases executed and none skipped.
+- [~] ALIGN-02: the bounded Linux installed consumer now passes all four optional
+  PyArrow cases with no skips; see the follow-up above. Integrator adoption of
+  recurring hosted execution and any additional platform acceptance remain open.
 - [ ] ALIGN-03: reconcile and qualify the current Kairos pin and its lawful
   distribution/publishability route with the existing provider/integration owners.
 - [ ] ALIGN-04: obtain exact-candidate native/platform, scheduled-consumer,

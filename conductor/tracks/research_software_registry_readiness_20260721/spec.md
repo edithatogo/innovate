@@ -63,6 +63,25 @@ publication owner's V01–V05/M01–M05/Q01–Q05 work.
 - Keep all external states pending until real, verified provider events exist.
   Source fingerprints and local preparation checks do not promote those states.
 
+## Offline manuscript integrity contract — 16 November 2026 follow-up
+
+`scripts/check_joss_readiness.py` implements repeatable preparation checks for
+the current unapproved-draft schema. It requires the complete reviewed set of
+14 source and three edition fingerprints, exact version/revision tokens,
+visible draft notice, six required sections and the recorded word budget.
+Missing, stale, ambiguous or unsafe inputs fail; Git's CRLF text conversions
+are accepted only against the same normalized fingerprint and are reported.
+
+The command never rewrites hashes, resolves external identifiers, authenticates
+the recorded Git revision, or approves research, authorship or submission.
+The existing native test collection exercises its real repository record and
+negative cases. A change to a supporting source therefore requires claim review
+and an explicitly updated edition before that integrity test can pass. Shared
+changes in #656/#659 must be reconciled through #624, not silently rehashed.
+Actual YAML/BibTeX parsing, citation rendering and PDF inspection remain separate
+checks with their own tool/output records. `--require-submission-ready` fails
+for this draft even when every integrity check passes.
+
 ## GitHub hierarchy
 
 Parent: [#398](https://github.com/edithatogo/innovate/issues/398)

@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-11-16T11:00:14.508478+00:00",
+  "status": "blocked",
+  "submission_ready": false,
+  "scientific_or_release_qualification": false,
+  "visual_review": "not_performed",
+  "inara": {
+    "url": "https://github.com/openjournals/inara",
+    "revision": "88ee5d656f147d801448ce77ad8375619d383df6"
+  },
+  "repository_head_observed": "0c718cea3eb982717ce940560868004d71261e9b",
+  "render_script_sha256": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+  "input_sha256": {
+    "paper.md": "e2fcc6b76a831ea1175f779049410f419e69df5fcb3165580527761477a1b991",
+    "paper.bib": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
+    "source-snapshot.json": "02fa87528eb5746d88d9d807b63879ff4149c791d42faf6ca7e5548fa1484cf0"
+  },
+  "software_revision": "69b674814513e09a683279c679b1584af8bb4214",
+  "source_date_epoch": 1794787200,
+  "draft_mode": true,
+  "commands": [
+    {
+      "stage": "source_integrity",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-tools/inara",
+      "argv": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/check_joss_readiness.py",
+        "--root",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific",
+        "--json"
+      ]
+    },
+    {
+      "stage": "bibtex_parse",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-tools/inara",
+      "argv": [
+        "/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc",
+        "--fail-if-warnings",
+        "--from=bibtex",
+        "--to=csljson",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib",
+        "--output=/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/evidence/joss-render-20261116/attempt-2/bibliography.json"
+      ]
+    },
+    {
+      "stage": "official_tex",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-tools/inara",
+      "argv": [
+        "make",
+        "tex",
+        "ARTICLE=/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md",
+        "TARGET_FOLDER=/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/evidence/joss-render-20261116/attempt-2",
+        "PANDOC=/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc --fail-if-warnings --metadata=draft:true --variable=draft:true"
+      ]
+    },
+    {
+      "stage": "official_pdf",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-tools/inara",
+      "argv": [
+        "make",
+        "pdf",
+        "ARTICLE=/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md",
+        "TARGET_FOLDER=/workspace/scratch/e4108ca2b049/innovate-scientific/conductor/tracks/research_software_registry_readiness_20260721/evidence/joss-render-20261116/attempt-2",
+        "PANDOC=/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc --fail-if-warnings --metadata=draft:true --variable=draft:true"
+      ]
+    }
+  ],
+  "tools": {
+    "pandoc": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc",
+      "version": "pandoc 3.6.4"
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "version_output": "GNU Make 4.4.1\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+      "version_exit_code": 0
+    },
+    "latexmk": {
+      "path": "/usr/bin/latexmk",
+      "version_output": "Latexmk, John Collins, 11 Dec. 2024. Version 4.86",
+      "version_exit_code": 0
+    },
+    "lualatex": {
+      "path": "/usr/bin/lualatex",
+      "version_output": "This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)\nDevelopment id: 7611\n\nExecute  'luahbtex --credits'  for credits and version details.\n\nThere is NO warranty. Redistribution of this software is covered by\nthe terms of the GNU General Public License, version 2 or (at your option)\nany later version. For more information about these matters, see the file\nnamed COPYING and the LuaTeX source.\n\nLuaTeX is Copyright 2022 Taco Hoekwater and the LuaTeX Team.",
+      "version_exit_code": 0
+    }
+  },
+  "tex_environment": {
+    "TEXMF": "{/workspace/scratch/e4108ca2b049/joss-render-tools/tex-state/var,/workspace/scratch/e4108ca2b049/joss-render-tools/tex-state/config,/workspace/scratch/e4108ca2b049/joss-render-tools/texmf/texmf-dist,/workspace/scratch/e4108ca2b049/joss-render-tools/texmf,/usr/share/texmf,/usr/share/texlive/texmf-dist}",
+    "TEXMFVAR": "/workspace/scratch/e4108ca2b049/joss-render-tools/tex-state/var",
+    "TEXMFCONFIG": "/workspace/scratch/e4108ca2b049/joss-render-tools/tex-state/config",
+    "TEXMFCACHE": ".",
+    "VARTEXFONTS": "/workspace/scratch/e4108ca2b049/joss-render-tools/tex-state/fonts",
+    "OSFONTDIR": "/workspace/scratch/e4108ca2b049/joss-render-tools/hack/build/ttf;/workspace/scratch/e4108ca2b049/joss-render-tools/inara/fonts/libre-franklin"
+  },
+  "checks": {
+    "source_integrity": {
+      "status": "passed",
+      "exit_code": 0
+    },
+    "bibtex_parse": {
+      "status": "passed",
+      "exit_code": 0,
+      "entry_ids": [
+        "bass1969",
+        "fisher1971",
+        "mesa2025",
+        "ndlib2018",
+        "pymc2023"
+      ]
+    },
+    "official_tex": {
+      "status": "passed",
+      "exit_code": 0
+    },
+    "draft_tex_markers": {
+      "status": "passed"
+    },
+    "official_pdf": {
+      "status": "failed",
+      "exit_code": 2
+    }
+  },
+  "output_sha256": {
+    "bibliography.json": "5671b189eac558845b4fec884cdec07a24827071e7a5eefc7f18e737e95fba82",
+    "paper.tex": "3310ab2100f184cfb712ad2159174dc0a0a1ff2070e586c6b7107d8b7ca4dba7",
+    "render.log": "db622163b4532e7eed95a38ca31a2c78f0c6ab2d24fdf6a8701c95d032b498cc"
+  },
+  "error": "official_pdf failed (exit 2); see render.log",
+  "diagnostic_lines": [
+    "! LaTeX Error: File `luacode.sty' not found.",
+    "! Emergency stop."
+  ]
+}

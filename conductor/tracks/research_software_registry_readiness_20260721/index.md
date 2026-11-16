@@ -6,6 +6,11 @@ Current status: [16 November scientific/journal reconciliation](./reconciliation
 This includes the five-issue crosswalk, ordered work packages and ownership;
 dated older receipts retain their original scope.
 
+The [executed preparation follow-up](./implementation-20261116.md) records
+the manuscript integrity command, actual bibliographic/rendering work, archival
+candidate inventory and installed optional Arrow qualification. It supersedes
+the earlier preparation-only status within those explicitly tested scopes.
+
 Parent issue: [#398](https://github.com/edithatogo/innovate/issues/398)
 
 - [Specification](./spec.md)
@@ -19,3 +24,4 @@ Parent issue: [#398](https://github.com/edithatogo/innovate/issues/398)
 - [Manuscript claim/source register](./joss/claim-evidence.md)
 - [Current source fingerprints](./joss/source-snapshot.json)
 - [Current verification receipt](./verification-20261116.md)
+- [Executed preparation and remaining gates](./implementation-20261116.md)

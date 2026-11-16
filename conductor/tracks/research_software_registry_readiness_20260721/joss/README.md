@@ -129,7 +129,8 @@ interactions; this packet does not authorise or automate journal correspondence.
    disclosure. Replace draft-specific pending statements only with verified facts.
 4. Render the manuscript with the current JOSS-supported toolchain and inspect
    the PDF, citations and metadata. Record tool versions, source revision and
-   output hash. Rendering was **not executed** by this drafting increment.
+   output hash. The bounded follow-up below completed the bibliography parse and
+   official TeX generation; PDF compilation and visual inspection remain open.
 5. Re-run relevant installation, scientific, documentation and release gates on
    the selected source/artifacts. Structural manuscript checks do not establish
    submission readiness, scientific validity or a qualified software release.
@@ -148,9 +149,144 @@ visible draft notice and headings, the body contains **1,136 words** under that
 word-token rule. Both are within the current guidance; this is not the JOSS
 renderer or an editorial word-count decision.
 
-The YAML front matter parsed successfully with PyYAML. All six required section
-headings were present; all five cited keys matched the five bibliography entries;
-all 16 relative links resolved; and no trailing whitespace was found in the three
-packet files. A full BibTeX parser and JOSS PDF rendering were not executed.
-These are structural checks of the draft only, not acceptance checks for its
-research claims or the software.
+The original drafting increment parsed the YAML front matter with PyYAML,
+checked the six required section headings, matched all five cited keys to the
+bibliography, resolved its then-current 16 relative links and checked whitespace.
+The follow-up below adds an actual bibliography parse and a bounded official
+render attempt. These checks concern the draft's structure and build, not
+acceptance of its research claims or the software.
+
+## Repeatable integrity and render checks
+
+Run the dependency-free integrity check from the repository root:
+
+```sh
+python scripts/check_joss_readiness.py --json
+```
+
+This checks the source snapshot's 14 implementation/documentation hashes and
+three manuscript-edition hashes, the software version/revision identifiers, the
+visible draft notice, the six required sections and the recorded prose-count
+rule. A changed source hash requires reassessing the relevant manuscript claims
+and their evidence before deliberately updating the snapshot. Do not regenerate
+hashes merely to clear a failure. A changed manuscript edition likewise requires
+reviewing the claims and citation mapping before refreshing its hashes.
+
+The checker does not parse YAML or BibTeX, render a PDF, qualify the science, or
+supply author approval. Its explicit readiness gate is expected to fail for this
+draft:
+
+```sh
+python scripts/check_joss_readiness.py --require-submission-ready
+```
+
+### Official Inara build
+
+[render.py](render.py) uses the local Makefile route documented by the
+[JOSS paper guide](https://joss.readthedocs.io/en/latest/paper.html) and
+[Inara](https://github.com/openjournals/inara). It requires an unchanged Inara
+checkout at `88ee5d656f147d801448ce77ad8375619d383df6` and Pandoc **3.6.4**, matching
+the Pandoc version in that revision's
+[Dockerfile](https://github.com/openjournals/inara/blob/88ee5d656f147d801448ce77ad8375619d383df6/Dockerfile).
+These primary-source rendering instructions were checked on **16 November 2026**.
+
+Install or provide Git, Python, GNU Make, Pandoc 3.6.4, `latexmk` and a working
+LuaLaTeX installation with the upstream Dockerfile's packages and fonts. This
+includes the LuaTeX support packages, New Computer Modern and Hack; the upstream
+image also bundles Libre Franklin. TeX formats, font discovery and a writable
+font cache must be configured. The wrapper installs nothing and makes no
+system-wide environment changes. Paths passed to the upstream Make recipes must
+exclude spaces and shell metacharacters. This local wrapper targets a POSIX
+environment, including Linux under WSL; it rejects native Windows drive and UNC
+paths. The retained execution was on Linux. Portable orchestration tests do not
+qualify native Windows rendering.
+
+For an already provisioned local toolchain, use a new isolated checkout and
+output directory. Replace the Pandoc path with the installed 3.6.4 executable:
+
+```sh
+joss_tools="$(mktemp -d /tmp/innovate-joss.XXXXXX)"
+git init "$joss_tools/inara"
+git -C "$joss_tools/inara" fetch --depth 1 https://github.com/openjournals/inara.git 88ee5d656f147d801448ce77ad8375619d383df6
+git -C "$joss_tools/inara" checkout --detach FETCH_HEAD
+python conductor/tracks/research_software_registry_readiness_20260721/joss/render.py \
+  --inara "$joss_tools/inara" \
+  --pandoc /path/to/pandoc-3.6.4/bin/pandoc \
+  --output-dir "$joss_tools/render" \
+  --source-date-epoch 1794787200
+```
+
+The epoch above is 16 November 2026 at 00:00 UTC and reproduces this attempt's
+draft date. Record the selected epoch for each later attempt. Matching only the
+Inara and Pandoc revisions does not promise byte-identical PDFs across different
+TeX distributions, fonts or platforms.
+
+The wrapper first runs the offline integrity check and stops if it fails. It then
+parses `paper.bib` through Pandoc's BibTeX reader into CSL-JSON and runs upstream
+`make tex` and `make pdf` with citeproc. It explicitly passes
+`--metadata=draft:true` and `--variable=draft:true`, the draft settings used by
+Inara's entrypoint, because the local Makefile does not itself supply them.
+It checks the generated TeX for the draft watermark, line numbering and visible
+working-draft notice. It uses the unmodified official template and does not
+enable production mode.
+
+Outputs include a receipt with commands, input/output hashes, software revision,
+tool versions and separate stage outcomes. An existing output directory is
+rejected to protect earlier evidence. Failure returns a non-zero exit code and
+preserves the completed stages and log; PDF build success still leaves visual
+review pending. Inspect every resulting PDF page for clipping, missing glyphs,
+citations and the draft notice before recording visual acceptance. The renderer's
+editor/reviewer/DOI placeholders are template defaults, not editorial records.
+
+The official Docker route remains available on a Docker-capable host. Building
+the pinned checkout's unmodified Dockerfile provides its intended package
+environment; record the resulting image identity and use draft mode. No Docker
+build or run was executed in this workspace, where Docker is unavailable.
+
+### Retained attempt: 16 November 2026
+
+The [render receipt](../evidence/joss-render-20261116/attempt-2/receipt.json) records Pandoc
+3.6.4, GNU Make 4.4.1, latexmk 4.86 and LuaHBTeX 1.18.0 (TeX Live
+2025/dev/Debian), with the pinned Inara source above. The complete
+[command log](../evidence/joss-render-20261116/attempt-2/render.log) preserves the failure.
+This final wrapper attempt supersedes the
+[earlier attempt](../evidence/joss-render-20261116/receipt.json), which is preserved
+unchanged with the hash of the earlier script that actually generated it.
+
+| Stage | Executed result |
+| --- | --- |
+| Offline integrity prerequisite | Passed with all 14 source and three edition hashes matching, six required sections and 1,074 prose words. Submission readiness remains false. |
+| Actual BibTeX parse | Passed with five records and no Pandoc warnings; retained [CSL-JSON](../evidence/joss-render-20261116/attempt-2/bibliography.json). The parser preserved the `Sîrbu` diacritic and the literal author `Rht`. |
+| Official template and citeproc | Passed; retained [draft TeX](../evidence/joss-render-20261116/attempt-2/paper.tex) contains all five resolved references, the working-draft notice and the draft watermark/line-numbering commands. |
+| PDF compilation | **Blocked**: LuaLaTeX reported `File luacode.sty not found`; upstream Make returned 2 and the wrapper returned 1. No PDF was produced. |
+| PDF visual inspection | **Not performed** because there is no PDF. Source-level draft markers are not visual inspection. |
+
+The installed system Pandoc 3.1.11.1 initially lacked an Inara template partial;
+the isolated official Pandoc 3.6.4 binary resolved that mismatch. The workspace's
+TeX image also lacked its file database, format, Lua support packages and some
+fonts. A bounded, isolated setup used the installed distribution's files,
+packages from the historic TeX Live 2024 repository named in Inara's Dockerfile,
+and Hack v3.003. A process-local `TEXMFCACHE=.` allowed font-cache creation in the
+isolated Inara checkout. Setup stopped at the remaining `luacode.sty` dependency;
+no global TeX configuration or other worker's environment was changed. The next
+attempt should use a complete supported TeX environment or the official
+container, retain a new receipt, and finish the PDF visual review.
+
+The wrapper's 18 focused tests in
+[test_joss_render.py](../../../../tests/native/test_joss_render.py) passed using
+explicit synthetic subprocess fixtures. They exercise version/checkout guards,
+unsafe and reused output paths, the integrity prerequisite, mandatory draft
+markers, failed PDF receipts and source changes or deletion during a build.
+Host-independent path-text cases test the actual production restriction with
+POSIX paths and rejected Windows drive/UNC paths. Mocked orchestration uses host
+temporary files to model the POSIX Make environment without requiring a real
+renderer on each CI platform. A
+synthetic successful process still leaves visual review and submission pending;
+these fixtures are not real renders or scientific acceptance evidence. Ruff's
+`E,F,I,UP,B` checks and formatting passed for the wrapper and tests.
+
+This follow-up used ChatGPT with GPT-6 Astra Pro for the wrapper, source checks
+and build diagnostics. It does not complete the whole-project AI inventory or
+the authors' review declaration. A parser or build pass does not establish
+research use, scientific validity, a qualified release, author consent,
+submission readiness or journal acceptance.

@@ -15,6 +15,7 @@
   "external_evidence_required": true,
   "readiness_record": "conductor/tracks/research_software_registry_readiness_20260721/readiness.json",
   "current_reconciliation": "conductor/tracks/research_software_registry_readiness_20260721/reconciliation-20261116.md",
+  "current_execution_record": "conductor/tracks/research_software_registry_readiness_20260721/implementation-20261116.md",
   "assessed_revision": "69b674814513e09a683279c679b1584af8bb4214",
   "manuscript_draft": "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md"
 }

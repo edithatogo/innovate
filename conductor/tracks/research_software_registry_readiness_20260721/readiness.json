@@ -16,7 +16,7 @@
       "issue": 399,
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md",
       "outstanding": [
-        "Select a release/tag and record its exact commit and publication/rights prerequisites; no current release qualification is implied.",
+        "Select an archival target from the recorded historical release/tag inventory or a later qualified native release; target identity inventory does not supply the required rights/release decision.",
         "The two exact origin lookups returned 404 again on 16 November 2026; retain an actual archive-request receipt and successful visit/snapshot for the selected release.",
         "Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion."
       ],
@@ -42,7 +42,7 @@
       "issue": 401,
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md",
       "outstanding": [
-        "Review and render the current unapproved joss/paper.md draft and verified bibliography; resolve its claim register against accepted source, research-use evidence and author declarations. Structural checks alone are not JOSS readiness.",
+        "Complete the official draft PDF build and visual inspection in a complete TeX environment after the recorded BibTeX/citeproc/TeX success; local compilation stops at missing luacode.sty. Reconcile claims with accepted source, research use and author declarations; source-integrity checks remain preparation only.",
         "Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.",
         "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
         "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."

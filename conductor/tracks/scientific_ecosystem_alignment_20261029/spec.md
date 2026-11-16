@@ -73,7 +73,26 @@ comparative prediction study, causal study and innovation/hype application retai
 separate claims and evidence. Submission, release and external registration remain
 separate actions with their own authority and verified outcomes.
 
-This reconciliation changes only the five named documentation files in this
-track. Shared manifests, provider pins, schemas, CI, registries and promotion
+The initial reconciliation changed only the five named documentation files in
+this track. Shared manifests, provider pins, schemas, CI, registries and promotion
 remain with the [sole integrator](../../dependency-migration-ownership-20261115.md).
 Existing native, empirical and documentation owners retain their work.
+
+## Executable installed-Arrow qualification — 16 November 2026 follow-up
+
+`scripts/qualify_scenario_arrow.py` must bind a supplied development wheel to
+executor-recorded build inputs, wheel RECORD entries and the bytes actually
+imported from the selected environment. It runs with isolated Python imports
+outside the checkout, checks the declared runtime/optional/test dependencies,
+and executes the existing 38 scenario-export cases plus four named native
+Kairos/paused-producer cases. All four optional Arrow cases must execute.
+Any missing, duplicate, unexpected, skipped, failed or errored case fails the
+qualification; existing scientific test expectations remain unchanged.
+
+Retain source, test, artifact, dependency and command identities with actual
+results. Executor evidence is not a signed build attestation. A passing Linux
+development-wheel check does not qualify other platforms, a distributable
+release, all provider behaviour, or the 38 scientific obligations. Separate
+execution on Rust 1.99.1 may establish a bounded minimum-compiler check; a build
+on 1.100.0 cannot substitute for it. Root CI adoption and promotion remain with
+#624 and the existing owners.

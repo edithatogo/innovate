@@ -1,5 +1,25 @@
 # Software Heritage and RRID evidence dossier
 
+## Executed target inventory — 16 November 2026 follow-up
+
+The [read-only target inventory](evidence/archive-target-inventory-20261116.json)
+resolves the available archival candidates without selecting or publishing one.
+GitHub's complete returned release page contains six published releases; its tag
+references identify the separate annotated `v0.6.0` tag.
+
+| Candidate | Verified repository identity | Remaining decision |
+| --- | --- | --- |
+| Latest published GitHub release, `v0.5.0` | Lightweight tag at `6b673832c6024f5332c971ac35172a96615f75f9`; published 29 August 2025 | Historical archival target only; assess the selected source and third-party rights before requesting archival. |
+| `v0.6.0` | Annotated tag `86eceddcfa17362d05afa34a6f224e7eac5d561b` targets `3459f4528c11ceba8d1e5840d3da852dfb8d58bd`; GitHub reports its signature verified | No matching published release appeared in the returned collection. A signed tag does not establish scientific, rights or archival acceptance. |
+| Current native development line, `0.7.0a1` | No matching `0.7` tag in the returned references | No qualified native release can be selected from this inventory. Keep current native acceptance with #556/#624. |
+
+This completes a bounded identity-preparation step of SWH-01. The selected target,
+rights assessment, actual archive request, successful visit/snapshot and resolving
+object linkage remain pending. Historical archival may be considered separately
+without being represented as current native qualification. The existing RRID
+draft is locally complete; its inaccessible duplicate search and actual curator
+outcome still require external evidence.
+
 **16 November update:** [fresh read-only observations](evidence/provider-lookups-20261116.json)
 again returned 404 for the two exact Software Heritage origins and 403/non-JSON
 for SciCrunch search. These are observations, not archival or curator receipts;

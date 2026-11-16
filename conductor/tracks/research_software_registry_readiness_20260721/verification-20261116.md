@@ -1,5 +1,11 @@
 # Verification receipt — scientific and journal reconciliation
 
+This file preserves the initial reconciliation receipt. The later executable
+follow-up and its distinct tests, artifacts, remaining PDF blocker and publication
+record are in [implementation-20261116.md](implementation-20261116.md). Earlier
+statements that a parser or native command was not executed apply to this initial
+packet, not to that subsequent work.
+
 Base software: `69b674814513e09a683279c679b1584af8bb4214`.
 Scope: the two existing scientific-alignment and registry-readiness tracks;
 no scientific source, shared registry, CI, dependency or release changes.

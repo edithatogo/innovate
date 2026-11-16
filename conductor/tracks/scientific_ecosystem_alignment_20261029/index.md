@@ -1,6 +1,7 @@
 # innovate: scientific ecosystem alignment
 
 - [Current reconciliation and remaining acceptance — 16 November 2026](reconciliation-20261116.md)
+- [Executed installed Arrow qualification](evidence/arrow-installed-20261116/README.md)
 - [Specification](spec.md)
 - [Plan](plan.md)
 - [Metadata](metadata.json)
@@ -19,3 +20,8 @@ scientific core, Polars tables and thin Python, Julia and R bindings.
 Arrow outcome-shape correction. Neither merge nor the reported 38-test pass on
 `44cb9635` establishes current-source provider, optional-consumer or release
 acceptance. All 38 full-feature scientific obligations remain open.
+
+The current follow-up implements a repeatable installed-artifact qualifier and
+records 42 passing Linux consumer cases with all four optional PyArrow cases
+executed and no skips. Its artifact/source/compiler scope is explicit in the
+linked receipt; shared CI adoption and broader acceptance remain pending.

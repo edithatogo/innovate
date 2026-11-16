@@ -1,5 +1,41 @@
 # Implementation Plan
 
+## Executable preparation follow-up — 16 November 2026
+
+The user's follow-up authorises implementing the remaining feasible preparation.
+Starting published head: `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`
+(local tree-equivalent receipt `0c718cea3eb982717ce940560868004d71261e9b`).
+Inspected main: `18c467e18b71d972060365c68865aa405a69949c`; its only advance
+from the assessed source changes the Renovate workflow. #624 still owns shared
+integration; #656/#659 have no overlap with the allowed files below.
+
+- [x] JOSS-02a: implement an offline manuscript/source integrity check with
+  negative tests for drift, incomplete evidence and false readiness; preserve
+  the current unapproved edition and all scientific/author/provider gates.
+  Fifty tests and independent review pass; 14 source hashes also match Git blobs
+  at the recorded assessment revision. The checker itself does not claim Git
+  authentication or submission readiness.
+- [x] JOSS-02b: implement the reproducible pinned draft-render wrapper and its
+  18 guard tests; execute actual bibliography parsing, official TeX/citeproc and
+  draft-marker checks. The final `attempt-2` receipt matches the final script.
+- [!] JOSS-02c: complete PDF compilation and visual inspection. Actual LuaLaTeX
+  stopped at missing `luacode.sty`; Make exited 2, wrapper exited 1 and no PDF
+  was produced. Continue in a complete TeX/Inara environment with a new receipt;
+  do not infer visual acceptance from TeX output.
+- [x] SWH-01a: resolve the historical release/tag inventory, including the
+  annotated-tag target; preserve target selection, rights and archival gates.
+- [x] Reconcile observed hosted results and remaining JOSS-01, RRID-01, SWH-01,
+  author and external gates after execution; independently review the bounded
+  implementation and final portable fixtures. The exact publication, issue
+  readback and new-head hosted receipts belong in #662 and its #624 handoff.
+
+Allowed files: this track, `scripts/check_joss_readiness.py`,
+`tests/native/test_joss_readiness.py`, `tests/native/test_joss_render.py`, and
+the separately scoped scientific Arrow qualification packet. Root workflows,
+manifests, dependency pins, common registries, empirical protocols and other
+owners' source remain reserved.
+Preparation checks cannot supply research-use facts or author attestations.
+
 ## Scientific and journal reconciliation — 16 November 2026
 
 Current work packet: `REG-16`, based on

@@ -1,5 +1,11 @@
 # Scientific, registry and journal reconciliation — 16 November 2026
 
+**Executed follow-up:** [implementation and evidence](implementation-20261116.md)
+now record the manuscript integrity command, real BibTeX/official TeX processing,
+blocked PDF compilation, archival target inventory and bounded installed native
+qualification. Those results supersede preparation-only wording below within
+their recorded scope. External, author, scientific and integration gates remain.
+
 Status: repository preparation in progress; all five issues remain open.
 Inspected software revision: `69b674814513e09a683279c679b1584af8bb4214`.
 Development version: `0.7.0a1`; no submission version or qualified release is
