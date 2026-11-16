@@ -7,6 +7,11 @@ consumer receives the same dependency graph. `gemm-f16` is retained for the
 upstream optional feature, even when the current Innovate graph does not enable
 it. Upstream licences, notices and original manifests are retained alongside
 each crate; `UPSTREAM.json` records the original archive checksums and revisions.
+The only local Rust source change is in `faer/src/sort.rs`: empty block-sort
+cursors initially point to their offset arrays instead of using null sentinels.
+The loop already reset each empty cursor to that array before dereferencing it;
+the new initialization makes that invariant explicit. `UPSTREAM.json` records
+the original and patched file hashes, and the audit check verifies the latter.
 
 Cargo advisory tools skip path dependencies. `Cargo.lock` in this directory is
 therefore an **audit inventory**, not a build lock: it records the original

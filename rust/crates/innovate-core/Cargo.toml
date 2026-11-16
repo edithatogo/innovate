@@ -42,3 +42,6 @@ kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f62
 kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
+
+[dev-dependencies]
+faer = { path = "../../vendor/faer-0.24.4", version = "=0.24.4", default-features = false, features = ["sparse"] }

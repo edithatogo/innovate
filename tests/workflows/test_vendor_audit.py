@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import tempfile
@@ -78,6 +79,26 @@ class VendorAuditTests(unittest.TestCase):
         (second / "COPYING.extra").write_text("Updated notice\n")
         with self.assertRaisesRegex(ValueError, "licence bundle differs"):
             AUDIT.check_license_bundle(self.vendor, bundle_path)
+
+    def test_local_patch_hash_and_path_are_checked(self):
+        source = self.crate / "source.rs"
+        source.write_bytes(b"patched source\n")
+        self.inventory["packages"][0]["local_patches"] = [
+            {
+                "path": "source.rs",
+                "upstream_sha256": "b" * 64,
+                "patched_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+            }
+        ]
+        self.write_inventory()
+        AUDIT.check_inventory(self.vendor)
+        source.write_bytes(b"different source\n")
+        with self.assertRaisesRegex(ValueError, "local patch differs"):
+            AUDIT.check_inventory(self.vendor)
+        self.inventory["packages"][0]["local_patches"][0]["path"] = "../escape.rs"
+        self.write_inventory()
+        with self.assertRaisesRegex(ValueError, "invalid local patch path"):
+            AUDIT.check_inventory(self.vendor)
 
 
 if __name__ == "__main__":

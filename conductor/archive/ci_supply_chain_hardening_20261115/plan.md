@@ -47,7 +47,7 @@ same expected error and exit code; no worker behavior is changed.
   The games manifest and lock name the receiving commit. The same three checks
   passed on receiving main in runs `43878846017` and `43878846026`.
 - Root, games and vendored-audit lock SHA-256 values respectively are
-  `63158d51e40f180a34c68bdb614f318b13ffd2de765607871daa7db36a8de4fd`,
+  `642a7176be4ac9fae0c633e468abfd5decdd2531c594fcdf8f3d4029c8784342`,
   `307c1c18b5d4e0beee7b9cd4d575c320045b4f71287b8fbfe1976f269d23750e`, and
   `b72b16b86c389ffb59e79044414b3501d8cfbefcae8fd6b559b17d75f0e20e6b`.
   Locked all-features metadata found `pastey 0.2.3` and no `paste` in either
@@ -122,6 +122,44 @@ also selected Python 3.12.16, whereas this repository requires Python 3.15.2;
 the current [Presidio analyzer 2.2.366 metadata](https://pypi.org/project/presidio-analyzer/2.2.366/)
 declares Python below 3.15. A qualified 3.15-compatible privacy route and
 review of the exact nonidentifiers remain open. Do not count this job as a pass.
+
+### Vendored sort and hosted follow-up — 17 November 2026
+
+On candidate `25f6a76db7ca6274ff191a1a1a08d13c847aa771`, the PR's native
+matrix, Julia/R matrix, package, RustSec and workflow-policy jobs passed. The
+Rust CodeQL analysis completed, but its aggregate check failed on four new
+high-severity invalid-pointer alerts (`#52`–`#55`) in the vendored faer sort.
+Each points back to one of the empty cursor's null initializers. The PR privacy
+scan covered 759 of 759 selected files and again reported three blocking matches;
+release readiness retained the 38 existing scientific obligations. The offline
+security jobs remained queued. None of these failures or queues was waived.
+
+The exact-head manual CI run `43887883380` passed all jobs, including the
+clean source-distribution consumer and remote-worker container build and runtime
+checks. That receipt applies to `25f6a76d`, before the sort follow-up below.
+
+The candidate initializes the two empty block-sort cursors directly from their
+offset arrays. Previously, each null cursor was reset to its array in the loop
+before it could be dereferenced. This changes the initializer and declaration
+order only; the sort algorithm and comparisons are unchanged. `UPSTREAM.json`
+records both source hashes, and `scripts/check_vendor_audit.py` verifies the
+patched hash. A differential harness using Rust 1.99.1 compared upstream and
+candidate output for 1,840 inputs and produced the same digest; each output was
+also checked against independently sorted keys and the input value permutation.
+The library-level `cargo test --offline -p innovate-core --test
+vendored_faer_sort` passed its block-boundary and invalid-range tests before
+the change; the `--locked --offline` rerun passed afterward. Five Python
+inventory tests and repository policy passed. `nox -s security` passed its
+three RustSec audits and inventory checks; `cargo deny --all-features --locked
+check` and the games `check bans` both passed with existing duplicate warnings.
+The full `nox -s native` session also passed on Rust 1.99.1, with its one
+live-OECD test ignored; `nox -s lint` passed.
+The root and games all-features metadata remain paste-free. The first offline
+games metadata attempt lacked the Paignia checkout; the locked online retry
+passed. The root lock gained only the existing faer package as a test dependency;
+all 285 package identities are unchanged, so the prior unfiltered OSV result
+for that package set remains applicable. CodeQL and all relevant hosted gates
+must run again on the new candidate; the findings have not been dismissed.
 
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 

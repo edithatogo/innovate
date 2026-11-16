@@ -278,14 +278,14 @@ unsafe fn partition_in_blocks<P: Ptr, F: FnMut(P, P) -> bool>(
 	const BLOCK: usize = 128;
 	let mut l = v;
 	let mut block_l = BLOCK;
-	let mut start_l = core::ptr::null_mut();
-	let mut end_l = core::ptr::null_mut();
 	let mut offsets_l = [core::mem::MaybeUninit::<u8>::uninit(); BLOCK];
+	let mut start_l = offsets_l.as_mut_ptr() as *mut u8;
+	let mut end_l = start_l;
 	let mut r = unsafe { l.add(v_len) };
 	let mut block_r = BLOCK;
-	let mut start_r = core::ptr::null_mut();
-	let mut end_r = core::ptr::null_mut();
 	let mut offsets_r = [core::mem::MaybeUninit::<u8>::uninit(); BLOCK];
+	let mut start_r = offsets_r.as_mut_ptr() as *mut u8;
+	let mut end_r = start_r;
 	unsafe fn width<P: Ptr>(l: P, r: P) -> usize {
 		r.offset_from(l) as usize
 	}

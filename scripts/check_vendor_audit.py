@@ -6,11 +6,12 @@ separate lock is an audit inventory, not a Cargo resolution or a release lock.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
 import tomllib
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
 VENDOR = ROOT / "rust/vendor"
@@ -41,6 +42,16 @@ def audit_lock(vendor: Path) -> str:
             manifest = tomllib.load(stream)["package"]
         if (manifest["name"], manifest["version"]) != (name, version):
             raise ValueError(f"manifest identity differs for {directory}")
+        for patch in package.get("local_patches", []):
+            path = PurePosixPath(patch["path"])
+            if path.is_absolute() or ".." in path.parts:
+                raise ValueError(f"invalid local patch path for {directory}")
+            for field in ("upstream_sha256", "patched_sha256"):
+                if not re.fullmatch(r"[0-9a-f]{64}", patch[field]):
+                    raise ValueError(f"invalid local patch checksum for {directory}")
+            actual_hash = hashlib.sha256((vendor / directory / path).read_bytes()).hexdigest()
+            if actual_hash != patch["patched_sha256"]:
+                raise ValueError(f"local patch differs for {directory}/{path}")
         records.append((name, version, checksum))
     actual = {path.name for path in vendor.iterdir() if path.is_dir()}
     if not records or actual != directories:

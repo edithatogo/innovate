@@ -7,6 +7,14 @@
       "version": "0.24.4",
       "license": "MIT",
       "crate_sha256": "5ab6df3dd147fe8d702a288b95bcd8fcc499ab572fc80da6828f60cd4d524d67",
+      "local_patches": [
+        {
+          "path": "src/sort.rs",
+          "upstream_sha256": "8a0fefdde7960f5793ce081df7ea11f2c0d02f5803b444d8baf9b3c9389bee51",
+          "patched_sha256": "f97d4aac6e04cb3e354764359e109af32b2751103010eb0b16cf9205ca781b32",
+          "reason": "Initialize empty block-sort cursors to their offset arrays instead of null."
+        }
+      ],
       "upstream_vcs": {
         "git": {
           "sha1": "0539947ffb757a739d7e703a7d2fa0c792a909c1"

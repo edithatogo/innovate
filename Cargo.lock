@@ -895,6 +895,7 @@ name = "innovate-core"
 version = "0.7.0-alpha.1"
 dependencies = [
  "chrono",
+ "faer",
  "kairo-ecs-abm",
  "kairo-ecs-core",
  "kairo-ecs-des",
