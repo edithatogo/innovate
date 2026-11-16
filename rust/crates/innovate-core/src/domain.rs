@@ -57,28 +57,41 @@ impl TryFrom<Vec<f64>> for TimeGrid {
 /// Semantic kind of observed series; observations do not infer an underlying actor count.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationKind {
+    /// New adoption during each observation interval.
     NewAdoption,
+    /// Actors or units currently active at each observation time.
     ActiveStock,
+    /// Transactions observed at each time point.
     Transactions,
+    /// A rate measured per unit time or expressed as a proportion.
     Rate,
+    /// A share of an explicitly defined population or market.
     Share,
+    /// An attention or expectation measure, distinct from adoption counts.
     Attention,
 }
 
 /// Measurement units for an observation series.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Units {
+    /// A count of observed events or units.
     Count,
+    /// A dimensionless proportion.
     Proportion,
+    /// A rate expressed per unit of time.
     RatePerUnitTime,
+    /// A monetary amount in the caller's declared currency.
     Currency,
+    /// An index on the caller's declared measurement scale.
     Index,
 }
 
 /// Optional explicit denominator accompanying normalized or share observations.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Denominator {
+    /// Size of the population underlying a normalized observation.
     Population(f64),
+    /// Market potential underlying a normalized observation.
     MarketPotential(f64),
 }
 
@@ -194,26 +207,31 @@ impl DomainObservationSeries {
         })
     }
 
+    /// Borrow the validated time grid associated with the observations.
     #[must_use]
     pub fn grid(&self) -> &TimeGrid {
         &self.grid
     }
 
+    /// Borrow the observations, preserving missing entries as `None`.
     #[must_use]
     pub fn values(&self) -> &[Option<f64>] {
         &self.values
     }
 
+    /// Return the declared semantic kind of the observations.
     #[must_use]
     pub fn kind(&self) -> ObservationKind {
         self.kind
     }
 
+    /// Return the declared measurement units.
     #[must_use]
     pub fn units(&self) -> Units {
         self.units
     }
 
+    /// Return the optional validated denominator.
     #[must_use]
     pub fn denominator(&self) -> Option<Denominator> {
         self.denominator

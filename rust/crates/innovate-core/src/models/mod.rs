@@ -1,14 +1,18 @@
 //! Classical, hierarchical, competing, repeat-use, regime, network, and demand models (A01–A08).
 
+/// Bass diffusion prediction.
 pub mod bass;
 pub mod competition;
 pub mod demand;
 pub mod expectation_feedback;
+/// Fisher–Pry substitution prediction.
 pub mod fisher_pry;
+/// Gompertz diffusion prediction.
 pub mod gompertz;
 pub mod hierarchical;
 pub mod hype;
 pub mod hype_effects;
+/// Logistic diffusion prediction.
 pub mod logistic;
 pub mod network;
 pub mod norton_bass;
@@ -24,13 +28,18 @@ use serde_json::json;
 /// Supported classical scalar diffusion families (A01).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ClassicalFamily {
+    /// Bass innovation–imitation diffusion.
     Bass,
+    /// Logistic diffusion curve.
     Logistic,
+    /// Gompertz diffusion curve.
     Gompertz,
+    /// Fisher–Pry substitution curve.
     FisherPry,
 }
 
 impl ClassicalFamily {
+    /// Return the native model key for this family.
     #[must_use]
     pub fn as_str(self) -> &'static str {
         match self {
@@ -45,25 +54,35 @@ impl ClassicalFamily {
 /// Request for [`fit_classical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct FitRequest {
+    /// Classical family to fit.
     pub family: ClassicalFamily,
+    /// Validated times aligned with the observations.
     pub time: TimeGrid,
+    /// Finite, nonnegative observations to fit.
     pub observed: Vec<f64>,
 }
 
 /// Request for [`predict_classical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PredictionRequest {
+    /// Classical family to evaluate.
     pub family: ClassicalFamily,
+    /// Validated prediction times.
     pub time: TimeGrid,
+    /// Family-specific parameters in the order expected by the model.
     pub parameters: Vec<f64>,
 }
 
 /// Prediction output bundle returned by [`predict_classical`] and [`regimes::predict_regimes`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PredictionBundle {
+    /// Name of the evaluated family or derived regime family.
     pub family: String,
+    /// Prediction times in the same order as `values`.
     pub time: Vec<f64>,
+    /// Predicted values at each time.
     pub values: Vec<f64>,
+    /// Whether the result is flagged as weakly identified.
     pub weakly_identified: bool,
 }
 

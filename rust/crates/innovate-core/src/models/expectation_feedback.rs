@@ -5,7 +5,9 @@ use crate::inference::InnovationError;
 /// External lag signal evaluated at `t - lag` without using future information.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ExternalLagSignal {
+    /// Nonnegative delay applied before evaluating the external signal.
     pub lag: f64,
+    /// Value used when the shifted time precedes zero.
     pub baseline_value: f64,
 }
 
@@ -13,7 +15,8 @@ impl ExternalLagSignal {
     /// Evaluate external signal `f(t - lag)` using provided closure `signal_fn`.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] if `t` or `lag < 0` is invalid or `signal_fn` produces non-finite output.
+    /// Returns [`InnovationError`] if `t`, the lag or baseline is non-finite,
+    /// the lag is negative, or `signal_fn` produces non-finite output.
     pub fn evaluate<F>(&self, t: f64, signal_fn: F) -> Result<f64, InnovationError>
     where
         F: Fn(f64) -> f64,
@@ -47,8 +50,11 @@ impl ExternalLagSignal {
 /// Coupled hype-adoption delayed state step using explicit state history (H05).
 #[derive(Debug, Clone, PartialEq)]
 pub struct DelayedStateModel {
+    /// Number of history entries between the latest and the feedback value.
     pub delay_steps: usize,
+    /// Coefficient multiplying lagged adoption in the hype update.
     pub feedback_gain: f64,
+    /// Nonnegative decay coefficient for the current hype state.
     pub decay: f64,
 }
 

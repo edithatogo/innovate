@@ -7,18 +7,26 @@ use crate::models::{ClassicalFamily, PredictionBundle, PredictionRequest, predic
 /// Dated shock or market-potential shift applied from `effective_time` onward.
 #[derive(Debug, Clone, PartialEq)]
 pub struct DatedShock {
+    /// First time at which the shock applies.
     pub effective_time: f64,
+    /// Positive multiplier for the family's innovation or growth parameter.
     pub p_multiplier: f64,
+    /// Positive multiplier for the Bass imitation parameter.
     pub q_multiplier: f64,
+    /// Positive multiplier for the family's capacity parameter when applicable.
     pub capacity_multiplier: f64,
 }
 
 /// Request for [`predict_regimes`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegimeRequest {
+    /// Classical diffusion family to evaluate.
     pub family: ClassicalFamily,
+    /// Validated times at which predictions are requested.
     pub time: TimeGrid,
+    /// Family-specific parameters before any shock.
     pub base_parameters: Vec<f64>,
+    /// Dated multiplicative shocks applied when their effective time is reached.
     pub shocks: Vec<DatedShock>,
 }
 

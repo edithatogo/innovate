@@ -170,8 +170,11 @@ fn normalize_rows(matrix: &mut [Vec<f64>]) -> Result<(), InnovationError> {
 /// Bi-exponential excess-risk / frailty decay kernel $w(\tau) = \alpha e^{-\lambda_1 \tau} + (1 - \alpha) e^{-\lambda_2 \tau}$ (SM02).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BiExponentialKernel {
+    /// Mixture weight of the first exponential, between zero and one.
     pub alpha: f64,
+    /// Nonnegative decay rate of the first exponential.
     pub lambda1: f64,
+    /// Nonnegative decay rate of the second exponential.
     pub lambda2: f64,
 }
 
@@ -203,9 +206,13 @@ impl BiExponentialKernel {
 /// Semi-Markov duration-since-transition tunnel-state model $\tau \in \{0, \dots, K\}$ (SM02).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct TunnelStateModel {
+    /// Maximum represented duration; the final tunnel retains longer durations.
     pub max_tunnel: usize,
+    /// Nonnegative baseline relapse hazard.
     pub baseline_relapse: f64,
+    /// Nonnegative excess hazard at duration zero.
     pub frailty_amplitude: f64,
+    /// Nonnegative exponential decay rate of the excess hazard.
     pub decay_rate: f64,
 }
 
@@ -240,7 +247,7 @@ impl TunnelStateModel {
     /// returning `(next_occupancy, total_relapsed)`.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] on length mismatch, negative occupancy/entry, or hazard > 1.
+    /// Returns [`InnovationError`] for invalid occupancy, entry flow, or model parameters.
     pub fn step_cohort(
         &self,
         occupancy: &[f64],
