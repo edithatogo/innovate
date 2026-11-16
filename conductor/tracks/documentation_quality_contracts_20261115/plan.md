@@ -1,5 +1,59 @@
 # Implementation plan
 
+## Current learning-programme intake — 16 November 2026
+
+- [x] Reconcile main 06b16671b654b4e51f158bf7d605c4286f156755, open PRs,
+  documentation-owner handoff #613 and coordinator issue #624 for this planning
+  increment; no open PR was returned at intake.
+- [x] Refresh concurrent work before publication: #656 subsequently proposed
+  archiving this documentation track. Record the active-successor/directory-move
+  reconciliation required before integration; leave its shared registry edits
+  with the coordinator. The native/content audit remains pinned to the stated base.
+- [x] Audit the maintained tutorial/example inventory and three root legacy
+  notebooks; distinguish current examples, public-data gaps and historical APIs.
+- [x] Research official marimo/Astro features and publisher dataset terms; record
+  compatibility tests, coverage targets, ordered work and ownership boundaries.
+- [x] Incorporate the recommendations in the linked programme, curriculum, design
+  and dataset records. This checks completion of planning only.
+- [ ] DOC-01: resolve existing browser delivery failures and publish reproducible
+  documentation revision identity through the existing owner/integrator.
+- [ ] DOC-02: derive the model/operation/tutorial catalogue, reconcile variant
+  metadata and classify legacy notebooks before promoting current coverage.
+- [ ] DOC-03: qualify optional marimo tooling with the exact native environment,
+  then execute and export the first notebook through existing contracts.
+- [ ] DOC-04: admit frozen public datasets and deliver beginner/intermediate
+  fitting, model-choice, forecasting and reproducibility lessons.
+- [ ] DOC-05: use typed Astro collections, Starlight components, scientific figures,
+  equations and targeted search to present the shared catalogue and examples.
+- [ ] DOC-06: complete advanced model/mechanism tutorials against accepted native
+  capabilities, including explicit unsupported-case teaching.
+- [ ] DOC-07: deliver equivalent Python/Julia/R starting routes and practical
+  old-to-current migration recipes without claiming unsupported parity.
+- [ ] DOC-08: complete reader tasks, scoped scientific review, browser/search
+  follow-ups and live artifact verification for the expanded learning programme.
+
+Dependencies, ownership boundaries and acceptance are in the
+[ordered work packages](learning-plan-20261116.md). All implementation markers
+above remain pending. Existing scientific, security, release and deployment holds
+remain; no notebook dependency or dataset is installed or admitted by this plan.
+
+### Current evidence versus historical receipts
+
+At the inspected main, [documentation run 43804385173](https://github.com/edithatogo/innovate/actions/runs/43804385173)
+passed native documentation examples, Astro build/type checks and local artifact
+checks. Browser qualification executed 142 cases: 140 passed and two mobile cases
+failed (artifact-response mismatch and aborted script request); deployment was
+skipped. This supplies current hosted language evidence within that job's scope,
+not final browser, public-deployment, scientific or full platform acceptance.
+Older receipts below remain attributed to their actual revisions.
+
+The baseline registry-hygiene command exits 1 for three unrelated completed tracks
+still under the active directory: rust_ode_integration_20261115,
+rust_nuts_hmc_20261115 and ci_supply_chain_hardening_20261115. Shared-registry
+corrections remain with the integrator; this supplement changes only this track.
+
+## Historical implementation and verification record
+
 ## Reconciliation
 
 - [x] Inspect live main, open PR ownership, existing Astro site, archived tracks and published site.
