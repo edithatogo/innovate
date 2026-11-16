@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "title": "Innovate-to-Voiage Decision Binding Contract",
+  "required_fields": [
+    "schema_version",
+    "perspective",
+    "population",
+    "horizon",
+    "discount_rate",
+    "units",
+    "fit_status",
+    "strategies"
+  ],
+  "forbidden_raw_units": ["prescriptions", "raw_counts_without_utility_mapping"]
+}

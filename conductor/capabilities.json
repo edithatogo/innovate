@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "revision": "44cb96358b073cf899a3d5e2360456bc0e7c5ca9",
+  "capabilities": [
+    {
+      "model": "bass",
+      "operation": "fit_model",
+      "payload": "scalar_time_observed",
+      "backend": "rust_native",
+      "evidence": {
+        "implementation": true,
+        "native_receipt": "rust/crates/innovate-core/tests/scientific_contract.rs",
+        "scientific_receipt": "rust/crates/innovate-core/tests/bass_reference.rs",
+        "empirical_receipt": null,
+        "release_receipt": null
+      }
+    },
+    {
+      "model": "bass",
+      "operation": "predict_model",
+      "payload": "scalar_time_parameters",
+      "backend": "rust_native",
+      "evidence": {
+        "implementation": true,
+        "native_receipt": "rust/crates/innovate-core/tests/bass_reference.rs",
+        "scientific_receipt": "rust/crates/innovate-core/tests/bass_reference.rs",
+        "empirical_receipt": null,
+        "release_receipt": null
+      }
+    },
+    {
+      "model": "logistic",
+      "operation": "fit_model",
+      "payload": "scalar_time_observed",
+      "backend": "rust_native",
+      "evidence": {
+        "implementation": true,
+        "native_receipt": "rust/crates/innovate-core/tests/scientific_contract.rs",
+        "scientific_receipt": "rust/crates/innovate-core/tests/weighted.rs",
+        "empirical_receipt": null,
+        "release_receipt": null
+      }
+    },
+    {
+      "model": "regime_switching",
+      "operation": "fit_model",
+      "payload": "scalar_time_observed",
+      "backend": "rust_native",
+      "evidence": {
+        "implementation": true,
+        "native_receipt": "rust/crates/innovate-core/tests/regime.rs",
+        "scientific_receipt": "rust/crates/innovate-core/src/regime.rs",
+        "empirical_receipt": null,
+        "release_receipt": null
+      }
+    }
+  ]
+}

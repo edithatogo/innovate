@@ -27,14 +27,14 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] M03 — temporal mapping, panel grain and coverage.
 - [ ] M04 — generic utilisation identifiability/observation fixture.
 - [ ] M05 — frozen medicines forecasting cohort.
-- [ ] V01 — independent model-oracle registry.
-- [ ] V02 — leakage-safe benchmark runner.
-- [ ] V03 — cross-domain and early-stage validation.
-- [ ] V04 — accuracy-controlled performance evaluation.
-- [ ] Q01 — input/property/fuzz/FFI safety.
+- [x] V01 — independent model-oracle registry (`validation/oracles/manifest.json`, `tests/validation/test_oracle_manifest.py`).
+- [x] V02 — leakage-safe benchmark runner (`validation/benchmarks/protocol.py`, `tests/validation/test_temporal_benchmark.py`).
+- [x] V03 — cross-domain and early-stage validation (`validation/cross-domain/protocol.json`, `tests/validation/test_cross_domain_protocol.py`).
+- [x] V04 — accuracy-controlled performance evaluation (`validation/performance/protocol.json`, `benches/workloads.rs`, `tests/validation/test_performance_receipts.py`).
+- [x] Q01 — input/property/fuzz/FFI safety (`rust/crates/innovate-core/tests/properties.rs`, `rust/crates/innovate-ffi/tests/adversarial.rs`).
 - [ ] Q02 — actual native/no-legacy installed CI matrix.
 - [ ] Q03 — supply-chain and distributable-artifact evidence.
-- [ ] Q04 — executable scientific/docs release truth.
+- [x] Q04 — executable scientific/docs release truth (`tests/validation/test_release_claims.py`).
 - [ ] V05 — clean reproduction and distinct publication packages.
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 

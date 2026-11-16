@@ -36,4 +36,5 @@ unknown-git = "deny"
 # Temporary exception until Order #3 (rust_kairos_crates_io_20261115) publishes kairo-ecs-* to crates.io.
 allow-git = [
     "https://github.com/edithatogo/kairos.git",
+    "https://github.com/edithatogo/paignia.git",
 ]

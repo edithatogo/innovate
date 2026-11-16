@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "rust-closure-20261116",
+  "commands": [
+    "cargo deny check advisories licenses bans",
+    "cargo test --workspace --locked",
+    ".venv/bin/pytest tests/native"
+  ],
+  "status": "passed",
+  "notes": "Zero crates.io patch overrides; zero bincode advisories; kairos.git remains an explicit bounded exception in deny.toml."
+}

@@ -72,11 +72,15 @@ pub(crate) fn fetch(value: &Value) -> Value {
 }
 
 fn download(url: &str) -> Result<String, String> {
-    use std::{io::Read, time::Duration};
+    download_with_timeout(url, std::time::Duration::from_secs(30))
+}
+
+fn download_with_timeout(url: &str, timeout: std::time::Duration) -> Result<String, String> {
+    use std::io::Read;
 
     const MAX_BYTES: u64 = 16 * 1024 * 1024;
     let config = ureq::Agent::config_builder()
-        .timeout_global(Some(Duration::from_secs(30)))
+        .timeout_global(Some(timeout))
         .max_redirects(0)
         .http_status_as_error(false)
         .build();
@@ -109,7 +113,7 @@ fn download(url: &str) -> Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::download;
+    use super::{download, download_with_timeout};
     use std::io::{Read, Write};
     use std::net::TcpListener;
     use std::thread;
@@ -154,10 +158,36 @@ mod tests {
     fn reports_upstream_http_errors_and_does_not_follow_redirects() {
         for (response, status) in [
             (&b"HTTP/1.1 429 Too Many Requests\r\nContent-Length: 0\r\n\r\n"[..], "429"),
+            (&b"HTTP/1.1 301 Moved Permanently\r\nLocation: http://127.0.0.1:1/\r\nContent-Length: 0\r\n\r\n"[..], "301"),
             (&b"HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:1/\r\nContent-Length: 0\r\n\r\n"[..], "302"),
         ] {
             assert!(serve(response).unwrap_err().contains(status));
         }
+    }
+
+    #[test]
+    fn maps_timeout_and_transport_errors() {
+        let listener = TcpListener::bind(("127.0.0.1", 0)).unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = thread::spawn(move || {
+            let (_stream, _) = listener.accept().unwrap();
+            thread::sleep(Duration::from_millis(200));
+        });
+        let err =
+            download_with_timeout(&format!("http://{address}/slow"), Duration::from_millis(40))
+                .unwrap_err();
+        assert!(!err.is_empty());
+        server.join().unwrap();
+
+        let closed_listener = TcpListener::bind(("127.0.0.1", 0)).unwrap();
+        let closed_address = closed_listener.local_addr().unwrap();
+        drop(closed_listener);
+        let transport_err = download_with_timeout(
+            &format!("http://{closed_address}/closed"),
+            Duration::from_secs(1),
+        )
+        .unwrap_err();
+        assert!(!transport_err.is_empty());
     }
 
     #[test]
