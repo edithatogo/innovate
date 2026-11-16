@@ -1,13 +1,15 @@
+[workspace]
+
 [package]
 name = "innovate-games"
 description = "Static game-theoretic adapter for Innovate backed by Paignia without Kairos runtime dependency"
-version.workspace = true
-edition.workspace = true
-rust-version.workspace = true
-license.workspace = true
-repository.workspace = true
+version = "0.7.0-alpha.1"
+edition = "2024"
+rust-version = "1.99.1"
+license = "Apache-2.0"
+repository = "https://github.com/edithatogo/innovate"
 
 [dependencies]
-innovate-core.workspace = true
+innovate-core = { path = "../innovate-core" }
 paignia-core = { git = "https://github.com/edithatogo/paignia.git", rev = "da5e62098b14625411b409419606532762d62122" }
 paignia-solve = { git = "https://github.com/edithatogo/paignia.git", rev = "da5e62098b14625411b409419606532762d62122" }
