@@ -206,11 +206,18 @@ class RustWorkspaceScopeTests(unittest.TestCase):
             "rust/crates/innovate-python",
             "rust/crates/innovate-tabular",
         ]
-        self.excluded = ["rust/crates/innovate-games"]
+        # Construct the fixture from the explicit reviewed exclusions. The
+        # directory name is not necessarily the Cargo package name (e.g. qd).
+        excluded = self.contract["rust"]["excluded_crates"]
+        self.excluded = [Path(manifest).parent.as_posix() for manifest in excluded.values()]
+        package_names = {
+            Path(manifest).parent.as_posix(): name for name, manifest in excluded.items()
+        }
         for directory in self.members + self.excluded:
             path = self.root / directory / "Cargo.toml"
             path.parent.mkdir(parents=True)
-            path.write_text(f'[package]\nname = "{Path(directory).name}"\nversion = "0.1.0"\n', encoding="utf-8")
+            name = package_names.get(directory, Path(directory).name)
+            path.write_text(f'[package]\nname = "{name}"\nversion = "0.1.0"\n', encoding="utf-8")
         self.write_workspace()
         package = self.root / "bindings/python/innovate/__init__.py"
         package.parent.mkdir(parents=True)
@@ -232,7 +239,9 @@ class RustWorkspaceScopeTests(unittest.TestCase):
                 self.assertEqual(len(scope["workspace_crates"]), 5)
                 self.assertIn("innovate-kairos", scope["workspace_crates"])
                 self.assertNotIn("innovate-games", scope["workspace_crates"])
-                self.assertEqual(scope["excluded_crates"], {"innovate-games": "rust/crates/innovate-games/Cargo.toml"})
+                self.assertEqual(scope["excluded_crates"], self.contract["rust"]["excluded_crates"])
+                self.assertNotIn("innovate-games", scope["workspace_crates"])
+                self.assertEqual(len(scope["excluded_crates"]), 17)
                 self.assertEqual(scope["excluded_crates_qualification"], "not_qualified_by_workspace_commands")
                 self.assertEqual(scope["compiler_and_doctests"], "not_executed")
                 self.assertEqual(report["rust_status"], "not_executed")
