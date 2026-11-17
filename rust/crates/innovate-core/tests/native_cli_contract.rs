@@ -85,6 +85,12 @@ fn native_cli_validates_requests_and_returns_native_results() {
         1,
         "does not allow operation",
     );
+    let marker = "PRIVATE_REQUEST_OPERATION_83972";
+    fs::write(&input, json!({"operation": marker}).to_string()).unwrap();
+    let rejected = request("predict", &input, &output);
+    assert_failure(&rejected, 1, "predict_model");
+    assert!(!String::from_utf8_lossy(&rejected.stderr).contains(marker));
+    assert!(!output.exists());
 
     let prediction = json!({
         "model_key": "bass",

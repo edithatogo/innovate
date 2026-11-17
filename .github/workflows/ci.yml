@@ -25,6 +25,11 @@ jobs:
       SCCACHE_GHA_ENABLED: "true"
       RUSTC_WRAPPER: "sccache"
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
@@ -76,7 +81,8 @@ jobs:
       - name: Verify source and capability evidence guards
         run: uv run --no-sync nox -s validation_coverage
       - run: uv run --no-sync python scripts/check_migration.py
-      - run: cargo fmt --all --check
+      # The virtual workspace selects project members without formatting vendored dependencies.
+      - run: cargo fmt --check
       - name: Verify Rust docs.rs documentation build
         if: matrix.os == 'ubuntu-latest'
         env:
@@ -109,12 +115,12 @@ jobs:
         timeout-minutes: 15
         shell: bash
         run: |
-          git archive HEAD Dockerfile Cargo.toml Cargo.lock LICENSE rust |
+          git archive HEAD Dockerfile Cargo.toml Cargo.lock LICENSE THIRD-PARTY-LICENSES rust |
             docker build --target remote-worker -t innovate-remote-worker:ci -
           test "$(docker image inspect --format '{{.Config.User}}' innovate-remote-worker:ci)" = 65532:65532
           docker run --rm --network none --read-only --cap-drop ALL \
             --entrypoint /bin/sh innovate-remote-worker:ci -ec \
-            "test -s /usr/local/share/doc/innovate/LICENSE && ! command -v python && ! command -v python3"
+            "test -s /usr/local/share/doc/innovate/LICENSE && test -s /usr/local/share/doc/innovate/THIRD-PARTY-LICENSES && ! command -v python && ! command -v python3"
           worker=(docker run --rm -i --network none --read-only --cap-drop ALL innovate-remote-worker:ci)
           "${worker[@]}" --describe |
             jq -e '.result.worker_transport == "stdin_stdout" and .result.max_raw_envelope_bytes == 2000000 and .result.identity_verification == "caller_supplied_context"'
@@ -170,6 +176,11 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
       - name: Require the native matrix, including Rust formatting and Python lint
         env:
           RESULT: ${{ needs.native-python.result }}
@@ -183,6 +194,11 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
       - name: Require native Rust and Python tests on every platform
         env:
           RESULT: ${{ needs.native-python.result }}
@@ -195,6 +211,11 @@ jobs:
       SCCACHE_GHA_ENABLED: "true"
       RUSTC_WRAPPER: "sccache"
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
@@ -240,6 +261,11 @@ jobs:
       SCCACHE_GHA_ENABLED: "true"
       RUSTC_WRAPPER: "sccache"
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false

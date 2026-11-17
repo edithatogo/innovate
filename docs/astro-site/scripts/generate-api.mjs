@@ -10,5 +10,12 @@ const result = spawnSync(executable, [path.join(root, 'scripts/generate_api_refe
   stdio: 'inherit',
   timeout: 60_000,
 });
-if (result.error) console.error(result.error.message);
+if (result.error) {
+  switch (result.error.code) {
+    case 'ENOENT': console.error('API reference generator could not start: interpreter not found.'); break;
+    case 'EACCES': console.error('API reference generator could not start: interpreter is not executable.'); break;
+    case 'ETIMEDOUT': console.error('API reference generator timed out.'); break;
+    default: console.error('API reference generator could not start.');
+  }
+}
 process.exit(result.status ?? 1);

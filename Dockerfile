@@ -7,20 +7,21 @@ ENV PATH=/usr/local/cargo/bin:$PATH
 COPY --from=ghcr.io/astral-sh/uv:latest@sha256:5cc1805e2426484abca4ad46ea783bab281fdb225fd82d8ce6d66a81254bac85 /uv /bin/uv
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential pkg-config && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE ./
+COPY pyproject.toml uv.lock Cargo.toml Cargo.lock README.md LICENSE THIRD-PARTY-LICENSES ./
 COPY rust/ rust/
 COPY bindings/python/ bindings/python/
 ENV CARGO_BUILD_JOBS=2
 FROM rust:1.100.0-slim-trixie@sha256:e9d95b74296f7126a83ae3d041aeaba1ff4c478f13abc5cc034fcf7c131c3d4a AS remote-worker-build
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential pkg-config && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY Cargo.toml Cargo.lock LICENSE ./
+COPY Cargo.toml Cargo.lock LICENSE THIRD-PARTY-LICENSES ./
 COPY rust/ rust/
 ENV CARGO_BUILD_JOBS=2
 RUN cargo build --locked --release -p innovate-core --bin innovate-remote-worker
 
 FROM debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2 AS remote-worker
 COPY --from=remote-worker-build /app/LICENSE /usr/local/share/doc/innovate/LICENSE
+COPY --from=remote-worker-build /app/THIRD-PARTY-LICENSES /usr/local/share/doc/innovate/THIRD-PARTY-LICENSES
 COPY --from=remote-worker-build /app/target/release/innovate-remote-worker /usr/local/bin/
 USER 65532:65532
 ENTRYPOINT ["/usr/local/bin/innovate-remote-worker"]

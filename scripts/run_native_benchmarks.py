@@ -5,11 +5,17 @@ import hashlib
 import json
 import os
 import platform
+import re
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import perf_counter
 
 from innovate import _native, execute
+
+
+def _slurm_numeric_id(value: str) -> bool:
+    """Accept Slurm's signed and unsigned 32-bit identifier representations."""
+    return bool(re.fullmatch(r"-?[0-9]{1,10}", value)) and -(2**31) <= int(value) <= 0xFFFFFFFF
 
 
 def main() -> int:
@@ -61,8 +67,10 @@ def main() -> int:
         if args.slurm_shard:
             job_id = os.environ.get("SLURM_JOB_ID", "").strip()
             step_id = os.environ.get("SLURM_STEP_ID", "").strip()
-            if not job_id or not step_id:
-                parser.error("--slurm-shard requires SLURM_JOB_ID and SLURM_STEP_ID")
+            if not _slurm_numeric_id(job_id) or not (
+                _slurm_numeric_id(step_id) or step_id in {"batch", "extern", "interactive"}
+            ):
+                parser.error("--slurm-shard requires valid Slurm job and step IDs")
             shard.update(job_id=job_id, step_id=step_id)
     elif args.policy is not None:
         payload["ci_policy"] = args.policy

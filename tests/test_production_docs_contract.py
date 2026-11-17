@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -20,7 +21,7 @@ class ProductionDocumentationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name).resolve()
         self.dist = self.root / "dist"
         self.dist.mkdir()
         (self.root / "docs").mkdir()
@@ -76,6 +77,123 @@ class ProductionDocumentationTests(unittest.TestCase):
     def test_broken_fragment_fails(self):
         self.write_page("index.html", "/innovate/", '<a href="/innovate/guide/#missing">Guide</a>')
         self.assertIn("broken_fragment", str(self.check()["errors"]))
+
+    def test_untrusted_urls_are_fingerprinted_in_errors(self):
+        marker = "PRIVATE_URL_MARKER_78124"
+        link = f"/innovate/missing-{marker}/?token={marker}#{marker}"
+        self.write_page("index.html", "/innovate/", f'<a href="{link}">Guide</a>')
+        self.write_page("guide/index.html", f"/innovate/{marker}/", "Guide")
+        sitemap = self.dist / "sitemap-0.xml"
+        sitemap.write_text(sitemap.read_text().replace("/guide/", f"/{marker}/"))
+        result = self.check()
+        self.assertEqual(result["status"], "failed")
+        self.assertNotIn(marker, json.dumps(result))
+        broken = next(item for item in result["errors"] if item["code"] == "broken_link")
+        self.assertEqual(broken["source"], "/innovate/")
+        self.assertEqual(broken["url"], "sha256:" + hashlib.sha256(link.encode()).hexdigest())
+        self.assertIn("canonical", {item["code"] for item in result["errors"]})
+        self.assertIn("sitemap_route", {item["code"] for item in result["errors"]})
+
+    def test_cli_and_receipt_do_not_expose_untrusted_link(self):
+        marker = "PRIVATE_URL_MARKER_41865"
+        self.write_page("index.html", "/innovate/", f'<a href="/innovate/guide/?key={marker}#{marker}">Guide</a>')
+        contract_path = self.root / "contract.json"
+        contract_path.write_text(json.dumps(self.contract))
+        output = self.root / "receipt.json"
+        for flag in ([], ["--json"]):
+            with self.subTest(flag=flag):
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        str(SCRIPT),
+                        "--root",
+                        str(self.root),
+                        "--dist",
+                        str(self.dist),
+                        "--contract",
+                        str(contract_path),
+                        "--output",
+                        str(output),
+                        *flag,
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 1)
+                receipt = output.read_text()
+                self.assertNotIn(marker, result.stdout + result.stderr + receipt)
+                self.assertIn("broken_fragment", receipt)
+
+    def test_malformed_urls_cannot_leak_through_errors(self):
+        marker = "PRIVATE_INVALID_URL_MARKER_83514"
+        url = f"https://{marker}＃.invalid/path"
+        self.write_page("index.html", "/innovate/", f'<a href="{url}">Guide</a>')
+        sitemap = self.dist / "sitemap-0.xml"
+        sitemap.write_text(sitemap.read_text().replace("https://edithatogo.github.io/innovate/guide/", url))
+        contract_path = self.root / "contract.json"
+        contract_path.write_text(json.dumps(self.contract))
+        for flag in ([], ["--json"]):
+            with self.subTest(flag=flag):
+                output = self.root / "receipt.json"
+                output.write_text(json.dumps({"status": "passed"}))
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        str(SCRIPT),
+                        "--root",
+                        str(self.root),
+                        "--dist",
+                        str(self.dist),
+                        "--contract",
+                        str(contract_path),
+                        "--output",
+                        str(output),
+                        *flag,
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 1)
+                receipt = output.read_text()
+                self.assertEqual(json.loads(receipt)["status"], "failed")
+                self.assertNotIn(marker, result.stdout + result.stderr + receipt)
+                self.assertIn("invalid_url", receipt)
+                self.assertIn("sitemap_route", receipt)
+
+    def test_valueless_canonical_replaces_a_passed_receipt(self):
+        index = self.dist / "index.html"
+        index.write_text(index.read_text().replace('href="https://edithatogo.github.io/innovate/"', "href"))
+        contract_path = self.root / "contract.json"
+        contract_path.write_text(json.dumps(self.contract))
+        for flag in ([], ["--json"]):
+            with self.subTest(flag=flag):
+                output = self.root / "receipt.json"
+                output.write_text(json.dumps({"status": "passed"}))
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        str(SCRIPT),
+                        "--root",
+                        str(self.root),
+                        "--dist",
+                        str(self.dist),
+                        "--contract",
+                        str(contract_path),
+                        "--output",
+                        str(output),
+                        *flag,
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(result.returncode, 1)
+                receipt = json.loads(output.read_text())
+                self.assertEqual(receipt["status"], "failed")
+                canonical = next(item for item in receipt["errors"] if item["code"] == "canonical")
+                self.assertEqual(canonical["actual"], [None])
 
     def test_double_base_canonical_fails(self):
         self.write_page("guide/index.html", "/innovate/innovate/guide/", "")
