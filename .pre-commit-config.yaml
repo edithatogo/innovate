@@ -79,7 +79,3 @@ repos:
     rev: 3.0.0
     hooks:
       - id: shellcheck
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.8.0
-    hooks:
-      - id: eslint

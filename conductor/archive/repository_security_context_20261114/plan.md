@@ -13,8 +13,8 @@
   version schedule, refresh the workflow-bound documentation inventory, and
   record validation. Allowed paths are this plan, affected `.github/workflows/`
   files, `.github/dependabot.yml`, and
-  `docs/contracts/polyglot-api-documentation.json`. Preserve other bot changes,
-  existing security controls and Git hooks.
+  `docs/contracts/polyglot-api-documentation.json`. Preserve existing security
+  controls and Git hooks.
 - Native object/authentication scope: none. The next operation is a read-only
   baseline audit, then a standard merge of verified main `cc2e4da4` into the
   isolated candidate and focused local and exact-head hosted checks.
@@ -27,6 +27,30 @@ reproduced the bot's competing Dependabot version schedule; Renovate's existing
 dashboard #595 is open and was updated on 17 November. The bot's CI workflow
 edit has made the recorded polyglot structural inventory stale. These are
 separate from scientific release acceptance and the offline-security lane.
+
+The isolated repo-local Python 3.15.2 environment also ran the bot-added
+ESLint 10.8.0 pre-commit hook against an existing documentation script. It
+failed because this repository has no ESLint configuration. The allowed scope
+therefore includes `.pre-commit-config.yaml` solely to omit this new, unqualified
+hook; retain the existing hook configuration and the bot's other hook additions.
+Node documentation tests and existing lint/security checks remain unchanged.
+
+On the merged candidate, repo-local CPython 3.15.2 with the workflow's Zizmor
+1.32.0 reports zero active findings (the same offline default used by the
+failed hosted job); the original 30 unpinned-use failures are gone. The existing
+two ignored and 61 suppressed results were not changed. Actionlint 1.7.12,
+16 Node workflow-control cases, 19 repository-policy cases, 11 release-workflow
+cases, 38 polyglot documentation cases, Ruff and the local policy check passed.
+The refreshed polyglot inventory changes only the CI workflow hash. The newly
+proposed Gitleaks and ShellCheck hooks each passed an isolated representative
+run; the incompatible ESLint hook was removed from the proposal, not from main.
+
+Poutine 1.1.4 ran with the workflow's existing arguments: it returned zero and
+reported 70 `github_action_from_unverified_creator_used` findings, the same
+count observed on current main. This tool invocation does not use
+`--fail-on-violation`, so exit zero is not a clean vulnerability assessment.
+Exact-head hosted execution, including the original job's skipped steps, remains
+required. Local policy success does not establish live GitHub settings.
 
 Base: `276c2e505a0ce26910820fe8a94a6a498f505700`.
 Branch: `chatgpt/issue-414-maintainer-security`.
