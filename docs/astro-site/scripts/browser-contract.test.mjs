@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { artifactPath, budgets, caseEvidenceComplete, darkEntryRoutes, expectedCaseTitles, fingerprint, loadInventory, measureArtifact, prefetchProbePath, projectNames, qualificationCoverage, routeForSource, safeRelative, sha256, wcagTags } from './browser-contract.mjs';
+import { artifactPath, budgets, captureInputs, caseEvidenceComplete, darkEntryRoutes, expectedCaseTitles, fingerprint, loadInventory, measureArtifact, prefetchProbePath, projectNames, qualificationCoverage, retirementEntryRoutes, routeForSource, safeRelative, sha256, wcagTags } from './browser-contract.mjs';
 
 function temporary(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'innovate-browser-contract-'));

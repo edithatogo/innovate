@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { budgets, darkEntryRoutes, loadInventory, measureArtifact, siteRoot } from '../../scripts/browser-contract.mjs';
+import { budgets, darkEntryRoutes, loadInventory, measureArtifact, retirementEntryRoutes, siteRoot } from '../../scripts/browser-contract.mjs';
 import { test, expect, openPage, assertNoOverflow, assertTableKeyboardScroll, scanAccessibility, assertTransferBudget, assertOriginalPrefetchCapture, attachJson, focusWithTab, showMobileMenu } from './support.mjs';
 
 const inventory = loadInventory();

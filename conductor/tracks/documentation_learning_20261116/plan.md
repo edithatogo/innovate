@@ -7,8 +7,10 @@
   Base: PR #671 head `304789f50541c39f2fd84fed0ca1603d382e568d`.
   Allowed files: `docs/contracts/scientific-pedagogical-review.json`, the
   formatting-only correction in `tests/native/test_documentation_conventions.py`,
-  and this plan. Native scope: none. Next: verify the reviewed-source follow-up
-  and supply its scoped commit after the in-flight owner run ends.
+  `docs/astro-site/scripts/browser-contract.test.mjs`, the related
+  `docs/astro-site/tests/browser/documentation.spec.mjs`, and this plan. Native
+  scope: none. Next: verify the reviewed-source follow-up and supply its scoped
+  commit after the in-flight owner run ends.
 - Compared four changed sources at `f3462528` with their previously reviewed
   bytes and related page claims. The four inputs are unchanged at `304789f5`.
   The review record describes each delta and its source-check limitations;
@@ -26,6 +28,22 @@
   freshness check passed; Ruff check, Ruff format check, repository-policy check
   and `git diff --check` passed. These are local source checks, not hosted or
   native execution evidence.
+- Continuing beyond the previous freshness failure, `pnpm test` found two
+  `ReferenceError` failures: browser-contract tests use the exported
+  `retirementEntryRoutes` and `captureInputs` without importing them. Repair the
+  test imports and rerun the complete Node suite before qualifying the build.
+- Browser case discovery also found the missing `retirementEntryRoutes` import
+  in the browser spec. Restore that import before listing the full suite; a case
+  listing is not a browser execution or accessibility qualification.
+- With Node 26.13.1 and pnpm 12.21.0, the restored imports pass all 56 Node
+  tests. The local Astro build produced 211 pages; `pnpm check`, the content
+  ratchet and production-artifact verifier passed, with zero artifact errors.
+  `pnpm test:browser:list` discovers 164 cases; browser execution remains for
+  hosted CI. These local results do not certify scientific or reader acceptance.
+- On the separately received head `304789f5`, hosted CI run `44082433990`
+  passed the native matrix; Windows reported 443 Python passes, seven skips and
+  15 passing subtests. That receipt predates this follow-up and is not an
+  exact-head result for it.
 - PR #671 auto-merge was disabled because live branch protection does not require
   the failing RustSec and release-readiness jobs. The security advisories, 38
   release obligations and queued offline lane remain unresolved.
