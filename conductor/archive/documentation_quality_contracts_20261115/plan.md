@@ -239,3 +239,108 @@ to qualify the repaired PR.
   Git tree as `ca9739d5`; the unpushed packet was rebased onto that commit as a
   follow-up to main. Historical PR checks remain historical, and final-head
   hosted documentation and coverage evidence is still required.
+
+## Main browser and CodeQL follow-up — 16 November 2026
+
+- Owner: chat `01a1e3e9-537d-72a0-acc9-56b9ba954680`; worktree
+  `/Users/doughnut/.codex/worktrees/innovate-pr656-doc-coverage/innovate`;
+  branch `codex/innovate-main-quality-20261116`; base
+  `b29a1d27f54fdd08d77881ee999772fceab7c03a`. Initial write scope is this
+  evidence entry only. Any source path requires exact diagnostic identification
+  and ownership reconciliation before editing. No native authentication or
+  tenant object is assigned to this lane.
+- PR #659 was closed in favor of draft #671. Its owner retains the overlapping
+  browser test files; the successor's hosted documentation workflow passed
+  164/164 browser cases on `b2ed945f9ffede3bdd00c29437636c0bf1eba03d`.
+  That is evidence for the successor head, not a main-branch pass.
+- Main CodeQL reported 129 Rust files extracted without errors and two with
+  errors. The exact `b29a1d27` database was downloaded read-only (archive
+  SHA-256 `6d36cf420d666e7b6b542d299a1c34feca9549dd8e710c33fdc76447bf3e1fee`)
+  and inspected with CodeQL CLI 2.27.4 and the matching `codeql/rust-queries`
+  0.1.46 pack. The source-file `ExtractionErrors.ql` query returned zero rows.
+  Its summary metric also counts warnings, which are being queried separately.
+- Next operation: identify the warnings and their source ownership, then make
+  the smallest qualified repair. Scientific release readiness and the dedicated
+  offline-security lane remain unchanged and independently unqualified.
+- The main database's `ExtractionErrors.ql` returned zero source-file rows.
+  Its `ExtractionWarnings.ql` returned two rows: the archived
+  `rust_network_petgraph_20261115/evidence/replay_probe.rs` and the active-track
+  `scientific_ecosystem_alignment_20261029/evidence/scenario-parity-20261113/
+  historical_producer.rs` have no semantic analyzer because neither is in a
+  Cargo manifest. The CodeQL summary counts warnings as well as errors. The
+  CSV receipts and database archive are in
+  `/Volumes/PortableSSD/.innovate-pr668-diagnostics.keHDMl/codeql/receipts/`
+  and its parent; the main-warning CSV SHA-256 is
+  `ceb7fd6e950c0ee52955924a0bad534350e1783aa39465c509f1184629359462`.
+- In an isolated source fixture, a nested manifest eliminated the warning.
+  The scenario probe type-checked against historical commit `3681c8a8` with
+  its original resolved dependency versions and hashbrown source; its lock
+  passed a local RustSec audit. The replay probe type-checked offline against
+  baseline `07d6d897` and a separately generated `ff7e077a` candidate overlay
+  with the recorded `network.rs` hash and `petgraph` configuration. Its lock
+  had no `paste` and passed the local audit. CodeQL 2.27.4 over both temporary
+  contexts returned zero extraction-error and zero extraction-warning rows.
+  These are isolated-fixture results, not a new main-branch CodeQL run.
+- A naive candidate alias to later commit `ead7d5e5` also type-checked but
+  changed other core sources and pulled in unmaintained `paste` 1.0.15; it was
+  rejected. No analysis manifest, historical source, dependency pin, scanner
+  configuration or security exemption has been committed to main by this lane.
+  A durable repair must provide the exact historical overlay before GitHub's
+  default scan without changing the scientific evidence or undermining the
+  concurrent dependency-remediation lane.
+- Draft PR #671's current head `070a04424dfb084758d1c0b201bf2980002ea81d`
+  passed [hosted documentation qualification](https://github.com/edithatogo/innovate/actions/runs/43869447887),
+  including 164/164 browser cases; the PR remains draft and its owner retains
+  the affected files. Main's own browser failure is not thereby repaired.
+  PR #668's description was updated and read back with the corrected CodeQL
+  finding and the successor's exact-head evidence.
+
+### Continuation: scoped browser and historical-scan repair
+
+- The user directed this lane to continue until both issues are resolved on
+  main while coordinating with PR #671. The source branch remains
+  `codex/innovate-main-quality-20261116` at base `b29a1d27`; the owned
+  preflight checkout will temporarily hold an independent historical analysis
+  support branch at `ff7e077a`, then return to target preflight use.
+- Allowed source scope is the browser qualification helper, its focused tests
+  and contracts under `docs/astro-site/{tests/browser,scripts}`, a new
+  non-production historical-analysis harness under `tools/codeql-evidence`,
+  and this plan. The support branch may add only a standalone candidate-analysis
+  manifest against the already recorded historical source. PR #671 retains its
+  branch and worktree; any browser backport must preserve its committed source
+  identity and be reconciled with its current head.
+- Keep active root Cargo manifests, production dependency pins, CodeQL default
+  setup, scientific release readiness, coverage thresholds and offline-security
+  workflows unchanged. Qualify the historical harness with real source,
+  lockfile audits and observed CodeQL diagnostics before proposing integration.
+- CodeQL's real-file fixture did not associate manifests under
+  `tools/codeql-evidence` with Rust probes outside those manifest directories.
+  This lane's allowed scope therefore also includes new standalone
+  `Cargo.toml` and `Cargo.lock` files beside the two named evidence probes.
+  The existing historical files and their hashes remain unchanged. The replay
+  manifest must bind distinct recorded baseline and candidate sources; a pinned
+  analysis-only support commit may supply the candidate manifest, without
+  changing the root workspace or the scientific/offline gates.
+- The scoped browser backport uses the original-response capture helper, its
+  focused tests and support fixture exactly from PR #671 head `070a0442`;
+  main's archived-version navigation remains present and now waits for each
+  navigation's network activity before starting the next. No failed-resource,
+  artifact-identity, accessibility, budget or case-count check was removed.
+  On Node 26.13.1 and pnpm 12.21.0, 47 JavaScript contract tests passed, the
+  site built 202 pages, Astro check reported zero errors or warnings, and
+  browser discovery listed 142 cases. Hosted browser execution remains required.
+- New standalone manifests and locks beside the two historical probes bind
+  the recorded source contexts without modifying the root workspace. The
+  replay candidate is pinned to manifest-only support commit
+  `b0a60804f6bcd407e2548197301a3976011b08e1`, retained by branch
+  `codex/innovate-codeql-historical-candidate`. Both locked Cargo checks passed
+  offline; RustSec audited 104 and 71 dependencies without advisories, and
+  neither analysis lock contains `paste`. The replay ran 160 full-response
+  comparisons and produced SHA-256
+  `47e3e6aeec589cc73ba5a17b4518c192a1db328b4e0b57e8e41e8a515ce99c80`,
+  exactly matching its historical receipt. This synthetic parity is not
+  independent scientific validation.
+- A CodeQL 2.27.4 Rust fixture using the published candidate commit and both
+  historical manifests returned zero extraction-error and zero extraction-
+  warning rows. Full-repository and hosted exact-head results remain required.
+  Scientific readiness and the offline-security boundary remain unchanged.
