@@ -45,6 +45,16 @@ test named above; see its lane receipts for the current native claim boundary
 and evidence. I01 remains pending until the integrator's exact-source and hosted
 checks complete and its acceptance is reconciled.
 
+The source packet was received at `92519488c56c7f618c1e555b353c5fc2a5a52070`
+after a clean exact-range preflight. On that source, Cargo and rustc 1.99.1 ran
+the locked offline Kairos and network suites: **17** and **37** passed. A wheel
+built from that checkout with Maturin 1.16.0 and Python 3.15.2 had SHA-256
+`4752a2dc18dec5747d68d53fd046b84e985e4b1e78e67173d5fcd5fab3e636f2`;
+six selected tests passed against its isolated installed copy, including the
+three provider identities and zero-dispatch boundary. Ruff and the local
+repository-policy check passed. This is local macOS evidence, not cross-platform
+or full-track acceptance; the integrated PR's hosted checks remain required.
+
 Executor: specialist. Requires: none.
 
 Files: `src/innovate/abm/kairos_contract.py`, `tests/unit/test_kairos_adapter_contract.py`.
