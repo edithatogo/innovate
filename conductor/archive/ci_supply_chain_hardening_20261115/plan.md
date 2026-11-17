@@ -328,11 +328,13 @@ third-party sources; it is not the repository CI formatting command. No source
 or dependency has been migrated, the alert is not closed, and these checks do
 not qualify all platforms, consumers or release readiness.
 
-The later artifact-import guard passed with the five earlier controls: six tests
-passed using Rust/Cargo 1.99.1 and `cargo test --locked --offline -p
-innovate-core --test temporal_compatibility -j 2` in this worktree's isolated
-target. The actual repository `cargo fmt --check` and repo-local Python policy
-check also passed. The guard checks the decoded accepted timestamp string and
-rejection of four malformed inputs; it does not itself migrate or qualify a
-temporal library. An independent read-only reviewer found no blocking issues in
-the test, while noting that the comparison is not original JSON wire-byte proof.
+The later artifact-import guard passed with the five earlier controls, but its
+initial command used Cargo 1.99.1 while selecting Homebrew rustc 1.100.0. A
+second run pinned the 1.99.1 compiler, Cargo and rustdoc explicitly in a separate
+target: all six tests passed, and Cargo's compiler metadata confirms rustc 1.99.1.
+The original local compiler attribution was incorrect. The guard checks the
+decoded accepted timestamp string and rejection of four malformed inputs; it
+does not itself migrate or qualify a temporal library. An independent read-only
+reviewer found no blocking issues in the test, while noting that the comparison
+is not original JSON wire-byte proof. Explicit 1.99.1 `cargo fmt --check` and
+the repo-local Python policy check also passed.
