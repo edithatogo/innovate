@@ -171,6 +171,26 @@ contains `pastey 0.2.3` and no `paste`; `cargo-audit` found no advisories. Its
 closed-form Bass control passed and an invalid time was rejected. The same
 consumer control also passed with the host Rust 1.100.0 compiler.
 
+### Privacy receiving candidate — 17 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this isolated PR branch's
+privacy receiving candidate. The allowed files are the privacy workflow and
+this evidence plan; shared main integration and Innovate promotion remain with
+their existing integrators. Native and authentication scope: none.
+
+Shared standards draft PR #151 adds three exact reviews for the public matrix
+fixture, with no change to scanner rules. Its candidate `cf6a3451c6828248bf99c1f53d35a246f54a4b9a`
+passed hosted policy, privacy, real scanner, canary, CodeQL and workflow lint
+checks. Independent review verified the three exact blob identities, the
+complex-number source and real-Presidio blocking controls, including a changed
+blob and a neighboring unreviewed value. The complete local Innovate changed-file
+scan covered 760 of 760 files, with three reviewed matches and no blocking
+privacy or secret findings; 1,145 advisory matches remained. The privacy workflow
+here temporarily pins that draft candidate solely to obtain an actual receiving
+PR scan. This is not promotion to main: replace the pin with the accepted shared
+main revision and rerun the applicable checks after PR #151 is integrated.
+Release readiness and the offline security runner remain separate open gates.
+
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
 ## Phase 1: `cargo-deny` & `poutine` in Security Quality Workflow
