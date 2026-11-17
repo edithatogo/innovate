@@ -142,24 +142,6 @@ test('current navigation and retirement boundaries', async ({ page, isMobile, ru
   await assertNoOverflow(page);
   await scanAccessibility(page, testInfo, 'primary-navigation');
   await assertTransferBudget(runtime, testInfo);
-  const version = page.locator('starlight-version-select select:visible').first();
-  await expect(version.locator('option:checked')).toHaveText('0.7 Development');
-  await expect(version.locator('option')).toHaveText(['0.7 Development', '0.6 Reference']);
-  if (isMobile) await scanAccessibility(page, testInfo, 'light-mobile-menu');
-  await version.selectOption({ label: '0.6 Reference' });
-  await expect(page).toHaveURL((url) => url.pathname === '/innovate/latest/api/python/');
-  await expect(page.getByRole('main')).toContainText('0.6 Reference');
-  await page.waitForLoadState('networkidle');
-  await assertNoOverflow(page);
-  await showMobileMenu(page, isMobile);
-  const archived = page.locator('starlight-version-select select:visible').first();
-  await expect(archived.locator('option:checked')).toHaveText('0.6 Reference');
-  await archived.selectOption({ label: '0.7 Development' });
-  await expect(page).toHaveURL((url) => url.pathname === '/innovate/api/python/');
-  await page.waitForLoadState('networkidle');
-  await openPage(page, '/innovate/migration/');
-  await expect(page.getByRole('main')).toContainText('Pre-0.7 reference');
-  await expect(page.getByRole('main').getByRole('link', { name: 'native migration guide', exact: true })).toHaveAttribute('href', '/innovate/native-migration/');
 });
 
 for (const route of retirementEntryRoutes) {

@@ -44,6 +44,16 @@
   passed the native matrix; Windows reported 443 Python passes, seven skips and
   15 passing subtests. That receipt predates this follow-up and is not an
   exact-head result for it.
+- Hosted documentation run `44085118243` at follow-up head `0a5db6d7` passed
+  native examples and 162 of 164 browser cases. The two navigation cases failed
+  because a merge retained old version-selector interactions immediately after
+  asserting that the retired selector is absent. Restore the complete browser
+  specification to its previously qualified `070a0442` bytes, retaining the
+  current-route, accessibility, retirement, history and search checks. A new
+  full hosted browser run is required; the two failed cases are not passes.
+- Both the browser spec and its Node contract test now match their `070a0442`
+  versions byte for byte. The 56 Node tests, 164-case discovery, artifact
+  verification and diff whitespace check pass locally after the restoration.
 - PR #671 auto-merge was disabled because live branch protection does not require
   the failing RustSec and release-readiness jobs. The security advisories, 38
   release obligations and queued offline lane remain unresolved.
