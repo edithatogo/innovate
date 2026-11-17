@@ -253,3 +253,14 @@ checks nor this diagnostic change establishes release readiness.
 - [x] **3.2 Add `Syft` SBOM generation + `Grype` scan:** Add SHA-pinned `anchore/sbom-action` (`Syft`) and `anchore/scan-action` (`Grype`) in `.github/workflows/bindings-publish.yml` / release packaging, uploading SPDX/CycloneDX SBOMs as release artifacts.
 - [x] **3.3 Run full workflow & policy verification:** Execute `uvx zizmor .github/workflows/*.yml`, `python3 scripts/check_repository_policy.py`, `pytest -o minversion=9.0 tests/workflows/test_release_workflows.py`, and `pytest -o minversion=9.0 tests/workflows/test_repository_policy.py`.
 - [x] **3.4 Conductor Review (Phase 3 & Track Sign-off):** Run `conductor-review`, apply any fixes, re-verify, and mark track complete in `conductor/tracks.md`.
+
+### Current-main reconciliation after PR 672 — 17 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the receiving PR 674
+worktree `/Volumes/PortableSSD/GitHub/innovate-security-alert-44`, starting at
+`ce7bd2acad48c1c41fc86584474bf93d1d29572b`. The bounded operation is to
+integrate main `4b3d5cbb1c52b378ae2dbdd1c554d351e12f69a8`, reconcile its
+generated documentation inventory, and record the resulting checks here. The
+merge brings the committed main changes; manual edits are limited to the
+generated inventory and this record. Native and authentication scope: none.
+The scientific release and offline security gates remain open.
