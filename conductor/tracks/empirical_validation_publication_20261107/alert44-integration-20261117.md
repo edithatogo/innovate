@@ -24,3 +24,18 @@ The first read-only preflight found clean source and target worktrees, no
 staged deletions, missing target files or dirty overlaps. It did not establish
 semantic mergeability. The shared CI workflow, Nox file and workflow-bound
 documentation inventory differ on both branches and require explicit review.
+
+The repeated preflight at receiving commit `bc62b5811f49036c16c10892c39c1d81225ca9f7`
+was clean. The standard merge retained the target's vendored-format and security
+checks and the source's evidence-coverage checks. The only textual conflict was
+the workflow SHA in the polyglot inventory; regeneration changed that hash alone
+to match the combined workflow and its structural check passed.
+
+On the combined staged source, repo-local Python 3.15.2 passed **87** migration
+policy tests and **69** source/capability tests. The required Nox validation
+session retained its two 90% branch/line gates and measured **94.39%** and
+**95.45%**. The **38** polyglot documentation contract cases, targeted Ruff
+lint and format, local repository policy, actionlint parsing, `git diff --check`,
+and staged Gitleaks/Presidio scans passed. Hosted checks on the resulting merge
+remain required; none of these checks qualifies the scientific obligations or
+the offline security image.
