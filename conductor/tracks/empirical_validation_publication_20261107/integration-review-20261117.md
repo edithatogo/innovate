@@ -129,3 +129,13 @@ the current uncommitted diagnostic changes, no staged deletions or missing targe
 files, and no patch-equivalent source commits. The two candidates both modify
 the committed CI workflow and Nox configuration; a future integration must
 reconcile those files and rerun the preflight at that decision point.
+
+The first hosted documentation job on candidate `cf344834` failed its structural
+inventory check because this packet changes the CI workflow included in that
+inventory's source hashes. A direct comparison found the workflow digest was the
+only changed inventory value. The receiving scope therefore also includes
+`docs/contracts/polyglot-api-documentation.json` for a reviewed refresh of that
+digest, followed by the existing structural checks. The earlier hosted failure
+is retained as evidence and is not a passing run.
+The refreshed inventory differs only in that workflow SHA-256; its exact check
+and all 38 polyglot documentation contract tests passed locally.
