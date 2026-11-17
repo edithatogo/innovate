@@ -280,3 +280,43 @@ The post-merge main Security and Quality run `44066589564` reported a failing
 RustSec advisory audit for unmaintained `chrono` (`RUSTSEC-2026-0543`) and
 `chrono-tz` (`RUSTSEC-2026-0555`). These are separate from the `paste` fix and
 must be rechecked on the PR head; no advisory exception has been added.
+
+### Alert 44 temporal compatibility controls — 17 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this bounded candidate in
+`/Users/doughnut/.codex/worktrees/innovate-pr672-security-pin/innovate`, based
+on main `b74de7e678966865ea91fe00c5fe0eb15d31c20f`. Allowed files are
+`rust/crates/innovate-core/tests/temporal_compatibility.rs` and this record.
+Native/authentication scope: none. The next operation is to add independent
+public-dispatch controls for expanded Gregorian years and timestamp handling,
+using fixed expected results and malformed-input cases. These are migration
+safety tests only; they do not change dependencies, waive advisories, qualify
+Polars, or resolve the alert.
+
+The Scorecard instance on main `b74de7e6` remains open for the informational
+unmaintained advisories `RUSTSEC-2026-0543` (`chrono`) and `RUSTSEC-2026-0555`
+(`chrono-tz`); both list all versions as affected and no patched version.
+`cargo tree --locked --offline` confirms `innovate-core` directly uses Chrono,
+while the Polars tabular dependency graph reaches both crates even with default
+features disabled. A direct-only replacement therefore cannot clear the alert.
+The [upstream Polars Jiff draft](https://github.com/pola-rs/polars/pull/29110)
+is unmerged, based on 0.55.1 rather than the locked 0.55.2, and documents
+parsing, display and date-range changes. A root Cargo patch or relabelled vendor
+source would not establish a consumer-safe, advisory-free replacement.
+
+The new public-dispatch controls use fixed Gregorian/RFC 3339 expectations for
+expanded-year leap days and the existing maximum date, UTC day crossings,
+fractional weekly boundaries, leap-second labels and naive/offset rejection.
+An independent read-only review identified an over-restrictive test for the old
+maximum and missing fractional-anchor coverage; the candidate now rejects an
+impossible date instead and checks the microsecond boundary.
+
+With Rust/Cargo 1.99.1 selected explicitly and a per-worktree target directory,
+`cargo test --locked --offline -p innovate-core --test temporal_compatibility -j 2`
+passed five tests. The existing native-boundary calendar selection passed three,
+the offset-week selection passed one, and the internal calendar selection passed
+two. `cargo fmt --check`, the local repository-policy check and Conductor registry
+hygiene passed. An extra `cargo fmt --all -- --check` failed on unchanged vendored
+third-party sources; it is not the repository CI formatting command. No source
+or dependency has been migrated, the alert is not closed, and these checks do
+not qualify all platforms, consumers or release readiness.
