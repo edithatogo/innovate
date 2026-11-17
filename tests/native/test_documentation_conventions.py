@@ -210,9 +210,7 @@ class RustWorkspaceScopeTests(unittest.TestCase):
         # directory name is not necessarily the Cargo package name (e.g. qd).
         excluded = self.contract["rust"]["excluded_crates"]
         self.excluded = [Path(manifest).parent.as_posix() for manifest in excluded.values()]
-        package_names = {
-            Path(manifest).parent.as_posix(): name for name, manifest in excluded.items()
-        }
+        package_names = {Path(manifest).parent.as_posix(): name for name, manifest in excluded.items()}
         for directory in self.members + self.excluded:
             path = self.root / directory / "Cargo.toml"
             path.parent.mkdir(parents=True)

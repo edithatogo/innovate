@@ -1,5 +1,35 @@
 # Implementation plan
 
+## PR #671 source-review follow-up — 17 November 2026
+
+- Owner: chat `01a1e448-3a28-7653-a681-cd3fdb41f498` in the managed worktree
+  `/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+  Base: PR #671 head `304789f50541c39f2fd84fed0ca1603d382e568d`.
+  Allowed files: `docs/contracts/scientific-pedagogical-review.json`, the
+  formatting-only correction in `tests/native/test_documentation_conventions.py`,
+  and this plan. Native scope: none. Next: verify the reviewed-source follow-up
+  and supply its scoped commit after the in-flight owner run ends.
+- Compared four changed sources at `f3462528` with their previously reviewed
+  bytes and related page claims. The four inputs are unchanged at `304789f5`.
+  The review record describes each delta and its source-check limitations;
+  historical independent review and qualification receipts remain unchanged.
+- A separate fixture candidate at `60986c33756e0a4a5286ffb736f11636dc89f130`
+  was superseded by the owner's `304789f5` fixture repair. It is retained as
+  local history, not presented as the PR's implementation. Hosted checks for
+  the owner's head remain in flight and must not be attributed to this follow-up.
+- Focused tests of the received fixture pass locally; Ruff's format check found
+  its dictionary comprehension needs formatting. The correction preserves the
+  incoming fixture's behavior.
+- At CPython 3.15.2, `python -m pytest
+  tests/native/test_documentation_conventions.py` passed 14 tests and 15
+  subtests. The seven scientific-review contract tests and the 66-input
+  freshness check passed; Ruff check, Ruff format check, repository-policy check
+  and `git diff --check` passed. These are local source checks, not hosted or
+  native execution evidence.
+- PR #671 auto-merge was disabled because live branch protection does not require
+  the failing RustSec and release-readiness jobs. The security advisories, 38
+  release obligations and queued offline lane remain unresolved.
+
 ## Active successor after upstream archival
 
 The merged #656 moved the predecessor to `conductor/archive`. This track keeps

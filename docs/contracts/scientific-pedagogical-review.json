@@ -80,7 +80,7 @@
   },
   "fingerprint_encoding": "sha256 of UTF-8 bytes with CRLF normalized to LF",
   "source_files": {
-    "Cargo.toml": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+    "Cargo.toml": "2f22f7a075467934df9e710bfb087b89958b6b069de9d15814b6ee1ee2ba9959",
     "bindings/julia/src/Innovate.jl": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
     "bindings/python/innovate/__init__.py": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
     "bindings/r/R/kernel_bridge.R": "45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
@@ -94,7 +94,7 @@
     "docs/astro-site/src/content/docs/core/index.md": "d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
     "docs/astro-site/src/content/docs/historical-documentation.md": "4c119872b24c567272b7f6fe5a70ce9f4d12e54891e368bc01c7993cfabfc74b",
-    "docs/astro-site/src/content/docs/maintainers/documentation-quality.md": "7ccd4dd7d508211e0b3c3c6452c26eb733e0c7ee0208d1b5c3c718991dceef60",
+    "docs/astro-site/src/content/docs/maintainers/documentation-quality.md": "1ed08524a49dcda10acbe7d1b1210955610e38eb1d47d0db85521a9171952344",
     "docs/astro-site/src/content/docs/models/index.mdx": "3dd74df861495b979d98fa3285ed6f65802aeb10d5747179993f5a8aab02e25b",
     "docs/astro-site/src/content/docs/native-migration.md": "345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763",
     "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx": "39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614",
@@ -142,9 +142,9 @@
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
     "rust/crates/innovate-core/src/regime.rs": "fe0becb9a743333aa42d74322f087794bba7480525506b6546d083be79a5c17b",
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
-    "rust/crates/innovate-core/src/simulation.rs": "e8ab3ab618ba87ca0b0a217cc251bd3edfffdd355d285beffd65ffd87d7e7178",
+    "rust/crates/innovate-core/src/simulation.rs": "fd3ef8614f5f303adbe8d6267c15ad9544fc4705cf901c1db762832754fcb94d",
     "rust/crates/innovate-ffi/src/lib.rs": "af0c0513e5658d18dc6958b0d1edc1753e5c02bd290d5369c208b1edc785afc7",
-    "rust/crates/innovate-games/Cargo.toml": "54ced568be3dcfdd36d18ea9be13df4bf313bfda8d67e38a71abc4dc86eafb71",
+    "rust/crates/innovate-games/Cargo.toml": "d2d4d1161bdc7a6d3283bb2d5219d27341387361fc37de5dde40f29e159202e6",
     "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1"
   },
   "references": [
@@ -782,7 +782,8 @@
     "recovery_reader_arithmetic": "passed with JavaScript Math after recovery: Logistic levels/unit conversion/slope, replacement levels/hazard probability and Gaussian posterior; not native execution",
     "new_native_anchor_targets": "all three newly linked native-guide headings exist in recovered Markdown; not an Astro route/build check",
     "independent_migration_review": "Twelve current pages independently read against source at d732999; six imported expected outputs rechecked unchanged at 5f805f85cbd99be29be99f1077642c9cbf876cdb. Two tutorial paragraphs improved; no raw example changes.",
-    "contract_checker": "The seven standard-library unittest cases passed on CPython 3.15.2 in the recovered integrated checkout. They cover fresh UTF-8/CRLF inputs, source drift, unsupported human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys. The real 27-input review record also passed consistency and freshness validation; this does not certify scientific or pedagogical quality."
+    "contract_checker": "The seven standard-library unittest cases passed on CPython 3.15.2 in the recovered integrated checkout. They cover fresh UTF-8/CRLF inputs, source drift, unsupported human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys. The real 27-input review record also passed consistency and freshness validation; this does not certify scientific or pedagogical quality.",
+    "pr671_source_drift_followup": "Agent source-to-claim follow-up at f34625288a5ed2ca786b1531f4ef82f97da08715 compared the four changed inputs with their previously fingerprinted bytes. Cargo.toml adds 16 vendor exclusions without changing the five members or the games exclusion; the Rust guide still reserves separate games qualification. The games manifest changes only the Paignia revisions, matching its lockfile. simulation.rs changes only provider revision metadata, matching the core manifest and lockfile; the tutorial limits replay to an identical request and installed runtime and makes no cross-version claim. The documentation-quality paragraph matches the diagnostic fingerprint and ratchet code, including the warning that guessable names are not secret. This source review does not rerun native simulations, establish upstream behavior or confer scientific, human or release acceptance. Earlier independent review and historical receipts retain their original source scope."
   },
   "recovery": {
     "reason": "The local execution environment became unavailable before these edits were committed.",
