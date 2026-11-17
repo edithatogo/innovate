@@ -30,7 +30,10 @@ scientific review, accessibility, browser behavior and live publication obligati
 Rendered artifact checks inspect this build's HTML, routes, local fragments,
 canonical/base paths, search index, sitemap, semantics and size. Source and output
 fingerprints are retained as contemporaneous evidence; they alone are not a signed
-build attestation. The existing Pages activation boundary and coordinator merge
+build attestation. Artifact receipt schema 3 replaces artifact-supplied URL values
+in diagnostics with UTF-8 SHA-256 fingerprints; source routes, error codes and
+the expected canonical URL remain available to locate failures. A fingerprint is
+for correlation, not a guarantee against guessing a low-entropy URL. The existing Pages activation boundary and coordinator merge
 ownership remain in place.
 
 Alternatives considered were another site migration, manually maintained API

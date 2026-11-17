@@ -206,6 +206,35 @@ separate open gates.
 
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
+### Documentation and native diagnostic privacy — 17 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns a bounded follow-up in
+`/Volumes/PortableSSD/GitHub/innovate-security-alert-44`, based on
+`fab4343b009e933ada4ed6460b20c336d1e5beed`. Allowed paths are the API
+generator wrapper and its Node tests, the production documentation verifier and
+its contract tests, the native CLI and its CLI contract tests, the documentation
+ADR, and this plan. Native/authentication scope: none. The next operation is to
+protect interpreter launch errors, artifact URL diagnostics and rejected native
+request operations while preserving their checks, useful failure information,
+and successful behavior. The scanner's coverage, image review and scientific
+release acceptance remain separate open gates.
+
+The documentation launcher now reports fixed launch diagnostics instead of the
+configured interpreter path. Artifact receipt schema 3 fingerprints untrusted
+URL diagnostics while retaining error codes, source routes and failure status;
+invalid URLs and valueless canonical attributes also replace any old pass with a
+failure receipt. Rejected native operations show the expected operation without
+echoing the supplied request value. Independent review found the invalid-URL and
+valueless-attribute cases; both were reproduced and covered by regression tests.
+
+With repo-local Python 3.15.2, the 25 production-documentation contract tests
+passed in both human and JSON receipt modes. All 48 Node documentation tests,
+the actual API-generation `--check`, targeted Ruff and rustfmt checks, and the
+locked offline Rust 1.99.1 `innovate-core` native CLI contract test passed. The
+local repository-policy check passed within its documented scope. The strict
+offline scanner and its parser coverage are not yet qualified; neither these
+checks nor this diagnostic change establishes release readiness.
+
 ## Phase 1: `cargo-deny` & `poutine` in Security Quality Workflow
 - [x] **1.1 Create `deny.toml` at repo root:** Configure `[advisories]`, `[licenses]` (SPDX allowlist), `[bans]` (duplicate/wildcards), and `[sources]` (`unknown-registry = "deny"`, `unknown-git = "deny"`). Run `cargo deny check` locally (or via `taiki-e/install-action` in CI) and verify baseline pass.
 - [x] **1.2 Wire `cargo-deny` into `.github/workflows/security-quality.yml`:** Add a `cargo-deny` step alongside `cargo-audit` using SHA-pinned `EmbarkStudios/cargo-deny-action` or `taiki-e/install-action`.
