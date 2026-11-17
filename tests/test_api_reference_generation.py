@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import contextlib
 import importlib.util
+import io
 import json
 import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/generate_api_reference.py"
@@ -233,6 +236,58 @@ class ApiReferenceGenerationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unresolved_export"):
             self.generator.generate(self.root)
         self.assertFalse(self.output.exists())
+
+    def test_unresolved_export_does_not_appear_in_generator_error(self):
+        marker = "diagnostic_fixture_export"
+        self.write(self.complete_source().replace('["calculate", "Measurement"]', repr([marker])))
+        with self.assertRaisesRegex(ValueError, "unresolved_export") as error:
+            self.generator.generate(self.root)
+        self.assertNotIn(marker, str(error.exception))
+        self.assertIn("sha256:", str(error.exception))
+        self.assertFalse(self.output.exists())
+
+    def test_unknown_docstring_parameter_does_not_appear_in_generator_error(self):
+        marker = "diagnostic_fixture_parameter"
+        self.write(
+            self.complete_source().replace("scale: A dimensionless multiplier", f"{marker}: A dimensionless multiplier")
+        )
+        with self.assertRaisesRegex(ValueError, "unknown_parameter") as error:
+            self.generator.generate(self.root)
+        self.assertNotIn(marker, str(error.exception))
+        self.assertFalse(self.output.exists())
+
+    def test_unrenderable_export_does_not_appear_in_generator_error(self):
+        marker = "diagnostic_fixture_constant"
+        source = self.complete_source().replace('["calculate", "Measurement"]', repr(["calculate", marker]))
+        self.write(source + f"\n{marker} = 1\n")
+        with self.assertRaisesRegex(ValueError, "no documented renderable definition") as error:
+            self.generator.generate(self.root)
+        self.assertNotIn(marker, str(error.exception))
+        self.assertIn("sha256:", str(error.exception))
+        self.assertFalse(self.output.exists())
+
+    def test_cli_does_not_echo_unverified_export_in_either_mode(self):
+        marker = "diagnostic_fixture_export"
+        self.write(self.complete_source().replace('["calculate", "Measurement"]', repr([marker])))
+        for arguments in ([], ["--check"]):
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with (
+                patch.object(self.generator, "ROOT", self.root),
+                contextlib.redirect_stdout(stdout),
+                contextlib.redirect_stderr(stderr),
+            ):
+                self.assertEqual(self.generator.main(arguments), 1)
+            self.assertNotIn(marker, stdout.getvalue() + stderr.getvalue())
+            self.assertIn("unresolved_export", stderr.getvalue())
+        self.assertFalse(self.output.exists())
+
+    def test_newline_in_source_filename_cannot_forge_diagnostic_lines(self):
+        marker = "DIAGNOSTIC_FIXTURE_FORGED_LINE"
+        (self.package / f"unexpected\n{marker}.py").write_text("value = 1\n", encoding="utf-8")
+        with self.assertRaises(ValueError) as error:
+            self.generator.build_artifacts(self.root)
+        self.assertNotIn("\n" + marker, str(error.exception))
+        self.assertIn("\\n" + marker, str(error.exception))
 
     def test_missing_docstring_or_parameter_contract_fails(self):
         self.write('''

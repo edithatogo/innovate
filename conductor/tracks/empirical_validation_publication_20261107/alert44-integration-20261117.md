@@ -39,3 +39,48 @@ lint and format, local repository policy, actionlint parsing, `git diff --check`
 and staged Gitleaks/Presidio scans passed. Hosted checks on the resulting merge
 remain required; none of these checks qualifies the scientific obligations or
 the offline security image.
+
+## Diagnostic finding follow-up
+
+At receiving base `1d5b45fc3b723f7476c24941cf77ada7f6f5b1d3`, the
+alert-44 integrator owns a bounded investigation of two diagnostic data flows.
+The independent source review found that unverified export literals and
+docstring-only parameter names can enter API gap IDs, generator errors, stdout
+and receipts; scheduler job/step environment values can enter shard receipts.
+The permitted source and test paths are `scripts/check_api_documentation.py`,
+`scripts/generate_api_reference.py`, `scripts/run_native_benchmarks.py`, `tests/test_api_documentation_contract.py`,
+`tests/test_api_reference_generation.py`, `tests/native/test_benchmark_shards.py`
+and `docs/astro-site/src/content/docs/maintainers/documentation-quality.md` and
+this record. Preserve valid symbol inventory, distinct gap/ratchet identities,
+same-step verification, and the existing independent checks. Review any changed
+diagnostic identity and scheduler formats explicitly; hosted or real Slurm
+execution is not implied by local synthetic tests.
+
+The independent candidate reviewer also reproduced source-controlled imported
+export aliases in gap details and a non-renderable exported constant in the
+generator's error. The generator is included above to protect those diagnostic
+copies while retaining public inventory and the existing failure behavior.
+
+The reviewer additionally reproduced raw legacy baseline identities in stale
+gap and removed-symbol output, a newline in a source filename forging a
+generator diagnostic line, and legitimate signed scheduler IDs rejected by an
+initial unsigned-only candidate. The final candidate fingerprints unqualified
+gap and stale-baseline identities, JSON-escapes displayed diagnostic text, and
+retains signed and unsigned 32-bit Slurm IDs plus the named special steps.
+[Slurm's task environment source](https://github.com/SchedMD/slurm/blob/slurm-26-05-5-1/src/common/env.c)
+documents signed formatting; this is source evidence, not a live Slurm run.
+External API ratchet baselines containing prior raw gap IDs will need explicit
+review and refresh. Fingerprints of guessable names are not anonymity.
+
+The pre-fix regressions failed on both disclosure paths and the signed-ID
+control. After the corrections, repo-local Python 3.15.2 passed **34** API
+checker, **27** generator, **25** production-docs and **12** native benchmark
+shard cases. Those shard tests used the separately installed local wheel above;
+they do not establish operation on a real scheduler. API generation and its
+freshness check, targeted Ruff and local repository-policy checks passed. The
+offline SAST control and image review remain separate and unqualified.
+The real local Opengrep rerun over the four originally reported scripts still
+reported all seven taint findings, with four targets scanned and no scanner
+errors in that focused run. The reviewer traced those reports primarily to
+overtainted counts and generated identities; they are retained as open findings,
+not suppressed or described as a passing security control.

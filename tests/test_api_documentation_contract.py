@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -209,6 +210,83 @@ class DocumentationContractTests(unittest.TestCase):
         ''')
         self.assertIn("unresolved_export", self.rules())
 
+    def test_unverified_diagnostic_details_are_fingerprinted_in_reports(self):
+        export_names = ["diagnostic_fixture_alpha", "diagnostic_fixture_beta"]
+        self.write(f'"""A demonstration package with invalid exports."""\n__all__ = {export_names!r}\n')
+        report = self.report()
+        gaps = [gap for gap in report["gaps"] if gap["rule"] == "unresolved_export"]
+        self.assertEqual(len(gaps), 2)
+        self.assertEqual(
+            {gap["detail"] for gap in gaps},
+            {"sha256:" + hashlib.sha256(name.encode()).hexdigest() for name in export_names},
+        )
+        self.assertEqual(len({gap["id"] for gap in gaps}), 2)
+        self.assertFalse(report["inventory_valid"])
+
+        output = self.root / "receipt.json"
+        command = [sys.executable, str(SCRIPT), "--root", str(self.root)]
+        for mode in ("strict", "audit"):
+            for extra in ([], ["--output", str(output)]):
+                result = subprocess.run(command + ["--mode", mode] + extra, capture_output=True, text=True)
+                self.assertEqual(result.returncode, 1)
+                published = result.stdout + result.stderr + (output.read_text() if extra else "")
+                for name in export_names:
+                    self.assertNotIn(name, published)
+
+    def test_unresolved_export_fingerprint_handles_surrogates_and_empty_values(self):
+        surrogate = "\ud800"
+        self.write(f'"""A demonstration package with invalid exports."""\n__all__ = {[surrogate, ""]!r}\n')
+        gaps = [gap for gap in self.report()["gaps"] if gap["rule"] == "unresolved_export"]
+        self.assertEqual(len(gaps), 2)
+        self.assertIn("", {gap["detail"] for gap in gaps})
+        expected = hashlib.sha256(surrogate.encode("utf-8", errors="surrogatepass")).hexdigest()
+        self.assertIn("sha256:" + expected, {gap["detail"] for gap in gaps})
+
+    def test_unknown_parameter_fingerprint_preserves_ratchet_identity(self):
+        marker = "diagnostic_fixture_parameter"
+        self.write(self.complete_source().replace("scale: A dimensionless", f"{marker}: A dimensionless"))
+        report = self.report()
+        unknown = [gap for gap in report["gaps"] if gap["rule"] == "unknown_parameter"]
+        self.assertEqual(len(unknown), 1)
+        self.assertEqual(unknown[0]["detail"], "sha256:" + hashlib.sha256(marker.encode()).hexdigest())
+        self.assertNotIn(marker, json.dumps(report))
+        baseline = self.checker.make_baseline(report)
+        self.assertTrue(self.checker.evaluate_ratchet(report, baseline)["passed"])
+        self.write(self.complete_source().replace("scale: A dimensionless", "another_parameter: A dimensionless"))
+        self.assertFalse(self.checker.evaluate_ratchet(self.report(), baseline)["passed"])
+
+    def test_legacy_baseline_values_do_not_escape_through_ratchet_receipts(self):
+        marker = "diagnostic_fixture_parameter"
+        self.write(self.complete_source().replace("scale: A dimensionless", f"{marker}: A dimensionless"))
+        report = self.report()
+        baseline = self.checker.make_baseline(report)
+        for gap in baseline["gaps"]:
+            if "::unknown_parameter:" in gap["id"]:
+                gap["id"] = gap["id"].split("::unknown_parameter:")[0] + "::unknown_parameter:" + marker
+        baseline["symbols"].append("untrusted_baseline_symbol_" + marker)
+        baseline_path = self.root / "baseline.json"
+        baseline_path.write_text(json.dumps(baseline), encoding="utf-8")
+        receipt = self.root / "ratchet.json"
+        command = [
+            sys.executable,
+            str(SCRIPT),
+            "--root",
+            str(self.root),
+            "--mode",
+            "ratchet",
+            "--baseline",
+            str(baseline_path),
+        ]
+        for extra in ([], ["--output", str(receipt)]):
+            result = subprocess.run(command + extra, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            published = result.stdout + result.stderr + (receipt.read_text() if extra else "")
+            self.assertNotIn(marker, published)
+        check = self.checker.evaluate_ratchet(report, baseline)
+        self.assertFalse(check["passed"])
+        self.assertEqual(len(check["stale_gaps"]), 1)
+        self.assertEqual(len(check["removed_symbols"]), 1)
+
     def test_imported_exports_require_explicit_source_qualification(self):
         self.write('''
             """A demonstration of an imported public export."""
@@ -216,6 +294,19 @@ class DocumentationContractTests(unittest.TestCase):
             __all__ = ["imported"]
         ''')
         self.assertIn("imported_export", self.rules())
+
+    def test_imported_export_diagnostic_does_not_repeat_source_name(self):
+        marker = "diagnostic_fixture_alias"
+        self.write(
+            '"""A demonstration of an imported public export."""\n'
+            f"from module import item as {marker}\n"
+            f"__all__ = [{marker!r}]"
+        )
+        report = self.report()
+        imported = [gap for gap in report["gaps"] if gap["rule"] == "imported_export"]
+        self.assertEqual(len(imported), 1)
+        self.assertNotIn(marker, json.dumps(imported))
+        self.assertTrue(imported[0]["detail"].startswith("sha256:"))
 
     def test_explicit_underscore_export_has_public_contract(self):
         self.write('''
@@ -304,7 +395,8 @@ class DocumentationContractTests(unittest.TestCase):
         self.write(self.complete_source())
         result = self.checker.evaluate_ratchet(self.report(), baseline)
         self.assertFalse(result["passed"])
-        self.assertIn("bindings/python/innovate/__init__.py::innovate._helper", result["removed_symbols"])
+        removed = "bindings/python/innovate/__init__.py::innovate._helper"
+        self.assertIn("sha256:" + hashlib.sha256(removed.encode()).hexdigest(), result["removed_symbols"])
 
     def test_duplicate_or_malformed_baseline_fails_closed(self):
         self.write("def missing(value):\n    return value\n")
