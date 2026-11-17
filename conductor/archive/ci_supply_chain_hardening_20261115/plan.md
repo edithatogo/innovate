@@ -186,10 +186,23 @@ complex-number source and real-Presidio blocking controls, including a changed
 blob and a neighboring unreviewed value. The complete local Innovate changed-file
 scan covered 760 of 760 files, with three reviewed matches and no blocking
 privacy or secret findings; 1,145 advisory matches remained. The privacy workflow
-here temporarily pins that draft candidate solely to obtain an actual receiving
-PR scan. This is not promotion to main: replace the pin with the accepted shared
-main revision and rerun the applicable checks after PR #151 is integrated.
-Release readiness and the offline security runner remain separate open gates.
+here temporarily pinned that draft candidate solely to obtain an actual receiving
+PR scan. The receiving privacy job passed on GitHub's synthetic merge of Innovate
+head `3fb0cd6fa5275ff7f894dfdc8ad779f65792e35b` into base `cc2e4da4` using
+Python 3.15.2; Gitleaks reported zero findings, while the hosted log did not
+expose the Presidio JSON summary. A separate exact-head local scan covered 761
+of 761 changed files, with three reviewed matches, zero blocking, 1,145 advisory
+and no skips. Its value-free receipt SHA-256 is
+`ea65a61e59e0c99a0c3ac47a487abbce3586ad1762f41c0e0fd53677fe36b537`.
+
+At the user's direction, chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the
+bounded integration of shared PR #151 and Innovate PR #674 in the worktrees
+recorded here and in the shared track; earlier integrators retain unrelated
+work. Shared PR #151 merged as `c82b2658f6874127d05f825dbe9ed4747f146efd`,
+whose tree is byte-identical to its tested head `4265b912`. This candidate pins
+that receiving revision; post-merge shared checks and a fresh Innovate receiving
+scan remain required. Release readiness and the offline security runner remain
+separate open gates.
 
 > **Dependencies:** `deny.toml` `[sources] allow-git = []` strict mode requires `rust_tabular_crates_io_20261115` and `rust_kairos_crates_io_20261115` to complete first (allow those two URLs temporarily in `deny.toml` if implementing earlier).
 
