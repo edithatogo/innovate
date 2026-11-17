@@ -177,6 +177,9 @@ def rust_workspace_scope(root: Path, policy: dict[str, Any]) -> dict[str, Any]:
             "Explicit manifest membership only; dependency resolution and compiler qualification are separate."
         ),
     }
+def _diagnostic_fingerprint(value: str) -> str:
+    """Retain a stable identity without copying unverified diagnostic text."""
+    return "sha256:" + hashlib.sha256(value.encode("utf-8", errors="surrogatepass")).hexdigest()
 
 
 def _substantive(value: str) -> bool:
@@ -379,6 +382,10 @@ def audit(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
     seen: set[str] = set()
 
     def gap(symbol: dict[str, Any], rule: str, detail: str = "") -> None:
+        # Unqualified export names and unmatched docstring labels are source
+        # text. Keep stable distinct gap identities without publishing the text.
+        if detail and rule in {"unresolved_export", "imported_export", "unknown_parameter"}:
+            detail = _diagnostic_fingerprint(detail)
         gaps.append(
             {
                 "id": f"{symbol['id']}::{rule}" + (f":{detail}" if detail else ""),
@@ -641,8 +648,10 @@ def evaluate_ratchet(report: dict[str, Any], baseline: Any) -> dict[str, Any]:
     actual = {gap["id"]: gap["source_sha256"] for gap in report["gaps"]}
     result["new_gaps"] = sorted(actual.keys() - accepted.keys())
     result["changed_gaps"] = sorted(key for key in actual.keys() & accepted.keys() if actual[key] != accepted[key])
-    result["stale_gaps"] = sorted(accepted.keys() - actual.keys())
-    result["removed_symbols"] = sorted(set(symbols) - {symbol["id"] for symbol in report["symbols"]})
+    result["stale_gaps"] = sorted(_diagnostic_fingerprint(value) for value in accepted.keys() - actual.keys())
+    result["removed_symbols"] = sorted(
+        _diagnostic_fingerprint(value) for value in set(symbols) - {symbol["id"] for symbol in report["symbols"]}
+    )
     if not report["inventory_valid"]:
         result["errors"].append("inventory is incomplete or unresolved")
     result["passed"] = not any(
@@ -697,7 +706,7 @@ def main(argv: list[str] | None = None) -> int:
             args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         else:
             print(json.dumps(report, indent=2, sort_keys=True))
-        print(f"API documentation qualification failed: {error}", file=sys.stderr)
+        print(f"API documentation qualification failed: {json.dumps(str(error))}", file=sys.stderr)
         return 2
 
 

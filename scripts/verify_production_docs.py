@@ -198,6 +198,22 @@ def route_for(path: Path, dist: Path, base: str) -> str:
     return base + relative
 
 
+def public_diagnostic(error: dict) -> dict:
+    """Fingerprint artifact-supplied URLs before they enter public receipts or logs."""
+
+    def fingerprint(value: str | None) -> str | None:
+        if value is None:
+            return None
+        return "sha256:" + hashlib.sha256(value.encode("utf-8", errors="surrogatepass")).hexdigest()
+
+    result = dict(error)
+    if "url" in result:
+        result["url"] = fingerprint(result["url"])
+    if result["code"] == "canonical":
+        result["actual"] = [fingerprint(value) for value in result["actual"]]
+    return result
+
+
 def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
     """Check built pages, destinations, canonical URLs, search and sitemap."""
     validate_contract(contract)
@@ -239,7 +255,11 @@ def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
     checked_links = 0
 
     def destination(url, source):
-        parsed = urlsplit(urljoin(origin + source, url))
+        try:
+            parsed = urlsplit(urljoin(origin + source, url))
+        except ValueError:
+            errors.append({"code": "invalid_url", "source": source, "url": url})
+            return None, None
         if parsed.scheme not in {"http", "https"}:
             return None, None
         if f"{parsed.scheme}://{parsed.netloc}" != origin:
@@ -298,7 +318,11 @@ def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
                 if target is None:
                     errors.append({"code": "sitemap_index", "url": node.text})
                 continue
-            parsed = urlsplit(node.text)
+            try:
+                parsed = urlsplit(node.text)
+            except ValueError:
+                errors.append({"code": "sitemap_route", "url": node.text})
+                continue
             if f"{parsed.scheme}://{parsed.netloc}" != origin or parsed.path not in pages:
                 errors.append({"code": "sitemap_route", "url": node.text})
             else:
@@ -335,8 +359,9 @@ def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
 
     source_hash, source_files = source_digest(root, contract)
     artifact_hash, artifact_files = digest_files(safe, dist)
+    errors = [public_diagnostic(error) for error in errors]
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "status": "failed" if errors else "passed",
         "generated_at": datetime.now(UTC).isoformat(),
         "source_sha256": source_hash,
@@ -382,11 +407,11 @@ def main() -> int:
         report["contract_sha256"] = hashlib.sha256(contract_path.read_bytes()).hexdigest()
         commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, timeout=10)
         report["commit"] = commit.stdout.strip() if commit.returncode == 0 else None
-    except (OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError) as error:
+    except OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError:
         report = {
-            "schema_version": 2,
+            "schema_version": 3,
             "status": "failed",
-            "errors": [{"code": "invalid_input", "detail": str(error)}],
+            "errors": [{"code": "invalid_input", "detail": "Input or artifact could not be verified."}],
             "content_complete": False,
             "live_deployment_verified": False,
             "browser_accessibility_verified": False,

@@ -1,14 +1,14 @@
 {
   "track_id": "empirical_validation_publication_20261107",
   "type": "feature",
-  "status": "new",
+  "status": "in_progress",
   "approved": true,
-  "approval_scope": "planning",
+  "approval_scope": "implementation and review; external publication requires separate authorization",
   "repository": "innovate",
   "created_at": "2026-11-07",
-  "updated_at": "2026-11-07",
+  "updated_at": "2026-11-17",
   "priority": "P1",
   "depends_on": ["scientific_integrity_20261107"],
   "parallel_safe_work": ["source audit", "licence audit", "protocol drafting"],
-  "implementation_started": false
+  "implementation_started": true
 }

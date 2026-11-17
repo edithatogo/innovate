@@ -12,7 +12,7 @@ use kairo_ecs_rng::{
 use kairo_ecs_types::{EntityId, EventKind, ScheduleRequest, SimTime, StepOutcome};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
-pub(crate) const REV: &str = "e76b97be2ea3712645933d903822ff6381c8883e";
+pub(crate) const REV: &str = "a1f6283575ad26918230adc122a99b5c08fc4da3";
 // The provider's scheduler, RNG and state crates are identical at these two
 // revisions. Keep the digest namespace stable so existing checkpoints replay.
 pub(crate) const CHECKPOINT_PROVIDER: &str = "d56863505d938feb069af88a737eb7668113d14b";

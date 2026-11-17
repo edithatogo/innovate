@@ -494,7 +494,7 @@ Historical completion labels above do not establish current full-native ownershi
 - [x] **Track: Rust-core convergence and native acceptance** *(Completed)*
   *Link: [./archive/rust_core_convergence_20261107/](./archive/rust_core_convergence_20261107/)*
 
-- [~] **Track: Empirical validation and publication** *(In Progress — V01–V04, Q01, Q04 complete; M01–M05, V05, Q02–Q03, Q05 pending)*
+- [~] **Track: Empirical validation and publication** *(In Progress — M01, V01–V04, Q01 and Q04 partially implemented; remaining qualification and M02–M05, V05, Q02–Q03 and Q05 pending)*
   *Link: [./tracks/empirical_validation_publication_20261107/](./tracks/empirical_validation_publication_20261107/)*
 
 - [x] **Track: Advanced diffusion frontier methods** *(Archived — A01–A06 complete; G01–G04 & Kairos/Paignia adapters remain open upstream)*

@@ -86,13 +86,16 @@ fn worker_rejects_invalid_framing_without_writing_a_response() {
 
 #[test]
 fn worker_reports_a_closed_response_pipe() {
+    // Close the read end before spawning the worker, reducing the window in
+    // which another concurrent spawn could temporarily inherit a reader.
+    let (reader, writer) = std::io::pipe().unwrap();
+    drop(reader);
     let mut child = Command::new(env!("CARGO_BIN_EXE_innovate-remote-worker"))
         .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
+        .stdout(Stdio::from(writer))
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
-    drop(child.stdout.take().unwrap());
     child.stdin.take().unwrap().write_all(b"{}").unwrap();
     let output = child.wait_with_output().unwrap();
     assert_eq!(output.status.code(), Some(1));

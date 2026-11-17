@@ -26,6 +26,35 @@ unfinished; a scoped runtime receipt must not mark optional game work complete.
 
 - [ ] I01 Implement and verify this bounded outcome.
 
+Alert #44 receiving integration, 17 November 2026: the Innovate integrator in
+chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the receiving worktree
+`/Volumes/PortableSSD/GitHub/innovate-security-alert-44`, starting at
+`74a4d0690636ca9f6e445b4d778b5e2f6488234d`. The allowed receiving files are
+this plan, `rust/crates/innovate-core/src/simulation.rs`,
+`tests/native/test_python_consumer.py`, and the two new lane receipts. The
+source packet is `44e33d0644742945ba6b4da16cb8bf27085866df` through
+`ec8b8218e2d905ca3ee1f56e8220330b3c833381`, from
+`/Users/doughnut/.codex/worktrees/innovate-kairos-i01/innovate`. Its owner has
+handed off a terminal scoped result and is not editing this worktree. The next
+operation is exact-range preflight, integration, and targeted local and hosted
+tests; it does not promote shared pins or establish track or release acceptance.
+
+The paths and check below describe the historical adapter. The receiving
+candidate instead uses the Rust simulation module and installed Python consumer
+test named above; see its lane receipts for the current native claim boundary
+and evidence. I01 remains pending until the integrator's exact-source and hosted
+checks complete and its acceptance is reconciled.
+
+The source packet was received at `92519488c56c7f618c1e555b353c5fc2a5a52070`
+after a clean exact-range preflight. On that source, Cargo and rustc 1.99.1 ran
+the locked offline Kairos and network suites: **17** and **37** passed. A wheel
+built from that checkout with Maturin 1.16.0 and Python 3.15.2 had SHA-256
+`4752a2dc18dec5747d68d53fd046b84e985e4b1e78e67173d5fcd5fab3e636f2`;
+six selected tests passed against its isolated installed copy, including the
+three provider identities and zero-dispatch boundary. Ruff and the local
+repository-policy check passed. This is local macOS evidence, not cross-platform
+or full-track acceptance; the integrated PR's hosted checks remain required.
+
 Executor: specialist. Requires: none.
 
 Files: `src/innovate/abm/kairos_contract.py`, `tests/unit/test_kairos_adapter_contract.py`.

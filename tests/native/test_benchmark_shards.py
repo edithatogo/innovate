@@ -1,9 +1,12 @@
 """Exercise Slurm receipt validation without a scheduler allocation."""
 
+import json
 import os
 import subprocess
 import sys
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -53,3 +56,76 @@ def test_slurm_benchmark_receipts_require_a_single_step(tmp_path):
     result = run(verifier, serial, first, other)
     assert result.returncode == 2
     assert "same job and step" in result.stderr
+
+
+@pytest.mark.parametrize(
+    ("invalid_field", "marker"),
+    [
+        ("SLURM_JOB_ID", "diagnostic_fixture_value"),
+        ("SLURM_STEP_ID", "diagnostic_fixture_value"),
+        ("SLURM_JOB_ID", "4294967296"),
+        ("SLURM_JOB_ID", "-2147483649"),
+        ("SLURM_STEP_ID", "１２３"),
+    ],
+)
+def test_unstructured_slurm_identifiers_do_not_enter_receipts(tmp_path, invalid_field, marker):
+    variables = {"SLURM_PROCID": "0", "SLURM_STEP_NUM_TASKS": "1", "SLURM_JOB_ID": "100", "SLURM_STEP_ID": "0"}
+    variables[invalid_field] = marker
+    output = tmp_path / "shard.json"
+    result = subprocess.run(
+        [
+            sys.executable,
+            ROOT / "scripts/run_native_benchmarks.py",
+            "--policy",
+            "fast",
+            "--slurm-shard",
+            "--output",
+            output,
+        ],
+        env={**os.environ, **variables},
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 2
+    assert marker not in result.stdout + result.stderr
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    ("job", "step"),
+    [
+        ("100", "0"),
+        ("100", "batch"),
+        ("100", "extern"),
+        ("100", "interactive"),
+        ("-2147483647", "-6"),
+        ("4294967295", "4294967294"),
+    ],
+)
+def test_supported_slurm_identifier_forms_remain_visible(tmp_path, job, step):
+    output = tmp_path / "shard.json"
+    result = subprocess.run(
+        [
+            sys.executable,
+            ROOT / "scripts/run_native_benchmarks.py",
+            "--policy",
+            "fast",
+            "--slurm-shard",
+            "--output",
+            output,
+        ],
+        env={
+            **os.environ,
+            "SLURM_PROCID": "0",
+            "SLURM_STEP_NUM_TASKS": "1",
+            "SLURM_JOB_ID": job,
+            "SLURM_STEP_ID": step,
+        },
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    shard = json.loads(output.read_text())["metadata"]["benchmark_runner"]["mpi_shard"]
+    assert (shard["job_id"], shard["step_id"]) == (job, step)

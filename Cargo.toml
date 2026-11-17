@@ -1,6 +1,6 @@
 [workspace]
 members = ["rust/crates/innovate-core", "rust/crates/innovate-tabular", "rust/crates/innovate-ffi", "rust/crates/innovate-python", "rust/crates/innovate-kairos"]
-exclude = ["rust/crates/innovate-games"]
+exclude = ["rust/crates/innovate-games", "rust/vendor/simba-0.9.1", "rust/vendor/nalgebra-0.34.2", "rust/vendor/levenberg-marquardt-0.15.0", "rust/vendor/ode_solvers-0.6.2", "rust/vendor/nuts-rs-0.19.1", "rust/vendor/faer-0.24.4", "rust/vendor/faer-traits-0.24.0", "rust/vendor/qd-0.8.0", "rust/vendor/pulp-0.22.3", "rust/vendor/gemm-0.19.0", "rust/vendor/gemm-common-0.19.0", "rust/vendor/gemm-c32-0.19.0", "rust/vendor/gemm-c64-0.19.0", "rust/vendor/gemm-f32-0.19.0", "rust/vendor/gemm-f64-0.19.0", "rust/vendor/gemm-f16-0.19.0"]
 resolver = "3"
 
 [workspace.package]

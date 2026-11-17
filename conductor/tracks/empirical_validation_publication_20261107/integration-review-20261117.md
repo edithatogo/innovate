@@ -1,0 +1,188 @@
+# Empirical validation integration review
+
+- Owner: Codex chat `01a1e3d8-fb04-7010-a038-2a5478662a5d`.
+- Worktree: `/Users/doughnut/.codex/worktrees/innovate-empirical-integration/innovate`.
+- Branch: `codex/innovate-empirical-integration-scanned-20261117`.
+- Base: `cc2e4da4af9c848043b31f1191c9d96212048276`.
+- Scope: receive the reviewed M01 and Q04 source packets, propose honest
+  empirical-track status and exercise their offline tests in CI and Nox.
+- Allowed files: the two source packets and their lane receipts; this receipt;
+  `conductor/tracks.md`; this track's `index.md`, `metadata.json` and `plan.md`;
+  `.github/workflows/ci.yml`; `noxfile.py`; and the new offline raw-admission
+  regression test `tests/validation/test_pbs_upstream_receipts.py`.
+- Native object scope: none. This branch is an integration proposal; the
+  existing sole integrator retains shared-branch promotion, shared workflow
+  ownership and any required acceptance of the common registry changes.
+- Next operation: validate the combined source and track-status proposal and
+  preserve the exact results for the existing integrator.
+
+The original M01 branch was `054074beca4062f63be77b905b815503a1103168`,
+based at `18c467e18b71d972060365c68865aa405a69949c`; it supplied three scoped
+commits ending in the [source handoff](m01-source-qualification-20261116.md).
+The original Q04 packet was `1f9e6ae6cd2c6d8264335326812f7fd83c83236b`, based
+at `57d2916586d107c8affe90355e453abe27f01c26`; its findings and limitations are
+in the [claim review](q04-claim-review-20261116.md). Read-only integration
+preflights immediately before each cherry-pick found clean source and target
+worktrees and no overlapping dirty paths, staged deletions or missing files.
+The reports do not establish hosted checks, acceptance or mergeability.
+
+Initial combined focused verification with the branch-local CPython 3.15.2
+environment: **39 passed**, comprising the 27 M01 cases and 12 Q04 cases.
+Ruff check and format check passed for the five source and test files. The
+repository-policy check passed its local scope; live settings were not checked.
+No hosted result is inferred for this branch.
+
+## Integration review and corrections
+
+- The original Q04 historical-revision test relied on an older commit being
+  present in the surrounding repository. A synthetic checkout containing only
+  a new source commit reproduced a failure, as the CI checkout is shallow by
+  default. The test now creates a separate temporary Git repository with a
+  historical source commit and a newer commit. The same synthetic-checkout
+  reproduction then passed, retaining the historical-revision assertion and
+  the requirement that self-declared receipts remain unqualified.
+- The expanded offline tests construct six synthetic metadata chains and check
+  duplicate/missing objects, unproved semantic claims, failed runs, changed
+  object identities and receipt digests. They contain no source payloads.
+  `uv run --no-sync nox -s validation_coverage` now executes the four M01/Q04
+  test files using this worktree's `.venv/bin/python` (CPython 3.15.2):
+  **68 passed** on macOS arm64. Per-file combined line/branch coverage was
+  **94.39%** for the PBS validator and **96.67%** for the capability guard;
+  statement coverage was 197/205 and 97/100 respectively. The session enforces
+  90% combined coverage for each validator. CI proposes this session for each
+  existing native-Python platform and separate lint/format checks. These are
+  focused validator results, not a hosted-platform, installed-artifact or
+  full-repository coverage receipt.
+  A separate capability-absence simulation deselected the symlink test and
+  produced 67 passes, one deselection and 95.33% guard coverage; it is not a
+  Windows run or a substitute for executing the symlink case where supported.
+- `ruff check` and `ruff format --check` passed for the five M01/Q04 files and
+  `noxfile.py`; the complete local `nox -s lint` session, including
+  `cargo fmt --all --check`, also passed. `scripts/check_repository_policy.py`,
+  `scripts/conductor_registry_hygiene.py`, the 20 selected repository-policy
+  and workflow-documentation tests, and `git diff --check` passed locally.
+  An actionlint 1.7.12 run without external integrations parsed
+  the changed workflow successfully. The full local actionlint attempt did not
+  complete and was interrupted; a separate ShellCheck run passed the three new
+  run commands. The required hosted workflow/security checks remain outstanding
+  and must not be represented by the partial local results.
+- A local Gitleaks scan reported the unmodified upstream receipt's
+  `idempotency_key` as a generic API key. The Atlas replay implementation
+  derives that value as SHA-256 of the partition and snapshot IDs; it is a
+  deterministic identity, not an access credential. The fixture now stores a
+  null placeholder and the test reconstructs the original metadata bytes from
+  those public IDs, checking the original pinned receipt SHA-256 before use.
+  The source payload is not included. This avoids a scanner exemption while
+  retaining the exact-byte receipt check. Gitleaks 8.30.1 reported no leaks on
+  the resulting staged changes and, after commit, on the candidate's complete
+  change range. The original local candidate branch is preserved for its
+  history and is not the proposed branch to publish.
+- The proposed registry, plan, index and metadata describe V01–V04, Q01 and
+  Q04 as partial, rather than completed. Q01 still needs its complete corpus,
+  fuzz and sanitizer evidence assessed; this review does not say it failed.
+  M01 is partial until the selected CI and integration are accepted. See the
+  individual source receipts for the original findings and review limits.
+- The final branch re-ran `scripts/validate_pbs_source_manifest.py` against
+  the existing read-only Atlas receipt checkout: the manifest and all named
+  upstream receipt files passed byte validation. This does not qualify source
+  semantics or a modelling consumer. The 81 selected migration-policy and
+  mutation tests also passed under the local Python 3.15.2 environment.
+
+## Open acceptance
+
+The migration release checker still cannot bind a self-declared qualified
+ledger entry to substantive scientific and exact-artifact acceptance. Its
+existing synthetic test demonstrates that arbitrary hashed text can satisfy
+the current migration-only check. The currently checked-in ledger continues
+to block release with 38 unqualified obligations. A shared evidence contract
+and the Q02/Q03/Q04 gates remain open; this proposal does not create a receipt
+schema or assert release readiness. M02–M05, V05, scientific review and
+publication depend on further source, consumer and validation work.
+
+At the last successful GitHub read in this pass, main was still the base
+`cc2e4da4af9c848043b31f1191c9d96212048276`. Subsequent exact-main and branch
+protection reads timed out; bounded HTTPS probes to both GitHub endpoints and
+the GitHub connector also failed. No branch push, pull request, hosted
+candidate check or merge occurred. Refresh main, ownership and checks before
+any promotion; the existing sole integrator retains that operation.
+
+## Integrator receiving checkpoint
+
+At the user's direction to address Innovate's release-readiness blockers, chat
+`01a1e448-3a28-7653-a681-cd3fdb41f498` owns the receiving checkpoint in the
+app-managed worktree `/Users/doughnut/.codex/worktrees/innovate-empirical-review/innovate`,
+branch `codex/innovate44-empirical-evidence`, based on the preserved candidate
+`e98a200f029e70e0f6d7082157aff20f2bae1ed8`. The allowed modification is this
+handoff record; the candidate source remains the original lane's exact bytes.
+Native/authentication scope: none. The next operation is to submit this bounded
+source candidate for hosted checks without asserting empirical or release
+acceptance. The prior lane and its ownership remain recorded above.
+
+An isolated worktree-local Python 3.15.2 environment, constrained by this
+candidate's unchanged `uv.lock`, reran the four focused files: **68 passed**.
+The PBS source validator and capability guard measured **94.39%** and **96.67%**
+combined branch/line coverage respectively, both above their existing 90% gates.
+Ruff lint/format and the local repository-policy check passed. These results do
+not establish hosted behavior or close the scientific acceptance obligations.
+An on-demand read-only preflight against Innovate PR #674 found no overlap with
+the current uncommitted diagnostic changes, no staged deletions or missing target
+files, and no patch-equivalent source commits. The two candidates both modify
+the committed CI workflow and Nox configuration; a future integration must
+reconcile those files and rerun the preflight at that decision point.
+
+The first hosted documentation job on candidate `cf344834` failed its structural
+inventory check because this packet changes the CI workflow included in that
+inventory's source hashes. A direct comparison found the workflow digest was the
+only changed inventory value. The receiving scope therefore also includes
+`docs/contracts/polyglot-api-documentation.json` for a reviewed refresh of that
+digest, followed by the existing structural checks. The earlier hosted failure
+is retained as evidence and is not a passing run.
+The refreshed inventory differs only in that workflow SHA-256; its exact check
+and all 38 polyglot documentation contract tests passed locally.
+
+The first hosted Windows run of the four focused files reported 16 receipt
+fixture setup errors and one invalid-path assertion. The fixture reconstructs
+an exact upstream LF receipt from a Git text file that Windows checked out with
+CRLF endings; the invalid NUL path is reported as nonexistent on Windows
+instead of invalid. The receiving scope also includes
+`tests/validation/test_pbs_manifest.py` and `scripts/validate_capability_claims.py`
+to make that synthetic reconstruction platform-independent and reject the NUL
+before filesystem resolution. Preserve the original upstream receipt digest and
+all existing rejection tests. The next operation is targeted local verification
+followed by a fresh hosted Windows run; the failed run is not a pass.
+The new LF/CRLF regression reconstructs the same pre-existing upstream digest
+for both checkout forms. The focused suite now has **69 passes** on macOS with
+94.39% PBS-validator and 95.45% capability-guard combined branch/line coverage;
+targeted Ruff checks also passed. Windows and other hosted results remain pending.
+
+An independent release-gate review confirmed that a matching hash of arbitrary
+text can currently produce a false successful `--release` result and that
+combining `--release --source-digest` returns before release checks. The four
+entries in the current capability matrix cover only three models, not all 38
+ledger obligations; the existing capability checker is a negative-only guard,
+not a qualified scientific receipt or coverage contract. The receiving scope
+therefore also includes `scripts/check_migration.py`,
+`tests/native/test_migration_policy.py`, and
+`tests/native/test_migration_mutation.py` for an explicit fail-closed release
+boundary and mutually exclusive modes. This does not qualify the 38 obligations
+or invent a positive receipt schema. Existing development and source-digest
+behavior, including the changed-source rejection oracle, must remain intact.
+
+The read-only reviewer also found that the development success message could
+misstate declared ledger entries as scientifically qualified, and that the
+source digest omitted three explicitly packaged reference JSON files. The same
+owned scope corrects the message and includes those exact package inputs in the
+digest while keeping other evidence outside it. Regression checks cover dirty
+and committed changes to each reference and all currently declared sdist inputs.
+Argparse's normal `--help` exit remains help, not a release check; checked-in
+release callers invoke the fixed `--release` command without help flags.
+
+On the amended candidate, the two focused migration-policy suites passed all
+**87** cases with repo-local Python 3.15.2. The three packaged-reference cases
+also passed with a deliberately unusable globally configured commit signer;
+only their temporary test repositories disable signing, and ordinary hooks are
+unchanged. Ruff lint and format, repository policy and `git diff --check` pass.
+The independent reviewer verified the corrected release boundary, source scope
+and diagnostic; the synthetic-Git signing portability issue they identified was
+fixed and retested. A qualified positive scientific release contract still needs
+to replace this explicit hard stop before any release can pass.

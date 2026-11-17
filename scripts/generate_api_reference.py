@@ -367,7 +367,7 @@ def build_artifacts(root: Path) -> dict[str, str]:
         raise ValueError("generated_reference_languages must explicitly be ['python'] or ['python', 'julia', 'r']")
     report = checker.audit(root, contract)
     if not report["python_complete"]:
-        details = "; ".join(gap["id"] for gap in report["gaps"][:8])
+        details = "; ".join(json.dumps(gap["id"]) for gap in report["gaps"][:8])
         raise ValueError(f"API source documentation is incomplete: {details}")
     public = [symbol for symbol in report["symbols"] if symbol["exposure"] == "public"]
     modules = [symbol for symbol in public if symbol["kind"] == "module"]
@@ -385,7 +385,8 @@ def build_artifacts(root: Path) -> dict[str, str]:
                     for export in ast.literal_eval(child.value):
                         target = nodes.get(f"{module['name']}.{export}")
                         if not isinstance(target, DEFINITIONS):
-                            raise ValueError(f"export has no documented renderable definition: {export}")
+                            fingerprint = _sha256(export.encode("utf-8", errors="surrogatepass"))
+                            raise ValueError(f"export has no documented renderable definition: sha256:{fingerprint}")
     missing = [symbol["id"] for symbol in public if symbol["id"] not in node_map]
     if missing:
         raise ValueError(f"public inventory contains unrenderable symbols: {missing}")
@@ -628,7 +629,7 @@ def main(argv: list[str] | None = None) -> int:
             errors = check_generated(ROOT)
             if errors:
                 for error in errors:
-                    print(error, file=sys.stderr)
+                    print(json.dumps(error), file=sys.stderr)
                 return 1
             print("Current API references match all declared language, source and generator hashes.")
         else:
@@ -636,7 +637,7 @@ def main(argv: list[str] | None = None) -> int:
             pages, removed = result["pages"], result["removed"]
             print(f"Generated {pages} current API reference pages; removed {removed} owned stale pages.")
     except (OSError, ValueError, SyntaxError) as error:
-        print(f"API reference generation failed: {error}", file=sys.stderr)
+        print(f"API reference generation failed: {json.dumps(str(error))}", file=sys.stderr)
         return 1
     return 0
 

@@ -62,7 +62,7 @@ def test_pending_development_is_valid_but_release_is_blocked(policy_tree, monkey
     policy, ledger, _ = policy_tree
     pending = len(ledger["models"]) + len(ledger["feature_areas"])
     assert policy.main() == 0
-    assert f"{pending} feature obligations still block release" in capsys.readouterr().out
+    assert f"{pending} ledger obligations are not declared qualified" in capsys.readouterr().out
     monkeypatch.setattr(sys, "argv", ["check_migration.py", "--release"])
     assert policy.main() == 1
     message = capsys.readouterr().out
@@ -71,14 +71,14 @@ def test_pending_development_is_valid_but_release_is_blocked(policy_tree, monkey
         assert all(item["key"] in message for item in ledger[group])
 
 
-def test_qualified_release_requires_matching_source(policy_tree, monkeypatch, capsys):
+def test_qualified_release_requires_matching_source_and_scientific_contract(policy_tree, monkeypatch):
     policy, ledger, write = policy_tree
     qualify(ledger)
     write()
     monkeypatch.setattr(policy, "release_source_digest", lambda: SOURCE_DIGEST)
     monkeypatch.setattr(sys, "argv", ["check_migration.py", "--release"])
-    assert policy.main() == 0
-    assert "0 feature obligations still block release" in capsys.readouterr().out
+    with pytest.raises(ValueError, match="scientific evidence contract"):
+        policy.main()
     monkeypatch.setattr(policy, "release_source_digest", lambda: "b" * 64)
     with pytest.raises(ValueError, match="does not match the release source digest"):
         policy.main()
@@ -94,6 +94,16 @@ def test_qualified_but_unapproved_release_remains_blocked(policy_tree, monkeypat
     assert policy.main() == 1
 
 
+def test_development_output_does_not_claim_qualified_scientific_evidence(policy_tree, capsys):
+    policy, ledger, write = policy_tree
+    qualify(ledger)
+    write()
+    assert policy.main() == 0
+    output = capsys.readouterr().out
+    assert "0 ledger obligations are not declared qualified" in output
+    assert "scientific evidence contract and obligation coverage remain unqualified" in output
+
+
 def test_source_digest_mode_does_not_require_a_ledger(policy_tree, monkeypatch, capsys):
     policy, _, _ = policy_tree
     (policy.ROOT / "migration-ledger.json").unlink()
@@ -101,6 +111,15 @@ def test_source_digest_mode_does_not_require_a_ledger(policy_tree, monkeypatch, 
     monkeypatch.setattr(sys, "argv", ["check_migration.py", "--source-digest"])
     assert policy.main() == 0
     assert capsys.readouterr().out == SOURCE_DIGEST + "\n"
+
+
+def test_release_and_source_digest_modes_are_mutually_exclusive(policy_tree, monkeypatch):
+    policy, _, _ = policy_tree
+    monkeypatch.setattr(policy, "release_source_digest", lambda: SOURCE_DIGEST)
+    monkeypatch.setattr(sys, "argv", ["check_migration.py", "--release", "--source-digest"])
+    with pytest.raises(SystemExit) as error:
+        policy.main()
+    assert error.value.code == 2
 
 
 def test_source_inventory_must_be_nonempty_and_clean(policy_tree, monkeypatch):

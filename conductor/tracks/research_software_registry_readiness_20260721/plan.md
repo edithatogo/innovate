@@ -1,5 +1,35 @@
 # Implementation Plan
 
+## Packaging-input reassessment — alert 44, 16 November 2026
+
+The alert 44 candidate based on `b29a1d27f54fdd08d77881ee999772fceab7c03a`
+changes the Python manifest's licence-file patterns and source-distribution
+include list to retain the vendored upstream licences, notices and sources.
+The project name, development version, description, Python constraint, declared
+project licence, authors, runtime dependency and repository identity are
+unchanged. A wheel built from an extracted source distribution contains the
+project licence and the copied upstream licence and notice files. The dossier's
+distinction between project-owned Apache-2.0 code and applicable third-party
+terms remains necessary; this check does not establish publication rights.
+
+The previous manifest digest was
+`888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395`;
+the reassessed candidate digest is
+`d0269f89303986a3cd40bde7c98c5ed45e96b21cce0d84bb3d9e1b556041936c`.
+The original assessed revision remains the upstream reconciliation baseline.
+Software Heritage, RRID and JOSS remain pending, and the release and scientific
+gates remain open. No external lookup, submission or acceptance is inferred
+from this packaging reassessment.
+
+The subsequent wheel-content check found identical upstream licence texts in
+separate wheel paths. The manifest now includes the project licence and a
+generated third-party bundle that maps each upstream path to its unmodified
+notice text, grouping only byte-identical copies. Individual upstream licence
+files remain in the source distribution. The reassessed manifest digest is
+now `9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05`;
+identity, version, project licence and the three pending registry dispositions
+are unchanged. This metadata review does not establish publication rights.
+
 ## Phase 1: Readiness and prerequisites
 
 - [x] Inspect the current native repository and registry-specific prerequisites.
