@@ -11,6 +11,9 @@ readme = "../../../README.md"
 keywords = ["innovation", "diffusion", "bass-model", "forecasting", "simulation"]
 categories = ["science", "simulation", "mathematics"]
 description = "Rust-owned innovation diffusion scientific kernel"
+# Cargo rewrites versioned path dependencies to crates.io when publishing.
+# Keep registry releases blocked until paste-free dependencies are published.
+publish = false
 
 [package.metadata.docs.rs]
 all-features = true
@@ -25,13 +28,13 @@ serde.workspace = true
 serde_json.workspace = true
 ureq = { version = "=3.5.2", default-features = false, features = ["rustls"] }
 libm = "=0.2.16"
-nalgebra = "=0.34.2"
-levenberg-marquardt = "=0.15.0"
-ode_solvers = "=0.6.2"
+nalgebra = { path = "../../vendor/nalgebra-0.34.2", version = "=0.34.2" }
+levenberg-marquardt = { path = "../../vendor/levenberg-marquardt-0.15.0", version = "=0.15.0" }
+ode_solvers = { path = "../../vendor/ode_solvers-0.6.2", version = "=0.6.2" }
 petgraph = "=0.8.3"
 sha2 = "=0.11.1"
 statrs = "=0.19.1"
-nuts-rs = "=0.19.1"
+nuts-rs = { path = "../../vendor/nuts-rs-0.19.1", version = "=0.19.1" }
 rand = "=0.10.4"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
 kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
@@ -39,3 +42,6 @@ kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f62
 kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
+
+[dev-dependencies]
+faer = { path = "../../vendor/faer-0.24.4", version = "=0.24.4", default-features = false, features = ["sparse"] }

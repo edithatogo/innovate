@@ -67,7 +67,7 @@ fn main() -> ExitCode {
     if let Some(op) = obj.get("operation").and_then(|v| v.as_str())
         && op != expected_op
     {
-        eprintln!("subcommand '{subcommand}' does not allow operation '{op}'");
+        eprintln!("subcommand '{subcommand}' does not allow operation; expected '{expected_op}'");
         return ExitCode::from(1);
     }
     obj.entry("schema_version")

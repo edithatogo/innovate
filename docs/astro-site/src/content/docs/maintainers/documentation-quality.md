@@ -35,6 +35,13 @@ bound to specific source hashes and violations. Fixing an entry requires removin
 its stale exception; duplicate and resolved exceptions fail the check. A passing
 ratchet never establishes complete documentation.
 
+API reports fingerprint unqualified export names and unmatched docstring
+parameter names in gap details and IDs, and fingerprint stale gap and removed
+symbol IDs supplied by a baseline. Current file and documented-symbol identities
+remain visible. An external API ratchet baseline made with the earlier raw gap
+IDs may report those entries as new and stale; review and refresh it explicitly.
+Fingerprints preserve distinct identities but do not make guessable names secret.
+
 **Strict completion** rejects unresolved current obligations and cannot substitute
 classification for execution. Python documentation completion, current-content
 structure, executable outcomes and whole-site completion are reported separately.

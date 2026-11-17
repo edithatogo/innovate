@@ -11,5 +11,5 @@ repository = "https://github.com/edithatogo/innovate"
 
 [dependencies]
 innovate-core = { path = "../innovate-core" }
-paignia-core = { git = "https://github.com/edithatogo/paignia.git", rev = "5103675004d80afc845bbdd067e2fea4e75f6425" }
-paignia-solve = { git = "https://github.com/edithatogo/paignia.git", rev = "5103675004d80afc845bbdd067e2fea4e75f6425" }
+paignia-core = { git = "https://github.com/edithatogo/paignia.git", rev = "ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf" }
+paignia-solve = { git = "https://github.com/edithatogo/paignia.git", rev = "ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf" }
