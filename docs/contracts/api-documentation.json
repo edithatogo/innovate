@@ -33,7 +33,23 @@
       "innovate-kairos"
     ],
     "excluded_crates": {
-      "innovate-games": "rust/crates/innovate-games/Cargo.toml"
+      "faer": "rust/vendor/faer-0.24.4/Cargo.toml",
+      "faer-traits": "rust/vendor/faer-traits-0.24.0/Cargo.toml",
+      "gemm": "rust/vendor/gemm-0.19.0/Cargo.toml",
+      "gemm-c32": "rust/vendor/gemm-c32-0.19.0/Cargo.toml",
+      "gemm-c64": "rust/vendor/gemm-c64-0.19.0/Cargo.toml",
+      "gemm-common": "rust/vendor/gemm-common-0.19.0/Cargo.toml",
+      "gemm-f16": "rust/vendor/gemm-f16-0.19.0/Cargo.toml",
+      "gemm-f32": "rust/vendor/gemm-f32-0.19.0/Cargo.toml",
+      "gemm-f64": "rust/vendor/gemm-f64-0.19.0/Cargo.toml",
+      "innovate-games": "rust/crates/innovate-games/Cargo.toml",
+      "levenberg-marquardt": "rust/vendor/levenberg-marquardt-0.15.0/Cargo.toml",
+      "nalgebra": "rust/vendor/nalgebra-0.34.2/Cargo.toml",
+      "nuts-rs": "rust/vendor/nuts-rs-0.19.1/Cargo.toml",
+      "ode_solvers": "rust/vendor/ode_solvers-0.6.2/Cargo.toml",
+      "pulp": "rust/vendor/pulp-0.22.3/Cargo.toml",
+      "qd": "rust/vendor/qd-0.8.0/Cargo.toml",
+      "simba": "rust/vendor/simba-0.9.1/Cargo.toml"
     },
     "excluded_crates_qualification": "not_qualified_by_workspace_commands",
     "limitations": "The source checker verifies explicit Cargo workspace membership but does not qualify Rust execution. Rust public API presence and links require the pinned compiler; passing documentation lints does not establish scientific validity or prose quality. PyO3-exported functions also need source doc comments because Rust visibility alone does not identify the Python API. innovate-games has a separate workspace and lockfile; the root workspace documentation and doctest commands do not qualify it."
