@@ -2,6 +2,7 @@
 
 ## PR #671 source-review follow-up — 17 November 2026
 
+- Final source-to-claim discrepancy: the Browser quality table still advertised version-selector interactions after removal of the selector. Verified the maintained browser spec asserts selector absence and tests current navigation, retirement routes and keyboard search, then corrected the claim and its 66-input scientific-review fingerprint. The previous exact-head 164/164 browser run stays scoped to 1771dffb; the amended guide needs its own hosted qualification. No native or scientific acceptance claim was added.
 - Owner: chat `01a1e448-3a28-7653-a681-cd3fdb41f498` in the managed worktree
   `/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
   Base: PR #671 head `304789f50541c39f2fd84fed0ca1603d382e568d`.
