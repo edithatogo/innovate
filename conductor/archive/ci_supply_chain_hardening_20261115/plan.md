@@ -264,3 +264,19 @@ generated documentation inventory, and record the resulting checks here. The
 merge brings the committed main changes; manual edits are limited to the
 generated inventory and this record. Native and authentication scope: none.
 The scientific release and offline security gates remain open.
+
+The read-only preflight compared clean worktrees and the merged main tree to
+PR 672's tested tree; the tree IDs were identical. Git's merge preview found one
+content conflict: the generated hash of `.github/workflows/ci.yml`. Regenerating
+the inventory on the merged sources resolved it. With repo-local Python 3.15.2,
+the inventory check, repository-policy check and pre-commit configuration
+validation passed. The repository-policy, release-workflow and polyglot inventory
+suites passed 19, 11 and 38 tests respectively; all 16 Node workflow tests
+passed. Actionlint and Zizmor passed, with Zizmor's existing two ignored and 61
+suppressed findings unchanged. These focused checks do not establish hosted
+exact-head, offline-scanner or scientific release acceptance.
+
+The post-merge main Security and Quality run `44066589564` reported a failing
+RustSec advisory audit for unmaintained `chrono` (`RUSTSEC-2026-0543`) and
+`chrono-tz` (`RUSTSEC-2026-0555`). These are separate from the `paste` fix and
+must be rechecked on the PR head; no advisory exception has been added.
