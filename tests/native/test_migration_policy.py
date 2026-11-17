@@ -4,11 +4,73 @@ import hashlib
 import importlib.util
 import json
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
 
 ROOT = Path(__file__).parents[2]
+
+
+def test_declared_sdist_inputs_are_in_release_source_scope():
+    spec = importlib.util.spec_from_file_location("migration_policy", ROOT / "scripts/check_migration.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text())
+    for entry in project["tool"]["maturin"]["include"]:
+        if entry["format"] == "sdist":
+            path = entry["path"]
+            assert any(path == source or path.startswith(source + "/") for source in module.SOURCE_PATHS), path
+
+
+@pytest.mark.parametrize(
+    "reference",
+    [
+        "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json",
+        "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json",
+        "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json",
+    ],
+)
+def test_release_source_digest_tracks_packaged_reference(tmp_path, monkeypatch, reference):
+    spec = importlib.util.spec_from_file_location("migration_policy", ROOT / "scripts/check_migration.py")
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    def git(*args):
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Test",
+                "-c",
+                "user.email=test@example.invalid",
+                "-c",
+                "commit.gpgsign=false",
+                *args,
+            ],
+            cwd=tmp_path,
+            check=True,
+            capture_output=True,
+        )
+
+    git("init")
+    source = tmp_path / "Cargo.toml"
+    source.write_text("synthetic source\n")
+    reference_path = tmp_path / reference
+    reference_path.parent.mkdir(parents=True)
+    reference_path.write_text('{"value": 1}\n')
+    git("add", "Cargo.toml", reference)
+    git("commit", "-m", "Initial source")
+    initial = module.release_source_digest()
+    reference_path.write_text('{"value": 2}\n')
+    with pytest.raises(ValueError, match="clean source inputs"):
+        module.release_source_digest()
+    git("add", reference)
+    git("commit", "-m", "Change packaged reference")
+    assert module.release_source_digest() != initial
 
 
 @pytest.mark.parametrize(
@@ -157,7 +219,8 @@ def test_release_source_digest_tracks_source_and_excludes_receipts(tmp_path, mon
     ledger.update(release_ready=True, qualified_source_sha256=module.release_source_digest())
     (tmp_path / "migration-ledger.json").write_text(json.dumps(ledger))
     monkeypatch.setattr("sys.argv", ["check_migration.py", "--release"])
-    assert module.main() == 0
+    with pytest.raises(ValueError, match="scientific evidence contract"):
+        module.main()
 
     source.write_text("third")
     git("add", "Cargo.toml")

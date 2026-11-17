@@ -17,6 +17,9 @@ SOURCE_PATHS = (
     ".github/workflows",
     ".python-version",
     "bindings",
+    "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json",
+    "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json",
+    "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json",
     "rust",
     "scripts",
     "specs",
@@ -47,8 +50,9 @@ def main() -> int:
     if sys.version_info[:3] != (3, 15, 2):
         raise ValueError("Use the selected repo-local Python 3.15.2 interpreter")
     parser = argparse.ArgumentParser()
-    parser.add_argument("--release", action="store_true")
-    parser.add_argument("--source-digest", action="store_true")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--release", action="store_true")
+    modes.add_argument("--source-digest", action="store_true")
     args = parser.parse_args()
     if args.source_digest:
         print(release_source_digest())
@@ -161,10 +165,17 @@ def main() -> int:
     if args.release and release_ready:
         if ledger.get("qualified_source_sha256") != release_source_digest():
             raise ValueError("Qualified evidence does not match the release source digest")
+        # A digest of arbitrary text is not scientific or installed-artifact
+        # acceptance. The current capability matrix covers only a subset of the
+        # ledger and has no qualified source-bound receipt/coverage contract.
+        raise ValueError("Release blocked: scientific evidence contract and obligation coverage are not qualified")
     if args.release and not release_ready:
         print("Release blocked: scientific migration and acceptance remain incomplete:", ", ".join(pending))
         return 1
-    print(f"Native development policy valid; {len(pending)} feature obligations still block release")
+    print(
+        f"Native development policy valid; {len(pending)} ledger obligations are not declared qualified. "
+        "The scientific evidence contract and obligation coverage remain unqualified."
+    )
     return 0
 
 

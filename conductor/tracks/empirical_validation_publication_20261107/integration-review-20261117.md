@@ -154,3 +154,35 @@ The new LF/CRLF regression reconstructs the same pre-existing upstream digest
 for both checkout forms. The focused suite now has **69 passes** on macOS with
 94.39% PBS-validator and 95.45% capability-guard combined branch/line coverage;
 targeted Ruff checks also passed. Windows and other hosted results remain pending.
+
+An independent release-gate review confirmed that a matching hash of arbitrary
+text can currently produce a false successful `--release` result and that
+combining `--release --source-digest` returns before release checks. The four
+entries in the current capability matrix cover only three models, not all 38
+ledger obligations; the existing capability checker is a negative-only guard,
+not a qualified scientific receipt or coverage contract. The receiving scope
+therefore also includes `scripts/check_migration.py`,
+`tests/native/test_migration_policy.py`, and
+`tests/native/test_migration_mutation.py` for an explicit fail-closed release
+boundary and mutually exclusive modes. This does not qualify the 38 obligations
+or invent a positive receipt schema. Existing development and source-digest
+behavior, including the changed-source rejection oracle, must remain intact.
+
+The read-only reviewer also found that the development success message could
+misstate declared ledger entries as scientifically qualified, and that the
+source digest omitted three explicitly packaged reference JSON files. The same
+owned scope corrects the message and includes those exact package inputs in the
+digest while keeping other evidence outside it. Regression checks cover dirty
+and committed changes to each reference and all currently declared sdist inputs.
+Argparse's normal `--help` exit remains help, not a release check; checked-in
+release callers invoke the fixed `--release` command without help flags.
+
+On the amended candidate, the two focused migration-policy suites passed all
+**87** cases with repo-local Python 3.15.2. The three packaged-reference cases
+also passed with a deliberately unusable globally configured commit signer;
+only their temporary test repositories disable signing, and ordinary hooks are
+unchanged. Ruff lint and format, repository policy and `git diff --check` pass.
+The independent reviewer verified the corrected release boundary, source scope
+and diagnostic; the synthetic-Git signing portability issue they identified was
+fixed and retested. A qualified positive scientific release contract still needs
+to replace this explicit hard stop before any release can pass.
