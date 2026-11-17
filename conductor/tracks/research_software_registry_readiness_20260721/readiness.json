@@ -7,7 +7,7 @@
   "input_sha256": {
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
     "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
-    "pyproject.toml": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+    "pyproject.toml": "9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05",
     "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5"
   },
   "destinations": [

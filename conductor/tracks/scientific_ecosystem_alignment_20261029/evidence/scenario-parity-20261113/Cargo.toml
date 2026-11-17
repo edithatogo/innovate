@@ -1,0 +1,19 @@
+[workspace]
+
+[package]
+name = "innovate-historical-scenario-analysis"
+version = "0.0.0"
+edition = "2024"
+publish = false
+license = "Apache-2.0"
+
+[[test]]
+name = "historical-producer"
+path = "historical_producer.rs"
+
+[dependencies]
+innovate-core = { git = "https://github.com/edithatogo/innovate.git", rev = "3681c8a820e7f3f852ff7429687ba3997cbcae3f" }
+serde_json = { version = "=1.0.154", features = ["float_roundtrip"] }
+
+[patch.crates-io]
+hashbrown = { git = "https://github.com/pola-rs/hashbrown", rev = "d76a6f81abd8f388676aff15068236a8d21c7e1a" }

@@ -6,12 +6,23 @@ from pathlib import Path
 import nox
 
 nox.options.default_venv_backend = "none"
-nox.options.sessions = ["lint", "types", "tests", "native", "package"]
+nox.options.sessions = ["lint", "types", "tests", "validation_coverage", "native", "package"]
 ENVIRONMENT = Path(
     os.environ.get("UV_PROJECT_ENVIRONMENT", ".venv-native" if Path(".venv-native").exists() else ".venv")
 ).resolve()
 BIN = ENVIRONMENT / ("Scripts" if os.name == "nt" else "bin")
 PYTHON = str(BIN / ("python.exe" if os.name == "nt" else "python"))
+VALIDATION_TESTS = (
+    "tests/validation/test_pbs_manifest.py",
+    "tests/validation/test_pbs_upstream_receipts.py",
+    "tests/unit/test_capability_claims.py",
+    "tests/validation/test_release_claims.py",
+)
+VALIDATION_SOURCES = (
+    "scripts/validate_pbs_source_manifest.py",
+    "scripts/validate_capability_claims.py",
+)
+VALIDATION_FILES = (*VALIDATION_SOURCES, *VALIDATION_TESTS)
 
 
 def tool(session, name, *args):
@@ -20,7 +31,16 @@ def tool(session, name, *args):
 
 @nox.session(python=False)
 def lint(session):
-    tool(session, "ruff", "check", "bindings/python", "tests/native", "noxfile.py", "scripts/check_migration.py")
+    tool(
+        session,
+        "ruff",
+        "check",
+        "bindings/python",
+        "tests/native",
+        "noxfile.py",
+        "scripts/check_migration.py",
+        *VALIDATION_FILES,
+    )
     tool(
         session,
         "ruff",
@@ -30,8 +50,10 @@ def lint(session):
         "tests/native",
         "noxfile.py",
         "scripts/check_migration.py",
+        *VALIDATION_FILES,
     )
-    session.run("cargo", "fmt", "--all", "--check", external=True)
+    # The virtual workspace selects all project members without formatting vendored dependencies.
+    session.run("cargo", "fmt", "--check", external=True)
 
 
 @nox.session(python=False)
@@ -42,6 +64,30 @@ def types(session):
 @nox.session(python=False)
 def tests(session):
     session.run(PYTHON, "-m", "pytest", "tests/native", *session.posargs, external=True)
+
+
+@nox.session(python=False)
+def validation(session):
+    session.run(PYTHON, "-m", "pytest", *VALIDATION_TESTS, *session.posargs, external=True)
+
+
+@nox.session(python=False)
+def validation_coverage(session):
+    env = {"COVERAGE_FILE": str(ENVIRONMENT / ".coverage-validation")}
+    session.run(PYTHON, "-m", "coverage", "run", "--branch", "-m", "pytest", *VALIDATION_TESTS, external=True, env=env)
+    for source in VALIDATION_SOURCES:
+        session.run(
+            PYTHON,
+            "-m",
+            "coverage",
+            "report",
+            f"--include={source}",
+            "--show-missing",
+            "--precision=2",
+            "--fail-under=90",
+            external=True,
+            env=env,
+        )
 
 
 @nox.session(python=False)
@@ -106,6 +152,12 @@ def release_reproducibility(session):
 def security(session):
     tool(session, "bandit", "-r", "bindings/python/innovate", "-q")
     session.run("cargo", "audit", "--file", "Cargo.lock", external=True)
+    session.run("cargo", "audit", "--file", "rust/crates/innovate-games/Cargo.lock", external=True)
+    session.run(PYTHON, "scripts/check_vendor_audit.py", external=True)
+    session.run(
+        PYTHON, "-m", "unittest", "discover", "-s", "tests/workflows", "-p", "test_vendor_audit.py", external=True
+    )
+    session.run("cargo", "audit", "--file", "rust/vendor/Cargo.lock", external=True)
 
 
 @nox.session(python=False)
