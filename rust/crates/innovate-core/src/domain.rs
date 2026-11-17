@@ -3,6 +3,10 @@
 use crate::inference::InnovationError;
 
 /// Strictly increasing, finite, non-empty time grid.
+///
+/// Construct with [`TryFrom<Vec<f64>>`]. Coordinates may be negative; individual
+/// models can impose a narrower domain. The caller chooses the time unit and
+/// uses that same unit for rates, pulse widths, delays, and dated interventions.
 #[derive(Debug, Clone, PartialEq)]
 pub struct TimeGrid {
     times: Vec<f64>,
@@ -57,41 +61,41 @@ impl TryFrom<Vec<f64>> for TimeGrid {
 /// Semantic kind of observed series; observations do not infer an underlying actor count.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationKind {
-    /// New adoption during each observation interval.
+    /// Newly recorded adoption during each observation interval.
     NewAdoption,
-    /// Actors or units currently active at each observation time.
+    /// Amount in active use at each observation time.
     ActiveStock,
-    /// Transactions observed at each time point.
+    /// Recorded transactions, which may include repeat use by the same actor.
     Transactions,
-    /// A rate measured per unit time or expressed as a proportion.
+    /// A rate or normalized rate measurement.
     Rate,
-    /// A share of an explicitly defined population or market.
+    /// A proportion of an explicitly described population or market.
     Share,
-    /// An attention or expectation measure, distinct from adoption counts.
+    /// An attention or interest measurement.
     Attention,
 }
 
 /// Measurement units for an observation series.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Units {
-    /// A count of observed events or units.
+    /// Count units; integrality is checked by the selected count likelihood.
     Count,
-    /// A dimensionless proportion.
+    /// Dimensionless proportion units.
     Proportion,
-    /// A rate expressed per unit of time.
+    /// Amount per caller-defined time unit.
     RatePerUnitTime,
-    /// A monetary amount in the caller's declared currency.
+    /// Monetary amount in a currency and price basis supplied by the caller.
     Currency,
-    /// An index on the caller's declared measurement scale.
+    /// Index values on a caller-defined reference scale.
     Index,
 }
 
 /// Optional explicit denominator accompanying normalized or share observations.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Denominator {
-    /// Size of the population underlying a normalized observation.
+    /// Declared population used to normalize the observations.
     Population(f64),
-    /// Market potential underlying a normalized observation.
+    /// Declared attainable market size used to normalize the observations.
     MarketPotential(f64),
 }
 
@@ -207,31 +211,31 @@ impl DomainObservationSeries {
         })
     }
 
-    /// Borrow the validated time grid associated with the observations.
+    /// Borrow the validated coordinates aligned with [`Self::values`].
     #[must_use]
     pub fn grid(&self) -> &TimeGrid {
         &self.grid
     }
 
-    /// Borrow the observations, preserving missing entries as `None`.
+    /// Borrow observations in grid order, retaining missing values as `None`.
     #[must_use]
     pub fn values(&self) -> &[Option<f64>] {
         &self.values
     }
 
-    /// Return the declared semantic kind of the observations.
+    /// Return the declared observation meaning without inferring actor counts.
     #[must_use]
     pub fn kind(&self) -> ObservationKind {
         self.kind
     }
 
-    /// Return the declared measurement units.
+    /// Return the declared units; construction does not rescale the values.
     #[must_use]
     pub fn units(&self) -> Units {
         self.units
     }
 
-    /// Return the optional validated denominator.
+    /// Return the optional denominator, validated as finite and positive at construction.
     #[must_use]
     pub fn denominator(&self) -> Option<Denominator> {
         self.denominator

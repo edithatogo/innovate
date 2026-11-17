@@ -5,7 +5,6 @@ import starlightDocSearch from '@astrojs/starlight-docsearch';
 import remarkSingleTitle from './scripts/remark-single-title.mjs';
 import rehypeFocusableTables from './scripts/rehype-focusable-tables.mjs';
 import starlightLinksValidator from 'starlight-links-validator';
-import starlightVersions from 'starlight-versions';
 
 const docSearchPlugins =
   process.env.ALGOLIA_APP_ID && process.env.ALGOLIA_API_KEY && process.env.ALGOLIA_INDEX_NAME
@@ -50,10 +49,6 @@ export default defineConfig({
       plugins: [
         starlightLinksValidator(),
         ...docSearchPlugins,
-        starlightVersions({
-          current: { label: '0.7 Development' },
-          versions: [{ slug: 'latest', label: '0.6 Reference' }],
-        }),
       ],
       sidebar: [
         {
@@ -69,6 +64,7 @@ export default defineConfig({
           label: 'User Guide',
           items: [
             { label: 'Core concepts', link: '/core/' },
+            { label: 'Model atlas', link: '/models/' },
             { label: 'Fitting models', link: '/user-guide/fitting/' },
             { label: 'Forecasting', link: '/user-guide/forecasting/' },
             { label: 'Native execution and backends', link: '/user-guide/backends/' },
@@ -78,6 +74,12 @@ export default defineConfig({
           label: 'Tutorials',
           items: [
             { label: 'Choose a tutorial', link: '/tutorials/' },
+            { label: 'Fit public observations', link: '/tutorials/public-data-fit/' },
+            { label: 'Explore in marimo', link: '/tutorials/marimo/' },
+            { label: 'Batch execution', link: '/tutorials/native-batch/' },
+            { label: 'Forcing and time', link: '/tutorials/forcing-and-time/' },
+            { label: 'Network scenarios', link: '/tutorials/network-scenarios/' },
+            { label: 'Kairos simulation', link: '/tutorials/kairos-simulation/' },
             { label: 'Scenario experiments', link: '/tutorials/scenario-experiment-workflows/' },
             { label: 'Norton–Bass model', link: '/tutorials/norton-bass/' },
             { label: 'Bayesian inference', link: '/tutorials/bayesian-fitter/' },
@@ -101,15 +103,17 @@ export default defineConfig({
           label: 'Maintainers',
           items: [
             { label: 'Documentation quality contracts', link: '/maintainers/documentation-quality/' },
+            { label: 'Language documentation conventions', link: '/maintainers/language-conventions/' },
+            { label: 'Open science documentation standards', link: '/operations/documentation-standards/' },
             { label: 'Test acceleration', link: '/maintainers/test-acceleration/' },
             { label: 'Registry readiness', link: '/operations/registry-readiness/' },
           ],
         },
         {
-          label: 'Historical Reference',
+          label: 'Migration',
           collapsed: true,
           items: [
-            { label: 'Earlier documentation and current replacements', link: '/historical-documentation/' },
+            { label: 'Retired documentation and current routes', link: '/historical-documentation/' },
           ],
         },
       ],

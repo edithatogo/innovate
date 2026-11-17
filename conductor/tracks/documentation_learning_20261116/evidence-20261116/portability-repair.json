@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-16T11:34:15.065554+00:00",
+  "scope": "Local focused verification of Windows newline causes observed on the hosted native matrix. Actual Windows execution of this repair remains pending.",
+  "starting_head": "178779bd21d7fdde2fe4f6b8179444b72a4bc6d1",
+  "observed_hosted_failure": {
+    "run_id": 43855079005,
+    "job_id": 133257258207,
+    "platform": "windows-latest",
+    "failed": 5,
+    "passed": 403,
+    "skipped": 7,
+    "failures": [
+      "deterministic learning-catalogue output",
+      "four frozen public-data checksum cases"
+    ]
+  },
+  "changes": [
+    "Write the generated catalogue as explicit UTF-8 bytes so check mode compares identical bytes across platforms.",
+    "Pin the three frozen dataset identities to -text within their dataset directory; keep all expected hashes and exact loader checks.",
+    "Add an actual temporary Git checkout with core.autocrlf=true, checking a CRLF control plus byte-identical frozen inputs."
+  ],
+  "regression": {
+    "before_exit_code": 1,
+    "before_failure": "Frozen dataset checksum mismatch: observations.csv",
+    "before_log": "checkout-regression-before.log",
+    "after_exit_code": 0,
+    "command": ".venv/bin/python -m pytest tests/native/test_public_data_tutorial.py tests/native/test_learning_catalogue.py tests/native/test_documentation_conventions.py -q -rA --junitxml=/tmp/innovate-portability-tests.xml",
+    "passed_top_level_cases": 44,
+    "cases_by_file": {
+      "test_public_data_tutorial.py": 20,
+      "test_learning_catalogue.py": 16,
+      "test_documentation_conventions.py": 8
+    },
+    "failures": 0,
+    "skipped": 0,
+    "log": "portability-tests.log",
+    "counting_note": "Counts are the 44 explicit passed cases in the log. The JUnit suite aggregate reports 52 while containing 44 testcase elements; that higher aggregate is not used as a unique-test count."
+  },
+  "additional_checks": {
+    "scoped_ruff_check": "passed",
+    "scoped_ruff_format_check": "passed",
+    "catalogue_check": "passed",
+    "scientific_review_source_freshness": "passed; 61 declared inputs; no scientific or pedagogical certification"
+  },
+  "independent_review": "Reader reviewer confirmed exact snapshot bytes and scientific teaching/example/notebook inputs unchanged, actual checkout regression passed; catalogue source hash refresh only.",
+  "source_sha256": {
+    "docs/datasets/.gitattributes": "97e5087d7c30e4f566df76586f87ff89a307c2a2b4706e388aad8e3b64074293",
+    "scripts/generate_learning_catalogue.py": "cd3f4df8289632ec8fecca12d6b77fca65d57f98d5832d61848e6afafb330152",
+    "docs/contracts/learning-catalogue.json": "5139b1d37149fe6ccf89b67ff5e1afd5f2a344ff6efe755238d50ca75a95de77",
+    "tests/native/test_public_data_tutorial.py": "e82d78a7c6752a2c7526a619117232441a5ec87609671382db69848b91a44873"
+  },
+  "frozen_dataset_sha256": {
+    "manifest.json": "e8d7718a3be7b39caf5f7e592f318bd2912b3f225b5c74b8593a5b0691f2e8a6",
+    "observations.csv": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+    "raw.json": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472"
+  },
+  "native_behavior_changed": false,
+  "hash_normalization_added": false,
+  "windows_runtime_qualified": false
+}

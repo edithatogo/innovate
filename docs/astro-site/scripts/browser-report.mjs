@@ -64,10 +64,15 @@ export default class BrowserQualificationReporter {
       && this.cases.every((entry) => entry.expected_status === 'passed' && entry.retry === 0 && caseEvidenceComplete(entry));
     if (!complete) this.errors.push('The complete, unfiltered two-viewport qualification did not pass with full evidence and without skips or retries.');
     const passed = result.status === 'passed' && unchanged && complete && this.errors.length === 0;
+    const browserOverride = process.env.INNOVATE_DOCS_CHROMIUM_EXECUTABLE || null;
+    const browserVersions = [...new Set(this.cases.map((entry) => entry.evidence?.['runtime-observation']?.browser_version)
+      .filter((version) => typeof version === 'string'))].sort();
     const report = {
       schema_version: 1,
       status: passed ? 'passed' : 'failed',
-      scope: 'Automated Chromium qualification of the local built artifact; no manual usability, assistive-technology, scientific, or live-deployment certification.',
+      scope: `Automated Chromium qualification of the local built artifact${browserOverride
+        ? ' using an explicitly selected executable; this run does not qualify the Playwright-managed CI browser'
+        : ' using the Playwright-managed browser'}; no manual usability, assistive-technology, scientific, or live-deployment certification.`,
       started_at: this.startedAt,
       finished_at: new Date().toISOString(),
       git_commit: this.commit,
@@ -75,6 +80,9 @@ export default class BrowserQualificationReporter {
       github_run_id: process.env.GITHUB_RUN_ID ?? null,
       github_run_attempt: process.env.GITHUB_RUN_ATTEMPT ?? null,
       node_version: process.version,
+      browser_executable_override: browserOverride,
+      observed_browser_versions: browserVersions,
+      playwright_managed_browser_qualified: passed && browserOverride === null,
       wcag_tags: wcagTags,
       budgets,
       coverage,

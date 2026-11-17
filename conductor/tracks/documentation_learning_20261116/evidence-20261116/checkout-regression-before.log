@@ -1,0 +1,11 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_frozen_dataset_survives_git_checkout_with_crlf_defaults _________
+tests/native/test_public_data_tutorial.py:93: in test_frozen_dataset_survives_git_checkout_with_crlf_defaults
+    frame, manifest = example.load_observations(checked_out)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+examples/native_public_data.py:55: in load_observations
+    raise ValueError(f"Frozen dataset checksum mismatch: {name}")
+E   ValueError: Frozen dataset checksum mismatch: observations.csv
+=========================== short test summary info ============================
+FAILED tests/native/test_public_data_tutorial.py::test_frozen_dataset_survives_git_checkout_with_crlf_defaults

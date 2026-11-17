@@ -1,0 +1,34 @@
+---
+import type { GetStaticPaths } from 'astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import retirement from '../../../contracts/retired-documentation.json';
+
+/** Keep old URLs useful without publishing obsolete executable instructions. */
+export const getStaticPaths = (() => retirement.entries
+  .filter((entry) => 'route' in entry)
+  .map((entry) => ({
+    params: { retired: entry.route!.replace(/^\/innovate\//u, '').replace(/\/$/u, '') },
+    props: { entry },
+  }))) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+---
+
+<StarlightPage frontmatter={{
+  title: `Retired: ${entry.title}`,
+  description: 'A migration notice for retired Innovate documentation, with current guidance and an immutable history link.',
+  pagefind: false,
+  editUrl: false,
+  tableOfContents: false,
+  prev: false,
+  next: false,
+  head: [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex, follow' } }],
+}}>
+  <section data-retired-source={entry.path} aria-label="Documentation retirement">
+    <p><strong>This documentation has been retired.</strong> The pre-0.7 instructions were removed from the maintained site on {retirement.retired_at}.</p>
+    <p>{entry.scope}</p>
+    <p><a href={entry.replacement}>Continue to current guidance</a></p>
+    <p>For an earlier analysis, <a href={entry.history_url}>read the exact historical source in Git</a>. Its interfaces, results and readiness claims are historical evidence.</p>
+    <p>See the <a href="/innovate/historical-documentation/">documentation migration guide</a> for the retirement policy and remaining scientific obligations.</p>
+  </section>
+</StarlightPage>

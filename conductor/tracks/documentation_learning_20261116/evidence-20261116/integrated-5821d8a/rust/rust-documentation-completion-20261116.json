@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "worktree": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+  "rust_toolchain": "1.100.0",
+  "source_frozen": true,
+  "source_files": 17,
+  "workspace_crates": [
+    "innovate-core",
+    "innovate-tabular",
+    "innovate-ffi",
+    "innovate-python",
+    "innovate-kairos"
+  ],
+  "strict_rustdoc": {
+    "command": "RUSTDOCFLAGS='-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes' cargo doc --workspace --no-deps --locked -j 4",
+    "exit_code": 0,
+    "scope": "final frozen sources"
+  },
+  "doctests": {
+    "command": "cargo test --doc --workspace --locked -j 4",
+    "exit_code": 0,
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 0,
+    "by_crate": {
+      "innovate-core": 2,
+      "innovate-ffi": 1,
+      "innovate-kairos": 1,
+      "innovate-tabular": 0
+    },
+    "innovate-python": "cdylib doctests unsupported by Cargo",
+    "source_timing": "Executed before final prose clarifications and three authorized formatting commas; executable doctest bodies and runtime semantics are unchanged."
+  },
+  "format": {
+    "command": "cargo fmt --all --check",
+    "exit_code": 0,
+    "scope": "final frozen sources"
+  },
+  "diff_check": {
+    "command": "git diff --check -- rust/crates",
+    "exit_code": 0
+  },
+  "source_preservation": {
+    "exact_stripped_doc_bytes_and_tokens": 16,
+    "likelihood_exception": "Exactly three root-authorized rustfmt trailing commas after NegativeBinomial.dispersion, Gaussian.sigma and StudentT.df; rustfmt-normalized stripped-doc source equal.",
+    "negative_tokenizer_controls_passed": true
+  },
+  "warnings": [
+    "Existing redundant package.homepage manifest warnings; manifests unchanged.",
+    "innovate-python cdylib has no supported Cargo doctest execution."
+  ],
+  "excluded_games": {
+    "qualified_by_workspace": false,
+    "separate_receipt": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/games-documentation-20261116.json",
+    "status": "separate dependency resolution failed before rustdoc; doctests not run"
+  },
+  "qualification_limit": "Rust documentation structure, links, four executable examples, formatting and source preservation only. No scientific validity, browser, model-family, or binding-support acceptance inferred.",
+  "evidence": {
+    "strict_rustdoc": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-docs-frozen-20261116.log",
+      "sha256": "8c4e5a367b14390d5371bdfe9c0fbd0ed39ccb9b862cc7a88e5249e69d71ccf7"
+    },
+    "doctests": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-doctests-20261116.log",
+      "sha256": "897c1b547614686758206687a8b8704f8651bd0a612371a53ad6989f41860ce9"
+    },
+    "format": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-fmt-20261116.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source_preservation": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-rust-doc-token-evidence-20261116.json",
+      "sha256": "b1657046cdb668d7fba292097dfa1142ffb379f1d869dbb936285f6d4f44d9c1"
+    }
+  }
+}

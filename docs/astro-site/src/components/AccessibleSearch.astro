@@ -1,8 +1,8 @@
 ---
-import VersionSearch from 'starlight-versions/components/VersionSearch.astro';
+import Search from '@astrojs/starlight/components/Search.astro';
 ---
 
-<VersionSearch {...Astro.props}><slot /></VersionSearch>
+<Search {...Astro.props}><slot /></Search>
 
 <script is:inline>
   // Reuse the localized label and platform shortcut in the accessible name.

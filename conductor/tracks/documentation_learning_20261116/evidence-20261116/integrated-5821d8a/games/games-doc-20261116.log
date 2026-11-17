@@ -1,0 +1,27 @@
+warning: `package.homepage` is redundant with `package.repository`
+ --> /workspace/scratch/5e94e22858cb/innovate-docs-integrated/rust/crates/innovate-core/Cargo.toml:8:12
+  |
+7 | repository.workspace = true
+  | ----------
+8 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-core` (manifest) generated 1 warning
+    Updating git repository `https://github.com/edithatogo/paignia.git`
+    Updating git repository `https://github.com/edithatogo/kairos.git`
+    Updating crates.io index
+error: failed to select a version for `thiserror`.
+    ... required by package `kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)`
+    ... which satisfies git dependency `kairo-ecs-abm` of package `innovate-core v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-integrated/rust/crates/innovate-core)`
+    ... which satisfies path dependency `innovate-core` (locked to 0.7.0-alpha.1) of package `innovate-games v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-integrated/rust/crates/innovate-games)`
+versions that meet the requirements `^2.0.21` (locked to 2.0.21) are: 2.0.21
+
+all possible versions conflict with previously selected packages
+
+  previously selected package `thiserror v2.0.18`
+    ... which satisfies dependency `thiserror = "=2.0.18"` of package `paignia-core v0.1.0 (https://github.com/edithatogo/paignia.git?rev=5103675004d80afc845bbdd067e2fea4e75f6425#51036750)`
+    ... which satisfies git dependency `paignia-core` of package `innovate-games v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-integrated/rust/crates/innovate-games)`
+
+failed to select a version for `thiserror` which could resolve this conflict

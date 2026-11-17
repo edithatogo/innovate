@@ -1,0 +1,129 @@
+{
+  "discovered_cases": 164,
+  "evidence_files": [
+    {
+      "bytes": 6158,
+      "path": "docs/astro-site/.reports/browser/managed-browser-install.log",
+      "sha256": "4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832"
+    },
+    {
+      "bytes": 71558,
+      "path": "docs/astro-site/.reports/browser/setup-failure-qualification.json",
+      "sha256": "0475c78ad89a05cdeddafdf9a7e5daf249024025cda2b056a26ee0bd1ad8c085"
+    },
+    {
+      "bytes": 6137,
+      "path": "docs/astro-site/.reports/browser/playwright.json",
+      "sha256": "bcdec3cd8f8b2630aeb6d3ff118e6dbb568b32e0488d5e8dd8b59f1634f0f691"
+    },
+    {
+      "bytes": 71558,
+      "path": "docs/astro-site/.reports/browser/qualification.json",
+      "sha256": "0475c78ad89a05cdeddafdf9a7e5daf249024025cda2b056a26ee0bd1ad8c085"
+    },
+    {
+      "bytes": 19706,
+      "path": "docs/astro-site/.reports/browser/launch-failure.log",
+      "sha256": "773b03b845de89120ddeb76ff1c26e3bd71242396e2db254bdf30dc8d841cc38"
+    },
+    {
+      "bytes": 4935,
+      "path": "docs/astro-site/.reports/browser/first-launch-error.md",
+      "sha256": "e0ca344fe3bf400068c263a550fb6298aeef6098a3010114dbdeaecea7e58411"
+    },
+    {
+      "bytes": 26855,
+      "path": "docs/astro-site/.reports/browser/launch-failure-artifacts.json",
+      "sha256": "ff7873581f3bd9f684f4fa2b994d864084a16492db695c07818c6cb3319419d4"
+    },
+    {
+      "bytes": 57030,
+      "path": "docs/astro-site/.reports/artifact.json",
+      "sha256": "71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483"
+    },
+    {
+      "bytes": 57030,
+      "path": "docs/astro-site/.reports/artifact-before-foreground-fix.json",
+      "sha256": "6895824dced5f855dce3f04a8e0429544863485f130266cb4981beee1e9c517c"
+    },
+    {
+      "bytes": 19706,
+      "path": "docs/astro-site/.reports/browser/full-run.log",
+      "sha256": "773b03b845de89120ddeb76ff1c26e3bd71242396e2db254bdf30dc8d841cc38"
+    }
+  ],
+  "foreground_harness_correction": {
+    "after": "pnpm exec astro preview --host 127.0.0.1 --port 4321 --ignore-lock",
+    "artifact_resource_and_error_gates_preserved": true,
+    "before": "pnpm exec astro preview --host 127.0.0.1 --port 4321",
+    "file": "docs/astro-site/playwright.config.mjs",
+    "playwright_existing_server_rejection_preserved": true,
+    "result": "Preview remained in the foreground and the 164-case suite started."
+  },
+  "initial_preview_setup_attempt": {
+    "cause": "Astro7 agent detection started preview as a background daemon.",
+    "completed_case_results": 0,
+    "error": "Process from config.webServer exited early.",
+    "expected_cases": 164,
+    "receipt": "docs/astro-site/.reports/browser/setup-failure-qualification.json",
+    "status": "failed_before_cases"
+  },
+  "managed_browser_installation": {
+    "browser": "Chrome for Testing 159.0.8154.6; Playwright Chromium v1255",
+    "download_url": "https://cdn.playwright.dev/builds/cft/159.0.8154.6/linux64/chrome-linux64.zip",
+    "error": "End of central directory record signature not found. Either not a zip file, or file is truncated.",
+    "final_error": "Failed to install browsers; Download failure, code=1",
+    "observed_download_attempts": 5,
+    "original_log": "/workspace/scratch/5e94e22858cb/innovate-toolchains/chromium-install.log",
+    "original_log_sha256": "4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832",
+    "root_reported_followup": "Root separately observed HTML bytes from the ZIP URL with curl; no saved response artifact was supplied and this agent did not independently reproduce that request.",
+    "status": "failed"
+  },
+  "next_qualification_path": "Run the unfiltered suite in hosted PR checks with the pinned Playwright-managed browser and required browser socket operations available.",
+  "receipt_state": {
+    "artifact_sha256": "3ba25e835523128c356202105b3e0617fe1f98c3945079b9d219d3833e5271e6",
+    "artifact_unchanged_after_foreground_fix": true,
+    "changed_source_paths": [
+      "docs/astro-site/playwright.config.mjs"
+    ],
+    "checked_local_links": 11360,
+    "current_static_artifact_errors": [],
+    "current_static_artifact_status": "passed",
+    "html_pages": 211,
+    "qualification_json_and_playwright_json": "Still contain the initial zero-case preview failure; they are not final results from the interrupted system-browser attempt.",
+    "source_sha256": "e0feabd53cba12cfaa0c259e48531c9bff9a6c481f9c7de34ba43a5368671cee",
+    "static_receipt_refresh_without_html_rebuild": true
+  },
+  "record_type": "browser_environment_diagnostic",
+  "recorded_at": "2026-11-16T10:46:38.588287+00:00",
+  "runtime": {
+    "explicit_browser_environment_variable": "INNOVATE_DOCS_CHROMIUM_EXECUTABLE=/usr/bin/chromium",
+    "node_version": "v26.13.1",
+    "python_version": "3.15.2"
+  },
+  "schema_version": 1,
+  "scope": "Browser launch diagnosis only. No current page, accessibility, resource, performance, managed-browser, scientific, or deployment qualification passed.",
+  "status": "blocked_before_browser_connection",
+  "system_browser_attempt": {
+    "all64_saved_error_contexts_show_same_socket_failure": true,
+    "attempted_cases_at_least": 64,
+    "attempted_cases_exact": null,
+    "completed_failed_setup_case_results": 64,
+    "completed_page_interactions": 0,
+    "connected_browser_version": null,
+    "count_limit": "The run was interrupted after 64 identical browser-launch failure results. No final second-run Playwright JSON was written; whether the next worker had entered a case is not established.",
+    "error": "FATAL:chrome/browser/process_singleton_posix.cc:297 Check failed: . socket() failed: Operation not permitted (1)",
+    "executable": "/usr/bin/chromium",
+    "full_unfiltered_suite_selected": true,
+    "installed_version_observed_from_version_command": "156.0.8078.79",
+    "interrupted_in_progress_case_count": null,
+    "no_restricted_workaround_attempted": true,
+    "passed_case_results": 0,
+    "playwright_managed_browser_qualified": false,
+    "process_exit_code": 130,
+    "secondary_error": "crashpad scoped_ptrace_attach.cc:27 ptrace: Operation not permitted (1)",
+    "selected_cases_without_final_result": 100,
+    "successful_browser_connections": 0,
+    "unreported_cases_are_not_counted_as_failures_or_skips": true
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "artifact_digest_verifications": [
+    {
+      "artifact_id": 14226341369,
+      "name": "documentation-execution-evidence",
+      "sha256": "sha256:7f6f1875ccfc407f00383931baecdcb863eba600948fd4a8b6c9fdb4064f6dc1"
+    },
+    {
+      "artifact_id": 14226322512,
+      "name": "native-test-evidence-windows-latest",
+      "sha256": "sha256:c9d756cb1b9ccb539997a39ae35fec1b46c972b34a94f8d26d95347145d87a75"
+    }
+  ],
+  "base_sha": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "checkout_merge_sha": "96a02acc63a757bf6d07f679527c79bc1e1014a0",
+  "ci": {
+    "conclusion": "success",
+    "native_python": {
+      "macos": {
+        "conclusion": "success",
+        "documentation_catalogue_public_data_tests_skipped": false,
+        "job_id": 133296528303,
+        "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528303",
+        "log": {
+          "path": "native-python-macos-job.log",
+          "raw_line_endings_preserved": true,
+          "sha256": "sha256:52189865d74751f8c7900fd6cb392a9c946baa475c0c0fb29ec4f08b9252b84c"
+        },
+        "python": "3.15.2",
+        "python_tests": {
+          "command": "uv run --no-sync pytest tests/native",
+          "failed": 0,
+          "passed": 424,
+          "seconds": 44.5,
+          "skip_details": [
+            "SKIPPED [1] tests/native/test_python_consumer.py:2248: requires the live OECD SDMX endpoint",
+            "SKIPPED [4] tests/native/test_scenario_exports.py:139: requires the locked optional Arrow extra"
+          ],
+          "skipped": 5,
+          "subtests_passed": 15
+        },
+        "rust": "1.100.0",
+        "rust_native_tests": {
+          "failed": 0,
+          "passed": 466,
+          "skip": "native_boundary::oecd_fetch_returns_csv_from_live_endpoint; requires live public OECD SDMX",
+          "skipped": 1
+        },
+        "scoped_ci_doctests": {
+          "crates": [
+            "innovate-core",
+            "innovate-tabular",
+            "innovate-ffi"
+          ],
+          "failed": 0,
+          "ignored": 0,
+          "passed": 3
+        }
+      },
+      "ubuntu": {
+        "conclusion": "success",
+        "documentation_catalogue_public_data_tests_skipped": false,
+        "job_id": 133296528218,
+        "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528218",
+        "log": {
+          "path": "native-python-ubuntu-job.log",
+          "raw_line_endings_preserved": true,
+          "sha256": "sha256:090664a271ca4c0427455e3f05db728fc742f70fe652c32148243e4408a07978"
+        },
+        "python": "3.15.2",
+        "python_tests": {
+          "command": "uv run --no-sync pytest tests/native",
+          "failed": 0,
+          "passed": 424,
+          "seconds": 20.67,
+          "skip_details": [
+            "SKIPPED [1] tests/native/test_python_consumer.py:2248: requires the live OECD SDMX endpoint",
+            "SKIPPED [4] tests/native/test_scenario_exports.py:139: requires the locked optional Arrow extra"
+          ],
+          "skipped": 5,
+          "subtests_passed": 15
+        },
+        "rust": "1.100.0",
+        "rust_native_tests": {
+          "failed": 0,
+          "passed": 466,
+          "skip": "native_boundary::oecd_fetch_returns_csv_from_live_endpoint; requires live public OECD SDMX",
+          "skipped": 1
+        },
+        "scoped_ci_doctests": {
+          "crates": [
+            "innovate-core",
+            "innovate-tabular",
+            "innovate-ffi"
+          ],
+          "failed": 0,
+          "ignored": 0,
+          "passed": 3
+        }
+      },
+      "windows": {
+        "conclusion": "success",
+        "documentation_catalogue_public_data_tests_skipped": false,
+        "job_id": 133296528314,
+        "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528314",
+        "log": {
+          "path": "native-python-windows-job.log",
+          "raw_line_endings_preserved": true,
+          "sha256": "sha256:39d65ac7b7a6a26d3e98776f9f7670c805c608833f65df93c5a5ce8e1f7c8792"
+        },
+        "python": "3.15.2",
+        "python_tests": {
+          "command": "uv run --no-sync pytest tests/native",
+          "failed": 0,
+          "passed": 422,
+          "seconds": 56.35,
+          "skip_details": [
+            "SKIPPED [1] tests/native/test_python_consumer.py:2248: requires the live OECD SDMX endpoint",
+            "SKIPPED [4] tests/native/test_scenario_exports.py:139: requires the locked optional Arrow extra",
+            "SKIPPED [2] tests/native/test_test_acceleration_process.py:20: POSIX process groups and SIGINT; Windows uses taskkill"
+          ],
+          "skipped": 7,
+          "subtests_passed": 15
+        },
+        "rust": "1.100.0",
+        "rust_native_tests": {
+          "failed": 0,
+          "passed": 466,
+          "skip": "native_boundary::oecd_fetch_returns_csv_from_live_endpoint; requires live public OECD SDMX",
+          "skipped": 1
+        },
+        "scoped_ci_doctests": {
+          "crates": [
+            "innovate-core",
+            "innovate-tabular",
+            "innovate-ffi"
+          ],
+          "failed": 0,
+          "ignored": 0,
+          "passed": 3
+        }
+      }
+    },
+    "other_job_statuses": [
+      {
+        "conclusion": "success",
+        "job_id": 133296527899,
+        "name": "julia-r (macos-latest, libinnovate_ffi.dylib)",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296527899"
+      },
+      {
+        "conclusion": "success",
+        "job_id": 133296528254,
+        "name": "julia-r (ubuntu-latest, libinnovate_ffi.so)",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528254"
+      },
+      {
+        "conclusion": "success",
+        "job_id": 133296528319,
+        "name": "package",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528319"
+      },
+      {
+        "conclusion": "success",
+        "job_id": 133296528369,
+        "name": "julia-r (windows-latest, innovate_ffi.dll)",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528369"
+      },
+      {
+        "conclusion": "success",
+        "job_id": 133301445975,
+        "name": "lint",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133301445975"
+      },
+      {
+        "conclusion": "success",
+        "job_id": 133301446043,
+        "name": "unit-tests-base (3.15.1)",
+        "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133301446043"
+      }
+    ],
+    "run_id": 43866570444,
+    "run_url": "https://github.com/edithatogo/innovate/actions/runs/43866570444"
+  },
+  "evidence": {
+    "ci-final-jobs.json": {
+      "bytes": 41032,
+      "sha256": "sha256:a757c56ebe1724aa100729851a69316fccabe22f8b62d52d16b2a6d43e6f09cb"
+    },
+    "documentation-execution-evidence.zip": {
+      "bytes": 15207,
+      "sha256": "sha256:7f6f1875ccfc407f00383931baecdcb863eba600948fd4a8b6c9fdb4064f6dc1"
+    },
+    "native-documentation-job.json": {
+      "bytes": 4958,
+      "sha256": "sha256:f4e67d1fd7e5ccc1266acdb8b9a26b01b68dbeae2072eaed5cc091ad7c0a8ab3"
+    },
+    "native-documentation-job.log": {
+      "bytes": 678064,
+      "sha256": "sha256:779236c3ba3843e24e278a99eac0ff17fc2a18a75b5fa79c7fd463d9c96b4971"
+    },
+    "native-documentation/execution.json": {
+      "bytes": 41047,
+      "sha256": "sha256:d455b99846885101c3e544fda715bc63ba08f794fe1bca7bac4add56def1a98f"
+    },
+    "native-documentation/julia-documentation.json": {
+      "bytes": 5610,
+      "sha256": "sha256:30fd8b5ab0a63be58a43ab47071c3a65e1724b401267ff227c90ee78e3c18603"
+    },
+    "native-documentation/native-api.json": {
+      "bytes": 2280,
+      "sha256": "sha256:5e0b48684f7a19871218234d9de24d81bb530bbe03600cd4bf7618b8f6a362a2"
+    },
+    "native-documentation/r-documentation.json": {
+      "bytes": 6976,
+      "sha256": "sha256:8bf7c386dccfd978f27348917ee37067a60b7588bea6ee5972b82bebff0bc067"
+    },
+    "native-python-macos-job.log": {
+      "bytes": 173190,
+      "sha256": "sha256:52189865d74751f8c7900fd6cb392a9c946baa475c0c0fb29ec4f08b9252b84c"
+    },
+    "native-python-ubuntu-job.log": {
+      "bytes": 176976,
+      "sha256": "sha256:090664a271ca4c0427455e3f05db728fc742f70fe652c32148243e4408a07978"
+    },
+    "native-python-windows-job.log": {
+      "bytes": 178352,
+      "sha256": "sha256:39d65ac7b7a6a26d3e98776f9f7670c805c608833f65df93c5a5ce8e1f7c8792"
+    },
+    "native-test-evidence-windows.zip": {
+      "bytes": 15760,
+      "sha256": "sha256:c9d756cb1b9ccb539997a39ae35fec1b46c972b34a94f8d26d95347145d87a75"
+    }
+  },
+  "failures_observed_in_requested_scope": [],
+  "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+  "native_documentation": {
+    "aggregate": {
+      "complete": true,
+      "counts": {
+        "current_pages": 69,
+        "examples": 11,
+        "generated_api_pages": 34,
+        "historical_pages": 0,
+        "pages": 69,
+        "unbound_python_blocks": 0,
+        "versioned_archive_pages": 0,
+        "violations": 0
+      },
+      "current_content_complete": true,
+      "current_python_content_complete": true,
+      "execution_status": "passed",
+      "gate_passed": true,
+      "ratchet": {
+        "new_or_changed": [],
+        "passed": true,
+        "reason": "No new structural debt; completeness is reported separately.",
+        "stale": []
+      }
+    },
+    "commands_verified_in_log": [
+      "uv sync --locked --python 3.15.2",
+      ".venv/bin/python scripts/generate_api_reference.py",
+      ".venv/bin/python scripts/check_native_documentation.py --output docs/astro-site/.reports/native-api.json",
+      "cargo doc --workspace --no-deps --locked -j 4",
+      "cargo test --workspace --doc --locked -j 4",
+      "cargo build --release --locked -p innovate-ffi -j 4",
+      "julia --depwarn=error --project=bindings/julia scripts/check_julia_documentation.jl",
+      "R CMD INSTALL bindings/r",
+      "Rscript scripts/check_r_documentation.R",
+      ".venv/bin/python scripts/check_documentation_content.py --mode ratchet --execute --python .venv/bin/python --language-receipt-dir docs/astro-site/.reports --output docs/astro-site/.reports/execution.json"
+    ],
+    "conclusion": "success",
+    "job_id": 133296525320,
+    "job_url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133296525320",
+    "julia": {
+      "assertions_executed": 10,
+      "docstrings_checked": 24,
+      "examples_executed": 7,
+      "qualified": true
+    },
+    "python": {
+      "doctests_attempted": 19,
+      "doctests_failed": 0,
+      "example_assertion_lines": 117,
+      "examples": 11,
+      "installed_source_matches": true,
+      "native_callables": 10,
+      "native_extension": {
+        "path": "/home/runner/work/innovate/innovate/bindings/python/innovate/_native.cpython-315-x86_64-linux-gnu.so",
+        "sha256": "sha256:4e6af8a2c6d6713798c6321c164061f289ee9a5eff4321bbb9186b8f670d1b91"
+      },
+      "native_gaps": 0
+    },
+    "r": {
+      "assertions_executed": 11,
+      "examples_executed": 6,
+      "exports_checked": 24,
+      "manuals_checked": 14,
+      "qualified": true
+    },
+    "run_id": 43866570433,
+    "rust": {
+      "doctests_failed": 0,
+      "doctests_ignored": 0,
+      "doctests_passed": 4,
+      "python_cdylib_doctests": "not supported by Cargo",
+      "strict_workspace_documentation_passed": true,
+      "workspace_crates": 5
+    },
+    "rustdoc_flags": "-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes",
+    "versions": {
+      "julia": "1.13.4",
+      "python": "3.15.2",
+      "r": "R version 4.6.2 (2026-10-29)",
+      "rust": "1.100.0"
+    }
+  },
+  "observed_at": "2026-11-16T12:41:06.011024+00:00",
+  "pr": 671,
+  "qualification_limits": [
+    "Per-job counts are separate executions with overlapping coverage; do not add them as unique tests.",
+    "Browser qualification is retained by a separate lane. This receipt does not grant scientific, curriculum, release or publication acceptance.",
+    "The native checker verifies installed binding source and records the extension hash but does not independently attest binary provenance.",
+    "The explicitly ignored live OECD Rust test and listed Python skips remain unexecuted.",
+    "Local marimo qualification is separate; these jobs do not establish hosted notebook interaction or WASM support."
+  ],
+  "raw_originals_preserved": true,
+  "schema_version": 1,
+  "status": "passed_for_declared_runtime_scope",
+  "windows_portability": {
+    "actual_os": "windows-latest",
+    "command": "uv run --no-sync pytest tests/native",
+    "evidence_basis": "The full unfiltered tests/native suite passed. Its complete skip summary covers only live OECD, optional Arrow and POSIX process-group cases; no maintained documentation/catalogue/public-data case was skipped. Passing node IDs are not individually printed by the quiet invocation.",
+    "failure_classes": [
+      "generated catalogue LF-to-CRLF byte drift",
+      "Git checkout conversion of frozen CSV bytes"
+    ],
+    "job_id": 133296528314,
+    "relevant_cases": [
+      "tests/native/test_learning_catalogue.py::LearningCatalogueTests::test_render_is_deterministic_and_check_never_repairs_drift",
+      "tests/native/test_learning_catalogue.py::LearningCatalogueTests::test_check_rejects_output_line_ending_drift_without_rewriting",
+      "tests/native/test_public_data_tutorial.py::test_frozen_dataset_survives_git_checkout_with_crlf_defaults"
+    ],
+    "status": "closed_by_current_hosted_full_suite"
+  }
+}

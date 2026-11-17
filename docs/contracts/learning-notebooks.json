@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "environment": {
+    "python": "3.15.2",
+    "marimo": "0.25.2",
+    "polars": "2.1.0",
+    "innovate": "0.7.0a1",
+    "project": "notebooks/pyproject.toml",
+    "lock": "notebooks/uv.lock"
+  },
+  "execution_mode": "native_python",
+  "browser_wasm_qualified": false,
+  "static_export_published": false,
+  "notebooks": [
+    {
+      "id": "public-data-fit",
+      "source": "notebooks/public_data_fit.py",
+      "example": "examples/native_public_data.py",
+      "dataset": "docs/datasets/wdi-aus-internet-20261116/manifest.json",
+      "default_cutoff": 2015,
+      "alternate_cutoff": 2018,
+      "result_variable": "comparison",
+      "control_variable": "cutoff"
+    }
+  ]
+}

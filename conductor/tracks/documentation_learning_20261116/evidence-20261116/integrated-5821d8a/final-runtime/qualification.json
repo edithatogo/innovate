@@ -1,0 +1,192 @@
+{
+  "aggregate_content_command": {
+    "command_exit_code": 1,
+    "current_content_complete": false,
+    "current_python_content_complete": true,
+    "gate_passed": false,
+    "language_receipts": {
+      "julia": {
+        "qualified": false,
+        "reason": "Native documentation receipt was not supplied.",
+        "status": "not_run"
+      },
+      "r": {
+        "qualified": false,
+        "reason": "Native documentation receipt was not supplied.",
+        "status": "not_run"
+      }
+    },
+    "python_execution_status": "passed",
+    "ratchet_passed": true,
+    "reason": "The aggregate all-language gate remains incomplete: no current Julia/R execution receipts were supplied locally.",
+    "violations": 0
+  },
+  "all_maintained_languages_qualified": false,
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "browser_qualified": false,
+  "evidence": {
+    "execution.json": {
+      "bytes": 26044,
+      "sha256": "e40e067f532d2ec41a45f5709b4f22b43f168f87917a2acb86d5276efe819a0b"
+    },
+    "execution.log": {
+      "bytes": 26044,
+      "sha256": "e40e067f532d2ec41a45f5709b4f22b43f168f87917a2acb86d5276efe819a0b"
+    },
+    "focused-native.log": {
+      "bytes": 65,
+      "sha256": "179ab4d4c8b861d475e6c708546aacf9209be5fb16626fd27804f6d86688f51f"
+    },
+    "focused-native.xml": {
+      "bytes": 8142,
+      "sha256": "1a2acd8b01ad67f0450b1b1256edcdb11a68435324e5404c4516fa681a02110e"
+    },
+    "innovate-integrated-native-frozen-build.log": {
+      "bytes": 709,
+      "sha256": "be97963abf2bbb744aedba2679f8e2ccf3b58caddb6061d9173ad0ead91f9c61"
+    },
+    "innovate-integrated-notebook-frozen-build.log": {
+      "bytes": 707,
+      "sha256": "605f25456ed95a456b6ad989f726dce6d6aa06456b1e3e4c5c6b65cc5d11034b"
+    },
+    "native-api.json": {
+      "bytes": 2322,
+      "sha256": "c6866bdb0046504e2d094dac79ad699e56eac8e587a513643bbc1da170145f28"
+    },
+    "native-api.log": {
+      "bytes": 2322,
+      "sha256": "c6866bdb0046504e2d094dac79ad699e56eac8e587a513643bbc1da170145f28"
+    },
+    "notebooks.log": {
+      "bytes": 2768,
+      "sha256": "02fc3bde081a38323e84cd06a7f0a569a03c8acf54e8a477036f90d100240ea9"
+    },
+    "notebooks/public-data-fit.html": {
+      "bytes": 54901,
+      "sha256": "ec0cc62abf3f5fe2ac6e5dfe78726107418a12202ff444a00ba02c658cc6b121"
+    },
+    "notebooks/qualification.json": {
+      "bytes": 2768,
+      "sha256": "4f2b290cd431d477554e4b86d06c2d25e48567de8927999c02d57e21587af79e"
+    },
+    "rust-doctests.log": {
+      "bytes": 2660,
+      "sha256": "e4244d3ee0d83ef8f37f75519fe2d11da2bf25121fbc1db67298446a7eefc6a2"
+    }
+  },
+  "focused_tests": {
+    "by_module": {
+      "DocumentationConventionTests": 8,
+      "LearningCatalogueTests": 16,
+      "RustWorkspaceScopeTests": 6,
+      "test_public_data_tutorial": 20
+    },
+    "command_exit_code": 0,
+    "errors": 0,
+    "failed": 0,
+    "passed": 50,
+    "skipped": 0
+  },
+  "fresh_build_logs_supplied_by_integrator": [
+    "innovate-integrated-native-frozen-build.log",
+    "innovate-integrated-notebook-frozen-build.log"
+  ],
+  "generated_at": "2026-11-16T12:06:00.691267+00:00",
+  "installed_binding": {
+    "path": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/bindings/python/innovate/__init__.py",
+    "sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4"
+  },
+  "local_requested_scope_passed": true,
+  "native_binary_sha256": "fae743379e41993343496eb0fab04ae4a9f7994c937eb724403337af50ed7aaa",
+  "native_binary_source_binding_verified_by_checkers": false,
+  "native_docstrings": {
+    "callable_count": 10,
+    "command_exit_code": 0,
+    "gaps": 0,
+    "installed_source_matches": true,
+    "status": "passed"
+  },
+  "notebooks": {
+    "browser_wasm_qualified": false,
+    "command_exit_code": 0,
+    "environment": {
+      "innovate": "0.7.0a1",
+      "marimo": "0.25.2",
+      "polars": "2.1.0",
+      "python": "3.15.2"
+    },
+    "executed": true,
+    "runs": [
+      {
+        "cutoffs": [
+          2015,
+          2018
+        ],
+        "default_scores": [
+          {
+            "converged": true,
+            "holdout_bias": -15.99389039086351,
+            "holdout_mae": 15.99389039086351,
+            "holdout_rmse": 16.473585795389813,
+            "model": "logistic"
+          },
+          {
+            "converged": true,
+            "holdout_bias": -12.916266716072734,
+            "holdout_mae": 12.916266716072734,
+            "holdout_rmse": 13.46547584917368,
+            "model": "gompertz"
+          },
+          {
+            "converged": null,
+            "holdout_bias": -8.410123487267725,
+            "holdout_mae": 8.410123487267725,
+            "holdout_rmse": 9.292633480442127,
+            "model": "persistence"
+          }
+        ],
+        "exact_example_parity": true,
+        "export_bytes": 54901,
+        "export_exit_code": 0,
+        "export_sha256": "ec0cc62abf3f5fe2ac6e5dfe78726107418a12202ff444a00ba02c658cc6b121",
+        "holdout_rows": [
+          9,
+          6
+        ],
+        "id": "public-data-fit"
+      }
+    ],
+    "source_files": 11,
+    "static_export_published": false,
+    "status": "passed"
+  },
+  "ordinary_examples": {
+    "executed_assertion_lines": 117,
+    "failed": 0,
+    "passed": 11
+  },
+  "public_doctests": {
+    "attempted": 19,
+    "failed": 0
+  },
+  "python_version": "3.15.2",
+  "qualification_scope": "Fresh final installed native Python examples, documentation, focused cases, optional native marimo workflow, and Rust workspace doctests.",
+  "rust_doctests": {
+    "by_crate": {
+      "innovate-core": 2,
+      "innovate-ffi": 1,
+      "innovate-kairos": 1,
+      "innovate-tabular": 0
+    },
+    "command_exit_code": 0,
+    "failed": 0,
+    "filtered": 0,
+    "ignored": 0,
+    "passed": 4,
+    "python_cdylib": "unsupported by Cargo",
+    "source_scope": "final frozen Rust sources"
+  },
+  "schema_version": 1,
+  "scientific_acceptance": false,
+  "source_checkout": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated"
+}

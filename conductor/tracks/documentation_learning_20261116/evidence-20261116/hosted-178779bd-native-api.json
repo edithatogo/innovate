@@ -1,0 +1,66 @@
+{
+  "callable_count": 10,
+  "complete": false,
+  "gaps": [],
+  "generated_at": "2026-11-16T11:10:05.608439+00:00",
+  "installed_binding": {
+    "path": "/home/runner/work/innovate/innovate/bindings/python/innovate/__init__.py",
+    "sha256": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4"
+  },
+  "installed_extension": {
+    "path": "/home/runner/work/innovate/innovate/bindings/python/innovate/_native.cpython-315-x86_64-linux-gnu.so",
+    "sha256": "eebbdbc20f1ce91876843cdc838cf40eedbe6337d9fd60e898f56955d892f011"
+  },
+  "installed_source_matches": true,
+  "module": "innovate._native",
+  "native_binary_source_binding_verified": false,
+  "native_documentation_complete": true,
+  "python_version": "3.15.2",
+  "runtime_callables": [
+    "categorize_adopters_ipc",
+    "execute",
+    "export_ipc_file",
+    "export_ipc_stream",
+    "fit_ipc",
+    "paired_outcomes_ipc",
+    "predict_ipc",
+    "scenario_comparisons_ipc",
+    "scenario_executions_ipc",
+    "scenario_grid_ipc"
+  ],
+  "runtime_explicit_exports": [
+    "__version__",
+    "categorize_adopters_ipc",
+    "execute",
+    "export_ipc_file",
+    "export_ipc_stream",
+    "fit_ipc",
+    "paired_outcomes_ipc",
+    "predict_ipc",
+    "scenario_comparisons_ipc",
+    "scenario_executions_ipc",
+    "scenario_grid_ipc"
+  ],
+  "runtime_noncallable_exports": [
+    "__version__"
+  ],
+  "schema_version": 1,
+  "scope": "Actual public module callables, including underscore names in __all__; runtime docstring structure and exact installed Python binding source. Noncallable exports are inventoried separately. This does not qualify Rust compiler docs, scientific accuracy, class-member runtime docs, or attest that the native binary was built from this checkout.",
+  "source_files": {
+    "bindings/python/innovate/__init__.py": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
+    "bindings/python/innovate/_native.pyi": "299ef58b667caa8fa712a6f600e5bfc79fddb31dc58022f335dec1d818617282"
+  },
+  "status": "passed",
+  "stub_callables": [
+    "categorize_adopters_ipc",
+    "execute",
+    "export_ipc_file",
+    "export_ipc_stream",
+    "fit_ipc",
+    "paired_outcomes_ipc",
+    "predict_ipc",
+    "scenario_comparisons_ipc",
+    "scenario_executions_ipc",
+    "scenario_grid_ipc"
+  ]
+}

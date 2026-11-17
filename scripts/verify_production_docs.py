@@ -144,6 +144,11 @@ def validate_contract(contract: object) -> None:
         raise ValueError("exclude_source_parts must contain single path components")
     if type(contract.get("max_html_bytes")) is not int or contract["max_html_bytes"] <= 0:
         raise ValueError("max_html_bytes must be a positive integer")
+    if (
+        "retired_documentation" in contract
+        and contract["retired_documentation"] != "docs/contracts/retired-documentation.json"
+    ):
+        raise ValueError("retired_documentation must name the canonical retirement contract")
 
 
 def ensure_contained_path(path: Path, root: Path) -> None:
@@ -326,6 +331,32 @@ def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
     for route in sorted(required_sitemap - sitemap_routes):
         errors.append({"code": "sitemap_missing", "route": route})
 
+    retirement_report = None
+    if "retired_documentation" in contract:
+        # The general page checks remain in force for migration notices. This
+        # additional gate binds every old URL to its source and search exclusion.
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(root / "scripts/check_retired_documentation.py"),
+                "--root",
+                str(root),
+                "--dist",
+                str(dist),
+                "--json",
+            ],
+            cwd=root,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        try:
+            retirement_report = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            retirement_report = {"status": "failed", "error": result.stderr or "missing retirement receipt"}
+        if result.returncode != 0 or retirement_report.get("status") != "passed":
+            errors.append({"code": "retired_documentation", "detail": retirement_report})
+
     source_hash, source_files = source_digest(root, contract)
     artifact_hash, artifact_files = digest_files(safe, dist)
     errors = [public_diagnostic(error) for error in errors]
@@ -344,6 +375,7 @@ def verify_artifact(root: Path, dist: Path, contract: dict) -> dict:
             "errors": len(errors),
         },
         "errors": errors,
+        "retired_documentation": retirement_report,
         "content_complete": False,
         "live_deployment_verified": False,
         "browser_accessibility_verified": False,

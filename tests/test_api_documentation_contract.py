@@ -454,5 +454,33 @@ class DocumentationContractTests(unittest.TestCase):
         self.assertIn("placeholder_docstring", self.rules())
 
 
+    def test_repository_cargo_exclusions_match_explicit_rust_documentation_scope(self):
+        """A workspace vendor exclusion is not evidence of a compiled Rust crate."""
+        policy = self.checker.default_contract()["rust"]
+        report = self.checker.rust_workspace_scope(ROOT, policy)
+        self.assertEqual(report["status"], "source_membership_matches")
+        self.assertEqual(set(report["workspace_crates"]), set(policy["required_crates"]))
+        self.assertEqual(report["excluded_crates"], policy["excluded_crates"])
+        self.assertEqual(
+            report["excluded_crates"]["simba"],
+            "rust/vendor/simba-0.9.1/Cargo.toml",
+        )
+        self.assertEqual(
+            report["excluded_crates_qualification"],
+            "not_qualified_by_workspace_commands",
+        )
+        # An omitted vendor manifest must cause a hard failure, not an
+        # implicit qualification of its Rust API.
+        incomplete = {
+            **policy,
+            "excluded_crates": {
+                name: path for name, path in policy["excluded_crates"].items()
+                if name != "simba"
+            },
+        }
+        with self.assertRaisesRegex(ValueError, "excluded_crates differ"):
+            self.checker.rust_workspace_scope(ROOT, incomplete)
+
+
 if __name__ == "__main__":
     unittest.main()

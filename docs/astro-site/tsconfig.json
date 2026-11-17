@@ -2,6 +2,7 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {},
   "include": [
+    ".astro/types.d.ts",
     "src/**/*",
     "astro.config.mjs",
     "starlight.config.mjs"

@@ -1,18 +1,21 @@
 //! Classical, hierarchical, competing, repeat-use, regime, network, and demand models (A01–A08).
+//!
+//! These helpers expose typed Rust calls. Their presence does not register a new
+//! JSON operation or establish availability through a language binding.
 
-/// Bass diffusion prediction.
+/// Cumulative Bass diffusion with innovation, imitation, and market capacity.
 pub mod bass;
 pub mod competition;
 pub mod demand;
 pub mod expectation_feedback;
-/// Fisher–Pry substitution prediction.
+/// Fisher–Pry substitution shares with a growth coefficient and midpoint.
 pub mod fisher_pry;
-/// Gompertz diffusion prediction.
+/// Asymmetric cumulative Gompertz growth.
 pub mod gompertz;
 pub mod hierarchical;
 pub mod hype;
 pub mod hype_effects;
-/// Logistic diffusion prediction.
+/// Logistic cumulative growth with capacity, growth coefficient, and midpoint.
 pub mod logistic;
 pub mod network;
 pub mod norton_bass;
@@ -28,18 +31,18 @@ use serde_json::json;
 /// Supported classical scalar diffusion families (A01).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ClassicalFamily {
-    /// Bass innovation–imitation diffusion.
+    /// Bass cumulative diffusion, keyed as `bass` by the native dispatcher.
     Bass,
-    /// Logistic diffusion curve.
+    /// Logistic cumulative diffusion, keyed as `logistic`.
     Logistic,
-    /// Gompertz diffusion curve.
+    /// Gompertz cumulative diffusion, keyed as `gompertz`.
     Gompertz,
-    /// Fisher–Pry substitution curve.
+    /// Fisher–Pry substitution share, keyed as `fisher_pry`.
     FisherPry,
 }
 
 impl ClassicalFamily {
-    /// Return the native model key for this family.
+    /// Return the exact native model key for this family.
     #[must_use]
     pub fn as_str(self) -> &'static str {
         match self {
@@ -54,39 +57,48 @@ impl ClassicalFamily {
 /// Request for [`fit_classical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct FitRequest {
-    /// Classical family to fit.
+    /// Classical family passed to the native fitting dispatcher.
     pub family: ClassicalFamily,
-    /// Validated times aligned with the observations.
+    /// Validated observation coordinates in the caller's time unit.
     pub time: TimeGrid,
-    /// Finite, nonnegative observations to fit.
+    /// Finite, nonnegative observations aligned one-to-one with `time`.
     pub observed: Vec<f64>,
 }
 
 /// Request for [`predict_classical`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PredictionRequest {
-    /// Classical family to evaluate.
+    /// Family determining the positional parameter layout.
     pub family: ClassicalFamily,
-    /// Validated prediction times.
+    /// Validated coordinates at which to evaluate the curve.
     pub time: TimeGrid,
-    /// Family-specific parameters in the order expected by the model.
+    /// Bass `[p, q, m]`, logistic `[L, k, x0]`, Gompertz `[a, b, c]`, or
+    /// Fisher–Pry `[alpha, t0]`. Reorder fitted values by their returned names;
+    /// [`fit_classical`] does not promise this positional order.
     pub parameters: Vec<f64>,
 }
 
 /// Prediction output bundle returned by [`predict_classical`] and [`regimes::predict_regimes`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PredictionBundle {
-    /// Name of the evaluated family or derived regime family.
+    /// Model key, with a `_regimes` suffix for dated-regime predictions.
     pub family: String,
-    /// Prediction times in the same order as `values`.
+    /// Evaluation coordinates in the same order as `values`.
     pub time: Vec<f64>,
-    /// Predicted values at each time.
+    /// Predicted levels or substitution shares, according to the model family.
     pub values: Vec<f64>,
-    /// Whether the result is flagged as weakly identified.
+    /// Diagnostic flag; the current typed predictors set this to `false` without
+    /// performing an identifiability assessment.
     pub weakly_identified: bool,
 }
 
 /// Fit a classical scalar diffusion curve via the shared `innovate-core` optimizer (A01).
+///
+/// Returns [`FitOutcome::Deterministic`] with named point estimates, or
+/// [`FitOutcome::Invalid`] for invalid input or an unusable native result.
+/// The short-series/pre-inflection diagnostic is a heuristic, not a confidence
+/// interval or a posterior assessment. Use the returned names when constructing
+/// the family-specific positional [`PredictionRequest::parameters`].
 #[must_use]
 pub fn fit_classical(request: &FitRequest) -> FitOutcome {
     if request.observed.len() != request.time.len()
