@@ -1,5 +1,33 @@
 # Issue #414 implementation plan
 
+## PR #672 workflow-lint repair — 17 November 2026
+
+- Integrator: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.
+- Isolated app-managed worktree:
+  `/Users/doughnut/.codex/worktrees/innovate-pr672-security-pin/innovate`,
+  branch `codex/pr672-workflow-lint`, based on PR head
+  `49602f622e19a04fa99e3ad872c6b277d484db95`.
+- Scope: reconcile the PR with current main, pin the bot-added
+  `step-security/harden-runner@v2` uses to the verified upstream commit already
+  used by this repository, remove its newly introduced competing Dependabot
+  version schedule, refresh the workflow-bound documentation inventory, and
+  record validation. Allowed paths are this plan, affected `.github/workflows/`
+  files, `.github/dependabot.yml`, and
+  `docs/contracts/polyglot-api-documentation.json`. Preserve other bot changes,
+  existing security controls and Git hooks.
+- Native object/authentication scope: none. The next operation is a read-only
+  baseline audit, then a standard merge of verified main `cc2e4da4` into the
+  isolated candidate and focused local and exact-head hosted checks.
+
+The linked workflow-lint job reported 30 high `unpinned-uses` findings for the
+new floating Harden-Runner references. The upstream `v2` and `v2.22.4` tags
+both resolved to `1d88384fd173af6ecb012dfd0264a306b711241a`, already pinned in
+six release workflow steps on this base. The repository-policy checker also
+reproduced the bot's competing Dependabot version schedule; Renovate's existing
+dashboard #595 is open and was updated on 17 November. The bot's CI workflow
+edit has made the recorded polyglot structural inventory stale. These are
+separate from scientific release acceptance and the offline-security lane.
+
 Base: `276c2e505a0ce26910820fe8a94a6a498f505700`.
 Branch: `chatgpt/issue-414-maintainer-security`.
 PR: [#606](https://github.com/edithatogo/innovate/pull/606).
