@@ -105,3 +105,27 @@ protection reads timed out; bounded HTTPS probes to both GitHub endpoints and
 the GitHub connector also failed. No branch push, pull request, hosted
 candidate check or merge occurred. Refresh main, ownership and checks before
 any promotion; the existing sole integrator retains that operation.
+
+## Integrator receiving checkpoint
+
+At the user's direction to address Innovate's release-readiness blockers, chat
+`01a1e448-3a28-7653-a681-cd3fdb41f498` owns the receiving checkpoint in the
+app-managed worktree `/Users/doughnut/.codex/worktrees/innovate-empirical-review/innovate`,
+branch `codex/innovate44-empirical-evidence`, based on the preserved candidate
+`e98a200f029e70e0f6d7082157aff20f2bae1ed8`. The allowed modification is this
+handoff record; the candidate source remains the original lane's exact bytes.
+Native/authentication scope: none. The next operation is to submit this bounded
+source candidate for hosted checks without asserting empirical or release
+acceptance. The prior lane and its ownership remain recorded above.
+
+An isolated worktree-local Python 3.15.2 environment, constrained by this
+candidate's unchanged `uv.lock`, reran the four focused files: **68 passed**.
+The PBS source validator and capability guard measured **94.39%** and **96.67%**
+combined branch/line coverage respectively, both above their existing 90% gates.
+Ruff lint/format and the local repository-policy check passed. These results do
+not establish hosted behavior or close the scientific acceptance obligations.
+An on-demand read-only preflight against Innovate PR #674 found no overlap with
+the current uncommitted diagnostic changes, no staged deletions or missing target
+files, and no patch-equivalent source commits. The two candidates both modify
+the committed CI workflow and Nox configuration; a future integration must
+reconcile those files and rerun the preflight at that decision point.
