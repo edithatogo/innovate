@@ -103,3 +103,48 @@ fn naive_timestamps_keep_naive_labels_and_cannot_mix_with_offsets() {
         "cannot mix offset timestamps and naive timestamps"
     );
 }
+
+#[test]
+fn imported_artifacts_preserve_rfc3339_timestamps_and_reject_invalid_forms() {
+    let mut request = json!({
+        "schema_version": "2.0",
+        "operation": "import_scenario_artifact",
+        "payload": {"artifact": {
+            "scenario": {
+                "scenario_type": "baseline", "name": "baseline", "description": "",
+                "time_horizon": 5, "time_unit": "year", "reference_year": 2026,
+                "market_size": 100, "initial_adoption": 0
+            },
+            "seed": 42, "model_type": "bass", "version": "0.6.0", "notes": null,
+            "timestamp": "2026-01-01T00:00:00+00:00"
+        }}
+    });
+    for timestamp in [
+        "2026-01-01T00:00:00+00:00",
+        "2024-02-29T15:04:05.123456+10:00",
+        "2016-12-31T23:59:60Z",
+    ] {
+        request["payload"]["artifact"]["timestamp"] = json!(timestamp);
+        let response: Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert!(response["error"].is_null(), "{timestamp}: {response}");
+        assert_eq!(response["result"]["artifact"]["timestamp"], timestamp);
+        assert_eq!(response["result"]["replay_available"], false);
+    }
+    for timestamp in [
+        "2026-01-01T00:00:00",
+        "2023-02-29T00:00:00Z",
+        "2016-12-31T23:59:61Z",
+        "2026-01-01T00:00:00+24:00",
+    ] {
+        request["payload"]["artifact"]["timestamp"] = json!(timestamp);
+        let response: Value =
+            serde_json::from_str(&innovate_core::execute_json(&request.to_string())).unwrap();
+        assert_eq!(response["error"]["code"], "invalid_request", "{timestamp}");
+        assert_eq!(
+            response["error"]["message"],
+            "scenario artifact timestamp must be RFC 3339 with a time offset",
+            "{timestamp}"
+        );
+    }
+}

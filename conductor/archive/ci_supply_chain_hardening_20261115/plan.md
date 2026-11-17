@@ -293,6 +293,13 @@ using fixed expected results and malformed-input cases. These are migration
 safety tests only; they do not change dependencies, waive advisories, qualify
 Polars, or resolve the alert.
 
+On 17 November the same owner extended this bounded test scope to the public
+scenario-artifact import timestamp contract. The allowed files remain the test
+file and this plan. The artifact stores the accepted timestamp unchanged; the
+tests cover offset, fractional and leap-second forms plus invalid dates, seconds
+and missing offsets. This is a migration guard, not a dependency replacement or
+an assertion that the alert is fixed.
+
 The Scorecard instance on main `b74de7e6` remains open for the informational
 unmaintained advisories `RUSTSEC-2026-0543` (`chrono`) and `RUSTSEC-2026-0555`
 (`chrono-tz`); both list all versions as affected and no patched version.
@@ -320,3 +327,12 @@ hygiene passed. An extra `cargo fmt --all -- --check` failed on unchanged vendor
 third-party sources; it is not the repository CI formatting command. No source
 or dependency has been migrated, the alert is not closed, and these checks do
 not qualify all platforms, consumers or release readiness.
+
+The later artifact-import guard passed with the five earlier controls: six tests
+passed using Rust/Cargo 1.99.1 and `cargo test --locked --offline -p
+innovate-core --test temporal_compatibility -j 2` in this worktree's isolated
+target. The actual repository `cargo fmt --check` and repo-local Python policy
+check also passed. The guard checks the decoded accepted timestamp string and
+rejection of four malformed inputs; it does not itself migrate or qualify a
+temporal library. An independent read-only reviewer found no blocking issues in
+the test, while noting that the comparison is not original JSON wire-byte proof.
