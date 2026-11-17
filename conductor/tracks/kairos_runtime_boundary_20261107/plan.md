@@ -26,6 +26,25 @@ unfinished; a scoped runtime receipt must not mark optional game work complete.
 
 - [ ] I01 Implement and verify this bounded outcome.
 
+Alert #44 receiving integration, 17 November 2026: the Innovate integrator in
+chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the receiving worktree
+`/Volumes/PortableSSD/GitHub/innovate-security-alert-44`, starting at
+`74a4d0690636ca9f6e445b4d778b5e2f6488234d`. The allowed receiving files are
+this plan, `rust/crates/innovate-core/src/simulation.rs`,
+`tests/native/test_python_consumer.py`, and the two new lane receipts. The
+source packet is `44e33d0644742945ba6b4da16cb8bf27085866df` through
+`ec8b8218e2d905ca3ee1f56e8220330b3c833381`, from
+`/Users/doughnut/.codex/worktrees/innovate-kairos-i01/innovate`. Its owner has
+handed off a terminal scoped result and is not editing this worktree. The next
+operation is exact-range preflight, integration, and targeted local and hosted
+tests; it does not promote shared pins or establish track or release acceptance.
+
+The paths and check below describe the historical adapter. The receiving
+candidate instead uses the Rust simulation module and installed Python consumer
+test named above; see its lane receipts for the current native claim boundary
+and evidence. I01 remains pending until the integrator's exact-source and hosted
+checks complete and its acceptance is reconciled.
+
 Executor: specialist. Requires: none.
 
 Files: `src/innovate/abm/kairos_contract.py`, `tests/unit/test_kairos_adapter_contract.py`.
