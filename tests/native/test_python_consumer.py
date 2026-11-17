@@ -162,6 +162,53 @@ def test_kairos_metadata_identifies_the_locked_provider(engine):
     assert result["metadata"]["kairos_revision"] == revision
 
 
+def test_kairos_capability_declaration_is_distinct_from_execution():
+    bass = innovate.capabilities().filter(pl.col("key") == "bass").row(0, named=True)
+    assert {"kairos_des", "kairos_abm", "kairos_network"} <= set(bass["simulation_engines"])
+
+    payload = {
+        "inputs": {"time": [0.0, 1.0]},
+        "parameters": {"p": 0.2, "q": 0.3, "m": 100.0},
+    }
+    deterministic = innovate.execute("simulate_model", "bass", **payload)
+    try:
+        spoofed = innovate.execute(
+            "simulate_model",
+            "bass",
+            **payload,
+            metadata={
+                "engine": "kairos_des",
+                "kairos_revision": "declared-only",
+                "example": "kairos_des_smoke.rs",
+                "claims_kairos_backed_simulation": True,
+            },
+        )
+    except innovate.NativeError:
+        pass  # Rejecting unrecognized metadata is also fail-closed.
+    else:
+        assert spoofed == deterministic
+    assert "engine" not in deterministic["metadata"]
+    assert "kairos_revision" not in deterministic["result"]["metadata"]
+
+    with pytest.raises(innovate.NativeError):
+        innovate.execute(
+            "simulate_model",
+            "bass",
+            **payload,
+            simulation_options={"engine": "declared-only", "seed": 42, "population": 3},
+        )
+
+    executed = innovate.execute(
+        "simulate_model",
+        "bass",
+        **payload,
+        simulation_options={"engine": "kairos_des", "seed": 42, "population": 3, "initial_adopters": 3},
+    )["result"]
+    assert executed["counts"] == [3, 3]
+    assert executed["metadata"]["engine"] == "kairos_des"
+    assert executed["metadata"]["kairos_dispatched_events"] == 0
+
+
 def test_kairos_abm_forcing_retains_agents_and_restarts_adoption():
     r = innovate.execute(
         "simulate_model",
