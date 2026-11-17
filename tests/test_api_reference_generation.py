@@ -283,9 +283,11 @@ class ApiReferenceGenerationTests(unittest.TestCase):
 
     def test_newline_in_source_filename_cannot_forge_diagnostic_lines(self):
         marker = "DIAGNOSTIC_FIXTURE_FORGED_LINE"
-        (self.package / f"unexpected\n{marker}.py").write_text("value = 1\n", encoding="utf-8")
-        with self.assertRaises(ValueError) as error:
-            self.generator.build_artifacts(self.root)
+        report = {"python_complete": False, "gaps": [{"id": f"unexpected\n{marker}.py::missing_docstring"}]}
+        with patch.object(self.generator, "_checker") as checker:
+            checker.return_value.audit.return_value = report
+            with self.assertRaises(ValueError) as error:
+                self.generator.build_artifacts(self.root)
         self.assertNotIn("\n" + marker, str(error.exception))
         self.assertIn("\\n" + marker, str(error.exception))
 

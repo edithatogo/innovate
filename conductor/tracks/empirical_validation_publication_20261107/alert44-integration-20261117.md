@@ -84,3 +84,9 @@ reported all seven taint findings, with four targets scanned and no scanner
 errors in that focused run. The reviewer traced those reports primarily to
 overtainted counts and generated identities; they are retained as open findings,
 not suppressed or described as a passing security control.
+
+The filename-control regression now feeds a synthetic newline-bearing inventory
+ID into the generator boundary rather than creating a filename containing a
+control character. This preserves the diagnostic assertion on Windows filesystems
+that cannot create such names; the separate reviewer reproduced the real-path
+case on macOS. All **27** generator tests and targeted Ruff checks still pass.
