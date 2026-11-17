@@ -139,3 +139,18 @@ digest, followed by the existing structural checks. The earlier hosted failure
 is retained as evidence and is not a passing run.
 The refreshed inventory differs only in that workflow SHA-256; its exact check
 and all 38 polyglot documentation contract tests passed locally.
+
+The first hosted Windows run of the four focused files reported 16 receipt
+fixture setup errors and one invalid-path assertion. The fixture reconstructs
+an exact upstream LF receipt from a Git text file that Windows checked out with
+CRLF endings; the invalid NUL path is reported as nonexistent on Windows
+instead of invalid. The receiving scope also includes
+`tests/validation/test_pbs_manifest.py` and `scripts/validate_capability_claims.py`
+to make that synthetic reconstruction platform-independent and reject the NUL
+before filesystem resolution. Preserve the original upstream receipt digest and
+all existing rejection tests. The next operation is targeted local verification
+followed by a fresh hosted Windows run; the failed run is not a pass.
+The new LF/CRLF regression reconstructs the same pre-existing upstream digest
+for both checkout forms. The focused suite now has **69 passes** on macOS with
+94.39% PBS-validator and 95.45% capability-guard combined branch/line coverage;
+targeted Ruff checks also passed. Windows and other hosted results remain pending.

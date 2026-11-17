@@ -55,6 +55,8 @@ def _has_source_commit(root: pathlib.Path, revision: str) -> bool:
 def _receipt_issue(root: pathlib.Path, value: object, label: str) -> str:
     if not isinstance(value, str) or not value.strip():
         return f"{label} is missing"
+    if "\x00" in value:
+        return f"{label} has an invalid path"
     try:
         path = pathlib.Path(value)
         if path.is_absolute() or ".." in path.parts:

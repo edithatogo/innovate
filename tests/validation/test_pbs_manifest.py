@@ -114,11 +114,10 @@ def test_manifest_rejects_changed_identity_or_unproved_claim(manifest, case, err
         pbs_manifest.validate_manifest(manifest)
 
 
-@pytest.fixture
-def replay_fixture(manifest):
-    obj = copy.deepcopy(manifest["objects"][0])
-    # Rebuild the deterministic replay identity; the source payload is not bundled.
-    raw = (ROOT / "tests/validation/fixtures/pbs-replay-40677682866.json").read_bytes()
+def reconstruct_replay_fixture(raw):
+    # Git may check out this text fixture as CRLF on Windows. The original
+    # upstream receipt uses LF; its exact digest is still checked below.
+    raw = raw.replace(b"\r\n", b"\n")
     receipt = json.loads(raw)
     registration = receipt["replay"]["registration"]
     assert registration["idempotency_key"] is None
@@ -128,9 +127,26 @@ def replay_fixture(manifest):
     placeholder = b'"idempotency_key": null'
     assert raw.count(placeholder) == 1
     raw = raw.replace(placeholder, f'"idempotency_key": "{identity}"'.encode())
+    return raw
+
+
+@pytest.fixture
+def replay_fixture(manifest):
+    obj = copy.deepcopy(manifest["objects"][0])
+    # Rebuild the deterministic replay identity; the source payload is not bundled.
+    raw = (ROOT / "tests/validation/fixtures/pbs-replay-40677682866.json").read_bytes()
+    raw = reconstruct_replay_fixture(raw)
     assert hashlib.sha256(raw).hexdigest() == obj["receipt"]["sha256"]
     receipt = json.loads(raw)
     return obj, receipt, raw
+
+
+def test_replay_fixture_preserves_original_hash_for_lf_and_crlf(manifest):
+    original = (ROOT / "tests/validation/fixtures/pbs-replay-40677682866.json").read_bytes()
+    lf = original.replace(b"\r\n", b"\n")
+    expected = manifest["objects"][0]["receipt"]["sha256"]
+    for fixture in (lf, lf.replace(b"\n", b"\r\n")):
+        assert hashlib.sha256(reconstruct_replay_fixture(fixture)).hexdigest() == expected
 
 
 def test_matching_local_receipt_fixture_is_accepted(manifest, replay_fixture):
