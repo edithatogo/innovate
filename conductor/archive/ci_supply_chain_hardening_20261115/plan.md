@@ -280,3 +280,79 @@ The post-merge main Security and Quality run `44066589564` reported a failing
 RustSec advisory audit for unmaintained `chrono` (`RUSTSEC-2026-0543`) and
 `chrono-tz` (`RUSTSEC-2026-0555`). These are separate from the `paste` fix and
 must be rechecked on the PR head; no advisory exception has been added.
+
+### Alert 44 temporal compatibility controls — 17 November 2026
+
+On 18 November, the same chat continues this bounded test-only scope from
+`0c9ecfd3222202fbe8b1d0e3295102d7013d09e7`. A temporary Rust 1.99.1
+differential probe compared Chrono 0.4.45 with Time 0.3.55 and additionally
+found that Chrono accepts unpadded month/day fields and leading whitespace
+that Time's standard date parser rejects. An initial public-dispatch test
+incorrectly assumed leading whitespace was accepted and failed: Innovate's
+dispatcher classifies any space as a timestamp before parsing. The corrected
+controls preserve accepted unpadded calendar dates and rejection of a leading
+space. Do not treat the probe as a replacement or change dependency pins
+without an independently qualified implementation.
+
+With Rust/Cargo 1.99.1, explicit `PATH`, `RUSTC`, `RUSTDOC`, and the existing
+worktree-local target directory, the complete `temporal_compatibility` test
+binary passed all seven cases after the correction. Rustfmt and
+`git diff --check` also passed. The Time probe is a temporary comparison, not a
+new production dependency, and no alert or downstream-consumer resolution is
+claimed from these tests.
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this bounded candidate in
+`/Users/doughnut/.codex/worktrees/innovate-pr672-security-pin/innovate`, based
+on main `b74de7e678966865ea91fe00c5fe0eb15d31c20f`. Allowed files are
+`rust/crates/innovate-core/tests/temporal_compatibility.rs` and this record.
+Native/authentication scope: none. The next operation is to add independent
+public-dispatch controls for expanded Gregorian years and timestamp handling,
+using fixed expected results and malformed-input cases. These are migration
+safety tests only; they do not change dependencies, waive advisories, qualify
+Polars, or resolve the alert.
+
+On 17 November the same owner extended this bounded test scope to the public
+scenario-artifact import timestamp contract. The allowed files remain the test
+file and this plan. The artifact stores the accepted timestamp unchanged; the
+tests cover offset, fractional and leap-second forms plus invalid dates, seconds
+and missing offsets. This is a migration guard, not a dependency replacement or
+an assertion that the alert is fixed.
+
+The Scorecard instance on main `b74de7e6` remains open for the informational
+unmaintained advisories `RUSTSEC-2026-0543` (`chrono`) and `RUSTSEC-2026-0555`
+(`chrono-tz`); both list all versions as affected and no patched version.
+`cargo tree --locked --offline` confirms `innovate-core` directly uses Chrono,
+while the Polars tabular dependency graph reaches both crates even with default
+features disabled. A direct-only replacement therefore cannot clear the alert.
+The [upstream Polars Jiff draft](https://github.com/pola-rs/polars/pull/29110)
+is unmerged, based on 0.55.1 rather than the locked 0.55.2, and documents
+parsing, display and date-range changes. A root Cargo patch or relabelled vendor
+source would not establish a consumer-safe, advisory-free replacement.
+
+The new public-dispatch controls use fixed Gregorian/RFC 3339 expectations for
+expanded-year leap days and the existing maximum date, UTC day crossings,
+fractional weekly boundaries, leap-second labels and naive/offset rejection.
+An independent read-only review identified an over-restrictive test for the old
+maximum and missing fractional-anchor coverage; the candidate now rejects an
+impossible date instead and checks the microsecond boundary.
+
+With Rust/Cargo 1.99.1 selected explicitly and a per-worktree target directory,
+`cargo test --locked --offline -p innovate-core --test temporal_compatibility -j 2`
+passed five tests. The existing native-boundary calendar selection passed three,
+the offset-week selection passed one, and the internal calendar selection passed
+two. `cargo fmt --check`, the local repository-policy check and Conductor registry
+hygiene passed. An extra `cargo fmt --all -- --check` failed on unchanged vendored
+third-party sources; it is not the repository CI formatting command. No source
+or dependency has been migrated, the alert is not closed, and these checks do
+not qualify all platforms, consumers or release readiness.
+
+The later artifact-import guard passed with the five earlier controls, but its
+initial command used Cargo 1.99.1 while selecting Homebrew rustc 1.100.0. A
+second run pinned the 1.99.1 compiler, Cargo and rustdoc explicitly in a separate
+target: all six tests passed, and Cargo's compiler metadata confirms rustc 1.99.1.
+The original local compiler attribution was incorrect. The guard checks the
+decoded accepted timestamp string and rejection of four malformed inputs; it
+does not itself migrate or qualify a temporal library. An independent read-only
+reviewer found no blocking issues in the test, while noting that the comparison
+is not original JSON wire-byte proof. Explicit 1.99.1 `cargo fmt --check` and
+the repo-local Python policy check also passed.
