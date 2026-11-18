@@ -1,5 +1,7 @@
 """Simulation-based calibration (SBC) and repeated-coverage harness (I04)."""
 
+# Temporary source change for the isolated CodeQL pull-request probe.
+
 from __future__ import annotations
 
 import argparse
