@@ -33,12 +33,19 @@ CLASSIC_CHECKS = {
     **QUALIFIED_CHECKS,
     "package": 15368,
     "CodeQL": 57789,
+    "Analyze (python)": 15368,
+    "Analyze (rust)": 15368,
     "Secret Scan": 15368,
     "Workflow and policy lint": 15368,
     "Python quality harness": 15368,
 }
 BASE_RULES = {"deletion", "non_fast_forward", "pull_request", "required_status_checks"}
-ADDITIONAL_LIVE_RULES = {"required_signatures", "required_linear_history", "required_conversation_resolution"}
+ADDITIONAL_LIVE_RULES = {
+    "required_signatures",
+    "required_linear_history",
+    "required_conversation_resolution",
+    "code_scanning",
+}
 OWNER_BYPASS = {"actor_type": "RepositoryRole", "actor_id": 5, "bypass_mode": "pull_request"}
 
 
@@ -201,6 +208,40 @@ def _matches_main(value, path, findings):
     return False
 
 
+def _code_scanning(parameters, path, findings):
+    if not _object(parameters, path, findings, allowed={"code_scanning_tools"}, required={"code_scanning_tools"}):
+        return
+    tools = parameters.get("code_scanning_tools")
+    if not isinstance(tools, list) or not tools:
+        findings.append(f"{path}: expected at least the CodeQL scanning tool")
+        return
+    names = set()
+    for index, tool in enumerate(tools):
+        item = f"{path}.code_scanning_tools[{index}]"
+        fields = {"tool", "alerts_threshold", "security_alerts_threshold"}
+        if not _object(tool, item, findings, allowed=fields, required=fields):
+            continue
+        name = tool.get("tool")
+        if not isinstance(name, str) or not name:
+            findings.append(f"{item}.tool: expected a nonempty tool name")
+            continue
+        if name in names:
+            findings.append(f"{item}.tool: duplicate scanning tool")
+        names.add(name)
+        alerts = tool.get("alerts_threshold")
+        security = tool.get("security_alerts_threshold")
+        if alerts not in ("none", "errors", "errors_and_warnings", "all"):
+            findings.append(f"{item}.alerts_threshold: unknown threshold")
+        if security not in ("none", "critical", "high_or_higher", "medium_or_higher", "all"):
+            findings.append(f"{item}.security_alerts_threshold: unknown threshold")
+        if name == "CodeQL" and alerts not in ("errors", "errors_and_warnings", "all"):
+            findings.append(f"{item}.alerts_threshold: CodeQL must block errors")
+        if name == "CodeQL" and security not in ("high_or_higher", "medium_or_higher", "all"):
+            findings.append(f"{item}.security_alerts_threshold: CodeQL must block high findings")
+    if "CodeQL" not in names:
+        findings.append(f"{path}: CodeQL scanning results are required")
+
+
 def _ruleset(value, path, findings, *, local=False):
     allowed = {"name", "target", "enforcement", "bypass_actors", "conditions", "rules"}
     if not local:
@@ -251,7 +292,15 @@ def _ruleset(value, path, findings, *, local=False):
     if not any(included) or any(excluded):
         return set(), set()
     actors = value.get("bypass_actors")
-    if (
+    rules = value.get("rules")
+    has_code_scanning = (
+        not local
+        and isinstance(rules, list)
+        and any(isinstance(rule, dict) and rule.get("type") == "code_scanning" for rule in rules)
+    )
+    if has_code_scanning and actors != []:
+        findings.append(f"{path}.bypass_actors: the CodeQL results rule must not allow bypass")
+    elif not has_code_scanning and (
         not isinstance(actors, list)
         or len(actors) != 1
         or not isinstance(actors[0], dict)
@@ -261,7 +310,6 @@ def _ruleset(value, path, findings, *, local=False):
         findings.append(
             f"{path}.bypass_actors: retain only RepositoryRole 5 recovery in pull_request mode; no bot bypass"
         )
-    rules = value.get("rules")
     if not isinstance(rules, list):
         findings.append(f"{path}.rules: expected a list of full rules")
         return set(), set()
@@ -284,6 +332,8 @@ def _ruleset(value, path, findings, *, local=False):
             checks |= _status_checks(
                 rule.get("parameters"), f"{item_path}.required_status_checks", findings, local=local
             )
+        elif kind == "code_scanning":
+            _code_scanning(rule.get("parameters"), f"{item_path}.code_scanning", findings)
         elif "parameters" in rule and rule["parameters"] != {}:
             findings.append(f"{item_path}: rule {kind} does not accept parameters")
     return seen, checks
@@ -410,6 +460,8 @@ def _snapshot(value, findings, now):
             checks |= active_checks
     if not BASE_RULES <= seen:
         findings.append(f"snapshot.rulesets: active main rulesets lack {sorted(BASE_RULES - seen)}")
+    if "code_scanning" not in seen:
+        findings.append("snapshot.rulesets: an active main CodeQL results rule is required")
     if checks != set(QUALIFIED_CHECKS):
         findings.append("snapshot.rulesets: active main rulesets lack the qualified stable checks")
     _protection(value.get("branch_protection"), findings)

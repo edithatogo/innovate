@@ -1,0 +1,47 @@
+# Read-only qualification of a candidate verifier. This is not a required gate.
+name: CodeQL evidence canary
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/codeql-evidence-canary.yml
+      - scripts/check_codeql_success.py
+      - tests/workflows/test_codeql_success.py
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+  security-events: read
+
+jobs:
+  observe:
+    name: CodeQL evidence canary
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+      - name: Prepare and check the repo-local interpreter
+        run: |
+          uv venv .venv-codeql-evidence --python 3.15.2
+          .venv-codeql-evidence/bin/python -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+      - name: Run verifier controls
+        run: .venv-codeql-evidence/bin/python -m unittest tests.workflows.test_codeql_success -v
+      - name: Observe this pull request's CodeQL evidence
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: >-
+          .venv-codeql-evidence/bin/python scripts/check_codeql_success.py
+          --pr "$PR_NUMBER" --head "$PR_HEAD" --wait-seconds 2400
