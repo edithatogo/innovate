@@ -1,0 +1,354 @@
+{
+  "scope": "Content/rule experiment over all 49 retained evidence files as one newly authored temporary Git commit. Not a complete PR or production-verifier result.",
+  "normalizer_python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_input_count": 49,
+  "original_input_sha256": {
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-cargo-doc.log": "sha256:f6148ed0053e90bc81e621487069d1404b1fd77a3833eb32f0ab6ca6f5748b4a",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-cargo-doctest.log": "sha256:47ec680dd006705e22e3e0f8f9eea2e7476b2bc9ec061aa6a41b16384611f134",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-native-documentation.json": "sha256:6600098aa83c4e25346fa7f007ece29eb9612e24572af48b86f07c8a658960c1",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-native-documentation.log": "sha256:6600098aa83c4e25346fa7f007ece29eb9612e24572af48b86f07c8a658960c1",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-python-execution.json": "sha256:61b875ef3a6352354e8006091c414d987ad63efd2856554059ea9c392aaae9f7",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-python-execution.log": "sha256:fe75b95bb65ad5874a59b9962e4ca2f75cd2388bcec8eff84292895c5b9ea859",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/69b6748-summary.json": "sha256:e7aba8b04cec4345bde86fac5c6a698d5e7bcabffeaac12c581fdd47d0ee5c1a",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/README.md": "sha256:b78ad49d5a266d688e389100755466ca813ef9460533870c16f680071bc4d479",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json": "sha256:84e46ae2bbc3720558d9cb117ffa355329b80dcdfb90abd8998996b09fe429af",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json": "sha256:71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/astro-build.log": "sha256:c8686ddd083e355bf22854fc9d04d98946b0c4fe03a89fafc4c3dbc2ab92d6a1",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/astro-check.log": "sha256:1b933bd962dcc3e00c9d7d0a01a7d849b3a5d03c8b8fc9bddfaf58cadd3b6d70",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/browser-environment-blocker.json": "sha256:0c9f094ec121ac5f528762da837be4058ea36be397d8ce3907b5c4fbb918b331",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/browser-environment-blocker.md": "sha256:455dccc2f23d412c0d5709a06c31ea888fe90a4a85877581925bbeca1dd9dc46",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/browser-first-launch-error.md": "sha256:e0ca344fe3bf400068c263a550fb6298aeef6098a3010114dbdeaecea7e58411",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/browser-launch-failure-artifacts.json": "sha256:ff7873581f3bd9f684f4fa2b994d864084a16492db695c07818c6cb3319419d4",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/browser-launch-failure.log": "sha256:773b03b845de89120ddeb76ff1c26e3bd71242396e2db254bdf30dc8d841cc38",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/checkout-regression-before.log": "sha256:4965ec5b88f91b1c4a29cd47f4727d9cd27cd3247d74dab8581a913089ebdfee",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/content-structure.json": "sha256:99c416fdfe551323c1292c4acd24a4f0ba97b8d5878c08e04f3da5dd56dcaa77",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd-execution.json": "sha256:88859a07b8882773f090269639264ffe413a8da0c7d1ed23ae94420e272ad56a",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd-julia-documentation.json": "sha256:15daef52d18fe5ddd0bf993a8de9ade12360250097fa40986bfe8b4c813687f9",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd-native-api.json": "sha256:1b9cc5f3d4d7789b5f4a71bab963e486bdde0c7c81fbbf367ad823b46aa8bc7d",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd-r-documentation.json": "sha256:c642b8291b9bf68c663a2f24649fb4bd767b45a7e90855f50790d2a24337628e",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd.json": "sha256:504e4cb7d8f626e8b115d2d43e7672649cd680c1a0ef2e70852150378bcafd62",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-5ee03ddc.json": "sha256:d9eca34f7eb819d5db76697f07bd9a76203bda7179f852468d3462cbd63847c7",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/managed-browser-install.log": "sha256:4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/notebook-qualification.json": "sha256:24245d511027a3874b0612d68f0ea938c864b55c8ca474475b9988ab418b148b",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/notebook-structure.json": "sha256:79f982de6d55a82733f9ab6c0ed4551581cda5f43c691f8424742e340aee03f4",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/polyglot-source.json": "sha256:274b7f1259a0290e38b2cb003de9c87e7d78d3e0df971f3fe35d2c594c084737",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/portability-repair.json": "sha256:a0e3fc8a68c4c33c058631b84b1c41fdf80efca2eab3b7e6d0b8a9503eb4608a",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/portability-tests.log": "sha256:e5351a5cd740dfd38807d6814ae778e4bd95d8f563916ab893809cb561ac0001",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/qualification-summary.json": "sha256:32b618ea9818a42b10174d430c0ebd5caa8f7d425c2a7b46c50436d46352867e",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/ratchet-regressions.log": "sha256:b90c77dea3f69a9854b14230702bcf5c1141e634ff6b3efc8b24f400c9551330",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/ratchet-repair.json": "sha256:4769af5e7450ff997adb437b2b0ac96031f183df792b371a1d9be30b0923270c",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/registry-hygiene.json": "sha256:cdb7784e548cec0836ba373732d8617833746709ed621707ee28cc77d71050a6",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/retirement.json": "sha256:e8f12210d8d0f1226d59b0619d786da3076d8d9b79303e48d6a9da2c111a49e1",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/scientific-review.json": "sha256:16c1b3daa63b1a37f6f2ed01d1dc63effae2ff4471accf4ca1417f916a8b81d8",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/source-tests.json": "sha256:327c716420b7827f25925b67f2cf82fb844fb87aaa64f9209cb806391e05d09b",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_api_documentation_contract.log": "sha256:cf7066a2ad89e2ced3679ab881c29c097fb3de37ed9d9e6ea87b1e5aa7b9cf30",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_api_reference_generation.log": "sha256:ea2c8d5f4936ce414d01addb4e1a67b0feedb36aafcea1ba62653cf035d39e9c",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_community_documentation.log": "sha256:0aaf5a7eb179366b126144073025d5a04fb1d370138d3c9739d97a98eac6d884",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_documentation_content_contract.log": "sha256:f6e3ae776208723b4285198c77c804d38f7dbe1ffca7f08ecb4708d5b1588718",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_documentation_source_hash_contract.log": "sha256:65e028d9927eea93eda6259d5cea618c53e56cb2cd899853ffdf58495fe731d1",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_documentation_workflow.log": "sha256:40e6a3053d86436d6aa245501343227a2e81436f4f14da71a21257468605aff6",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_native_documentation_contract.log": "sha256:2e542158e2319da6a519b9d5f3fb023b5b2f27bb12bb8607dbe7f11b01324a57",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_polyglot_api_documentation.log": "sha256:e494852f3db317c279ba50aabae3f46dfc32a30a4349a603030e9bd3c2772465",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_production_docs_contract.log": "sha256:1a046e39b1bca734d4329433e75e1def31c8ee7f9b79dfded9eb9fd1dc193175",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_retired_documentation.log": "sha256:e17397a4f13ab805c2d75dad73d79b725ceb9fa1063d1f4d63f2441bd6031ac9",
+    "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/test_scientific_review_contract.log": "sha256:86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8"
+  },
+  "original_findings": [
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/hosted-178779bd.json",
+      "line": 62,
+      "field": "hosted-178779bd-native-api.json",
+      "section": [],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Retained original record bytes"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/qualification-summary.json",
+      "line": 143,
+      "field": "test_polyglot_api_documentation.log",
+      "section": [
+        "retained_record_sha256"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Retained original record bytes"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 379,
+      "field": "docs/astro-site/scripts/generate-api.mjs",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 383,
+      "field": "docs/astro-site/src/components/AccessibleSearch.astro",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 466,
+      "field": "docs/contracts/api-documentation.json",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 472,
+      "field": "docs/contracts/polyglot-api-documentation.json",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 496,
+      "field": "scripts/check_api_documentation.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 502,
+      "field": "scripts/check_polyglot_api_documentation.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact-after-baseline.json",
+      "line": 506,
+      "field": "scripts/generate_api_reference.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 379,
+      "field": "docs/astro-site/scripts/generate-api.mjs",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 383,
+      "field": "docs/astro-site/src/components/AccessibleSearch.astro",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 466,
+      "field": "docs/contracts/api-documentation.json",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 472,
+      "field": "docs/contracts/polyglot-api-documentation.json",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 496,
+      "field": "scripts/check_api_documentation.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 502,
+      "field": "scripts/check_polyglot_api_documentation.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    },
+    {
+      "path": "conductor/tracks/documentation_quality_contracts_20261115/evidence-20261116/artifact.json",
+      "line": 506,
+      "field": "scripts/generate_api_reference.py",
+      "section": [
+        "source_files"
+      ],
+      "rule": "generic-api-key",
+      "is_bare_sha256": true,
+      "digest_match_verified": true,
+      "digest_source": "Git blob content at scanned head"
+    }
+  ],
+  "original_counts": {
+    "8.24.3": 16,
+    "8.30.1": 16
+  },
+  "changed_files": [
+    "qualification-summary.json",
+    "hosted-178779bd.json",
+    "artifact.json",
+    "artifact-after-baseline.json"
+  ],
+  "producer_and_scanner_changes": false,
+  "all_original_bytes_reconstruct_exactly": true,
+  "scans": [
+    {
+      "version": "8.24.3",
+      "rules": "built-in defaults",
+      "exit_code": 0,
+      "finding_count": 0,
+      "log": "scan-8.24.3.log",
+      "report": "scan-8.24.3.json",
+      "command": [
+        "/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.24.3",
+        "detect",
+        "--source",
+        "/tmp/innovate-evidence-tagged/scan-input",
+        "--redact",
+        "--exit-code=2",
+        "--report-format=json",
+        "--report-path",
+        "/tmp/innovate-evidence-tagged/scan-8.24.3.json",
+        "--log-level=error",
+        "--log-opts=--no-merges --first-parent HEAD"
+      ]
+    },
+    {
+      "version": "8.30.1",
+      "rules": "repository-standards@985503bc8eae58e7d6ef36a6e5427d0077e0193c/privacy/gitleaks.toml (extends defaults)",
+      "exit_code": 0,
+      "finding_count": 0,
+      "log": "scan-8.30.1.log",
+      "report": "scan-8.30.1.json",
+      "command": [
+        "/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.30.1",
+        "git",
+        "--log-opts=--full-history --no-ext-diff --no-textconv HEAD",
+        "--config",
+        "/tmp/innovate-digest-scan-yew0s1u2/trusted-gitleaks.toml",
+        "--gitleaks-ignore-path",
+        "/tmp/innovate-digest-scan-yew0s1u2/empty-ignore",
+        "--ignore-gitleaks-allow",
+        "--redact=100",
+        "--no-banner",
+        "--no-color",
+        "--log-level=error",
+        "--report-format=json",
+        "--report-path",
+        "/tmp/innovate-evidence-tagged/scan-8.30.1.json",
+        "--timeout=60",
+        "/tmp/innovate-evidence-tagged/scan-input"
+      ]
+    }
+  ],
+  "roundtrip": {
+    "archive_format": "innovate-retained-json-sha256-v1",
+    "verified": [
+      {
+        "file": "artifact-after-baseline.json",
+        "archive_sha256": "sha256:f1cdccdfb08cd013c4ce1f41881549c2d6cd4fd48786efd42af798eba3ff8d1e",
+        "original_serialized_sha256": "sha256:84e46ae2bbc3720558d9cb117ffa355329b80dcdfb90abd8998996b09fe429af",
+        "original_semantic_sha256": "sha256:838d8fbbb4b5a2b660cd8c779ec7656d1b22a50329fdeb6582a96ffbd55518bb",
+        "tagged_digest_count": 480,
+        "exact_original_bytes_reconstructed": true
+      },
+      {
+        "file": "artifact.json",
+        "archive_sha256": "sha256:d7f843b703202e5ee4db5d6b54717bf0952172fc9fa08d91f5da1a2b0f595e37",
+        "original_serialized_sha256": "sha256:71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483",
+        "original_semantic_sha256": "sha256:a6d677a1c3ac0887d185648567e96c564993272319c39cbf28bb15f92179750f",
+        "tagged_digest_count": 480,
+        "exact_original_bytes_reconstructed": true
+      },
+      {
+        "file": "hosted-178779bd.json",
+        "archive_sha256": "sha256:f3337c47f839802383f71dd824cf6495ffbff6fbcb423863dc61f44325de8574",
+        "original_serialized_sha256": "sha256:504e4cb7d8f626e8b115d2d43e7672649cd680c1a0ef2e70852150378bcafd62",
+        "original_semantic_sha256": "sha256:2dab5be52a91fd5de55f038bb340b3ac5cdfb00f92e1536ec23a34c7c0193611",
+        "tagged_digest_count": 11,
+        "exact_original_bytes_reconstructed": true
+      },
+      {
+        "file": "qualification-summary.json",
+        "archive_sha256": "sha256:e67ed8edcfa459096782b563c6bede112793ec0c036e4e0496c1e1cae29046cc",
+        "original_serialized_sha256": "sha256:32b618ea9818a42b10174d430c0ebd5caa8f7d425c2a7b46c50436d46352867e",
+        "original_semantic_sha256": "sha256:28444cd8d961d1ecf75114129735eb5c5f006b29b5b077819b3e421171578988",
+        "tagged_digest_count": 47,
+        "exact_original_bytes_reconstructed": true
+      }
+    ]
+  },
+  "verified_download_archive_sha256": {
+    "8.24.3": "sha256:9991e0b2903da4c8f6122b5c3186448b927a5da4deef1fe45271c3793f4ee29c",
+    "8.30.1": "sha256:551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+  },
+  "trusted_config_sha256": "sha256:20734071fce254738e1d519eaa28ac1a746cc482c9129484c61aee630b6ebd45",
+  "normalizer_sha256": "sha256:77ac5b798665d70f0cf998bcffa46c015130f590462f32b1b8e8f5dbb6e5e6f2"
+}

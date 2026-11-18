@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-11-16T12:05:22.760310+00:00",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "python": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]",
+  "baseline_suites": 11,
+  "baseline_expected_tests": 272,
+  "baseline_actual_tests": 272,
+  "additional_convention_tests": 14,
+  "total_tests": 286,
+  "all_passed": true,
+  "native_execution": "not_performed_by_these_source_suites"
+}

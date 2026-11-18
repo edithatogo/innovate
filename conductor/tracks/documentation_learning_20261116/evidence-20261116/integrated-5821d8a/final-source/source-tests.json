@@ -1,0 +1,374 @@
+[
+  {
+    "suite": "test_api_documentation_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_api_documentation_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 29,
+    "passed": true,
+    "elapsed_seconds": 0.318,
+    "source_sha256": "4764f08a206a378b826abbd28046c33132f3091e38f23d4b52a7115c37785026",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_api_documentation_contract.log",
+    "summary": [
+      ".............................",
+      "----------------------------------------------------------------------",
+      "Ran 29 tests in 0.228s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_native_documentation_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_native_documentation_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 28,
+    "passed": true,
+    "elapsed_seconds": 0.165,
+    "source_sha256": "872c410f661320b5f1e062e506d51879ffba918e0818c06acfeb1fcf8f7ddfca",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_native_documentation_contract.log",
+    "summary": [
+      "............................",
+      "----------------------------------------------------------------------",
+      "Ran 28 tests in 0.039s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_content_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_documentation_content_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 65,
+    "passed": true,
+    "elapsed_seconds": 1.279,
+    "source_sha256": "36f160b82753243121edf3955b17f0315e3b9d5f703d141f0b632757b989cc52",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_content_contract.log",
+    "summary": [
+      ".................................................................",
+      "----------------------------------------------------------------------",
+      "Ran 65 tests in 1.137s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_source_hash_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_documentation_source_hash_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 14,
+    "passed": true,
+    "elapsed_seconds": 0.165,
+    "source_sha256": "2b88ffbc7bea21827b3e0e817d9ce5ce5e5e9a5fedf675b7873b29ee5f815cb5",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_source_hash_contract.log",
+    "summary": [
+      "..............",
+      "----------------------------------------------------------------------",
+      "Ran 14 tests in 0.024s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_production_docs_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_production_docs_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 21,
+    "passed": true,
+    "elapsed_seconds": 0.172,
+    "source_sha256": "e5bcc6d0d6c1db7a0816d7e948d2be2c5d9ab3f4c865ba152987c9b43c16b29d",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_production_docs_contract.log",
+    "summary": [
+      ".....................",
+      "----------------------------------------------------------------------",
+      "Ran 21 tests in 0.077s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_api_reference_generation",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_api_reference_generation.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 22,
+    "passed": true,
+    "elapsed_seconds": 10.322,
+    "source_sha256": "46865211a8807bf7c584fa288c938a8fb586921d30d05270762e46f7353e71e4",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_api_reference_generation.log",
+    "summary": [
+      "......................",
+      "----------------------------------------------------------------------",
+      "Ran 22 tests in 10.136s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_polyglot_api_documentation",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_polyglot_api_documentation.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 38,
+    "passed": true,
+    "elapsed_seconds": 0.188,
+    "source_sha256": "ef9634a70f38e7baac9326ab6c9e6c2c5fef23dd1071eb3141aee7028d636489",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_polyglot_api_documentation.log",
+    "summary": [
+      "......................................",
+      "----------------------------------------------------------------------",
+      "Ran 38 tests in 0.118s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_workflow",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_documentation_workflow.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 10,
+    "passed": true,
+    "elapsed_seconds": 0.056,
+    "source_sha256": "ed5301beeddc4527ad4c9ba797e6721d196b1292dcabdb4261c71291c2b6d6f0",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_workflow.log",
+    "summary": [
+      "..........",
+      "----------------------------------------------------------------------",
+      "Ran 10 tests in 0.003s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_scientific_review_contract",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_scientific_review_contract.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 7,
+    "passed": true,
+    "elapsed_seconds": 0.079,
+    "source_sha256": "c96875376cfbed562b76882d839186ba2d42e3e523954080dce68814b17d7992",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_scientific_review_contract.log",
+    "summary": [
+      ".......",
+      "----------------------------------------------------------------------",
+      "Ran 7 tests in 0.008s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_retired_documentation",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_retired_documentation.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 14,
+    "passed": true,
+    "elapsed_seconds": 0.163,
+    "source_sha256": "7ebb0c1632456253eb7f8d1a523d7e1934878cdc628cabf353e6303e9ca848e2",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_retired_documentation.log",
+    "summary": [
+      "..............",
+      "----------------------------------------------------------------------",
+      "Ran 14 tests in 0.090s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_community_documentation",
+    "directory": "tests",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_community_documentation.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 24,
+    "passed": true,
+    "elapsed_seconds": 0.306,
+    "source_sha256": "92fe3648cfafaacd2bf334334ac0c6a4b93b396cb56823951e7f46f39bbc9759",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_community_documentation.log",
+    "summary": [
+      "........................",
+      "----------------------------------------------------------------------",
+      "Ran 24 tests in 0.235s",
+      "",
+      "OK"
+    ]
+  },
+  {
+    "suite": "test_documentation_conventions",
+    "directory": "tests/native",
+    "argv": [
+      "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python",
+      "-I",
+      "-S",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/native",
+      "-p",
+      "test_documentation_conventions.py"
+    ],
+    "exit_code": 0,
+    "tests_run": 14,
+    "passed": true,
+    "elapsed_seconds": 0.133,
+    "source_sha256": "3398c22e3d798ce8ef74c859108fdbb130f516646182629192208670c89ea919",
+    "source_unchanged": true,
+    "log": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_conventions.log",
+    "summary": [
+      "..............",
+      "----------------------------------------------------------------------",
+      "Ran 14 tests in 0.073s",
+      "",
+      "OK"
+    ]
+  }
+]

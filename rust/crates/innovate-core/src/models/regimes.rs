@@ -7,26 +7,28 @@ use crate::models::{ClassicalFamily, PredictionBundle, PredictionRequest, predic
 /// Dated shock or market-potential shift applied from `effective_time` onward.
 #[derive(Debug, Clone, PartialEq)]
 pub struct DatedShock {
-    /// First time at which the shock applies.
+    /// Finite time from which this shock participates, inclusive of the boundary.
     pub effective_time: f64,
-    /// Positive multiplier for the family's innovation or growth parameter.
+    /// Positive multiplier of Bass `p`, logistic `k`, Gompertz `c`, or Fisher–Pry `alpha`.
     pub p_multiplier: f64,
-    /// Positive multiplier for the Bass imitation parameter.
+    /// Positive multiplier of Bass `q`; validated but unused by the other families.
     pub q_multiplier: f64,
-    /// Positive multiplier for the family's capacity parameter when applicable.
+    /// Positive multiplier of Bass `m`, logistic `L`, or Gompertz `a`;
+    /// validated but unused for Fisher–Pry shares.
     pub capacity_multiplier: f64,
 }
 
 /// Request for [`predict_regimes`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegimeRequest {
-    /// Classical diffusion family to evaluate.
+    /// Classical family whose parameters receive the applicable multipliers.
     pub family: ClassicalFamily,
-    /// Validated times at which predictions are requested.
+    /// Validated coordinates at which to evaluate the regime-adjusted curve.
     pub time: TimeGrid,
-    /// Family-specific parameters before any shock.
+    /// Baseline values in the positional layout of [`PredictionRequest::parameters`].
     pub base_parameters: Vec<f64>,
-    /// Dated multiplicative shocks applied when their effective time is reached.
+    /// Dated multipliers; every applicable entry is multiplied into the baseline
+    /// at each query time, irrespective of the order of this vector.
     pub shocks: Vec<DatedShock>,
 }
 

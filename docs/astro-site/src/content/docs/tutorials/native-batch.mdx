@@ -1,0 +1,142 @@
+---
+title: Run ordered native prediction batches
+description: Compare one and two native workers, verify independent Logistic predictions, and distinguish per-item failures from a rejected batch.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_batch.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+Use a native batch when several independent requests share a model key but have
+their own inputs and parameters. This tutorial checks two small Logistic
+predictions, preserves their association with the original requests, and tests
+the worker-count error contract. The curves are synthetic and their parameters
+are supplied directly.
+
+## Learning outcomes
+
+You will construct ordered native payloads, compare results with one and two
+workers, and verify predictions against the Logistic equation. You will know
+where to look for a failure affecting one dataset and when the whole call raises
+`NativeError`.
+
+## Prerequisites
+
+Install the [current native development package](/innovate/user-guide/installation/)
+and complete [Predict a native diffusion curve](/innovate/user-guide/getting-started/).
+Run the example with the interpreter containing that package. It uses ordinary
+Python mappings and lists; it downloads no data and makes no network request.
+
+Each payload contains an `inputs.time` array and its own `parameters` mapping.
+These are the JSON-compatible inputs accepted by `predict_model`. The
+[`predict_batch` API](/innovate/api/generated/predict-batch/) accepts these
+payloads; the separate table helpers accept Polars frames.
+
+| Request position | Query times | Parameters | Expected quantity |
+| --- | --- | --- | --- |
+| 0 | 0 and 1 | `L=100`, `k=1`, `x0=0` | Two levels on the first curve |
+| 1 | 0 | `L=200`, `k=1`, `x0=0` | One level on the second curve |
+
+Choose a consistent time unit. `k` has inverse-time units, `x0` uses the time
+coordinate, and `L` uses the chosen level units. Worker count has no scientific
+unit and does not change those definitions.
+
+## Steps
+
+1. Run the canonical example from the repository root:
+
+   ```sh
+   .venv-native/bin/python -I examples/native_batch.py
+   ```
+
+2. Follow the first call: `predict_batch("logistic", datasets, workers=2)`
+   returns one result row for each payload in its original position. The first
+   row contains two predicted values; the second contains one.
+3. Compare those rows with the same call using `workers=1`. Then check the
+   analytic values independently and deliberately submit `workers=0`.
+
+<Code code={exampleSource} lang="python" title="examples/native_batch.py" />
+
+The model key selects the Logistic equations. `workers` selects native batch
+concurrency, with supported integer values from 1 through 32. It does not select
+a different model, simulation engine or numerical backend. The
+[native batch implementation](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/lib.rs)
+collects results in input order, including when work is split into chunks.
+
+## Expected results
+
+The following output is imported from the example runner's expected-output
+contract. The script prints it only after all assertions pass.
+
+<Code code={contentQuality.examples['examples/native_batch.py'].expected_stdout} lang="json" />
+
+`worker_invariant` reports equality of the two complete row lists in this
+fixture. `invalid_workers_rejected` means that the zero-worker request raised
+`NativeError` with code `invalid_request`. Neither field is a timing measurement.
+
+## Interpretation
+
+For this model the level is `L / (1 + exp(-k * (t - x0)))`. At `t=x0=0`, the
+first curve gives 50 and the second gives 100. At time 1, the first gives
+`100 / (1 + exp(-1))`, approximately 73.105858. The script compares that value
+with an absolute tolerance of `1e-12` and zero relative tolerance. It checks
+levels rather than changes accumulated between query times.
+
+Batch position and observation position have different roles. `rows[1]` means
+the second input dataset; its `values[0]` means that dataset's first query time.
+Keep your own dataset identifiers alongside the ordered payloads so results can
+be associated by position. The two curves do not become one pooled population
+merely because they share a batch.
+
+### Inspect both error levels
+
+A successful outer request returns rows containing `result` and `error`. An
+individual prediction failure has a null result and an error object in its row;
+other successful rows remain available. Inspect every row before consuming its
+values. The [Python binding](https://github.com/edithatogo/innovate/blob/main/bindings/python/innovate/__init__.py)
+raises a non-null outer error, while the native batch retains per-item errors as
+values.
+
+The displayed fixture requires both rows to succeed and separately checks an
+invalid outer worker count. It does not execute a mixed-success batch. Its
+all-success assertion is appropriate for a regression example; an application
+that permits partial results must branch on each row's error and record which
+inputs failed.
+
+## Check your understanding
+
+1. If you reverse the two payloads, which result should occupy `rows[0]`, and
+   should that row contain one or two predicted values?
+2. Would requesting two workers mean the first curve should return twice its
+   one-worker prediction?
+3. If a valid batch contains one failed prediction, is catching `NativeError`
+   around the whole call sufficient to find it?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. The payload with `L=200` moves to position zero. It still has one query time,
+   so its values contain the single midpoint level 100.
+2. No. Workers control concurrency. The predicted level is determined by the
+   supplied model, inputs and parameters; the example verifies row equality.
+3. No. Inspect each row's `error`. An outer request can succeed while retaining
+   an individual failure in its original position.
+
+</details>
+
+The reversed-order and mixed-success cases are reasoning exercises here; the
+canonical script executes the two successful payloads and the invalid-worker
+case shown above.
+
+## Limitations
+
+Two tiny deterministic requests establish the tested ordering, numerical and
+validation contracts. They do not establish a speedup, a useful worker count
+for a real workload, or reproducibility for every stochastic algorithm. Measure
+performance with the actual data size, machine, native build and serialization
+costs before choosing concurrency.
+
+This example neither fits parameters nor evaluates predictive accuracy on
+observations. It also does not exercise fitting batches or Polars frame helpers.
+See [runtime and execution choices](/innovate/user-guide/backends/) for those
+boundaries and [the fitting guide](/innovate/user-guide/fitting/) for estimation.

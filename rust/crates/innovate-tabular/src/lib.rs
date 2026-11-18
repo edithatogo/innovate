@@ -664,41 +664,41 @@ pub fn paired_outcomes_ipc(payload: &Value) -> PolarsResult<Vec<u8>> {
 /// Explicit column mapping for [`bind_panel`] (R03).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ColumnBinding {
-    /// Name of the numeric time column.
+    /// Name of the non-null numeric time column; coordinates must be finite.
     pub time: String,
-    /// Name of the product identifier column.
+    /// Name of the non-null string column identifying each product.
     pub product: String,
-    /// Name of the measurement identifier column.
+    /// Name of the non-null string column identifying the observed measure.
     pub measure: String,
-    /// Name of the measurement unit column.
+    /// Name of the non-null string column carrying the observation unit label.
     pub unit: String,
-    /// Name of the numeric observation column.
+    /// Name of the numeric observation column; nulls remain missing values.
     pub value: String,
-    /// Optional name of the numeric denominator column.
+    /// Optional numeric denominator column; present values must be positive and finite.
     pub denominator: Option<String>,
 }
 
 /// One validated observation row extracted by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct PanelRow {
-    /// Finite observation time.
+    /// Finite time coordinate in the caller's chosen time units.
     pub time: f64,
-    /// Product identifier.
+    /// Nonempty product label retained without normalization.
     pub product: String,
-    /// Measurement identifier.
+    /// Nonempty measure label used with product and time to identify a row.
     pub measure: String,
-    /// Declared unit for the product and measurement series.
+    /// Nonempty unit label, consistent within each product/measure series.
     pub unit: String,
-    /// Observed value, or `None` for a missing observation.
+    /// Finite observation when present; `None` is distinct from an observed zero.
     pub value: Option<f64>,
-    /// Optional positive denominator when supplied and present.
+    /// Positive finite denominator, or `None` for a missing value or unbound column.
     pub denominator: Option<f64>,
 }
 
 /// Normalized observation panel produced by [`bind_panel`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct ObservationPanel {
-    /// Validated rows in input order.
+    /// Validated observations in input row order; binding does not sort by time.
     pub rows: Vec<PanelRow>,
 }
 
@@ -802,40 +802,43 @@ pub fn bind_panel(frame: DataFrame, binding: &ColumnBinding) -> PolarsResult<Obs
 }
 
 /// One row of a versioned [`JointDrawBundle`] (R04).
+///
+/// The encoder validates structural fields and unique keys; labels supplied by
+/// the caller do not establish posterior convergence or scientific validity.
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawRow {
-    /// Draw identifier used to preserve alignment across rows.
+    /// Draw identifier, retained with the chain identifier for alignment.
     pub draw_id: u64,
-    /// Identifier of the draw's chain.
+    /// Caller-supplied chain identifier; no chain diagnostics are calculated here.
     pub chain_id: u64,
-    /// Scenario identifier.
+    /// Scenario label forming part of the unique row key.
     pub scenario_id: String,
-    /// Strategy identifier within the scenario.
+    /// Strategy label forming part of the unique row key.
     pub strategy_id: String,
-    /// Product identifier.
+    /// Product label forming part of the unique row key.
     pub product: String,
-    /// Region identifier.
+    /// Region label forming part of the unique row key.
     pub region: String,
-    /// Time associated with the value.
+    /// Finite time coordinate; this bundle does not store a separate time-unit field.
     pub time: f64,
-    /// Draw value, or `None` when the value is missing.
+    /// Finite draw value when present; missingness survives the IPC round trip.
     pub value: Option<f64>,
-    /// Declared measurement units.
+    /// Nonempty value-unit label; encoding performs no unit conversion.
     pub units: String,
-    /// Fit status associated with the draw.
+    /// Caller-supplied status, required to equal `"valid"` by the encoder.
     pub fit_status: String,
-    /// Provenance label supplied with the draw.
+    /// Nonempty caller-supplied provenance description, retained verbatim.
     pub provenance: String,
 }
 
 /// Versioned joint posterior/scenario draw bundle (`specs/joint-draw-v1.json`, R04).
 #[derive(Debug, Clone, PartialEq)]
 pub struct JointDrawBundle {
-    /// Version of the joint-draw interchange schema.
+    /// Wire-schema version; the current encoder and decoder accept only `"1.0"`.
     pub schema_version: String,
-    /// Explicit label describing the declared draw dependence.
+    /// Nonempty dependence label; the codec preserves but does not verify its meaning.
     pub dependence: String,
-    /// Rows forming the joint draw bundle.
+    /// Nonempty draw rows in caller order, with unique draw/chain/scenario/strategy/product/region/time keys.
     pub rows: Vec<JointDrawRow>,
 }
 
@@ -1005,25 +1008,28 @@ pub fn decode_joint_draws(bytes: &[u8]) -> PolarsResult<JointDrawBundle> {
 }
 
 /// One row of a semi-Markov cohort occupancy/transition trajectory (SM03).
+///
+/// Units and time-step width are supplied by the caller's cohort model. The IPC
+/// codec neither converts occupancy/flow scales nor checks conservation totals.
 #[derive(Debug, Clone, PartialEq)]
 pub struct CohortOccupancyRow {
-    /// Draw identifier for the trajectory.
+    /// Draw identifier used to align cohort trajectories.
     pub draw_id: u64,
-    /// Scenario identifier.
+    /// Scenario identifier; the encoder rejects an empty or whitespace-only label.
     pub scenario_id: String,
-    /// Cohort identifier.
+    /// Cohort identifier; the encoder rejects an empty or whitespace-only label.
     pub cohort_id: String,
-    /// Subgroup label within the cohort.
+    /// Subgroup label retained as supplied; the encoder permits an empty label.
     pub subgroup: String,
-    /// State occupied by the cohort.
+    /// Nonempty state label identifying the occupied compartment.
     pub state: String,
-    /// Discrete duration bin within the state.
+    /// Duration-bin index within the caller's state-history discretization.
     pub duration_bin: u32,
-    /// Time associated with the row.
+    /// Finite observation time in the caller's chosen time units.
     pub time: f64,
-    /// Nonnegative cohort occupancy at that time.
+    /// Nonnegative finite occupied mass, in the caller's count or proportion scale.
     pub occupancy: f64,
-    /// Nonnegative transition flow associated with the row.
+    /// Nonnegative finite transition-flow value on the caller's chosen step and scale.
     pub transition_flow: f64,
 }
 
@@ -1075,7 +1081,10 @@ pub fn cohort_occupancy_ipc(rows: &[CohortOccupancyRow]) -> PolarsResult<Vec<u8>
 /// Decode cohort occupancy/transition rows from Arrow IPC bytes (SM03).
 ///
 /// # Errors
-/// Returns `PolarsError` if IPC decoding or column extraction fails.
+/// Returns `PolarsError` if IPC decoding or column extraction fails, including
+/// nulls in required columns. This decoder does not repeat the encoder's checks
+/// for finite, nonnegative values or nonempty labels; callers must validate
+/// those properties when reading untrusted IPC data.
 pub fn decode_cohort_occupancy_ipc(bytes: &[u8]) -> PolarsResult<Vec<CohortOccupancyRow>> {
     let frame = read_ipc(bytes)?;
     let n = frame.height();

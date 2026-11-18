@@ -24,6 +24,12 @@ export const darkEntryRoutes = [
   '/innovate/api/generated/r/',
   '/innovate/native-migration/',
 ];
+// Sample both a formerly versioned page and an unversioned retired route.
+// Source/HTML checks and captureInputs still cover every manifest route.
+export const retirementEntryRoutes = [
+  '/innovate/latest/api/python/',
+  '/innovate/migration/',
+];
 // Byte counts are decoded response bodies, not timing or compression scores.
 export const budgets = Object.freeze({
   artifactBytes: 25_000_000,
@@ -96,7 +102,33 @@ export function loadInventory(root = repositoryRoot) {
   for (const route of darkEntryRoutes) {
     assert(pages.some((page) => page.route === route), `Required current entry is absent: ${route}`);
   }
-  return { base: sitePolicy.base, pages, historical, sitePolicy };
+  const retirement = readJson(path.join(root, safeRelative(sitePolicy.retired_documentation)));
+  assert.equal(retirement.schema_version, 1, 'Unsupported retirement policy');
+  assert(/^[a-f0-9]{40}$/u.test(retirement.source_commit), 'Retirement history must name an immutable commit');
+  assert(Array.isArray(retirement.entries), 'Retirement entries must be an array');
+  const retired = [];
+  for (const entry of retirement.entries) {
+    assert(entry && typeof entry === 'object', 'Invalid retirement entry');
+    if (!('route' in entry)) continue;
+    const source = safeRelative(entry.path);
+    assert(source.startsWith(`${contentRoot}/`), `Retired web source is outside the content directory: ${source}`);
+    const route = routeForSource(source.slice(contentRoot.length + 1), sitePolicy.base);
+    assert.equal(entry.route, route, `Retirement route does not match its source: ${source}`);
+    assert(!pages.some((page) => page.route === route), `Retirement route collides with a current page: ${route}`);
+    assert(pages.some((page) => page.route === entry.replacement), `Retirement target is not current: ${entry.replacement}`);
+    const history = new URL(entry.history_url);
+    assert(history.origin === 'https://github.com' && !history.username && !history.password
+      && !history.search && !history.hash
+      && decodeURIComponent(history.pathname) === `/edithatogo/innovate/blob/${retirement.source_commit}/${source}`,
+    `Retirement history is not bound to its immutable source: ${source}`);
+    retired.push({ route, source, replacement: entry.replacement, history_url: entry.history_url });
+  }
+  retired.sort((a, b) => a.route.localeCompare(b.route, 'en'));
+  assert.equal(new Set(retired.map((page) => page.route)).size, retired.length, 'Duplicate retirement routes');
+  for (const route of retirementEntryRoutes) {
+    assert(retired.some((page) => page.route === route), `Required retirement entry is absent: ${route}`);
+  }
+  return { base: sitePolicy.base, pages, historical, retired, sitePolicy };
 }
 
 function visitFiles(root, relative, excluded, files) {
@@ -138,6 +170,9 @@ export function captureInputs(root = repositoryRoot) {
   for (const page of inventory.pages) {
     assert(artifact.files[artifactPath(page.route, inventory.base)], `Missing rendered current page: ${page.route}`);
   }
+  for (const page of inventory.retired) {
+    assert(artifact.files[artifactPath(page.route, inventory.base)], `Missing rendered retirement page: ${page.route}`);
+  }
   assert(artifact.files['pagefind/pagefind.js'], 'Build Pagefind before browser qualification');
   return { source, artifact, inventory };
 }
@@ -153,10 +188,11 @@ export function expectedCaseTitles(inventory) {
   return [
     ...inventory.pages.map(({ route }) => `current page: ${route}`),
     ...darkEntryRoutes.map((route) => `dark entry: ${route}`),
+    ...retirementEntryRoutes.map((route) => `retired page: ${route}`),
     'keyboard skip link and visible focus',
     'keyboard Pagefind search: native diffusion curve',
     'keyboard Pagefind search: Current Python API',
-    'current navigation and archived version labels',
+    'current navigation and retirement boundaries',
     'deterministic artifact budgets',
   ];
 }
@@ -208,6 +244,20 @@ export function caseEvidenceComplete(entry) {
       if (measurement.successful_internal_responses !== runtime.responses.length
         || measurement.decoded_body_bytes !== runtime.responses.reduce((total, response) => total + response.bytes, 0)) return false;
     }
+  } else if (entry.title.startsWith('retired page: ')) {
+    scan = evidence['axe-retired-page'];
+    route = entry.title.slice('retired page: '.length);
+    const notice = evidence['retirement-page'];
+    if (notice?.route !== route || typeof notice.source !== 'string'
+      || !notice.source.startsWith('docs/astro-site/src/content/docs/')
+      || typeof notice.replacement !== 'string' || !notice.replacement.startsWith('/innovate/')
+      || !/^https:\/\/github\.com\/edithatogo\/innovate\/blob\/[a-f0-9]{40}\//u.test(notice.history_url ?? '')
+      || notice.code_elements !== 0 || notice.version_selectors !== 0
+      || notice.pagefind_bodies !== 0 || notice.robots !== 'noindex, follow') return false;
+  } else if (entry.title === 'current navigation and retirement boundaries') {
+    scan = evidence['axe-primary-navigation'];
+    route = '/innovate/api/python/';
+    if (!Array.isArray(evidence['primary-navigation']) || evidence['primary-navigation'].length === 0) return false;
   } else if (entry.title.startsWith('dark entry: ')) {
     scan = evidence['axe-dark-page'];
     route = entry.title.slice('dark entry: '.length);

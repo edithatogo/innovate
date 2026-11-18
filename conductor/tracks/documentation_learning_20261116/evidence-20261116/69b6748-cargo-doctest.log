@@ -1,0 +1,56 @@
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-core/Cargo.toml:8:12
+  |
+7 | repository.workspace = true
+  | ----------
+8 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-core` (manifest) generated 1 warning
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-tabular/Cargo.toml:9:12
+  |
+8 | repository.workspace = true
+  | ----------
+9 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-tabular` (manifest) generated 1 warning
+warning: doc tests are not supported for crate type(s) `cdylib` in package `innovate-python`
+   Compiling kairo-ecs-types v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling kairo-ecs-core v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling kairo-ecs-rng v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling kairo-ecs-state v0.0.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling kairo-ecs-des v0.1.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling kairo-ecs-abm v0.1.0 (https://github.com/edithatogo/kairos.git?rev=a1f6283575ad26918230adc122a99b5c08fc4da3#a1f62835)
+   Compiling innovate-core v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-core)
+   Compiling innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-tabular)
+   Compiling innovate-ffi v0.7.0-alpha.1 (/workspace/scratch/5e94e22858cb/innovate-docs-implementation/rust/crates/innovate-ffi)
+    Finished `test` profile [unoptimized] target(s) in 14.31s
+   Doc-tests innovate_core
+
+running 2 tests
+test rust/crates/innovate-core/src/kernel.rs - kernel::KernelBinding (line 14) ... ok
+test rust/crates/innovate-core/src/adopters.rs - adopters::classify_adopters (line 15) ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.36s; merged doctests compilation took 0.36s
+   Doc-tests innovate_ffi
+
+running 1 test
+test rust/crates/innovate-ffi/src/lib.rs - innovate_call (line 34) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.81s; merged doctests compilation took 0.80s
+   Doc-tests innovate_tabular
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

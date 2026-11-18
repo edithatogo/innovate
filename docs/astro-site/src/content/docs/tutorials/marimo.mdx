@@ -1,0 +1,107 @@
+---
+title: Explore the public-data fit in marimo
+description: Run a native reactive notebook that shares the checked public-data workflow, changes the training cutoff and separates local execution from static or browser-only modes.
+---
+
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_public_data.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+The optional marimo notebook lets you change the final training year and inspect
+the resulting fit scores and prediction table. It uses the same native workflow
+as [the public-data fitting lesson](/innovate/tutorials/public-data-fit/).
+The calculation is kept in one ordinary Python source; the notebook adds a
+reactive control and presentation.
+
+## Learning outcomes
+
+You will launch the locked notebook environment, distinguish input controls from
+scientific assumptions, inspect how a calendar cutoff changes results, and
+verify that the default notebook agrees with its ordinary example. You will
+also distinguish native interactive execution from an exported snapshot.
+
+## Prerequisites
+
+Read the public-data lesson's observation definition, missingness policy,
+licence and interpretation. Use the supported Python and Rust toolchains from
+[installation](/innovate/user-guide/installation/). The optional environment
+pins marimo 0.25.2 in `notebooks/uv.lock` and installs Innovate from this checkout.
+Notebook tooling is separate from the library's required runtime dependencies.
+
+## Steps
+
+Run these commands from the repository root:
+
+<Tabs syncKey="learning-mode">
+  <TabItem label="Interactive notebook">
+
+    ```sh
+    uv sync --project notebooks --locked
+    uv run --project notebooks --locked marimo edit notebooks/public_data_fit.py
+    ```
+
+    Open the local URL printed by marimo. Start with **Last training year =
+    2015**, inspect the scores and observation table, then move the slider to
+    2018. Each change creates fresh results from `run_comparison`; it does not
+    mutate an existing fit envelope. The small native fits run directly when
+    the control changes.
+
+  </TabItem>
+  <TabItem label="Headless checks">
+
+    ```sh
+    uv run --project notebooks --locked python scripts/check_learning_notebooks.py --execute
+    ```
+
+    This runs marimo's strict structural check, executes the app at default and
+    changed control values, compares actual results with the ordinary workflow,
+    and requires a successful static HTML export. The report records the source
+    files, native binary and environment used by this run.
+
+  </TabItem>
+</Tabs>
+
+The notebook source is `notebooks/public_data_fit.py`. Its calculation comes
+from this complete registered example:
+
+<Code code={exampleSource} lang="python" title="Shared native computation" />
+
+## Expected results
+
+At the default cutoff, the notebook has 23 training observations and nine holdout
+observations. Its scores agree with the ordinary example:
+
+<Code code={contentQuality.examples['examples/native_public_data.py'].expected_stdout} lang="json" />
+
+Changing the cutoff to 2018 leaves six holdout observations. The checker requires
+both the cutoff and predictions to change, then compares the new result with a
+fresh ordinary computation. Writing an HTML file without successful execution
+does not pass: export exit status is checked independently.
+
+## Interpretation
+
+Reactive execution makes the dependency between the cutoff and displayed
+results visible. It does not validate a model choice. This retrospective
+experiment uses the November 2026 data vintage, so it is not a real-time
+backtest. Repeatedly choosing a cutoff after observing the scores is exploratory.
+The default example shows a baseline outperforming two converged fitted curves.
+
+**Reader exercise:** explain why the notebook leaves missing years unfilled,
+and why changing the slider changes the scientific comparison even though the
+underlying source data remain the same. Where would you reserve an untouched
+evaluation period before selecting a model?
+
+## Limitations
+
+Interactive execution currently requires native Python and the Rust extension.
+Browser-only Pyodide/WASM support has not been qualified for Innovate. A
+[marimo static HTML export](https://docs.marimo.io/guides/exporting/)
+is a snapshot; it needs marimo's JavaScript renderer and does not contain a live
+Python kernel. Exported files stay in the local run-report directory until
+their deployment, asset and accessibility behavior is separately checked.
+
+This Astro lesson remains a readable explanation with source and expected
+results when no notebook is running. Headless parity checks do not establish
+browser interaction, scientific validity, publication readiness or calibrated
+forecast uncertainty. See the [documentation contracts](/innovate/maintainers/documentation-quality/)
+for those separate evidence requirements.

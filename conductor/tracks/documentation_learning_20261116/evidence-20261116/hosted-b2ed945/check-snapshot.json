@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-16T12:42:39.033Z",
+  "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+  "pr": 671,
+  "scope": "Fresh GitHub check metadata snapshot. Queued, running, skipped and neutral results are not passes.",
+  "checks": [
+    {
+      "name": "unit-tests-base (3.15.1)",
+      "id": 133301446043,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133301446043",
+      "started_at": "2026-11-16T12:35:51Z",
+      "completed_at": "2026-11-16T12:35:54Z"
+    },
+    {
+      "name": "lint",
+      "id": 133301445975,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133301445975",
+      "started_at": "2026-11-16T12:35:51Z",
+      "completed_at": "2026-11-16T12:35:54Z"
+    },
+    {
+      "name": "deploy",
+      "id": 133299664001,
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133299664001",
+      "started_at": "2026-11-16T12:32:24Z",
+      "completed_at": "2026-11-16T12:32:23Z"
+    },
+    {
+      "name": "codecov/patch",
+      "id": 133299137784,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://app.codecov.io/gh/edithatogo/innovate/pull/671",
+      "started_at": "2026-11-16T12:31:23Z",
+      "completed_at": "2026-11-16T12:31:24Z"
+    },
+    {
+      "name": "CodeQL",
+      "id": 133296938945,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/runs/133296938945",
+      "started_at": "2026-11-16T12:27:07Z",
+      "completed_at": "2026-11-16T12:27:12Z"
+    },
+    {
+      "name": "release-lane-checks",
+      "id": 133296528422,
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570277/job/133296528422",
+      "started_at": "2026-11-16T12:26:20Z",
+      "completed_at": "2026-11-16T12:26:19Z"
+    },
+    {
+      "name": "julia-r (windows-latest, innovate_ffi.dll)",
+      "id": 133296528369,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528369",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:31:30Z"
+    },
+    {
+      "name": "package",
+      "id": 133296528319,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528319",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:29:39Z"
+    },
+    {
+      "name": "native-python (windows-latest)",
+      "id": 133296528314,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528314",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:35:49Z"
+    },
+    {
+      "name": "native-python (macos-latest)",
+      "id": 133296528303,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528303",
+      "started_at": "2026-11-16T12:26:24Z",
+      "completed_at": "2026-11-16T12:33:36Z"
+    },
+    {
+      "name": "julia-r (ubuntu-latest, libinnovate_ffi.so)",
+      "id": 133296528254,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528254",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:29:10Z"
+    },
+    {
+      "name": "native-python (ubuntu-latest)",
+      "id": 133296528218,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296528218",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:31:05Z"
+    },
+    {
+      "name": "julia-r (macos-latest, libinnovate_ffi.dylib)",
+      "id": 133296527899,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570444/job/133296527899",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:31:58Z"
+    },
+    {
+      "name": "offline-ai-security / offline-security",
+      "id": 133296527673,
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866571036/job/133296527673",
+      "started_at": "2026-11-16T12:26:20Z",
+      "completed_at": null
+    },
+    {
+      "name": "RustSec advisory audit",
+      "id": 133296526147,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570405/job/133296526147",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:29:13Z"
+    },
+    {
+      "name": "Workflow and policy lint",
+      "id": 133296526062,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570405/job/133296526062",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:26:41Z"
+    },
+    {
+      "name": "Dependency Review",
+      "id": 133296526055,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570405/job/133296526055",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:26:29Z"
+    },
+    {
+      "name": "Secret Scan",
+      "id": 133296525976,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570405/job/133296525976",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:26:36Z"
+    },
+    {
+      "name": "Rust line coverage",
+      "id": 133296525648,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570446/job/133296525648",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:30:41Z"
+    },
+    {
+      "name": "Python binding line coverage",
+      "id": 133296525620,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570446/job/133296525620",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:27:55Z"
+    },
+    {
+      "name": "Python quality harness",
+      "id": 133296525471,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570405/job/133296525471",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:32:37Z"
+    },
+    {
+      "name": "readiness-report",
+      "id": 133296525371,
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570277/job/133296525371",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:26:30Z"
+    },
+    {
+      "name": "Native documentation examples",
+      "id": 133296525320,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133296525320",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:30:18Z"
+    },
+    {
+      "name": "Installed Voiage normalized input",
+      "id": 133296525127,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570285/job/133296525127",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:30:13Z"
+    },
+    {
+      "name": "update_release_draft",
+      "id": 133296524872,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570480/job/133296524872",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:27:16Z"
+    },
+    {
+      "name": "Fuzz innovate-core JSON contract",
+      "id": 133296524870,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570308/job/133296524870",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:32:53Z"
+    },
+    {
+      "name": "build",
+      "id": 133296524820,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570433/job/133296524820",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:32:23Z"
+    },
+    {
+      "name": "privacy-and-secrets",
+      "id": 133296524747,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570324/job/133296524747",
+      "started_at": "2026-11-16T12:26:22Z",
+      "completed_at": "2026-11-16T12:26:57Z"
+    },
+    {
+      "name": "contract",
+      "id": 133296524450,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866570302/job/133296524450",
+      "started_at": "2026-11-16T12:26:21Z",
+      "completed_at": "2026-11-16T12:31:11Z"
+    },
+    {
+      "name": "Analyze (rust)",
+      "id": 133296507958,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866563325/job/133296507958",
+      "started_at": "2026-11-16T12:26:20Z",
+      "completed_at": "2026-11-16T12:37:55Z"
+    },
+    {
+      "name": "Analyze (python)",
+      "id": 133296507450,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866563325/job/133296507450",
+      "started_at": "2026-11-16T12:26:19Z",
+      "completed_at": "2026-11-16T12:27:16Z"
+    },
+    {
+      "name": "offline-ai-security / offline-security",
+      "id": 133296488930,
+      "status": "queued",
+      "conclusion": null,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43866559443/job/133296488930",
+      "started_at": "2026-11-16T12:26:16Z",
+      "completed_at": null
+    }
+  ]
+}

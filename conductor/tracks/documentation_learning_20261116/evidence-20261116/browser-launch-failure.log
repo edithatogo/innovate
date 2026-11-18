@@ -1,0 +1,201 @@
+$ playwright test
+[WebServer] (node:88) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] {"message":" astro  v7.4.12 ready in 27 ms\n┃ Local    http://127.0.0.1:4321/innovate/","label":"SKIP_FORMAT","level":"info"}
+
+Running 164 tests using 1 worker
+
+(node:131) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    1 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/ (2ms)
+(node:166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    2 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/ (2ms)
+(node:201) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    3 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/aggregate-time-series/ (2ms)
+(node:236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    4 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/aggregate-weekly/ (2ms)
+(node:271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    5 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/bootstrap-forecast-frame/ (2ms)
+(node:306) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    6 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/capabilities/ (2ms)
+(node:341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    7 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/categorize-adopters/ (2ms)
+(node:376) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    8 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/cumulative-sum/ (2ms)
+(node:411) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘    9 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/execute-scenario-grid/ (2ms)
+(node:446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   10 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/execute/ (2ms)
+(node:481) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   11 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/export-ipc-file/ (3ms)
+(node:516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   12 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/export-ipc-stream/ (2ms)
+(node:551) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   13 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/fetch-oecd-dataset/ (2ms)
+(node:586) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   14 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/fit-batch/ (2ms)
+(node:621) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   15 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/fit-frames/ (2ms)
+(node:656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   16 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/fit-result/ (1ms)
+(node:691) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   17 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/fit/ (2ms)
+(node:726) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   18 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/ingest-local/ (2ms)
+(node:761) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   19 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/ingest-polars/ (2ms)
+(node:796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   20 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/invoke-registered-extension/ (1ms)
+(node:831) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   21 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/julia/ (1ms)
+(node:866) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   22 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/native-error/ (2ms)
+(node:901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   23 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/paired-outcomes/ (1ms)
+(node:936) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   24 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/policy-metadata-frame/ (1ms)
+(node:971) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   25 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/predict-batch/ (1ms)
+(node:1006) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   26 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/predict-frames/ (2ms)
+(node:1041) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   27 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/predict/ (2ms)
+(node:1076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   28 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/r/ (2ms)
+(node:1111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   29 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/rolling-average/ (2ms)
+(node:1146) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   30 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/sarima-fit/ (2ms)
+(node:1181) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   31 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/scenario-comparisons/ (1ms)
+(node:1216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   32 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/scenario-executions/ (2ms)
+(node:1251) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   33 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/seasonal-decomposition/ (2ms)
+(node:1286) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   34 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/staggered-att-polars/ (2ms)
+(node:1321) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   35 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/generated/treatment-contrast-frame/ (2ms)
+(node:1356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   36 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/api/python/ (2ms)
+(node:1391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   37 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/bindings/ (2ms)
+(node:1426) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   38 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/bindings/csharp/ (2ms)
+(node:1461) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   39 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/bindings/go/ (1ms)
+(node:1496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   40 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/bindings/rust/ (1ms)
+(node:1531) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   41 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/core/ (3ms)
+(node:1566) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   42 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/core/arrow-interchange/ (1ms)
+(node:1601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   43 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/core/kernel/ (1ms)
+(node:1636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   44 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/historical-documentation/ (2ms)
+(node:1671) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   45 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/maintainers/documentation-quality/ (2ms)
+(node:1706) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   46 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/maintainers/language-conventions/ (1ms)
+(node:1741) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   47 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/maintainers/test-acceleration/ (2ms)
+(node:1776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   48 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/models/ (1ms)
+(node:1811) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   49 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/native-migration/ (2ms)
+(node:1846) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   50 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/operations/documentation-standards/ (1ms)
+(node:1881) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   51 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/operations/registry-readiness/ (2ms)
+(node:1916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   52 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/ (1ms)
+(node:1951) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   53 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/arrow-interchange/ (1ms)
+(node:1986) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   54 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/bayesian-fitter/ (2ms)
+(node:2021) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   55 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/counterfactual-analysis/ (2ms)
+(node:2056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   56 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/data-ingestion-provenance/ (2ms)
+(node:2091) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   57 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/forcing-and-time/ (2ms)
+(node:2126) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   58 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/kairos-simulation/ (1ms)
+(node:2161) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   59 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/marimo/ (2ms)
+(node:2196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   60 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/native-batch/ (2ms)
+(node:2231) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   61 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/network-scenarios/ (23ms)
+(node:2266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   62 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/norton-bass/ (2ms)
+(node:2301) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   63 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/public-data-fit/ (2ms)
+(node:2336) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   64 [chromium-desktop] › tests/browser/documentation.spec.mjs:11:3 › current page: /innovate/tutorials/scenario-experiment-workflows/ (1ms)
+(node:2371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

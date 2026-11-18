@@ -1,0 +1,19 @@
+{
+  "counts": {
+    "julia_documented_functions": 23,
+    "julia_documented_types": 1,
+    "julia_example_assertions": 10,
+    "julia_example_blocks": 7,
+    "julia_exported_symbols": 24,
+    "r_all_manual_pages": 14,
+    "r_documented_functions": 24,
+    "r_example_assertions": 11,
+    "r_example_blocks": 6,
+    "r_exported_functions": 24,
+    "r_manual_pages": 13
+  },
+  "documentation_complete": false,
+  "errors": [],
+  "runtime_qualification": "not_run_by_this_checker",
+  "structural_complete": true
+}

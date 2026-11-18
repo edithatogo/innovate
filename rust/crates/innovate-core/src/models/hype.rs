@@ -5,37 +5,37 @@ use crate::inference::InnovationError;
 /// Single Gaussian pulse in a composite hype expectation curve.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypePulse {
-    /// Signed height of the Gaussian pulse.
+    /// Finite signed height; negative values represent downward pulses.
     pub amplitude: f64,
-    /// Time at which the pulse is centered.
+    /// Finite pulse-center coordinate in the evaluation time unit.
     pub center: f64,
-    /// Positive Gaussian width in the same units as time.
+    /// Finite positive Gaussian width in the same time unit as `center`.
     pub width: f64,
 }
 
 /// Structural configuration separating ordered hype cycles from unrestricted waves.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HypeConfiguration {
-    /// Require pulse centers to be strictly increasing.
+    /// Require strictly increasing pulse centers; this alone does not enforce a canonical hype-cycle shape.
     OrderedCycle,
-    /// Allow pulse centers without an ordering constraint.
+    /// Permit any order of finite pulse centers.
     UnrestrictedWave,
 }
 
 /// Parameters for [`hype_mean`] and [`hype_derivative`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct HypeParameters {
-    /// Constant baseline of the composite curve.
+    /// Finite additive level in the units of the observed hype signal.
     pub baseline: f64,
-    /// Amplitude of the logistic maturity component.
+    /// Finite signed amplitude of the logistic maturity component.
     pub maturity_amplitude: f64,
-    /// Positive growth rate of the logistic maturity component.
+    /// Finite positive logistic growth coefficient per time unit.
     pub growth: f64,
-    /// Midpoint time of the logistic maturity component.
+    /// Finite midpoint time of the logistic maturity component.
     pub t_maturity: f64,
-    /// Gaussian pulses added to the maturity component.
+    /// Additive Gaussian pulses, whose ordering is controlled by `configuration`.
     pub pulses: Vec<HypePulse>,
-    /// Ordering rule applied to pulse centers.
+    /// Structural rule governing pulse-center order.
     pub configuration: HypeConfiguration,
 }
 

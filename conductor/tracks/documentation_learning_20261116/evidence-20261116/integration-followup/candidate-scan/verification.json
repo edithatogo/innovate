@@ -1,0 +1,97 @@
+{
+  "checked_utc": "2026-11-16T12:21:19.253707+00:00",
+  "outcome": "passed",
+  "scope": "complete one-parent ordinary candidate diff; not hosted-CI or release acceptance",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "staged_tree": "dc4a4ec77eff920fc8167fb03c5e7efa674ce3ff",
+  "detached_scan_commit": "c3f441dc6478114695fab8e36e94a0a35804c057",
+  "scan_range": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057",
+  "ordinary_commit_count": 1,
+  "delta_entries_no_renames": 499,
+  "rename_note": "Default Git detection identifies one empty deleted file and one empty added log as an R100 rename; scans disable rename detection to retain all499 delete/add path entries.",
+  "scanners": [
+    {
+      "version": "8.24.3",
+      "started_utc": "2026-11-16T12:20:51.757461+00:00",
+      "finished_utc": "2026-11-16T12:20:54.698338+00:00",
+      "command": [
+        "/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.24.3",
+        "detect",
+        "--source",
+        "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+        "--no-banner",
+        "--redact=100",
+        "--log-level=debug",
+        "--gitleaks-ignore-path",
+        "/tmp/innovate-final-candidate-scan-k405hvfz/empty.gitleaksignore",
+        "--report-format=json",
+        "--report-path",
+        "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.24.3.json",
+        "--exit-code=2",
+        "--log-opts=--no-merges --first-parent --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057"
+      ],
+      "exit_code": 0,
+      "finding_count": 0,
+      "binary_sha256": "sha256:e18325d568268b6efb6cd0cc721f8bea5667f4cd1c8d03618ab61987f41269ad",
+      "trusted_config_sha256": null,
+      "empty_ignore_file_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "log_sha256": "sha256:2b8a1dbf7c864e2b0cffad18cbca620d114647d341efafe26eb6f79a7c4b2e4f",
+      "log_confirmation": [
+        "11:20PM DBG executing: /usr/local/bin/git -C /workspace/scratch/5e94e22858cb/innovate-docs-integrated log -p -U0 --no-merges --first-parent --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057",
+        "11:20PM INF 1 commits scanned.",
+        "11:20PM INF scanned ~1931870 bytes (1.93 MB) in 2.46s",
+        "11:20PM INF no leaks found"
+      ]
+    },
+    {
+      "version": "8.30.1",
+      "started_utc": "2026-11-16T12:20:51.742478+00:00",
+      "finished_utc": "2026-11-16T12:20:54.713930+00:00",
+      "command": [
+        "/tmp/innovate-digest-scan-yew0s1u2/bin/gitleaks-8.30.1",
+        "detect",
+        "--source",
+        "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+        "--no-banner",
+        "--redact=100",
+        "--log-level=debug",
+        "--gitleaks-ignore-path",
+        "/tmp/innovate-final-candidate-scan-k405hvfz/empty.gitleaksignore",
+        "--report-format=json",
+        "--report-path",
+        "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.30.1.json",
+        "--config",
+        "/tmp/innovate-digest-scan-yew0s1u2/trusted-gitleaks.toml",
+        "--ignore-gitleaks-allow",
+        "--exit-code=1",
+        "--log-opts=--full-history --no-ext-diff --no-textconv --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057"
+      ],
+      "exit_code": 0,
+      "finding_count": 0,
+      "binary_sha256": "sha256:88f91962aa2f93ac6ab281d553b9e125f5197bbbce38f9f2437f7299c32e5509",
+      "trusted_config_sha256": "sha256:20734071fce254738e1d519eaa28ac1a746cc482c9129484c61aee630b6ebd45",
+      "empty_ignore_file_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "log_sha256": "sha256:3b40dac9a404a221f90b636905ebe46314c8fc9487c8c9e77f0c32b8f4d595b4",
+      "log_confirmation": [
+        "11:20PM DBG executing: /usr/local/bin/git -C /workspace/scratch/5e94e22858cb/innovate-docs-integrated log -p -U0 --full-history --no-ext-diff --no-textconv --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057",
+        "11:20PM INF 1 commits scanned.",
+        "11:20PM INF scanned ~1931870 bytes (1.93 MB) in 2.49s",
+        "11:20PM INF no leaks found"
+      ]
+    }
+  ],
+  "integrity": {
+    "index_byte_identical": true,
+    "index_sha256": "sha256:2e90c46e5cc066c3f9c9e2bec831d5cb69f4b9da3e8851015185b59b7926a194",
+    "refs_unchanged": true,
+    "refs_sha256": "sha256:a31b2e107f6a88e1be2d8fab496ee6389317b942853c50ea98fd53285c3b03d3",
+    "head_unchanged": true,
+    "head": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+    "index_still_matches_supplied_tree": true,
+    "no_unstaged_changes": true,
+    "no_untracked_nonignored_files": true
+  },
+  "limitations": "No source, index, worktree or refs mutated. Only an unattached commit object and external scan receipts created. Original scanner rules/configs retained; no baseline/exclusion/allowlist additions. Whitespace review is separately owned and not part of secret scanning."
+}

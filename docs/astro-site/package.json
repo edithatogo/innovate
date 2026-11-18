@@ -18,8 +18,7 @@
     "@astrojs/starlight-docsearch": "^0.8.2",
     "astro": "^7.4.11",
     "starlight-links-validator": "^0.27.0",
-    "starlight-polyglot": "file:vendor/starlight-polyglot",
-    "starlight-versions": "^0.10.2"
+    "starlight-polyglot": "file:vendor/starlight-polyglot"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",

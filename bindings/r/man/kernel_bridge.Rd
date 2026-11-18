@@ -26,8 +26,8 @@ kernel_discover_models()
 }
 \value{
 \describe{
-\item{\code{kernel_call}}{A complete native response as nested lists when raw is FALSE, or the original response string when TRUE. Arrays decode as lists and JSON null as NULL. Successful envelopes may omit error; non-null native errors are raised in either mode.}
-\item{\code{kernel_call_json}}{The parsed native envelope as nested lists, or its exact JSON string if raw is TRUE. Even raw responses are checked for a native error before being returned.}
+\item{\code{kernel_call}}{A complete native response as nested lists when raw is FALSE, or the original response string when TRUE. Arrays decode as lists and JSON null as NULL. Successful envelopes may omit error; non-null outer native errors are raised in either mode. Errors inside individual batch or scenario result rows remain available to inspect.}
+\item{\code{kernel_call_json}}{The parsed native envelope as nested lists, or its exact JSON string if raw is TRUE. Even raw responses are checked for a non-null outer native error before being returned. Per-item errors inside a successful batch or scenario result are retained.}
 \item{\code{kernel_discover_models}}{The discovery result as a named list containing models; the outer response envelope is omitted.}
 }
 }
@@ -40,6 +40,11 @@ precision already lost before encoding cannot be recovered; use kernel_call_json
 exact existing JSON. Scientific computation and validation run in Rust with no Python
 fallback. JSON calls keep a loader reference for process-local registry state, copy
 response text into R, and release native response memory.
+
+Time units, observation quantities and parameter domains follow the selected native
+operation. This wrapper does not sort arrays, convert dates to elapsed time, integrate
+interval counts or replace missing observations. Use \code{kernel_call_json} when
+an operation needs an exact JSON array shape outside the named fields preserved here.
 }
 \subsection{\code{kernel_call_json}}{
 Send an existing JSON request without re-encoding its numbers or arrays.
@@ -48,6 +53,10 @@ Use this entry point for full-width integer identifiers or externally prepared s
 arrays. Parsed R numeric values may round wide integers; raw=TRUE preserves their
 response tokens. INNOVATE_NATIVE_LIBRARY overrides the installed platform-specific
 library in the package lib directory.
+
+This function passes the supplied request text to Rust without changing its schema,
+units, nulls or array shapes. It parses the response to inspect the outer error even
+in raw mode; raw mode preserves the returned text, not an unchecked success status.
 }
 \subsection{\code{kernel_discover_models}}{
 Read the native model catalog and its capability metadata.
@@ -73,6 +82,8 @@ copied into R-owned memory before their native allocations are released.
 \examples{
 catalog <- kernel_discover_models()
 stopifnot(any(vapply(catalog$models, function(model) model$key == "bass", logical(1))))
+response <- kernel_call("discover_models")
+stopifnot(identical(response$schema_version, "2.0"), is.null(response$error))
 request <- '{"schema_version":"2.0","operation":"discover_models","payload":{}}'
 response_json <- kernel_call_json(request, raw = TRUE)
 stopifnot(is.character(response_json), length(response_json) == 1L)

@@ -74,6 +74,5 @@ instead of treating every failure as a request for more iterations.
 
 Continue with [prediction and forecasting](/innovate/user-guide/forecasting/) and
 [scenario experiments](/innovate/tutorials/scenario-experiment-workflows/).
-The [earlier fitting guide](/innovate/latest/user-guide/fitting/) is retained as
-historical documentation; its removed `fit_model`, ensemble and backend examples
+The [earlier fitting guide](https://github.com/edithatogo/innovate/blob/6c226f92f14f01e771b1490c7fb3a7c77f4bc74a/docs/astro-site/src/content/docs/latest/user-guide/fitting.md) now points to retired source history; its removed `fit_model`, ensemble and backend examples
 are not current API instructions.

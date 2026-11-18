@@ -1,0 +1,5 @@
+# Frozen teaching snapshots are validated against exact SHA-256 byte identities.
+# Preserve those bytes when contributors check out with core.autocrlf=true.
+wdi-aus-internet-20261116/manifest.json -text
+wdi-aus-internet-20261116/raw.json -text
+wdi-aus-internet-20261116/observations.csv -text

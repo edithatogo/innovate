@@ -1,0 +1,9 @@
+{
+  "track_id": "documentation_learning_20261116",
+  "type": "feature",
+  "status": "in_progress",
+  "created_at": "2026-11-16T21:45:00+10:00",
+  "updated_at": "2026-11-16T12:42:09.050153+00:00",
+  "description": "Implement and qualify source-derived Astro catalogues, optional native marimo learning, a frozen public-data lesson, advanced examples, language documentation contracts, community standards and legacy retirement. Draft PR #671 supersedes closed PR #659. At merged head b2ed945 the documentation workflow, all 164 browser cases, installed Python/Julia/R aggregate and Windows/macOS/Linux native CI pass. Upstream tests and historical receipts are preserved. Scientific release obligations, standalone games dependency resolution, offline runner qualification, broader curriculum, human reader evaluation and live publication remain open.",
+  "predecessor": "../../archive/documentation_quality_contracts_20261115/"
+}

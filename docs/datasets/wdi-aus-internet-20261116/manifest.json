@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "wdi-aus-internet-20261116",
+  "title": "Individuals using the Internet in Australia (% of population)",
+  "source_url": "https://api.worldbank.org/v2/country/AUS/indicator/IT.NET.USER.ZS?format=json&date=1990:2025&per_page=100",
+  "metadata_url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/IT.NET.USER.ZS",
+  "retrieved_at": "2026-11-16T10:11:58.244189+00:00",
+  "source_last_updated": "2026-11-11",
+  "attribution": "International Telecommunication Union (ITU), World Telecommunication/ICT Indicators Database, via World Bank World Development Indicators.",
+  "license": "CC-BY-4.0",
+  "license_url": "https://datacatalog.worldbank.org/public-licenses#cc-by",
+  "country_iso3": "AUS",
+  "indicator": "IT.NET.USER.ZS",
+  "unit": "percent_of_population",
+  "observation": "Individuals who used the Internet in the preceding three months; an annual measure of current use, not cumulative first adoption.",
+  "time_origin": 1990,
+  "time_unit": "year",
+  "missing_years": [
+    2002,
+    2003,
+    2004,
+    2025
+  ],
+  "raw_rows": 36,
+  "observed_rows": 32,
+  "transformation": "Validate indicator/country, sort calendar years ascending, set time=year-1990, copy numeric values unchanged, keep missing observations as empty CSV fields; exclude missing rows only at fitting, without compressing elapsed time.",
+  "files": {
+    "raw.json": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+    "observations.csv": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46"
+  },
+  "default_cutoff_year": 2015,
+  "default_training_rows": 23,
+  "default_holdout_rows": 9,
+  "limitations": [
+    "A descriptive saturation-curve example; aggregate current use does not identify a causal adoption mechanism.",
+    "Survey definitions, source revisions and country reporting can change values. The frozen extract is not automatically updated.",
+    "Missing years are not zero use. No interpolation, stock summation, forward filling or random train/test split is used.",
+    "Point fits do not supply calibrated uncertainty; calendar holdout metrics are an example-specific diagnostic.",
+    "The retrospective calendar holdout uses the November 2026 data vintage; revisions mean it is not an as-of-2015 real-time backtest. Repeated cutoff selection after inspecting scores is exploratory."
+  ]
+}

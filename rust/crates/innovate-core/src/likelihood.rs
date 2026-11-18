@@ -7,21 +7,21 @@ use statrs::function::gamma::ln_gamma;
 /// Declared observation likelihood family.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LikelihoodFamily {
-    /// Poisson count likelihood parameterized by its mean.
+    /// Poisson counts with variance equal to the supplied mean.
     Poisson,
-    /// Negative-binomial count likelihood parameterized by mean and dispersion.
+    /// Negative-binomial counts with variance `mean + mean² / dispersion`.
     NegativeBinomial {
-        /// Positive dispersion (size) parameter.
+        /// Positive inverse overdispersion.
         dispersion: f64,
     },
-    /// Gaussian likelihood parameterized by mean and standard deviation.
+    /// Gaussian observations with the supplied mean and standard deviation.
     Gaussian {
-        /// Positive observation standard deviation.
+        /// Positive standard deviation.
         sigma: f64,
     },
-    /// Student-t likelihood parameterized by location, scale and degrees of freedom.
+    /// Student-t observations; `sigma` is a scale, not the standard deviation.
     StudentT {
-        /// Positive observation scale.
+        /// Positive scale.
         sigma: f64,
         /// Positive degrees of freedom.
         df: f64,
@@ -31,20 +31,20 @@ pub enum LikelihoodFamily {
 /// Observation scale guard preventing cumulative counts from being treated as independent increments.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ObservationScale {
-    /// Counts for separate observation intervals.
+    /// Interval counts that may enter an independent count likelihood.
     IncidenceCounts,
-    /// Cumulative counts, which cannot be treated as independent count increments.
+    /// Accumulated counts; rejected by Poisson and negative-binomial likelihoods.
     CumulativeCounts,
-    /// Observations measured on a continuous scale.
+    /// Continuous measurements on the scale of the supplied mean vector.
     Continuous,
 }
 
 /// Configuration for [`log_likelihood`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LikelihoodConfig {
-    /// Distribution used to evaluate each present observation.
+    /// Observation distribution and its fixed scale or dispersion parameters.
     pub family: LikelihoodFamily,
-    /// Declared observation scale used by the cumulative-count guard.
+    /// Declared data scale used to reject cumulative-count independence misuse.
     pub scale: ObservationScale,
 }
 

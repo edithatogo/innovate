@@ -88,6 +88,16 @@ This synthetic calculation does not establish external empirical validity.
     def report(self) -> dict:
         return checker.build_report(self.root, self.contract)
 
+    def test_import_cache_is_not_an_example_but_unknown_source_still_is(self) -> None:
+        cache = self.root / "examples/__pycache__"
+        cache.mkdir()
+        (cache / "forecast.cpython-315.pyc").write_bytes(b"compiled import cache")
+        report = self.report()
+        self.assertFalse(any(".pyc" in item["path"] for item in report["violations"]))
+        (cache / "hidden.py").write_text("print('unregistered source')\n")
+        report = self.report()
+        self.assertTrue(any("hidden.py" in item["path"] for item in report["violations"]))
+
     def rules(self) -> set[str]:
         return {item["rule"] for item in self.report()["violations"]}
 

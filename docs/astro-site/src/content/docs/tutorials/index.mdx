@@ -1,0 +1,87 @@
+---
+title: Tutorials and learning routes
+description: Choose an executable native tutorial by the scientific task and evidence you need.
+---
+
+import { Card, CardGrid, Steps } from '@astrojs/starlight/components';
+import TutorialCatalogue from '../../../components/TutorialCatalogue.astro';
+
+These tutorials use the current Rust and Polars development API. Install the
+[locked development environment](/innovate/user-guide/installation/) first.
+Each current tutorial displays its registered example file, expected output,
+interpretation and limits. Run the unchanged file successfully before adapting
+it to a new analysis.
+
+## Choose a learning route
+
+<CardGrid>
+  <Card title="Make and interpret a first prediction">
+    Begin with the [quickstart](/innovate/user-guide/getting-started/), then
+    [prediction and forecasting](/innovate/user-guide/forecasting/). Learn what a
+    level means, how identifiers survive the table boundary and why time units
+    must agree with model parameters.
+  </Card>
+  <Card title="Fit and evaluate public observations">
+    Start with the [public-data fit](/innovate/tutorials/public-data-fit/) and
+    its [marimo companion](/innovate/tutorials/marimo/). Read the
+    [fitting guide](/innovate/user-guide/fitting/), then work through
+    [Norton–Bass fitting](/innovate/tutorials/norton-bass/). Compare parameter
+    recovery with held-out predictions and signed derivatives. Use the
+    [model atlas](/innovate/models/) to inspect other advertised families.
+  </Card>
+  <Card title="Reproduce a scenario analysis">
+    Follow [data ingestion and provenance](/innovate/tutorials/data-ingestion-provenance/),
+    [Arrow round trips](/innovate/tutorials/arrow-interchange/) and
+    [scenario experiments](/innovate/tutorials/scenario-experiment-workflows/).
+    Separate unchanged data, unchanged execution and an unchanged scientific
+    interpretation.
+  </Card>
+  <Card title="Examine an inferential claim">
+    [Bayesian fitting](/innovate/tutorials/bayesian-fitter/) checks a sampler
+    against a known posterior. [Counterfactual and causal analysis](/innovate/tutorials/counterfactual-analysis/)
+    checks a cross-fitted contrast and overlap failures. They answer different
+    questions and require different assumptions.
+  </Card>
+  <Card title="Control simulation time and network exposure">
+    Compare [homogeneous Kairos simulation](/innovate/tutorials/kairos-simulation/)
+    with [network scenarios](/innovate/tutorials/network-scenarios/), then inspect
+    [forcing and time](/innovate/tutorials/forcing-and-time/). Distinguish a model
+    key, an engine, a time grid and an observation quantity.
+  </Card>
+  <Card title="Scale an ordered workflow">
+    Use [native batch execution](/innovate/tutorials/native-batch/) to compare
+    worker counts while retaining per-item errors and result order. A successful
+    outer request does not make every batch item successful.
+  </Card>
+</CardGrid>
+
+## All current tutorials
+
+<TutorialCatalogue />
+
+## Complete and explain a workflow
+
+<Steps>
+
+1. **Run the original example.** Use the installed checkout and command shown
+   by the tutorial. Compare its output with the displayed contract and stop to
+   investigate a failed assertion.
+2. **Explain the result.** State the quantity, units, inputs, model assumptions,
+   relevant diagnostics, failure behavior and the inference the example does
+   not support. Try the tutorial's reader task before revealing its answer.
+3. **Change one assumption or input.** Predict what should change, then run
+   the revised analysis. New data or assumptions need their own checks; a
+   passing original example does not qualify the revision.
+
+</Steps>
+
+## What passing a tutorial establishes
+
+Passing a synthetic example establishes its stated software checks. It does not
+establish empirical accuracy, causal identification, interval coverage or
+suitability for a particular population. The
+[documentation quality guide](/innovate/maintainers/documentation-quality/)
+separates structure, execution and broader scientific and reader-task review.
+Use the [native capability guide](/innovate/native-migration/) to inspect exact
+model, variant, operation and quantity conventions and remaining qualification
+limits.

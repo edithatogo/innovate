@@ -5,20 +5,20 @@ use crate::inference::InnovationError;
 /// Current market state for competing products.
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketState {
-    /// Current adoption for each product, in the same order as the parameters.
+    /// Nonnegative adopted amounts in the shared product order.
     pub adoption: Vec<f64>,
 }
 
 /// Parameters for competing-product diffusion rates.
 #[derive(Debug, Clone, PartialEq)]
 pub struct CompetitionParameters {
-    /// Shared market capacity across products.
+    /// Finite positive capacity shared by all products.
     pub market_capacity: f64,
-    /// Time at which each product enters the market.
+    /// Entry time for each product; its rate is zero before this time.
     pub entry_times: Vec<f64>,
-    /// Per-product innovation coefficients.
+    /// Nonnegative external-adoption coefficients per product and time unit.
     pub p: Vec<f64>,
-    /// Per-product imitation coefficients.
+    /// Nonnegative imitation coefficients multiplying each product's own share.
     pub q: Vec<f64>,
     /// Interaction matrix `alpha[i][j]` (product `j` effect on product `i`).
     pub interaction: Vec<Vec<f64>>,
@@ -27,15 +27,17 @@ pub struct CompetitionParameters {
 /// Instantaneous adoption rates returned by [`competing_rates`].
 #[derive(Debug, Clone, PartialEq)]
 pub struct MarketRates {
-    /// Instantaneous adoption rate for each product.
+    /// Adoption amounts per time unit, aligned with [`MarketState::adoption`].
     pub rates: Vec<f64>,
 }
 
 /// Compute instantaneous adoption rates for competing products under a shared market capacity (A04).
 ///
 /// # Errors
-/// Returns [`InnovationError`] on mismatched dimensions, invalid time or capacity,
-/// or non-finite or negative state and `p`/`q` values.
+/// Returns [`InnovationError`] on mismatched dimensions, non-finite time, invalid
+/// capacity, or non-finite/negative adoption and `p`/`q` values. Entry times and
+/// interaction coefficients are caller-supplied; this function does not
+/// independently validate their finiteness.
 pub fn competing_rates(
     t: f64,
     state: &MarketState,

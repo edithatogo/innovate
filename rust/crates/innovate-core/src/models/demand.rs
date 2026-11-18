@@ -5,18 +5,18 @@ use crate::inference::InnovationError;
 /// Choice set of inside alternatives (with observable attributes and prices).
 #[derive(Debug, Clone, PartialEq)]
 pub struct ChoiceSet {
-    /// Quality attribute of each inside alternative.
+    /// Finite quality attributes in alternative order, excluding the outside option.
     pub quality: Vec<f64>,
-    /// Price of each inside alternative, aligned with `quality`.
+    /// Finite prices in the same alternative order and caller-defined currency.
     pub price: Vec<f64>,
 }
 
 /// Preference parameters for [`choice_shares`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct PreferenceParameters {
-    /// Linear utility coefficient for quality.
+    /// Signed coefficient of quality in utility `alpha_quality * quality + beta_price * price`.
     pub alpha_quality: f64,
-    /// Linear utility coefficient for price; its sign is supplied by the caller.
+    /// Signed price coefficient in utility; a negative value represents price aversion.
     pub beta_price: f64,
 }
 

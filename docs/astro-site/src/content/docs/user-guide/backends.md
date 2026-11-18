@@ -5,7 +5,7 @@ description: Use the current Rust core, select supported native operations, and 
 
 Innovate's 0.7 development API uses a Rust scientific core. The earlier global
 `set_backend` interface and NumPy/JAX/Numba backend instructions belong to the
-[versioned archive](/innovate/latest/user-guide/backends/). They do not describe
+[retired source history](https://github.com/edithatogo/innovate/blob/6c226f92f14f01e771b1490c7fb3a7c77f4bc74a/docs/astro-site/src/content/docs/latest/user-guide/backends.md). They do not describe
 the maintained native package.
 
 ## Separate language, algorithm and execution engine

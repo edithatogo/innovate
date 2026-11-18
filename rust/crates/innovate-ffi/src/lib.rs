@@ -1,12 +1,60 @@
-//! Narrow C ABI for Julia and R. Input is borrowed; returned UTF-8 is Rust-owned.
+//! Narrow C ABI for Julia and R, with explicit borrowed-input and owned-output rules.
+//!
+//! JSON calls return Rust-owned, NUL-terminated UTF-8. Copy or inspect the text and
+//! release it exactly once with [`innovate_free`]. Arrow exporters return a null
+//! error pointer on success and write a Rust-owned byte pointer and byte length;
+//! release that original pair with [`innovate_free_bytes`]. These buffers must not
+//! be released by a foreign allocator. All input buffers are borrowed only for
+//! the duration of the synchronous call.
+//!
+//! Error envelopes describe request or execution failures. They do not recover
+//! from violations of an unsafe function's pointer preconditions. The ABI does
+//! not infer scientific units or convert observation quantities.
 use std::ffi::{CStr, CString, c_char};
 use std::ptr;
 
-/// Execute a UTF-8 JSON request. Free the result once with `innovate_free`.
-/// Null input returns a structured invalid-request response.
+/// Execute a schema-2.0 UTF-8 JSON request and return its response text.
+///
+/// # Returns
+/// A Rust-owned, NUL-terminated JSON string, or null if the response cannot be
+/// represented as a C string. Inspect the outer `error` member before consuming
+/// `result`, and release every non-null response once with [`innovate_free`].
+///
+/// # Errors
+/// Null input, invalid UTF-8 and rejected requests produce a native error
+/// envelope. A caught Rust panic produces an `internal_error` envelope. Errors
+/// retained inside batch result rows are distinct from the outer request error.
 ///
 /// # Safety
-/// Non-null `request` must point to a readable NUL-terminated string for this call.
+/// A non-null `request` must point to a readable NUL-terminated string that
+/// remains allocated and unchanged for this call. Null is accepted as an invalid
+/// request; any other invalid pointer violates the contract.
+///
+/// # Examples
+/// ```
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// use innovate_ffi::{innovate_call, innovate_free};
+/// use std::ffi::{CStr, CString};
+///
+/// let request = CString::new(
+///     r#"{"schema_version":"2.0","operation":"discover_models","payload":{}}"#,
+/// )?;
+/// // SAFETY: request is live and NUL-terminated for the synchronous call.
+/// let response = unsafe { innovate_call(request.as_ptr()) };
+/// assert!(!response.is_null());
+/// // SAFETY: read the live response before returning its allocation to Rust.
+/// let decoded = unsafe {
+///     serde_json::from_slice::<serde_json::Value>(CStr::from_ptr(response).to_bytes())
+/// };
+/// // SAFETY: this is the original response pointer, released exactly once.
+/// unsafe { innovate_free(response) };
+/// let envelope = decoded?;
+/// assert_eq!(envelope["schema_version"], "2.0");
+/// assert!(envelope["error"].is_null());
+/// assert!(envelope["result"]["models"].is_array());
+/// # Ok(())
+/// # }
+/// ```
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_call(request: *const c_char) -> *mut c_char {
     let response = std::panic::catch_unwind(|| {
@@ -22,11 +70,23 @@ pub unsafe extern "C" fn innovate_call(request: *const c_char) -> *mut c_char {
     owned_response(response)
 }
 
-/// Execute a scenario grid on a borrowed Arrow IPC file. Free with innovate_free.
+/// Execute a scenario grid on a borrowed Arrow IPC file and return JSON.
+///
+/// `len` is the input buffer length in bytes. The payload is the scenario-grid
+/// JSON object, not a full schema-2.0 request. The returned text follows the
+/// allocation contract of [`innovate_call`] and must be freed with [`innovate_free`].
+///
+/// # Errors
+/// Null inputs, a zero or oversized byte length, malformed JSON and rejected IPC
+/// or grid data produce an `invalid_request` envelope. A caught Rust panic
+/// produces `internal_error`. Inspect each returned scenario row as well as the
+/// outer error before treating an execution as successful.
 ///
 /// # Safety
-/// Non-null pointers must address a readable buffer of length `len` and a
-/// readable NUL-terminated payload respectively for the duration of the call.
+/// Non-null inputs must remain allocated and unchanged for the call. `data` must
+/// address `len` readable bytes in one allocation, and `payload` must address a
+/// readable NUL-terminated string. No Rust reference may permit mutation of the
+/// borrowed bytes while they are read.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_scenario_grid_ipc(
     data: *const u8,
@@ -63,11 +123,13 @@ fn owned_response(response: std::thread::Result<String>) -> *mut c_char {
     CString::new(text).map_or(ptr::null_mut(), CString::into_raw)
 }
 
-/// Release a result returned by a native call. A null pointer is a no-op.
+/// Release JSON text returned by this library. A null pointer is a no-op.
 ///
 /// # Safety
-/// `response` must be null or a still-live pointer returned by a native call.
-/// Do not use the pointer after this call, free it twice, or supply foreign memory.
+/// `response` must be null or the original, still-live pointer returned by a
+/// JSON call or an Arrow export's error return. Its string length and NUL
+/// terminator must not have changed. Do not use the pointer after this call,
+/// free it twice, or supply memory owned by another allocator.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_free(response: *mut c_char) {
     if !response.is_null() {
@@ -135,12 +197,27 @@ mod tests {
     }
 }
 
-/// Convert a grid response to Arrow IPC. Returns a JSON error or null on success.
+/// Convert scenario execution rows from a grid response to Arrow IPC file bytes.
+///
+/// # Returns
+/// Null on success, after writing the owned byte pointer to `data` and its byte
+/// length to `len`. Release that original pair once with [`innovate_free_bytes`].
+/// A non-null return instead points to an owned JSON error string that must be
+/// released once with [`innovate_free`].
+///
+/// # Errors
+/// Missing input or output pointers, invalid JSON and conversion failures return
+/// `invalid_request`; a caught Rust panic returns `internal_error`. When both
+/// output pointers are valid, they are initialized to null and zero before
+/// conversion, including on failure. If either output pointer is null, no output
+/// is initialized and neither out parameter should be read as a result.
 ///
 /// # Safety
-/// The response must be a readable NUL-terminated string. Both out parameters
-/// must be valid writable pointers. Release successful bytes with
-/// `innovate_free_bytes` and any error string with `innovate_free`.
+/// A non-null `response` must remain a readable, unchanged NUL-terminated string
+/// for the call. Non-null `data` and `len` must point to properly aligned writable
+/// storage for their declared types, disjoint from each other and from input
+/// storage. Null pointers are rejected as request errors. Input remains borrowed;
+/// the caller owns the responsibility for releasing either returned allocation.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_scenario_executions_ipc(
     response: *const c_char,
@@ -160,8 +237,17 @@ pub unsafe extern "C" fn innovate_scenario_executions_ipc(
 
 /// Convert ordered grid comparisons to Arrow IPC.
 ///
+/// The success/error return and byte-length out parameters follow
+/// [`innovate_scenario_executions_ipc`]. Preserve the returned comparison order
+/// when interpreting the output table.
+///
+/// # Errors
+/// Missing pointers, invalid JSON and rejected comparison data return
+/// `invalid_request`; a caught Rust panic returns `internal_error`.
+///
 /// # Safety
-/// Same pointer and ownership contract as `innovate_scenario_executions_ipc`.
+/// The pointer, lifetime and allocation rules of [`innovate_scenario_executions_ipc`]
+/// apply, including disjoint writable output storage and exactly one matching free.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_scenario_comparisons_ipc(
     response: *const c_char,
@@ -181,8 +267,16 @@ pub unsafe extern "C" fn innovate_scenario_comparisons_ipc(
 
 /// Convert validated paired Bass outcomes to Arrow IPC.
 ///
+/// `payload` is the paired-outcomes JSON object. The success/error return and
+/// byte-length out parameters follow [`innovate_scenario_executions_ipc`].
+///
+/// # Errors
+/// Missing pointers, invalid JSON or paired-outcome validation/conversion failures
+/// return `invalid_request`; a caught Rust panic returns `internal_error`.
+///
 /// # Safety
-/// Same pointer and ownership contract as `innovate_scenario_executions_ipc`.
+/// The pointer, lifetime and allocation rules of [`innovate_scenario_executions_ipc`]
+/// apply with `payload` as the borrowed string input.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_paired_outcomes_ipc(
     payload: *const c_char,
@@ -215,9 +309,20 @@ unsafe fn scenario_output<E: std::fmt::Display>(
 
 /// Rewrite IPC file or stream bytes to a portable Arrow IPC file.
 ///
+/// `input_len` and the returned `len` are byte counts. The success/error return,
+/// output initialization and matching free functions follow
+/// [`innovate_scenario_executions_ipc`]. Conversion allocates a new output buffer.
+///
+/// # Errors
+/// Null pointers, an empty or oversized input, and IPC reader/writer failures
+/// return `invalid_request`; a caught Rust panic returns `internal_error`.
+///
 /// # Safety
-/// Input must be readable for input_len bytes. Output pointers must be writable.
-/// Release output using innovate_free_bytes or innovate_free for an error.
+/// A non-null input must address `input_len` readable bytes in one allocation and
+/// remain unchanged for the call. Non-null output pointers must be properly
+/// aligned, writable for their types, and disjoint from each other and the input.
+/// Release successful bytes with [`innovate_free_bytes`] and an error string with
+/// [`innovate_free`], each exactly once.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_export_ipc_file(
     input: *const u8,
@@ -239,9 +344,19 @@ pub unsafe extern "C" fn innovate_export_ipc_file(
 
 /// Rewrite IPC file or stream bytes to a portable Arrow IPC stream.
 ///
+/// `input_len` and the returned `len` are byte counts. The success/error return,
+/// output initialization and matching free functions follow
+/// [`innovate_scenario_executions_ipc`]. Conversion allocates a new output buffer.
+///
+/// # Errors
+/// Null pointers, an empty or oversized input, and IPC reader/writer failures
+/// return `invalid_request`; a caught Rust panic returns `internal_error`.
+///
 /// # Safety
-/// Input must be readable for input_len bytes. Output pointers must be writable.
-/// Release output using innovate_free_bytes or innovate_free for an error.
+/// The borrowed-buffer, writable-output and allocation rules of
+/// [`innovate_export_ipc_file`] apply. Input storage must remain allocated and
+/// unchanged for the call; return either output allocation to its matching free
+/// function exactly once.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn innovate_export_ipc_stream(
     input: *const u8,
@@ -295,7 +410,10 @@ unsafe fn arrow_output(
     }
 }
 
-/// Release an Arrow result once.
+/// Release an Arrow result once using its original byte length.
+///
+/// A null `data` pointer is a no-op. JSON error strings use [`innovate_free`]
+/// instead; no output can be read after its allocation has been released.
 ///
 /// # Safety
 /// A non-null pointer and length must be the original pair returned by

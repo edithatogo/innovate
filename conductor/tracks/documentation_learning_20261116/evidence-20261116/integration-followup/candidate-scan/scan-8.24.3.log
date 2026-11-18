@@ -1,0 +1,9 @@
+11:20PM DBG using github.com/wasilibs/go-re2 regex engine
+11:20PM DBG no gitleaks config found in path /workspace/scratch/5e94e22858cb/innovate-docs-integrated/.gitleaks.toml, using default gitleaks config
+11:20PM DBG found .gitleaksignore file: /tmp/innovate-final-candidate-scan-k405hvfz/empty.gitleaksignore
+11:20PM DBG executing: /usr/local/bin/git -C /workspace/scratch/5e94e22858cb/innovate-docs-integrated log -p -U0 --no-merges --first-parent --no-renames 5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057
+11:20PM DBG SCM platform parsed from host host=github.com platform=github
+11:20PM INF 1 commits scanned.
+11:20PM DBG Note: this number might be smaller than expected due to commits with no additions
+11:20PM INF scanned ~1931870 bytes (1.93 MB) in 2.46s
+11:20PM INF no leaks found

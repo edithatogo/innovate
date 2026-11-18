@@ -1,0 +1,18 @@
+$ node scripts/generate-api.mjs --check && astro check
+Current API references match all declared language, source and generator hashes.
+Learning catalogue: source inventory current; native execution not run by this command.
+Retired documentation: {'schema_version': 1, 'status': 'passed', 'removed_sources': 263, 'migration_routes': 141, 'rendered_notices_checked': 0, 'git_history_checked': False, 'scientific_acceptance': False}
+Documentation traceability valid: 11 mapped requirements.
+Runtime execution, scientific qualification and external acceptance remain separate.
+Learning notebooks: passed; native execution: False; report: /workspace/scratch/5e94e22858cb/innovate-docs-integrated/docs/astro-site/.reports/notebooks/structure.json
+22:57:34 [content] Syncing content
+22:57:34 [content] Astro config changed
+22:57:34 [content] Clearing content store
+22:57:36 [content] Synced content
+22:57:36 [types] Generated 2.75s
+22:57:36 [check] Getting diagnostics for Astro files in /workspace/scratch/5e94e22858cb/innovate-docs-integrated/docs/astro-site...
+Result (8 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
