@@ -5,29 +5,33 @@ use crate::inference::InnovationError;
 /// Active-user stock vector across products/states.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ActiveUseState {
-    /// Active-user stock for each product or state.
+    /// Current nonnegative active-user stock per product or state.
     pub active: Vec<f64>,
-    /// Accumulated start flows for each product or state.
+    /// Caller-maintained cumulative starts, increased by `starts * dt`;
+    /// switching inflows are excluded from this counter.
     pub cumulative_starts: Vec<f64>,
-    /// Accumulated stop flows for each product or state.
+    /// Caller-maintained cumulative stops, increased by `stops * dt`;
+    /// switching outflows are excluded from this counter.
     pub cumulative_stops: Vec<f64>,
 }
 
 /// Flow rates per unit time: starts, abandonment/stops, and pairwise switching matrix `switch[from][to]`.
 #[derive(Debug, Clone, PartialEq)]
 pub struct UseRates {
-    /// Start flow per unit time for each product or state.
+    /// Nonnegative external starts per product and time unit.
     pub starts: Vec<f64>,
-    /// Stop flow per unit time for each product or state.
+    /// Nonnegative cessation flows per product and time unit.
     pub stops: Vec<f64>,
-    /// Switching flow per unit time, indexed by source then destination.
+    /// Nonnegative switching flows `switch[from][to]` per time unit;
+    /// diagonal entries are validated but do not move stock.
     pub switch: Vec<Vec<f64>>,
 }
 
 /// Supply intensity (transactions per active user per unit time) separating transactions from actor counts.
 #[derive(Debug, Clone, PartialEq)]
 pub struct SupplyIntensity {
-    /// Expected prescriptions per active user per unit time, by product.
+    /// Finite nonnegative transactions per active user per time unit,
+    /// in the same product order as [`ActiveUseState::active`].
     pub prescriptions_per_active: Vec<f64>,
 }
 
@@ -98,7 +102,11 @@ pub fn step_active_use(
     })
 }
 
-/// Convert active user stock to expected transaction/prescription counts (A05).
+/// Convert active user stock to expected transaction/prescription rates (A05).
+///
+/// Returns `active[i] * prescriptions_per_active[i]`; no time interval is
+/// integrated. The caller supplies valid active stocks, which this helper does
+/// not revalidate.
 ///
 /// # Errors
 /// Returns [`InnovationError`] if lengths mismatch or intensities are negative/non-finite.

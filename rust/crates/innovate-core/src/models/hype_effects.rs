@@ -5,51 +5,54 @@ use crate::inference::InnovationError;
 /// State separating cumulative first adoption from active use.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct InnovationState {
-    /// Cumulative number of first adopters.
+    /// Finite nonnegative cumulative amount adopting for the first time.
     pub cumulative_first_adoption: f64,
-    /// Current active-use stock.
+    /// Finite nonnegative amount currently in use, on the same scale as adoption.
     pub active_use: f64,
 }
 
 /// Exogenous or observed hype level at time `t`.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypeSignal {
-    /// Hype level used by the log-linear effects.
+    /// Finite signal value multiplying each log-linear effect coefficient.
     pub level: f64,
 }
 
 /// Separate log-linear hype effect coefficients on `p`, `q`, and cessation hazard.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct HypeEffectParameters {
-    /// Positive baseline innovation coefficient.
+    /// Finite positive baseline innovation coefficient per time unit.
     pub p0: f64,
-    /// Nonnegative baseline imitation coefficient.
+    /// Finite nonnegative baseline imitation coefficient per time unit.
     pub q0: f64,
-    /// Positive market potential.
+    /// Finite positive market capacity on the cumulative first-adoption scale.
     pub m: f64,
-    /// Log-linear hype coefficient for innovation.
+    /// Finite signed effect on innovation: `p = p0 * exp(beta_p * level)`.
     pub beta_p: f64,
-    /// Log-linear hype coefficient for imitation.
+    /// Finite signed effect on imitation: `q = q0 * exp(beta_q * level)`.
     pub beta_q: f64,
-    /// Nonnegative baseline cessation hazard.
+    /// Finite nonnegative baseline cessation hazard per time unit, applied to each unit of active use.
     pub h0_stop: f64,
-    /// Log-linear hype coefficient for cessation.
+    /// Finite signed effect on cessation: `h_stop = h0_stop * exp(beta_stop * level)`.
     pub beta_stop: f64,
 }
 
 /// Instantaneous rates returned by [`innovation_rates`].
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct InnovationRates {
-    /// Instantaneous first-adoption flow.
+    /// Instantaneous increase in cumulative first adoption per time unit.
     pub first_adoption_rate: f64,
-    /// Net instantaneous active-use change after cessation.
+    /// Net active-use change per time unit after cessation; this can be negative.
     pub active_use_rate: f64,
 }
 
 /// Compute separate hype-modulated first-adoption and active-use rates (H04).
 ///
 /// Zero coefficients (`beta_p = beta_q = beta_stop = 0`) recover baseline Bass uptake and cessation.
-/// Negative coefficients inhibit uptake without ever making `first_adoption_rate` negative.
+/// Each multiplier is `exp(beta * level)`: a negative product reduces the
+/// corresponding baseline coefficient, and a positive product increases it.
+/// `beta_stop` acts on cessation, so reducing that multiplier lowers active-use
+/// losses rather than inhibiting first adoption.
 ///
 /// # Errors
 /// Returns [`InnovationError`] if parameters or state are non-finite or out of domain.

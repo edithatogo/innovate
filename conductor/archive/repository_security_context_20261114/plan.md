@@ -1,5 +1,268 @@
 # Issue #414 implementation plan
 
+## Alert #44 CodeQL language-check gap — 18 November 2026
+
+- Owner: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.
+- Isolated worktree: `/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`,
+  branch `codex/alert44-codeql-language-gate`, based on main commit
+  `0f86ee6bc40600d19df467b2c395741c89ad7f92`.
+- Allowed files: this plan, `scripts/check_repository_policy.py`, and
+  `tests/workflows/test_repository_policy.py`. Native scope is only the required
+  status checks on `main`; preserve all other branch-protection settings.
+- Next operation: qualify the two existing CodeQL language-job contexts against
+  current pull-request and bot histories, prepare the drift-checker change, and
+  add both app-bound contexts to protection only if they do not replace an
+  existing check or disturb an in-flight pull request.
+
+On 18 November this chat continued the requested success-only qualification in
+the same worktree. The allowed source scope additionally includes
+`scripts/check_codeql_success.py` and `tests/workflows/test_codeql_success.py`.
+The next bounded operation is a read-only verifier for an exact PR head, using
+GitHub's default-setup workflow, latest run, both job conclusions and uploaded
+analysis identities. It does not publish a status or change native protection.
+Any later automated status producer requires separate threat and event-race
+qualification before it is made required.
+
+The allowed scope also includes `.github/workflows/codeql-evidence-canary.yml`:
+a non-required, read-only hosted canary may exercise the verifier with its
+actual restricted GitHub token. It does not authorize a required status or
+checkout of PR code in a privileged workflow.
+
+The verifier requires an exact open PR head, the current GitHub default-setup
+run, successful Python and Rust jobs on its latest attempt, matching uploaded
+analyses with completed SARIF processing, a successful GitHub CodeQL aggregate,
+and no open CodeQL findings on that head. It checks again for concurrent head,
+run or aggregate changes. This is a stricter point-in-time observation; it is
+not continuous enforcement. In particular, a later same-head rerun needs an
+independently qualified event/status design before any result can be required.
+
+With repo-local Python 3.15.2, 11 verifier cases and 19 policy cases passed,
+including negative controls for skipped/neutral checks, wrong app or ref,
+missing or stale analyses, unfinished SARIF, findings and rerun races. A
+separate review exposed an older-run rerun and inconsistent-metadata bypass;
+both were fixed and their controls passed. Read-only live probes returned
+success for PR #678 head `0c9ecfd3`, pending for PR #682 head `dc9ce084` while
+Rust was running, and failure for a wrong PR head. Ruff, actionlint, Zizmor on
+the canary, repository policy and Conductor hygiene passed locally. Hosted
+canary `44235275341` passed on PR #682 head
+`e572893aa7ded32aba1753d77cb6243a88d56432` with its restricted token. The
+same hash-verified Opengrep 2.0.0 local rule-engine diagnostic scanned the
+verifier and its test file with no findings or errors. This focused scan is
+not the separate complete consumer SAST or parser gate. Later commits require
+their own hosted checks. A subsequent read-only verifier run also passed for
+PR #678 head `a498d1df54d6e6353dadf6ea531281e7145e898e`, using CodeQL run
+`44237683850`; that head's RustSec and release-readiness jobs failed.
+
+The required `CodeQL` aggregate was neutral on PR #671 while the Rust analysis
+had not finished. GitHub treats neutral and skipped required status checks as
+passing. Requiring each default-setup language job adds a missing/pending/failure
+barrier, but does not by itself reject a future neutral or skipped job. Keep
+that residual gap open and do not claim complete enforcement from this change.
+
+On 18 November, the exact current heads of open PRs #662, #678 and #681, and
+merged PRs #671, #672, #670, #667 and #666, each reported successful
+`Analyze (python)` and `Analyze (rust)` checks from GitHub Actions app 15368.
+Those samples include StepSecurity and Renovate updates; they do not guarantee
+that future configurations or bot changes cannot skip a language. PR #662's
+existing auto-merge request is owned elsewhere and was not changed. Its current
+head already has both successes and its merge state is behind.
+
+The drift-checker regression first failed for both absent contexts and both
+wrong-app contexts. With the two app-bound requirements added to the checker,
+all 19 repository-policy tests pass on repo-local Python 3.15.2. The local
+policy check, Conductor hygiene, Ruff and `git diff --check` also pass; the
+local policy check does not inspect live settings.
+
+The live classic protection was then updated using the exact reviewed baseline
+and read back: strict mode and the seven pre-existing app-bound contexts remain,
+and `Analyze (python)` and `Analyze (rust)` are additionally required from app
+15368. The full protection response outside required status checks was unchanged,
+including enforced administrators and zero required approvals. PR #662 remained
+open, behind and auto-merge enabled, with its existing head unchanged. This
+additive change does not reject a skipped or neutral language job and is not
+acceptance of the complete CodeQL requirement.
+
+The updated checker accepted the freshly read classic protection after the
+separate restrictions endpoint explicitly returned HTTP 404 `Push restrictions
+not enabled`. The protection response itself omitted that field, so evaluating
+it without the second read correctly failed as incomplete. This targeted
+classic-protection check does not certify the separate ruleset proposal.
+
+### Isolated native rule qualification
+
+The same chat owns a temporary `codex/codeql-rule-probe-base` branch and a
+branch-scoped test ruleset for this task. The probe starts at
+`b74de7e678966865ea91fe00c5fe0eb15d31c20f` and advances normally to
+`0f86ee6bc40600d19df467b2c395741c89ad7f92`. It does not target `main` or alter
+another pull request. First enable only a non-fast-forward rule and scan the
+protected test base. Then test a CodeQL code-scanning rule against a temporary
+pull request using this branch's source, read back the resulting rule and
+checks, and close the owned probe after its terminal evidence is recorded.
+The probe will not authorize skipping findings or altering the existing checks.
+GitHub documents that its code-scanning rule does not apply to Dependabot pull
+requests analyzed by default setup, so this limitation must remain explicit.
+The first fast-forward to the already-scanned main commit did not create a
+CodeQL run or analysis for the test ref. A normal empty commit in a separate
+test worktree will check whether a distinct commit triggers the baseline scan;
+an absent baseline is a blocked probe, not a pass.
+
+Rule `27519086` applied only `non_fast_forward` to the test branch. The normal
+fast-forward to `0f86ee6b` and the distinct empty commit
+`4b635ae775690b5278a60e72e034623a85ddd922` produced no default-setup CodeQL
+workflow runs or code-scanning analyses for that protected ref. The expected
+baseline was Python and Rust analyses; only offline-security jobs queued.
+Because both targeted baseline attempts failed, the proposed code-scanning
+rule was not exercised or applied to main. Its missing-analysis and Dependabot
+behavior remain unqualified here. The owned test rule, branch and queued test
+jobs are removed after readback; this does not change main's protections.
+
+On 18 November the same integrator tests a new hypothesis: the two prior test
+pushes had no Rust or Python source change. An isolated `codex/codeql-probe2-base`
+branch may receive one harmless Rust comment after its branch-scoped protection
+is active. Its only purpose is to request a real default-setup baseline before
+testing the native code-scanning rule; it does not target main or change another
+pull request. Record the exact outcomes and remove only these owned probe
+resources. No skipped, neutral or absent result is treated as a pass.
+
+Ruleset `27521435` made the isolated branch report protected. Source-bearing
+commit `a49fbe0b9e0918bb6d96bf5b199a48a30a83a2ce` still produced no CodeQL
+run or analysis on that ref. A final bounded comparison adds classic branch
+protection to this same owned test branch and pushes a second harmless comment
+change; the classic-protection endpoint previously returned 404 for this ref.
+This tests whether default setup distinguishes the protection mechanisms. Both
+temporary protections and only this branch's queued jobs must be removed after
+the result is read back.
+
+Classic protection followed by comment-only commit
+`b59da1d3b3a0ce4f0d16c0016c74cf56567bef07` started default-setup run
+`44238449463`; this is a trigger observation, not a completed analysis. The
+same integrator may create a separate `codex/codeql-probe2-head` branch with a
+harmless source comment and an explicitly temporary pull request targeting
+only the protected test branch. Add the native CodeQL code-scanning rule only
+to ruleset `27521435`; observe its behavior while the test analyses are
+pending and after they finish. After both baseline languages succeed, a single
+rerun of the owned test PR's Rust job may test whether a same-head rerun blocks
+the native rule. The test PR has no auto-merge and must never be
+merged. Close it and remove both owned test branches, both temporary protections
+and their queued offline jobs after recording the terminal evidence.
+
+The base run and PR run eventually completed successfully for both languages,
+and both uploaded analyses were present on each exact ref. GitHub rejected the
+owned PR's Rust-job-only rerun with HTTP 403: jobs in this dynamic workflow run
+cannot be rerun. The separately scoped full-run rerun endpoint may be tried
+once; its outcome must be recorded and must not be generalized to other runs.
+The full-run request was also rejected as not retryable. The integrator may
+instead advance only the test PR head with a second harmless comment change,
+then observe the native rule against the now-complete test base while the new
+head's analyses are pending. This tests a new head, not a same-head rerun.
+On new test head `1dff04125f59428f5f8c0e7a0f11ebd57c96f1e5`, with the
+completed Python and Rust baseline at `b59da1d3`, GitHub's native PR view
+displayed “Merge is blocked” and said it was waiting for CodeQL results while
+both new-head language jobs were still running. This establishes the initial
+missing-result block for this test, not that the rule requires each language
+or rejects skipped/neutral results after one language has completed.
+After the new-head Python job succeeded, its Rust job was still running and
+the aggregate was neutral. GitHub continued to block the test PR, explicitly
+reporting one expected CodeQL result. The earlier head had both successful
+analyses and an `UNSTABLE`, rather than `BLOCKED`, merge state after the base
+finished. This does not qualify the documented Dependabot exception or a
+same-head rerun, which GitHub rejected for this generated workflow.
+
+The authorized native scope may also include one additive main-only CodeQL
+code-scanning ruleset with no bypass actors, error-level non-security and
+high-or-higher security thresholds. Before creation, current main `0f86ee6b`
+has both CodeQL baseline analyses. Separately owned PR #662 is behind with
+auto-merge enabled, both language jobs and aggregate successful, and no open
+CodeQL findings on its current head; PR #681 also has both successes and no
+open CodeQL findings. Preserve the classic protection, existing checks and
+PR #662's auto-merge setting, and read them back after any additive rule.
+This partial strengthening is not a success-only guarantee for Dependabot or
+an unqualified skipped/neutral language result.
+
+Ruleset `27522878` was then created and read back active on `refs/heads/main`
+with only the CodeQL results rule, the stated thresholds and no bypass actors.
+The effective main rules endpoint confirms it applies. Classic strict mode,
+enforced administrators, zero required approvals and all nine app-bound status
+checks remain present. PR #662 remained open at
+`d98ede3b4daa1a3f1a1fcec74e015ed77e24c3d5`, behind and auto-merge enabled;
+PR #681 remained open at its prior head and blocked. This is an additional
+native barrier for applicable pull requests, not complete success-only
+enforcement for every actor or every skipped result.
+After activation, PR #682 at `e572893a` with both CodeQL analyses successful
+remained `UNSTABLE` rather than rule-blocked; PR #678 remained behind. The
+disposable `1dff041` PR run was only needed to observe the missing-Rust block;
+if stopped during cleanup, its cancelled Rust job is not a successful scan.
+The owned test PR #683 was closed unmerged, run `44241877647` was cancelled
+with its Rust job cancelled, and its seven queued offline jobs and second
+release-drafter run were cancelled. The isolated worktree, both test branches
+and both test protections were removed. Readback leaves the new main ruleset
+active and PR #662's head, behind status and auto-merge unchanged.
+
+The policy checker's new live-snapshot control first failed because it did not
+recognize this additional no-bypass rule. It now requires an active main
+CodeQL results rule with at least the observed thresholds and rejects missing,
+disabled, excluded, bypassable, wrong-tool or weakened variants. It accepts
+stronger thresholds and additional tools. The actual rule `27522878` passed the
+targeted ruleset parser readback. On repo-local Python 3.15.2, the combined
+policy and verifier suites passed 32 tests; Ruff, the local repository-policy
+check, Conductor hygiene and `git diff --check` passed. The shared staged
+Gitleaks 8.30.1 wrapper reported zero findings; a local Presidio scan was not
+run in these lean environments. This targeted readback does not certify every
+other live repository setting.
+
+The native rule is active on the test ref with CodeQL `errors` and
+`high_or_higher` thresholds. Test PR `#683` has no auto-merge, base
+`b59da1d3b3a0ce4f0d16c0016c74cf56567bef07`, and head
+`90b9b688d6673f925692cc784c9a139f125af368`. At approximately 04:39 UTC,
+the internal GitHub PR view displayed “Able to merge” while both base run
+`44238449463` and PR run `44238616323` had successful Python jobs but Rust
+jobs still in progress. REST returned `mergeable: true` and `unstable` at the
+same observation. The base Rust analysis had not yet established a baseline,
+so this proves only that the rule did not block that incomplete-baseline
+state; it does not establish behavior after both base languages are present.
+No merge was attempted. The test PR also triggered release-drafter run
+`44238619427`; its log reported forced dry-run and disabled publish for the
+ephemeral PR merge ref. The owned run was cancelled and its result was
+`cancelled`.
+
+For the hosted Opengrep failure, a separate clean detached diagnostic worktree
+at exact consumer `e2a3ce65f330252c9ad74b182a19a0e8cdb19418` was scanned
+with the SHA-256-verified macOS Opengrep 2.0.0 release and the candidate's
+unchanged rules. The local rule-engine run reported all 891 parent-index source
+paths, seven Python egress-rule findings and one partial Rust parse error; one
+uninitialized submodule was outside that inventory. The seven rule matches
+occur in four developer-reporting scripts. They have not been classified as
+actual leaks or resolved, and this diagnostic did not rerun the separate
+per-file parser gate. No match contents were retained or sent to CI. The clean
+diagnostic worktree was removed. A macOS diagnostic is not the failed hosted
+Linux consumer run or proof of complete SAST coverage.
+
+On current PR #682 head `e572893aa7ded32aba1753d77cb6243a88d56432`, a
+separate real Opengrep 2.0.0 strict per-file Rust parser probe tested all 746
+tracked Rust files. It rejected 46: 26 under vendored faer, 18 under vendored
+nalgebra, and one each under vendored faer-traits and pulp. No source text or
+scanner diagnostics were printed. Vendored source remains within the scanner's
+tracked-source inventory; these failures are not excluded or treated as clean.
+The local macOS parser result is not the hosted Linux qualification.
+
+The shared standards draft's later exact-head hosted run `44239253142` on
+`8e303d11a81ce821ffb37893030ee0d91d07b93f` again passed image construction
+and controls but failed the consumer Opengrep step. Its artifact `14399107739`
+has verified archive SHA-256
+`6d3b9b9d2f805423a996d4fa4d57527f107dbcc862a46118a1ae8b571914e732`.
+The manifest and SBOM/vulnerability receipt hashes match; the all-layer report
+retains 451 matches including 11 critical and 129 high, and one ignored match.
+The tested image and release remain unqualified.
+
+A separate temporary inventory checked the frozen source ZIP hashes and root
+licence/notice file hashes for all 65 compiled Go modules in the candidate
+Gitleaks binary. Eleven ZIPs were retrieved from their frozen Go-proxy sources;
+the other 54 were already cached. Each module had at least one root notice.
+The inventory SHA-256 is
+`04a14db9dc8d1c3bc3c4c157861998e22733e376505e096bd730e97312fdcc49`.
+This does not classify the licences, cover all embedded or noncompiled source,
+or establish redistribution compliance; the licence review remains open.
+
 ## PR #672 workflow-lint repair — 17 November 2026
 
 - Integrator: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.

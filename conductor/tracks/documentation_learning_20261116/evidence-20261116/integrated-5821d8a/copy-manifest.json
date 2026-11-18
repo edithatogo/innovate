@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "scope": "Verbatim copies of final integrated qualification receipts; hashes identify original raw bytes before any later archival envelope.",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "records": [
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/api.json",
+      "retained_path": "final-source/api.json",
+      "bytes": 24749,
+      "raw_sha256": "8ee33c74b5e00e009e1404880cc3638c7e153fbf8f35dfd13ad4be06b9ad1372",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/api.log",
+      "retained_path": "final-source/api.log",
+      "bytes": 102,
+      "raw_sha256": "b1646367c288acb0cf0fffbe29303823263598036d41405b6ec7ac4b51661468",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/artifact.json",
+      "retained_path": "final-source/artifact.json",
+      "bytes": 67240,
+      "raw_sha256": "30f19b7e68ec320c5d102f454755478898a0084728ec294cbea1b7fafab59e12",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/artifact.log",
+      "retained_path": "final-source/artifact.log",
+      "bytes": 134,
+      "raw_sha256": "e7cfe5b26e22ceb452701962676f2caeee8e27905eabf5d0075283a2743fe40a",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/community.json",
+      "retained_path": "final-source/community.json",
+      "bytes": 7462,
+      "raw_sha256": "f28a2735bb52b304c4c97c8e4d7e4ead21c9b2f4bc457ba7029370deed4bab0c",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/community.log",
+      "retained_path": "final-source/community.log",
+      "bytes": 7462,
+      "raw_sha256": "f28a2735bb52b304c4c97c8e4d7e4ead21c9b2f4bc457ba7029370deed4bab0c",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/content-ratchet.json",
+      "retained_path": "final-source/content-ratchet.json",
+      "bytes": 17873,
+      "raw_sha256": "4bebcd5f559e31eafd1cfc505d433735082765918c39d7e4fb134ce8b4f77105",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/content-ratchet.log",
+      "retained_path": "final-source/content-ratchet.log",
+      "bytes": 17873,
+      "raw_sha256": "4bebcd5f559e31eafd1cfc505d433735082765918c39d7e4fb134ce8b4f77105",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/content-strict.json",
+      "retained_path": "final-source/content-strict.json",
+      "bytes": 17713,
+      "raw_sha256": "e8ba9d12328661dccdbc60e1bead37028c2be9a2604b769e2fc8af3854c8c105",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/content-strict.log",
+      "retained_path": "final-source/content-strict.log",
+      "bytes": 17713,
+      "raw_sha256": "e8ba9d12328661dccdbc60e1bead37028c2be9a2604b769e2fc8af3854c8c105",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/notebook-source.json",
+      "retained_path": "final-source/notebook-source.json",
+      "bytes": 1466,
+      "raw_sha256": "7c8cd3658e54b551015a80a4ebcdc509ae9e5aa583519c2d904f2b766aec5118",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/notebook-source.log",
+      "retained_path": "final-source/notebook-source.log",
+      "bytes": 1466,
+      "raw_sha256": "7c8cd3658e54b551015a80a4ebcdc509ae9e5aa583519c2d904f2b766aec5118",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/polyglot.json",
+      "retained_path": "final-source/polyglot.json",
+      "bytes": 510,
+      "raw_sha256": "c245f4cdb784935af7ff30cad31cb648b5cffe515b69d5587cd9f82f22b8618f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/polyglot.log",
+      "retained_path": "final-source/polyglot.log",
+      "bytes": 450,
+      "raw_sha256": "274b7f1259a0290e38b2cb003de9c87e7d78d3e0df971f3fe35d2c594c084737",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/qualification-summary.json",
+      "retained_path": "final-source/qualification-summary.json",
+      "bytes": 6946,
+      "raw_sha256": "9373fa89b0f1b69d52f0aebf32ab3bc49d585df1dbc1a0962d735a83018a9c9f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/retired.json",
+      "retained_path": "final-source/retired.json",
+      "bytes": 201,
+      "raw_sha256": "e8f12210d8d0f1226d59b0619d786da3076d8d9b79303e48d6a9da2c111a49e1",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/retired.log",
+      "retained_path": "final-source/retired.log",
+      "bytes": 201,
+      "raw_sha256": "e8f12210d8d0f1226d59b0619d786da3076d8d9b79303e48d6a9da2c111a49e1",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/scientific-review.json",
+      "retained_path": "final-source/scientific-review.json",
+      "bytes": 333,
+      "raw_sha256": "e15f8656367157b993cfed59b50dee288e6e45c28beb01894150d2820010202f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/scientific-review.log",
+      "retained_path": "final-source/scientific-review.log",
+      "bytes": 333,
+      "raw_sha256": "e15f8656367157b993cfed59b50dee288e6e45c28beb01894150d2820010202f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/source-checks.json",
+      "retained_path": "final-source/source-checks.json",
+      "bytes": 6472,
+      "raw_sha256": "1c7f2a64247b001c624c44419f30b427df523ccd26c9ee82c4424a21bc272f3b",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/source-tests-summary.json",
+      "retained_path": "final-source/source-tests-summary.json",
+      "bytes": 420,
+      "raw_sha256": "37cc92e1035dd64377bba859fb36361412cbbced01183141b308af13085d2bf8",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/source-tests.json",
+      "retained_path": "final-source/source-tests.json",
+      "bytes": 10485,
+      "raw_sha256": "499358e944c3192571c2235f4c465e3d5a7b5b44e9ca4a9c10d1fcd718e26f33",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_api_documentation_contract.log",
+      "retained_path": "final-source/test_api_documentation_contract.log",
+      "bytes": 128,
+      "raw_sha256": "81fb9a05bbb0eb1463141d7c5b8b02ba57ef1cdfcb55e502744d13978d149450",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_api_reference_generation.log",
+      "retained_path": "final-source/test_api_reference_generation.log",
+      "bytes": 122,
+      "raw_sha256": "e1382034fa9e686cc3b076e206e819a5a494e24ca77670f12085bae002d71bcd",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_community_documentation.log",
+      "retained_path": "final-source/test_community_documentation.log",
+      "bytes": 123,
+      "raw_sha256": "9bba6981d5d979c276cf9e4b708dded926dc9c7925c6b086800a838095e981ee",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_content_contract.log",
+      "retained_path": "final-source/test_documentation_content_contract.log",
+      "bytes": 164,
+      "raw_sha256": "d83fcb534b08f774356d5ee9a2fdec77305d92dd524f7cc2c638495b34a5b9d2",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_conventions.log",
+      "retained_path": "final-source/test_documentation_conventions.log",
+      "bytes": 113,
+      "raw_sha256": "a7b1750a9e2f65447c2d051fd23da9b426069e065e2c8f08e30801951c5f7b27",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_source_hash_contract.log",
+      "retained_path": "final-source/test_documentation_source_hash_contract.log",
+      "bytes": 113,
+      "raw_sha256": "2c077bdba128ca0fb47263d37406350dc3338d6181c13e75167d8d96ba953550",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_documentation_workflow.log",
+      "retained_path": "final-source/test_documentation_workflow.log",
+      "bytes": 109,
+      "raw_sha256": "38eeff1237d74275801617a271eced659e08b1cad8069897d18e659ae40641d8",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_native_documentation_contract.log",
+      "retained_path": "final-source/test_native_documentation_contract.log",
+      "bytes": 127,
+      "raw_sha256": "32198d14d22c7b3fdb04722a1f867de1b109dd7d87f07e02c60555d954ced30f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_polyglot_api_documentation.log",
+      "retained_path": "final-source/test_polyglot_api_documentation.log",
+      "bytes": 137,
+      "raw_sha256": "f3323c6f6c2d4f1b41efbd24591db37b5d01dcd108169219a8a9de2ddc369663",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_production_docs_contract.log",
+      "retained_path": "final-source/test_production_docs_contract.log",
+      "bytes": 120,
+      "raw_sha256": "1f2ff5056c4eaaf5800e72cf73e5cb905addb27d15fc1f7fce7f0f1f6ff4100a",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_retired_documentation.log",
+      "retained_path": "final-source/test_retired_documentation.log",
+      "bytes": 113,
+      "raw_sha256": "d839abcd3734c79f7676ae315997dc8db6d16bdcb7cc250bb6827f27bddd60dd",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-source/test_scientific_review_contract.log",
+      "retained_path": "final-source/test_scientific_review_contract.log",
+      "bytes": 105,
+      "raw_sha256": "86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/execution.json",
+      "retained_path": "final-runtime/execution.json",
+      "bytes": 26044,
+      "raw_sha256": "e40e067f532d2ec41a45f5709b4f22b43f168f87917a2acb86d5276efe819a0b",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/execution.log",
+      "retained_path": "final-runtime/execution.log",
+      "bytes": 26044,
+      "raw_sha256": "e40e067f532d2ec41a45f5709b4f22b43f168f87917a2acb86d5276efe819a0b",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/focused-native.log",
+      "retained_path": "final-runtime/focused-native.log",
+      "bytes": 65,
+      "raw_sha256": "179ab4d4c8b861d475e6c708546aacf9209be5fb16626fd27804f6d86688f51f",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/focused-native.xml",
+      "retained_path": "final-runtime/focused-native.xml",
+      "bytes": 8142,
+      "raw_sha256": "1a2acd8b01ad67f0450b1b1256edcdb11a68435324e5404c4516fa681a02110e",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/innovate-integrated-native-frozen-build.log",
+      "retained_path": "final-runtime/innovate-integrated-native-frozen-build.log",
+      "bytes": 709,
+      "raw_sha256": "be97963abf2bbb744aedba2679f8e2ccf3b58caddb6061d9173ad0ead91f9c61",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/innovate-integrated-notebook-frozen-build.log",
+      "retained_path": "final-runtime/innovate-integrated-notebook-frozen-build.log",
+      "bytes": 707,
+      "raw_sha256": "605f25456ed95a456b6ad989f726dce6d6aa06456b1e3e4c5c6b65cc5d11034b",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/native-api.json",
+      "retained_path": "final-runtime/native-api.json",
+      "bytes": 2322,
+      "raw_sha256": "c6866bdb0046504e2d094dac79ad699e56eac8e587a513643bbc1da170145f28",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/native-api.log",
+      "retained_path": "final-runtime/native-api.log",
+      "bytes": 2322,
+      "raw_sha256": "c6866bdb0046504e2d094dac79ad699e56eac8e587a513643bbc1da170145f28",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/notebooks/public-data-fit.html",
+      "retained_path": "final-runtime/notebooks/public-data-fit.html",
+      "bytes": 54901,
+      "raw_sha256": "ec0cc62abf3f5fe2ac6e5dfe78726107418a12202ff444a00ba02c658cc6b121",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/notebooks/qualification.json",
+      "retained_path": "final-runtime/notebooks/qualification.json",
+      "bytes": 2768,
+      "raw_sha256": "4f2b290cd431d477554e4b86d06c2d25e48567de8927999c02d57e21587af79e",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/notebooks.log",
+      "retained_path": "final-runtime/notebooks.log",
+      "bytes": 2768,
+      "raw_sha256": "02fc3bde081a38323e84cd06a7f0a569a03c8acf54e8a477036f90d100240ea9",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/qualification.json",
+      "retained_path": "final-runtime/qualification.json",
+      "bytes": 5984,
+      "raw_sha256": "7c801f188fb7749a7e0ee80fc87bf2ab36c639e325963d7c004602895be67ef2",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/final-runtime/rust-doctests.log",
+      "retained_path": "final-runtime/rust-doctests.log",
+      "bytes": 2660,
+      "raw_sha256": "e4244d3ee0d83ef8f37f75519fe2d11da2bf25121fbc1db67298446a7eefc6a2",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/rust-documentation-completion-20261116.json",
+      "retained_path": "rust/rust-documentation-completion-20261116.json",
+      "bytes": 3311,
+      "raw_sha256": "2336d492af0e5ad78cce9aea7c776a7b6a1f6d81b9a5e140363483bdf13da2ea",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-rust-doc-token-evidence-20261116.json",
+      "retained_path": "rust/innovate-rust-doc-token-evidence-20261116.json",
+      "bytes": 9151,
+      "raw_sha256": "b1657046cdb668d7fba292097dfa1142ffb379f1d869dbb936285f6d4f44d9c1",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-docs-frozen-20261116.log",
+      "retained_path": "rust/innovate-workspace-rust-docs-frozen-20261116.log",
+      "bytes": 1993,
+      "raw_sha256": "8c4e5a367b14390d5371bdfe9c0fbd0ed39ccb9b862cc7a88e5249e69d71ccf7",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-doctests-20261116.log",
+      "retained_path": "rust/innovate-workspace-rust-doctests-20261116.log",
+      "bytes": 2661,
+      "raw_sha256": "897c1b547614686758206687a8b8704f8651bd0a612371a53ad6989f41860ce9",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/innovate-workspace-rust-fmt-20261116.log",
+      "retained_path": "rust/innovate-workspace-rust-fmt-20261116.log",
+      "bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-rust-executable-tokens-20261116.rs",
+      "retained_path": "rust/innovate-rust-executable-tokens-20261116.rs",
+      "bytes": 1760,
+      "raw_sha256": "d4cbf8230cb4359d6f1ab4edc2b9cfb4aad7001fa7bb82c2302d873c5486cd83",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/games-documentation-20261116.json",
+      "retained_path": "games/games-documentation-20261116.json",
+      "bytes": 2118,
+      "raw_sha256": "cc0123bcb210e5465e7afd989a3221dc4d05abefa6acdd6674eccd970b6cdf99",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/games-doc-20261116.log",
+      "retained_path": "games/games-doc-20261116.log",
+      "bytes": 1912,
+      "raw_sha256": "78d30271da7252fab33ae5c5e08624c3bed179f78f3a67ae8d336c70eb52eebf",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-integrated-astro-build.log",
+      "retained_path": "frontend/innovate-integrated-astro-build.log",
+      "bytes": 15845,
+      "raw_sha256": "ce5eefa1c38c20978847328637e8e9797e2a1efa2f7a3e6d27a553ca233db45d",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-integrated-astro-check.log",
+      "retained_path": "frontend/innovate-integrated-astro-check.log",
+      "bytes": 1112,
+      "raw_sha256": "3d13e5f9da233230f3c1a760b0807a31b3627342eee4c94d0afedfed2b7744e1",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-integrated-node-tests.log",
+      "retained_path": "frontend/innovate-integrated-node-tests.log",
+      "bytes": 4633,
+      "raw_sha256": "9f9f561cfd4886009246d18dd508d227addad6cb36664acb245212cccd34e4a3",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-integrated-browser-list.log",
+      "retained_path": "frontend/innovate-integrated-browser-list.log",
+      "bytes": 17695,
+      "raw_sha256": "79e2b906224ab2bf4d4a5f9c2864fe11f42df00c6674cd7d77570819e27a0aaf",
+      "byte_identical_copy": true
+    },
+    {
+      "original_path": "/tmp/innovate-integrated-pnpm-install.log",
+      "retained_path": "frontend/innovate-integrated-pnpm-install.log",
+      "bytes": 1261,
+      "raw_sha256": "bf15749fd3dd12c08f620c8a0506d18484f7911553b638b1a2ad1ffbd532270d",
+      "byte_identical_copy": true
+    }
+  ],
+  "copied_files": 60,
+  "copied_bytes": 407966,
+  "all_byte_identical": true,
+  "cross_reference_rule": "Original absolute provenance paths are unchanged inside copied records. retained_path resolves the repository copy. Cross-record digests identify original decoded record bytes if a reversible archival envelope is subsequently applied."
+}

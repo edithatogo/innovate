@@ -65,6 +65,6 @@ or cross-version replay compatibility. A table also cannot recover fields omitte
 before export. Use the [dataset-artifact tutorial](/innovate/tutorials/data-ingestion-provenance/)
 for the separately checked ingestion and checksum contract.
 
-The [earlier interchange page](/innovate/latest/core/arrow-interchange/) remains
+The [earlier interchange page](https://github.com/edithatogo/innovate/blob/6c226f92f14f01e771b1490c7fb3a7c77f4bc74a/docs/astro-site/src/content/docs/latest/core/arrow-interchange.md) remains
 available for interpreting historical artifacts; its earlier Python payload
 classes are not the current interface.

@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/edithatogo/innovate",
+  "reviewed_on": "2026-11-16",
+  "reviewed_by": "agent",
+  "assessment": "documentation_traceability_only",
+  "registry": {
+    "parent_issue": 398,
+    "issues": {"software_heritage": 399, "rrid": 400, "joss": 401},
+    "paths": {
+      "manifest": "conductor/tracks/research_software_registry_readiness_20260721/readiness.json",
+      "checker": "scripts/check_registry_readiness.py",
+      "policy": "docs/registry-readiness.md"
+    }
+  },
+  "sources": [
+    {"id": "joss_review", "url": "https://joss.readthedocs.io/en/latest/review_criteria.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "joss_submission", "url": "https://joss.readthedocs.io/en/latest/submitting.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "pyopensci_author", "url": "https://www.pyopensci.org/software-peer-review/how-to/author-guide.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "pyopensci_policy", "url": "https://www.pyopensci.org/software-peer-review/our-process/policies.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "ropensci_packaging", "url": "https://devguide.ropensci.org/pkg_building.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "ropensci_statistics", "url": "https://stats-devguide.ropensci.org/standards.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "python_numpydoc", "url": "https://numpydoc.readthedocs.io/en/latest/format.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "rust_documentation", "url": "https://rust-lang.github.io/api-guidelines/documentation.html", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "julia_documentation", "url": "https://docs.julialang.org/en/v1/manual/documentation/", "checked_on": "2026-11-16", "access": "official_page"},
+    {"id": "software_heritage_archive", "url": "https://www.softwareheritage.org/how-to-archive-reference-code/", "checked_on": "2026-11-16", "access": "official_search_excerpt"},
+    {"id": "scicrunch_registry", "url": "https://scicrunch.org/scicrunch/about/Curation%20Guidelines", "checked_on": "2026-11-16", "access": "official_search_excerpt"},
+    {"id": "numfocus_projects", "url": "https://numfocus.org/projects-overview", "checked_on": "2026-11-16", "access": "official_page"}
+  ],
+  "requirements": [
+    {
+      "id": "software_heritage_archival",
+      "target": "software_heritage",
+      "relationship": "issue_commitment",
+      "source_ids": ["software_heritage_archive"],
+      "section": "Archive and reference code",
+      "requirement": "Archive the cloneable source origin and identify the selected archived release or revision with a resolving SWHID.",
+      "status": "mapped_not_qualified",
+      "evidence": ["docs/registry-readiness.md", "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md"],
+      "checks": ["scripts/check_registry_readiness.py"],
+      "remaining": ["Select and qualify the release; retain the provider event and resolver evidence required by the existing readiness policy."]
+    },
+    {
+      "id": "rrid_identity",
+      "target": "rrid",
+      "relationship": "issue_commitment",
+      "source_ids": ["scicrunch_registry"],
+      "section": "Submission of new resources",
+      "requirement": "Check for an existing resource, describe its name, URL and purpose, and retain curator approval before advertising an assigned RRID.",
+      "status": "mapped_not_qualified",
+      "evidence": ["docs/registry-readiness.md", "conductor/tracks/research_software_registry_readiness_20260721/registry-evidence.md"],
+      "checks": ["scripts/check_registry_readiness.py"],
+      "remaining": ["Complete the live identity and duplicate check and retain any actual curator decision and resolving identifier."]
+    },
+    {
+      "id": "joss_documentation",
+      "target": "joss",
+      "relationship": "issue_commitment",
+      "source_ids": ["joss_review"],
+      "section": "Documentation, functionality and tests",
+      "requirement": "Explain the research need, audience and alternatives; document installation, useful examples, API inputs and outputs, contribution, issue reporting and support.",
+      "status": "mapped_not_qualified",
+      "evidence": ["README.md", "CONTRIBUTING.md", "LICENSE", "docs/astro-site/src/content/docs/user-guide/installation.md", "docs/contracts/api-documentation.json", "docs/contracts/content-quality.json"],
+      "checks": ["scripts/check_api_documentation.py", "scripts/check_documentation_content.py"],
+      "remaining": ["Review the substantive need and alternatives for the selected software revision and qualify its installed functionality and examples."]
+    },
+    {
+      "id": "joss_submission_evidence",
+      "target": "joss",
+      "relationship": "issue_commitment",
+      "source_ids": ["joss_submission", "joss_review"],
+      "section": "Submission requirements and pre-review screening",
+      "requirement": "Prepare a current software paper and evidence of actual research use, sustained public development, appropriate packaging and author responsibility.",
+      "status": "mapped_not_qualified",
+      "evidence": ["CITATION.cff", "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md", "docs/registry-readiness.md"],
+      "checks": ["scripts/check_registry_readiness.py"],
+      "remaining": ["Retain the current manuscript, qualified release, research-use and development-history evidence, author declarations and eventual editorial outcome in the owning readiness track.", "Human authors must confirm authorship and their actual design, review and AI-use declarations; a metadata check supplies none of these attestations."]
+    },
+    {
+      "id": "python_review_documentation",
+      "target": "pyopensci",
+      "relationship": "adopted_guidance",
+      "source_ids": ["pyopensci_author", "pyopensci_policy"],
+      "section": "Editor checks, human oversight and maintenance",
+      "requirement": "Provide online installation, quickstart and API documentation with standard-format docstrings, contributor guidance, a code of conduct, a license and CI evidence.",
+      "status": "mapped_not_qualified",
+      "evidence": ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "LICENSE", "docs/astro-site/src/content/docs/user-guide/getting-started.mdx", "docs/contracts/api-documentation.json"],
+      "checks": ["scripts/check_api_documentation.py", "scripts/check_documentation_content.py"],
+      "remaining": ["Assess package fit, current distribution and actual installation; retain meaningful human oversight and a maintainer commitment before considering submission.", "Coordinate any future journal or pyOpenSci review with the maintainer; no submission or acceptance is recorded by this mapping."]
+    },
+    {
+      "id": "r_review_documentation",
+      "target": "ropensci",
+      "relationship": "adopted_guidance",
+      "source_ids": ["ropensci_packaging"],
+      "section": "1.7 Documentation",
+      "requirement": "Document exported functions, defaults, return types and examples using roxygen2; provide package help, useful cross-links and a substantial realistic HTML vignette.",
+      "status": "mapped_not_qualified",
+      "evidence": ["bindings/r/R/kernel_bridge.R", "bindings/r/man/innovate.R-package.Rd", "bindings/r/vignettes/innovate-r-kernel.Rmd", "docs/contracts/polyglot-api-documentation.json"],
+      "checks": ["scripts/check_polyglot_api_documentation.py", "scripts/check_r_documentation.R"],
+      "remaining": ["Qualify a substantial installed-R vignette and its examples; the presence of a starter vignette or rendered help does not establish execution or reviewer acceptance."]
+    },
+    {
+      "id": "scientific_reporting",
+      "target": "ropensci_statistics",
+      "relationship": "adopted_guidance",
+      "source_ids": ["ropensci_statistics"],
+      "section": "G1.0; RE1.4, RE3.0-RE3.3; TS1.8, TS2.0-TS2.1; NW2.3-NW2.7",
+      "requirement": "Cite primary methods and explain applicable assumptions, convergence behaviour, calendar units, missingness and network representation; record standards that do not apply.",
+      "status": "mapped_not_qualified",
+      "evidence": ["docs/astro-site/src/content/docs/native-migration.md", "docs/contracts/scientific-pedagogical-review.json", "migration-ledger.json"],
+      "checks": ["scripts/check_scientific_review_contract.py"],
+      "remaining": ["Review each selected standard against supported native behaviour. Public-data fits, synthetic recovery and a consistent review record do not establish causal identification or empirical scientific validity."]
+    },
+    {
+      "id": "python_conventions",
+      "target": "python",
+      "relationship": "adopted_guidance",
+      "source_ids": ["python_numpydoc"],
+      "section": "Docstring standard and sections",
+      "requirement": "Use a declared readable docstring convention and document input meaning, units, defaults, result structure, useful errors and examples consistently with the source.",
+      "status": "mapped_not_qualified",
+      "evidence": ["docs/contracts/api-documentation.json", "bindings/python/innovate/__init__.py"],
+      "checks": ["scripts/check_api_documentation.py", "scripts/check_native_documentation.py"],
+      "remaining": ["Review scientific meaning and native-translated failures beyond direct Python raises. NumPy treats Raises as optional; any stronger Innovate rule is a project policy, not a universal community requirement."]
+    },
+    {
+      "id": "rust_conventions",
+      "target": "rust",
+      "relationship": "adopted_guidance",
+      "source_ids": ["rust_documentation"],
+      "section": "C-CRATE-DOC, C-EXAMPLE, C-FAILURE",
+      "requirement": "Provide crate guidance, meaningful examples or applicable cross-links, and relevant Errors, Panics and Safety documentation using rustdoc.",
+      "status": "mapped_not_qualified",
+      "evidence": ["docs/contracts/api-documentation.json", "rust/crates/innovate-core/src/lib.rs"],
+      "checks": ["scripts/check_api_documentation.py"],
+      "remaining": ["Run the separately required pinned Rust compiler and doctest gates; the Python documentation checker cannot establish Rust compilation or scientific correctness."]
+    },
+    {
+      "id": "julia_conventions",
+      "target": "julia",
+      "relationship": "adopted_guidance",
+      "source_ids": ["julia_documentation"],
+      "section": "Writing documentation",
+      "requirement": "Attach Markdown docstrings with signatures and defaults, clear summaries, useful related-function links and reproducible examples.",
+      "status": "mapped_not_qualified",
+      "evidence": ["bindings/julia/src/Innovate.jl", "docs/contracts/polyglot-api-documentation.json"],
+      "checks": ["scripts/check_polyglot_api_documentation.py", "scripts/check_julia_documentation.jl"],
+      "remaining": ["Qualify examples in the installed Julia environment. Julia permits concise argument descriptions for simple functions; stronger binding contracts are Innovate policy."]
+    },
+    {
+      "id": "community_stewardship",
+      "target": "numfocus",
+      "relationship": "adopted_guidance",
+      "source_ids": ["numfocus_projects"],
+      "section": "Requirements to join and application status",
+      "requirement": "Publish contribution and conduct expectations; assess actual community participation, leadership, governance and roadmap evidence for any future affiliation or fiscal sponsorship.",
+      "status": "mapped_not_qualified",
+      "evidence": ["CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "conductor/archive/community_submission_readiness_20260507/spec.md"],
+      "checks": [],
+      "remaining": ["Reassess scope and community evidence before any application. The official page observed on 16 November 2026 pauses new applications; refresh that observation before acting."]
+    }
+  ],
+  "history": {
+    "path": "conductor/archive/community_submission_readiness_20260507/spec.md",
+    "status": "requires_reassessment",
+    "targets": ["Apache Arrow", "PyPA", "pyOpenSci", "rOpenSci", "JOSS", "NumFOCUS", "scikit-learn-contrib", ".NET Foundation", "Julia/R community"]
+  }
+}

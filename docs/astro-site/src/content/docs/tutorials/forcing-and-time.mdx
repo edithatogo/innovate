@@ -1,0 +1,159 @@
+---
+title: Pause adoption with timed forcing
+description: Construct an exact synthetic adoption pause, compare equivalent additive controls, and check time-resolution and tracked-agent invariants.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import exampleSource from '../../../../../../examples/native_forcing.py?raw';
+import contentQuality from '../../../../../contracts/content-quality.json';
+
+This tutorial constructs a known pause in a stochastic Bass adoption process.
+A piecewise-constant covariate cancels innovation and imitation until time three;
+a later event increases innovation at time six. You will compare this schedule
+with an equivalent sequence of additive events and inspect the tracked agents.
+The controls are supplied assumptions in a synthetic experiment.
+
+## Learning outcomes
+
+You will distinguish observation times from control-change times, calculate the
+effective rates in each interval, and verify that a zero-rate interval produces
+no adoptions. You will also check replay, agent conservation and rejection of
+negative rates or control changes that collide at the selected tick resolution.
+
+## Prerequisites
+
+Install the [native development environment](/innovate/user-guide/installation/)
+and read [Simulate a seeded Bass adoption path](/innovate/tutorials/kairos-simulation/).
+Use the same checkout and installed native package. No external data or service
+is needed.
+
+The scientific model key is `bass`; `kairos_abm` selects a native execution
+engine that also records homogeneous, exchangeable agent identities. It does
+not introduce network ties or fitted individual effects. This example has
+100 agents and a market level `m=100`, so its count and level happen to have the
+same numerical value.
+
+Use one consistent numeric time unit. The baseline `p=0.2` and `q=0.3` have
+inverse-time units. Here the covariate `x` is dimensionless, so `beta_p`,
+`beta_q`, `delta_p` and `delta_q` also have inverse-time units. The observation
+grid is `[0, 1, 3, 5, 6, 10]`; its unequal gaps do not imply pauses in execution.
+
+## Steps
+
+1. Run the canonical example from the repository root:
+
+   ```sh
+   .venv-native/bin/python -I examples/native_forcing.py
+   ```
+
+2. Read the covariate and event specifications. Work out the effective rates
+   before looking at the resulting path.
+3. Follow the assertions for the zero-rate interval, monotone bounded counts,
+   unique agent identities and repeat execution of the same request.
+4. Compare the equivalent all-event schedule, then inspect the two deliberately
+   invalid specifications at the end of the script.
+
+<Code code={exampleSource} lang="python" title="examples/native_forcing.py" />
+
+The [forcing implementation](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/forcing.rs)
+uses additive controls: the effective innovation rate is baseline `p`, plus
+`beta_p * x(t)`, plus all innovation deltas whose event times have been reached.
+Imitation follows the corresponding rule for `q`. A covariate value is held
+until its next knot, and event deltas persist after their event time.
+
+## Expected results
+
+The script prints this source-bound output after its checks pass:
+
+<Code code={contentQuality.examples['examples/native_forcing.py'].expected_stdout} lang="json" />
+
+The first three counts are zero, including the observation exactly at time
+three. Positive adoption follows the restored rates. `equivalent_forcing`
+checks equality of the `counts`, `values` and `agents` fields for the two
+specifications. `tracked_agents=100` verifies the population size, while a
+separate assertion checks that adopted agents equal the final count.
+
+## Interpretation
+
+The covariate is `-1` from time zero until three, then zero. Its coefficients
+equal the baseline rates, so the effective schedule is:
+
+| Time interval | Covariate contribution | Accumulated event contribution | Effective `p`, `q` |
+| --- | --- | --- | --- |
+| 0 up to 3 | `-0.2`, `-0.3` | `0`, `0` | `0`, `0` |
+| 3 up to 6 | `0`, `0` | `0`, `0` | `0.2`, `0.3` |
+| 6 onward | `0`, `0` | `0.1`, `0` | `0.3`, `0.3` |
+
+The schedule is right-continuous: the new coefficients apply at their change
+time. A coefficient change does not itself create an adopter. The
+[simulation clock](https://github.com/edithatogo/innovate/blob/main/rust/crates/innovate-core/src/simulation.rs)
+rounds a sampled waiting time upward to at least one tick, and a control
+boundary precedes an adoption event tied to that boundary. Consequently the
+restored rates at time three still leave the count at that exact boundary zero.
+
+`ticks_per_unit=1_000_000` gives a tick duration of one millionth of the chosen
+time unit. Change times are mapped with `ceil(time * ticks_per_unit)`;
+observations sample completed events through `floor(time * ticks_per_unit)`.
+The fixture uses integer change and observation times, which are exactly on
+this tick grid. It does not require observations at every tick or every event.
+Between recorded times, the process continues under the active coefficients.
+
+### Why the alternative schedule agrees
+
+The event-only specification subtracts `0.2` and `0.3` at time zero, adds them
+back at time three, and adds another `0.1` to innovation at time six. This gives
+the same boundaries and effective rates as the covariate specification. With
+the same seed and engine, the fixture verifies matching counts, levels and
+agent assignments. This is a controlled equivalence check for these schedules;
+it is not a general claim that different interventions share identical random
+paths.
+
+The negative tests exercise two different mistakes. Setting `beta_p=2` while
+`x=-1` makes innovation `0.2-2=-1.8`, which is rejected instead of clamped to
+zero. At one tick per unit, distinct events at `0.1` and `0.2` both map to tick
+one; the native contract rejects that collision instead of silently merging
+the changes.
+
+## Check your understanding
+
+1. Why are all counts zero through time three despite the positive baseline
+   `p` and `q`?
+2. If the time unit changes from years to months, how must the time coordinates,
+   coefficients and tick resolution change to preserve this specification?
+3. Is the observed adoption increase after time six an estimated effect of a
+   real intervention?
+
+<details>
+<summary>Compare your answers</summary>
+
+1. The covariate cancels both rates before time three. The new positive rates
+   then need a positive waiting time before an adoption can occur.
+2. Multiply time coordinates by 12 and divide inverse-time coefficients and
+   event deltas by 12. Preserving the same physical tick would also require
+   dividing ticks per year by 12. That quotient must satisfy the integer tick
+   contract; with `1_000_000` ticks per year it is not an integer. Choosing a
+   new valid resolution can alter quantization and exact replay, even when the
+   continuous-time schedule represents the same intended rates.
+3. No. The script supplies the rate change and simulates its consequences. It
+   does not estimate the coefficient, identify a counterfactual from data, or
+   quantify an intervention effect with uncertainty.
+
+</details>
+
+The unit conversion is a reasoning exercise; the canonical script runs only
+the original schedule and its explicit event equivalent.
+
+## Limitations
+
+This is one seeded synthetic path with homogeneous agents. The covariate is a
+specified additive control, not a fitted regression effect. The pause and
+equivalence assertions do not validate an empirical intervention, identify
+causal effects or establish uncertainty coverage. A positive rate also does
+not guarantee that every agent adopts before a finite horizon.
+
+Replay is checked for the same request and installed runtime. Changing time
+resolution, engine, initial conditions, seed or implementation revision can
+change the path. Preserve these details with the result. For graph-mediated
+transmission and service queues, continue with
+[network demand and completed adoption](/innovate/tutorials/network-scenarios/);
+those mechanisms have different exposure and completion contracts.

@@ -34,6 +34,41 @@ DOCUMENTATION_COMMANDS = {
     "r": "Rscript scripts/check_r_documentation.R",
 }
 RUNNERS = {"julia": "scripts/check_julia_documentation.jl", "r": "scripts/check_r_documentation.R"}
+LANGUAGE_CONVENTIONS = {
+    "julia": {
+        "style": "Base.Docs Markdown",
+        "source_checker": CHECKER,
+        "structurally_enforced": {
+            "attached_docstrings": True,
+            "explicit_exports_resolve": True,
+            "summary_description": True,
+            "signature_and_defaults_match_source": True,
+            "argument_names_match_signature": True,
+            "returns_and_throws_descriptions": True,
+            "struct_fields_documented": True,
+            "unique_sections_and_named_entries": True,
+            "reviewed_examples_contain_assertions": True,
+        },
+        "execution_checker": RUNNERS["julia"],
+    },
+    "r": {
+        "style": "roxygen comments with matching Rd help",
+        "source_checker": CHECKER,
+        "structurally_enforced": {
+            "attached_roxygen_comments": True,
+            "explicit_exports_resolve": True,
+            "summary_description": True,
+            "source_parameters_match_signature": True,
+            "source_return_and_errors_descriptions": True,
+            "unique_parameters_return_and_errors": True,
+            "rd_aliases_and_usage_match_exports": True,
+            "rd_signature_defaults_match_source": True,
+            "rd_arguments_and_value_descriptions": True,
+            "reviewed_examples_contain_assertions": True,
+        },
+        "execution_checker": RUNNERS["r"],
+    },
+}
 REVIEWED_JULIA_EXAMPLES = (
     "kernel_aggregate_dates",
     "kernel_call",
@@ -697,6 +732,7 @@ def build_inventory(root: Path = ROOT) -> dict[str, Any]:
         "structural_complete": True,
         "documentation_complete": False,
         "runtime_qualification": "not_run_by_this_checker",
+        "language_conventions": LANGUAGE_CONVENTIONS,
         "hashing": {
             "algorithm": "sha256",
             "text_encoding": "utf-8",

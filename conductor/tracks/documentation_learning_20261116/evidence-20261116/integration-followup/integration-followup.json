@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-16T12:30:38+00:00",
+  "scope": "Post-merge local integration and retained candidate-scan evidence; hosted documentation result is pending in this snapshot.",
+  "integration_commit": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+  "parents": [
+    "ab997d711038675e3fa7aaeb1e286fe19455cb04",
+    "b29a1d27f54fdd08d77881ee999772fceab7c03a"
+  ],
+  "publication": {
+    "current_pr": 671,
+    "current_pr_url": "https://github.com/edithatogo/innovate/pull/671",
+    "current_pr_state_at_record_creation": "open_draft",
+    "superseded_pr": 659,
+    "superseded_pr_url": "https://github.com/edithatogo/innovate/pull/659",
+    "superseded_pr_state": "closed",
+    "live_deployment_verified": false
+  },
+  "merge_preservation": {
+    "method": "Ordinary two-parent merge; retain reviewed implementation source blobs and clean upstream additions.",
+    "upstream_preserved_path_count": 5,
+    "upstream_preserved_paths": [
+      ".github/workflows/renovate-config.yml",
+      "conductor/archive/documentation_quality_contracts_20261115/plan.md",
+      "rust/crates/innovate-core/tests/inference_failure_contracts.rs",
+      "rust/crates/innovate-core/tests/native_cli_contract.rs",
+      "rust/crates/innovate-core/tests/public_contract_edges.rs"
+    ],
+    "ours_rust_source_count": 16,
+    "ours_rust_source": [
+      {
+        "path": "rust/crates/innovate-core/src/domain.rs",
+        "merged_blob_sha256": "sha256:4e714719f29be367e9b80af10d82662f81c49c556727a42cd97255e96fcac4f9",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/inference/hype_fit.rs",
+        "merged_blob_sha256": "sha256:c4b6495af921db4aa8b15fb618d9dcda1ac46e6fb18e29279fe9176b71d57e98",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/inference/hype_posterior.rs",
+        "merged_blob_sha256": "sha256:3fc92c4bde284e073663b8ada9320e57c7a4e6e8dea4b4206a3df53a56fd5466",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/likelihood.rs",
+        "merged_blob_sha256": "sha256:59268b5fd0715ff3b509f8f6755f4bf50cb65ac815f3fd1a8177758e892d6842",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/competition.rs",
+        "merged_blob_sha256": "sha256:a18994306dfb9b7ce40746a8a4818f910018707cc1e87e832349a9e9712ec0dd",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/demand.rs",
+        "merged_blob_sha256": "sha256:8e377e2336604d6d32a51dd532e26f7d9b8238e804f7e073483d8ae0c0686f74",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/expectation_feedback.rs",
+        "merged_blob_sha256": "sha256:be97055248656f27f531db02bc19a04eb4d204f9b64edc2e98bb606a07dd7764",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hierarchical.rs",
+        "merged_blob_sha256": "sha256:5add28ba8eec0fc501d794396b1423f6a50750130c0ecdd840254d2601d0e1f3",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hype.rs",
+        "merged_blob_sha256": "sha256:5d87fc07d2f8327c5a9bf006e59c96607dae43fd3f4e4562e48d116409b21e09",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hype_effects.rs",
+        "merged_blob_sha256": "sha256:6ff387245ff6488cf4ff91056e1839da018ec0f899ab91265a8b9cdac76417c8",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/mod.rs",
+        "merged_blob_sha256": "sha256:34313a79f90e616f647af0e7f1adfd7cefda175d9bed453306ac291e4c0cfa0e",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/regimes.rs",
+        "merged_blob_sha256": "sha256:cd9e967deef55e01daec1b64f97e48a488bdadcbd783c58e9e4aca85aee8978a",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/repeat_use.rs",
+        "merged_blob_sha256": "sha256:fa0b75d24b5be85bc0f0724b7801e557cbba3376a897cf9f401f04af5cbe65b4",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/semi_markov.rs",
+        "merged_blob_sha256": "sha256:4efcaab02c61f8408a0470be9f2013e5b6ff5457e9795d898ae0ba53b54886e6",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-kairos/src/lib.rs",
+        "merged_blob_sha256": "sha256:a1c23b4a6fc796ae61c6b489c83d9715965b86276ab45b4da876e8030e274998",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      },
+      {
+        "path": "rust/crates/innovate-tabular/src/lib.rs",
+        "merged_blob_sha256": "sha256:d8fae4e66a9862f20eb28689b20b8eb66b5bac09f47927777ba3bbb593d56558",
+        "retained_ours_bytes": true,
+        "non_doc_bytes_identical_to_upstream": true
+      }
+    ],
+    "all_merged_rust_source_bytes_equal_published_ours": true,
+    "all_non_documentation_source_bytes_equal_upstream": true,
+    "comparison_method": "Remove only whole-line Rust /// and //! documentation comments, then compare remaining bytes. All 16 results are exact.",
+    "base_source_delta": "Relative to base582, 15 files are exact after documentation removal; likelihood.rs has only the same field expansion and three previously authorised formatting commas in both branches.",
+    "semantic_review": "Our comments preserve upstream meanings and specify units, runtime/engine distinctions, validation and inference limits more precisely. No indispensable upstream documentation obligation was omitted.",
+    "fresh_native_rebuild_performed_for_merge": false
+  },
+  "new_upstream_tests": {
+    "status": "passed",
+    "exit_code": 0,
+    "exit_code_provenance": "Coordinator observed execution session 86081 exit 0.",
+    "argv": [
+      "cargo",
+      "test",
+      "--locked",
+      "-p",
+      "innovate-core",
+      "--test",
+      "native_cli_contract",
+      "--test",
+      "public_contract_edges",
+      "--test",
+      "inference_failure_contracts",
+      "-j",
+      "4"
+    ],
+    "working_directory": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated",
+    "environment": {
+      "RUSTUP_HOME": "/workspace/scratch/5e94e22858cb/innovate-toolchains/rustup",
+      "CARGO_HOME": "/workspace/scratch/5e94e22858cb/innovate-toolchains/cargo",
+      "CARGO_TARGET_DIR": "/workspace/scratch/5e94e22858cb/innovate-docs-implementation/target",
+      "PATH_prepend": "/workspace/scratch/5e94e22858cb/innovate-toolchains/cargo/bin",
+      "PYO3_PYTHON": "/workspace/scratch/5e94e22858cb/innovate-docs-integrated/.venv/bin/python"
+    },
+    "receipt": "upstream-b29-targeted-tests.log",
+    "suites": {
+      "inference_failure_contracts": 3,
+      "native_cli_contract": 1,
+      "public_contract_edges": 5
+    },
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0,
+    "compile_seconds_reported_by_cargo": 51.41,
+    "scope": "The three newly merged core integration-test targets, not the full workspace suite."
+  },
+  "fresh_source_checks": {
+    "scientific": {
+      "receipt": "merge-scientific.json",
+      "exit_code": 0,
+      "status": "passed",
+      "scope": "Review-record consistency and freshness of 66 declared source files.",
+      "scientific_quality_certified": false
+    },
+    "notebook": {
+      "receipt": "merge-notebook-source.json",
+      "exit_code": 0,
+      "status": "passed",
+      "executed": false,
+      "browser_wasm_qualified": false,
+      "static_export_published": false
+    }
+  },
+  "artifact_comparison": {
+    "status": "unchanged",
+    "producer_report_commit": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "producer_report_generated_at": "2026-11-16T12:27:08.517137+00:00",
+    "fresh_verifier_exit_code": 0,
+    "source_sha256": "sha256:cf3ea0712e66f7512c76f248d1eddfab75edf1bb14c88e3466af5a742b9b21ca",
+    "prior_source_sha256": "sha256:cf3ea0712e66f7512c76f248d1eddfab75edf1bb14c88e3466af5a742b9b21ca",
+    "source_equal": true,
+    "artifact_sha256": "sha256:adfc2087fa55fa9e3605da5db9604650d8a2531865c1e37a4c11ed2365a4169b",
+    "prior_artifact_sha256": "sha256:adfc2087fa55fa9e3605da5db9604650d8a2531865c1e37a4c11ed2365a4169b",
+    "artifact_equal": true,
+    "counts": {
+      "checked_local_links": 11361,
+      "errors": 0,
+      "external_urls_not_checked": 413,
+      "html_pages": 211
+    },
+    "errors": [],
+    "source_artifact_binding_verified": false,
+    "browser_accessibility_verified": false,
+    "live_deployment_verified": false,
+    "full_fresh_producer_receipt": {
+      "original_path": "/tmp/innovate-merge-artifact.json",
+      "bytes": 67240,
+      "raw_sha256": "sha256:2e4954cdaeb6b3148d12a6c87d52a8adccebccad7a538b365fc4ba9118e6e3a6",
+      "copied_into_repository": false,
+      "retention_note": "The full fresh producer JSON remains at the recorded /tmp path. This compact comparison avoids duplicating its redundant file inventory; it is not a replacement full producer receipt."
+    },
+    "prior_retained_producer_receipt": "../integrated-5821d8a/final-source/artifact.json",
+    "prior_retained_receipt_note": "The original prior producer receipt is retained in its verified reversible archive envelope. Decode it before using the producer schema; source/artifact values above were compared with the prior integrated qualification record.",
+    "prior_integrated_qualification": "../integrated-5821d8a/integrated-qualification.json",
+    "fingerprint_scope": "Contemporaneous source and artifact fingerprints; these hashes alone do not prove the artifact was built from this source."
+  },
+  "candidate_secret_scan": {
+    "status": "passed_for_recorded_candidate_only",
+    "verification": "candidate-scan/verification.json",
+    "staged_tree": "dc4a4ec77eff920fc8167fb03c5e7efa674ce3ff",
+    "detached_scan_commit": "c3f441dc6478114695fab8e36e94a0a35804c057",
+    "scan_range": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0..c3f441dc6478114695fab8e36e94a0a35804c057",
+    "ordinary_commit_count": 1,
+    "delta_entries_no_renames": 499,
+    "scanners": [
+      {
+        "version": "8.24.3",
+        "exit_code": 0,
+        "finding_count": 0
+      },
+      {
+        "version": "8.30.1",
+        "exit_code": 0,
+        "finding_count": 0
+      }
+    ],
+    "new_merged_head_scanned_by_these_receipts": false,
+    "scope_note": "The supplied ordinary candidate tree dc4a4ec was scanned before publication and the b29 integration. These receipts do not claim to scan merge b2ed945 or this subsequent evidence-only follow-up. No baseline, exclusions, rule changes or allowlist additions were used."
+  },
+  "hosted_documentation": {
+    "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "run_id": 43866570433,
+    "run_url": "https://github.com/edithatogo/innovate/actions/runs/43866570433",
+    "status_at_snapshot": "in_progress",
+    "conclusion": null,
+    "qualified": false,
+    "scope_note": "Pre-result snapshot supplied by the coordinator. A later exact-head hosted receipt must record the actual outcome separately."
+  },
+  "release_readiness": {
+    "status": "blocked",
+    "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "runner_checkout_merge_commit": "96a02acc63a757bf6d07f679527c79bc1e1014a0",
+    "receipt": "hosted-b2ed945-release.log",
+    "command": [
+      ".venv-release/bin/python",
+      "scripts/check_migration.py",
+      "--release"
+    ],
+    "exit_code": 1,
+    "model_holds": [
+      "bass",
+      "complementary_goods",
+      "composite",
+      "fisher_pry",
+      "gompertz",
+      "hierarchical",
+      "latent_process",
+      "lock_in",
+      "logistic",
+      "lotka_volterra",
+      "mixture",
+      "multi_product",
+      "network_diffusion",
+      "norton_bass",
+      "policy_hazard",
+      "regime_switching"
+    ],
+    "model_hold_count": 16,
+    "capability_holds": [
+      "covariates_and_events",
+      "multi_generation_substitution",
+      "competitive_ecosystems",
+      "hierarchical_mixture_inference",
+      "latent_regime_models",
+      "network_policy_diffusion",
+      "kairos_des_abm",
+      "bayesian_inference",
+      "bootstrap_uncertainty",
+      "batch_fitting",
+      "preprocessing",
+      "causal_analysis",
+      "adopter_classification",
+      "data_ingestion_provenance_validation",
+      "scenario_registry_execution",
+      "explainability_sensitivity_reporting",
+      "benchmark_model_cards",
+      "plugin_contracts",
+      "remote_execution",
+      "accelerator_hpc",
+      "voiage_arrow_handoff",
+      "calibration_identifiability"
+    ],
+    "capability_hold_count": 22,
+    "classification": "Existing scientific migration and acceptance gate; not waived or repaired by documentation integration."
+  },
+  "remaining_holds": [
+    "Standalone innovate-games documentation remains blocked before rustdoc by the recorded upstream thiserror dependency conflict; its doctests were not run.",
+    "Release scientific migration and acceptance remain incomplete: 16 model entries and 22 capability entries.",
+    "Current hosted documentation/native-language, managed-browser and Windows outcomes are pending in this record.",
+    "Offline security-runner infrastructure and other queued checks remain unqualified; the ordinary candidate scan is not a hosted run.",
+    "Human reader evaluation, broader curriculum/scientific acceptance and live publication remain incomplete."
+  ],
+  "retention": {
+    "files": [
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/candidate.json",
+        "retained_path": "candidate-scan/candidate.json",
+        "bytes": 1332,
+        "raw_sha256": "sha256:8ccb65e489606929dc846481170c97bce90f5b198e6413556873d107e5e9bac8",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/empty.gitleaksignore",
+        "retained_path": "candidate-scan/empty.gitleaksignore",
+        "bytes": 0,
+        "raw_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/result-8.24.3.json",
+        "retained_path": "candidate-scan/result-8.24.3.json",
+        "bytes": 1210,
+        "raw_sha256": "sha256:5032c92c89269fd1cfd88e38b0b11502e8d2f49d6051c1eaf5646e3f40fc8625",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/result-8.30.1.json",
+        "retained_path": "candidate-scan/result-8.30.1.json",
+        "bytes": 1406,
+        "raw_sha256": "sha256:6fa9d69bf78747e0826ceb96a2f8c86be2101aa3f1f69802c217525016936643",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.24.3.json",
+        "retained_path": "candidate-scan/scan-8.24.3.json",
+        "bytes": 3,
+        "raw_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.24.3.log",
+        "retained_path": "candidate-scan/scan-8.24.3.log",
+        "bytes": 827,
+        "raw_sha256": "sha256:2b8a1dbf7c864e2b0cffad18cbca620d114647d341efafe26eb6f79a7c4b2e4f",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.30.1.json",
+        "retained_path": "candidate-scan/scan-8.30.1.json",
+        "bytes": 3,
+        "raw_sha256": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/scan-8.30.1.log",
+        "retained_path": "candidate-scan/scan-8.30.1.log",
+        "bytes": 52088,
+        "raw_sha256": "sha256:3b40dac9a404a221f90b636905ebe46314c8fc9487c8c9e77f0c32b8f4d595b4",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-final-candidate-scan-k405hvfz/verification.json",
+        "retained_path": "candidate-scan/verification.json",
+        "bytes": 5238,
+        "raw_sha256": "sha256:512613215920c4975b9fd6bfb70f5aacf0537bcce630e8b1df61a7c6eeaa1a1a",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-upstream-b29-targeted-tests.log",
+        "retained_path": "upstream-b29-targeted-tests.log",
+        "bytes": 4652,
+        "raw_sha256": "sha256:74bd4692c63dcc196d08da67b0945e0ed9f5aefbd371058897375642a269d030",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-merge-scientific.json",
+        "retained_path": "merge-scientific.json",
+        "bytes": 333,
+        "raw_sha256": "sha256:e15f8656367157b993cfed59b50dee288e6e45c28beb01894150d2820010202f",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/tmp/innovate-merge-notebook-source.json",
+        "retained_path": "merge-notebook-source.json",
+        "bytes": 1466,
+        "raw_sha256": "sha256:31afd8b5e809fd4d1e240e8bb436ca03db04e05e19a0a8808caa3f39fe9d0623",
+        "byte_identical_copy": true
+      },
+      {
+        "original_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-release.log",
+        "retained_path": "hosted-b2ed945-release.log",
+        "bytes": 18140,
+        "raw_sha256": "sha256:d84fdc2946d412ef5027fda2b17e252f9ce374fe08e431ed20b7b45f3ae584a3",
+        "byte_identical_copy": true
+      }
+    ],
+    "copied_files": 13,
+    "copied_raw_bytes": 86698,
+    "all_raw_copies_verified": true,
+    "verification_stage": "Before any subsequent reviewed archival envelope.",
+    "cross_reference_note": "Original absolute execution paths remain provenance. Retained paths are relative to this receipt. Raw hashes identify decoded originals if a later reversible archival envelope is applied; stored-envelope identities must be indexed separately."
+  },
+  "track_complete": false,
+  "scientific_acceptance": false,
+  "live_deployment_verified": false
+}

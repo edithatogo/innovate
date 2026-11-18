@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "bounded independent review of exact-head hosted browser qualification",
+  "reviewed_at_utc": "2026-11-16T12:38:10.106321+00:00",
+  "status": "passed",
+  "repository": "edithatogo/innovate",
+  "pull_request": 671,
+  "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+  "head_tree": "f826196927cc994410f9391b4381929d3641bf1a",
+  "run": {
+    "id": 43866570433,
+    "html_url": "https://github.com/edithatogo/innovate/actions/runs/43866570433",
+    "head_sha": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+    "head_tree": "f826196927cc994410f9391b4381929d3641bf1a",
+    "base_sha": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "event": "pull_request",
+    "created_at": "2026-11-16T12:26:19Z",
+    "updated_at": "2026-11-16T12:32:24Z"
+  },
+  "checkout": {
+    "merge_sha": "96a02acc63a757bf6d07f679527c79bc1e1014a0",
+    "tree": "f826196927cc994410f9391b4381929d3641bf1a",
+    "parents": [
+      "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+      "b2ed945f9ffede3bdd00c29437636c0bf1eba03d"
+    ],
+    "tree_equals_pr_head_tree": true,
+    "source": "GitHub commit API and producer qualification git_commit",
+    "url": "https://github.com/edithatogo/innovate/commit/96a02acc63a757bf6d07f679527c79bc1e1014a0"
+  },
+  "jobs": [
+    {
+      "id": 133296524820,
+      "name": "build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 133296525320,
+      "name": "Native documentation examples",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 133299664001,
+      "name": "deploy",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "browser": {
+    "managed": true,
+    "observed_versions": [
+      "159.0.8154.6"
+    ],
+    "executable_override": null,
+    "playwright_version": "1.65.1",
+    "node_version": "v26.13.1",
+    "started_at": "2026-11-16T12:27:31.838Z",
+    "finished_at": "2026-11-16T12:32:15.840Z",
+    "playwright_duration_ms": 288793.9
+  },
+  "coverage": {
+    "expected": 164,
+    "observed": 164,
+    "missing": [],
+    "unexpected": [],
+    "duplicate_count": 0,
+    "unsuccessful": [],
+    "passed": 164,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retry_attempts": 0,
+    "case_errors": 0,
+    "reporter_errors": 0,
+    "projects": [
+      {
+        "project": "chromium-desktop",
+        "cases": 82,
+        "passed": 82,
+        "failed": 0,
+        "skipped": 0,
+        "retried": 0
+      },
+      {
+        "project": "chromium-mobile-390",
+        "cases": 82,
+        "passed": 82,
+        "failed": 0,
+        "skipped": 0,
+        "retried": 0
+      }
+    ],
+    "all_expected_statuses_passed": true,
+    "unchanged_current_contract_revalidated_records": 164,
+    "invalid_evidence_records": 0,
+    "revalidation_method": "Existing caseEvidenceComplete and qualificationCoverage(loadInventory(), cases) via Node; no browser rerun."
+  },
+  "previously_failing_mobile_dark_entry": {
+    "project": "chromium-mobile-390",
+    "title": "dark entry: /innovate/native-migration/",
+    "status": "passed",
+    "retry": 0,
+    "errors": []
+  },
+  "homepage_original_response_probes": [
+    {
+      "project": "chromium-desktop",
+      "probe": {
+        "trigger": "link-rel-prefetch",
+        "url": "/innovate/api/python/?documentation-capture-probe=chromium-desktop",
+        "file": "api/python/index.html",
+        "status": 200,
+        "bytes": 36326,
+        "sha256": "sha256:51e6ad3923741179f43ed8d6c5f9352544c133f3f02983484eb5b8a1651014e4",
+        "capture_method": "cdp-fetch-original-response",
+        "fetch_request_id": "interception-job-10.0",
+        "network_request_id": "3474.15",
+        "capture_complete": true,
+        "continued_unchanged": true,
+        "network_loading_finished": true
+      },
+      "transfer_budget": {
+        "decoded_body_bytes": 249902,
+        "successful_internal_responses": 10,
+        "byte_limit": 1500000,
+        "request_limit": 40
+      },
+      "unique_matching_url_fetch_and_network_ids": true,
+      "body_bytes_match_uploaded_pages": true,
+      "all_homepage_response_hashes_match_uploaded_pages": true,
+      "probe_included_once_in_response_and_byte_budget": true
+    },
+    {
+      "project": "chromium-mobile-390",
+      "probe": {
+        "trigger": "link-rel-prefetch",
+        "url": "/innovate/api/python/?documentation-capture-probe=chromium-mobile-390",
+        "file": "api/python/index.html",
+        "status": 200,
+        "bytes": 36326,
+        "sha256": "sha256:51e6ad3923741179f43ed8d6c5f9352544c133f3f02983484eb5b8a1651014e4",
+        "capture_method": "cdp-fetch-original-response",
+        "fetch_request_id": "interception-job-10.0",
+        "network_request_id": "5562.16",
+        "capture_complete": true,
+        "continued_unchanged": true,
+        "network_loading_finished": true
+      },
+      "transfer_budget": {
+        "decoded_body_bytes": 249902,
+        "successful_internal_responses": 10,
+        "byte_limit": 1500000,
+        "request_limit": 40
+      },
+      "unique_matching_url_fetch_and_network_ids": true,
+      "body_bytes_match_uploaded_pages": true,
+      "all_homepage_response_hashes_match_uploaded_pages": true,
+      "probe_included_once_in_response_and_byte_budget": true
+    }
+  ],
+  "source_identity": {
+    "aggregate_sha256": "sha256:b43e52876613d21232f1579efb885600b39f5a5ba747826681f12dbf641df4eb",
+    "source_files": 250,
+    "tracked_files_compared_to_exact_head_git_blobs": 215,
+    "tracked_file_mismatches": 0,
+    "generated_api_files_compared_to_existing_qualified_local_outputs": 35,
+    "generated_api_file_mismatches": 0,
+    "generated_output_limit": "Ignored derived API files checked against existing local qualified output; these are not Git blobs or independent build attestation.",
+    "selected_source_sha256": {
+      ".github/workflows/docs.yml": "sha256:7f37dda6ee3abbc48968560d190e55b38c08875920fbe80b7224dbdc7745e2b5",
+      "docs/astro-site/playwright.config.mjs": "sha256:c7b302ac928f3d49c19663df141fc884f27df064e03dff36fdda911793fc9c26",
+      "docs/astro-site/tests/browser/original-response-capture.mjs": "sha256:2403fc952a429b5a9e302a131f06c53b5d47630f9c3ec11e793e7a2b1c740b96",
+      "docs/astro-site/tests/browser/support.mjs": "sha256:c4c7978036e867a24b616bf076f71724a9356e78e88e297504bed5904321d6b9",
+      "docs/astro-site/tests/browser/documentation.spec.mjs": "sha256:958736ce52fbee2afb2c8468c6d6c0c730277904f3e720a4daf6332cfa86ee61",
+      "docs/astro-site/scripts/browser-contract.mjs": "sha256:f335c3b0807ce44da42fed59039a9ddfd66d337038ebb28e2923dc3f91903b26",
+      "docs/astro-site/scripts/browser-report.mjs": "sha256:37618f584980ab11beb9d2d81a0f7989366764457ed04795b7b4ba954b9e1ae2",
+      "docs/astro-site/src/content/docs/api/python.md": "sha256:e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3",
+      "docs/astro-site/src/content/docs/native-migration.md": "sha256:345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763"
+    },
+    "producer_source_maps_equal": true
+  },
+  "artifact_identity": {
+    "browser_artifact_sha256": "sha256:cdc04badb110006f2a6be4a052df8ae48152251b7d0f72fa9b956642f25e8641",
+    "browser_artifact_files": 312,
+    "production_receipt_artifact_sha256": "sha256:cdc04badb110006f2a6be4a052df8ae48152251b7d0f72fa9b956642f25e8641",
+    "production_receipt_counts": {
+      "checked_local_links": 11361,
+      "errors": 0,
+      "external_urls_not_checked": 413,
+      "html_pages": 211
+    },
+    "uploaded_pages_files": 311,
+    "uploaded_pages_files_sha256": "sha256:30aef8e76d49fe6fcded07e5883abaad1436ee7fbaac36d85c2c09485de26281",
+    "all_uploaded_file_hashes_match_browser_inventory": true,
+    "uploaded_file_mismatches": 0,
+    "packaging_omission": {
+      "path": ".nojekyll",
+      "bytes": 0,
+      "expected_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reason": "Pinned actions/upload-pages-artifact defaults include-hidden-files=false; workflow does not override it.",
+      "action_source": "https://github.com/actions/upload-pages-artifact/blob/fc324d3547104276b827a68afc52ff2a11cc49c9/action.yml"
+    },
+    "full_browser_inventory_reconstructed_with_known_empty_marker_matches": true
+  },
+  "artifact_downloads": [
+    {
+      "id": 14225583583,
+      "name": "documentation-build-evidence",
+      "github_api_url": "https://api.github.com/repos/edithatogo/innovate/actions/artifacts/14225583583",
+      "github_zip_sha256": "sha256:5b986d77180da2fd477e9aa8ece48960978724eff36c097b707e6d1b73e3df28",
+      "downloaded_zip_sha256": "sha256:5b986d77180da2fd477e9aa8ece48960978724eff36c097b707e6d1b73e3df28",
+      "zip_digest_verified": true,
+      "zip_bytes": 132220,
+      "original_zip_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/documentation-build-evidence.zip"
+    },
+    {
+      "id": 14225907924,
+      "name": "documentation-browser-diagnostics",
+      "github_api_url": "https://api.github.com/repos/edithatogo/innovate/actions/artifacts/14225907924",
+      "github_zip_sha256": "sha256:3cc4fc933388b2296b3b593669323838fdeb0994927f779f4ecede82bbbd1ff1",
+      "downloaded_zip_sha256": "sha256:3cc4fc933388b2296b3b593669323838fdeb0994927f779f4ecede82bbbd1ff1",
+      "zip_digest_verified": true,
+      "zip_bytes": 635257,
+      "original_zip_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/documentation-browser-diagnostics.zip"
+    },
+    {
+      "id": 14225563563,
+      "name": "github-pages",
+      "github_api_url": "https://api.github.com/repos/edithatogo/innovate/actions/artifacts/14225563563",
+      "github_zip_sha256": "sha256:93c26a97c19ef412b8f2ac9533b16704fdcf7d566cc34b731e84940c46d15ff0",
+      "downloaded_zip_sha256": "sha256:93c26a97c19ef412b8f2ac9533b16704fdcf7d566cc34b731e84940c46d15ff0",
+      "zip_digest_verified": true,
+      "zip_bytes": 1493890,
+      "original_zip_path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/github-pages.zip"
+    }
+  ],
+  "runtime_checks": {
+    "inputs_unchanged_during_run": true,
+    "served_resources_match_artifact": true,
+    "worktree_dirty": false,
+    "console_errors": 0,
+    "page_errors": 0,
+    "failed_internal_resources": 0,
+    "wcag_tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa"
+    ],
+    "budgets": {
+      "artifactBytes": 25000000,
+      "singleAssetBytes": 512000,
+      "initialPageBytes": 1500000,
+      "initialPageRequests": 40,
+      "searchJourneyBytes": 2000000,
+      "searchJourneyRequests": 65
+    }
+  },
+  "original_evidence": {
+    "directory": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser",
+    "producer_records_preserved_unchanged": true,
+    "reports": [
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/documentation-build-evidence/browser/qualification.json",
+        "bytes": 1701443,
+        "sha256": "sha256:a23a8f2714e99733912de715e812add4a1f94bc842598a71e74c26de3a89b85c"
+      },
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/documentation-build-evidence/artifact.json",
+        "bytes": 67100,
+        "sha256": "sha256:a68f094af5452e5c6f16e059e490189c57d351a3b2c16898610511221de24e25"
+      },
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/documentation-browser-diagnostics/playwright.json",
+        "bytes": 1578921,
+        "sha256": "sha256:956b2e35a7eb7abd00ad33ee962554bd5102459e188ed8019a028a66a7c829fe"
+      },
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/build-job.log",
+        "bytes": 236102,
+        "sha256": "sha256:f6a9c313a108394c497ad79da6008135b04beca82bb0b31c00e51f5d93134db8"
+      },
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/github-context.json",
+        "bytes": 14490,
+        "sha256": "sha256:5c699073c7cebc79cfa350f2b9fc69ee28485b154ff59f06d8d572350d683690"
+      },
+      {
+        "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/github-checkout.json",
+        "bytes": 329,
+        "sha256": "sha256:e0b96a8026e15391e86151fc44425be5ff8eca642a29409ed423a7dff0b1837e"
+      }
+    ],
+    "independent_proof": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/independent-browser-proof.json",
+      "bytes": 7382,
+      "sha256": "sha256:556a4d1025e0eb507660efff2cdddd8de30081d72c0b8d11dd477ab4ddbad3d9"
+    },
+    "independent_verification_script": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/verify_hosted_browser.py",
+      "bytes": 7941,
+      "sha256": "sha256:51de3d7a6771cf7f81b2acc5bb1ad874892d996945d0bb3c36f3d10f3ef7d6e5"
+    },
+    "pinned_pages_action_source": {
+      "path": "/workspace/scratch/5e94e22858cb/innovate-docs-validation/hosted-b2ed945-browser/upload-pages-artifact-action.yml",
+      "bytes": 2895,
+      "sha256": "sha256:f84e759011e0c497e696f5bce4ebb5fbe9bbdc5aea309b73795283fa139c1558"
+    }
+  },
+  "qualification_limits": {
+    "scope": "Automated Chromium qualification of the local built artifact using the Playwright-managed browser; no manual usability, assistive-technology, scientific, or live-deployment certification.",
+    "producer_source_artifact_binding_verified": false,
+    "independent_build_attestation": false,
+    "manual_accessibility_reviewed": false,
+    "manual_usability_reviewed": false,
+    "wcag_conformance_certified": false,
+    "scientific_acceptance": false,
+    "whole_curriculum_complete": false,
+    "deployment_job": "skipped",
+    "live_deployment_verified": false,
+    "external_urls_not_checked": 413,
+    "publications_or_settings_changed_by_this_review": false
+  },
+  "checksum_representation": "All SHA-256 values in this authored summary carry an explicit sha256: prefix. Downloaded producer records remain unchanged outside the repository."
+}

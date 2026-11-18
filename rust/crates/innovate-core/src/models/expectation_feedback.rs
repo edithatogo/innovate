@@ -5,9 +5,9 @@ use crate::inference::InnovationError;
 /// External lag signal evaluated at `t - lag` without using future information.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ExternalLagSignal {
-    /// Nonnegative delay applied before evaluating the external signal.
+    /// Finite nonnegative delay in the same time unit as the evaluation coordinate.
     pub lag: f64,
-    /// Value used when the shifted time precedes zero.
+    /// Finite value used when `t - lag` precedes zero, without calling the signal closure.
     pub baseline_value: f64,
 }
 
@@ -15,8 +15,7 @@ impl ExternalLagSignal {
     /// Evaluate external signal `f(t - lag)` using provided closure `signal_fn`.
     ///
     /// # Errors
-    /// Returns [`InnovationError`] if `t`, the lag or baseline is non-finite,
-    /// the lag is negative, or `signal_fn` produces non-finite output.
+    /// Returns [`InnovationError`] if `t` or `lag < 0` is invalid or `signal_fn` produces non-finite output.
     pub fn evaluate<F>(&self, t: f64, signal_fn: F) -> Result<f64, InnovationError>
     where
         F: Fn(f64) -> f64,
@@ -50,16 +49,19 @@ impl ExternalLagSignal {
 /// Coupled hype-adoption delayed state step using explicit state history (H05).
 #[derive(Debug, Clone, PartialEq)]
 pub struct DelayedStateModel {
-    /// Number of history entries between the latest and the feedback value.
+    /// Number of stored observations back from the latest history entry;
+    /// this is an index delay, with no interpolation of irregular time coordinates.
     pub delay_steps: usize,
-    /// Coefficient multiplying lagged adoption in the hype update.
+    /// Finite signed coefficient multiplying the selected lagged adoption value.
     pub feedback_gain: f64,
-    /// Nonnegative decay coefficient for the current hype state.
+    /// Finite nonnegative decay coefficient per time unit in `step_hype`.
     pub decay: f64,
 }
 
 impl DelayedStateModel {
     /// Advance hype state `h[t]` given adoption history `adoption_history` and exogenous shock.
+    ///
+    /// Uses one explicit Euler step; the caller chooses `dt` and its time unit.
     ///
     /// # Errors
     /// Returns [`InnovationError`] if history is shorter than `delay_steps + 1` or inputs are non-finite.

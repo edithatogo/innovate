@@ -1,0 +1,953 @@
+{
+  "counts": {
+    "models": 16,
+    "registered_examples": 11,
+    "tutorial_example_sources": 11,
+    "tutorials": 14
+  },
+  "discovery_metadata": {
+    "runtime": "rust_native",
+    "scope": "Bounded Rust-native scalar, multivariate ODE, wrapper and mixture kernels. Model-specific extensions are explicit; full scientific migration and release qualification remain incomplete."
+  },
+  "evidence_scope": {
+    "native_execution": "not_run_by_generator",
+    "scientific_acceptance": "not_established",
+    "source": "native discovery and registered current content",
+    "support_combinations": "not_inferred_from_independent_metadata_lists"
+  },
+  "examples": [
+    {
+      "declaration": {
+        "expected_stdout": "{\"batch_items\": 2, \"invalid_workers_rejected\": true, \"worker_invariant\": true}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/native-batch/"
+      ],
+      "id": "examples/native_batch.py",
+      "source_sha256": "5425dbd50552179e39ed65c06b8de9846f50cdb9e20742ac05ecea68781309dc",
+      "tutorial_ids": [
+        "tutorials/native-batch"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"chains\": 4, \"draws\": 16000, \"posterior_oracle_passed\": true}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/bayesian-fitter/"
+      ],
+      "id": "examples/native_bayesian.py",
+      "source_sha256": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+      "tutorial_ids": [
+        "tutorials/bayesian-fitter"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"counts\": [0, 0, 0, 50, 64, 96], \"equivalent_forcing\": true, \"invalid_forcing_rejected\": 2, \"tracked_agents\": 100}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/forcing-and-time/"
+      ],
+      "id": "examples/native_forcing.py",
+      "source_sha256": "81f98614b5ec25b57b02ffecf99cae36d15e0ba49d1201b5c6e67f735938d2d4",
+      "tutorial_ids": [
+        "tutorials/forcing-and-time"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"duplicate_time_rejected\": true, \"ids\": [\"a\", \"b\", \"c\"], \"predictions\": [26.894142, 50.0, 73.105858]}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/user-guide/forecasting/",
+        "/innovate/user-guide/getting-started/"
+      ],
+      "id": "examples/native_forecast.py",
+      "source_sha256": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+      "tutorial_ids": [
+        "user-guide/forecasting",
+        "user-guide/getting-started"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"counts\": [0, 27, 82, 100], \"levels\": [0.0, 67.5, 205.0, 250.0], \"replay_equal\": true, \"sparse_grid_equal\": true, \"unknown_engine_rejected\": true}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/kairos-simulation/"
+      ],
+      "id": "examples/native_kairos.py",
+      "source_sha256": "f6e9fa77aabacd0ce18b099949cc6663680783abd8f9688ea70f7198f3297782",
+      "tutorial_ids": [
+        "tutorials/kairos-simulation"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"chain_counts\": [1, 1, 3, 3], \"disconnected_counts\": [1, 1, 1, 1], \"fifo_completions\": [6, 11, 16], \"invalid_edges_rejected\": true}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/network-scenarios/"
+      ],
+      "id": "examples/native_network.py",
+      "source_sha256": "845e798b85e94aa64a64850ffa39361835626d0c09cb1af616ba0924d1f69904",
+      "tutorial_ids": [
+        "tutorials/network-scenarios"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"converged\": true, \"forecast_rows\": 3, \"parameters_checked\": 6}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/norton-bass/"
+      ],
+      "id": "examples/native_norton_bass.py",
+      "source_sha256": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+      "tutorial_ids": [
+        "tutorials/norton-bass"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"ate\": 5.25, \"minimum_training_arm_clusters\": 1, \"minimum_training_arm_count\": 1, \"propensity_range\": [0.333333, 0.666667], \"rejected_designs\": 3}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/counterfactual-analysis/"
+      ],
+      "id": "examples/native_overlap.py",
+      "source_sha256": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+      "tutorial_ids": [
+        "tutorials/counterfactual-analysis"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"cutoff_year\": 2015, \"holdout_mae\": {\"gompertz\": 12.916, \"logistic\": 15.994, \"persistence\": 8.41}, \"holdout_rows\": 9, \"missing_years\": [2002, 2003, 2004, 2025], \"training_rows\": 23}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/tutorials/marimo/",
+        "/innovate/tutorials/public-data-fit/"
+      ],
+      "id": "examples/native_public_data.py",
+      "source_sha256": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+      "tutorial_ids": [
+        "tutorials/marimo",
+        "tutorials/public-data-fit"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"encodings\": [\"python_sorted_json_v1\", \"rust_sorted_json_v1\"], \"tampered_artifacts_rejected\": 2}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/native-migration/",
+        "/innovate/tutorials/data-ingestion-provenance/"
+      ],
+      "id": "examples/native_reingestion.py",
+      "source_sha256": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+      "tutorial_ids": [
+        "tutorials/data-ingestion-provenance"
+      ]
+    },
+    {
+      "declaration": {
+        "expected_stdout": "{\"policy_counts\": [0, 0], \"replacement_total\": 100.0, \"replayed\": 4, \"scenario_ids\": [\"baseline\", \"pause-innovation\", \"two-products\", \"replacement\"]}\n",
+        "language": "python",
+        "network": false,
+        "status": "runnable",
+        "timeout_seconds": 60
+      },
+      "documented_routes": [
+        "/innovate/tutorials/arrow-interchange/",
+        "/innovate/tutorials/scenario-experiment-workflows/"
+      ],
+      "id": "examples/native_scenarios.py",
+      "source_sha256": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+      "tutorial_ids": [
+        "tutorials/arrow-interchange",
+        "tutorials/scenario-experiment-workflows"
+      ]
+    }
+  ],
+  "fingerprint_encoding": "sha256 of exact source-file bytes",
+  "generated_by": "scripts/generate_learning_catalogue.py",
+  "models": [
+    {
+      "advertised": {
+        "family": "diffusion",
+        "import_path": "innovate_core",
+        "key": "bass",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve",
+          "kairos_des",
+          "kairos_abm",
+          "kairos_network"
+        ],
+        "simulation_semantics": "deterministic_curve_or_finite_population_DES_ABM",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "ode_fixed",
+          "ode_historical_batch"
+        ]
+      },
+      "id": "bass",
+      "summary": "Explore adoption driven by external influence and imitation.",
+      "title": "Bass"
+    },
+    {
+      "advertised": {
+        "family": "competition",
+        "import_path": "innovate_core",
+        "key": "complementary_goods",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_ode_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": true,
+        "supports_parameter_events": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "complementary_goods",
+      "summary": "Explore complementary interactions between product levels.",
+      "title": "Complementary goods"
+    },
+    {
+      "advertised": {
+        "family": "composite",
+        "import_path": "innovate_core",
+        "key": "composite",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_coupled_growth_ODE_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "fixed",
+          "historical_batch"
+        ]
+      },
+      "id": "composite",
+      "summary": "Explore coupled growth trajectories with the native ODE conventions.",
+      "title": "Composite"
+    },
+    {
+      "advertised": {
+        "family": "substitution",
+        "import_path": "innovate_core",
+        "key": "fisher_pry",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_curve_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "fisher_pry",
+      "summary": "Explore a substitution share between technologies.",
+      "title": "Fisher–Pry"
+    },
+    {
+      "advertised": {
+        "family": "diffusion",
+        "import_path": "innovate_core",
+        "key": "gompertz",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_curve_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "ode_fixed",
+          "ode_historical_batch"
+        ]
+      },
+      "id": "gompertz",
+      "summary": "Describe an asymmetric trajectory approaching a saturation level.",
+      "title": "Gompertz"
+    },
+    {
+      "advertised": {
+        "family": "hierarchical",
+        "import_path": "innovate_core",
+        "key": "hierarchical",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_group_point_curves_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": true,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "historical_additive",
+          "centered"
+        ]
+      },
+      "id": "hierarchical",
+      "summary": "Compare grouped point trajectories and their centering conventions.",
+      "title": "Hierarchical"
+    },
+    {
+      "advertised": {
+        "family": "latent_process",
+        "import_path": "innovate_core",
+        "key": "latent_process",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_smoothed_residual_path_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "latent_process",
+      "summary": "Inspect a smoothed residual path around a base trajectory.",
+      "title": "Latent process"
+    },
+    {
+      "advertised": {
+        "family": "competition",
+        "import_path": "innovate_core",
+        "key": "lock_in",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_ode_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": true,
+        "supports_parameter_events": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "lock_in",
+      "summary": "Examine the native historical lock-in and capacity conventions.",
+      "title": "Lock-in"
+    },
+    {
+      "advertised": {
+        "family": "diffusion",
+        "import_path": "innovate_core",
+        "key": "logistic",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_curve_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "logistic",
+      "summary": "Describe an S-shaped level trajectory with a midpoint and saturation scale.",
+      "title": "Logistic"
+    },
+    {
+      "advertised": {
+        "family": "competition",
+        "import_path": "innovate_core",
+        "key": "lotka_volterra",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_ode_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": true,
+        "supports_parameter_events": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "lotka_volterra",
+      "summary": "Explore two interacting shares with separate capacities.",
+      "title": "Lotka–Volterra"
+    },
+    {
+      "advertised": {
+        "family": "mixture",
+        "import_path": "innovate_core",
+        "key": "mixture",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_weighted_point_curves_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "gaussian_residual",
+          "historical_adoption"
+        ]
+      },
+      "id": "mixture",
+      "summary": "Distinguish weighted component trajectories from Gaussian residual-mixture fitting.",
+      "title": "Mixture"
+    },
+    {
+      "advertised": {
+        "family": "competition",
+        "import_path": "innovate_core",
+        "key": "multi_product",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_ode_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": true,
+        "supports_parameter_events": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "multi_product",
+      "summary": "Explore interacting product levels and market potentials.",
+      "title": "Multi-product competition"
+    },
+    {
+      "advertised": {
+        "family": "network_diffusion",
+        "import_path": "innovate_core",
+        "key": "network_diffusion",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_spillover_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": true,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "network_diffusion",
+      "summary": "Explore deterministic spillover; this model key is distinct from the Bass Kairos network engine.",
+      "title": "Network diffusion"
+    },
+    {
+      "advertised": {
+        "family": "substitution",
+        "import_path": "innovate_core",
+        "key": "norton_bass",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_curve_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": true,
+        "supports_multivariate_output": true,
+        "supports_parameter_events": true,
+        "supports_rates": true,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "legacy_cannibalization",
+          "successive_generations"
+        ]
+      },
+      "id": "norton_bass",
+      "summary": "Compare successive technology generations and their transfer conventions.",
+      "title": "Norton–Bass"
+    },
+    {
+      "advertised": {
+        "family": "policy_hazard",
+        "import_path": "innovate_core",
+        "key": "policy_hazard",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_policy_level_multiplier_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": []
+      },
+      "id": "policy_hazard",
+      "summary": "Inspect a bounded policy-timing level multiplier and its interpretation.",
+      "title": "Policy hazard"
+    },
+    {
+      "advertised": {
+        "family": "regime_switching",
+        "import_path": "innovate_core",
+        "key": "regime_switching",
+        "optional_dependencies": [],
+        "simulation_engines": [
+          "deterministic_curve"
+        ],
+        "simulation_semantics": "deterministic_piecewise_curves_only",
+        "stability": "experimental",
+        "supported_backends": [
+          "rust"
+        ],
+        "supported_operations": [
+          "fit_model",
+          "predict_model",
+          "simulate_model",
+          "summarize_model",
+          "diagnose_model"
+        ],
+        "supports_covariates": false,
+        "supports_multivariate_output": false,
+        "supports_rates": false,
+        "supports_simulation": true,
+        "supports_summarize": true,
+        "variants": [
+          "historical_index",
+          "fixed_time"
+        ]
+      },
+      "id": "regime_switching",
+      "summary": "Compare piecewise trajectories under explicit regime conventions.",
+      "title": "Regime switching"
+    }
+  ],
+  "schema_version": 1,
+  "source_files": {
+    "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx": "39f4a57e01d702a72b161eef251286e078a23a0f3acc1452d37d57f7428ce614",
+    "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx": "b6700b4067512c40d4e63b72728b24d869f0d0463aafed97e128a88c341be6fa",
+    "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx": "033e6c825d794ad32b94a9121f8aee7a9c6c8223e3a3952706188e2fb464fea4",
+    "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx": "ab9292f71a1565d3bb6c1fda1e52dc0f7a4e5e3a78a5f647068021c5c570292c",
+    "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx": "b3febf58fa4df831c428d945e705828f6deb85376766bad2f1c6c39e995e1101",
+    "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx": "02b9a786232c9947d363d47fdfe459a668d872cf47dc64e5d74ae38dbe25ea56",
+    "docs/astro-site/src/content/docs/tutorials/marimo.mdx": "86d2d6228b863b0517e2e6f4af182a83b114ab334d9b7112ac4ca557307ef57f",
+    "docs/astro-site/src/content/docs/tutorials/native-batch.mdx": "973c65ac494b25279682b0c90584e1dad4e6b476bc3a24750ecd9a0b3c656ada",
+    "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx": "eae6d0b973fbb1cb7f1d9cab17730c7ce428d093f8b3fd3b1afcb1067788e0d3",
+    "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx": "29d81c07c7013b9d4b8c7dc33c0fd84461ff7f102e3547990a8acf1edb53ffb6",
+    "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx": "1839904d1fee7040bb1926cea22e2921f7422374621c57497c3ee5dc434abfba",
+    "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx": "579e763631bf1cd373845dc5e16338675cef761841415667d9ee24d8c7ac2572",
+    "docs/astro-site/src/content/docs/user-guide/forecasting.mdx": "f0dfaf4eb5e46435b460ec2b8c51fc50b9150a5fe56e55eb6d14da2f0e0db290",
+    "docs/astro-site/src/content/docs/user-guide/getting-started.mdx": "f4933697ba80274ef6d324da18758839cecaeefdb1388f0340c9ca9d28c25288",
+    "docs/contracts/content-quality.json": "978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+    "examples/native_batch.py": "5425dbd50552179e39ed65c06b8de9846f50cdb9e20742ac05ecea68781309dc",
+    "examples/native_bayesian.py": "3ab164ca031362ee9e2c6d307726b98914fa235420c9b5c655106a40e3a51d4d",
+    "examples/native_forcing.py": "81f98614b5ec25b57b02ffecf99cae36d15e0ba49d1201b5c6e67f735938d2d4",
+    "examples/native_forecast.py": "b05c074bc217d0ef9509f16cc12f47819cd437a5b39cfbc9e7741bbab11ca4dd",
+    "examples/native_kairos.py": "f6e9fa77aabacd0ce18b099949cc6663680783abd8f9688ea70f7198f3297782",
+    "examples/native_network.py": "845e798b85e94aa64a64850ffa39361835626d0c09cb1af616ba0924d1f69904",
+    "examples/native_norton_bass.py": "9a11590b707806404bff99d53305549018f7090f1613f40c18af1dea46b75688",
+    "examples/native_overlap.py": "94bb3da31115065eeaa7a317eeeaddcf4e06f7f3342e3b9706a5820c927b8138",
+    "examples/native_public_data.py": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+    "examples/native_reingestion.py": "47222251bb96cfa982e090d532672f02dbb932c1e54d501a516158efbb7020f3",
+    "examples/native_scenarios.py": "7d983c373d46757c53e9c03e0db6b1f264a16b835046767def85d66ea3876a8d",
+    "rust/crates/innovate-core/src/discovery.json": "935a5f0ca05209f6f74e859d629356b4f7dda338e38208f21e7a695abd31ff2b",
+    "scripts/generate_learning_catalogue.py": "cd3f4df8289632ec8fecca12d6b77fca65d57f98d5832d61848e6afafb330152"
+  },
+  "tutorials": [
+    {
+      "description": "Save native scenario results as JSON and Arrow, recover their identities and execution records, and check replay.",
+      "example_id": "examples/native_scenarios.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/arrow-interchange",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/arrow-interchange/",
+      "source": "docs/astro-site/src/content/docs/tutorials/arrow-interchange.mdx",
+      "title": "Round-trip and replay scenario results"
+    },
+    {
+      "description": "Compare four native Metropolis chains with a tractable posterior and interpret support, Monte Carlo error and diagnostics.",
+      "example_id": "examples/native_bayesian.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/bayesian-fitter",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/bayesian-fitter/",
+      "source": "docs/astro-site/src/content/docs/tutorials/bayesian-fitter.mdx",
+      "title": "Check a native Bayesian sampler"
+    },
+    {
+      "description": "Hand-check a cross-fitted AIPW contrast, inspect overlap, and reject invalid training-fold and cluster designs.",
+      "example_id": "examples/native_overlap.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/counterfactual-analysis",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/counterfactual-analysis/",
+      "source": "docs/astro-site/src/content/docs/tutorials/counterfactual-analysis.mdx",
+      "title": "Separate scenario contrasts from causal effects"
+    },
+    {
+      "description": "Preserve native dataset artifacts and their declared encoding, reject altered data, and understand the limits of checksum and provenance fields.",
+      "example_id": "examples/native_reingestion.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/data-ingestion-provenance",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/data-ingestion-provenance/",
+      "source": "docs/astro-site/src/content/docs/tutorials/data-ingestion-provenance.mdx",
+      "title": "Verify dataset re-ingestion and checksum scope"
+    },
+    {
+      "description": "Construct an exact synthetic adoption pause, compare equivalent additive controls, and check time-resolution and tracked-agent invariants.",
+      "example_id": "examples/native_forcing.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/forcing-and-time",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/forcing-and-time/",
+      "source": "docs/astro-site/src/content/docs/tutorials/forcing-and-time.mdx",
+      "title": "Pause adoption with timed forcing"
+    },
+    {
+      "description": "Run the native Kairos DES engine, distinguish agent counts from scaled levels, and verify replay and observation-grid invariance.",
+      "example_id": "examples/native_kairos.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/kairos-simulation",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/kairos-simulation/",
+      "source": "docs/astro-site/src/content/docs/tutorials/kairos-simulation.mdx",
+      "title": "Simulate a seeded Bass adoption path"
+    },
+    {
+      "description": "Run a native reactive notebook that shares the checked public-data workflow, changes the training cutoff and separates local execution from static or browser-only modes.",
+      "example_id": "examples/native_public_data.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/marimo",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/marimo/",
+      "source": "docs/astro-site/src/content/docs/tutorials/marimo.mdx",
+      "title": "Explore the public-data fit in marimo"
+    },
+    {
+      "description": "Compare one and two native workers, verify independent Logistic predictions, and distinguish per-item failures from a rejected batch.",
+      "example_id": "examples/native_batch.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/native-batch",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/native-batch/",
+      "source": "docs/astro-site/src/content/docs/tutorials/native-batch.mdx",
+      "title": "Run ordered native prediction batches"
+    },
+    {
+      "description": "Trace spread through a three-agent network, compare a disconnected graph, and verify FIFO service and resource accounting independently.",
+      "example_id": "examples/native_network.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/network-scenarios",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/network-scenarios/",
+      "source": "docs/astro-site/src/content/docs/tutorials/network-scenarios.mdx",
+      "title": "Separate network demand from completed adoption"
+    },
+    {
+      "description": "Recover a two-generation Norton–Bass model and check held-out levels and signed rates against independent equations.",
+      "example_id": "examples/native_norton_bass.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/norton-bass",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/norton-bass/",
+      "source": "docs/astro-site/src/content/docs/tutorials/norton-bass.mdx",
+      "title": "Fit and forecast successive generations"
+    },
+    {
+      "description": "Fit native Logistic and Gompertz curves to public Internet-use observations, preserve missing years and compare a retrospective calendar holdout with a simple baseline.",
+      "example_id": "examples/native_public_data.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/public-data-fit",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/public-data-fit/",
+      "source": "docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+      "title": "Fit and challenge a forecast with public data"
+    },
+    {
+      "description": "Execute four synthetic native scenarios, verify their expected invariants, and round-trip and replay JSON and Arrow artifacts.",
+      "example_id": "examples/native_scenarios.py",
+      "execution_status": "not_run_by_generator",
+      "id": "tutorials/scenario-experiment-workflows",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/tutorials/scenario-experiment-workflows/",
+      "source": "docs/astro-site/src/content/docs/tutorials/scenario-experiment-workflows.mdx",
+      "title": "Scenario experiment workflows"
+    },
+    {
+      "description": "Check conditional predictions, preserve row identity, and distinguish a level from a rate or a validated forecast.",
+      "example_id": "examples/native_forecast.py",
+      "execution_status": "not_run_by_generator",
+      "id": "user-guide/forecasting",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/user-guide/forecasting/",
+      "source": "docs/astro-site/src/content/docs/user-guide/forecasting.mdx",
+      "title": "Prediction and forecasting"
+    },
+    {
+      "description": "Run a checked Rust and Polars example, interpret its output, and verify invalid inputs fail.",
+      "example_id": "examples/native_forecast.py",
+      "execution_status": "not_run_by_generator",
+      "id": "user-guide/getting-started",
+      "language": "python",
+      "network": false,
+      "route": "/innovate/user-guide/getting-started/",
+      "source": "docs/astro-site/src/content/docs/user-guide/getting-started.mdx",
+      "title": "Predict a native diffusion curve"
+    }
+  ]
+}

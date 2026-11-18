@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-11-16T11:03:42+00:00",
+  "head_commit": "5ee03ddc073b9c3bcf91efdcd62923d87748920f",
+  "merge_commit": "b8478fed1dda8f0741f5c7a7df790d28bd55320c",
+  "run_id": 43853246809,
+  "run_url": "https://github.com/edithatogo/innovate/actions/runs/43853246809",
+  "conclusion": "failure",
+  "scope": "Exact-head hosted results before the content-baseline binding repair. Executed languages passed; the aggregate policy gate and browser qualification did not.",
+  "build": {
+    "job_id": 133250924263,
+    "status": "failed",
+    "passed_steps": [
+      "documentation contracts",
+      "source/native-language structure",
+      "scientific review freshness",
+      "18 Node tests",
+      "Astro build",
+      "Astro type-check"
+    ],
+    "failed_step": "Require no new documentation debt",
+    "failure": "Content policy changed; explicit baseline review is required.",
+    "violations": [],
+    "secondary_failure": "Browser diagnostic upload had no files because browser steps were never reached."
+  },
+  "native": {
+    "job_id": 133250923685,
+    "status": "failed_at_ratchet",
+    "failure": "Content policy changed; explicit baseline review is required.",
+    "additional_execution_failures": false,
+    "execution_status": "passed",
+    "full_scope_complete": true,
+    "gate_passed": false,
+    "python": {
+      "version": "3.15.2",
+      "examples_passed": 11,
+      "api_doctests_passed": 19,
+      "failed": 0
+    },
+    "julia": {
+      "version": "1.13.4",
+      "examples_executed": 7,
+      "assertions_executed": 10,
+      "qualified": true
+    },
+    "r": {
+      "version": "4.6.2",
+      "examples_executed": 6,
+      "assertions_executed": 11,
+      "exports": 24,
+      "manuals": 14,
+      "qualified": true
+    },
+    "julia_r_shared_library_sha256": "55a2e453b1ae4aa6c040d1dddc54ba62ec2ba94df3760fea082420d165785e8c",
+    "rust_documentation": "passed",
+    "rust_doctests": "passed"
+  },
+  "browser": {
+    "discovery": "skipped",
+    "installation": "skipped",
+    "execution": "skipped",
+    "attempts": 0,
+    "hosted_case_count": null,
+    "qualified": false
+  },
+  "deployment": "skipped",
+  "artifacts": [
+    {
+      "name": "documentation-build-evidence",
+      "id": 14219681861,
+      "sha256": "ff0c8e64aac1969a9aee58cd1a0c365d33b2469976c8fe15bfe08b9c9e85f346"
+    },
+    {
+      "name": "documentation-execution-evidence",
+      "id": 14220525515,
+      "sha256": "646d37f5ba6bc8efe29b2b40141d408c089de0d2ed12cc3928b76f0e0f3e983f"
+    }
+  ],
+  "other_hosted_results": {
+    "workflow_policy_lint": "passed",
+    "privacy_secrets": "passed",
+    "release_readiness": {
+      "run_id": 43853246957,
+      "job_id": 133250923220,
+      "status": "failure",
+      "reason": "Scientific migration and acceptance remain incomplete:16 model and22 feature-area obligations remain bounded_native.",
+      "introduced_by_documentation": false,
+      "release_inputs_byte_identical_to_receiving_main": true
+    },
+    "remaining_jobs": "Not all complete at this observation; no complete CI pass."
+  }
+}

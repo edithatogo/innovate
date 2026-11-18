@@ -10,6 +10,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Astro documentation quality contracts** *(Archived — 183 Python doc contract tests pass; hosted browser/Pages & `#655` polyglot inventory refresh remain open)*
   *Link: [./archive/documentation_quality_contracts_20261115/](./archive/documentation_quality_contracts_20261115/)*
+- [~] **Track: Documentation learning programme and current qualification** *(Active successor — marimo, Astro catalogues, public-data and advanced lessons, language contracts and legacy retirement implemented; broader curriculum, browser/publication and community acceptance remain in progress)*
+  *Link: [./tracks/documentation_learning_20261116/](./tracks/documentation_learning_20261116/)*
 - [ ] **Track: Kairos native consumer and domain boundary** *(Proposed; implementation pending)*
   *Link: [./tracks/kairos_runtime_boundary_20261107/](./tracks/kairos_runtime_boundary_20261107/)*
 

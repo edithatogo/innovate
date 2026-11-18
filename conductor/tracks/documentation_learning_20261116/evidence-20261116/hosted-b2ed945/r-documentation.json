@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "language": "r",
+  "status": "passed",
+  "qualified": true,
+  "runtime": "R version 4.6.2 (2026-10-29)",
+  "platform": "x86_64-pc-linux-gnu",
+  "runner": "scripts/check_r_documentation.R",
+  "examples": [
+    {
+      "id": "r:bindings/r/man/kernel_adopters.Rd:1",
+      "source": "bindings/r/man/kernel_adopters.Rd",
+      "source_line": 52,
+      "code_sha256": "af02a45c64a33c52a4aa885ef81106a40765c8c4fe95f32ea6a07d011afeb1a0",
+      "assertions_executed": 1,
+      "elapsed_seconds": 0.0040000000000000036,
+      "status": "passed"
+    },
+    {
+      "id": "r:bindings/r/man/kernel_aggregate_dates.Rd:1",
+      "source": "bindings/r/man/kernel_aggregate_dates.Rd",
+      "source_line": 34,
+      "code_sha256": "4574b77a193698c164cda87d8e407cf639dac74c0044e2c3eca3e19e88de872f",
+      "assertions_executed": 1,
+      "elapsed_seconds": 0.0010000000000000009,
+      "status": "passed"
+    },
+    {
+      "id": "r:bindings/r/man/kernel_batch.Rd:1",
+      "source": "bindings/r/man/kernel_batch.Rd",
+      "source_line": 55,
+      "code_sha256": "70fa7bdb5383ef41269884494abcb9bce98ceac644995b1f0f680c8d2157b7c7",
+      "assertions_executed": 2,
+      "elapsed_seconds": 0.0020000000000000018,
+      "status": "passed"
+    },
+    {
+      "id": "r:bindings/r/man/kernel_bridge.Rd:1",
+      "source": "bindings/r/man/kernel_bridge.Rd",
+      "source_line": 82,
+      "code_sha256": "3b4492918cf628f96ba449231f0a304dc986b0c0636629dc8fc486d35619f58d",
+      "assertions_executed": 3,
+      "elapsed_seconds": 0.0030000000000000027,
+      "status": "passed"
+    },
+    {
+      "id": "r:bindings/r/man/kernel_models.Rd:1",
+      "source": "bindings/r/man/kernel_models.Rd",
+      "source_line": 104,
+      "code_sha256": "effedc84cbe9ea27367e89a204534ae5a6bfe7f8c95816c0c300895e771f8cb9",
+      "assertions_executed": 2,
+      "elapsed_seconds": 0.0050000000000000044,
+      "status": "passed"
+    },
+    {
+      "id": "r:bindings/r/man/kernel_preprocessing.Rd:1",
+      "source": "bindings/r/man/kernel_preprocessing.Rd",
+      "source_line": 54,
+      "code_sha256": "e9320f253e8fdce5276e591475ec7993d19d030aede8569656567711b4d7d766",
+      "assertions_executed": 2,
+      "elapsed_seconds": 0.0020000000000000018,
+      "status": "passed"
+    }
+  ],
+  "inventory_sha256": "857399a2e44a6a9905e5aa8e3ac3d442c77134acfa9f98f08a4d6a7feeb0c179",
+  "source_sha256": {
+    ".github/workflows/ci.yml": "sha256:ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+    "bindings/julia/Project.toml": "sha256:09474ba11ef69edc7f11193a66d993abc9bfe2e043b0ed0d07ba69a1e7d42514",
+    "bindings/julia/src/Innovate.jl": "sha256:be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
+    "bindings/r/DESCRIPTION": "sha256:dea747164cb71949d291fa7c23ecdec8d0e2dcce8d4543256b622d84c0d66d08",
+    "bindings/r/NAMESPACE": "sha256:e16a7c7f83d94bbe4cc2d3ddefc0bf28f5fcef29094013dacb9b6819a6653c23",
+    "bindings/r/R/kernel_bridge.R": "sha256:45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
+    "bindings/r/man/export_ipc_file.Rd": "sha256:1acff02de09135d2b2c191d8715a32c08c119527fe635adbb5ada2625d689360",
+    "bindings/r/man/export_ipc_stream.Rd": "sha256:d2bf9e68304a1b7d888fbc384ff9ad343865f1367979574d517fe33ff7c9eab7",
+    "bindings/r/man/innovate.R-package.Rd": "sha256:4f8305fb98cc340db31bbb6b528d82f61ca727f3fcd04b93e71c3b506352d499",
+    "bindings/r/man/invoke_registered_extension.Rd": "sha256:f45ea6735e9291c037f8a223b4bc4cad5ae9694cf763837e02eea6e7a0669d66",
+    "bindings/r/man/kernel_adopters.Rd": "sha256:8805bb9f748a3b4f316e9eb3bc432001b9478b86b72876dd0db73f5f32650d0e",
+    "bindings/r/man/kernel_aggregate_dates.Rd": "sha256:a41265e1b3a04832351f0ee075f0d7cacf767960a0f8125bc44c912cd735b211",
+    "bindings/r/man/kernel_batch.Rd": "sha256:c188cd609be86ee294952faca1d07c4dee4b34899bf4226b02e494ff237fd351",
+    "bindings/r/man/kernel_bridge.Rd": "sha256:c10512758affbbc9cfa01cecb142e2c2554b92679544fcccb25803b69821c410",
+    "bindings/r/man/kernel_models.Rd": "sha256:957a9fa174d6235902196d193f435681037ee6c7577113f186c2c9e6b3931bea",
+    "bindings/r/man/kernel_paired_outcomes_ipc.Rd": "sha256:104a1c2894a4cb18d5965f6a583564330772dd91b21e0b9cb71d30933f4ee07b",
+    "bindings/r/man/kernel_preprocessing.Rd": "sha256:398b6d04da433921e7ee908363e72e011545407906164f169f7eb69dab80a283",
+    "bindings/r/man/kernel_sarima_fit.Rd": "sha256:98c0338c54b3c949f743402b4e848f72836a91f1b9ed7710a5a1b5450b9a3547",
+    "bindings/r/man/kernel_scenario_ipc.Rd": "sha256:cb7d33f07546800f127583f21d06795931cbf4e4553a6749bfa29d24250259c4",
+    "bindings/r/man/kernel_seasonal_decomposition.Rd": "sha256:3839a81d26ec1cfa18401d0abbe9d3ade3812b9a96e315494b86c06d8537b751",
+    "scripts/check_julia_documentation.jl": "sha256:9f27b4d976750c7af0858cb294d1986642809e3d79e867df9440da6b890c72e0",
+    "scripts/check_polyglot_api_documentation.py": "sha256:35c51f19b3c7f1fb307cb516508ed39710fbe049dabae7c2f794fba7e3d39626",
+    "scripts/check_r_documentation.R": "sha256:61759da05f3fe5b8aae4a1139e3754928d675d5ad09af0738eab32f395253ce9"
+  },
+  "exported_names_checked": ["export_ipc_file", "export_ipc_stream", "invoke_registered_extension", "kernel_aggregate_dates", "kernel_call", "kernel_call_json", "kernel_categorize_adopters", "kernel_categorize_fitted_adopters", "kernel_cumulative_sum", "kernel_diagnose_model", "kernel_discover_models", "kernel_fit_batch", "kernel_fit_model", "kernel_paired_outcomes_ipc", "kernel_predict_batch", "kernel_predict_model", "kernel_rolling_average", "kernel_sarima_fit", "kernel_scenario_comparisons_ipc", "kernel_scenario_executions_ipc", "kernel_scenario_grid_ipc", "kernel_seasonal_decomposition", "kernel_simulate_model", "kernel_summarize_model"],
+  "package_version": "0.7.0.9000",
+  "jsonlite_version": "2.0.0",
+  "native_library": {
+    "path": "/home/runner/work/_temp/Library/innovate.R/lib/libinnovate_ffi.so",
+    "sha256": "238e04a416a8a46b693363b2ae36b15c8687c05d44aac3680b8dbb602e7d950d"
+  },
+  "installed_code_sha256": {
+    "/home/runner/work/_temp/Library/innovate.R/R/innovate.R.rdb": "9c2ae89db75bccabd02b4ac515652918679299fc5e8d82fb56a72c2b289dbf15",
+    "/home/runner/work/_temp/Library/innovate.R/R/innovate.R.rdx": "55994880a6f4b2cd69b36e2061eaa916344f5d84f0646c48e3661437f9a3a279"
+  },
+  "manuals_checked": ["bindings/r/man/export_ipc_file.Rd", "bindings/r/man/export_ipc_stream.Rd", "bindings/r/man/innovate.R-package.Rd", "bindings/r/man/invoke_registered_extension.Rd", "bindings/r/man/kernel_adopters.Rd", "bindings/r/man/kernel_aggregate_dates.Rd", "bindings/r/man/kernel_batch.Rd", "bindings/r/man/kernel_bridge.Rd", "bindings/r/man/kernel_models.Rd", "bindings/r/man/kernel_paired_outcomes_ipc.Rd", "bindings/r/man/kernel_preprocessing.Rd", "bindings/r/man/kernel_sarima_fit.Rd", "bindings/r/man/kernel_scenario_ipc.Rd", "bindings/r/man/kernel_seasonal_decomposition.Rd"],
+  "examples_executed": 6,
+  "assertions_executed": 11,
+  "elapsed_seconds": 0.42200000000000004
+}

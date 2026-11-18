@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-16T12:14:39.980585+00:00",
+  "base_commit": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+  "scope": "Final frozen integrated working tree on base 5821d8a: source contracts, installed native Python, optional native notebook, root-workspace Rust documentation and static Astro artifact. This is a scoped qualification record, not whole-programme acceptance.",
+  "source_state": "Working-tree input hashes identify tested bytes before ordinary-commit publication; original receipts retain their own execution paths and timestamps.",
+  "source_sha256": "cf3ea0712e66f7512c76f248d1eddfab75edf1bb14c88e3466af5a742b9b21ca",
+  "artifact_sha256": "adfc2087fa55fa9e3605da5db9604650d8a2531865c1e37a4c11ed2365a4169b",
+  "source_artifact_binding_verified": false,
+  "native_binary_source_binding_verified_by_checkers": false,
+  "native_binary_sha256": "fae743379e41993343496eb0fab04ae4a9f7994c937eb724403337af50ed7aaa",
+  "counts": {
+    "source_tests": 286,
+    "source_baseline_tests": 272,
+    "convention_and_workspace_scope_tests": 14,
+    "focused_tests": 50,
+    "node_tests": 55,
+    "fresh_rust_doctests": 4,
+    "html_pages": 211,
+    "checked_local_links": 11361,
+    "ordinary_python_examples": 11,
+    "executed_example_assertion_lines": 117,
+    "public_python_doctests": 19,
+    "current_pages": 69,
+    "generated_api_pages": 34,
+    "tutorial_pages": 14,
+    "model_discovery_records": 16
+  },
+  "test_count_scope": "Counts describe separate invocations and overlap; convention tests and Python wrapper suites must not be summed as unique coverage.",
+  "source": {
+    "status": "passed",
+    "record": "final-source/qualification-summary.json",
+    "strict_content_without_execution": {
+      "exit_code": 1,
+      "expected_incomplete_without_execution": true,
+      "violations": 0,
+      "structural_complete": true,
+      "execution_status": "not_run",
+      "required_languages": [
+        "python",
+        "julia",
+        "r"
+      ],
+      "complete": false
+    },
+    "content_ratchet": {
+      "new_or_changed": [],
+      "passed": true,
+      "reason": "No new structural debt; completeness is reported separately.",
+      "stale": []
+    },
+    "scientific_review": "Consistency and 66 declared source hashes only; no scientific or pedagogical certification."
+  },
+  "runtime": {
+    "status": "passed_within_requested_local_scope",
+    "record": "final-runtime/qualification.json",
+    "fresh_installed_builds": [
+      "final-runtime/innovate-integrated-native-frozen-build.log",
+      "final-runtime/innovate-integrated-notebook-frozen-build.log"
+    ],
+    "ordinary_examples": {
+      "executed_assertion_lines": 117,
+      "failed": 0,
+      "passed": 11
+    },
+    "public_doctests": {
+      "attempted": 19,
+      "failed": 0
+    },
+    "native_docstrings": {
+      "callable_count": 10,
+      "command_exit_code": 0,
+      "gaps": 0,
+      "installed_source_matches": true,
+      "status": "passed"
+    },
+    "focused_tests": {
+      "by_module": {
+        "DocumentationConventionTests": 8,
+        "LearningCatalogueTests": 16,
+        "RustWorkspaceScopeTests": 6,
+        "test_public_data_tutorial": 20
+      },
+      "command_exit_code": 0,
+      "errors": 0,
+      "failed": 0,
+      "passed": 50,
+      "skipped": 0
+    },
+    "all_language_aggregate": {
+      "command_exit_code": 1,
+      "current_content_complete": false,
+      "current_python_content_complete": true,
+      "gate_passed": false,
+      "language_receipts": {
+        "julia": {
+          "qualified": false,
+          "reason": "Native documentation receipt was not supplied.",
+          "status": "not_run"
+        },
+        "r": {
+          "qualified": false,
+          "reason": "Native documentation receipt was not supplied.",
+          "status": "not_run"
+        }
+      },
+      "python_execution_status": "passed",
+      "ratchet_passed": true,
+      "reason": "The aggregate all-language gate remains incomplete: no current Julia/R execution receipts were supplied locally.",
+      "violations": 0
+    }
+  },
+  "rust": {
+    "workspace_crates": [
+      "innovate-core",
+      "innovate-tabular",
+      "innovate-ffi",
+      "innovate-python",
+      "innovate-kairos"
+    ],
+    "strict_rustdoc": {
+      "status": "passed",
+      "command": "RUSTDOCFLAGS='-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes' cargo doc --workspace --no-deps --locked -j 4",
+      "log": "rust/innovate-workspace-rust-docs-frozen-20261116.log"
+    },
+    "fresh_doctests": {
+      "by_crate": {
+        "innovate-core": 2,
+        "innovate-ffi": 1,
+        "innovate-kairos": 1,
+        "innovate-tabular": 0
+      },
+      "command_exit_code": 0,
+      "failed": 0,
+      "filtered": 0,
+      "ignored": 0,
+      "passed": 4,
+      "python_cdylib": "unsupported by Cargo",
+      "source_scope": "final frozen Rust sources"
+    },
+    "fresh_doctest_log": "final-runtime/rust-doctests.log",
+    "documentation_completion_record": "rust/rust-documentation-completion-20261116.json",
+    "completion_record_timing_note": "The completion record retains its earlier doctest timing; final-runtime/rust-doctests.log is the subsequent execution against final frozen sources.",
+    "source_preservation": {
+      "files": 17,
+      "exact_stripped_documentation_bytes": 16,
+      "exception": "Exactly three root-authorized rustfmt trailing commas after NegativeBinomial.dispersion, Gaussian.sigma and StudentT.df; rustfmt-normalized stripped-doc source equal.",
+      "negative_controls_passed": true,
+      "record": "rust/innovate-rust-doc-token-evidence-20261116.json"
+    },
+    "standalone_games": {
+      "status": "blocked_before_rustdoc",
+      "record": "games/games-documentation-20261116.json",
+      "log": "games/games-doc-20261116.log",
+      "doc_exit_code": 101,
+      "doctests": "not_run",
+      "reason": "The Kairos dependency requires thiserror ^2.0.21 while Paignia 5103675 pins thiserror =2.0.18. No dependency or pin changes were made.",
+      "qualified_by_workspace_commands": false
+    }
+  },
+  "frontend": {
+    "node_tests": {
+      "passed": 55,
+      "failed": 0,
+      "log": "frontend/innovate-integrated-node-tests.log"
+    },
+    "astro_build": {
+      "html_pages": 211,
+      "log": "frontend/innovate-integrated-astro-build.log"
+    },
+    "astro_check": {
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0,
+      "log": "frontend/innovate-integrated-astro-check.log"
+    },
+    "browser_discovery": {
+      "selected_tests": 164,
+      "log": "frontend/innovate-integrated-browser-list.log",
+      "execution_qualified": false
+    },
+    "artifact_record": "final-source/artifact.json"
+  },
+  "notebook": {
+    "status": "passed_for_native_headless_execution_and_export",
+    "record": "final-runtime/notebooks/qualification.json",
+    "runs": [
+      {
+        "cutoffs": [
+          2015,
+          2018
+        ],
+        "default_scores": [
+          {
+            "converged": true,
+            "holdout_bias": -15.99389039086351,
+            "holdout_mae": 15.99389039086351,
+            "holdout_rmse": 16.473585795389813,
+            "model": "logistic"
+          },
+          {
+            "converged": true,
+            "holdout_bias": -12.916266716072734,
+            "holdout_mae": 12.916266716072734,
+            "holdout_rmse": 13.46547584917368,
+            "model": "gompertz"
+          },
+          {
+            "converged": null,
+            "holdout_bias": -8.410123487267725,
+            "holdout_mae": 8.410123487267725,
+            "holdout_rmse": 9.292633480442127,
+            "model": "persistence"
+          }
+        ],
+        "exact_example_parity": true,
+        "export_bytes": 54901,
+        "export_exit_code": 0,
+        "export_sha256": "ec0cc62abf3f5fe2ac6e5dfe78726107418a12202ff444a00ba02c658cc6b121",
+        "holdout_rows": [
+          9,
+          6
+        ],
+        "id": "public-data-fit"
+      }
+    ],
+    "environment": {
+      "innovate": "0.7.0a1",
+      "marimo": "0.25.2",
+      "polars": "2.1.0",
+      "python": "3.15.2"
+    },
+    "retained_html": "final-runtime/notebooks/public-data-fit.html",
+    "retained_html_purpose": "Evidence artifact only; not copied into the site or published.",
+    "interactive_browser_qualified": false,
+    "browser_wasm_qualified": false,
+    "static_export_published": false
+  },
+  "retirement": {
+    "schema_version": 1,
+    "status": "passed",
+    "removed_sources": 263,
+    "migration_routes": 141,
+    "rendered_notices_checked": 141,
+    "git_history_checked": true,
+    "scientific_acceptance": false
+  },
+  "community": {
+    "record_valid": true,
+    "page_matches_mapping": true,
+    "requirements_mapped": 11,
+    "requirements_with_pending_work": 11,
+    "assessment": "documentation_traceability_only",
+    "external_acceptance_assessed": false
+  },
+  "pending": {
+    "current_julia_and_r_execution_receipts": true,
+    "all_maintained_languages_qualified": false,
+    "browser_hosted_qualification": true,
+    "windows_hosted_qualification": true,
+    "standalone_games_documentation": true,
+    "human_reader_and_assistive_technology_evaluation": true,
+    "broader_scientific_and_curriculum_acceptance": true,
+    "live_publication": true,
+    "merge_and_release_acceptance": true
+  },
+  "browser_repair_scope": "Original response-stage CDP Fetch capture and mandatory homepage prefetch probe are implemented and regression-tested; actual managed Chromium execution at the integrated head remains pending.",
+  "historical_evidence": "Main 69b6748 and hosted 5ee/178 records retain their original scope. The hosted 178 all-language pass and 163/164 browser result are not reassigned to this integrated source.",
+  "upstream_read_only_observation": {
+    "main": "45e33cd6344e49351ce116c816b4d0a7edeebbc7",
+    "changes_since_base": [
+      ".github/workflows/renovate-config.yml"
+    ],
+    "renovate_validator": "44.243.0 to 44.243.2 via #666 and #670",
+    "provenance": "Coordinator read-only remote refresh; qualified checkout remains 5821d8a. No rebase, rebuild or reattribution performed."
+  },
+  "retention": {
+    "copy_manifest": "copy-manifest.json",
+    "raw_copies": 60,
+    "raw_bytes": 407966,
+    "all_raw_copies_byte_identical": true,
+    "archive_format": "../archive-format/README.md",
+    "cross_reference_rule": "Original absolute provenance paths are unchanged inside copied records. retained_path resolves the repository copy. Cross-record digests identify original decoded record bytes if a reversible archival envelope is subsequently applied."
+  },
+  "track_complete": false,
+  "scientific_acceptance": false,
+  "live_deployment_performed": false
+}

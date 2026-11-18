@@ -1,0 +1,439 @@
+{
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_record": {
+    "repository_path": "conductor/tracks/documentation_learning_20261116/evidence-20261116/integrated-5821d8a/rust/innovate-rust-doc-token-evidence-20261116.json",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 9151,
+    "serialized_sha256": "sha256:b1657046cdb668d7fba292097dfa1142ffb379f1d869dbb936285f6d4f44d9c1",
+    "semantic_sha256": "sha256:364ac2d00758492d474feb0fa53f0ad9b8e181beb400e8f838680cb259c0a5c4",
+    "semantic_encoding": "python-json:sort_keys=true,ensure_ascii=false,separators=(',',':'),allow_nan=false;UTF-8;no-final-newline",
+    "serialization": {
+      "indent": 2,
+      "ensure_ascii": true,
+      "separators": "default",
+      "line_ending": "\n",
+      "final_newline": "\n",
+      "preserve_object_order": true
+    }
+  },
+  "tagged_digest_paths": [
+    [
+      "records",
+      0,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      0,
+      "before_sha256"
+    ],
+    [
+      "records",
+      0,
+      "after_sha256"
+    ],
+    [
+      "records",
+      1,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      1,
+      "before_sha256"
+    ],
+    [
+      "records",
+      1,
+      "after_sha256"
+    ],
+    [
+      "records",
+      2,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      2,
+      "before_sha256"
+    ],
+    [
+      "records",
+      2,
+      "after_sha256"
+    ],
+    [
+      "records",
+      3,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      3,
+      "before_sha256"
+    ],
+    [
+      "records",
+      3,
+      "after_sha256"
+    ],
+    [
+      "records",
+      3,
+      "normalized_source_sha256"
+    ],
+    [
+      "records",
+      4,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      4,
+      "before_sha256"
+    ],
+    [
+      "records",
+      4,
+      "after_sha256"
+    ],
+    [
+      "records",
+      5,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      5,
+      "before_sha256"
+    ],
+    [
+      "records",
+      5,
+      "after_sha256"
+    ],
+    [
+      "records",
+      6,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      6,
+      "before_sha256"
+    ],
+    [
+      "records",
+      6,
+      "after_sha256"
+    ],
+    [
+      "records",
+      7,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      7,
+      "before_sha256"
+    ],
+    [
+      "records",
+      7,
+      "after_sha256"
+    ],
+    [
+      "records",
+      8,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      8,
+      "before_sha256"
+    ],
+    [
+      "records",
+      8,
+      "after_sha256"
+    ],
+    [
+      "records",
+      9,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      9,
+      "before_sha256"
+    ],
+    [
+      "records",
+      9,
+      "after_sha256"
+    ],
+    [
+      "records",
+      10,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      10,
+      "before_sha256"
+    ],
+    [
+      "records",
+      10,
+      "after_sha256"
+    ],
+    [
+      "records",
+      11,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      11,
+      "before_sha256"
+    ],
+    [
+      "records",
+      11,
+      "after_sha256"
+    ],
+    [
+      "records",
+      12,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      12,
+      "before_sha256"
+    ],
+    [
+      "records",
+      12,
+      "after_sha256"
+    ],
+    [
+      "records",
+      13,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      13,
+      "before_sha256"
+    ],
+    [
+      "records",
+      13,
+      "after_sha256"
+    ],
+    [
+      "records",
+      14,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      14,
+      "before_sha256"
+    ],
+    [
+      "records",
+      14,
+      "after_sha256"
+    ],
+    [
+      "records",
+      15,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      15,
+      "before_sha256"
+    ],
+    [
+      "records",
+      15,
+      "after_sha256"
+    ],
+    [
+      "records",
+      16,
+      "token_stream_sha256"
+    ],
+    [
+      "records",
+      16,
+      "before_sha256"
+    ],
+    [
+      "records",
+      16,
+      "after_sha256"
+    ]
+  ],
+  "record": {
+    "base": "5821d8a38fbc6cbf3822a63474b79c07b18b5bc0",
+    "scope": "Rust files changed in this documentation-only completion relative to preserved pre-edit sources",
+    "method": "proc_macro2 tokenization with only doc attributes removed; exact stripped-doc bytes for16 files; likelihood has exactly3 authorized trailing commas and equal rustfmt-normalized stripped-doc source; negative controls passed",
+    "changed_files": 17,
+    "records": [
+      {
+        "path": "rust/crates/innovate-core/src/domain.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:1fc7458528c50a0ebea361d838e3e014d8c9a9ea10cc71d29e93ec3c6fce7aa8",
+        "before_sha256": "sha256:dc3092e7345820b82750d675bdc5b7560d090d603d5e9eb7f7ac784fa734c28b",
+        "after_sha256": "sha256:4e714719f29be367e9b80af10d82662f81c49c556727a42cd97255e96fcac4f9",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/inference/hype_fit.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:240b54e62b3d76684fd45081984470b80411b8f8f205973065f850c9eea96a5a",
+        "before_sha256": "sha256:cbd8b9ae78156aec120bd5a519630fd001238f2383521e44e9789264f1dd7741",
+        "after_sha256": "sha256:c4b6495af921db4aa8b15fb618d9dcda1ac46e6fb18e29279fe9176b71d57e98",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/inference/hype_posterior.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:28f17499514e34b66c27d7335a1f74b75ad1c687025da3fc4e6e2f58caafac94",
+        "before_sha256": "sha256:d609267b2d178e0a60c84f44986c4b9f253cb8e945816c0f27ae4dcade13deed",
+        "after_sha256": "sha256:3fc92c4bde284e073663b8ada9320e57c7a4e6e8dea4b4206a3df53a56fd5466",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/likelihood.rs",
+        "non_documentation_tokens_unchanged": false,
+        "token_stream_sha256": "sha256:01ff675ec4c573d8509f33b222229a454b1f41757b849f67da52957e9b41fec6",
+        "before_sha256": "sha256:e4a446c343b9aca2883b1a79e64c54b0d761c9af8a76069b1e59fdc9ce9334e2",
+        "after_sha256": "sha256:59268b5fd0715ff3b509f8f6755f4bf50cb65ac815f3fd1a8177758e892d6842",
+        "stripped_documentation_bytes_unchanged": false,
+        "approved_format_only_changes": [
+          "Trailing comma after NegativeBinomial.dispersion",
+          "Trailing comma after Gaussian.sigma",
+          "Trailing comma after StudentT.df",
+          "Whitespace wrapping required by rustfmt"
+        ],
+        "rustfmt_normalized_stripped_docs_equal": true,
+        "normalized_source_sha256": "sha256:586e115ea94ccb1f34fc8743cd54a903a913f0cb70ba3fa16df0308984be1263"
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/competition.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:7d66770fee1e267b108b01cae7facdfc8ef3dd31a1f71659b6ca846e4dbeba01",
+        "before_sha256": "sha256:166295b5829e22d578f59d6135c838e2677677a42430648f25c65afc69a4dd3b",
+        "after_sha256": "sha256:a18994306dfb9b7ce40746a8a4818f910018707cc1e87e832349a9e9712ec0dd",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/demand.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:61b34470912905316b563f49a01542fc20b49ba3f5b7487e1782d29311839116",
+        "before_sha256": "sha256:a8f31a96060f1a479df3e9be451e6636946229ac789429aa97333ba13d9f3b3b",
+        "after_sha256": "sha256:8e377e2336604d6d32a51dd532e26f7d9b8238e804f7e073483d8ae0c0686f74",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/expectation_feedback.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:9cfd628ce3fbfc3a5aa40a5c00159d2f76ae31f3830f69986f61e4d8fc8fa06b",
+        "before_sha256": "sha256:f14624271e7885c37eff4f3fad40c7565ff131cb66cd07c59745a5d185cad2b3",
+        "after_sha256": "sha256:be97055248656f27f531db02bc19a04eb4d204f9b64edc2e98bb606a07dd7764",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hierarchical.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:7138c8e3e0a68627d7ff171a5096692c3d977b993e56c72098490dbda7854344",
+        "before_sha256": "sha256:723c7d215aedd0b506b43054854673ac71c07eb8a3d207b15f3ac066a6ce3eb2",
+        "after_sha256": "sha256:5add28ba8eec0fc501d794396b1423f6a50750130c0ecdd840254d2601d0e1f3",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hype.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:afd35f748218b2daaae7bc4ad4c0b78749a8795aeb91983d7bc1b52a7b4b72e5",
+        "before_sha256": "sha256:27fabf2e8d47c0c0d7019ecd05418403f71d52c4e9da2d7b053330f68e94cbd3",
+        "after_sha256": "sha256:5d87fc07d2f8327c5a9bf006e59c96607dae43fd3f4e4562e48d116409b21e09",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/hype_effects.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:9f1c48a263c31fcdd4d94dd20efd12a30d9261c773ab4f4d5c71e6059bbca86c",
+        "before_sha256": "sha256:f32b14215af95e10e840f85a212b63a61d6e92714ac32bcc640bc6fdde02b85a",
+        "after_sha256": "sha256:6ff387245ff6488cf4ff91056e1839da018ec0f899ab91265a8b9cdac76417c8",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/mod.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:67b4332bf009649259c5bd4cd14c79839d90ebf0d0cbb67703b3f1c019627398",
+        "before_sha256": "sha256:c15340f46031adf890cfaa33e1f8692cc0a724f214e248e92cad09656bde811c",
+        "after_sha256": "sha256:34313a79f90e616f647af0e7f1adfd7cefda175d9bed453306ac291e4c0cfa0e",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/regimes.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:848c3bcce10b7bbce769ce841c44f756740dcfa43e598ad13dc1226417aa1aec",
+        "before_sha256": "sha256:8094bf6d3d90fc57532ec85ca3f10e37303c52961800d89391d4fbf66acac89d",
+        "after_sha256": "sha256:cd9e967deef55e01daec1b64f97e48a488bdadcbd783c58e9e4aca85aee8978a",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/repeat_use.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:5815b90ab86cfda2eb525d03549b90aba02a83fc0efd82646203f6dded0e9f78",
+        "before_sha256": "sha256:ec4d1bc24abaaf92a96b030e9c5943d83cc0ca5a2b9957c5b2f231fb61af68f4",
+        "after_sha256": "sha256:fa0b75d24b5be85bc0f0724b7801e557cbba3376a897cf9f401f04af5cbe65b4",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-core/src/models/semi_markov.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:3e07c6cf4f51b3480fd6730ea1dd44d6fb099fab118348d8e91b648349e4f57c",
+        "before_sha256": "sha256:6dc3b357db56d83a233d81aca63546e224dbf1a57495d829c5723aebb8895995",
+        "after_sha256": "sha256:4efcaab02c61f8408a0470be9f2013e5b6ff5457e9795d898ae0ba53b54886e6",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-games/src/lib.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:49d205be97f2670b0daf294f322a22a7c5a4b435856fde10da964f17a0aa68cf",
+        "before_sha256": "sha256:4f73f26fd5cb55f127a102bcdafb65a699ed3036253242eb2894dfa77e799ab7",
+        "after_sha256": "sha256:1be0660f2243a8610d4c4cb7cfb015c710d2dd2c96db6ae83e5922eb23a05841",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-kairos/src/lib.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:bcaa359a5387245a2fda6537d256f4ad07f77d228fd369335cc46dafab92d4c5",
+        "before_sha256": "sha256:3d0b02a76a6810bab67802d7ee1855cb17626884b2243adde188403d14ba72f2",
+        "after_sha256": "sha256:a1c23b4a6fc796ae61c6b489c83d9715965b86276ab45b4da876e8030e274998",
+        "stripped_documentation_bytes_unchanged": true
+      },
+      {
+        "path": "rust/crates/innovate-tabular/src/lib.rs",
+        "non_documentation_tokens_unchanged": true,
+        "token_stream_sha256": "sha256:f6f7c766580a7aecf985e3d4c8a6c5a7e562be01dc1e25fab8cb83c3efe3bad0",
+        "before_sha256": "sha256:8ad9814f9aa80d7778b00f8c7eb57814b6e5c01935ea232c7334bb54950f59d9",
+        "after_sha256": "sha256:d8fae4e66a9862f20eb28689b20b8eb66b5bac09f47927777ba3bbb593d56558",
+        "stripped_documentation_bytes_unchanged": true
+      }
+    ],
+    "negative_controls_passed": true,
+    "all_non_documentation_tokens_unchanged": false,
+    "all_changes_are_documentation_or_three_approved_trailing_commas": true,
+    "qualification_limit": "Source preservation and compiler documentation evidence; no new scientific validity or runtime-model qualification.",
+    "independent_review": "Clarified per-time cessation hazard, signed hype effects, latent-mean uncertainty excluding observation noise, and joint vector proposals; no runtime changes."
+  }
+}

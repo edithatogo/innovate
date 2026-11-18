@@ -18,7 +18,7 @@ receipts, generated headings and a successful build do not establish completenes
 | Content | Every page and example is discovered and explicitly classified; current tutorials have outcomes, prerequisites, steps, expected results, interpretation and limitations | Pedagogical quality and scientific correctness cannot be inferred from headings |
 | Execution | Python runs the exact displayed sources with assertions and expected output; Julia/R runners execute every inventoried native example and record observed assertion counts | Receipts establish source and outcome consistency, not authenticated provenance or scientific validity; Python isolation is not a security sandbox |
 | Artifact | Rendered local links and fragments, canonical paths, sitemap, search index, semantics and size are inspected from the build output | Browser interaction, assistive-technology testing and live deployment |
-| Browser | Every current page is tested in Chromium at desktop and mobile sizes; checks cover automated accessibility findings, keyboard/search/version interactions, overflow, resource integrity and byte/request budgets | Human assistive-technology use, usability trials, other browser engines, real-user performance and live deployment |
+| Browser | Every current page is tested in Chromium at desktop and mobile sizes; checks cover automated accessibility findings, keyboard/search/current-navigation and retirement interactions, overflow, resource integrity and byte/request budgets | Human assistive-technology use, usability trials, other browser engines, real-user performance and live deployment |
 | Scientific review record | Reviewed inputs are fingerprinted; findings, primary references, worked reader tasks and scope claims must remain internally consistent | A consistent review record does not establish empirical validity or prove that readers can complete the tasks |
 
 The versioned machine-readable contracts live in 
@@ -157,7 +157,7 @@ alone is not a cryptographic proof that a particular compiler produced the outpu
 The browser suite previews the built artifact, so it exercises the actual
 Pagefind index. It uses a complete contract-derived page inventory, one desktop
 viewport and a 390-pixel mobile viewport. Separate cases check six dark-theme
-entry routes, keyboard focus and skip navigation, search, version switching and
+entry routes, keyboard focus and skip navigation, search, retirement notices and
 deterministic resource budgets. The reporter rejects filtered, skipped, retried,
 duplicate or incomplete runs and compares source, artifact and served-resource
 fingerprints.
@@ -180,11 +180,11 @@ validation remain separate acceptance work.
 
 The quickstart, scenario workflow, forecasting, Norton–Bass, Bayesian,
 counterfactual, Arrow and provenance tutorials display registered executable
-sources. Together with the API reference examples, they use ten checked Python
+sources. Together with the API reference examples, they use eleven checked Python
 files. The content baseline has no accepted current-page exceptions. A new or
-changed unbound snippet fails the regression gate. Retained historical material
-is explicitly outside current API qualification and is mapped to current
-guidance where a supported replacement exists.
+changed unbound snippet fails the regression gate. Obsolete source and notebooks have been retired. Their web routes provide
+short migration notices with current guidance and immutable Git history; the
+retirement contract rejects restored legacy source and searchable notices.
 
 Full acceptance additionally requires compiler-verified Rust docs, all supported
 language examples, scientific reference review, keyboard/mobile/search behavior,
@@ -199,6 +199,29 @@ requires the repository's explicit Pages activation setting and the existing
 integration process. Confirm the published generator and a representative current
 API/tutorial route after deployment. A local artifact pass is not live-site proof.
 
-Preserve the versioned historical reference and source history. Roll back a faulty
+Preserve immutable source history and historical acceptance receipts. Roll back a faulty
 publication to a previously verified artifact; do not rewrite historical evidence
 to make a new run appear to pass.
+
+## Current learning and community contracts
+
+The model atlas and tutorial catalogue are generated from native discovery and
+the existing content inventory. Typed Astro collections reject malformed
+metadata; build-time components avoid loading a scientific runtime in the
+reader's browser. Source generation records advertised coverage without claiming
+model, engine or variant combinations have been scientifically qualified.
+
+The public-data example adds an attributed, checksum-bound World Bank/ITU
+snapshot and a retrospective calendar holdout. Its marimo companion uses an
+isolated locked environment and the same ordinary Python computation.
+`scripts/check_learning_notebooks.py` checks source/data structure by default;
+`--execute` separately requires strict marimo checks, actual default/changed
+computations, example parity and a successful export exit code. Static export
+and browser/WASM delivery remain separate from native execution.
+
+The [language conventions](/innovate/maintainers/language-conventions/) explain
+Python, Rust, Julia and R source policies. The [open science standards
+map](/innovate/operations/documentation-standards/) records adopted requirements,
+issue commitments and pending evidence. Their checks run through the existing
+documentation build path; source consistency does not establish community or
+registry acceptance.

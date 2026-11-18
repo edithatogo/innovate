@@ -1,0 +1,1235 @@
+{
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_record": {
+    "repository_path": "conductor/tracks/documentation_learning_20261116/evidence-20261116/hosted-178779bd.json",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 34534,
+    "serialized_sha256": "sha256:504e4cb7d8f626e8b115d2d43e7672649cd680c1a0ef2e70852150378bcafd62",
+    "semantic_sha256": "sha256:2dab5be52a91fd5de55f038bb340b3ac5cdfb00f92e1536ec23a34c7c0193611",
+    "semantic_encoding": "python-json:sort_keys=true,ensure_ascii=false,separators=(',',':'),allow_nan=false;UTF-8;no-final-newline",
+    "serialization": {
+      "indent": 2,
+      "ensure_ascii": true,
+      "separators": "default",
+      "line_ending": "\n",
+      "final_newline": "\n",
+      "preserve_object_order": true
+    }
+  },
+  "tagged_digest_paths": [
+    [
+      "native_documentation",
+      "retained_receipts",
+      "hosted-178779bd-execution.json"
+    ],
+    [
+      "native_documentation",
+      "retained_receipts",
+      "hosted-178779bd-native-api.json"
+    ],
+    [
+      "native_documentation",
+      "retained_receipts",
+      "hosted-178779bd-julia-documentation.json"
+    ],
+    [
+      "native_documentation",
+      "retained_receipts",
+      "hosted-178779bd-r-documentation.json"
+    ],
+    [
+      "browser",
+      "source_sha256"
+    ],
+    [
+      "browser",
+      "artifact_sha256"
+    ],
+    [
+      "browser",
+      "qualification_report",
+      "sha256"
+    ],
+    [
+      "browser",
+      "trace",
+      "sha256"
+    ],
+    [
+      "artifacts",
+      0,
+      "sha256"
+    ],
+    [
+      "artifacts",
+      1,
+      "sha256"
+    ],
+    [
+      "artifacts",
+      2,
+      "sha256"
+    ]
+  ],
+  "record": {
+    "schema_version": 1,
+    "recorded_at": "2026-11-16T11:34:15.045960+00:00",
+    "scope": "Exact-head hosted documentation results. Registered language-example completion is not complete model curriculum, scientific acceptance, human review or live publication.",
+    "pull_request": 659,
+    "head_commit": "178779bd21d7fdde2fe4f6b8179444b72a4bc6d1",
+    "checkout_commit": "5f0cc853b48a7c14479f71ccf5183a6d1265e582",
+    "base_commit": "18c467e18b71d972060365c68865aa405a69949c",
+    "run": {
+      "id": 43855078677,
+      "attempt": 1,
+      "url": "https://github.com/edithatogo/innovate/actions/runs/43855078677",
+      "conclusion": "failure"
+    },
+    "jobs": {
+      "build": {
+        "id": 133257155692,
+        "conclusion": "failure",
+        "failing_step": "Qualify browser accessibility and interaction"
+      },
+      "native_documentation": {
+        "id": 133257156742,
+        "conclusion": "success"
+      },
+      "deploy": {
+        "id": 133261283791,
+        "conclusion": "skipped"
+      }
+    },
+    "native_documentation": {
+      "gate_passed": true,
+      "complete_registered_scope": true,
+      "violations": [],
+      "ratchet": {
+        "new_or_changed": [],
+        "passed": true,
+        "reason": "No new structural debt; completeness is reported separately.",
+        "stale": []
+      },
+      "python_examples": 11,
+      "python_doctests": {
+        "attempted": 19,
+        "failed": 0,
+        "python_version": "3.15.2",
+        "status": "passed"
+      },
+      "julia": {
+        "runtime": "1.13.4",
+        "examples_executed": 7,
+        "assertions_executed": 10,
+        "docstrings_checked": 24,
+        "qualified": true
+      },
+      "r": {
+        "runtime": "R version 4.6.2 (2026-10-29)",
+        "examples_executed": 6,
+        "assertions_executed": 11,
+        "qualified": true
+      },
+      "retained_receipts": {
+        "hosted-178779bd-execution.json": "sha256:88859a07b8882773f090269639264ffe413a8da0c7d1ed23ae94420e272ad56a",
+        "hosted-178779bd-native-api.json": "sha256:1b9cc5f3d4d7789b5f4a71bab963e486bdde0c7c81fbbf367ad823b46aa8bc7d",
+        "hosted-178779bd-julia-documentation.json": "sha256:15daef52d18fe5ddd0bf993a8de9ade12360250097fa40986bfe8b4c813687f9",
+        "hosted-178779bd-r-documentation.json": "sha256:c642b8291b9bf68c663a2f24649fb4bd767b45a7e90855f50790d2a24337628e"
+      }
+    },
+    "browser": {
+      "status": "failed",
+      "scope": "Automated Chromium qualification of the local built artifact using the Playwright-managed browser; no manual usability, assistive-technology, scientific, or live-deployment certification.",
+      "node_version": "v26.13.1",
+      "browser_executable_override": null,
+      "observed_browser_versions": [
+        "159.0.8154.6"
+      ],
+      "playwright_managed_browser_qualified": false,
+      "coverage": {
+        "expected": 164,
+        "observed": 164,
+        "missing": [],
+        "unexpected": [],
+        "duplicate_count": 0,
+        "unsuccessful": [
+          {
+            "project": "chromium-mobile-390",
+            "title": "dark entry: /innovate/native-migration/",
+            "status": "failed"
+          }
+        ]
+      },
+      "inputs_unchanged_during_run": true,
+      "served_resources_match_artifact": false,
+      "source_artifact_binding_verified": false,
+      "manual_accessibility_reviewed": false,
+      "manual_usability_reviewed": false,
+      "wcag_conformance_certified": false,
+      "live_deployment_verified": false,
+      "status_counts": {
+        "passed": 163,
+        "failed": 1
+      },
+      "source_sha256": "sha256:e4dfa44c7e1048e90ee6c16895e2f788a5a457139d9d6d9619cd9a513ca64b67",
+      "artifact_sha256": "sha256:24af5ff680bcc20ecbcdd78f1ebfa8f4d33bbdf784bb637751eb00e209db1c67",
+      "qualification_report": {
+        "path_in_artifact": "browser/qualification.json",
+        "bytes": 1648511,
+        "sha256": "sha256:c0056c6d8eb77ed6f8b33916151769548add520ae5d46a92034d223c3c853425"
+      },
+      "failed_case": {
+        "project": "chromium-mobile-390",
+        "title": "dark entry: /innovate/native-migration/",
+        "status": "failed",
+        "expected_status": "passed",
+        "retry": 0,
+        "duration_ms": 12689
+      },
+      "failed_internal_resources": [
+        {
+          "url": "/innovate/",
+          "error": "Error: Response differs from artifact: index.html"
+        }
+      ],
+      "failed_case_accessibility": {
+        "axe-dark-mobile-menu": {
+          "violations": [],
+          "incomplete": []
+        },
+        "axe-dark-page": {
+          "violations": [],
+          "incomplete": []
+        }
+      },
+      "failed_case_transfer_budget": {
+        "decoded_body_bytes": 740380,
+        "successful_internal_responses": 11,
+        "byte_limit": 1500000,
+        "request_limit": 40
+      },
+      "trace_observation": {
+        "request_method": "GET",
+        "url": "http://127.0.0.1:4321/innovate/",
+        "sec_purpose": "prefetch",
+        "sec_fetch_mode": "no-cors",
+        "resource_type": "other",
+        "status": 200,
+        "content_encoding": "gzip",
+        "encoded_body_bytes": 8051,
+        "transferred_bytes": 8314,
+        "playwright_exposed_body_bytes": 0,
+        "meaning": "Original transfer was nonempty; empty renderer-facing body does not establish empty server output. Artifact identity remains failed until original-response capture is qualified."
+      },
+      "trace": {
+        "path_in_artifact": "test-results/documentation-dark-entry-innovate-native-migration--chromium-mobile-390/trace.zip",
+        "sha256": "sha256:4e8b565571182ff572392356eebe86430a258840b8fb0befd39dc0f7e57b8962"
+      },
+      "case_outcomes": [
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/aggregate-time-series/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/aggregate-weekly/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/bootstrap-forecast-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/capabilities/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/categorize-adopters/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/cumulative-sum/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/execute-scenario-grid/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/execute/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/export-ipc-file/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/export-ipc-stream/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/fetch-oecd-dataset/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/fit-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/fit-frames/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/fit-result/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/ingest-local/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/ingest-polars/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/invoke-registered-extension/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/julia/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/native-error/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/paired-outcomes/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/policy-metadata-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/predict-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/predict-frames/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/predict/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/r/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/rolling-average/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/sarima-fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/scenario-comparisons/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/scenario-executions/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/seasonal-decomposition/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/staggered-att-polars/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/generated/treatment-contrast-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/bindings/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/bindings/csharp/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/bindings/go/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/bindings/rust/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/core/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/core/arrow-interchange/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/core/kernel/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/historical-documentation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/maintainers/documentation-quality/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/maintainers/language-conventions/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/maintainers/test-acceleration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/models/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/native-migration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/operations/documentation-standards/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/operations/registry-readiness/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/arrow-interchange/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/bayesian-fitter/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/counterfactual-analysis/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/data-ingestion-provenance/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/forcing-and-time/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/kairos-simulation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/marimo/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/native-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/network-scenarios/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/norton-bass/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/public-data-fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/tutorials/scenario-experiment-workflows/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/user-guide/backends/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/user-guide/fitting/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/user-guide/forecasting/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/user-guide/getting-started/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current page: /innovate/user-guide/installation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/user-guide/getting-started/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/api/generated/julia/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/api/generated/r/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "dark entry: /innovate/native-migration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "keyboard skip link and visible focus",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "keyboard Pagefind search: native diffusion curve",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "keyboard Pagefind search: Current Python API",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "current navigation and retirement boundaries",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "retired page: /innovate/latest/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "retired page: /innovate/migration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-desktop",
+          "title": "deterministic artifact budgets",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/aggregate-time-series/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/aggregate-weekly/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/bootstrap-forecast-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/capabilities/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/categorize-adopters/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/cumulative-sum/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/execute-scenario-grid/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/execute/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/export-ipc-file/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/export-ipc-stream/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/fetch-oecd-dataset/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/fit-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/fit-frames/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/fit-result/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/ingest-local/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/ingest-polars/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/invoke-registered-extension/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/julia/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/native-error/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/paired-outcomes/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/policy-metadata-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/predict-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/predict-frames/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/predict/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/r/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/rolling-average/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/sarima-fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/scenario-comparisons/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/scenario-executions/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/seasonal-decomposition/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/staggered-att-polars/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/generated/treatment-contrast-frame/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/bindings/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/bindings/csharp/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/bindings/go/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/bindings/rust/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/core/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/core/arrow-interchange/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/core/kernel/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/historical-documentation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/maintainers/documentation-quality/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/maintainers/language-conventions/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/maintainers/test-acceleration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/models/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/native-migration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/operations/documentation-standards/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/operations/registry-readiness/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/arrow-interchange/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/bayesian-fitter/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/counterfactual-analysis/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/data-ingestion-provenance/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/forcing-and-time/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/kairos-simulation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/marimo/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/native-batch/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/network-scenarios/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/norton-bass/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/public-data-fit/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/tutorials/scenario-experiment-workflows/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/user-guide/backends/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/user-guide/fitting/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/user-guide/forecasting/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/user-guide/getting-started/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current page: /innovate/user-guide/installation/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/user-guide/getting-started/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/api/generated/julia/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/api/generated/r/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "dark entry: /innovate/native-migration/",
+          "status": "failed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "keyboard skip link and visible focus",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "keyboard Pagefind search: native diffusion curve",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "keyboard Pagefind search: Current Python API",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "current navigation and retirement boundaries",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "retired page: /innovate/latest/api/python/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "retired page: /innovate/migration/",
+          "status": "passed",
+          "retry": 0
+        },
+        {
+          "project": "chromium-mobile-390",
+          "title": "deterministic artifact budgets",
+          "status": "passed",
+          "retry": 0
+        }
+      ]
+    },
+    "artifacts": [
+      {
+        "id": 14221277392,
+        "name": "documentation-build-evidence",
+        "sha256": "sha256:7b40971f4598363bfcf8cfba35d8397163fe58fc3106ec23749e1788078990f7"
+      },
+      {
+        "id": 14220717501,
+        "name": "documentation-browser-diagnostics",
+        "sha256": "sha256:d5590c835c7b27aa4a22ffe2bbc2c61e074114c769113697d6e7be56054c8438"
+      },
+      {
+        "id": 14220192614,
+        "name": "documentation-execution-evidence",
+        "sha256": "sha256:e6b3c749de713ef385c88cdef975c7e9ad464b315d0faa584ab249b1dbc425a2"
+      }
+    ],
+    "followup": "Repair original prefetch-response observation and Windows checkout portability without relaxing any artifact, request, byte, source or scientific gate. New source requires its own hosted qualification."
+  }
+}

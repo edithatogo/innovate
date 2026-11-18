@@ -1,0 +1,215 @@
+﻿2026-11-16T12:26:22.1483737Z Current runner version: '2.338.2'
+2026-11-16T12:26:22.1505502Z ##[group]Runner Image Provisioner
+2026-11-16T12:26:22.1506173Z Hosted Compute Agent
+2026-11-16T12:26:22.1506734Z Version: 20261103.629
+2026-11-16T12:26:22.1507306Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-16T12:26:22.1507930Z Build Date: 2026-11-03T17:26:59Z
+2026-11-16T12:26:22.1508494Z Worker ID: {43a8413c-6d18-4d47-a08f-11240e43c458}
+2026-11-16T12:26:22.1509055Z Region: eastus2
+2026-11-16T12:26:22.1509569Z Cloud: Azure
+2026-11-16T12:26:22.1510036Z ##[endgroup]
+2026-11-16T12:26:22.1511136Z ##[group]Operating System
+2026-11-16T12:26:22.1511665Z Ubuntu
+2026-11-16T12:26:22.1512091Z 26.04.1
+2026-11-16T12:26:22.1512553Z LTS
+2026-11-16T12:26:22.1513030Z ##[endgroup]
+2026-11-16T12:26:22.1513458Z ##[group]Runner Image
+2026-11-16T12:26:22.1514009Z Image: ubuntu-26.04
+2026-11-16T12:26:22.1514599Z Version: 20261111.196.1
+2026-11-16T12:26:22.1515704Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-16T12:26:22.1516886Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-16T12:26:22.1517717Z ##[endgroup]
+2026-11-16T12:26:22.1518643Z ##[group]GITHUB_TOKEN Permissions
+2026-11-16T12:26:22.1520246Z Contents: read
+2026-11-16T12:26:22.1520725Z Metadata: read
+2026-11-16T12:26:22.1521256Z ##[endgroup]
+2026-11-16T12:26:22.1522928Z Secret source: Actions
+2026-11-16T12:26:22.1523710Z Cache mode: write
+2026-11-16T12:26:22.1524516Z Prepare workflow directory
+2026-11-16T12:26:22.1791895Z Prepare all required actions
+2026-11-16T12:26:22.1830908Z Getting action download info
+2026-11-16T12:26:22.3827971Z Download action repository 'actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860' (SHA:6026fb2ad3aa556d78b517cf65c8c1f832075860)
+2026-11-16T12:26:22.7747334Z Download action repository 'astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2' (SHA:68559e99cc807c1eb7e9238fd43a15bba460eec2)
+2026-11-16T12:26:23.0938882Z Complete job name: readiness-report
+2026-11-16T12:26:23.1638204Z ##[group]Run actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+2026-11-16T12:26:23.1639025Z with:
+2026-11-16T12:26:23.1639382Z   persist-credentials: false
+2026-11-16T12:26:23.1639805Z   repository: edithatogo/innovate
+2026-11-16T12:26:23.1642927Z   token: ***
+2026-11-16T12:26:23.1643276Z   ssh-strict: true
+2026-11-16T12:26:23.1643639Z   ssh-user: git
+2026-11-16T12:26:23.1643976Z   clean: true
+2026-11-16T12:26:23.1644476Z   sparse-checkout-cone-mode: true
+2026-11-16T12:26:23.1644891Z   fetch-depth: 1
+2026-11-16T12:26:23.1645227Z   fetch-tags: false
+2026-11-16T12:26:23.1645583Z   show-progress: true
+2026-11-16T12:26:23.1645931Z   lfs: false
+2026-11-16T12:26:23.1646255Z   submodules: false
+2026-11-16T12:26:23.1646610Z   set-safe-directory: true
+2026-11-16T12:26:23.1647008Z   allow-unsafe-pr-checkout: false
+2026-11-16T12:26:23.1647573Z ##[endgroup]
+2026-11-16T12:26:24.1233980Z Syncing repository: edithatogo/innovate
+2026-11-16T12:26:24.1236971Z ##[group]Getting Git version info
+2026-11-16T12:26:24.1238428Z Working directory is '/home/runner/work/innovate/innovate'
+2026-11-16T12:26:24.1240532Z [command]/usr/bin/git version
+2026-11-16T12:26:24.1248774Z git version 2.56.1
+2026-11-16T12:26:24.1296176Z ##[endgroup]
+2026-11-16T12:26:24.1303596Z Temporarily overriding HOME='/home/runner/work/_temp/68151c37-f88a-48f9-b86f-cbc862209207' before making global git config changes
+2026-11-16T12:26:24.1307066Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-16T12:26:24.1309866Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/innovate/innovate
+2026-11-16T12:26:24.1350056Z Deleting the contents of '/home/runner/work/innovate/innovate'
+2026-11-16T12:26:24.1366298Z ##[group]Initializing the repository
+2026-11-16T12:26:24.1368712Z [command]/usr/bin/git init /home/runner/work/innovate/innovate
+2026-11-16T12:26:24.1583859Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-16T12:26:24.1587736Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-16T12:26:24.1591401Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-16T12:26:24.1594111Z hint: call:
+2026-11-16T12:26:24.1595856Z hint:
+2026-11-16T12:26:24.1597661Z hint: 	git config --global init.defaultBranch <name>
+2026-11-16T12:26:24.1599791Z hint:
+2026-11-16T12:26:24.1601784Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-16T12:26:24.1606939Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-16T12:26:24.1609533Z hint:
+2026-11-16T12:26:24.1611113Z hint: 	git branch -m <name>
+2026-11-16T12:26:24.1612861Z hint:
+2026-11-16T12:26:24.1615116Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-16T12:26:24.1618590Z Initialized empty Git repository in /home/runner/work/innovate/innovate/.git/
+2026-11-16T12:26:24.1624518Z [command]/usr/bin/git remote add origin https://github.com/edithatogo/innovate
+2026-11-16T12:26:24.3015235Z ##[endgroup]
+2026-11-16T12:26:24.3017514Z ##[group]Disabling automatic garbage collection
+2026-11-16T12:26:24.3019818Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-16T12:26:24.3060274Z ##[endgroup]
+2026-11-16T12:26:24.3062243Z ##[group]Setting up auth
+2026-11-16T12:26:24.3067134Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-16T12:26:24.3101964Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-16T12:26:24.5006523Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-16T12:26:24.5039307Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-16T12:26:24.5294090Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-16T12:26:24.5325134Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-16T12:26:24.5582058Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-16T12:26:24.5619071Z ##[endgroup]
+2026-11-16T12:26:24.5619908Z ##[group]Fetching the repository
+2026-11-16T12:26:24.5628115Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +96a02acc63a757bf6d07f679527c79bc1e1014a0:refs/remotes/pull/671/merge
+2026-11-16T12:26:25.3003241Z From https://github.com/edithatogo/innovate
+2026-11-16T12:26:25.3004925Z  * [new ref]         96a02acc63a757bf6d07f679527c79bc1e1014a0 -> pull/671/merge
+2026-11-16T12:26:25.3014923Z ##[endgroup]
+2026-11-16T12:26:25.3015530Z ##[group]Determining the checkout info
+2026-11-16T12:26:25.3016284Z ##[endgroup]
+2026-11-16T12:26:25.3016671Z [command]/usr/bin/git sparse-checkout disable
+2026-11-16T12:26:25.3059919Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-16T12:26:25.3086943Z ##[group]Checking out the ref
+2026-11-16T12:26:25.3090122Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/671/merge
+2026-11-16T12:26:25.4165000Z Note: switching to 'refs/remotes/pull/671/merge'.
+2026-11-16T12:26:25.4165461Z 
+2026-11-16T12:26:25.4165771Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-16T12:26:25.4166443Z changes and commit them, and you can discard any commits you make in this
+2026-11-16T12:26:25.4167123Z state without impacting any branches by switching back to a branch.
+2026-11-16T12:26:25.4167516Z 
+2026-11-16T12:26:25.4167799Z If you want to create a new branch to retain commits you create, you may
+2026-11-16T12:26:25.4168240Z do so (now or later) by using -c with the switch command. Example:
+2026-11-16T12:26:25.4169064Z 
+2026-11-16T12:26:25.4169220Z   git switch -c <new-branch-name>
+2026-11-16T12:26:25.4169388Z 
+2026-11-16T12:26:25.4169522Z Or undo this operation with:
+2026-11-16T12:26:25.4169679Z 
+2026-11-16T12:26:25.4169804Z   git switch -
+2026-11-16T12:26:25.4169984Z 
+2026-11-16T12:26:25.4170231Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-16T12:26:25.4170526Z 
+2026-11-16T12:26:25.4170866Z HEAD is now at 96a02ac Merge b2ed945f9ffede3bdd00c29437636c0bf1eba03d into b29a1d27f54fdd08d77881ee999772fceab7c03a
+2026-11-16T12:26:25.4174963Z ##[endgroup]
+2026-11-16T12:26:25.4218737Z [command]/usr/bin/git log -1 --format=%H
+2026-11-16T12:26:25.4242686Z 96a02acc63a757bf6d07f679527c79bc1e1014a0
+2026-11-16T12:26:25.4251204Z ##[group]Removing auth
+2026-11-16T12:26:25.4254486Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-16T12:26:25.4314063Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-16T12:26:25.5437816Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-16T12:26:25.5462197Z http.https://github.com/.extraheader
+2026-11-16T12:26:25.5468605Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-16T12:26:25.5496798Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-16T12:26:25.5732614Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-16T12:26:25.5760587Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-16T12:26:25.5997021Z ##[endgroup]
+2026-11-16T12:26:25.6353523Z ##[group]Run astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+2026-11-16T12:26:25.6353903Z with:
+2026-11-16T12:26:25.6354110Z   enable-cache: true
+2026-11-16T12:26:25.6354514Z   activate-environment: false
+2026-11-16T12:26:25.6354761Z   no-project: false
+2026-11-16T12:26:25.6355016Z   working-directory: /home/runner/work/innovate/innovate
+2026-11-16T12:26:25.6357026Z   github-token: ***
+2026-11-16T12:26:25.6357515Z   cache-dependency-glob: **/*requirements*.txt
+**/*requirements*.in
+**/*constraints*.txt
+**/*constraints*.in
+**/pyproject.toml
+**/uv.lock
+**/*.py.lock
+
+2026-11-16T12:26:25.6358026Z   restore-cache: true
+2026-11-16T12:26:25.6358241Z   save-cache: auto
+2026-11-16T12:26:25.6358459Z   prune-cache: false
+2026-11-16T12:26:25.6358678Z   cache-python: false
+2026-11-16T12:26:25.6358910Z   ignore-nothing-to-cache: false
+2026-11-16T12:26:25.6359164Z   ignore-empty-workdir: false
+2026-11-16T12:26:25.6359425Z   download-from-astral-mirror: true
+2026-11-16T12:26:25.6359715Z   add-problem-matchers: true
+2026-11-16T12:26:25.6359961Z   quiet: false
+2026-11-16T12:26:25.6360176Z   resolution-strategy: highest
+2026-11-16T12:26:25.6360414Z ##[endgroup]
+2026-11-16T12:26:26.0471657Z Trying to find version for uv in: /home/runner/work/innovate/innovate/uv.toml
+2026-11-16T12:26:26.0472830Z Could not find file: /home/runner/work/innovate/innovate/uv.toml
+2026-11-16T12:26:26.0473747Z Trying to find version for uv in: /home/runner/work/innovate/innovate/pyproject.toml
+2026-11-16T12:26:26.0482754Z Could not determine uv version from uv.toml or pyproject.toml. Falling back to latest.
+2026-11-16T12:26:26.0486601Z Fetching manifest data from https://releases.astral.sh/github/versions/main/v1/uv.ndjson ...
+2026-11-16T12:26:26.1887802Z Downloading uv from "https://releases.astral.sh/github/uv/releases/download/0.13.8/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+2026-11-16T12:26:26.3589440Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/c6ff7942-b736-4ce5-b872-80a6b19980a5 -f /home/runner/work/_temp/1b4c69cb-4ef6-4da7-b822-76d6b8eb0e47
+2026-11-16T12:26:26.6422983Z Added /home/runner/.local/bin to the path
+2026-11-16T12:26:26.6425866Z Added /opt/hostedtoolcache/uv/0.13.8/x86_64 to the path
+2026-11-16T12:26:26.6427084Z Set UV_PYTHON_INSTALL_DIR to /home/runner/work/_temp/uv-python-dir
+2026-11-16T12:26:26.6427656Z Added /home/runner/work/_temp/uv-python-dir to the path
+2026-11-16T12:26:26.6450323Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+2026-11-16T12:26:26.6450783Z Successfully installed uv version 0.13.8
+2026-11-16T12:26:26.7278813Z Searching files using cache dependency glob: /home/runner/work/innovate/innovate/**/*requirements*.txt,/home/runner/work/innovate/innovate/**/*requirements*.in,/home/runner/work/innovate/innovate/**/*constraints*.txt,/home/runner/work/innovate/innovate/**/*constraints*.in,/home/runner/work/innovate/innovate/**/pyproject.toml,/home/runner/work/innovate/innovate/**/uv.lock,/home/runner/work/innovate/innovate/**/*.py.lock
+2026-11-16T12:26:26.9199766Z /home/runner/work/innovate/innovate/notebooks/pyproject.toml
+2026-11-16T12:26:26.9211830Z /home/runner/work/innovate/innovate/notebooks/uv.lock
+2026-11-16T12:26:26.9219848Z /home/runner/work/innovate/innovate/pyproject.toml
+2026-11-16T12:26:26.9374606Z /home/runner/work/innovate/innovate/scripts/test_acceleration/requirements.in
+2026-11-16T12:26:26.9380412Z /home/runner/work/innovate/innovate/scripts/test_acceleration/requirements.txt
+2026-11-16T12:26:26.9451667Z /home/runner/work/innovate/innovate/uv.lock
+2026-11-16T12:26:26.9469166Z Found 6 files to hash.
+2026-11-16T12:26:26.9535058Z Trying to restore cache from GitHub Actions cache with key: setup-uv-2-x86_64-unknown-linux-gnu-ubuntu-26.04-unknown-0c72d2509b5a029d9647c7f3a34e8a3657cb48e1515fb37f2bc27c2cd2fdcdb2
+2026-11-16T12:26:27.0201681Z No GitHub Actions cache found for key: setup-uv-2-x86_64-unknown-linux-gnu-ubuntu-26.04-unknown-0c72d2509b5a029d9647c7f3a34e8a3657cb48e1515fb37f2bc27c2cd2fdcdb2
+2026-11-16T12:26:27.1346221Z ##[group]Run uv venv .venv-release --python 3.15.2
+2026-11-16T12:26:27.1346601Z [36;1muv venv .venv-release --python 3.15.2[0m
+2026-11-16T12:26:27.1397052Z shell: /usr/bin/bash -e {0}
+2026-11-16T12:26:27.1397284Z env:
+2026-11-16T12:26:27.1397524Z   UV_PYTHON_INSTALL_DIR: /home/runner/work/_temp/uv-python-dir
+2026-11-16T12:26:27.1397856Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-16T12:26:27.1398104Z ##[endgroup]
+2026-11-16T12:26:27.2448728Z Downloading cpython-3.15.2-linux-x86_64-gnu (download) (36.6MiB)
+2026-11-16T12:26:27.7718990Z  Downloaded cpython-3.15.2-linux-x86_64-gnu (download)
+2026-11-16T12:26:27.9100380Z Using CPython 3.15.2
+2026-11-16T12:26:27.9101009Z Creating virtual environment at: .venv-release
+2026-11-16T12:26:27.9105736Z Activate with: .venv-release/bin/activate
+2026-11-16T12:26:27.9167833Z ##[group]Run .venv-release/bin/python scripts/check_migration.py --release
+2026-11-16T12:26:27.9168271Z [36;1m.venv-release/bin/python scripts/check_migration.py --release[0m
+2026-11-16T12:26:27.9214026Z shell: /usr/bin/bash -e {0}
+2026-11-16T12:26:27.9214405Z env:
+2026-11-16T12:26:27.9214647Z   UV_PYTHON_INSTALL_DIR: /home/runner/work/_temp/uv-python-dir
+2026-11-16T12:26:27.9214966Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+2026-11-16T12:26:27.9215204Z ##[endgroup]
+2026-11-16T12:26:28.0728880Z Release blocked: scientific migration and acceptance remain incomplete: bass, complementary_goods, composite, fisher_pry, gompertz, hierarchical, latent_process, lock_in, logistic, lotka_volterra, mixture, multi_product, network_diffusion, norton_bass, policy_hazard, regime_switching, covariates_and_events, multi_generation_substitution, competitive_ecosystems, hierarchical_mixture_inference, latent_regime_models, network_policy_diffusion, kairos_des_abm, bayesian_inference, bootstrap_uncertainty, batch_fitting, preprocessing, causal_analysis, adopter_classification, data_ingestion_provenance_validation, scenario_registry_execution, explainability_sensitivity_reporting, benchmark_model_cards, plugin_contracts, remote_execution, accelerator_hpc, voiage_arrow_handoff, calibration_identifiability
+2026-11-16T12:26:28.0801701Z ##[error]Process completed with exit code 1.
+2026-11-16T12:26:28.0917945Z Post job cleanup.
+2026-11-16T12:26:28.1662236Z [command]/usr/bin/git version
+2026-11-16T12:26:28.1699531Z git version 2.56.1
+2026-11-16T12:26:28.1730095Z Temporarily overriding HOME='/home/runner/work/_temp/9c2a9556-fabf-460d-85bc-885e9e40e94f' before making global git config changes
+2026-11-16T12:26:28.1731123Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-16T12:26:28.1734347Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/innovate/innovate
+2026-11-16T12:26:28.1772714Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-16T12:26:28.1807515Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-16T12:26:28.2076875Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-16T12:26:28.2112212Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-16T12:26:28.2458414Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-16T12:26:28.2489954Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-16T12:26:28.2871126Z Cleaning up orphan processes

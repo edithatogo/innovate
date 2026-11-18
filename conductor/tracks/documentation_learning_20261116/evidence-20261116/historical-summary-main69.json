@@ -1,0 +1,378 @@
+{
+  "archive_format": "innovate-retained-json-sha256-v1",
+  "original_record": {
+    "repository_path": "conductor/tracks/documentation_learning_20261116/evidence-20261116/qualification-summary.json",
+    "media_type": "application/json",
+    "encoding": "utf-8",
+    "byte_length": 9266,
+    "serialized_sha256": "sha256:32b618ea9818a42b10174d430c0ebd5caa8f7d425c2a7b46c50436d46352867e",
+    "semantic_sha256": "sha256:28444cd8d961d1ecf75114129735eb5c5f006b29b5b077819b3e421171578988",
+    "semantic_encoding": "python-json:sort_keys=true,ensure_ascii=false,separators=(',',':'),allow_nan=false;UTF-8;no-final-newline",
+    "serialization": {
+      "indent": 2,
+      "ensure_ascii": true,
+      "separators": "default",
+      "line_ending": "\n",
+      "final_newline": "\n",
+      "preserve_object_order": true
+    }
+  },
+  "tagged_digest_paths": [
+    [
+      "runtime_results",
+      "native_binary_sha256"
+    ],
+    [
+      "static_artifact",
+      "artifact_sha256"
+    ],
+    [
+      "static_artifact",
+      "source_sha256"
+    ],
+    [
+      "source_sha256",
+      "docs/astro-site/playwright.config.mjs"
+    ],
+    [
+      "source_sha256",
+      "docs/contracts/site-quality.json"
+    ],
+    [
+      "source_sha256",
+      "docs/contracts/scientific-pedagogical-review.json"
+    ],
+    [
+      "source_sha256",
+      "docs/contracts/content-baseline.json"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-cargo-doc.log"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-cargo-doctest.log"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-native-documentation.json"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-native-documentation.log"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-python-execution.json"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-python-execution.log"
+    ],
+    [
+      "retained_record_sha256",
+      "69b6748-summary.json"
+    ],
+    [
+      "retained_record_sha256",
+      "README.md"
+    ],
+    [
+      "retained_record_sha256",
+      "artifact-after-baseline.json"
+    ],
+    [
+      "retained_record_sha256",
+      "artifact.json"
+    ],
+    [
+      "retained_record_sha256",
+      "astro-build.log"
+    ],
+    [
+      "retained_record_sha256",
+      "astro-check.log"
+    ],
+    [
+      "retained_record_sha256",
+      "browser-environment-blocker.json"
+    ],
+    [
+      "retained_record_sha256",
+      "browser-environment-blocker.md"
+    ],
+    [
+      "retained_record_sha256",
+      "browser-first-launch-error.md"
+    ],
+    [
+      "retained_record_sha256",
+      "browser-launch-failure-artifacts.json"
+    ],
+    [
+      "retained_record_sha256",
+      "browser-launch-failure.log"
+    ],
+    [
+      "retained_record_sha256",
+      "content-structure.json"
+    ],
+    [
+      "retained_record_sha256",
+      "hosted-5ee03ddc.json"
+    ],
+    [
+      "retained_record_sha256",
+      "managed-browser-install.log"
+    ],
+    [
+      "retained_record_sha256",
+      "notebook-qualification.json"
+    ],
+    [
+      "retained_record_sha256",
+      "notebook-structure.json"
+    ],
+    [
+      "retained_record_sha256",
+      "polyglot-source.json"
+    ],
+    [
+      "retained_record_sha256",
+      "ratchet-regressions.log"
+    ],
+    [
+      "retained_record_sha256",
+      "ratchet-repair.json"
+    ],
+    [
+      "retained_record_sha256",
+      "registry-hygiene.json"
+    ],
+    [
+      "retained_record_sha256",
+      "retirement.json"
+    ],
+    [
+      "retained_record_sha256",
+      "scientific-review.json"
+    ],
+    [
+      "retained_record_sha256",
+      "source-tests.json"
+    ],
+    [
+      "retained_record_sha256",
+      "test_api_documentation_contract.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_api_reference_generation.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_community_documentation.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_documentation_content_contract.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_documentation_source_hash_contract.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_documentation_workflow.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_native_documentation_contract.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_polyglot_api_documentation.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_production_docs_contract.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_retired_documentation.log"
+    ],
+    [
+      "retained_record_sha256",
+      "test_scientific_review_contract.log"
+    ]
+  ],
+  "record": {
+    "schema_version": 1,
+    "recorded_at": "2026-11-16T10:50:18.283505+00:00",
+    "base_commit": "69b674814513e09a683279c679b1584af8bb4214",
+    "implementation_code_snapshot": "7bd5aa89b0798abaab4132df8096bbc683cbb553",
+    "scope": "Documentation implementation local evidence. Exact source maps qualify working-tree inputs; no hosted, live, empirical or complete-language acceptance.",
+    "toolchains": {
+      "python": "3.15.2",
+      "rust": "1.100.0",
+      "node": "26.13.1",
+      "pnpm": "12.21.0",
+      "astro": "7.4.12",
+      "starlight": "0.43.1",
+      "marimo": "0.25.2",
+      "polars": "2.1.0",
+      "innovate": "0.7.0a1"
+    },
+    "source_regressions": {
+      "suites": 11,
+      "tests": 272,
+      "all_exit_codes_zero": true,
+      "record": "source-tests.json"
+    },
+    "additional_observed_regressions": {
+      "native_selected_pytest_cases": 43,
+      "native_test_paths": [
+        "tests/native/test_public_data_tutorial.py",
+        "tests/native/test_learning_catalogue.py",
+        "tests/native/test_documentation_conventions.py"
+      ],
+      "notebook_unittest_cases": 18,
+      "node_test_cases": 18,
+      "status": "passed",
+      "recording_scope": "Observed during integration; these individual stdout streams were not retained as standalone logs. Five Python suites also execute inside the Node test entry point. Counts overlap and are not summed."
+    },
+    "runtime_results": {
+      "python_examples": 11,
+      "python_doctest_statements": 19,
+      "rust_doctests": 3,
+      "native_binary_sha256": "sha256:1a89bb479ffc5800681bbc20e06ea653e630a8e65bf1d125bb3b8dcb86c7840b",
+      "native_binary_source_binding_verified": false,
+      "notebook_cutoffs": [
+        2015,
+        2018
+      ],
+      "notebook_export_bytes": 54901
+    },
+    "content": {
+      "models": 16,
+      "tutorial_pages": 14,
+      "distinct_tutorial_examples": 11,
+      "registered_examples": 11,
+      "admitted_datasets": 1,
+      "notebooks": 1,
+      "current_pages": 69,
+      "generated_api_pages": 34,
+      "removed_legacy_sources": 263,
+      "retirement_routes": 141
+    },
+    "static_artifact": {
+      "status": "passed",
+      "counts": {
+        "checked_local_links": 11360,
+        "errors": 0,
+        "external_urls_not_checked": 413,
+        "html_pages": 211
+      },
+      "artifact_sha256": "sha256:3ba25e835523128c356202105b3e0617fe1f98c3945079b9d219d3833e5271e6",
+      "source_sha256": "sha256:e0feabd53cba12cfaa0c259e48531c9bff9a6c481f9c7de34ba43a5368671cee",
+      "source_artifact_binding_verified": false
+    },
+    "browser": {
+      "status": "blocked_before_browser_connection",
+      "discovered_cases": 164,
+      "successful_browser_connections": 0,
+      "completed_page_interactions": 0,
+      "failed_setup_results": 64,
+      "selected_cases_without_final_result": 100,
+      "exact_interrupted_case_count": null,
+      "managed_browser_qualified": false,
+      "record": "browser-environment-blocker.json"
+    },
+    "independent_review": {
+      "source_runtime_and_dependency_review": "no blocking finding; executable binding/FFI bodies and shared manifests/locks unchanged",
+      "reader_and_scientific_review": "bounded agent review with time-unit, vintage and evaluation findings resolved",
+      "repository_policy": "passed with zero local findings; inputs unchanged from receiving main"
+    },
+    "unqualified": {
+      "julia_runtime": true,
+      "r_runtime": true,
+      "combined_language_completion": true,
+      "marimo_browser_interaction": true,
+      "browser_wasm": true,
+      "hosted_pr_checks": true,
+      "live_deployment": true,
+      "external_community_acceptance": true,
+      "human_reader_validation": true,
+      "exhaustive_scientific_qualification": true
+    },
+    "source_sha256": {
+      "docs/astro-site/playwright.config.mjs": "sha256:c7b302ac928f3d49c19663df141fc884f27df064e03dff36fdda911793fc9c26",
+      "docs/contracts/site-quality.json": "sha256:bd7f1a2151d32f37af925a41c8b80bf6372b36fbe4f2599caccbe246610850eb",
+      "docs/contracts/scientific-pedagogical-review.json": "sha256:8f7bf2ad89d88a6e1a91b7aab8bd0a75f265eeb0221c03d81909447de6a1214d",
+      "docs/contracts/content-baseline.json": "sha256:ee50f92285ccc030ff588ba864e018cbd8c592a568ddf34a5122275141af4f4b"
+    },
+    "retained_record_sha256": {
+      "69b6748-cargo-doc.log": "sha256:f6148ed0053e90bc81e621487069d1404b1fd77a3833eb32f0ab6ca6f5748b4a",
+      "69b6748-cargo-doctest.log": "sha256:47ec680dd006705e22e3e0f8f9eea2e7476b2bc9ec061aa6a41b16384611f134",
+      "69b6748-native-documentation.json": "sha256:6600098aa83c4e25346fa7f007ece29eb9612e24572af48b86f07c8a658960c1",
+      "69b6748-native-documentation.log": "sha256:6600098aa83c4e25346fa7f007ece29eb9612e24572af48b86f07c8a658960c1",
+      "69b6748-python-execution.json": "sha256:61b875ef3a6352354e8006091c414d987ad63efd2856554059ea9c392aaae9f7",
+      "69b6748-python-execution.log": "sha256:fe75b95bb65ad5874a59b9962e4ca2f75cd2388bcec8eff84292895c5b9ea859",
+      "69b6748-summary.json": "sha256:e7aba8b04cec4345bde86fac5c6a698d5e7bcabffeaac12c581fdd47d0ee5c1a",
+      "README.md": "sha256:836cad6906f9e3926629e95550d62f0b5380a78f232e2d1ae2683e3e95a7cb13",
+      "artifact-after-baseline.json": "sha256:84e46ae2bbc3720558d9cb117ffa355329b80dcdfb90abd8998996b09fe429af",
+      "artifact.json": "sha256:71b542ce6f711e4b4b96b3a978d6433f2284f0e7cfe31fe0864352a623609483",
+      "astro-build.log": "sha256:c8686ddd083e355bf22854fc9d04d98946b0c4fe03a89fafc4c3dbc2ab92d6a1",
+      "astro-check.log": "sha256:1b933bd962dcc3e00c9d7d0a01a7d849b3a5d03c8b8fc9bddfaf58cadd3b6d70",
+      "browser-environment-blocker.json": "sha256:0c9f094ec121ac5f528762da837be4058ea36be397d8ce3907b5c4fbb918b331",
+      "browser-environment-blocker.md": "sha256:455dccc2f23d412c0d5709a06c31ea888fe90a4a85877581925bbeca1dd9dc46",
+      "browser-first-launch-error.md": "sha256:e0ca344fe3bf400068c263a550fb6298aeef6098a3010114dbdeaecea7e58411",
+      "browser-launch-failure-artifacts.json": "sha256:ff7873581f3bd9f684f4fa2b994d864084a16492db695c07818c6cb3319419d4",
+      "browser-launch-failure.log": "sha256:773b03b845de89120ddeb76ff1c26e3bd71242396e2db254bdf30dc8d841cc38",
+      "content-structure.json": "sha256:99c416fdfe551323c1292c4acd24a4f0ba97b8d5878c08e04f3da5dd56dcaa77",
+      "hosted-5ee03ddc.json": "sha256:d9eca34f7eb819d5db76697f07bd9a76203bda7179f852468d3462cbd63847c7",
+      "managed-browser-install.log": "sha256:4e1ed61e21eff8d4824ef7ba645fe80245a82a95847117c987eb749c1311b832",
+      "notebook-qualification.json": "sha256:24245d511027a3874b0612d68f0ea938c864b55c8ca474475b9988ab418b148b",
+      "notebook-structure.json": "sha256:79f982de6d55a82733f9ab6c0ed4551581cda5f43c691f8424742e340aee03f4",
+      "polyglot-source.json": "sha256:274b7f1259a0290e38b2cb003de9c87e7d78d3e0df971f3fe35d2c594c084737",
+      "ratchet-regressions.log": "sha256:b90c77dea3f69a9854b14230702bcf5c1141e634ff6b3efc8b24f400c9551330",
+      "ratchet-repair.json": "sha256:4769af5e7450ff997adb437b2b0ac96031f183df792b371a1d9be30b0923270c",
+      "registry-hygiene.json": "sha256:cdb7784e548cec0836ba373732d8617833746709ed621707ee28cc77d71050a6",
+      "retirement.json": "sha256:e8f12210d8d0f1226d59b0619d786da3076d8d9b79303e48d6a9da2c111a49e1",
+      "scientific-review.json": "sha256:16c1b3daa63b1a37f6f2ed01d1dc63effae2ff4471accf4ca1417f916a8b81d8",
+      "source-tests.json": "sha256:327c716420b7827f25925b67f2cf82fb844fb87aaa64f9209cb806391e05d09b",
+      "test_api_documentation_contract.log": "sha256:cf7066a2ad89e2ced3679ab881c29c097fb3de37ed9d9e6ea87b1e5aa7b9cf30",
+      "test_api_reference_generation.log": "sha256:ea2c8d5f4936ce414d01addb4e1a67b0feedb36aafcea1ba62653cf035d39e9c",
+      "test_community_documentation.log": "sha256:0aaf5a7eb179366b126144073025d5a04fb1d370138d3c9739d97a98eac6d884",
+      "test_documentation_content_contract.log": "sha256:f6e3ae776208723b4285198c77c804d38f7dbe1ffca7f08ecb4708d5b1588718",
+      "test_documentation_source_hash_contract.log": "sha256:65e028d9927eea93eda6259d5cea618c53e56cb2cd899853ffdf58495fe731d1",
+      "test_documentation_workflow.log": "sha256:40e6a3053d86436d6aa245501343227a2e81436f4f14da71a21257468605aff6",
+      "test_native_documentation_contract.log": "sha256:2e542158e2319da6a519b9d5f3fb023b5b2f27bb12bb8607dbe7f11b01324a57",
+      "test_polyglot_api_documentation.log": "sha256:e494852f3db317c279ba50aabae3f46dfc32a30a4349a603030e9bd3c2772465",
+      "test_production_docs_contract.log": "sha256:1a046e39b1bca734d4329433e75e1def31c8ee7f9b79dfded9eb9fd1dc193175",
+      "test_retired_documentation.log": "sha256:e17397a4f13ab805c2d75dad73d79b725ceb9fa1063d1f4d63f2441bd6031ac9",
+      "test_scientific_review_contract.log": "sha256:86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8"
+    },
+    "integration_main_commit": "18c467e18b71d972060365c68865aa405a69949c",
+    "integration_refresh": {
+      "only_changed_path": ".github/workflows/renovate-config.yml",
+      "change": "Upstream Renovate validator44.242.0 to44.243.0, carried unchanged.",
+      "qualified_source_inputs_unchanged": true,
+      "native_results_reattributed": false,
+      "concurrent_pr_656_head": "8244d1eb23fec915c0ce93f4da93e3cae44d6ddb",
+      "documentation_archive_handoff": "Still unresolved; retain active unfinished DOC-01–08 obligations."
+    },
+    "hosted_followup": {
+      "record": "hosted-5ee03ddc.json",
+      "head": "5ee03ddc073b9c3bcf91efdcd62923d87748920f",
+      "all_maintained_language_examples_executed": true,
+      "aggregate_gate_passed": false,
+      "failure": "Stale content policy baseline binding; zero content violations.",
+      "browser_attempted": false,
+      "repair_record": "ratchet-repair.json",
+      "repair_independent_review": "Digest independently confirmed against canonical policy; zero accepted debt and unchanged gate implementation.",
+      "repaired_head_hosted_status": "pending"
+    }
+  }
+}

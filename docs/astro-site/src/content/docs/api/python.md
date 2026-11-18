@@ -26,6 +26,7 @@ requirements. Their status is recorded with the
 
 ## Historical API
 
-The [0.6 Python reference](/innovate/latest/api/python/) preserves the earlier
-`fit_model` and backend interface. It is historical material and is not the
-current installed development contract.
+The [historical 0.6 Python reference](https://github.com/edithatogo/innovate/blob/6c226f92f14f01e771b1490c7fb3a7c77f4bc74a/docs/astro-site/src/content/docs/latest/api/python.md)
+preserves the exact historical source for the earlier `fit_model` and backend
+interface. Use the source-derived references above for the installed development
+contract.

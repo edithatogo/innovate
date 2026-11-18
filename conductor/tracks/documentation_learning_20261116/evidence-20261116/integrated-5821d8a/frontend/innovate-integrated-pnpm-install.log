@@ -1,0 +1,27 @@
+✓ Lockfile passes supply-chain policies (verified 1h ago)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages are hard linked from the content-addressable store to the virtual store.
+  Content-addressable store is at: /workspace/.pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Packages: +470
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 470, reused 469, downloaded 0, added 470, done
+
+dependencies:
++ @astrojs/markdown-remark 7.3.9
++ @astrojs/starlight 0.43.1
++ @astrojs/starlight-docsearch 0.8.2
++ astro 7.4.12
++ starlight-links-validator 0.27.0
++ starlight-polyglot file:vendor/starlight-polyglot(@astrojs/starlight@0.43.1(@astrojs/markdown-remark@7.3.9(supports-color@10.2.2))(astro@7.4.12(@astrojs/markdown-remark@7.3.9(supports-color@10.2.2))(@types/node@24.19.2)(yaml@2.9.1))(supports-color@10.2.2)(typescript@6.0.3))(astro@7.4.12(@astrojs/markdown-remark@7.3.9(supports-color@10.2.2))(@types/node@24.19.2)(yaml@2.9.1))
+
+devDependencies:
++ @astrojs/check 0.9.12
++ @axe-core/playwright 4.14.0
++ @emnapi/runtime 1.11.3
++ @playwright/test 1.65.1
++ axe-core 4.14.0
++ typescript 6.0.3
+
+Done in 1.9s using pnpm v12.21.0

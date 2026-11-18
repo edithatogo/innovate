@@ -1,0 +1,155 @@
+{
+  "base_commit": "69b674814513e09a683279c679b1584af8bb4214",
+  "scope": "Current working-tree Python examples/documentation and Rust documentation gates; not combined Julia/R or scientific acceptance.",
+  "status": "passed_python_and_rust_gates",
+  "recorded_at": "2026-11-16T10:35:05.961392+00:00",
+  "python_version": "3.15.2",
+  "cargo_lock_sha256": "f88c8d1ec38c434167f7a7c5423dd7fca7b9cd45dab64c0e8fdbe569ddd6341d",
+  "content_contract_sha256": "978272cb2e8171787280cc1803adf53d03733dee5632dbc35bd478408734112b",
+  "tutorial_source_bindings": {
+    "pages": 14,
+    "unique_canonical_examples": 11,
+    "all_registered_examples_bound": true
+  },
+  "python_examples": {
+    "count": 11,
+    "passed": 11,
+    "stdout_contracts_matched": 11,
+    "observed_assertion_lines": 117,
+    "isolated_existing_runner": true,
+    "base_unchanged": true,
+    "contract_unchanged": true,
+    "per_example": [
+      {
+        "source": "examples/native_batch.py",
+        "status": "passed",
+        "observed_assertion_lines": 6
+      },
+      {
+        "source": "examples/native_bayesian.py",
+        "status": "passed",
+        "observed_assertion_lines": 13
+      },
+      {
+        "source": "examples/native_forcing.py",
+        "status": "passed",
+        "observed_assertion_lines": 12
+      },
+      {
+        "source": "examples/native_forecast.py",
+        "status": "passed",
+        "observed_assertion_lines": 6
+      },
+      {
+        "source": "examples/native_kairos.py",
+        "status": "passed",
+        "observed_assertion_lines": 11
+      },
+      {
+        "source": "examples/native_network.py",
+        "status": "passed",
+        "observed_assertion_lines": 19
+      },
+      {
+        "source": "examples/native_norton_bass.py",
+        "status": "passed",
+        "observed_assertion_lines": 11
+      },
+      {
+        "source": "examples/native_overlap.py",
+        "status": "passed",
+        "observed_assertion_lines": 13
+      },
+      {
+        "source": "examples/native_public_data.py",
+        "status": "passed",
+        "observed_assertion_lines": 9
+      },
+      {
+        "source": "examples/native_reingestion.py",
+        "status": "passed",
+        "observed_assertion_lines": 6
+      },
+      {
+        "source": "examples/native_scenarios.py",
+        "status": "passed",
+        "observed_assertion_lines": 11
+      }
+    ]
+  },
+  "public_python_doctests": {
+    "status": "passed",
+    "attempted": 19,
+    "failed": 0,
+    "installed_source_matches_generated_source": true
+  },
+  "native_python_documentation": {
+    "status": "passed",
+    "callable_count": 10,
+    "installed_source_matches": true,
+    "native_documentation_complete": true,
+    "native_binary_source_binding_verified": false,
+    "complete": false
+  },
+  "rust": {
+    "rustc": "1.100.0 (0ef1bc386 2026-11-09)",
+    "cargo": "1.100.0 (3acc79c0c 2026-11-05)",
+    "reference": {
+      "status": "passed",
+      "exit_code": 0,
+      "command": "RUSTDOCFLAGS='-D missing_docs -D rustdoc::broken_intra_doc_links -D rustdoc::invalid_codeblock_attributes' cargo doc --workspace --no-deps --locked",
+      "documented_crates": [
+        "innovate-core",
+        "innovate-ffi",
+        "innovate-python",
+        "innovate-tabular"
+      ]
+    },
+    "doctests": {
+      "status": "passed",
+      "exit_code": 0,
+      "command": "cargo test --workspace --doc --locked",
+      "crates": {
+        "innovate_core": {
+          "passed": 2,
+          "failed": 0,
+          "ignored": 0
+        },
+        "innovate_ffi": {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        "innovate_tabular": {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      },
+      "passed_total": 3,
+      "failed_total": 0,
+      "ignored_total": 0,
+      "unsupported_target": "innovate-python is cdylib-only; Cargo warns doctests are unsupported for that target."
+    }
+  },
+  "unexecuted_languages": {
+    "julia": {
+      "status": "not_run",
+      "runtime_on_path": false
+    },
+    "r": {
+      "status": "not_run",
+      "runtime_on_path": false
+    }
+  },
+  "combined_language_documentation_complete": false,
+  "prior_base_results": "Earlier logs without the 69b6748 prefix qualify the previous base and are retained separately.",
+  "artifacts": {
+    "python_execution": "69b6748-python-execution.json",
+    "python_log": "69b6748-python-execution.log",
+    "native_documentation": "69b6748-native-documentation.json",
+    "native_documentation_log": "69b6748-native-documentation.log",
+    "cargo_doc_log": "69b6748-cargo-doc.log",
+    "cargo_doctest_log": "69b6748-cargo-doctest.log"
+  }
+}

@@ -1,0 +1,48 @@
+---
+/** Render current contract-bound tutorials without adding browser JavaScript. */
+import { getCollection } from 'astro:content';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+const tutorials = (await getCollection('learningTutorials')).sort((a, b) => a.data.title.localeCompare(b.data.title, 'en'));
+if (tutorials.length === 0) throw new Error('The generated tutorial catalogue is empty.');
+const sources = new Set(tutorials.map(({ data }) => data.example_id));
+// LinkCard accepts HTML strings. Treat source frontmatter as plain text.
+const escapeText = (text: string) => text.replace(/[&<>"']/g, (character) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+})[character]!);
+---
+
+<p>
+  There are <strong>{tutorials.length} current tutorial pages</strong> linked to
+  <strong>{sources.size} distinct example files</strong>. Two pages using the same
+  file teach different tasks without adding an independent execution check.
+</p>
+
+<div class="tutorial-cards">
+  <CardGrid>
+    {tutorials.map(({ data }) => (
+      <article>
+        <LinkCard title={escapeText(data.title)} description={escapeText(data.description)} href={data.route} />
+        <p class="source">
+          <a href={`https://github.com/edithatogo/innovate/blob/main/${data.example_id}`}>
+            <code>{data.example_id}</code>
+          </a><br />
+          {data.language} · {data.network ? 'Network access declared' : 'No network access declared'}
+        </p>
+      </article>
+    ))}
+  </CardGrid>
+</div>
+
+<p>
+  This list is generated from the content contract and each tutorial's own title
+  and description. The catalogue generator reads and fingerprints the sources;
+  it does not execute them. Follow each tutorial's checks, expected output and
+  limits to understand the evidence it provides.
+</p>
+
+<style>
+  article { min-width: 0; }
+  .source { margin-block: 0.5rem 0; font-size: var(--sl-text-sm); }
+  code { overflow-wrap: anywhere; }
+</style>
