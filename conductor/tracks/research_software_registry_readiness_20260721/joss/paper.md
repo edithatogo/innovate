@@ -15,7 +15,7 @@ authors:
 affiliations:
   - name: Victoria University of Wellington
     index: 1
-date: 16 November 2026
+date: 18 November 2026
 bibliography: paper.bib
 ---
 
@@ -23,7 +23,7 @@ bibliography: paper.bib
 > metadata are provisional, copied from the repository's citation record.
 > Research-use evidence, declarations, scientific qualification and release
 > acceptance remain outstanding. This draft describes development version
-> 0.7.0a1 at commit `b29a1d27f54fdd08d77881ee999772fceab7c03a`.
+> 0.7.0a1 at commit `20fe0b41b815bc926fc3d61b9672c3d4b2feb289`.
 
 # Summary
 
@@ -99,9 +99,12 @@ Polars DataFrames and LazyFrames are the Python table interface. Rust owns table
 validation and predictions, while the current IPC exchange copies buffers and
 collects LazyFrames at the execution boundary. Julia and R currently use a
 versioned JSON contract through a native C ABI. Their tabular IPC adapters and
-distributable native-library bundles remain outstanding. These differences
-prevent an assumption of identical packaging or table capabilities across the
-three bindings. Additional platforms, accelerators and backends require their
+distributable native-library bundles remain outstanding. Panel, joint-draw and
+cohort IPC fields retain caller-supplied units and provenance; decoding does not
+repeat all encoder-side finite-value and label checks or establish scientific
+semantics. Untrusted data therefore require additional validation. These
+differences prevent an assumption of identical packaging or table capabilities
+across the three bindings. Additional platforms, accelerators and backends require their
 own evidence before support can be advertised.
 
 The core reuses existing Rust packages for linear algebra, optimisation,
@@ -112,7 +115,10 @@ delegates value-of-information and economic analysis to that project through
 scenario and forecast data. These boundaries avoid treating general simulation
 or economic analysis as duplicate Innovate implementations. Dependency reuse
 does not by itself establish the correctness of a model, adapter or selected
-provider revision.
+provider revision. Selected numerical dependencies now use vendored source
+paths; the native core prohibits registry publication pending suitable
+published dependencies. A source-distribution licence inventory does not
+by itself qualify that release.
 
 Scientific documentation distinguishes numerical execution from inferential
 claims. For example, the documented model time grids require finite, ordered values;

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "repository": "https://github.com/edithatogo/innovate",
   "parent_issue": 398,
-  "assessed_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "assessed_revision": "20fe0b41b815bc926fc3d61b9672c3d4b2feb289",
   "software_version": "0.7.0a1",
   "input_sha256": {
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
@@ -42,7 +42,7 @@
       "issue": 401,
       "dossier": "conductor/tracks/research_software_registry_readiness_20260721/joss-readiness.md",
       "outstanding": [
-        "Official four-page draft PDF compilation now passes and all-page visual review is complete in the recorded pinned environment, with the surname-particle correction and draft-template caveats retained. Reassess and rerender after any manuscript or assessed-source change; rendering does not approve the paper or establish research use.",
+        "The 16 November official draft PDF is historical source-bound evidence; the new 18 November manuscript must be rendered again with the official template, identified by fresh source/output hashes and independently reviewed page-by-page. Submission and author approval remain pending.",
         "Public PyPI distribution history from July 2025 and dated development records are now documented; establish actual version-bound research use and qualify the proposed current native source, installation, scientific and release scope.",
         "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
         "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."
