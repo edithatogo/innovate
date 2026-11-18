@@ -78,6 +78,8 @@ def snapshot():
                     "lint",
                     "unit-tests-base (3.15.1)",
                     "CodeQL",
+                    "Analyze (python)",
+                    "Analyze (rust)",
                     "package",
                     "Secret Scan",
                     "Workflow and policy lint",
@@ -87,6 +89,8 @@ def snapshot():
                     {"context": "lint", "app_id": 15368},
                     {"context": "unit-tests-base (3.15.1)", "app_id": 15368},
                     {"context": "CodeQL", "app_id": 57789},
+                    {"context": "Analyze (python)", "app_id": 15368},
+                    {"context": "Analyze (rust)", "app_id": 15368},
                     {"context": "package", "app_id": 15368},
                     {"context": "Secret Scan", "app_id": 15368},
                     {"context": "Workflow and policy lint", "app_id": 15368},
@@ -251,7 +255,15 @@ class RepositoryPolicyTests(unittest.TestCase):
         self.assertEqual(report["live"]["source"], "supplied_snapshot")
 
     def test_classic_protection_preserves_all_preexisting_checks_and_their_apps(self):
-        for removed in ("package", "Secret Scan", "Workflow and policy lint", "Python quality harness", "CodeQL"):
+        for removed in (
+            "package",
+            "Secret Scan",
+            "Workflow and policy lint",
+            "Python quality harness",
+            "CodeQL",
+            "Analyze (python)",
+            "Analyze (rust)",
+        ):
             with self.subTest(removed=removed):
                 value = snapshot()
                 checks = value["branch_protection"]["required_status_checks"]
@@ -261,6 +273,12 @@ class RepositoryPolicyTests(unittest.TestCase):
         value = snapshot()
         value["branch_protection"]["required_status_checks"]["checks"][2]["app_id"] = 15368
         self.assert_failed(self.report(value, remote=True), "live", "CodeQL")
+        for language in ("python", "rust"):
+            with self.subTest(language=language):
+                value = snapshot()
+                checks = value["branch_protection"]["required_status_checks"]["checks"]
+                next(check for check in checks if check["context"] == f"Analyze ({language})")["app_id"] = 57789
+                self.assert_failed(self.report(value, remote=True), "live", f"Analyze ({language})")
 
     def test_receipt_information_is_not_used_as_live_protection(self):
         value = snapshot()

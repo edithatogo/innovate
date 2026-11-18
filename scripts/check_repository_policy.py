@@ -33,6 +33,8 @@ CLASSIC_CHECKS = {
     **QUALIFIED_CHECKS,
     "package": 15368,
     "CodeQL": 57789,
+    "Analyze (python)": 15368,
+    "Analyze (rust)": 15368,
     "Secret Scan": 15368,
     "Workflow and policy lint": 15368,
     "Python quality harness": 15368,

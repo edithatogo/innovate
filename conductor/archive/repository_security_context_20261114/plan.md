@@ -1,5 +1,54 @@
 # Issue #414 implementation plan
 
+## Alert #44 CodeQL language-check gap — 18 November 2026
+
+- Owner: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.
+- Isolated worktree: `/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`,
+  branch `codex/alert44-codeql-language-gate`, based on main commit
+  `0f86ee6bc40600d19df467b2c395741c89ad7f92`.
+- Allowed files: this plan, `scripts/check_repository_policy.py`, and
+  `tests/workflows/test_repository_policy.py`. Native scope is only the required
+  status checks on `main`; preserve all other branch-protection settings.
+- Next operation: qualify the two existing CodeQL language-job contexts against
+  current pull-request and bot histories, prepare the drift-checker change, and
+  add both app-bound contexts to protection only if they do not replace an
+  existing check or disturb an in-flight pull request.
+
+The required `CodeQL` aggregate was neutral on PR #671 while the Rust analysis
+had not finished. GitHub treats neutral and skipped required status checks as
+passing. Requiring each default-setup language job adds a missing/pending/failure
+barrier, but does not by itself reject a future neutral or skipped job. Keep
+that residual gap open and do not claim complete enforcement from this change.
+
+On 18 November, the exact current heads of open PRs #662, #678 and #681, and
+merged PRs #671, #672, #670, #667 and #666, each reported successful
+`Analyze (python)` and `Analyze (rust)` checks from GitHub Actions app 15368.
+Those samples include StepSecurity and Renovate updates; they do not guarantee
+that future configurations or bot changes cannot skip a language. PR #662's
+existing auto-merge request is owned elsewhere and was not changed. Its current
+head already has both successes and its merge state is behind.
+
+The drift-checker regression first failed for both absent contexts and both
+wrong-app contexts. With the two app-bound requirements added to the checker,
+all 19 repository-policy tests pass on repo-local Python 3.15.2. The local
+policy check, Conductor hygiene, Ruff and `git diff --check` also pass; the
+local policy check does not inspect live settings.
+
+The live classic protection was then updated using the exact reviewed baseline
+and read back: strict mode and the seven pre-existing app-bound contexts remain,
+and `Analyze (python)` and `Analyze (rust)` are additionally required from app
+15368. The full protection response outside required status checks was unchanged,
+including enforced administrators and zero required approvals. PR #662 remained
+open, behind and auto-merge enabled, with its existing head unchanged. This
+additive change does not reject a skipped or neutral language job and is not
+acceptance of the complete CodeQL requirement.
+
+The updated checker accepted the freshly read classic protection after the
+separate restrictions endpoint explicitly returned HTTP 404 `Push restrictions
+not enabled`. The protection response itself omitted that field, so evaluating
+it without the second read correctly failed as incomplete. This targeted
+classic-protection check does not certify the separate ruleset proposal.
+
 ## PR #672 workflow-lint repair — 17 November 2026
 
 - Integrator: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.
