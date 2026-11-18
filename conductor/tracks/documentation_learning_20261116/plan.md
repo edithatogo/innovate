@@ -262,3 +262,9 @@ wheel. Build it in scratch with Rust 1.100.0 and run the same affected benchmark
 cases through the installed package. The four CLI changes preserve detailed
 file receipts and exit outcomes. Console output carries only qualification
 status and the existing separation from native and live deployment evidence.
+
+Run `44424922110` rechecked all 174 non-Rust files. Six active findings
+cleared. The other active finding points to the duplicate benchmark receipt
+error, which included the caller's output path. Keep the refusal to overwrite
+and the original benchmark count summary. Report the duplicate with a fixed
+message. Both hash-bound JOSS findings remain.
