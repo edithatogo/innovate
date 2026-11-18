@@ -127,6 +127,8 @@ def _review_parameters(value, path, findings, *, classic=False):
     }
     if classic:
         allowed |= {"url", "dismissal_restrictions", "bypass_pull_request_allowances"}
+    else:
+        allowed.add("require_extra_approval_for_unattributed_changes")
     if not _object(value, path, findings, allowed=allowed, required=required):
         return
     count = value.get("required_approving_review_count")
@@ -138,6 +140,11 @@ def _review_parameters(value, path, findings, *, classic=False):
     for key in (dismiss_key, "required_review_thread_resolution"):
         if key in value and type(value[key]) is not bool:
             findings.append(f"{path}.{key}: expected a boolean")
+    # GitHub's additional unattributed-change approval applies only when the
+    # required approval count above is nonzero.
+    extra_approval = "require_extra_approval_for_unattributed_changes"
+    if not classic and extra_approval in value and type(value[extra_approval]) is not bool:
+        findings.append(f"{path}.{extra_approval}: expected a boolean")
     if "required_reviewers" in value and value["required_reviewers"] != []:
         findings.append(f"{path}.required_reviewers: no mandatory reviewer or team gate is permitted")
     if "allowed_merge_methods" in value:

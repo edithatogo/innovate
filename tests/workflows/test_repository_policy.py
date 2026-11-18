@@ -264,6 +264,7 @@ class RepositoryPolicyTests(unittest.TestCase):
 
     def test_valid_supplied_snapshot_accepts_additional_automated_controls(self):
         value = snapshot()
+        value["rulesets"][0]["rules"][2]["parameters"]["require_extra_approval_for_unattributed_changes"] = True
         value["rulesets"][0]["rules"].append({"type": "required_signatures"})
         value["rulesets"][0]["rules"][3]["parameters"]["required_status_checks"].append(
             {"context": "Secret Scan", "integration_id": 15368}
@@ -273,6 +274,8 @@ class RepositoryPolicyTests(unittest.TestCase):
         self.assertEqual(report["live"]["status"], "pass")
         self.assertEqual(report["scope"], "local_and_supplied_snapshot")
         self.assertEqual(report["live"]["source"], "supplied_snapshot")
+        value["rulesets"][0]["rules"][2]["parameters"]["require_extra_approval_for_unattributed_changes"] = "true"
+        self.assert_failed(self.report(value, remote=True), "live", "require_extra_approval_for_unattributed_changes")
 
     def test_live_codeql_results_rule_cannot_be_removed_or_weakened(self):
         self.assertEqual(self.report(snapshot(), remote=True)["status"], "pass")
