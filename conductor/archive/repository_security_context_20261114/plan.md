@@ -14,6 +14,38 @@
   add both app-bound contexts to protection only if they do not replace an
   existing check or disturb an in-flight pull request.
 
+On 18 November this chat continued the requested success-only qualification in
+the same worktree. The allowed source scope additionally includes
+`scripts/check_codeql_success.py` and `tests/workflows/test_codeql_success.py`.
+The next bounded operation is a read-only verifier for an exact PR head, using
+GitHub's default-setup workflow, latest run, both job conclusions and uploaded
+analysis identities. It does not publish a status or change native protection.
+Any later automated status producer requires separate threat and event-race
+qualification before it is made required.
+
+The allowed scope also includes `.github/workflows/codeql-evidence-canary.yml`:
+a non-required, read-only hosted canary may exercise the verifier with its
+actual restricted GitHub token. It does not authorize a required status or
+checkout of PR code in a privileged workflow.
+
+The verifier requires an exact open PR head, the current GitHub default-setup
+run, successful Python and Rust jobs on its latest attempt, matching uploaded
+analyses with completed SARIF processing, a successful GitHub CodeQL aggregate,
+and no open CodeQL findings on that head. It checks again for concurrent head,
+run or aggregate changes. This is a stricter point-in-time observation; it is
+not continuous enforcement. In particular, a later same-head rerun needs an
+independently qualified event/status design before any result can be required.
+
+With repo-local Python 3.15.2, 11 verifier cases and 19 policy cases passed,
+including negative controls for skipped/neutral checks, wrong app or ref,
+missing or stale analyses, unfinished SARIF, findings and rerun races. A
+separate review exposed an older-run rerun and inconsistent-metadata bypass;
+both were fixed and their controls passed. Read-only live probes returned
+success for PR #678 head `0c9ecfd3`, pending for PR #682 head `dc9ce084` while
+Rust was running, and failure for a wrong PR head. Ruff, actionlint, Zizmor on
+the canary, repository policy and Conductor hygiene passed locally. Hosted
+canary execution and its restricted-token evidence remain pending.
+
 The required `CodeQL` aggregate was neutral on PR #671 while the Rust analysis
 had not finished. GitHub treats neutral and skipped required status checks as
 passing. Requiring each default-setup language job adds a missing/pending/failure
