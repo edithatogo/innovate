@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "assessed_at_utc": "2026-11-16T13:28:49.247837+00:00",
+  "scope": "Bounded JOSS claim reassessment; no scientific, provider, release, author or submission acceptance",
+  "previous_software_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "assessed_software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "software_version": "0.7.0a1",
+  "integration_head_observed": "2748084292e5e57c181c1665a686ad3a291145bf",
+  "integration_tree_observed": "787eb4cd175b7343026cdad88143e8879e0b3062",
+  "integration_parents": [
+    "d36c33f6b4fb480828ddb9aae0121f3379667015",
+    "b29a1d27f54fdd08d77881ee999772fceab7c03a"
+  ],
+  "previous_snapshot": {
+    "path": "source-reassessment.previous-snapshot.json",
+    "sha256": "d72e4ade70656d72caeb576a49f4596eafed6167e552b3429e2a49e708a4c571"
+  },
+  "source_inputs": [
+    {
+      "path": "README.md",
+      "before_sha256": "35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be",
+      "after_sha256": "35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "CITATION.cff",
+      "before_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "after_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "LICENSE",
+      "before_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "after_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "pyproject.toml",
+      "before_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+      "after_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "Cargo.toml",
+      "before_sha256": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+      "after_sha256": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "Cargo.lock",
+      "before_sha256": "2fbada0a3db416e66a1fb338ce82c4e77a53cecfed5529c20b98cc3228f00a44",
+      "after_sha256": "2fbada0a3db416e66a1fb338ce82c4e77a53cecfed5529c20b98cc3228f00a44",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "migration-ledger.json",
+      "before_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "after_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "conductor/product.md",
+      "before_sha256": "20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27",
+      "after_sha256": "20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "conductor/release-gates-20261107.md",
+      "before_sha256": "e2e7cb2795cb33fe9c8568e760817c8b051aa196c261985ff22fbb675717788a",
+      "after_sha256": "e2e7cb2795cb33fe9c8568e760817c8b051aa196c261985ff22fbb675717788a",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "docs/astro-site/src/content/docs/native-migration.md",
+      "before_sha256": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
+      "after_sha256": "910c20cd2335669d6d82807cf56a3ce5a2f82bf1e104af6782743c85e6c07d3f",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "rust/crates/innovate-core/Cargo.toml",
+      "before_sha256": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+      "after_sha256": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "rust/crates/innovate-tabular/Cargo.toml",
+      "before_sha256": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
+      "after_sha256": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "rust/crates/innovate-tabular/src/lib.rs",
+      "before_sha256": "8ad9814f9aa80d7778b00f8c7eb57814b6e5c01935ea232c7334bb54950f59d9",
+      "after_sha256": "40625938163f5c9dc0be0d280ab49643d6fb6807372e3fc84bb94971a0c15117",
+      "changed": true,
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "before_sha256": "ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+      "after_sha256": "ce67a3c4fbbf2fc6a92396f25ef3bf1fa82f59eb6380775d9ec432e8e518f39d",
+      "changed": false,
+      "local_equals_assessed_git_blob": true
+    }
+  ],
+  "supplemental_review_inputs": [
+    {
+      "path": "rust/crates/innovate-core/src/likelihood.rs",
+      "before_sha256": "e4a446c343b9aca2883b1a79e64c54b0d761c9af8a76069b1e59fdc9ce9334e2",
+      "after_sha256": "9fcc474a44396a423e3388d81934623c6b62ebe20a765d04a6ad2792ab697418",
+      "local_equals_assessed_git_blob": true
+    },
+    {
+      "path": "rust/crates/innovate-games/Cargo.toml",
+      "before_sha256": "8a5d52b4982ff64460a024a9c120188c6f4c53b13fbeb248988eb768bbae253d",
+      "after_sha256": "54ced568be3dcfdd36d18ea9be13df4bf313bfda8d67e38a71abc4dc86eafb71",
+      "local_equals_assessed_git_blob": true
+    }
+  ],
+  "changed_input_assessment": {
+    "added_rustdoc_lines": 36,
+    "removed_lines": 0,
+    "equal_after_removing_rustdoc_lines": true,
+    "non_rustdoc_sha256": "2853ec9a0b7f9bfc49065f6649b02e642ba39512b66302b13acb17200ec69639",
+    "diff_path": "source-reassessment.diff",
+    "diff_sha256": "839ecdac3304371bd2363ffe01c633c9cb5eb36c7089157cbb03d7c8d7cbaafe",
+    "affected_claims": [
+      "C05",
+      "C07"
+    ],
+    "decision": "Keep existing bounded wording; only update visible assessed commit identifier",
+    "non_rustdoc_sha256_method": "Remove whole lines whose left-stripped bytes begin ///; splitlines(keepends=True) and join with empty bytes preserve every remaining byte and original line ending."
+  },
+  "broader_changes_reviewed": [
+    "Rust field/variant documentation and enum formatting",
+    "Additional native contract tests, not executed as manuscript evidence",
+    "Renovate workflow version updates",
+    "Excluded innovate-games Paignia pin change to 5103675004d80afc845bbdd067e2fea4e75f6425; no provider acceptance inferred"
+  ],
+  "preserved": {
+    "required_migration_obligations": 38,
+    "withheld_claims": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05",
+      "P06"
+    ],
+    "submission_ready": false,
+    "scientific_or_release_qualification": false,
+    "author_approval": false
+  },
+  "integrity_before": {
+    "argv": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--json"
+    ],
+    "exit_code": 1,
+    "result": {
+      "snapshot_valid": false,
+      "submission_ready": false,
+      "error": "Input digest mismatch: rust/crates/innovate-tabular/src/lib.rs"
+    }
+  },
+  "integrity_after": {
+    "argv": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "result": {
+      "snapshot_valid": true,
+      "state": "unapproved_working_draft",
+      "software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+      "software_version": "0.7.0a1",
+      "source_files_checked": 14,
+      "edition_files_checked": 3,
+      "normalized_text_paths": [],
+      "required_sections_checked": 6,
+      "prose_word_count": 1076,
+      "submission_ready": false,
+      "git_revision_verified": false,
+      "scientific_qualification_performed": false,
+      "online_verification_performed": false,
+      "limits": "Structural and byte-identity checks only; rendering, research use and author/editorial decisions are separate."
+    }
+  },
+  "current_snapshot_sha256": "a62b7b9a08c3aa44372aaa6dcd3ff26fd3cdd7269bcead0a16b0bd818f9e57c5",
+  "current_edition_sha256": {
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "1257a2b4c8a18deb00f5a79484c6ff9a9d0d0ededf1701c3ba221a27383ffd4f"
+  },
+  "bibliography_render_correction": {
+    "assessed_at_utc": "2026-11-16T13:45:50.071726+00:00",
+    "reference": "mesa2025",
+    "primary_source": "https://joss.theoj.org/papers/10.21105/joss.07668",
+    "change": "Protect ter Hoeven with BibTeX braces to retain the publisher surname particle in formatted citations",
+    "before_sha256": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
+    "after_sha256": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "before_csl_author": {
+      "family": "Hoeven",
+      "given": "Ewout",
+      "dropping-particle": "ter"
+    },
+    "after_csl_author": {
+      "family": "Hoeven",
+      "given": "Ewout",
+      "non-dropping-particle": "ter"
+    },
+    "parsed_and_citeproc_checked": true,
+    "expected_citation": "(ter Hoeven et al., 2025)",
+    "prose_or_scientific_claim_change": false,
+    "prior_inputs_retained": "render/attempt-3/inputs/",
+    "fresh_render": {
+      "receipt_path": "render/attempt-4/receipt.json",
+      "receipt_sha256": "950353aec45dcab855e53ca0501eff7bfb172b3fc54f7c25a43eaa40b517967b",
+      "pdf_sha256": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+      "visual_review_path": "render/attempt-4/visual-review.json",
+      "visual_review_sha256": "a223a0ed5179b816b10cc92093b0ee10510cb00dc4633c00288175b3d94c4665",
+      "status": "readable_working_draft_with_recorded_template_limitations"
+    }
+  },
+  "integrity_after_bibliography_correction": {
+    "argv": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "result": {
+      "snapshot_valid": true,
+      "state": "unapproved_working_draft",
+      "software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+      "software_version": "0.7.0a1",
+      "source_files_checked": 14,
+      "edition_files_checked": 3,
+      "normalized_text_paths": [],
+      "required_sections_checked": 6,
+      "prose_word_count": 1076,
+      "submission_ready": false,
+      "git_revision_verified": false,
+      "scientific_qualification_performed": false,
+      "online_verification_performed": false,
+      "limits": "Structural and byte-identity checks only; rendering, research use and author/editorial decisions are separate."
+    }
+  }
+}

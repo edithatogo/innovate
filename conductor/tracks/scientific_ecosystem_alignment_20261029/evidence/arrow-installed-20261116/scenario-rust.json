@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "native Rust scenario export target",
+  "command": "cargo test --locked -p innovate-tabular --test scenario_exports -j 1",
+  "exit_code": 0,
+  "results": {
+    "passed": 8,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0
+  },
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)",
+  "source_commit": "0c718cea3eb982717ce940560868004d71261e9b",
+  "source_tree": "852b4687230505c1ee03cdbd657db0d2f9a24116",
+  "source_manifest": "build-provenance.json",
+  "source_manifest_sha256": "d3e9a4a9187d613defad601f942cb703192ebd4b0e484a1b3157d3ad205e7dc2",
+  "all_122_build_inputs_unchanged": true,
+  "test_source": "rust/crates/innovate-tabular/tests/scenario_exports.rs",
+  "test_source_sha256": "c2aed4ae09913825e7eb5cdac8ddb48e399dfd3e704e2ff65db917595572473b",
+  "log": "scenario-rust.log",
+  "log_sha256": "c3e51a16ccbea2ba5bf982461d6cc0c3ffaf3b29d489ca3ec79281966173a5c7",
+  "limitations": [
+    "Linux x86_64 development/test profile, not other-platform or release qualification",
+    "Does not validate every model-specific result or any of the 38 full scientific release obligations"
+  ]
+}

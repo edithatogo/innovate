@@ -1,0 +1,164 @@
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)  (INITEX)
+ restricted system commands enabled.
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/tex-ini-files/lualatex.ini
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/tex-ini-files/luatexconfig.tex
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/tex-ini-files/pdftexconfig.tex))
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/latex.ltx
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/texsys.cfg)
+./texsys.aux found
+
+
+\@currdir set to: ./.
+
+
+Assuming \openin and \input 
+have the same search path.
+
+
+Defining UNIX/DOS style filename parser.
+
+catcodes, registers, parameters,
+LaTeX2e <2024-11-01> patch level 2
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/l3kernel/expl3.ltx
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex)) hacks,
+document commands, templates, control, par, spacing, files, font encodings,
+lengths, NFSS base, NFSS axes, NFSS tracing, NFSS declarative interface,
+NFSS initialization,
+====================================
+
+Local config file fonttext.cfg used
+
+====================================
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/fonttext.cfg
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/fonttext.ltx
+=== Don't modify this file, use a .cfg file instead ===
+
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/omlenc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/omsenc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ot1enc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/t1enc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ts1enc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/tuenc.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/tulmr.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/tulmss.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/tulmtt.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/lm/ts1lmr.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/t1cmr.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ot1cmr.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/t1cmss.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/t1cmtt.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ot1cmss.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ot1cmtt.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ts1cmss.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ts1cmtt.fd)))
+====================================
+
+Local config file fontmath.cfg used
+
+====================================
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/fontmath.cfg
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/fontmath.ltx
+=== Don't modify this file, use a .cfg file instead ===
+
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/omlcmm.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/omscmsy.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/omxcmex.fd)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/ucmr.fd)))
+====================================
+
+Local config file preload.cfg used
+
+=====================================
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/preload.cfg
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/base/preload.ltx)) page nos., x-ref,
+environments, center, verbatim, math definitions, boxes, title, sectioning,
+contents, floats, footnotes, index, bibliography, output,
+ Unicode character data,
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/unicode-data/load-unicode-data.tex 
+load-unicode-data.tex v1.18 (2025-01-07)
+Reading Unicode data
+# UnicodeData-16.0.0.txt
+# Modified 2024-08-25 18:05 GMT [JAW]
+)
+===========================================
+Local configuration file hyphen.cfg used
+===========================================
+
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/babel/hyphen.cfg
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/babel/luababel.def)
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/generic/hyphen/hyphen.tex))
+(/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/t
+ex/texlive/texmf-dist/tex/latex/firstaid/latex2e-first-aid-for-external-files.l
+tx)
+))
+Beginning to dump on file lualatex.fmt
+ (format=lualatex 2026.11.16)
+24488 strings using 443152 bytes
+1078511 memory locations dumped; current usage is 204&513511
+23131 multiletter control sequences
+\font\nullfont=nullfont
+\font\OMX/cmex/m/n/10=cmex10
+\font\tenln=line10
+\font\tenlnw=linew10
+\font\tencirc=lcircle10
+\font\tencircw=lcirclew10
+\font\OT1/cmr/m/n/5=cmr5
+\font\OT1/cmr/m/n/7=cmr7
+\font\OT1/cmr/m/n/10=cmr10
+\font\OML/cmm/m/it/5=cmmi5
+\font\OML/cmm/m/it/7=cmmi7
+\font\OML/cmm/m/it/10=cmmi10
+\font\OMS/cmsy/m/n/5=cmsy5
+\font\OMS/cmsy/m/n/7=cmsy7
+\font\OMS/cmsy/m/n/10=cmsy10
+14 preloaded fonts
+warning  (pdf backend): no pages of output.
+Transcript written on lualatex.log.

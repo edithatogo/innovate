@@ -4,7 +4,7 @@
   "type": "chore",
   "status": "in_progress",
   "created_at": "2026-07-21T00:00:00Z",
-  "updated_at": "2026-11-14T00:00:00Z",
+  "updated_at": "2026-11-16",
   "owner_repo": "edithatogo/innovate",
   "github_parent_issue": "https://github.com/edithatogo/innovate/issues/398",
   "github_subissues": [
@@ -13,5 +13,9 @@
     "https://github.com/edithatogo/innovate/issues/401"
   ],
   "external_evidence_required": true,
-  "readiness_record": "conductor/tracks/research_software_registry_readiness_20260721/readiness.json"
+  "readiness_record": "conductor/tracks/research_software_registry_readiness_20260721/readiness.json",
+  "current_reconciliation": "conductor/tracks/research_software_registry_readiness_20260721/reconciliation-20261116.md",
+  "current_execution_record": "conductor/tracks/research_software_registry_readiness_20260721/evidence-acquisition-20261116.md",
+  "assessed_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "manuscript_draft": "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md"
 }

@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "observed_at_utc": "2026-11-16T11:20:11.349890+00:00",
+  "assessment_status": "bounded_source_reassessment_complete_not_scientific_qualification",
+  "prior_software_revision": "69b674814513e09a683279c679b1584af8bb4214",
+  "assessed_software_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "software_version": "0.7.0a1",
+  "main_merge_timestamp_utc": "2026-11-16T11:10:35Z",
+  "integration_head_observed": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "integration_committed_tree_observed": "81dffc475d082208cb5563747b685b4451cd6397",
+  "all_14_selected_local_source_inputs_equal_named_main_commit": true,
+  "changed_source_inputs": [
+    {
+      "path": "Cargo.toml",
+      "before_sha256": "1039753b1d5df7c329cd2d794ee2a596807db61e93812640d7a5f8ab29451c99",
+      "after_sha256": "932605b7548277a68fc86b8ca840aedb5ef174a14574094dc32940c6bac050fe",
+      "decision": "Workspace adds innovate-kairos and excludes standalone innovate-games; version and existing numerical dependency declarations unchanged. Retain C01/C06 with no integration or distribution promotion."
+    },
+    {
+      "path": "Cargo.lock",
+      "before_sha256": "f88c8d1ec38c434167f7a7c5423dd7fca7b9cd45dab64c0e8fdbe569ddd6341d",
+      "after_sha256": "2fbada0a3db416e66a1fb338ce82c4e77a53cecfed5529c20b98cc3228f00a44",
+      "decision": "Adds only the local innovate-kairos package; existing lock package records unchanged. Retain C06 without fresh dependency or security qualification."
+    },
+    {
+      "path": "rust/crates/innovate-core/Cargo.toml",
+      "before_sha256": "143bddb4ba83f9c8b7e298e1be4477f6b009f5a7fc884cf5f327af492c00f334",
+      "after_sha256": "4501622aed726cb198b00e79d87a27ca393f46abf1cf40d408da56c7aa34c764",
+      "decision": "Adds workloads benchmark target with harness=false. Retain architecture/dependency claims; no measured-performance result or P03 promotion."
+    },
+    {
+      "path": "rust/crates/innovate-tabular/src/lib.rs",
+      "before_sha256": "4071685796a16e8f037a122ecd3c057f01a0c0df779492b42223d25257c06957",
+      "after_sha256": "8ad9814f9aa80d7778b00f8c7eb57814b6e5c01935ea232c7334bb54950f59d9",
+      "decision": "Appends Rust panel, joint-draw and cohort IPC helpers; prior code is preserved. C05 binding limits retained; C07 now explicitly concerns documented model time grids, not arbitrary panel ordering."
+    }
+  ],
+  "unchanged_source_inputs": [
+    "README.md",
+    "CITATION.cff",
+    "LICENSE",
+    "pyproject.toml",
+    "migration-ledger.json",
+    "conductor/product.md",
+    "conductor/release-gates-20261107.md",
+    "docs/astro-site/src/content/docs/native-migration.md",
+    "rust/crates/innovate-tabular/Cargo.toml",
+    ".github/workflows/ci.yml"
+  ],
+  "additional_sources_inspected_at_assessed_revision": {
+    "rust/crates/innovate-core/src/domain.rs": "dc3092e7345820b82750d675bdc5b7560d090d603d5e9eb7f7ac784fa734c28b",
+    "rust/crates/innovate-core/src/models/mod.rs": "c15340f46031adf890cfaa33e1f8692cc0a724f214e248e92cad09656bde811c",
+    "rust/crates/innovate-core/src/lib.rs": "36faf35baa3804ab2374543693a05815cb6fc0f56112f6e6c9531b22fb11632f",
+    "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1",
+    "rust/crates/innovate-kairos/src/lib.rs": "3d0b02a76a6810bab67802d7ee1855cb17626884b2243adde188403d14ba72f2",
+    "conductor/capabilities.json": "e2b5b195f5a5abd3b2218290836c5f49d991d96d9f0432d22acefe00dbd110cf",
+    "conductor/tracks/empirical_validation_publication_20261107/plan.md": "4a32537ea150e0f65807430d116280e2846d7db47ffd2b98209490c6e3e4123c",
+    "conductor/qualification/application-promotion.json": "a64060ba903dcb150c1b83abd2c10ed6eedbbb017e759a970fa0b120e60c2aea",
+    "conductor/qualification/dependency-receipts/rust-closure-20261116.json": "ca984e4820a8382adb403074eb85b72d062f8a151051dce07732090a4d47c70e"
+  },
+  "unchanged_comparison_scope": [
+    "bindings/python",
+    "bindings/julia",
+    "bindings/r",
+    "rust/crates/innovate-core/src/kernel.rs",
+    "rust/crates/innovate-core/src/validation.rs"
+  ],
+  "cargo_lock_existing_package_records_unchanged": true,
+  "cargo_lock_added_packages": [
+    {
+      "name": "innovate-kairos",
+      "version": "0.7.0-alpha.1",
+      "dependencies": [
+        "innovate-core",
+        "serde_json"
+      ]
+    }
+  ],
+  "tabular_prior_content_preserved": true,
+  "claim_decisions": {
+    "C01": "Retain Rust computation and Python/Julia/R interfaces; no platform or full-interface qualification.",
+    "C02": "Retain existing sixteen-family inventory and all 38 required obligations from unchanged sources; no count or gate change.",
+    "C03_C04": "Unchanged bibliography and contextual claims; no new comparator or superiority claim.",
+    "C05": "Retain copying IPC, LazyFrame collection and Julia/R adapter/bundle limits. Added Rust helpers do not establish completed host bindings.",
+    "C06": "Retain numerical-dependency reuse and Kairos/Voiage ownership; no existing external lock records changed and no provider acceptance inferred.",
+    "C07": "Clarify the example to documented model time grids; do not apply ordering to all newly added panel/IPC rows or claim universal validation.",
+    "C08": "Retain limited AI disclosure; this reassessment assistance is recorded separately, without an author attestation.",
+    "P01_P06": "All withheld assertions remain pending. M01-M05/V05/Q02/Q03/Q05 remain open; capability empirical/release receipts are null. Merge/checkboxes/registry consumer names do not establish research-use, scientific, release, authorship or provider outcomes."
+  },
+  "edition_before_sha256": {
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "e2fcc6b76a831ea1175f779049410f419e69df5fcb3165580527761477a1b991",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "5f81a06a26fbb6f9fb4bac923a6008b4932e5880a35f322cf407fbb97473759c"
+  },
+  "edition_after_sha256": {
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "9dbd5388174e0de702b4eb53beee038295f35f07f0eeb274cd66be0c46839108",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "10435dffd8b50cac968d37819232f8e1bdcd76ac62cbafb95fd7e505fabe0f0e"
+  },
+  "prior_snapshot_path": "source-reassessment-20261116.previous-snapshot.json",
+  "prior_snapshot_sha256": "02fa87528eb5746d88d9d807b63879ff4149c791d42faf6ca7e5548fa1484cf0",
+  "updated_snapshot_sha256": "d72e4ade70656d72caeb576a49f4596eafed6167e552b3429e2a49e708a4c571",
+  "render_evidence_path": "joss-render-20261116/attempt-3/receipt.json",
+  "scientific_or_release_qualification": false,
+  "submission_ready": false,
+  "author_approval_established": false,
+  "ai_assistance": "ChatGPT with GPT-6 Astra Pro: source comparison, bounded claim clarification and evidence preparation; no human-author attestation.",
+  "limitations": [
+    "The 14 selected fingerprints do not cover every file changed by #656.",
+    "Supplemental source inspection does not qualify new scientific routines or accept merged plan checkboxes.",
+    "Render outcomes belong to the separate actual attempt 3 receipt; prior PDF dependency blocker is not waived."
+  ],
+  "scientific_runtime_or_empirical_validation_performed_by_this_reassessment": false,
+  "prior_edition_repository_revision": "a49d453e8786eca78ad89055a442862b3afcf9d2",
+  "main_commit_timestamp_utc": "2026-11-16T11:10:34Z",
+  "main_merge_timestamp_source": {
+    "url": "https://api.github.com/repos/edithatogo/innovate/pulls/656",
+    "field": "merged_at",
+    "provenance": "GitHub PR API response observed by the integrating agent; distinct from the Git committer timestamp."
+  }
+}

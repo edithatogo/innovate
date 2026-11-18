@@ -98,6 +98,24 @@ the public `DataFrame` type remains necessary. Keep both advisories visible
 in RustSec. The release and offline security lanes still require successful
 qualification before promotion.
 
+## PR #684 base update, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this draft branch in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Align its head `ecaccce231a1aa53b46418df52bd2cf3cc4e8d85` with main
+`fd7e259bb9a685d620f80907c6815d4837da3e53` through a normal merge.
+The preview confirmed the same eight PR paths against the new base.
+The only additional edit in this operation is this record. Native scope is
+the existing draft's head branch and check readback. Its next required
+promotion evidence is successful checks on the updated head.
+
+The new main includes the scientific evidence and Arrow/MSRV workflow from
+PRs #662 and #685. Its hosted Release Readiness run `44288977642` still
+reports all 38 incomplete scientific obligations. The Rust dependency
+fixtures and both documentation patches retain their existing bytes.
+On the integrated tree the local repository-policy check, all 21 policy
+tests, both installed `picomatch` controls and the diff checks passed.
+
 ## Alert #44 CodeQL language-check gap — 18 November 2026
 
 - Owner: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.

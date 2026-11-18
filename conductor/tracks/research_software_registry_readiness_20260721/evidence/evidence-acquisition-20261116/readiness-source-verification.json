@@ -1,0 +1,27 @@
+{
+  "assessed_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "prior_assessed_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "inputs": {
+    "CITATION.cff": {
+      "recorded_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "git_blob_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "local_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384"
+    },
+    "LICENSE": {
+      "recorded_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "git_blob_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "local_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648"
+    },
+    "pyproject.toml": {
+      "recorded_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+      "git_blob_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+      "local_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395"
+    },
+    "migration-ledger.json": {
+      "recorded_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "git_blob_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "local_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5"
+    }
+  },
+  "result": "All four prior input hashes still match both current-main Git blobs and local files; only the assessed revision changes."
+}

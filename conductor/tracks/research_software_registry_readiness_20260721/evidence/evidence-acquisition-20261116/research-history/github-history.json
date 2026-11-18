@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "inspected_on": "2026-11-16",
+  "source_context": {
+    "worktree_commit": "2748084292e5e57c181c1665a686ad3a291145bf",
+    "worktree_tree": "787eb4cd175b7343026cdad88143e8879e0b3062",
+    "integrated_main": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+    "pr662_head": "d36c33f6b4fb480828ddb9aae0121f3379667015",
+    "pr671_inspected_head": "070a04424dfb084758d1c0b201bf2980002ea81d"
+  },
+  "status": "public_project_chronology_assembled_for_review",
+  "prior_release_inventory": "../../archive-target-inventory-20261116.json",
+  "anchors": [
+    {
+      "number": 60,
+      "url": "https://github.com/edithatogo/innovate/pull/60",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/60",
+      "title": "Merge all open PRs: Dependabot updates, paper development branch, and backend enhancements",
+      "author_login": "Copilot",
+      "author_type": "Bot",
+      "state": "closed",
+      "created_at": "2025-11-06T22:51:28Z",
+      "merged_at": "2025-11-07T01:32:10Z",
+      "head_sha": "718c40de6bb0e710d9a284f0d189bdf71852bb1d",
+      "merge_commit_sha": "718da654feade513e1e14b7fdfe499698c8d3afb"
+    },
+    {
+      "number": 78,
+      "url": "https://github.com/edithatogo/innovate/pull/78",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/78",
+      "title": "⚡ Batched prediction tensor operations for Network Diffusion",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "closed",
+      "created_at": "2026-07-04T10:15:24Z",
+      "merged_at": "2026-07-09T04:18:29Z",
+      "head_sha": "ef8349fff65d0f7c207bff5551339234e7a69096",
+      "merge_commit_sha": "23c0c83073053ad90c88f668b9eedc44d13a7072"
+    },
+    {
+      "number": 554,
+      "url": "https://github.com/edithatogo/innovate/pull/554",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/554",
+      "title": "Qualify Python 3.15 and Arrow dependency candidate",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "closed",
+      "created_at": "2026-10-28T17:04:03Z",
+      "merged_at": "2026-11-01T10:53:36Z",
+      "head_sha": "5168d3e0c899db731adf4b2281778e0c16b012e4",
+      "merge_commit_sha": "e0b764896704c27562f66c8891e74b5f8582b9ed"
+    },
+    {
+      "number": 577,
+      "url": "https://github.com/edithatogo/innovate/pull/577",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/577",
+      "title": "Consolidate Innovate native runtime and reconciled PR history",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "closed",
+      "created_at": "2026-11-08T04:30:52Z",
+      "merged_at": "2026-11-08T05:19:35Z",
+      "head_sha": "26397c35196bc7e57d424dc883bf836825006165",
+      "merge_commit_sha": "95579544ebf1bcc8b1455468ba311c486692761d"
+    },
+    {
+      "number": 602,
+      "url": "https://github.com/edithatogo/innovate/pull/602",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/602",
+      "title": "Reject incomplete scenario outcomes before Arrow export",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "closed",
+      "created_at": "2026-11-14T13:51:12Z",
+      "merged_at": "2026-11-14T17:21:27Z",
+      "head_sha": "ae592570f1d3de7364ef936695a4ca35084f6c01",
+      "merge_commit_sha": "2c9ce0fda410161961209ddbf19d99515732e3c9"
+    },
+    {
+      "number": 662,
+      "url": "https://github.com/edithatogo/innovate/pull/662",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/662",
+      "title": "feat(qualification): implement scientific and journal readiness checks",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "open",
+      "created_at": "2026-11-16T10:15:25Z",
+      "merged_at": null,
+      "head_sha": "d36c33f6b4fb480828ddb9aae0121f3379667015",
+      "merge_commit_sha": null
+    },
+    {
+      "number": 671,
+      "url": "https://github.com/edithatogo/innovate/pull/671",
+      "source_url": "https://api.github.com/repos/edithatogo/innovate/pulls/671",
+      "title": "feat(docs): deliver native learning resources and retire legacy guides",
+      "author_login": "edithatogo",
+      "author_type": "User",
+      "state": "open",
+      "created_at": "2026-11-16T12:22:37Z",
+      "merged_at": null,
+      "head_sha": "070a04424dfb084758d1c0b201bf2980002ea81d",
+      "merge_commit_sha": null
+    }
+  ],
+  "issue_pull_request_census": {
+    "evidence_ledger": "github-activity-ledger.json",
+    "source_urls": [
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=1",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=2",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=3",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=4",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=5",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=6",
+      "https://api.github.com/repos/edithatogo/innovate/issues?state=all&per_page=100&sort=created&direction=asc&page=7"
+    ],
+    "entries": 671,
+    "duplicates": 0,
+    "monthly": [
+      {
+        "month": "2025-07",
+        "pull_requests": 50,
+        "issues": 0,
+        "automated_actor_entries": 4
+      },
+      {
+        "month": "2025-08",
+        "pull_requests": 2,
+        "issues": 0,
+        "automated_actor_entries": 2
+      },
+      {
+        "month": "2025-09",
+        "pull_requests": 3,
+        "issues": 0,
+        "automated_actor_entries": 3
+      },
+      {
+        "month": "2025-10",
+        "pull_requests": 2,
+        "issues": 0,
+        "automated_actor_entries": 2
+      },
+      {
+        "month": "2025-11",
+        "pull_requests": 7,
+        "issues": 0,
+        "automated_actor_entries": 6
+      },
+      {
+        "month": "2025-12",
+        "pull_requests": 2,
+        "issues": 0,
+        "automated_actor_entries": 2
+      },
+      {
+        "month": "2026-01",
+        "pull_requests": 0,
+        "issues": 0,
+        "automated_actor_entries": 0
+      },
+      {
+        "month": "2026-02",
+        "pull_requests": 0,
+        "issues": 0,
+        "automated_actor_entries": 0
+      },
+      {
+        "month": "2026-03",
+        "pull_requests": 0,
+        "issues": 0,
+        "automated_actor_entries": 0
+      },
+      {
+        "month": "2026-04",
+        "pull_requests": 0,
+        "issues": 6,
+        "automated_actor_entries": 6
+      },
+      {
+        "month": "2026-05",
+        "pull_requests": 1,
+        "issues": 0,
+        "automated_actor_entries": 1
+      },
+      {
+        "month": "2026-06",
+        "pull_requests": 0,
+        "issues": 1,
+        "automated_actor_entries": 1
+      },
+      {
+        "month": "2026-07",
+        "pull_requests": 162,
+        "issues": 178,
+        "automated_actor_entries": 214
+      },
+      {
+        "month": "2026-08",
+        "pull_requests": 50,
+        "issues": 17,
+        "automated_actor_entries": 39
+      },
+      {
+        "month": "2026-09",
+        "pull_requests": 23,
+        "issues": 12,
+        "automated_actor_entries": 35
+      },
+      {
+        "month": "2026-10",
+        "pull_requests": 29,
+        "issues": 19,
+        "automated_actor_entries": 41
+      },
+      {
+        "month": "2026-11",
+        "pull_requests": 83,
+        "issues": 24,
+        "automated_actor_entries": 50
+      }
+    ],
+    "first": "2025-07-12T04:13:31Z",
+    "last": "2026-11-16T12:54:35Z",
+    "pages": 7,
+    "final_page_items": 71,
+    "total_pull_requests": 414,
+    "total_issues": 257,
+    "classification": "GitHub issues collection: pull_request property distinguishes PRs; automated_actor_entries counts user.type Bot or login ending [bot] or equal to Copilot. This does not identify every AI-assisted or automated contribution.",
+    "limits": [
+      "Creation-month census of returned issues and PRs, not a commit census, merge count or research-adoption count.",
+      "Months with zero entries may still contain commits or other development.",
+      "Pages were read during one investigation, not as a transactional snapshot; the final page has fewer than 100 entries and no returned IDs were duplicated.",
+      "Historical creation/merge timestamps on currently public objects do not independently prove historical or uninterrupted repository visibility."
+    ]
+  },
+  "native_mainline_path_history": {
+    "source_url": "https://api.github.com/repos/edithatogo/innovate/commits?sha=b29a1d27f54fdd08d77881ee999772fceab7c03a&path=rust/crates/innovate-core/Cargo.toml&per_page=100",
+    "returned_count": 11,
+    "oldest_returned_commit": "95579544ebf1bcc8b1455468ba311c486692761d",
+    "oldest_returned_author_date": "2026-11-08T05:19:35Z",
+    "oldest_returned_committer_date": "2026-11-08T05:19:35Z",
+    "corroborating_consolidation_pr": 577,
+    "limits": [
+      "The path history and public PR record identify native mainline consolidation, not the first private or branch development of Rust code.",
+      "Project history dating to 2025 must not be presented as six months of qualification for the rewritten native 0.7 line."
+    ]
+  },
+  "limits": [
+    "Git commit author/committer dates are distinct from provider issue/PR event timestamps and public package upload dates.",
+    "The complete creation-month census reveals concentration in July and November 2026; duration alone does not decide iterative-development adequacy.",
+    "No eligibility, human authorship, external adoption, research-use or submission attestation is made."
+  ]
+}

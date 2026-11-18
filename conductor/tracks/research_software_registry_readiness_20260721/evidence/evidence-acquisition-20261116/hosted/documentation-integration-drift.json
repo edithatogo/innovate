@@ -1,0 +1,12 @@
+{
+  "candidate_documentation_revision": "070a04424dfb084758d1c0b201bf2980002ea81d",
+  "active_assessed_source": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "changed_manuscript_inputs": [
+    "docs/astro-site/src/content/docs/native-migration.md",
+    "rust/crates/innovate-tabular/src/lib.rs"
+  ],
+  "method": "In a disposable input fixture, replace only the active snapshot inputs changed by the documented #671 head. Run the unchanged integrity checker. This is a drift diagnostic, not acceptance of that PR or a combined release.",
+  "exit_code": 1,
+  "stdout": "{\n  \"snapshot_valid\": false,\n  \"submission_ready\": false,\n  \"error\": \"Input digest mismatch: docs/astro-site/src/content/docs/native-migration.md\"\n}\n",
+  "stderr": ""
+}

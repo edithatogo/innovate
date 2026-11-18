@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-16T11:06:22.153803+00:00",
+  "scope": "Registry and new journal/Arrow tooling tests; no scientific qualification inferred from guard tests",
+  "source_commit_observed": "0c718cea3eb982717ce940560868004d71261e9b",
+  "source_state": "new implementation files uncommitted at this validation; input identities below",
+  "python": "3.15.2",
+  "pytest": "9.2.0",
+  "coverage": "7.17.3",
+  "ruff": "0.17.5",
+  "test_command": ".venv-registry-reconciliation/bin/python -m coverage run --branch --data-file=/tmp/innovate-preparation-validation/coverage.data --include='*/scripts/check_joss_readiness.py,*/joss/render.py' -m pytest tests/native/test_registry_readiness.py tests/native/test_joss_readiness.py tests/native/test_joss_render.py tests/native/test_scenario_arrow_qualification.py -o addopts='' -q",
+  "test_exit_code": 0,
+  "tests": {
+    "passed": 169,
+    "failed": 0,
+    "skipped": 0,
+    "groups": {
+      "registry": 56,
+      "joss_integrity": 50,
+      "render_guards": 18,
+      "arrow_qualifier_guards": 45
+    }
+  },
+  "input_sha256": {
+    "scripts/check_joss_readiness.py": "fe1f4d576d2bf7aa9138eb333596bf9f318479b155837352955574172228b4a2",
+    "scripts/qualify_scenario_arrow.py": "fe894db45329c4fd9906aec6a77f8bd87653b0a7d927ac4aeaed39e6e099b3db",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/render.py": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+    "tests/native/test_joss_readiness.py": "ec4763a99c5ca5e9afacfdc52795a49cef59ab784703d3c82fd28b19ef3df4c4",
+    "tests/native/test_joss_render.py": "bca989c7e1ded08a9ef85f08c95c3d4d078637d9f0d3f297aa1e1c94e58d3fd8",
+    "tests/native/test_scenario_arrow_qualification.py": "52c45f22b9d2826bfa2661c533ec3016f2ef916480fc1ea9fc4825cb51a1c7a6"
+  },
+  "measured_coverage": {
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/render.py": {
+      "covered_lines": 119,
+      "num_statements": 126,
+      "percent_covered": 91.56626506024097,
+      "percent_covered_display": "92",
+      "missing_lines": 7,
+      "excluded_lines": 0,
+      "percent_statements_covered": 94.44444444444444,
+      "percent_statements_covered_display": "94",
+      "num_branches": 40,
+      "num_partial_branches": 7,
+      "covered_branches": 33,
+      "missing_branches": 7,
+      "percent_branches_covered": 82.5,
+      "percent_branches_covered_display": "82"
+    },
+    "scripts/check_joss_readiness.py": {
+      "covered_lines": 135,
+      "num_statements": 140,
+      "percent_covered": 94.50549450549451,
+      "percent_covered_display": "95",
+      "missing_lines": 5,
+      "excluded_lines": 0,
+      "percent_statements_covered": 96.42857142857143,
+      "percent_statements_covered_display": "96",
+      "num_branches": 42,
+      "num_partial_branches": 3,
+      "covered_branches": 37,
+      "missing_branches": 5,
+      "percent_branches_covered": 88.0952380952381,
+      "percent_branches_covered_display": "88"
+    }
+  },
+  "coverage_limits": "Only the JOSS integrity checker and renderer wrapper are measured in this run. Arrow qualifier coverage is recorded separately with its real isolated worker.",
+  "ruff_check": "Passed E,F,I,UP,B with target py315 and line length 120; all six files format-clean",
+  "independent_review": "Automated independent source/evidence review; material findings corrected with regression tests; not author or scientific approval",
+  "submission_ready": false,
+  "external_outcomes_changed": false,
+  "portability_review": "Renderer guard tests model POSIX/WSL command execution using host-independent pure path checks; no Windows renderer claim. JOSS fixtures normalize Git CRLF before controlled mutations; real-repository check still reads actual checkout bytes."
+}

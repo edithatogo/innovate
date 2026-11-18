@@ -1,0 +1,16 @@
+{
+  "snapshot_valid": true,
+  "state": "unapproved_working_draft",
+  "software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "software_version": "0.7.0a1",
+  "source_files_checked": 14,
+  "edition_files_checked": 3,
+  "normalized_text_paths": [],
+  "required_sections_checked": 6,
+  "prose_word_count": 1076,
+  "submission_ready": false,
+  "git_revision_verified": false,
+  "scientific_qualification_performed": false,
+  "online_verification_performed": false,
+  "limits": "Structural and byte-identity checks only; rendering, research use and author/editorial decisions are separate."
+}

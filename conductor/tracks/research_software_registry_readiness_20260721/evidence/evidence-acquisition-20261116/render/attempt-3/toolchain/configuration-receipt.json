@@ -1,0 +1,62 @@
+{
+  "scope": "Owned Linux x86_64 local PDF environment; no author/scientific/submission acceptance",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "pandoc_sha256": "21ac4e8961e8e31d6ae7a8050152a0cef4b37c2eb66b4ad5a84fc84cd15c0a6c",
+  "font_sha256": {
+    "texmf-local/fonts/truetype/hack/Hack-Bold.ttf": "5bbf531eff7f8a0c2559c9a0656718e2828a012a9b1f60b5f54006d59a4de8d4",
+    "texmf-local/fonts/truetype/hack/Hack-BoldItalic.ttf": "64f74a079700b7dfe128551a1e28875d5ba980971e55f5e0f0596e37bdc6a6bc",
+    "texmf-local/fonts/truetype/hack/Hack-Italic.ttf": "096fb67a2b85f3c866e9cb3e965b27c2c10b977315f4d3d7f095674be35091c1",
+    "texmf-local/fonts/truetype/hack/Hack-Regular.ttf": "15f55cc0c85a2988d2b4b3a8cdb5d77fdfbaf319e1bb5309d725db9818fb7125",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Black.ttf": "5c19026df067a7f2dc15321e98dbbdf40ec00cd61f956c1e5a466d9f272bf685",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-BlackItalic.ttf": "400f7c31c3320c5aa81736b8856ecb72a917e664fbc3b3e66b52a49e6a3994aa",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Bold.ttf": "f93c350295b34f5c3b70f93083ac90985ac19cbc86c71f45da1c558429e6f16e",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-BoldItalic.ttf": "f26946fcf5bb6e9106fb12dfd9e5617ad6322b1bfd8839b3fae6265f2cb705aa",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-ExtraBold.ttf": "5d244e8202e925601f4a36d0d8035782bcb0487e71b5975cf60b84133144b973",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-ExtraBoldItalic.ttf": "1f8bcc90c56bbb842acce8082452bac4e44692117556c851a0b8025730819856",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-ExtraLight.ttf": "f906fde6d4795d20baa5f65544b9d085aa5c3a8141bfe6f4ec6a7ab3af6e5c03",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-ExtraLightItalic.ttf": "0a7817f03a8e92037a9c81b50418c7bd8bcc5c0d2a40992241960cbbb84a662e",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Italic-VariableFont_wght.ttf": "eb0976d48d7aa43448966045c1a7a8e01cbf30477ad69f677d6431c27bc4ce13",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Italic.ttf": "40f89d6f9c5b4e265fb89487bd92886bec1511e87cef1d24b1a9c40b1e30259c",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Light.ttf": "819b8302250d5d73d329746008cbb3ae36d0922531c5ca8a030728f2080c2e95",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-LightItalic.ttf": "a62aab30e632a5faa1cf253d19a00a815263ec3ee1c0d1d20c6abb8f203f51d3",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Medium.ttf": "45e9ccefbfff050cb2056b6631c5ea53292c140d5097b7e96713ce9f44e908e0",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-MediumItalic.ttf": "1cd7517d6b46ec2536ab0745b6ca6f5f4f6c6145f34355b31aeb0587bf4ec4aa",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Regular.ttf": "869aa8807b4ac50634af49ada9f0d7acb3a3a0e4e332140ac55825677b4e7985",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-SemiBold.ttf": "b89088a805284e1e9e725e2f47d1e68cc525e5613e025116c6d988f084d2033c",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-SemiBoldItalic.ttf": "3bfa8e5e677089a6a3d80e474672a63761d349c8db84561874319f2968ca493b",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-Thin.ttf": "32c27cb7bd03b0879386b5c61339a7c55cc0fa7613ee994e15587ef626121e62",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-ThinItalic.ttf": "581b052eb02c1cfc233566d74a5dc17842a0945b3e16259479d8efbe08e650e8",
+    "texmf-local/fonts/truetype/libre-franklin/LibreFranklin-VariableFont_wght.ttf": "583144e16aa9faf9752e4686f52396ba4b7242249ff7f416b2fbc6848d4bf87b"
+  },
+  "commands": [
+    {
+      "stage": "format-build",
+      "argv": [
+        "luahbtex",
+        "--ini",
+        "--interaction=nonstopmode",
+        "--halt-on-error",
+        "--jobname=lualatex",
+        "--progname=lualatex",
+        "lualatex.ini"
+      ],
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/var/web2c/luahbtex",
+      "exit_code": 0,
+      "log_sha256": "65503962a6b1ef6e571e963851cb15b6c2c68727cbd75ac9cc59ad16694c8496"
+    },
+    {
+      "stage": "font-cache",
+      "argv": [
+        "luaotfload-tool",
+        "--update",
+        "--force"
+      ],
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "format_sha256": "5ec1b55442adabab18171db8d1900a40cc2eb8926307db8754a8eaac0eec1c16",
+  "configuration_script_sha256": "7432f80fa27cb274aec51bd2a16aea8cf85dd52184e7b90aa0e9815df0c55849",
+  "status": "configured"
+}

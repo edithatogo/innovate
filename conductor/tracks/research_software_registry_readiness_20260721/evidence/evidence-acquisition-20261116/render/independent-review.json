@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-11-16",
+  "reviewer": "ChatGPT GPT-6 Astra Pro independent review agent; not author or human approval",
+  "status": "no_unresolved_blocking_helper_finding; draft_visual_limitations_recorded",
+  "scope": "Read-only review of the scoped Linux PDF acquisition/reproduction helpers, preserved execution evidence and attempt-4 draft PDF; only these independent review records were added",
+  "repository_head_observed": "2748084292e5e57c181c1665a686ad3a291145bf",
+  "assessed_software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "reviewed_files_sha256": {
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/build_pdf_environment.py": "a985be16f46d2a8171daccc3a4ad687d1d31a4a2e05016c6720ece9812ed6231",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/configure_pdf_environment.py": "c0ca120d679c91f4c10fd3ffb3ed012924ee1dde531f911fda1cb985436b3e8c",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/reproduce.md": "32dc311b89399150cbbf6393e186c0d6735e7198d29eeb176b27d9732ba018b3",
+    "tests/native/test_joss_environment.py": "fa7421cff76891d9d7fd5cf784083fade845c3a22996b8f972830dd914b3feac",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/guarded-setup/receipt.json": "6dd4a1c9baec381e9b7dd053a8bfe0596413478a1a653a7ba78df28825eb2a2e",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/guarded-setup/configuration-receipt.json": "36ef0fab13a6db4a0a8793a98233a21d60d2549057eaf3dfdf706babce965014",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4/receipt.json": "950353aec45dcab855e53ca0501eff7bfb172b3fc54f7c25a43eaa40b517967b",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4/visual-review.json": "a223a0ed5179b816b10cc92093b0ee10510cb00dc4633c00288175b3d94c4665"
+  },
+  "guard_test_execution": {
+    "argv": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "-B",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "tests/native/test_joss_environment.py"
+    ],
+    "cwd": "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence",
+    "python": "3.15.2",
+    "exit_code": 0,
+    "observed_result": "15 passed in 0.10s",
+    "scope": "Offline synthetic guard tests; not a new PDF render or cross-platform execution"
+  },
+  "independent_real_cli_regressions": [
+    {
+      "case": "existing setup root preserves previous database",
+      "exit_code": 1,
+      "stderr": "Refusing to reuse existing setup root: /tmp/joss-guard-independent-h8lthvef/retained",
+      "retained_bytes_unchanged": true
+    },
+    {
+      "case": "unpinned database rejected before parent creation",
+      "exit_code": 1,
+      "stderr": "TeX Live database does not match the pinned SHA-256; no setup files were written",
+      "no_setup_writes": true
+    }
+  ],
+  "preserved_original_executed_helpers": {
+    "build_pdf_environment.py": {
+      "sha256": "76c3bfcf76746e3db5dc1bf13a697eb6e4921453a183cdfe2db3f29b28d81c82",
+      "preserved_exactly": true
+    },
+    "configure_pdf_environment.py": {
+      "sha256": "7432f80fa27cb274aec51bd2a16aea8cf85dd52184e7b90aa0e9815df0c55849",
+      "preserved_exactly": true
+    }
+  },
+  "original_environment_verification": {
+    "receipt": "attempt-3/toolchain/environment-receipt.json",
+    "receipt_sha256": "549c478ce5e9be294abeb2f2ed94180a9dca56a2a8baabab1f5819efc1dbff2b",
+    "package_manifest": "attempt-3/toolchain/package-manifest.json",
+    "package_manifest_sha256": "c383dfeaf43a8ba7fab33dfa12f53c2e60c910e0c36d34e5b83a32e286833a0b",
+    "archive_count": 241,
+    "archive_bytes": 47572856,
+    "all_archive_sha512_and_sizes_verified": true,
+    "all_24_configured_font_hashes_and_pinned_git_blobs_verified": true,
+    "all_six_recorded_tool_binary_hashes_verified": true,
+    "original_pdf_environment_retained": true
+  },
+  "guarded_setup_replay_verification": {
+    "all_three_top_level_commands_exit_zero": true,
+    "configuration_commands_exit_zero": true,
+    "logs_verified": {
+      "package-bootstrap.log": "fc47d9e1b5731632342cbffbe91afd042fb5c7ab28bd9010e8fdfa389962aedd",
+      "inara-clone.log": "4e418599ddc9d0e37de2915943c1243cdef9124636a25ad452dbb6b09df98615",
+      "configuration.log": "180c0dfc3a7df191a4619bbda3dd0c49cd677ca74f39c45cd2d74a833181f76f",
+      "format-build.log": "067798ae6760ea6fcc4d7a2c48674766983e2aa453d096111ea2d9b8d841a932",
+      "font-cache.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "manifest_sha256": "c383dfeaf43a8ba7fab33dfa12f53c2e60c910e0c36d34e5b83a32e286833a0b",
+    "archive_count": 241,
+    "archive_bytes": 47572856,
+    "archive_hashes_sizes_verified": true,
+    "configured_fonts_count": 24,
+    "font_bytes_match_original_and_record": true,
+    "pandoc_matches_original": true,
+    "tools_verified": {
+      "luahbtex": {
+        "sha256": "67b937ab25e5204773bd17b3729c880b220e05940bdc4a0f6b4a7a2b120f1eb6",
+        "resolves_inside_owned_tex": true
+      },
+      "lualatex": {
+        "sha256": "67b937ab25e5204773bd17b3729c880b220e05940bdc4a0f6b4a7a2b120f1eb6",
+        "resolves_inside_owned_tex": true
+      },
+      "latexmk": {
+        "sha256": "6f172e0c4f222b2b5407ab87e6d86616a7f0823b8307132b6aea4713e4a3c567",
+        "resolves_inside_owned_tex": true
+      },
+      "kpsewhich": {
+        "sha256": "449f286d0bda83535300e23e36bd9eeb15e233a02bb53a3966ec92fbbaa8b706",
+        "resolves_inside_owned_tex": true
+      }
+    },
+    "format_bytes_match_receipt": true,
+    "environment_copy_matches": true,
+    "pdf_render_performed": false
+  },
+  "resolved_findings": [
+    {
+      "finding": "Existing setup roots could be overwritten before invalid database input was rejected",
+      "fix": "Reject existing file/directory/symlink roots; check pinned database SHA-256 and complete package selection before setup writes; reproduction shell refuses any existing tools path before atomic mkdir",
+      "verification": "Focused guard tests plus two independent actual CLI negative executions; fresh cached setup exits zero"
+    },
+    {
+      "finding": "Pinned Git HEAD alone did not bind copied font/license bytes or exclude extra font files",
+      "fix": "Compare exact copied-file inventory and bytes against the pinned Git blobs; reject symlinks, missing files, modified bytes and untracked/ignored extras",
+      "verification": "Negative/positive guard tests; original 24 fonts independently matched Git blobs; fresh configuration font hashes equal the original environment"
+    },
+    {
+      "finding": "Setup could select a system TeX command if an expected owned executable was missing",
+      "fix": "Require executable paths to resolve within the supplied owned TeX tree and invoke the owned paths directly",
+      "verification": "Missing/outside/nonexecutable guard tests; guarded configuration command paths and executed format/font-cache log hashes verified"
+    }
+  ],
+  "extraction_and_recipe_inspection": {
+    "tex_archive_extraction_filter": "tarfile data filter",
+    "archives_checked_before_extraction": true,
+    "pinned_database_sha256": "60b9f8f8893d591d220d2f4f8dda3f686caa165efe78aa0ccc8dec80d48799aa",
+    "pandoc_archive_sha256_in_documented_recipe": "5def6e1ff535e397becce292ee97767a947306150b9fb1488003b67ac3417c5e",
+    "documented_inara_revision": "88ee5d656f147d801448ce77ad8375619d383df6",
+    "documented_hack_revision": "b47d21f808fbf4784565feccde2213ef2af924b3",
+    "scope": "Code and command-order inspection plus actual cached Linux setup; no repeated full network acquisition, malicious-archive fuzz campaign or other-platform qualification"
+  },
+  "final_pdf": {
+    "path": "attempt-4/paper.pdf",
+    "sha256": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+    "bytes": 207798,
+    "pages": 4,
+    "original_render_receipt": "attempt-4/receipt.json",
+    "original_render_receipt_sha256": "950353aec45dcab855e53ca0501eff7bfb172b3fc54f7c25a43eaa40b517967b",
+    "all_three_current_inputs_and_four_outputs_match_original_render_receipt": true,
+    "input_sha256": {
+      "paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+      "paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+      "source-snapshot.json": "a62b7b9a08c3aa44372aaa6dcd3ff26fd3cdd7269bcead0a16b0bd818f9e57c5"
+    },
+    "output_sha256": {
+      "bibliography.json": "281ff0bd5e63b29459763aae210353073a7d77d378e8e0471542427027f76c6a",
+      "paper.tex": "c6d5361e752cf0cd64dd5c016d6a6176b0dc143aa36fdf29895333fe4d09f17e",
+      "paper.pdf": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+      "render.log": "4b10a5e9ba5f9a1996c84a37e7fce01789d52487db3c7d91e3a223399eecde0e"
+    },
+    "unchanged_renderer_sha256": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+    "independent_page_rendering": {
+      "pdf": "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf",
+      "pdf_sha256": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+      "pdf_bytes": 207798,
+      "render_command": [
+        "pdftoppm",
+        "-r",
+        "150",
+        "-png",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf",
+        "/workspace/scratch/e4108ca2b049/tmp/pdfs/joss-attempt4-independent-tf6ocsk6/page"
+      ],
+      "renderer": "pdftoppm version 26.05.0",
+      "page_images": [
+        {
+          "path": "/workspace/scratch/e4108ca2b049/tmp/pdfs/joss-attempt4-independent-tf6ocsk6/page-1.png",
+          "sha256": "7acd878e7ae41160e9b19310b4f21d861b0acde0531b1599cf029049b011cd3c"
+        },
+        {
+          "path": "/workspace/scratch/e4108ca2b049/tmp/pdfs/joss-attempt4-independent-tf6ocsk6/page-2.png",
+          "sha256": "78eb63710a2e3c1433ab839e98f5bc2177a5168f65d133e503e540dcae32e317"
+        },
+        {
+          "path": "/workspace/scratch/e4108ca2b049/tmp/pdfs/joss-attempt4-independent-tf6ocsk6/page-3.png",
+          "sha256": "b01ff46731c4753768a57d034adb38b9b1ce2caa613672f1885d9c5a6d58ce49"
+        },
+        {
+          "path": "/workspace/scratch/e4108ca2b049/tmp/pdfs/joss-attempt4-independent-tf6ocsk6/page-4.png",
+          "sha256": "b3a49d7a759634eb83abda956da005cf2c49bd7ecb12cdad9f59edaa6e24677c"
+        }
+      ]
+    },
+    "all_four_page_images_visually_inspected": true,
+    "all_four_page_png_hashes_match_author_review": true,
+    "reference_link_check": {
+      "pdf_sha256": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+      "pages": 4,
+      "all_five_expected_reference_doi_annotations_present": true,
+      "expected_reference_dois": [
+        "https://doi.org/10.1007/s41060-017-0086-6",
+        "https://doi.org/10.1016/S0040-1625(71)80005-7",
+        "https://doi.org/10.1287/mnsc.15.5.215",
+        "https://doi.org/10.21105/joss.07668",
+        "https://doi.org/10.7717/peerj-cs.1516"
+      ],
+      "uri_annotations": [
+        {
+          "page": 1,
+          "uri": "https://orcid.org/0000-0002-9775-0603"
+        },
+        {
+          "page": 1,
+          "uri": "https://doi.org/10.xxxxxx/draft"
+        },
+        {
+          "page": 1,
+          "uri": "https://github.com/openjournals"
+        },
+        {
+          "page": 1,
+          "uri": "https://github.com/openjournals"
+        },
+        {
+          "page": 1,
+          "uri": "https://doi.org/10.5281"
+        },
+        {
+          "page": 1,
+          "uri": "https://joss.theoj.org"
+        },
+        {
+          "page": 1,
+          "uri": "https://github.com/openjournals"
+        },
+        {
+          "page": 1,
+          "uri": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        {
+          "page": 1,
+          "uri": "https://doi.org/10.xxxxxx/draft"
+        },
+        {
+          "page": 2,
+          "uri": "https://doi.org/10.xxxxxx/draft"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.7717/peerj-cs.1516"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1287/mnsc.15.5.215"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1016/S0040-1625(71)80005-7"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1016/S0040-1625(71)80005-7"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1016/S0040-1625(71)80005-7"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1007/s41060-017-0086-6"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1007/s41060-017-0086-6"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.1007/s41060-017-0086-6"
+        },
+        {
+          "page": 3,
+          "uri": "https://doi.org/10.xxxxxx/draft"
+        },
+        {
+          "page": 4,
+          "uri": "https://doi.org/10.21105/joss.07668"
+        },
+        {
+          "page": 4,
+          "uri": "https://doi.org/10.xxxxxx/draft"
+        }
+      ]
+    },
+    "observations": [
+      "Body text, headings, source/draft notice and five references are readable; no clipped body text, missing glyphs or unresolved citation keys observed",
+      "The Mesa in-text citation and bibliography both retain ter Hoeven after the edition-specific correction",
+      "Page-one licence sidebar crowds/overlaps line-number positions around 16-19; this is not a zero-overlap or publication-layout pass",
+      "Only the fifth reference continues onto page four; substantial whitespace remains without missing reference content",
+      "Official draft DOI, submitted date, editor/reviewer and volume/issue/page placeholders remain and are not evidence of real editorial events or approval"
+    ],
+    "separate_author_agent_visual_receipt": "attempt-4/visual-review.json",
+    "separate_visual_receipt_sha256": "a223a0ed5179b816b10cc92093b0ee10510cb00dc4633c00288175b3d94c4665",
+    "original_render_receipt_visual_review_remains": "not_performed"
+  },
+  "provenance_distinction": "Attempt 4 was produced in the original environment with the preserved pre-fix acquisition helpers; the guarded setup replay ran afterwards in fresh directories and did not render another PDF.",
+  "submission_ready": false,
+  "author_approved": false,
+  "scientific_or_release_qualification": false,
+  "limits": [
+    "Readable draft preparation and bounded setup guards only",
+    "No PDF/A, tagged accessibility, complete Inara container or cross-platform qualification",
+    "Research use, authorship/affiliation confirmation, licensing/rights selection and final editorial metadata remain separate pending evidence"
+  ]
+}

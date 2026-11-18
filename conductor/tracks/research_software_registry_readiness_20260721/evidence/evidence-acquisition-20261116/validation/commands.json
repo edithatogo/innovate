@@ -1,0 +1,46 @@
+[
+  {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_registry_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "log": "check_registry_readiness.log"
+  },
+  {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "log": "check_joss_readiness.log"
+  },
+  {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_repository_policy.py"
+    ],
+    "exit_code": 0,
+    "log": "check_repository_policy.log"
+  },
+  {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/conductor_registry_hygiene.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "log": "conductor_registry_hygiene.log"
+  },
+  {
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_migration.py",
+      "--release"
+    ],
+    "exit_code": 1,
+    "log": "check_migration.log"
+  }
+]

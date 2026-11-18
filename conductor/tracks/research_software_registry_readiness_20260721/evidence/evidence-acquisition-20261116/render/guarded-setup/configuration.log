@@ -1,0 +1,2 @@
+format-build: exit 0; /workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/configured/format-build.log
+font-cache: exit 0; /workspace/scratch/e4108ca2b049/joss-render-complete-20261116/guarded-replay/configured/font-cache.log

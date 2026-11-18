@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "status": "configured_and_archives_verified",
+  "scope": "Owned Linux x86_64 local Inara Makefile PDF environment, not the complete official container or a release/submission gate",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "system_teX_modified": false,
+  "other_worker_environments_modified": false,
+  "inara": {
+    "url": "https://github.com/openjournals/inara",
+    "revision": "88ee5d656f147d801448ce77ad8375619d383df6",
+    "checkout": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+    "acquisition": "git clone --no-hardlinks from previously verified owned checkout; no tracked source changes"
+  },
+  "hack": {
+    "url": "https://github.com/source-foundry/Hack",
+    "revision": "b47d21f808fbf4784565feccde2213ef2af924b3",
+    "tag": "v3.003",
+    "source": "/workspace/scratch/e4108ca2b049/joss-render-tools/hack"
+  },
+  "pandoc": {
+    "version": "3.6.4",
+    "archive_url": "https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-amd64.tar.gz",
+    "archive_sha256": "5def6e1ff535e397becce292ee97767a947306150b9fb1488003b67ac3417c5e",
+    "binary_sha256": "21ac4e8961e8e31d6ae7a8050152a0cef4b37c2eb66b4ad5a84fc84cd15c0a6c",
+    "acquisition": "Reused previously acquired official archive/executable; hash checked again"
+  },
+  "package_database": {
+    "url": "https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2024/tlnet-final/tlpkg/texlive.tlpdb.xz",
+    "sha256": "60b9f8f8893d591d220d2f4f8dda3f686caa165efe78aa0ccc8dec80d48799aa"
+  },
+  "verified_archives": {
+    "count": 241,
+    "bytes": 47572856,
+    "algorithm": "SHA-512 plus exact archive size",
+    "package_manifest_sha256": "c383dfeaf43a8ba7fab33dfa12f53c2e60c910e0c36d34e5b83a32e286833a0b"
+  },
+  "recipes": {
+    "build_pdf_environment.py": "76c3bfcf76746e3db5dc1bf13a697eb6e4921453a183cdfe2db3f29b28d81c82",
+    "configure_pdf_environment.py": "7432f80fa27cb274aec51bd2a16aea8cf85dd52184e7b90aa0e9815df0c55849"
+  },
+  "commands": [
+    {
+      "stage": "package_bootstrap",
+      "interpreter_version": "Python 3.12.14",
+      "exit_code": 0,
+      "argv": [
+        "python",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/build_pdf_environment.py",
+        "--root",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure",
+        "--database",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/texlive-2024-final.tlpdb.xz",
+        "--reuse-archives",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/closure-complete/archives"
+      ]
+    },
+    {
+      "stage": "configure",
+      "interpreter_version": "Python 3.15.2",
+      "exit_code": 0,
+      "argv": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configure_pdf_environment.py",
+        "--output",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base",
+        "--texlive",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive",
+        "--inara",
+        "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+        "--hack",
+        "/workspace/scratch/e4108ca2b049/joss-render-tools/hack",
+        "--pandoc",
+        "/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc"
+      ]
+    }
+  ],
+  "tools": {
+    "luahbtex": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/luahbtex",
+      "resolved_path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/luahbtex",
+      "sha256": "67b937ab25e5204773bd17b3729c880b220e05940bdc4a0f6b4a7a2b120f1eb6",
+      "version_exit_code": 0,
+      "version_output": "This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)\nDevelopment id: 7611\n\nExecute  'luahbtex --credits'  for credits and version details.\n\nThere is NO warranty. Redistribution of this software is covered by\nthe terms of the GNU General Public License, version 2 or (at your option)\nany later version. For more information about these matters, see the file\nnamed COPYING and the LuaTeX source.\n\nLuaTeX is Copyright 2022 Taco Hoekwater and the LuaTeX Team."
+    },
+    "lualatex": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/lualatex",
+      "resolved_path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/luahbtex",
+      "sha256": "67b937ab25e5204773bd17b3729c880b220e05940bdc4a0f6b4a7a2b120f1eb6",
+      "version_exit_code": 0,
+      "version_output": "This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)\nDevelopment id: 7611\n\nExecute  'luahbtex --credits'  for credits and version details.\n\nThere is NO warranty. Redistribution of this software is covered by\nthe terms of the GNU General Public License, version 2 or (at your option)\nany later version. For more information about these matters, see the file\nnamed COPYING and the LuaTeX source.\n\nLuaTeX is Copyright 2022 Taco Hoekwater and the LuaTeX Team."
+    },
+    "latexmk": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/latexmk",
+      "resolved_path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/texmf-dist/scripts/latexmk/latexmk.pl",
+      "sha256": "6f172e0c4f222b2b5407ab87e6d86616a7f0823b8307132b6aea4713e4a3c567",
+      "version_exit_code": 0,
+      "version_output": "Latexmk, John Collins, 27 Dec. 2024. Version 4.86a"
+    },
+    "kpsewhich": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/kpsewhich",
+      "resolved_path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/kpsewhich",
+      "sha256": "449f286d0bda83535300e23e36bd9eeb15e233a02bb53a3966ec92fbbaa8b706",
+      "version_exit_code": 0,
+      "version_output": "kpathsea version 6.4.0\nCopyright 2023 Karl Berry & Olaf Weber.\nLicense LGPLv2.1+: GNU Lesser GPL version 2.1 or later <https://gnu.org/licenses/lgpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "resolved_path": "/usr/bin/make",
+      "sha256": "8a229baf64671988cfb5af43ba3070c6ce7214cf32bcf96155115559d1466fa7",
+      "version_exit_code": 0,
+      "version_output": "GNU Make 4.4.1\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law."
+    },
+    "perl": {
+      "path": "/usr/bin/perl",
+      "resolved_path": "/usr/bin/perl",
+      "sha256": "b85210f03baeb859ee20b1324e59497f27f319eda9e2d3d1ecd163a79d884a7d",
+      "version_exit_code": 0,
+      "version_output": "This is perl 5, version 40, subversion 1 (v5.40.1) built for x86_64-linux-gnu-thread-multi\n(with 70 registered patches, see perl -V for more detail)\n\nCopyright 1987-2025, Larry Wall\n\nPerl may be copied only under the terms of either the Artistic License or the\nGNU General Public License, which may be found in the Perl 5 source kit.\n\nComplete documentation for Perl, including FAQ lists, should be found on\nthis system using \"man perl\" or \"perldoc perl\".  If you have access to the\nInternet, point your browser at https://www.perl.org/, the Perl Home Page."
+    }
+  },
+  "configuration_artifact_sha256": {
+    "configuration-receipt.json": "0e53e33126e00823e7774be29e9f3e5368fa551e084456dd16d9aee45e6ada41",
+    "font-cache.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "format-build.log": "65503962a6b1ef6e571e963851cb15b6c2c68727cbd75ac9cc59ad16694c8496",
+    "package-manifest.json": "c383dfeaf43a8ba7fab33dfa12f53c2e60c910e0c36d34e5b83a32e286833a0b",
+    "render-env.json": "73d8265cf700f4398d4c2841149181611deb3ec43bd4ce22955271926b6ce660"
+  },
+  "limitations": [
+    "Package checksums preserve archive identity; they are not scientific or author approval.",
+    "The final successful/failed manuscript stage is recorded separately by the unchanged renderer.",
+    "ConTeXt/JATS, PDF/A validation, tagged accessibility and other operating systems were not qualified."
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-11-16T11:18:48.993002+00:00",
+  "source_commit": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "source_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "main_source_revision": "57d2916586d107c8affe90355e453abe27f01c26",
+  "python_version": "Python 3.15.2",
+  "registry_input_verification": {
+    "CITATION.cff": {
+      "expected_sha256": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+      "observed_sha256": {
+        "worktree": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+        "69b674814513e09a683279c679b1584af8bb4214": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+        "57d2916586d107c8affe90355e453abe27f01c26": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384"
+      },
+      "unchanged": true
+    },
+    "LICENSE": {
+      "expected_sha256": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+      "observed_sha256": {
+        "worktree": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+        "69b674814513e09a683279c679b1584af8bb4214": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+        "57d2916586d107c8affe90355e453abe27f01c26": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648"
+      },
+      "unchanged": true
+    },
+    "pyproject.toml": {
+      "expected_sha256": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+      "observed_sha256": {
+        "worktree": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+        "69b674814513e09a683279c679b1584af8bb4214": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395",
+        "57d2916586d107c8affe90355e453abe27f01c26": "888cfd6e4611a6e8c526db96e34b0d85167fb20f3dea6fb37b537fe6dd6ee395"
+      },
+      "unchanged": true
+    },
+    "migration-ledger.json": {
+      "expected_sha256": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+      "observed_sha256": {
+        "worktree": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+        "69b674814513e09a683279c679b1584af8bb4214": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+        "57d2916586d107c8affe90355e453abe27f01c26": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5"
+      },
+      "unchanged": true
+    }
+  },
+  "checks": [
+    {
+      "name": "policy",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/check_repository_policy.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "Repository policy: PASS\nLocal files: PASS\nLive settings: NOT_CHECKED (none)\nLocal policy is not proof of live enforcement, bot activity or coverage delivery.\n",
+      "stderr": ""
+    },
+    {
+      "name": "conductor_hygiene",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/conductor_registry_hygiene.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "{\n  \"active_root\": \"conductor/tracks\",\n  \"archive_root\": \"conductor/archive\",\n  \"missing_active_directories\": [],\n  \"missing_archive_directories\": [],\n  \"missing_links\": [],\n  \"orphan_archive_directories\": [],\n  \"registered_active_directories\": [\n    \"empirical_validation_publication_20261107\",\n    \"kairos_runtime_boundary_20261107\",\n    \"research_software_registry_readiness_20260721\",\n    \"rust_kairos_crates_io_20261115\",\n    \"scientific_ecosystem_alignment_20261029\",\n    \"semi_markov_competing_risks_20261110\",\n    \"tobac_consumer_qualification_20261025\"\n  ],\n  \"registry\": \"conductor/tracks.md\",\n  \"schema_version\": 1,\n  \"stale_active_directories\": [],\n  \"summary\": {\n    \"active_directories\": 7,\n    \"missing_active_directories\": 0,\n    \"missing_archive_directories\": 0,\n    \"missing_links\": 0,\n    \"orphan_archive_directories\": 0,\n    \"registered_active_entries\": 7,\n    \"registry_entries\": 118,\n    \"stale_active_directories\": 0,\n    \"wrong_link_targets\": 0\n  },\n  \"wrong_link_targets\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "versions",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/sync_versions.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "Native development version mapping valid; release remains gated\n",
+      "stderr": ""
+    },
+    {
+      "name": "migration_development",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/check_migration.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "Native development policy valid; 38 feature obligations still block release\n",
+      "stderr": ""
+    },
+    {
+      "name": "migration_release",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/check_migration.py",
+        "--release"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "Release blocked: scientific migration and acceptance remain incomplete: bass, complementary_goods, composite, fisher_pry, gompertz, hierarchical, latent_process, lock_in, logistic, lotka_volterra, mixture, multi_product, network_diffusion, norton_bass, policy_hazard, regime_switching, covariates_and_events, multi_generation_substitution, competitive_ecosystems, hierarchical_mixture_inference, latent_regime_models, network_policy_diffusion, kairos_des_abm, bayesian_inference, bootstrap_uncertainty, batch_fitting, preprocessing, causal_analysis, adopter_classification, data_ingestion_provenance_validation, scenario_registry_execution, explainability_sensitivity_reporting, benchmark_model_cards, plugin_contracts, remote_execution, accelerator_hpc, voiage_arrow_handoff, calibration_identifiability\n",
+      "stderr": ""
+    },
+    {
+      "name": "registry_pending_record",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/check_registry_readiness.py",
+        "--json"
+      ],
+      "exit_code": 0,
+      "expected_exit_code": 0,
+      "stdout": "{\n  \"assessed_revision\": \"57d2916586d107c8affe90355e453abe27f01c26\",\n  \"destinations\": [\n    {\n      \"issue\": 399,\n      \"key\": \"software_heritage\",\n      \"outstanding\": [\n        \"Select an archival target from the recorded historical release/tag inventory or a later qualified native release; target identity inventory does not supply the required rights/release decision.\",\n        \"The two exact origin lookups returned 404 again on 16 November 2026; retain an actual archive-request receipt and successful visit/snapshot for the selected release.\",\n        \"Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion.\"\n      ],\n      \"state\": \"pending\"\n    },\n    {\n      \"issue\": 400,\n      \"key\": \"rrid\",\n      \"outstanding\": [\n        \"Complete a live duplicate check by resource name and canonical repository identity; the 16 November 2026 HTTP 403/non-JSON response did not establish absence.\",\n        \"Retain the actual submission receipt and curator decision for the root Innovate resource.\",\n        \"Verify the assigned RRID resolver identifies this repository before advertising an identifier.\"\n      ],\n      \"state\": \"pending\"\n    },\n    {\n      \"issue\": 401,\n      \"key\": \"joss\",\n      \"outstanding\": [\n        \"Complete the official draft PDF build and visual inspection in a complete TeX environment after the recorded BibTeX/citeproc/TeX success; local compilation stops at missing luacode.sty. Reconcile claims with accepted source, research use and author declarations; source-integrity checks remain preparation only.\",\n        \"Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.\",\n        \"Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.\",\n        \"Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier.\"\n      ],\n      \"state\": \"pending\"\n    }\n  ],\n  \"online_verification_performed\": false,\n  \"pending_issues\": [\n    399,\n    400,\n    401\n  ],\n  \"record_valid\": true,\n  \"recorded_complete\": false,\n  \"schema_version\": 1,\n  \"software_version\": \"0.7.0a1\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "registry_completion",
+      "command": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "scripts/check_registry_readiness.py",
+        "--require-complete",
+        "--json"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "{\n  \"assessed_revision\": \"57d2916586d107c8affe90355e453abe27f01c26\",\n  \"destinations\": [\n    {\n      \"issue\": 399,\n      \"key\": \"software_heritage\",\n      \"outstanding\": [\n        \"Select an archival target from the recorded historical release/tag inventory or a later qualified native release; target identity inventory does not supply the required rights/release decision.\",\n        \"The two exact origin lookups returned 404 again on 16 November 2026; retain an actual archive-request receipt and successful visit/snapshot for the selected release.\",\n        \"Resolve the selected revision or release SWHID and verify its origin/release relationship before recording archival completion.\"\n      ],\n      \"state\": \"pending\"\n    },\n    {\n      \"issue\": 400,\n      \"key\": \"rrid\",\n      \"outstanding\": [\n        \"Complete a live duplicate check by resource name and canonical repository identity; the 16 November 2026 HTTP 403/non-JSON response did not establish absence.\",\n        \"Retain the actual submission receipt and curator decision for the root Innovate resource.\",\n        \"Verify the assigned RRID resolver identifies this repository before advertising an identifier.\"\n      ],\n      \"state\": \"pending\"\n    },\n    {\n      \"issue\": 401,\n      \"key\": \"joss\",\n      \"outstanding\": [\n        \"Complete the official draft PDF build and visual inspection in a complete TeX environment after the recorded BibTeX/citeproc/TeX success; local compilation stops at missing luacode.sty. Reconcile claims with accepted source, research use and author declarations; source-integrity checks remain preparation only.\",\n        \"Establish research use, iterative public development and current source-bound scientific, installation, testing and release evidence.\",\n        \"Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.\",\n        \"Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier.\"\n      ],\n      \"state\": \"pending\"\n    }\n  ],\n  \"online_verification_performed\": false,\n  \"pending_issues\": [\n    399,\n    400,\n    401\n  ],\n  \"record_valid\": true,\n  \"recorded_complete\": false,\n  \"schema_version\": 1,\n  \"software_version\": \"0.7.0a1\"\n}\n",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Track preparation files are being updated in this worktree; this receipt does not identify the eventual published documentation commit.",
+    "No native test, external provider result or live GitHub policy enforcement is inferred from these repository checks."
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "inspected_on": "2026-11-16",
+  "status": "actual_version_bound_research_use_not_established_in_inspected_sources",
+  "research_use_established": false,
+  "candidates": [
+    {
+      "id": "genomic-budget-impact-paper",
+      "classification": "published research; Innovate implementation lineage unverified",
+      "sources": {
+        "publisher": "https://www.valueinhealthjournal.com/article/S1098-3015%2825%2905624-4/fulltext",
+        "pubmed": "https://pubmed.ncbi.nlm.nih.gov/41106549/",
+        "doi": "https://doi.org/10.1016/j.jval.2025.09.3067",
+        "institutional_record": "https://researchnow.flinders.edu.au/en/publications/genomic-testing-in-australia-a-budget-impact-analysis-using-diffu/",
+        "institutional_pdf": "https://researchnow.flinders.edu.au/files/226224074/Mordaunt_Genomic_P2026.pdf"
+      },
+      "findings": [
+        "The primary bibliographic/abstract and institutional records identify the genomic-testing budget-impact study and its authors.",
+        "The study reports analysis of historical Australian MBS claims, diffusion/time-series models and 2025–2034 projections.",
+        "Accessible records and inspected indexed publisher excerpts did not establish an Innovate version, commit, analysis repository or output-producing environment."
+      ],
+      "retrieval_limits": [
+        "The new institutional PDF route returned HTTP 403 through both the browser retrieval service and a direct public HTTP read.",
+        "The publisher full text and ScienceDirect also returned HTTP 403 when opened; search excerpts are not treated as complete inspection.",
+        "Earlier exact-DOI/repository searches are recorded in the existing JOSS README and were not treated as a new independent use attestation."
+      ],
+      "missing": [
+        "Actual analysis source/archive and Innovate version/commit or artifact identity",
+        "Environment and exact input provenance",
+        "Commands and mapping from archived outputs to the paper"
+      ],
+      "research_use_established": false
+    },
+    {
+      "id": "tobac-consumer",
+      "classification": "documented assessment and explicitly unexecuted historical integration",
+      "sources": {
+        "record": "https://github.com/edithatogo/tobac/blob/891f79e07292b7754f78d7193130623bd5f9e243/conductor/tracks/nz_au_empirical_20261106/phase4-progress.md",
+        "design": "https://github.com/edithatogo/tobac/blob/891f79e07292b7754f78d7193130623bd5f9e243/conductor/tracks/nz_au_empirical_20261106/phase4-design.md"
+      },
+      "inspected_consumer_commit": "891f79e07292b7754f78d7193130623bd5f9e243",
+      "reported_innovate_source": "b9998addf32717438df92b23a306903e4db51620",
+      "reported_package": "0.6.0",
+      "findings": [
+        "The 6 November report says actual Innovate imports, calls, fit recovery and numerical parity remained unexecuted.",
+        "Its existing Voiage execution uses synthetic fixtures and does not establish Innovate research use.",
+        "The recorded pandas conflict concerns the cited historical source/package; this dossier does not assert the current Rust 0.7 line has that conflict."
+      ],
+      "research_use_established": false
+    },
+    {
+      "id": "wdi-itu-internet-use-lesson",
+      "classification": "executed public-data teaching and exploratory workflow; not promoted to research use",
+      "sources": {
+        "pr": "https://github.com/edithatogo/innovate/pull/671",
+        "manifest": "https://github.com/edithatogo/innovate/blob/070a04424dfb084758d1c0b201bf2980002ea81d/docs/datasets/wdi-aus-internet-20261116/manifest.json",
+        "lesson": "https://github.com/edithatogo/innovate/blob/070a04424dfb084758d1c0b201bf2980002ea81d/docs/astro-site/src/content/docs/tutorials/public-data-fit.mdx",
+        "execution_receipt": "https://github.com/edithatogo/innovate/blob/070a04424dfb084758d1c0b201bf2980002ea81d/conductor/tracks/documentation_learning_20261116/evidence-20261116/hosted-b2ed945/execution.json",
+        "hosted_run": "https://github.com/edithatogo/innovate/actions/runs/43866570433"
+      },
+      "inspected_evidence_commit": "070a04424dfb084758d1c0b201bf2980002ea81d",
+      "reported_execution_source": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+      "data": {
+        "source_url": "https://api.worldbank.org/v2/country/AUS/indicator/IT.NET.USER.ZS?format=json&date=1990:2025&per_page=100",
+        "metadata_url": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/IT.NET.USER.ZS",
+        "retrieved_at": "2026-11-16T10:11:58.244189+00:00",
+        "source_last_updated": "2026-11-11",
+        "attribution": "International Telecommunication Union (ITU), World Telecommunication/ICT Indicators Database, via World Bank World Development Indicators.",
+        "license_claim": "CC-BY-4.0",
+        "unit": "percent_of_population",
+        "observation": "Individuals who used the Internet in the preceding three months; an annual measure of current use, not cumulative first adoption.",
+        "files": {
+          "raw.json": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+          "observations.csv": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46"
+        },
+        "missing_years": [
+          2002,
+          2003,
+          2004,
+          2025
+        ],
+        "training_rows": 23,
+        "holdout_rows": 9
+      },
+      "inspected_execution": {
+        "path": "examples/native_public_data.py",
+        "source_sha256": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+        "status": "passed",
+        "returncode": 0,
+        "stdout_matches_contract": true,
+        "output": {
+          "cutoff_year": 2015,
+          "holdout_mae": {
+            "gompertz": 12.916,
+            "logistic": 15.994,
+            "persistence": 8.41
+          },
+          "holdout_rows": 9,
+          "missing_years": [
+            2002,
+            2003,
+            2004,
+            2025
+          ],
+          "training_rows": 23
+        }
+      },
+      "identity_review": "teaching-workflow-identity.json",
+      "limits": [
+        "Real observations and retained native execution support an executable teaching example.",
+        "The November 2026 vintage makes the split retrospective, not an as-of-2015 real-time forecast evaluation.",
+        "Repeated cutoff exploration is exploratory; recent Internet use is not cumulative first adoption or evidence of a causal diffusion mechanism.",
+        "The inspected sources explicitly describe a teaching/exploratory lesson; this dossier does not reclassify it as an accepted research study."
+      ],
+      "research_use_established": false
+    }
+  ],
+  "bounded_related_repository_searches": [
+    {
+      "repository": "edithatogo/reimbursement-atlas",
+      "visibility": "public",
+      "tool_query": "innovate",
+      "scope": "indexed default-branch code",
+      "returned_matches": 0
+    },
+    {
+      "repository": "edithatogo/microcosting_genomics",
+      "visibility": "public",
+      "tool_query": "innovate",
+      "scope": "indexed default-branch code",
+      "returned_matches": 0
+    },
+    {
+      "repository": "edithatogo/microsim_oa",
+      "visibility": "public",
+      "tool_query": "innovate",
+      "scope": "indexed default-branch code",
+      "returned_matches": 0
+    }
+  ],
+  "next_evidence": "A factual research-use record from the existing research owner: research question, actual Innovate revision/artifact, source/environment, input provenance/rights, executed commands, outputs and publication/analysis linkage. Historical Python use must remain separate from native 0.7 qualification.",
+  "limits": [
+    "The search was bounded and public-only; no claim of worldwide absence of research use is made.",
+    "No private mail, Drive, workbooks or analysis folders were accessed; no one was contacted.",
+    "No examples, synthetic checks, intended integrations, source citations or package downloads were counted as research adoption.",
+    "No authorship, human review, funding, rights, editorial or submission attestation is generated."
+  ]
+}

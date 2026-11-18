@@ -1,0 +1,13 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/origin/https://pypi.org/project/innovate//visit/3/",
+  "requested_at_utc": "2026-11-16T13:27:09.442137+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:27:17 GMT",
+  "content_type": "application/json",
+  "final_url": "https://archive.softwareheritage.org/api/1/origin/https://pypi.org/project/innovate//visit/3/",
+  "link": null,
+  "body_bytes": 413,
+  "response_file": "swh-pypi-visit-3.response.json",
+  "response_sha256": "67d4bf567623cf0dbf90a52a420ac310d70500d06dc1bedef65a167f29e14b47"
+}

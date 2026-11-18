@@ -1,0 +1,234 @@
+EEEEEEEEEEEEEEEEEEEEE                                                    [100%]
+==================================== ERRORS ====================================
+_______ ERROR at setup of test_declared_installed_versions_are_accepted ________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_ ERROR at setup of test_missing_dependency_cannot_be_treated_as_skip[polars] __
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_ ERROR at setup of test_missing_dependency_cannot_be_treated_as_skip[pyarrow] _
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_ ERROR at setup of test_missing_dependency_cannot_be_treated_as_skip[pytest] __
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+____ ERROR at setup of test_changed_dependency_version_is_rejected[polars] _____
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+____ ERROR at setup of test_changed_dependency_version_is_rejected[pyarrow] ____
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+____ ERROR at setup of test_changed_dependency_version_is_rejected[pytest] _____
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_______________ ERROR at setup of test_wrong_python_is_rejected ________________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+___ ERROR at setup of test_all_named_export_and_producer_cases_are_required ____
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_ ERROR at setup of test_any_unsuccessful_case_rejects_qualification[skipped] __
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+_ ERROR at setup of test_any_unsuccessful_case_rejects_qualification[failure] __
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+__ ERROR at setup of test_any_unsuccessful_case_rejects_qualification[error] ___
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+______ ERROR at setup of test_missing_optional_parameter_case_is_rejected ______
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+______ ERROR at setup of test_duplicate_case_cannot_replace_missing_case _______
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+__ ERROR at setup of test_extra_or_empty_selection_is_not_the_qualified_scope __
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+___ ERROR at setup of test_supplied_wheel_matches_installed_bytes_and_record ___
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+____ ERROR at setup of test_different_installed_native_library_is_rejected _____
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+____________ ERROR at setup of test_invalid_record_hash_is_rejected ____________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+___________ ERROR at setup of test_missing_native_member_is_rejected ___________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+______________ ERROR at setup of test_wheel_traversal_is_rejected ______________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+________ ERROR at setup of test_test_source_drift_rejects_qualification ________
+tests/native/test_scenario_arrow_qualification.py:24: in qualifier
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:747: in exec_module
+    ???
+<frozen importlib._bootstrap_external>:880: in get_code
+    ???
+<frozen importlib._bootstrap_external>:926: in get_data
+    ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/e4108ca2b049/innovate-scientific/scripts/qualify_scenario_arrow.py'
+=========================== short test summary info ============================
+ERROR tests/native/test_scenario_arrow_qualification.py::test_declared_installed_versions_are_accepted
+ERROR tests/native/test_scenario_arrow_qualification.py::test_missing_dependency_cannot_be_treated_as_skip[polars]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_missing_dependency_cannot_be_treated_as_skip[pyarrow]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_missing_dependency_cannot_be_treated_as_skip[pytest]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_changed_dependency_version_is_rejected[polars]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_changed_dependency_version_is_rejected[pyarrow]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_changed_dependency_version_is_rejected[pytest]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_wrong_python_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_all_named_export_and_producer_cases_are_required
+ERROR tests/native/test_scenario_arrow_qualification.py::test_any_unsuccessful_case_rejects_qualification[skipped]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_any_unsuccessful_case_rejects_qualification[failure]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_any_unsuccessful_case_rejects_qualification[error]
+ERROR tests/native/test_scenario_arrow_qualification.py::test_missing_optional_parameter_case_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_duplicate_case_cannot_replace_missing_case
+ERROR tests/native/test_scenario_arrow_qualification.py::test_extra_or_empty_selection_is_not_the_qualified_scope
+ERROR tests/native/test_scenario_arrow_qualification.py::test_supplied_wheel_matches_installed_bytes_and_record
+ERROR tests/native/test_scenario_arrow_qualification.py::test_different_installed_native_library_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_invalid_record_hash_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_missing_native_member_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_wheel_traversal_is_rejected
+ERROR tests/native/test_scenario_arrow_qualification.py::test_test_source_drift_rejects_qualification

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "qualification_tooling_guards",
+  "qualifier_sha256": "fe894db45329c4fd9906aec6a77f8bd87653b0a7d927ac4aeaed39e6e099b3db",
+  "guard_tests_sha256": "52c45f22b9d2826bfa2661c533ec3016f2ef916480fc1ea9fc4825cb51a1c7a6",
+  "guard_junit_sha256": "291319b9817f0b456e160ba90a106a7069f123c1fb8e49d29bb594121125e38f",
+  "guard_log_sha256": "9a4c66ad267fad474dc901117b267d7ce7c5a177d261b43db17cb2e28f723bc9",
+  "test_command": ".venv-registry-reconciliation/bin/python -m pytest -o addopts= tests/native/test_scenario_arrow_qualification.py --junitxml=conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/arrow-installed-20261116/qualifier-guards.junit.xml -q",
+  "results": {
+    "passed": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ruff_version": "ruff 0.17.5",
+  "ruff_check_exit_code": 0,
+  "ruff_format_check_exit_code": 0,
+  "review": "Independent read-only review of new qualifier, guard tests and installed 42-case receipt reported no blocking residual. No scientific or release approval inferred."
+}

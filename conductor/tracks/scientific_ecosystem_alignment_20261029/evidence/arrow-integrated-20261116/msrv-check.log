@@ -1,0 +1,6 @@
+    Checking innovate-core v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-core)
+    Checking innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-tabular)
+    Checking innovate-ffi v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-ffi)
+    Checking innovate-kairos v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-kairos)
+    Checking innovate-python v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-python)
+    Finished `dev` profile [unoptimized] target(s) in 20.73s

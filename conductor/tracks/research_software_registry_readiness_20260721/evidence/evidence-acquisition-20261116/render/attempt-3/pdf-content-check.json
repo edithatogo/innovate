@@ -1,0 +1,76 @@
+{
+  "pages": 4,
+  "metadata": {
+    "format": "PDF 1.5",
+    "title": "Innovate: a native library for innovation and policy diffusion modelling",
+    "author": "",
+    "subject": "",
+    "keywords": "",
+    "creator": "LaTeX with hyperref",
+    "producer": "LuaHBTeX, Version 1.18.0 (TeX Live 2024)",
+    "creationDate": "D:20261116110000+11'00'",
+    "modDate": "D:20261116110000+11'00'",
+    "trapped": "",
+    "encryption": null
+  },
+  "page_sizes_points": [
+    [
+      595.2760009765625,
+      841.8900146484375
+    ],
+    [
+      595.2760009765625,
+      841.8900146484375
+    ],
+    [
+      595.2760009765625,
+      841.8900146484375
+    ],
+    [
+      595.2760009765625,
+      841.8900146484375
+    ]
+  ],
+  "draft_on_each_page": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "working_draft_notice": true,
+  "source_revision_visible": true,
+  "citation_links": {
+    "bass1969": {
+      "expected": "https://doi.org/10.1287/mnsc.15.5.215",
+      "present": true
+    },
+    "fisher1971": {
+      "expected": "https://doi.org/10.1016/S0040-1625(71)80005-7",
+      "present": true
+    },
+    "mesa2025": {
+      "expected": "https://doi.org/10.21105/joss.07668",
+      "present": true
+    },
+    "ndlib2018": {
+      "expected": "https://doi.org/10.1007/s41060-017-0086-6",
+      "present": true
+    },
+    "pymc2023": {
+      "expected": "https://doi.org/10.7717/peerj-cs.1516",
+      "present": true
+    }
+  },
+  "diacritic_sirbu_present": true,
+  "literal_author_rht_present": true,
+  "replacement_character_present": false,
+  "text_words_outside_page": [],
+  "fonts": [
+    "KPFJII+NewCMSans10-BookOblique",
+    "PJGFUN+NewCMSans08-Book",
+    "RXPFAC+Hack-Regular",
+    "YPHXWT+NewCMSans10-Bold",
+    "YYRHUX+NewCMSans10-Book"
+  ],
+  "remaining_citation_keys": []
+}

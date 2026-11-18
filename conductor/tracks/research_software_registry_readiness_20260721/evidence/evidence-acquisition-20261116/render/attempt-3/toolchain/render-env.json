@@ -1,0 +1,13 @@
+{
+  "PATH": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux:/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override:/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin:/opt/codex/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/agent/.local/bin:/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/fallback",
+  "TEXMFCNF": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/texmf-dist/web2c",
+  "TEXMF": "{/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/var,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/config,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/texmf-dist}",
+  "TEXMFVAR": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/var",
+  "TEXMFCONFIG": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/config",
+  "TEXMFHOME": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local",
+  "TEXMFLOCAL": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local",
+  "TEXMFCACHE": ".",
+  "VARTEXFONTS": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/fonts",
+  "OSFONTDIR": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local/fonts/truetype/hack;/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local/fonts/truetype/libre-franklin",
+  "SOURCE_DATE_EPOCH": "1794787200"
+}

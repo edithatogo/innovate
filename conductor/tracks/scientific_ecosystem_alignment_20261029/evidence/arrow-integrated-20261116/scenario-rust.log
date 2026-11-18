@@ -1,0 +1,39 @@
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-core/Cargo.toml:8:12
+  |
+7 | repository.workspace = true
+  | ----------
+8 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-core` (manifest) generated 1 warning
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-tabular/Cargo.toml:9:12
+  |
+8 | repository.workspace = true
+  | ----------
+9 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-tabular` (manifest) generated 1 warning
+   Compiling innovate-core v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-core)
+   Compiling innovate-tabular v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-tabular)
+    Finished `test` profile [unoptimized] target(s) in 21.28s
+     Running tests/scenario_exports.rs (/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target/debug/build/innovate-tabular/14b238fca59ef50b/out/scenario_exports-14b238fca59ef50b)
+
+running 8 tests
+test scenario_comparison_exports_require_explicit_pair_and_ensemble_outcomes ... ok
+test scenario_execution_exports_require_explicit_row_outcomes ... ok
+test scenario_execution_exports_reject_contradictory_and_mistyped_outcomes ... ok
+test scenario_exports_require_successful_explicit_envelope_outcomes ... ok
+test scenario_comparison_exports_reject_contradictory_and_mistyped_outcomes ... ok
+test scenario_execution_exports_preserve_success_failure_pause_and_nested_json ... ok
+test scenario_comparison_exports_preserve_pair_ensemble_outcomes_and_nested_json ... ok
+test scenario_exports_recover_after_rejected_input ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

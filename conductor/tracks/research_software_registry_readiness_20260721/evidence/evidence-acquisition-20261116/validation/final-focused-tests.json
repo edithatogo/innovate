@@ -1,0 +1,36 @@
+{
+  "command": [
+    "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+    "-m",
+    "pytest",
+    "tests/native/test_registry_readiness.py",
+    "tests/native/test_joss_readiness.py",
+    "tests/native/test_joss_render.py",
+    "tests/native/test_scenario_arrow_qualification.py",
+    "tests/native/test_scenario_wheel_build.py",
+    "tests/native/test_joss_environment.py",
+    "-o",
+    "addopts=",
+    "-q"
+  ],
+  "exit_code": 0,
+  "log_sha256": "9e5a82a99d6ed024ab3fb79c551d86a2d6edc51afac362424fe6937eae003220",
+  "input_sha256": {
+    "tests/native/test_registry_readiness.py": "032d76dc294fd8b375804832034e16a16e0399158f6956dfcbacd034a5244001",
+    "tests/native/test_joss_readiness.py": "ec4763a99c5ca5e9afacfdc52795a49cef59ab784703d3c82fd28b19ef3df4c4",
+    "tests/native/test_joss_render.py": "bca989c7e1ded08a9ef85f08c95c3d4d078637d9f0d3f297aa1e1c94e58d3fd8",
+    "tests/native/test_scenario_arrow_qualification.py": "52c45f22b9d2826bfa2661c533ec3016f2ef916480fc1ea9fc4825cb51a1c7a6",
+    "tests/native/test_scenario_wheel_build.py": "0026de73044f35ecd32187463b7a42fd3321d961fd40c4749b8c707856dcb4d8",
+    "tests/native/test_joss_environment.py": "fa7421cff76891d9d7fd5cf784083fade845c3a22996b8f972830dd914b3feac",
+    "scripts/check_registry_readiness.py": "b1d984bff0f694d0db238809b47c3b8cd554b036258b8fb4e25fc75f68f37b7d",
+    "scripts/check_joss_readiness.py": "fe1f4d576d2bf7aa9138eb333596bf9f318479b155837352955574172228b4a2",
+    "scripts/qualify_scenario_arrow.py": "fe894db45329c4fd9906aec6a77f8bd87653b0a7d927ac4aeaed39e6e099b3db",
+    "conductor/tracks/scientific_ecosystem_alignment_20261029/integration/build_scenario_wheel.py": "61e47e060a5f33bee2120c901b6e6b2f43696ef74da742aef6d5f1a1da233730",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/render.py": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/source-snapshot.json": "a62b7b9a08c3aa44372aaa6dcd3ff26fd3cdd7269bcead0a16b0bd818f9e57c5",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/build_pdf_environment.py": "a985be16f46d2a8171daccc3a4ad687d1d31a4a2e05016c6720ece9812ed6231",
+    "conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/configure_pdf_environment.py": "c0ca120d679c91f4c10fd3ffb3ed012924ee1dde531f911fda1cb985436b3e8c"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/get/69f471848dc9ebefd8a62689c0ad78e5e7b9505d/?filename=swh:1:dir:03ce01ed9f43a580277665e01a806db8d2b5d061_metadata",
+  "expected_metadata_format": "original-artifacts-json",
+  "requested_at_utc": "2026-11-16T13:30:47.810394+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:30:55 GMT",
+  "content_type": "application/octet-stream",
+  "final_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/get/69f471848dc9ebefd8a62689c0ad78e5e7b9505d/?filename=swh:1:dir:03ce01ed9f43a580277665e01a806db8d2b5d061_metadata",
+  "link": null,
+  "body_bytes": 341,
+  "response_file": "swh-pypi-original-artifacts-0.6.0.response.json",
+  "response_sha256": "1d213eb4441ecc5c8924f8f72a79b996f56fd67223452a62b39e9e0756bcc9ac"
+}

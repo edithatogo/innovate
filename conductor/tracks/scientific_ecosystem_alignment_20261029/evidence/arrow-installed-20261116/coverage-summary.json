@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "line_target_met",
+  "scope": "scripts/qualify_scenario_arrow.py only; not Rust scientific coverage",
+  "coverage_version": "7.17.3",
+  "qualifier_sha256": "fe894db45329c4fd9906aec6a77f8bd87653b0a7d927ac4aeaed39e6e099b3db",
+  "guard_tests_sha256": "52c45f22b9d2826bfa2661c533ec3016f2ef916480fc1ea9fc4825cb51a1c7a6",
+  "covered_statements": 196,
+  "statements": 215,
+  "line_percent": 91.16279069767442,
+  "minimum_line_percent": 90,
+  "covered_branches": 84,
+  "branches": 100,
+  "branch_percent": 84.0,
+  "excluded_lines": 0,
+  "coverage_json": "qualifier-coverage.json",
+  "coverage_json_sha256": "15e15ffcf27db03a392f71b177c065f44805cebf2ad841a7f1c37a10ea57d9e7",
+  "execution_inputs": {
+    "guard_tests": {
+      "cases_passed": 45,
+      "log": "coverage-guards.log",
+      "log_sha256": "bb95bea8fde017295f3104a645884d639024a0157980efaa7c80d7d90b57078a"
+    },
+    "real_isolated_worker": {
+      "receipt": "qualification-coverage.json",
+      "receipt_sha256": "fd64b93d5a454f640cce6084b4283a7c132487c51f2e38d6345de9d3b8434fb2",
+      "cases_passed": 42
+    },
+    "rejected_build_record": {
+      "receipt": "qualification-rejected-build-record.json",
+      "receipt_sha256": "4b1f7a10cb5b6c427747c209c5128c64301b7132df86a981a743f4cd65d775de",
+      "input_json": [],
+      "worker_exit_code": 1,
+      "expected_error": "build record must be an object",
+      "native_tests_executed": false
+    }
+  },
+  "method": [
+    "coverage run --branch --include=*/scripts/qualify_scenario_arrow.py -m pytest -o addopts= tests/native/test_scenario_arrow_qualification.py -q",
+    "Python -I -m coverage run --branch --include=*/scripts/qualify_scenario_arrow.py QUALIFIER --worker ... from a fresh directory outside the source checkout",
+    "Repeat isolated worker with a synthetic non-object build record; require exit 1, explicit failed receipt and no JUnit/test output",
+    "coverage combine --keep GUARDS_DATA WORKER_DATA REJECTION_DATA; coverage json"
+  ],
+  "limitations": [
+    "Branch coverage is measured separately and is 84%, not 90%",
+    "No Rust/native algorithm or full repository coverage is inferred"
+  ]
+}

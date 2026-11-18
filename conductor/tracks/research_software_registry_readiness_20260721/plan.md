@@ -1,5 +1,136 @@
 # Implementation Plan
 
+## Separate evidence acquisition — 16 November 2026
+
+Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`, consumed in the isolated integration
+commit `2748084292e5e57c181c1665a686ad3a291145bf`.
+
+- [x] JOSS-02f: review the changed source input, complete the official draft PDF
+  in an isolated, pinned TeX dependency closure, and visually inspect the result.
+  Final attempt4 is a four-page official draft; compilation and all-page visual
+  review pass, with the template placeholders/sidebar caveat explicitly retained.
+- [x] JOSS-02g: protect the Mesa author family name `ter Hoeven` in the
+  BibTeX after actual PDF review found its particle dropped in citations. This
+  narrow publisher-supported correction extends the allowed edition scope to
+  `joss/paper.bib` and its reviewed fingerprint; preserve attempt 3 and create
+  a fresh render, without changing scientific prose or author attestations.
+- [x] JOSS-02h: harden the reproducible environment helpers after independent
+  review reproduced unsafe reuse of an existing setup root. Require a pinned
+  database before writes, clean copied-font sources and absolute owned TeX
+  executables; preserve original executed helper bytes and verify the corrected
+  setup in fresh directories. Scope includes `tests/native/test_joss_environment.py`.
+  All 15 guard tests and an actual cached replay pass; 241 archives, 24 fonts
+  and owned binaries match the original environment. The final six-suite run
+  records 208 passes/no skips. Original PDF provenance remains separate.
+- [x] JOSS-01b: acquire primary public distribution/development history and
+  investigate identifiable version-bound research use without treating teaching
+  examples or unexecuted downstream plans as research use.
+- [x] SWH-01b / RRID-01b: follow public provider identifiers and distinguish
+  package archival evidence from the selected release and canonical resource.
+  Existing PyPI 0.5.0/0.6.0 archives and resolving SWHIDs are verified;
+  downloaded sdists match their recorded hashes and canonical metadata.
+  Actual research use and an Innovate RRID remain unverified.
+- [x] REG-16c: reconcile #668/main and the new #671 documentation ownership,
+  update actual readiness findings and prepare a concrete integration handoff.
+
+Allowed edits remain the two owning track namespaces and separately scoped
+scientific tooling. All prior attempts and receipts are preserved. External
+correspondence, submission, registration, release and main promotion remain
+separate from this evidence acquisition.
+
+## Reassessment after the main advance — 16 November 2026
+
+Main is now `57d2916586d107c8affe90355e453abe27f01c26` after the external
+merge of #656. The [integrated-source record](integration-20261116.md) supersedes
+earlier current-main and open-PR wording below while preserving each receipt.
+Allowed edits remain within this track and the scientific qualification track;
+no shared source, pin, workflow, registry or other writer's environment changes.
+
+- [x] REG-16b: consume the merged source in an isolated worktree, verify all
+  four registry input fingerprints against both Git revisions and local bytes,
+  and retain pending provider states. The former three Conductor registry
+  discrepancies are resolved by the upstream merge; local hygiene now passes.
+- [x] JOSS-02d: review the four changed manuscript inputs and each affected
+  claim, retain the prior snapshot, and explicitly bind the new unapproved
+  edition to main. Clarify model time-grid ordering without extending that
+  claim to every newly added table API; preserve scientific and author limits.
+  The new 1,076-word edition passes all 14 source and three edition identities.
+- [x] JOSS-02e: rerun pinned bibliography/TeX processing against the new edition.
+  Attempt 3 passes real bibliography, official TeX and draft-marker checks;
+  PDF still fails on missing `luacode.sty` (Make 2, wrapper 1), with no PDF or
+  visual-review pass. The prior edition and attempts remain preserved.
+- [x] Repeat all four preparation suites against the reassessed integrated
+  tree: **169 passed, zero skips**. Explicit submission mode still exits 1.
+- [ ] Integration: reconcile current hosted checks and hand off exact failures
+  and remaining shared work to #624. Native API documentation, recurring CI,
+  scientific/research-use evidence, author decisions and external outcomes
+  remain separate gates.
+
+## Executable preparation follow-up — 16 November 2026
+
+The user's follow-up authorises implementing the remaining feasible preparation.
+Starting published head: `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`
+(local tree-equivalent receipt `0c718cea3eb982717ce940560868004d71261e9b`).
+Inspected main: `18c467e18b71d972060365c68865aa405a69949c`; its only advance
+from the assessed source changes the Renovate workflow. #624 still owns shared
+integration; #656/#659 have no overlap with the allowed files below.
+
+- [x] JOSS-02a: implement an offline manuscript/source integrity check with
+  negative tests for drift, incomplete evidence and false readiness; preserve
+  the current unapproved edition and all scientific/author/provider gates.
+  Fifty tests and independent review pass; 14 source hashes also match Git blobs
+  at the recorded assessment revision. The checker itself does not claim Git
+  authentication or submission readiness.
+- [x] JOSS-02b: implement the reproducible pinned draft-render wrapper and its
+  18 guard tests; execute actual bibliography parsing, official TeX/citeproc and
+  draft-marker checks. The final `attempt-2` receipt matches the final script.
+- [!] JOSS-02c: complete PDF compilation and visual inspection. Actual LuaLaTeX
+  stopped at missing `luacode.sty`; Make exited 2, wrapper exited 1 and no PDF
+  was produced. Continue in a complete TeX/Inara environment with a new receipt;
+  do not infer visual acceptance from TeX output.
+- [x] SWH-01a: resolve the historical release/tag inventory, including the
+  annotated-tag target; preserve target selection, rights and archival gates.
+- [x] Reconcile observed hosted results and remaining JOSS-01, RRID-01, SWH-01,
+  author and external gates after execution; independently review the bounded
+  implementation and final portable fixtures. The exact publication, issue
+  readback and new-head hosted receipts belong in #662 and its #624 handoff.
+
+Allowed files: this track, `scripts/check_joss_readiness.py`,
+`tests/native/test_joss_readiness.py`, `tests/native/test_joss_render.py`, and
+the separately scoped scientific Arrow qualification packet. Root workflows,
+manifests, dependency pins, common registries, empirical protocols and other
+owners' source remain reserved.
+Preparation checks cannot supply research-use facts or author attestations.
+
+## Scientific and journal reconciliation — 16 November 2026
+
+Current work packet: `REG-16`, based on
+`69b674814513e09a683279c679b1584af8bb4214`. This section and
+[the current reconciliation](reconciliation-20261116.md) supersede operational
+status in the dated receipts below; those receipts remain historical evidence.
+Allowed changes are this track and the existing scientific ecosystem alignment
+track. The shared integrator in #624 retains promotion, root registry, workflows,
+pins and scientific acceptance. #656 owns the overlapping empirical plan and
+#659 retains documentation work.
+
+- [x] Reconcile the five requested issues, merged/closed PRs, current metadata,
+  scientific dependencies and the actual native issue hierarchy.
+- [x] Prepare a separate JOSS-format draft, checked bibliography and claim/source
+  register; preserve the legacy manuscript and V05-owned scholarly corrections.
+- [x] Refresh bounded read-only provider lookups and distinguish absent tested
+  origins, inaccessible results, submission and verified external outcomes.
+- [x] Verify the updated pending record, manuscript structure/citations/links,
+  exact changed-file scope and independent review; retain real failing gates.
+- [x] Publish the bounded PR and reconcile all five issue descriptions with its
+  exact source/evidence. Published as draft [#662](https://github.com/edithatogo/innovate/pull/662),
+  initial head `0b5751002c7fd6cfe6ebd60b16208c94597cfad2`; all five issue bodies
+  were updated and read back on 16 November 2026. Integration and external
+  completion remain separate.
+
+The remaining executable packages and their completion evidence are in the
+[current reconciliation](reconciliation-20261116.md#ordered-work-and-acceptance).
+No new scientific implementation owner is assigned by this packet.
 ## Packaging-input reassessment — alert 44, 16 November 2026
 
 The alert 44 candidate based on `b29a1d27f54fdd08d77881ee999772fceab7c03a`

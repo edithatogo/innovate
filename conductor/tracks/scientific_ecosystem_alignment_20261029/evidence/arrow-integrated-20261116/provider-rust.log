@@ -1,0 +1,112 @@
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-core/Cargo.toml:8:12
+  |
+7 | repository.workspace = true
+  | ----------
+8 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-core` (manifest) generated 1 warning
+warning: `package.homepage` is redundant with `package.repository`
+ --> rust/crates/innovate-tabular/Cargo.toml:9:12
+  |
+8 | repository.workspace = true
+  | ----------
+9 | homepage = "https://github.com/edithatogo/innovate"
+  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::redundant_homepage` is set to `warn` by default
+help: consider removing `package.homepage`
+warning: `innovate-tabular` (manifest) generated 1 warning
+   Compiling innovate-core v0.7.0-alpha.1 (/workspace/scratch/e4108ca2b049/innovate-scientific-integrated/rust/crates/innovate-core)
+    Finished `test` profile [unoptimized] target(s) in 23.90s
+     Running tests/kairos.rs (/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target/debug/build/innovate-core/b6b9385c29f15a34/out/kairos-b6b9385c29f15a34)
+
+running 17 tests
+test emitted_rng_checkpoint_restores_after_all_adoptions ... ok
+test finite_domain_and_option_guards_are_enforced ... ok
+test des_checkpoint_resumes_with_original_history_and_rng ... ok
+test abm_checkpoint_resumes_agent_identities_and_adoption_clock ... ok
+test pinned_scheduler_dispatches_ties_in_order_and_skips_cancelled_events ... ok
+test pinned_abm_replays_entity_state_and_rng ... ok
+test native_kairos_replays_and_does_not_depend_on_sampling_grid ... ok
+test covariates_and_events_can_pause_and_restart_pressure ... ok
+test unsupported_or_malformed_engines_never_silently_use_a_curve ... ok
+test abm_agents_are_conserved_replayable_and_match_homogeneous_des ... ok
+test abm_initial_adoption_is_conserved_at_zero_and_saturation ... ok
+test malformed_forcing_and_colliding_boundaries_are_errors ... ok
+test tick_pause_before_first_adoption_preserves_forced_des_and_abm ... ok
+test previous_provider_checkpoints_preserve_scientific_results ... ok
+test innovation_only_ensemble_matches_binomial_mean ... ok
+test forced_innovation_ensemble_matches_integrated_hazard ... ok
+test scenario_ensemble_replays_and_recovers_innovation_mean ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.41s
+
+     Running tests/network.rs (/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target/debug/build/innovate-core/9dd134c287ca23d4/out/network-9dd134c287ca23d4)
+
+running 37 tests
+test continuous_forcing_validates_effective_hazard_instead_of_unforced_total ... ok
+test continuous_hazard_scales_agent_weights_before_aggregation ... ok
+test continuous_hazard_can_wake_from_zero_and_replays ... ok
+test heterogeneous_vectors_reject_invalid_domains ... ok
+test contacts_control_pure_contagion_and_replay ... ok
+test linear_hazard_clock_matches_analytic_crossing ... ok
+test heterogeneous_service_uses_the_queued_agents_duration ... ok
+test imitation_weights_control_seeded_contagion ... ok
+test directed_weights_control_exposure_without_overflow ... ok
+test malformed_networks_resources_and_initial_nodes_are_rejected ... ok
+test pending_agents_are_not_counted_as_adopted ... ok
+test checkpoint_preserves_schedule_change_tied_with_completion ... ok
+test reopening_admits_priority_waiter_at_deadline ... ok
+test resource_metrics_clip_service_and_queue_wait_at_horizon ... ok
+test priority_reorders_waiters_without_preempting_service ... ok
+test heterogeneous_imitation_scales_large_coefficients_by_exposure ... ok
+test fifo_service_has_exact_capacity_limited_completion_times ... ok
+test schedule_retargets_innovation_without_resetting_service ... ok
+test scheduled_graph_and_service_changes_take_effect_at_boundaries ... ok
+test retry_restores_hazard_after_balking_or_expiry ... ok
+test scheduled_agent_durations_replace_scalar_override_at_admission ... ok
+test scheduled_null_clears_queue_restrictions ... ok
+test scheduled_hazards_enable_and_disable_requests_without_interrupting_service ... ok
+test scheduled_queue_limit_preserves_waiters_and_blocks_new_entries ... ok
+test scheduled_capacity_pauses_admission_and_reopens_waiting_service ... ok
+test scheduled_priorities_reorder_waiters_without_preempting_service ... ok
+test scheduled_wait_deadline_applies_only_to_new_waiters ... ok
+test unweighted_imitation_preserves_finite_hazard_at_large_rates ... ok
+test waiting_deadline_withdraws_only_agents_that_miss_service ... ok
+test scheduled_retry_preserves_pending_wake_after_policy_clears ... ok
+test network_checkpoint_preserves_pending_service_queue_and_schedule ... ok
+test network_checkpoint_can_pause_again_at_every_completion ... ok
+test weighted_contagion_is_invariant_to_common_edge_weight_scale ... ok
+test scheduled_resource_slot_ticks_balance_across_seeds ... ok
+test single_agent_request_frequency_matches_exponential_hazard ... ok
+test seeded_contagion_request_frequency_matches_imitation_exposure ... ok
+test network_checkpoint_continues_continuous_hazard_forcing ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.13s
+
+     Running tests/network_diffusion.rs (/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target/debug/build/innovate-core/4b336c2da0670eee/out/network_diffusion-4b336c2da0670eee)
+
+running 5 tests
+test graph_shape_and_unknown_options_are_rejected ... ok
+test historical_weighted_spillover_preserves_isolated_nodes_and_matrix_shape ... ok
+test finite_high_weight_graphs_keep_finite_summary_means ... ok
+test historical_summary_retains_coordinates_and_graph_statistics_without_times ... ok
+test independent_node_fits_retain_state_and_forecast ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/network_petgraph.rs (/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target/debug/build/innovate-core/89774bf45dd88c99/out/network_petgraph-89774bf45dd88c99)
+
+running 5 tests
+test network_petgraph_empty_weighted_graph_retains_public_metadata ... ok
+test network_petgraph_rejects_invalid_graphs_and_future_replacements ... ok
+test network_petgraph_directed_chain_preserves_analytical_times_and_disconnection ... ok
+test network_petgraph_edge_reversal_respects_directedness ... ok
+test network_petgraph_scheduled_graph_replacement_survives_tied_resume_boundaries ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

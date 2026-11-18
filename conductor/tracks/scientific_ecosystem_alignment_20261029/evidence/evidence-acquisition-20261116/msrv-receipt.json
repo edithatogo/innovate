@@ -1,0 +1,19 @@
+{
+  "source_commit": "2748084292e5e57c181c1665a686ad3a291145bf",
+  "source_tree": "787eb4cd175b7343026cdad88143e8879e0b3062",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+  "command": [
+    "cargo",
+    "check",
+    "--locked",
+    "--workspace",
+    "--all-targets",
+    "-j",
+    "1"
+  ],
+  "scope": "Linux, five workspace crates, default features; compile only. Excluded games crate, execution, linking, other platforms and release acceptance are not qualified.",
+  "exit_code": 0,
+  "elapsed_seconds": 26.264,
+  "log_sha256": "0a5f4a40fa08a00ef7dff95a6be9496a84561a5b9001749c484fedc623677466"
+}
