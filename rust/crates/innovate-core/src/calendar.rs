@@ -1,3 +1,4 @@
+// Temporary source change for the isolated CodeQL branch-protection probe.
 use chrono::{DateTime, Datelike, Days, Months, NaiveDate, NaiveDateTime, TimeDelta};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
