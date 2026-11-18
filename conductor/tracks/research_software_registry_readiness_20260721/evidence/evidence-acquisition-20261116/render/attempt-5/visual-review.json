@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-18",
+  "review_kind": "independent_four_page_visual_review_of_original_render_artifact",
+  "reviewer": {
+    "kind": "agent",
+    "author_approval": false,
+    "editorial_approval": false
+  },
+  "github": {
+    "repository": "edithatogo/innovate",
+    "pull_request": 687,
+    "workflow_run": 44283754817,
+    "artifact_id": 14418512152,
+    "artifact_name": "joss-unapproved-draft-b20910bfd50bdd6256861180c3cf4498abbd3a10",
+    "checkout_commit": "b20910bfd50bdd6256861180c3cf4498abbd3a10",
+    "feature_head": "d8e954e8c3998fc697e8f3ac8f05a3cf3cd93529"
+  },
+  "source": {
+    "software_revision": "20fe0b41b815bc926fc3d61b9672c3d4b2feb289",
+    "software_version": "0.7.0a1",
+    "inara_revision": "88ee5d656f147d801448ce77ad8375619d383df6",
+    "base_image_resolved": "pandoc/latex@sha256:505c16cb042a5cb2e7825da6ea7368278e8eb8fc3aff06062e80f790ca00dec8",
+    "source_date_epoch": 1794960000,
+    "pandoc": "3.6.4",
+    "tex": "LuaHBTeX 1.18.0 / TeX Live 2024"
+  },
+  "pdf": {
+    "sha256": "0c12b6400ec46f7904267c2720f5fff306ee793b7626cefb27277011606c41b4",
+    "bytes": 208864,
+    "page_count": 4,
+    "page_size": "A4",
+    "encrypted": false,
+    "embedded_font_unicode_maps": true,
+    "doi_hyperlinks_verified": [
+      "10.1287/mnsc.15.5.215",
+      "10.1016/S0040-1625(71)80005-7",
+      "10.21105/joss.07668",
+      "10.1007/s41060-017-0086-6",
+      "10.7717/peerj-cs.1516"
+    ],
+    "render_checks": [
+      "source_integrity",
+      "bibtex_parse",
+      "official_tex",
+      "draft_tex_markers",
+      "official_pdf"
+    ]
+  },
+  "pages": [
+    {
+      "number": 1,
+      "inspected": true,
+      "readable": true,
+      "draft_watermark": true,
+      "sections": [
+        "title and provisional author",
+        "Summary",
+        "Statement of need"
+      ],
+      "findings": [
+        "Template line numbers around 16-19 crowd/overlap the fixed license sidebar",
+        "Dummy DOI, 1970 submission date, editor/reviewer placeholders and footer citation placeholders are visibly provisional",
+        "Full SHA and unapproved notice visible"
+      ]
+    },
+    {
+      "number": 2,
+      "inspected": true,
+      "readable": true,
+      "draft_watermark": true,
+      "sections": [
+        "State of the field",
+        "Software design"
+      ],
+      "findings": [
+        "Current IPC decoder and vendored/dependency publication limitations visible",
+        "Paragraph continues normally onto page 3"
+      ]
+    },
+    {
+      "number": 3,
+      "inspected": true,
+      "readable": true,
+      "draft_watermark": true,
+      "sections": [
+        "Research impact statement",
+        "AI usage disclosure",
+        "Acknowledgements",
+        "References (first three)"
+      ],
+      "findings": [
+        "No research-use claim is falsely promoted",
+        "No clipping detected in body or citation lines at inspected resolution"
+      ]
+    },
+    {
+      "number": 4,
+      "inspected": true,
+      "readable": true,
+      "draft_watermark": true,
+      "sections": [
+        "References (final two)"
+      ],
+      "findings": [
+        "Final two references and DOI links readable including Sîrbu and ter Hoeven",
+        "Large unused page area due official template reference pagination"
+      ]
+    }
+  ],
+  "outcome": "rendered_and_visually_inspected_unapproved_with_template_layout_caveats",
+  "submission_ready": false,
+  "scientific_or_release_qualification": false,
+  "limitations": [
+    "This is a visual and PDF structural review, not text semantic/empirical peer review or author approval",
+    "No tagged PDF/UA, accessible PDF, screen reader, other-platform or disability-accessibility acceptance",
+    "The render receipt is retained verbatim with visual_review=not_performed; this separate review is later and bound to its exact PDF SHA",
+    "No external JOSS submission, DOI, editorial receipt, accepted manuscript or scientific release was observed"
+  ]
+}
