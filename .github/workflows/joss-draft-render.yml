@@ -56,11 +56,14 @@ jobs:
         run: |
           set -euo pipefail
           root="$RUNNER_TEMP/joss-render"
-          if ! docker build --pull --tag innovate-joss-inara:pinned "$root/inara" > "$root/docker-build.log" 2>&1; then
+          # BuildKit may not load the base tag into the host image store.
+          # Pull first, record the resolved digest, and build without repulling.
+          docker pull pandoc/latex:3.6.4-alpine > "$root/base-pull.log" 2>&1
+          docker image inspect --format '{{json .RepoDigests}}' pandoc/latex:3.6.4-alpine > "$root/base-image-digests.json"
+          if ! docker build --pull=false --tag innovate-joss-inara:pinned "$root/inara" > "$root/docker-build.log" 2>&1; then
             tail -n 100 "$root/docker-build.log"
             exit 1
           fi
-          docker image inspect --format '{{json .RepoDigests}}' pandoc/latex:3.6.4-alpine > "$root/base-image-digests.json"
           docker image inspect --format '{{json .Id}}' innovate-joss-inara:pinned > "$root/render-image-id.json"
 
       - name: Execute pinned official draft render and rasterize pages
@@ -148,6 +151,7 @@ jobs:
             ${{ runner.temp }}/joss-render/base-image-digests.json
             ${{ runner.temp }}/joss-render/render-image-id.json
             ${{ runner.temp }}/joss-render/runtime-packages.log
+            ${{ runner.temp }}/joss-render/base-pull.log
             ${{ runner.temp }}/joss-render/docker-build.log
             ${{ runner.temp }}/joss-render/pdfinfo.txt
             ${{ runner.temp }}/joss-render/paper-text.txt
