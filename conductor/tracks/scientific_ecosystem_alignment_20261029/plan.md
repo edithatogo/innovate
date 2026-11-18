@@ -1,5 +1,149 @@
 # Plan
 
+## Separate evidence and integration acquisition — 16 November 2026
+
+Base PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; main
+`b29a1d27f54fdd08d77881ee999772fceab7c03a`. The isolated merge is
+`2748084292e5e57c181c1665a686ad3a291145bf` (tree
+`787eb4cd175b7343026cdad88143e8879e0b3062`). This packet answers the user's
+request to acquire remaining evidence and integration.
+
+- [x] ALIGN-02f: provide and execute an owned build-record helper and a complete
+  recurring Arrow/MSRV workflow candidate for the existing integrator; bind a
+  fresh installed qualification to the current native inputs.
+  The 178-input fresh wheel passed all 42 cases, including four optional
+  Arrow cases; the independent Rust 1.99.1 compile also passed. The helper has
+  24 guard tests, and the combined preparation suite has 208 passes/no skips.
+- [x] ALIGN-04c: replace pending hosted observations with completed exact-source
+  platform/coverage/consumer receipts, and reconcile main's documentation repair
+  with the active documentation owner in #671 (superseding closed #659).
+- [ ] Integrator adoption of the candidate root workflow and final promotion.
+
+Allowed edits: this track's `integration/`, evidence and records; the companion
+journal/registry track; and `tests/native/test_scenario_wheel_build.py` for
+negative tests of the new track-local executor. Existing native source, tests,
+shared workflows/manifests, provider pins and migration obligations are retained.
+The workflow candidate is inert until #624 adopts it; local execution is not
+hosted adoption or release acceptance.
+
+## Requalification after the main advance — 16 November 2026
+
+Main advanced through #656 to `57d2916586d107c8affe90355e453abe27f01c26`
+after the first follow-up was prepared. The isolated integration commit
+`218c5a2f86037bf786d6292c7dbb3673a326d457` has tree
+`81dffc475d082208cb5563747b685b4451cd6397`, equal to GitHub's tested
+merge of that main and our published `a49d453e8786eca78ad89055a442862b3afcf9d2`.
+The [current integrated-source record](../research_software_registry_readiness_20260721/integration-20261116.md)
+supersedes the earlier main/PR-status wording below.
+
+- [x] ALIGN-01b: review the main advance, preserve ownership and old receipts,
+  and distinguish the 175 current build inputs from the earlier 122-input scope.
+  The integrated Conductor registry check passes; all 38 scientific release
+  obligations remain open.
+- [x] ALIGN-02d: build a fresh integrated Linux development wheel and execute
+  all 42 installed cases with all four optional PyArrow cases and zero skips.
+  The [new execution packet](evidence/arrow-integrated-20261116/README.md)
+  binds the changed source, wheel and environment.
+- [x] ALIGN-04b: execute the actual Rust 1.99.1 all-target workspace compile
+  check: all five integrated workspace crates pass on Linux/default features.
+  The excluded standalone
+  games crate, linking/artifacts, tests and other platforms require separate
+  evidence.
+- [x] ALIGN-02e / ALIGN-03b: repeat the eight native scenario-export and 64
+  existing provider/network tests against the integrated source. All pass on
+  Rust 1.100.0 with none failed, ignored or filtered; independent review verifies
+  the new source/artifact/log identities.
+- [ ] Admit the final source/artifact receipts through #624, adopt recurring
+  shared CI where appropriate, and resolve the integrated native documentation
+  gate with its existing owners. No old hosted result is promoted to a new head.
+
+Allowed edits for this continuation are the two existing scientific/journal
+track namespaces. Main's source changes are consumed unchanged. Shared source,
+manifests, pins, workflows and promotion remain with their existing owners.
+
+## Executable qualification follow-up — 16 November 2026
+
+Starting published head: `3f7e39249de496dc28a59e9e94a3c01390d1cb4b`;
+local tree-equivalent receipt: `0c718cea3eb982717ce940560868004d71261e9b`.
+Latest inspected main `18c467e18b71d972060365c68865aa405a69949c` only adds
+a Renovate workflow update to the assessed scientific source.
+
+- [x] ALIGN-02a: implement a repeatable installed Arrow qualifier that requires
+  the declared optional dependency, all four PyArrow cases and no skipped or
+  incomplete selection; include independent negative tests of the qualification
+  command and retain exact wheel/source/environment identities. Forty-five
+  tooling tests and independent review pass.
+- [x] ALIGN-02b: build in an owned isolated environment and execute the installed
+  scenario-export and relevant Kairos/producer checks, recording real failures
+  and limitations if the current build cannot complete. The identified Linux
+  development wheel passes all 42 selected cases, including all four optional
+  Arrow cases, with no skips. The retained build/consumer receipt binds 122
+  native inputs and the exact artifact bytes.
+- [x] ALIGN-04a: execute `cargo check --locked --workspace --all-targets -j 1`
+  on actual Rust 1.99.1 in an owned environment. All four workspace crates pass
+  for Linux/default features; test execution, linking/artifact and other-platform
+  acceptance are not inferred from compile checking.
+- [x] ALIGN-02c: execute the existing native `scenario_exports` target on Rust
+  1.100.0; eight cases pass with none failed, ignored or filtered.
+- [x] ALIGN-03a: execute the existing `kairos`, `network`, `network_diffusion`
+  and `network_petgraph` targets at the frozen current provider pin; 64 cases
+  pass (17/37/5/5), with none failed, ignored or filtered. Provider publication,
+  other platforms and broader scientific acceptance remain open.
+- [x] Reconcile observed hosted evidence and explicit minimum-compiler limits;
+  independently review this packet and prepare shared CI/provider/release
+  intake for #624. Exact publication/current-head receipts belong in #662;
+  integrator acceptance and recurring hosted adoption remain open.
+
+Allowed files: `scripts/qualify_scenario_arrow.py`,
+`tests/native/test_scenario_arrow_qualification.py`, this track's evidence and
+records. Existing science/test implementations, shared manifests/locks, root
+workflows/registries and other owners' files are not part of this packet.
+This execution implements test tooling and qualifies bounded behaviour; it
+does not reassign scientific model ownership or complete the 38 obligations.
+
+## Scientific and journal reconciliation — 16 November 2026
+
+- [x] ALIGN-01: reconcile issue #556, current native contracts, historical
+  receipts and journal/registry dependencies within this track's documentation.
+  Whitespace, metadata JSON, relative-link targets and preservation of the
+  historical plan were checked locally; integration remains pending.
+
+This bounded documentation pass is based on
+`69b674814513e09a683279c679b1584af8bb4214`. It does not reassign native,
+shared-integration or publication work. Historical entries below are preserved.
+
+**Read the [current reconciliation](reconciliation-20261116.md) first.** It
+supersedes old next-action and assignment wording below while retaining each
+receipt's original source and limits. Shared integration remains with #624.
+
+- [x] Record that #554 and #602 are merged source changes; distinguish the
+  reported 38 Arrow passes on `44cb9635` from current-source acceptance.
+- [~] ALIGN-02: the bounded Linux installed consumer now passes all four optional
+  PyArrow cases with no skips; see the follow-up above. Integrator adoption of
+  recurring hosted execution and any additional platform acceptance remain open.
+- [ ] ALIGN-03: reconcile and qualify the current Kairos pin and its lawful
+  distribution/publishability route with the existing provider/integration owners.
+- [ ] ALIGN-04: obtain exact-candidate native/platform, scheduled-consumer,
+  supply-chain, coverage/mutation and security receipts through existing owners.
+- [ ] ALIGN-05: connect truthful software scope and installed examples to the
+  existing empirical V01–V05 work and registry/JOSS preparation.
+- [ ] ALIGN-06: obtain the integrator's exact-artifact release disposition and
+  separate author/journal decisions after their mandatory prerequisites pass.
+
+The [shared intake](reconciliation-20261116.md#shared-integration-intake) requests
+recurring optional Arrow execution, explicit Rust minimum/compiler qualification,
+provider reconciliation and preservation of active work across #656/#659. These
+are pending handoffs, not implemented CI changes. All 38 scientific obligations,
+the four historical manual scenario checks and current provider/consumer/release
+holds remain open. See the [registry reconciliation](../research_software_registry_readiness_20260721/reconciliation-20261116.md)
+for #398–#401; the empirical and documentation plans retain their existing owners.
+
+## Historical execution record
+
+The material below is preserved unchanged from the inspected baseline. Its
+checkboxes and runtime/pin statements apply to the source and scope stated in
+each entry; they must not be interpreted as current whole-track acceptance.
+
 ## Issue #556 continuation — 14 November 2026
 
 Base: `276c2e505a0ce26910820fe8a94a6a498f505700`; branch:

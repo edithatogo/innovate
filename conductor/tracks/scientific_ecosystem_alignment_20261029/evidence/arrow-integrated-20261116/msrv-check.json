@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "command": "cargo check --locked --workspace --all-targets -j 1",
+  "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27)",
+  "source_commit": "218c5a2f86037bf786d6292c7dbb3673a326d457",
+  "source_tree": "81dffc475d082208cb5563747b685b4451cd6397",
+  "source_manifest": "build-provenance.json",
+  "source_manifest_sha256": "882a8292b38587ee80468c63d5a4a7be1ce84957aed039911d18da990ee4073a",
+  "source_input_count": 175,
+  "kairos_revision": "a1f6283575ad26918230adc122a99b5c08fc4da3",
+  "environment": {
+    "CARGO_HOME": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/cargo",
+    "CARGO_TARGET_DIR": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/target-msrv",
+    "CARGO_BUILD_JOBS": "1",
+    "PYO3_PYTHON": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python",
+    "PATH_toolchain": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/rustup-msrv/toolchains/1.99.1-x86_64-unknown-linux-gnu/bin"
+  },
+  "workspace_crates": [
+    "innovate-core",
+    "innovate-tabular",
+    "innovate-ffi",
+    "innovate-python",
+    "innovate-kairos"
+  ],
+  "workspace_exclusions": [
+    "rust/crates/innovate-games"
+  ],
+  "scope": "Linux x86_64; locked default-feature workspace all-target compile check",
+  "limitations": [
+    "Compile check only: no Rust 1.99.1 test execution, linked-artifact acceptance or other platform qualification.",
+    "innovate-games is explicitly excluded from the workspace; its files are captured for source identity, not compile acceptance."
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 20.788,
+  "all_build_inputs_unchanged": true,
+  "log": "msrv-check.log",
+  "log_sha256": "e2d11a68987dfba80854f75e9dc786aae6deb7c1d3063f5aad8ae84462d68417"
+}

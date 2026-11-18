@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope": "Read-only origin and resource-search observations; no submission or identifier verification",
+  "software_revision": "69b674814513e09a683279c679b1584af8bb4214",
+  "observations": [
+    {
+      "provider": "software_heritage",
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/edithatogo/innovate/get/",
+      "http_status": 404,
+      "content_type": "application/json",
+      "provider_response_date": "Mon, 16 Nov 2026 10:07:07 GMT",
+      "outcome": "not_found",
+      "response": {
+        "exception": "NotFoundExc",
+        "reason": "Origin with url https://github.com/edithatogo/innovate not found!"
+      }
+    },
+    {
+      "provider": "software_heritage",
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/https://github.com/edithatogo/innovate.git/get/",
+      "http_status": 404,
+      "content_type": "application/json",
+      "provider_response_date": "Mon, 16 Nov 2026 10:07:07 GMT",
+      "outcome": "not_found",
+      "response": {
+        "exception": "NotFoundExc",
+        "reason": "Origin with url https://github.com/edithatogo/innovate.git not found!"
+      }
+    },
+    {
+      "provider": "rrid",
+      "method": "GET",
+      "url": "https://scicrunch.org/resources/Tools/search?q=innovate&l=innovate",
+      "http_status": 403,
+      "content_type": "text/html; charset=UTF-8",
+      "provider_response_date": "Mon, 16 Nov 2026 10:07:04 GMT",
+      "outcome": "unavailable",
+      "response_kind": "non_json_response_not_retained",
+      "duplicate_check_complete": false
+    }
+  ],
+  "limitation": "These observations are not provider outcome receipts for readiness.json. Not found applies only to the tested origins and times. The RRID duplicate check is incomplete. No external submission, curator decision, archival ingestion, resolving identifier or qualified software release is established. Non-JSON response bodies and headers beyond those listed were not retained.",
+  "recorded_on": "2026-11-16",
+  "observation_time_source": "Individual provider HTTP Date headers are retained; no exact local request timestamp was captured."
+}

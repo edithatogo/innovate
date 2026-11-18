@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": "four existing native provider/network targets at the frozen Kairos pin",
+  "command": "cargo test --locked -p innovate-core --test kairos --test network --test network_diffusion --test network_petgraph -j 1",
+  "exit_code": 0,
+  "results": {
+    "kairos": {
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    "network": {
+      "passed": 37,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    "network_diffusion": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    "network_petgraph": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    }
+  },
+  "total_passed": 64,
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)",
+  "source_commit": "0c718cea3eb982717ce940560868004d71261e9b",
+  "source_tree": "852b4687230505c1ee03cdbd657db0d2f9a24116",
+  "source_manifest": "build-provenance.json",
+  "source_manifest_sha256": "d3e9a4a9187d613defad601f942cb703192ebd4b0e484a1b3157d3ad205e7dc2",
+  "all_122_build_inputs_unchanged": true,
+  "kairos_revision": "a1f6283575ad26918230adc122a99b5c08fc4da3",
+  "log": "provider-rust.log",
+  "log_sha256": "980ef7cbf933429cf4b1b19490261226b414797a441b7cbfe89e1af3a77ffd6f",
+  "limitations": [
+    "Linux x86_64 native test profile only",
+    "Does not establish upstream crates.io publication/publishability, other-platform support, full scientific validation or release acceptance"
+  ]
+}

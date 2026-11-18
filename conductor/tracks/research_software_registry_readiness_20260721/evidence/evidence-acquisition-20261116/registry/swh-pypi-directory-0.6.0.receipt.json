@@ -1,0 +1,13 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/directory/03ce01ed9f43a580277665e01a806db8d2b5d061/",
+  "requested_at_utc": "2026-11-16T13:28:58.553364+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:29:05 GMT",
+  "content_type": "application/json",
+  "final_url": "https://archive.softwareheritage.org/api/1/directory/03ce01ed9f43a580277665e01a806db8d2b5d061/",
+  "link": null,
+  "body_bytes": 282,
+  "response_file": "swh-pypi-directory-0.6.0.response.json",
+  "response_sha256": "9e1a990a550eacc77640645b7f48483dc3653ef615b93f00f294fd83418cc069"
+}

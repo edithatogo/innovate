@@ -1,0 +1,222 @@
+[
+  {
+    "DOI": "10.1287/mnsc.15.5.215",
+    "URL": "https://pubsonline.informs.org/doi/10.1287/mnsc.15.5.215",
+    "author": [
+      {
+        "family": "Bass",
+        "given": "Frank M."
+      }
+    ],
+    "container-title": "Management Science",
+    "id": "bass1969",
+    "issue": "5",
+    "issued": {
+      "date-parts": [
+        [
+          1969
+        ]
+      ]
+    },
+    "page": "215-227",
+    "title": "A new product growth for model consumer durables",
+    "type": "article-journal",
+    "volume": "15"
+  },
+  {
+    "DOI": "10.1016/S0040-1625(71)80005-7",
+    "URL": "https://www.sciencedirect.com/science/article/pii/S0040162571800057",
+    "author": [
+      {
+        "family": "Fisher",
+        "given": "J. C."
+      },
+      {
+        "family": "Pry",
+        "given": "R. H."
+      }
+    ],
+    "container-title": "Technological Forecasting and Social Change",
+    "id": "fisher1971",
+    "issued": {
+      "date-parts": [
+        [
+          1971
+        ]
+      ]
+    },
+    "page": "75-88",
+    "title": "A simple substitution model of technological change",
+    "type": "article-journal",
+    "volume": "3"
+  },
+  {
+    "DOI": "10.21105/joss.07668",
+    "URL": "https://joss.theoj.org/papers/10.21105/joss.07668",
+    "author": [
+      {
+        "dropping-particle": "ter",
+        "family": "Hoeven",
+        "given": "Ewout"
+      },
+      {
+        "family": "Kwakkel",
+        "given": "Jan"
+      },
+      {
+        "family": "Hess",
+        "given": "Vincent"
+      },
+      {
+        "family": "Pike",
+        "given": "Thomas"
+      },
+      {
+        "family": "Wang",
+        "given": "Boyu"
+      },
+      {
+        "literal": "Rht"
+      },
+      {
+        "family": "Kazil",
+        "given": "Jackie"
+      }
+    ],
+    "container-title": "Journal of Open Source Software",
+    "id": "mesa2025",
+    "issue": "107",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "page": "7668",
+    "title": "Mesa 3: Agent-based modeling with Python in 2025",
+    "title-short": "Mesa 3",
+    "type": "article-journal",
+    "volume": "10"
+  },
+  {
+    "DOI": "10.1007/s41060-017-0086-6",
+    "URL": "https://link.springer.com/article/10.1007/s41060-017-0086-6",
+    "author": [
+      {
+        "family": "Rossetti",
+        "given": "Giulio"
+      },
+      {
+        "family": "Milli",
+        "given": "Letizia"
+      },
+      {
+        "family": "Rinzivillo",
+        "given": "Salvatore"
+      },
+      {
+        "family": "Sîrbu",
+        "given": "Alina"
+      },
+      {
+        "family": "Pedreschi",
+        "given": "Dino"
+      },
+      {
+        "family": "Giannotti",
+        "given": "Fosca"
+      }
+    ],
+    "container-title": "International Journal of Data Science and Analytics",
+    "id": "ndlib2018",
+    "issued": {
+      "date-parts": [
+        [
+          2018
+        ]
+      ]
+    },
+    "page": "61-79",
+    "title": "NDlib: A python library to model and analyze diffusion processes over complex networks",
+    "title-short": "NDlib",
+    "type": "article-journal",
+    "volume": "5"
+  },
+  {
+    "DOI": "10.7717/peerj-cs.1516",
+    "URL": "https://peerj.com/articles/cs-1516/",
+    "author": [
+      {
+        "family": "Abril-Pla",
+        "given": "Oriol"
+      },
+      {
+        "family": "Andreani",
+        "given": "Virgile"
+      },
+      {
+        "family": "Carroll",
+        "given": "Colin"
+      },
+      {
+        "family": "Dong",
+        "given": "Larry"
+      },
+      {
+        "family": "Fonnesbeck",
+        "given": "Christopher J."
+      },
+      {
+        "family": "Kochurov",
+        "given": "Maxim"
+      },
+      {
+        "family": "Kumar",
+        "given": "Ravin"
+      },
+      {
+        "family": "Lao",
+        "given": "Junpeng"
+      },
+      {
+        "family": "Luhmann",
+        "given": "Christian C."
+      },
+      {
+        "family": "Martin",
+        "given": "Osvaldo A."
+      },
+      {
+        "family": "Osthege",
+        "given": "Michael"
+      },
+      {
+        "family": "Vieira",
+        "given": "Ricardo"
+      },
+      {
+        "family": "Wiecki",
+        "given": "Thomas"
+      },
+      {
+        "family": "Zinkov",
+        "given": "Robert"
+      }
+    ],
+    "container-title": "PeerJ Computer Science",
+    "id": "pymc2023",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "page": "e1516",
+    "title": "PyMC: A modern, and comprehensive probabilistic programming framework in Python",
+    "title-short": "PyMC",
+    "type": "article-journal",
+    "volume": "9"
+  }
+]

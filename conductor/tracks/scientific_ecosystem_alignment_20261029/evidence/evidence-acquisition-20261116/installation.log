@@ -1,0 +1,29 @@
+["uv", "venv", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer", "--python", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python"]
+Using CPython 3.15.2 interpreter at: venv/bin/python
+Creating virtual environment at: evidence-acquisition-installed/consumer
+["uv", "pip", "install", "--python", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python", "--only-binary", ":all:", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl", "pyarrow==26.0.1", "pytest==9.2.0"]
+Using Python 3.15.2 environment at: evidence-acquisition-installed/consumer
+Resolved 9 packages in 14.33s
+Downloading polars-runtime-32 (51.4MiB)
+Downloading pygments (1.2MiB)
+Downloading pyarrow (52.5MiB)
+ Downloaded pygments
+ Downloaded polars-runtime-32
+ Downloaded pyarrow
+Prepared 9 packages in 2.16s
+Installed 9 packages in 13ms
+ + iniconfig==2.3.1
+ + innovate==0.7.0a1 (from file:///workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl)
+ + packaging==26.3
+ + pluggy==1.7.0
+ + polars==2.1.0
+ + polars-runtime-32==2.1.0
+ + pyarrow==26.0.1
+ + pygments==2.21.0
+ + pytest==9.2.0
+["uv", "pip", "check", "--python", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python"]
+Using Python 3.15.2 environment at: evidence-acquisition-installed/consumer
+Checked 9 packages in 0.64ms
+All installed packages are compatible
+["/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python", "-I", "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/scripts/qualify_scenario_arrow.py", "--repository", "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence", "--wheel", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl", "--build-record", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/build-provenance.json", "--output", "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/qualification"]
+{"status": "passed", "output": "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/qualification", "error": null}

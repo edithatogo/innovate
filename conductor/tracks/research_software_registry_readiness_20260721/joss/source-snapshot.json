@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "state": "unapproved_working_draft",
+  "software_revision": "20fe0b41b815bc926fc3d61b9672c3d4b2feb289",
+  "software_version": "0.7.0a1",
+  "submission_ready": false,
+  "source_sha256": {
+    "README.md": "35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be",
+    "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
+    "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
+    "pyproject.toml": "9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05",
+    "Cargo.toml": "2f22f7a075467934df9e710bfb087b89958b6b069de9d15814b6ee1ee2ba9959",
+    "Cargo.lock": "642a7176be4ac9fae0c633e468abfd5decdd2531c594fcdf8f3d4029c8784342",
+    "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
+    "conductor/product.md": "20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27",
+    "conductor/release-gates-20261107.md": "e2e7cb2795cb33fe9c8568e760817c8b051aa196c261985ff22fbb675717788a",
+    "docs/astro-site/src/content/docs/native-migration.md": "345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763",
+    "rust/crates/innovate-core/Cargo.toml": "afe2af0cca4eeedb027a95c3b24e6bdd8425d72b4fd3718e68fac0b2f5cb2b3c",
+    "rust/crates/innovate-tabular/Cargo.toml": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
+    "rust/crates/innovate-tabular/src/lib.rs": "d8fae4e66a9862f20eb28689b20b8eb66b5bac09f47927777ba3bbb593d56558",
+    ".github/workflows/ci.yml": "4f4104462aa2ea198ecd149948552dfb38c57c7135fed7170e8ee28503e8cd5c"
+  },
+  "edition_sha256": {
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "71cb66a8479ba77c0c280de86a47ec150d610814692c967db7e6b886f3a53977",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "1c5523ba4411f95dad8e084300c515c778f93ce429316b7d5e62d51ee64314cb"
+  },
+  "limitations": [
+    "Source hashes bind this scoped assessment, not complete implementation coverage or scientific validity.",
+    "Provider outcomes and author declarations remain pending in readiness.json.",
+    "Reassess changed claims and source inputs before updating fingerprints; no automatic hash refresh for acceptance."
+  ]
+}

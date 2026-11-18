@@ -1,0 +1,8 @@
+{
+  "scope": "Exact helper source executed for the original 241-package environment used by render attempts 3 and 4; later reproduction guards are separate",
+  "environment_receipt_sha256": "549c478ce5e9be294abeb2f2ed94180a9dca56a2a8baabab1f5819efc1dbff2b",
+  "script_sha256": {
+    "build_pdf_environment.py": "76c3bfcf76746e3db5dc1bf13a697eb6e4921453a183cdfe2db3f29b28d81c82",
+    "configure_pdf_environment.py": "7432f80fa27cb274aec51bd2a16aea8cf85dd52184e7b90aa0e9815df0c55849"
+  }
+}

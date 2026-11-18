@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "inspected_on": "2026-11-16",
+  "inventory": "pypi-history.json",
+  "inventory_file_sha256": "047e25c4836a24ecddfa5506479501976e81277657bacb041c0c836b83f288c4",
+  "status": "verified",
+  "artifacts": [
+    {
+      "version": "0.5.0",
+      "filename": "innovate-0.5.0.tar.gz",
+      "source_url": "https://files.pythonhosted.org/packages/8f/da/43578bff1f45d9483e55982dd49422d5b238893b918b0f992a84ceb02f9e/innovate-0.5.0.tar.gz",
+      "inventory_sha256": "c8687b0ce2d08a55549d3707a7120847e8433fe0d51ae577fadba1ec94cb7961",
+      "upload_time_iso_8601": "2025-08-29T09:46:41.108181Z",
+      "retrieved_at": "2026-11-16T13:41:09.058032+00:00",
+      "http_status": 200,
+      "final_url": "https://files.pythonhosted.org/packages/8f/da/43578bff1f45d9483e55982dd49422d5b238893b918b0f992a84ceb02f9e/innovate-0.5.0.tar.gz",
+      "provider_date": "Mon, 16 Nov 2026 13:41:16 GMT",
+      "etag": "\"53c6ad087d69e11f2a369d9df2ff75f5\"",
+      "bytes": 107028,
+      "sha256": "c8687b0ce2d08a55549d3707a7120847e8433fe0d51ae577fadba1ec94cb7961",
+      "matches_inventory": true,
+      "status": "verified",
+      "archive_members": 165,
+      "metadata": {
+        "path": "innovate-0.5.0/PKG-INFO",
+        "bytes": 10356,
+        "sha256": "39b0fc63c496e54456c428452cac0f232f847a985c73327e7538201efbb79f00",
+        "fields": {
+          "Metadata-Version": [
+            "2.4"
+          ],
+          "Name": [
+            "innovate"
+          ],
+          "Version": [
+            "0.5.0"
+          ],
+          "Summary": [
+            "A Python library for simplifying innovation/policy diffusion modelling."
+          ],
+          "Home-page": [],
+          "Project-URL": [
+            "Homepage, https://github.com/edithatogo/innovate",
+            "Documentation, https://edithatogo.github.io/innovate"
+          ],
+          "License": [],
+          "License-Expression": [
+            "Apache-2.0"
+          ],
+          "License-File": [
+            "LICENSE"
+          ],
+          "Classifier": [],
+          "Requires-Python": [
+            ">=3.8"
+          ]
+        }
+      },
+      "identity": {
+        "name_matches": true,
+        "version_matches": true,
+        "canonical_repository_named": true,
+        "license_metadata_present": true
+      }
+    },
+    {
+      "version": "0.6.0",
+      "filename": "innovate-0.6.0.tar.gz",
+      "source_url": "https://files.pythonhosted.org/packages/4e/d5/9ed384a3e317af833f58ce906926c458a1a2f33a4bb69fc930fb72bba603/innovate-0.6.0.tar.gz",
+      "inventory_sha256": "ea0ce110499320871e568d5107d468f00f93185005a1909248de12f3b1bf8be2",
+      "upload_time_iso_8601": "2026-11-01T11:58:32.680487Z",
+      "retrieved_at": "2026-11-16T13:41:09.058932+00:00",
+      "http_status": 200,
+      "final_url": "https://files.pythonhosted.org/packages/4e/d5/9ed384a3e317af833f58ce906926c458a1a2f33a4bb69fc930fb72bba603/innovate-0.6.0.tar.gz",
+      "provider_date": "Mon, 16 Nov 2026 13:41:16 GMT",
+      "etag": "\"30bc19515b7c83c12a32b11daa15273f\"",
+      "bytes": 185910,
+      "sha256": "ea0ce110499320871e568d5107d468f00f93185005a1909248de12f3b1bf8be2",
+      "matches_inventory": true,
+      "status": "verified",
+      "archive_members": 191,
+      "metadata": {
+        "path": "innovate-0.6.0/PKG-INFO",
+        "bytes": 4365,
+        "sha256": "66cb17ae57a0fbe9bd28c15a64d51d3ff94e277c7293a38dc1edc6af8c12f429",
+        "fields": {
+          "Metadata-Version": [
+            "2.4"
+          ],
+          "Name": [
+            "innovate"
+          ],
+          "Version": [
+            "0.6.0"
+          ],
+          "Summary": [
+            "A Python library for simplifying innovation/policy diffusion modelling."
+          ],
+          "Home-page": [],
+          "Project-URL": [
+            "Homepage, https://github.com/edithatogo/innovate",
+            "Documentation, https://edithatogo.github.io/innovate",
+            "Issues, https://github.com/edithatogo/innovate/issues",
+            "Source, https://github.com/edithatogo/innovate"
+          ],
+          "License": [],
+          "License-Expression": [
+            "Apache-2.0"
+          ],
+          "License-File": [
+            "LICENSE"
+          ],
+          "Classifier": [
+            "Development Status :: 4 - Beta",
+            "Intended Audience :: Science/Research",
+            "Operating System :: OS Independent",
+            "Programming Language :: Python :: 3 :: Only",
+            "Programming Language :: Python :: 3.15",
+            "Topic :: Scientific/Engineering"
+          ],
+          "Requires-Python": [
+            "<3.16,>=3.15.1"
+          ]
+        }
+      },
+      "identity": {
+        "name_matches": true,
+        "version_matches": true,
+        "canonical_repository_named": true,
+        "license_metadata_present": true
+      }
+    }
+  ],
+  "method": "Fetch only the two immutable PyPI source-distribution URLs already recorded, recompute archive SHA-256, and read the regular top-level PKG-INFO directly from the tar stream. No archive paths were extracted and no package code was executed. Downloaded archives remain in owned scratch, outside the Git worktree.",
+  "limits": [
+    "Verifies the current immutable artifact bytes and their embedded package identity/license declarations, not the legal sufficiency of a license claim.",
+    "Does not prove Git tag/commit equivalence, historical or continuous GitHub repository visibility, native 0.7 qualification, research use or editorial eligibility.",
+    "Only 0.5.0 and 0.6.0 source distributions were downloaded; other inventory artifacts retain provider-recorded digest evidence only."
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "inspected_at_utc": "2026-11-16T13:45:50.012248+00:00",
+  "status": "visual_review_completed_with_citation_metadata_finding",
+  "reviewer": "ChatGPT GPT-6 Astra Pro; assistant inspection, not author or human approval",
+  "pdf": {
+    "path": "paper.pdf",
+    "sha256": "7fe134f4f14541d5aab263bee1f9e254669c8d0262eb6d3dd8e4bb7e4c56206f",
+    "bytes": 208220,
+    "pages": 4
+  },
+  "render_receipt_sha256": "3d7a942e8456039ad76810a2531595e825dd2872c243eea8e3fe8a5db57db552",
+  "source_input_sha256": {
+    "paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+    "paper.bib": "dd1ef2670fbe3bce7c506b89c9eb442821204eb76927b40bd4d01739fac1e740",
+    "source-snapshot.json": "4904f1e10f178983b05c2b3346a2e6315c0bd17152e2fca7358552401c87eddd"
+  },
+  "page_rendering": {
+    "tool": "pdftoppm 26.05.0",
+    "argv": [
+      "pdftoppm",
+      "-r",
+      "150",
+      "-png",
+      "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-3/paper.pdf",
+      "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/visual-review/page"
+    ],
+    "exit_code": 0,
+    "pages": [
+      {
+        "page": 1,
+        "png_sha256": "7acd878e7ae41160e9b19310b4f21d861b0acde0531b1599cf029049b011cd3c",
+        "pixels": [
+          1241,
+          1754
+        ],
+        "visually_inspected": true
+      },
+      {
+        "page": 2,
+        "png_sha256": "62812d24fbdab6314fcd16cbe00d5fd497b33b97a43707d6e605df1a2cd4fcdd",
+        "pixels": [
+          1241,
+          1754
+        ],
+        "visually_inspected": true
+      },
+      {
+        "page": 3,
+        "png_sha256": "6f749c3a12c60406151bb286167c86b0f614e228964cc73df157393de19bdfb0",
+        "pixels": [
+          1241,
+          1754
+        ],
+        "visually_inspected": true
+      },
+      {
+        "page": 4,
+        "png_sha256": "3c649b72d92c12a5f6bb0395fcfd179c7bcf4710ff55b4417df63c79098238a3",
+        "pixels": [
+          1241,
+          1754
+        ],
+        "visually_inspected": true
+      }
+    ],
+    "preview_retention": "Owned scratch; reproducible from the retained PDF"
+  },
+  "observed_passes": [
+    "All four page images inspected; text, headings, footers and page numbers legible",
+    "No observed clipping, unintended overlap, missing glyphs or replacement boxes",
+    "DRAFT watermark on all four pages; visible unapproved notice and source revision on page one",
+    "All five references and DOI links present; Sirbu diacritic and literal Rht author rendered"
+  ],
+  "finding": {
+    "reference": "mesa2025",
+    "rendered_citation": "Hoeven et al., 2025",
+    "publisher_citation": "ter Hoeven et al., 2025",
+    "primary_source": "https://joss.theoj.org/papers/10.21105/joss.07668",
+    "cause": "Pandoc interpreted the supplied surname particle as dropping; preserve it as non-dropping with BibTeX braces",
+    "follow_up": "Narrow author-family brace correction prepared for a fresh attempt-4; this PDF is retained as the historical pre-correction output"
+  },
+  "template_metadata_observed": [
+    "DOI 10.xxxxxx/draft",
+    "Submitted 01 January 1970; published unpublished",
+    "Open Journals editor and @openjournals reviewer placeholders",
+    "Volume, issue and page placeholders in self-citation",
+    "Provisional visible author/affiliation; PDF Info Author field empty"
+  ],
+  "content_check_sha256": "554a98d26722113ad3de92a7fb8bce9c65f9415c446a4cdd6b4ae0739e4deea4",
+  "submission_ready": false,
+  "author_approved": false,
+  "scientific_or_release_qualification": false,
+  "limits": [
+    "Review covers draft legibility and citation rendering only",
+    "Official template placeholders are not editorial events or rights declarations",
+    "No PDF/A conformance, tagged accessibility or cross-platform qualification performed"
+  ]
+}

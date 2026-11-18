@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "inspected_evidence_commit": "070a04424dfb084758d1c0b201bf2980002ea81d",
+  "recorded_execution_source": "b2ed945f9ffede3bdd00c29437636c0bf1eba03d",
+  "status": "identities_match",
+  "checks": [
+    {
+      "path": "docs/datasets/wdi-aus-internet-20261116/raw.json",
+      "source_url": "https://raw.githubusercontent.com/edithatogo/innovate/070a04424dfb084758d1c0b201bf2980002ea81d/docs/datasets/wdi-aus-internet-20261116/raw.json",
+      "retrieved_at": "2026-11-16T13:32:10.763921+00:00",
+      "expected_sha256": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+      "http_status": 200,
+      "bytes": 8414,
+      "sha256": "4ad0bb92ffd4870def5ef10cfce2b1de5b4a04624821d10c9e6a8e1ef9edb472",
+      "matches_recorded_identity": true
+    },
+    {
+      "path": "docs/datasets/wdi-aus-internet-20261116/observations.csv",
+      "source_url": "https://raw.githubusercontent.com/edithatogo/innovate/070a04424dfb084758d1c0b201bf2980002ea81d/docs/datasets/wdi-aus-internet-20261116/observations.csv",
+      "retrieved_at": "2026-11-16T13:32:10.764718+00:00",
+      "expected_sha256": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+      "http_status": 200,
+      "bytes": 575,
+      "sha256": "f97f200073130ca82341ea41058cbcbeb3682e394ca377ceddefdf80d31e5e46",
+      "matches_recorded_identity": true
+    },
+    {
+      "path": "examples/native_public_data.py",
+      "source_url": "https://raw.githubusercontent.com/edithatogo/innovate/070a04424dfb084758d1c0b201bf2980002ea81d/examples/native_public_data.py",
+      "retrieved_at": "2026-11-16T13:32:10.765288+00:00",
+      "expected_sha256": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+      "http_status": 200,
+      "bytes": 8548,
+      "sha256": "90a070baf420d0080919e43b0f32a31945b4073a1aeaf9a1ded9b408a65bff86",
+      "matches_recorded_identity": true
+    }
+  ],
+  "scope": "Read-only source and frozen-data byte comparison against the producer manifest/receipt; no execution of the analysis or admission as research use.",
+  "live_provider_snapshot_requeried": false
+}

@@ -1,0 +1,7 @@
+tree 787eb4cd175b7343026cdad88143e8879e0b3062
+parent d36c33f6b4fb480828ddb9aae0121f3379667015
+parent b29a1d27f54fdd08d77881ee999772fceab7c03a
+author Codex <codex@openai.com> 1794835381 +1100
+committer Codex <codex@openai.com> 1794835381 +1100
+
+Merge main documentation repair for evidence acquisition

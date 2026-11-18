@@ -1,0 +1,182 @@
+{
+  "current_version": "0.6.0",
+  "http_status": 200,
+  "limits": [
+    "Historical package-index upload metadata; not a build attestation or proof of any research execution.",
+    "The Python 0.6.0 distribution is separate from the current Rust 0.7 development line.",
+    "No PyPI file has been assumed byte-equivalent to a Git tag or commit."
+  ],
+  "name": "innovate",
+  "project_urls": {
+    "Documentation": "https://edithatogo.github.io/innovate",
+    "Homepage": "https://github.com/edithatogo/innovate",
+    "Issues": "https://github.com/edithatogo/innovate/issues",
+    "Source": "https://github.com/edithatogo/innovate"
+  },
+  "releases": {
+    "0.1.0": [
+      {
+        "filename": "innovate-0.1.0-py3-none-any.whl",
+        "packagetype": "bdist_wheel",
+        "sha256": "17c66b06dfbe3639470907e00b48b8d00bd13c65c20acb2c4fd7465ce5746ba0",
+        "upload_time_iso_8601": "2025-07-07T03:43:40.258702Z",
+        "url": "https://files.pythonhosted.org/packages/11/2f/6ccb849a07154401e6dda0844dce37d79a0fa18bb45aa39bcf3442b5e56d/innovate-0.1.0-py3-none-any.whl",
+        "yanked": false
+      },
+      {
+        "filename": "innovate-0.1.0.tar.gz",
+        "packagetype": "sdist",
+        "sha256": "9e0a025497ecd3aa55a8a52350121b201470e8dc3584e4c4415100db8a9bfc50",
+        "upload_time_iso_8601": "2025-07-07T03:43:42.054398Z",
+        "url": "https://files.pythonhosted.org/packages/40/37/f296bddd8b7735f4a8abe7a3b06a929989b33487b74b46b978f0980e201b/innovate-0.1.0.tar.gz",
+        "yanked": false
+      }
+    ],
+    "0.1.1": [
+      {
+        "filename": "innovate-0.1.1-py3-none-any.whl",
+        "packagetype": "bdist_wheel",
+        "sha256": "bdc0f5a9e6f1ab75713b63e5c42dcee7cb771a953dde43bee8e9396cdf0fc1f6",
+        "upload_time_iso_8601": "2025-07-07T22:47:46.158748Z",
+        "url": "https://files.pythonhosted.org/packages/ad/3a/8f12f6362040d270fdb97c0cc4538a1b4c2cdb653118ea706ae85bed5900/innovate-0.1.1-py3-none-any.whl",
+        "yanked": false
+      },
+      {
+        "filename": "innovate-0.1.1.tar.gz",
+        "packagetype": "sdist",
+        "sha256": "43921a634b58ad04184851fb69e5766f436dd8aca1030a84d300ea088b8d9958",
+        "upload_time_iso_8601": "2025-07-07T22:47:48.152726Z",
+        "url": "https://files.pythonhosted.org/packages/9f/9a/b636079be099ffbbffda2f9de28111d65eaca4054280bbe88842fdc57a78/innovate-0.1.1.tar.gz",
+        "yanked": false
+      }
+    ],
+    "0.2.1": [
+      {
+        "filename": "innovate-0.2.1-py3-none-any.whl",
+        "packagetype": "bdist_wheel",
+        "sha256": "1ae1342a409c67f8296a5c4bfd2b7e494d81105119ec43b66b71b1daca5d5a62",
+        "upload_time_iso_8601": "2025-08-29T09:46:35.906050Z",
+        "url": "https://files.pythonhosted.org/packages/21/1f/07289c6555d142f512e7e01428a5238f807d5e54b4d19f6ae28b19c6a34b/innovate-0.2.1-py3-none-any.whl",
+        "yanked": false
+      },
+      {
+        "filename": "innovate-0.2.1.tar.gz",
+        "packagetype": "sdist",
+        "sha256": "3e362d2217004409492c92f8adb912d224d1fc89cf7394304d4d443728b5cf81",
+        "upload_time_iso_8601": "2025-08-29T09:46:39.561671Z",
+        "url": "https://files.pythonhosted.org/packages/59/ae/9b46b9356e9fceb12a18bdd6c35538df7e1d23d9b85476073d9d7c6682e9/innovate-0.2.1.tar.gz",
+        "yanked": false
+      }
+    ],
+    "0.5.0": [
+      {
+        "filename": "innovate-0.5.0-py3-none-any.whl",
+        "packagetype": "bdist_wheel",
+        "sha256": "fd656c7662fabb7639aa204c4e86335e5ccfcdc0536365b398c69b8dcfe2b966",
+        "upload_time_iso_8601": "2025-08-29T09:46:37.910433Z",
+        "url": "https://files.pythonhosted.org/packages/dc/eb/13721834e0ae6ceb59ad02bca1fba5aa8f5d602939f7115ef05397f1b113/innovate-0.5.0-py3-none-any.whl",
+        "yanked": false
+      },
+      {
+        "filename": "innovate-0.5.0.tar.gz",
+        "packagetype": "sdist",
+        "sha256": "c8687b0ce2d08a55549d3707a7120847e8433fe0d51ae577fadba1ec94cb7961",
+        "upload_time_iso_8601": "2025-08-29T09:46:41.108181Z",
+        "url": "https://files.pythonhosted.org/packages/8f/da/43578bff1f45d9483e55982dd49422d5b238893b918b0f992a84ceb02f9e/innovate-0.5.0.tar.gz",
+        "yanked": false
+      }
+    ],
+    "0.6.0": [
+      {
+        "filename": "innovate-0.6.0-py3-none-any.whl",
+        "packagetype": "bdist_wheel",
+        "sha256": "f90cf9d8112d92139f9279f5728d136c33b51bdfe9a7ad1eb7512e3fccfa3be2",
+        "upload_time_iso_8601": "2026-11-01T11:58:30.920375Z",
+        "url": "https://files.pythonhosted.org/packages/98/6d/5819aaae8b956a825fcabc726dd8c83a0fb7f45aef494429c9fb5565cdc4/innovate-0.6.0-py3-none-any.whl",
+        "yanked": false
+      },
+      {
+        "filename": "innovate-0.6.0.tar.gz",
+        "packagetype": "sdist",
+        "sha256": "ea0ce110499320871e568d5107d468f00f93185005a1909248de12f3b1bf8be2",
+        "upload_time_iso_8601": "2026-11-01T11:58:32.680487Z",
+        "url": "https://files.pythonhosted.org/packages/4e/d5/9ed384a3e317af833f58ce906926c458a1a2f33a4bb69fc930fb72bba603/innovate-0.6.0.tar.gz",
+        "yanked": false
+      }
+    ]
+  },
+  "response_sha256": "0c7883bd4a3891a936835e311871c2023b9e53864c719f15110dd6eb7164d8aa",
+  "retrieved_at": "2026-11-16T13:27:48.355137+00:00",
+  "schema_version": 1,
+  "source_url": "https://pypi.org/pypi/innovate/json",
+  "version_metadata": {
+    "0.1.0": {
+      "author": null,
+      "home_page": null,
+      "http_status": 200,
+      "name": "innovate",
+      "project_urls": null,
+      "requires_python": ">=3.8",
+      "response_sha256": "02d84f9157b54320d118472e392c3c1c05b5aa587b2f0e0827bf02a1ff6ebfad",
+      "retrieved_at": "2026-11-16T13:30:43.359443+00:00",
+      "source_url": "https://pypi.org/pypi/innovate/0.1.0/json",
+      "version": "0.1.0"
+    },
+    "0.1.1": {
+      "author": null,
+      "home_page": null,
+      "http_status": 200,
+      "name": "innovate",
+      "project_urls": null,
+      "requires_python": ">=3.8",
+      "response_sha256": "cbd4cd45161f543cb06197b5c22b8379630a0890aa7c21898836abd4ab293ecf",
+      "retrieved_at": "2026-11-16T13:30:43.360243+00:00",
+      "source_url": "https://pypi.org/pypi/innovate/0.1.1/json",
+      "version": "0.1.1"
+    },
+    "0.2.1": {
+      "author": null,
+      "home_page": null,
+      "http_status": 200,
+      "name": "innovate",
+      "project_urls": null,
+      "requires_python": ">=3.8",
+      "response_sha256": "4af89967712d9da73b21797098a02bcb0666f6a4c532e3f7073cf381adf7021f",
+      "retrieved_at": "2026-11-16T13:30:43.360665+00:00",
+      "source_url": "https://pypi.org/pypi/innovate/0.2.1/json",
+      "version": "0.2.1"
+    },
+    "0.5.0": {
+      "author": null,
+      "home_page": null,
+      "http_status": 200,
+      "name": "innovate",
+      "project_urls": {
+        "Documentation": "https://edithatogo.github.io/innovate",
+        "Homepage": "https://github.com/edithatogo/innovate"
+      },
+      "requires_python": ">=3.8",
+      "response_sha256": "0848fd3f429806ab5d48c639f9a237bcfeae821ffe756f945a0c60d38516de14",
+      "retrieved_at": "2026-11-16T13:30:43.361184+00:00",
+      "source_url": "https://pypi.org/pypi/innovate/0.5.0/json",
+      "version": "0.5.0"
+    },
+    "0.6.0": {
+      "author": null,
+      "home_page": null,
+      "http_status": 200,
+      "name": "innovate",
+      "project_urls": {
+        "Documentation": "https://edithatogo.github.io/innovate",
+        "Homepage": "https://github.com/edithatogo/innovate",
+        "Issues": "https://github.com/edithatogo/innovate/issues",
+        "Source": "https://github.com/edithatogo/innovate"
+      },
+      "requires_python": "<3.16,>=3.15.1",
+      "response_sha256": "c45c73ac22d20b3fb1247aaccee9c580ea9660f9640fb72f3af7f09297363322",
+      "retrieved_at": "2026-11-16T13:30:49.853132+00:00",
+      "source_url": "https://pypi.org/pypi/innovate/0.6.0/json",
+      "version": "0.6.0"
+    }
+  }
+}

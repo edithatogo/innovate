@@ -1,0 +1,46 @@
+{
+  "assessed_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "destinations": [
+    {
+      "issue": 399,
+      "key": "software_heritage",
+      "outstanding": [
+        "Existing historical PyPI 0.5.0 and 0.6.0 archives now have verified origin/visit/snapshot/release/resolver and original-artifact checksum evidence in the dossier; these distribution objects do not identify the current native 0.7 source.",
+        "Select the intended archival target and assess its rights/release scope; preserve the distinction between the historical package releases, Git tag/commit objects and a later qualified native release.",
+        "For the selected Git/native target, obtain or locate the matching successful archive/visit/snapshot and resolving SWHID with verified source/release linkage before recording current-version completion."
+      ],
+      "state": "pending"
+    },
+    {
+      "issue": 400,
+      "key": "rrid",
+      "outstanding": [
+        "Complete accessible live duplicate discovery by canonical repository identity; the additional 16 November 2026 searches returned403 and the two indexed records identified other resources.",
+        "Confirm factual description, current submitter/contact and any earlier private registration; the dossier includes a concrete unsubmitted root-resource draft.",
+        "Retain the actual submission/curator outcome and verify that a resolving assigned RRID identifies Innovate before advertising an identifier."
+      ],
+      "state": "pending"
+    },
+    {
+      "issue": 401,
+      "key": "joss",
+      "outstanding": [
+        "Complete the official draft PDF build and visual inspection in a complete TeX environment after the recorded BibTeX/citeproc/TeX success; local compilation stops at missing luacode.sty. Reconcile claims with accepted source, research use and author declarations; source-integrity checks remain preparation only.",
+        "Public PyPI distribution history from July2025 and dated development records are now documented; establish actual version-bound research use and qualify the proposed current native source, installation, scientific and release scope.",
+        "Obtain author-confirmed authorship, affiliations, funding, conflicts and truthful AI-use/review declarations.",
+        "Retain the actual submission/review record, editorial outcome, accepted version archive and resolving publication identifier."
+      ],
+      "state": "pending"
+    }
+  ],
+  "online_verification_performed": false,
+  "pending_issues": [
+    399,
+    400,
+    401
+  ],
+  "record_valid": true,
+  "recorded_complete": false,
+  "schema_version": 1,
+  "software_version": "0.7.0a1"
+}

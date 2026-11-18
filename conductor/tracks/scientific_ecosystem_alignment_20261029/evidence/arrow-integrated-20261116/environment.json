@@ -1,0 +1,35 @@
+{
+  "commands": [
+    {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv pip install --reinstall --no-deps --python /workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python /workspace/scratch/e4108ca2b049/innovate-alignment-tools/wheels-integrated/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl",
+      "exit_code": 0,
+      "log": "install.log",
+      "log_sha256": "4b6ebcba3dbbc8ebff834026b43e59326c0da5f68b32d4d455113f674ed19d35"
+    },
+    {
+      "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv pip check --python /workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python",
+      "exit_code": 0,
+      "log": "environment-check.log",
+      "log_sha256": "3b6a18856b5b4d9e182b7be9a2ff27df6f475907755d124267805084f619f5e3"
+    }
+  ],
+  "runtime": {
+    "packages": {
+      "Pygments": "2.21.0",
+      "coverage": "7.17.3",
+      "iniconfig": "2.3.1",
+      "innovate": "0.7.0a1",
+      "maturin": "1.16.0",
+      "packaging": "26.3",
+      "pluggy": "1.7.0",
+      "polars": "2.1.0",
+      "polars-runtime-32": "2.1.0",
+      "pyarrow": "26.0.1",
+      "pytest": "9.2.0"
+    },
+    "python": "3.15.2 (main, Oct 26 2026, 14:06:56) [Clang 23.1.3 ]"
+  },
+  "schema_version": 1,
+  "scope": "selected manifest-pinned environment; not complete uv.lock development closure",
+  "status": "passed"
+}

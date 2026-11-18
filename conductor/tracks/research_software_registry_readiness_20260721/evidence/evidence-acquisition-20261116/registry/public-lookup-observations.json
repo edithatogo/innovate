@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-11-16",
+  "repository": "https://github.com/edithatogo/innovate",
+  "assessment_checkout": "2748084292e5e57c181c1665a686ad3a291145bf",
+  "assessment_tree": "787eb4cd175b7343026cdad88143e8879e0b3062",
+  "published_pr_head_at_initial_read": "d36c33f6b4fb480828ddb9aae0121f3379667015",
+  "acquisition": "Anonymous read-only GET requests using Python urllib; no login, credentials, request submission or curator correspondence.",
+  "retention": "Normalized observations transcribed from executed request output. Parsed JSON responses are preserved below; original response bytes were not saved for these initial requests. Do not treat this file as a raw-body digest receipt. Subsequent PyPI-origin chain requests have separate byte-preserving receipts.",
+  "limits": [
+    "404 applies only to each named object or existing-save-request query at the recorded response time.",
+    "Timeouts and HTTP 403 do not establish absence.",
+    "The two prior exact GitHub origin lookups were not blindly repeated.",
+    "No challenge HTML, tokens, cookies or credential material retained.",
+    "PyPI package origin identity is separate from GitHub origin, tag and commit identity."
+  ],
+  "observations": [
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/search/edithatogo/?limit=100",
+      "requested_at_utc": "2026-11-16T13:23:44.086368+00:00",
+      "http_status": null,
+      "response_date": null,
+      "error_type": "TimeoutError",
+      "error": "The read operation timed out"
+    },
+    {
+      "method": "GET",
+      "url": "https://rrid.site/data/source/nlx_144509-1/search?q=edithatogo&l=edithatogo",
+      "requested_at_utc": "2026-11-16T13:23:44.087164+00:00",
+      "http_status": 403,
+      "response_date": "Mon, 16 Nov 2026 13:23:53 GMT",
+      "content_type": "text/html; charset=UTF-8",
+      "body_bytes": 6216,
+      "body_retained": false
+    },
+    {
+      "method": "GET",
+      "url": "https://rrid.site/data/source/nlx_144509-1/search?q=innovate&l=innovate",
+      "requested_at_utc": "2026-11-16T13:23:44.087844+00:00",
+      "http_status": 403,
+      "response_date": "Mon, 16 Nov 2026 13:23:53 GMT",
+      "content_type": "text/html; charset=UTF-8",
+      "body_bytes": 6183,
+      "body_retained": false
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/search/edithatogo%2Finnovate/?limit=100",
+      "requested_at_utc": "2026-11-16T13:24:40.944088+00:00",
+      "http_status": null,
+      "response_date": null,
+      "error_type": "TimeoutError",
+      "error": "The read operation timed out"
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/release/86eceddcfa17362d05afa34a6f224e7eac5d561b/",
+      "requested_at_utc": "2026-11-16T13:24:40.945897+00:00",
+      "http_status": 404,
+      "response_date": "Mon, 16 Nov 2026 13:24:53 GMT",
+      "content_type": "application/json",
+      "body_bytes": 112,
+      "json_body": {
+        "exception": "NotFoundExc",
+        "reason": "Release with sha1_git 86eceddcfa17362d05afa34a6f224e7eac5d561b not found."
+      }
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/save/git/url/https://github.com/edithatogo/innovate/",
+      "requested_at_utc": "2026-11-16T13:24:40.946587+00:00",
+      "http_status": 404,
+      "response_date": "Mon, 16 Nov 2026 13:24:53 GMT",
+      "content_type": "application/json",
+      "body_bytes": 142,
+      "json_body": {
+        "exception": "NotFoundExc",
+        "reason": "No save requests found for visit of type git on origin with url https://github.com/edithatogo/innovate."
+      }
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/revision/6b673832c6024f5332c971ac35172a96615f75f9/",
+      "requested_at_utc": "2026-11-16T13:24:40.945322+00:00",
+      "http_status": 404,
+      "response_date": "Mon, 16 Nov 2026 13:24:53 GMT",
+      "content_type": "application/json",
+      "body_bytes": 113,
+      "json_body": {
+        "exception": "NotFoundExc",
+        "reason": "Revision with sha1_git 6b673832c6024f5332c971ac35172a96615f75f9 not found."
+      }
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/origin/https://pypi.org/project/innovate//get/",
+      "requested_at_utc": "2026-11-16T13:25:56.012984+00:00",
+      "http_status": 200,
+      "response_date": "Mon, 16 Nov 2026 13:26:03 GMT",
+      "content_type": "application/json",
+      "body_bytes": 347,
+      "json_body": {
+        "url": "https://pypi.org/project/innovate/",
+        "visit_types": [
+          "pypi"
+        ],
+        "origin_visits_url": "https://archive.softwareheritage.org/api/1/origin/https://pypi.org/project/innovate//visits/",
+        "metadata_authorities_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:ori:43c72e80ee63e8c814b9c6d0fab19498f69c42da/authorities/"
+      }
+    },
+    {
+      "method": "GET",
+      "url": "https://archive.softwareheritage.org/api/1/revision/3459f4528c11ceba8d1e5840d3da852dfb8d58bd/",
+      "requested_at_utc": "2026-11-16T13:25:56.013677+00:00",
+      "http_status": 404,
+      "response_date": "Mon, 16 Nov 2026 13:26:03 GMT",
+      "content_type": "application/json",
+      "body_bytes": 113,
+      "json_body": {
+        "exception": "NotFoundExc",
+        "reason": "Revision with sha1_git 3459f4528c11ceba8d1e5840d3da852dfb8d58bd not found."
+      }
+    }
+  ]
+}

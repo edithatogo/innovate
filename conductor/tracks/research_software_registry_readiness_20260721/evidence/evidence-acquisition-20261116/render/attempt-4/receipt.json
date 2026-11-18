@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-11-16T13:46:11.181669+00:00",
+  "status": "rendered_draft_visual_review_pending",
+  "submission_ready": false,
+  "scientific_or_release_qualification": false,
+  "visual_review": "not_performed",
+  "inara": {
+    "url": "https://github.com/openjournals/inara",
+    "revision": "88ee5d656f147d801448ce77ad8375619d383df6"
+  },
+  "repository_head_observed": "2748084292e5e57c181c1665a686ad3a291145bf",
+  "render_script_sha256": "e8fa54d784e9845f53a3372ece6aa744ce7efcf53d90d2dd18cd8e7dbaeaf511",
+  "input_sha256": {
+    "paper.md": "d0c4b6945f258b695454f3f287e237cdccbd6f9b9ead43b48ea549688be93fb3",
+    "paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
+    "source-snapshot.json": "a62b7b9a08c3aa44372aaa6dcd3ff26fd3cdd7269bcead0a16b0bd818f9e57c5"
+  },
+  "software_revision": "b29a1d27f54fdd08d77881ee999772fceab7c03a",
+  "source_date_epoch": 1794787200,
+  "draft_mode": true,
+  "commands": [
+    {
+      "stage": "source_integrity",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+      "argv": [
+        "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/scripts/check_joss_readiness.py",
+        "--root",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence",
+        "--json"
+      ]
+    },
+    {
+      "stage": "bibtex_parse",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+      "argv": [
+        "/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc",
+        "--fail-if-warnings",
+        "--from=bibtex",
+        "--to=csljson",
+        "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib",
+        "--output=/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4/bibliography.json"
+      ]
+    },
+    {
+      "stage": "official_tex",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+      "argv": [
+        "make",
+        "tex",
+        "ARTICLE=/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md",
+        "TARGET_FOLDER=/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4",
+        "PANDOC=/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc --fail-if-warnings --metadata=draft:true --variable=draft:true"
+      ]
+    },
+    {
+      "stage": "official_pdf",
+      "cwd": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/inara-base",
+      "argv": [
+        "make",
+        "pdf",
+        "ARTICLE=/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md",
+        "TARGET_FOLDER=/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-4",
+        "PANDOC=/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc --fail-if-warnings --metadata=draft:true --variable=draft:true"
+      ]
+    }
+  ],
+  "tools": {
+    "pandoc": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-tools/pandoc-3.6.4/bin/pandoc",
+      "version": "pandoc 3.6.4"
+    },
+    "make": {
+      "path": "/usr/bin/make",
+      "version_output": "GNU Make 4.4.1\nBuilt for x86_64-pc-linux-gnu\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.",
+      "version_exit_code": 0
+    },
+    "latexmk": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/latexmk",
+      "version_output": "Latexmk, John Collins, 27 Dec. 2024. Version 4.86a",
+      "version_exit_code": 0
+    },
+    "lualatex": {
+      "path": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/bin/x86_64-linux/lualatex",
+      "version_output": "This is LuaHBTeX, Version 1.18.0 (TeX Live 2024)\nDevelopment id: 7611\n\nExecute  'luahbtex --credits'  for credits and version details.\n\nThere is NO warranty. Redistribution of this software is covered by\nthe terms of the GNU General Public License, version 2 or (at your option)\nany later version. For more information about these matters, see the file\nnamed COPYING and the LuaTeX source.\n\nLuaTeX is Copyright 2022 Taco Hoekwater and the LuaTeX Team.",
+      "version_exit_code": 0
+    }
+  },
+  "tex_environment": {
+    "TEXMF": "{/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/var,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/config,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local,/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/latex-base-closure/texlive/texmf-dist}",
+    "TEXMFVAR": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/var",
+    "TEXMFCONFIG": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/config",
+    "TEXMFCACHE": ".",
+    "VARTEXFONTS": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/fonts",
+    "OSFONTDIR": "/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local/fonts/truetype/hack;/workspace/scratch/e4108ca2b049/joss-render-complete-20261116/configured-base/texmf-local/fonts/truetype/libre-franklin"
+  },
+  "checks": {
+    "source_integrity": {
+      "status": "passed",
+      "exit_code": 0
+    },
+    "bibtex_parse": {
+      "status": "passed",
+      "exit_code": 0,
+      "entry_ids": [
+        "bass1969",
+        "fisher1971",
+        "mesa2025",
+        "ndlib2018",
+        "pymc2023"
+      ]
+    },
+    "official_tex": {
+      "status": "passed",
+      "exit_code": 0
+    },
+    "draft_tex_markers": {
+      "status": "passed"
+    },
+    "official_pdf": {
+      "status": "passed",
+      "exit_code": 0
+    }
+  },
+  "output_sha256": {
+    "bibliography.json": "281ff0bd5e63b29459763aae210353073a7d77d378e8e0471542427027f76c6a",
+    "paper.tex": "c6d5361e752cf0cd64dd5c016d6a6176b0dc143aa36fdf29895333fe4d09f17e",
+    "paper.pdf": "14adfb6b79bd16c26fef5f3a704cae487fdc2d883e7c1e010a203b69c932c5b0",
+    "render.log": "4b10a5e9ba5f9a1996c84a37e7fce01789d52487db3c7d91e3a223399eecde0e"
+  },
+  "diagnostic_lines": []
+}

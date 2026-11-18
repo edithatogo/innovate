@@ -1,0 +1,13 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/release/bdb01a82e50284e59c4f09f670f5d94ddd91051d/",
+  "requested_at_utc": "2026-11-16T13:27:55.702391+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:28:03 GMT",
+  "content_type": "application/json",
+  "final_url": "https://archive.softwareheritage.org/api/1/release/bdb01a82e50284e59c4f09f670f5d94ddd91051d/",
+  "link": null,
+  "body_bytes": 524,
+  "response_file": "swh-pypi-release-0.6.0.response.json",
+  "response_sha256": "96e088f99a940ff232a7e849531fce36b39e62f77987b6f8f28d9efc426344d3"
+}

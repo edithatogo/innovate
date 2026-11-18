@@ -1,0 +1,13 @@
+{
+  "method": "GET",
+  "url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:dir:4e1c8dddd8bb2554f7830123faff277aeea1f27b/authorities/",
+  "requested_at_utc": "2026-11-16T13:28:58.554956+00:00",
+  "http_status": 200,
+  "response_date": "Mon, 16 Nov 2026 13:29:05 GMT",
+  "content_type": "application/json",
+  "final_url": "https://archive.softwareheritage.org/api/1/raw-extrinsic-metadata/swhid/swh:1:dir:4e1c8dddd8bb2554f7830123faff277aeea1f27b/authorities/",
+  "link": null,
+  "body_bytes": 481,
+  "response_file": "swh-pypi-authorities-0.5.0.response.json",
+  "response_sha256": "ba47e2a8683ec54b2aba15054bf92e7bffeaed61f2f46a67c78be8d1e9a2f207"
+}

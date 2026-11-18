@@ -1,0 +1,44 @@
+[
+  {
+    "name": "registry-final",
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_registry_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "log": "registry-final.log"
+  },
+  {
+    "name": "joss-final",
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--json"
+    ],
+    "exit_code": 0,
+    "log": "joss-final.log"
+  },
+  {
+    "name": "joss-submission-hold",
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_joss_readiness.py",
+      "--require-submission-ready",
+      "--json"
+    ],
+    "exit_code": 1,
+    "log": "joss-submission-hold.log"
+  },
+  {
+    "name": "registry-completion-hold",
+    "command": [
+      "/workspace/scratch/e4108ca2b049/innovate-scientific/.venv-registry-reconciliation/bin/python",
+      "scripts/check_registry_readiness.py",
+      "--require-complete",
+      "--json"
+    ],
+    "exit_code": 1,
+    "log": "registry-completion-hold.log"
+  }
+]

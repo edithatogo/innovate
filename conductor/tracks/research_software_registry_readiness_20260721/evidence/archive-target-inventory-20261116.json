@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-11-16",
+  "repository": "https://github.com/edithatogo/innovate",
+  "source_endpoints": [
+    "https://api.github.com/repos/edithatogo/innovate/releases?per_page=100",
+    "https://api.github.com/repos/edithatogo/innovate/git/matching-refs/tags",
+    "https://api.github.com/repos/edithatogo/innovate/git/tags/86eceddcfa17362d05afa34a6f224e7eac5d561b"
+  ],
+  "published_releases": [
+    {
+      "tag": "v0.5.0",
+      "published_at": "2025-08-29T09:23:10Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.5.0"
+    },
+    {
+      "tag": "v0.4.1",
+      "published_at": "2025-07-31T11:41:43Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.4.1"
+    },
+    {
+      "tag": "v0.4.0",
+      "published_at": "2025-07-31T11:39:23Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.4.0"
+    },
+    {
+      "tag": "v0.3.0",
+      "published_at": "2025-07-31T03:15:34Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.3.0"
+    },
+    {
+      "tag": "v0.2.1",
+      "published_at": "2025-07-12T04:12:49Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.2.1"
+    },
+    {
+      "tag": "v0.1.1",
+      "published_at": "2025-07-07T22:50:34Z",
+      "prerelease": false,
+      "url": "https://github.com/edithatogo/innovate/releases/tag/v0.1.1"
+    }
+  ],
+  "candidates": [
+    {
+      "tag": "v0.5.0",
+      "tag_kind": "lightweight",
+      "commit": "6b673832c6024f5332c971ac35172a96615f75f9",
+      "published_release": true,
+      "published_at": "2025-08-29T09:23:10Z",
+      "qualification": "historical source; not current native software"
+    },
+    {
+      "tag": "v0.6.0",
+      "tag_kind": "annotated",
+      "tag_object": "86eceddcfa17362d05afa34a6f224e7eac5d561b",
+      "commit": "3459f4528c11ceba8d1e5840d3da852dfb8d58bd",
+      "provider_signature_verified": true,
+      "provider_signature_reason": "valid",
+      "published_release": false,
+      "published_release_limit": "No matching non-draft release in the returned complete one-page collection",
+      "qualification": "Tag identity only; no current native or archival acceptance"
+    }
+  ],
+  "native_development_version": "0.7.0a1",
+  "matching_native_tags": [],
+  "selected_archival_target": null,
+  "rights_assessed": false,
+  "archive_request_performed": false,
+  "archival_verified": false,
+  "limits": [
+    "Read-only GitHub target identity inventory; no software release selected or approved.",
+    "A GitHub release or verified tag signature does not establish third-party rights, scientific qualification or Software Heritage ingestion.",
+    "Historical release archival can be considered separately; it does not qualify the current native implementation.",
+    "Provider duplicate/origin lookup outcomes remain in provider-lookups-20261116.json; successful visit/snapshot and resolving object linkage are still required.",
+    "No exact local request timestamp was captured; recorded_on is the inventory date."
+  ]
+}

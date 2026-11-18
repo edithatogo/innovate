@@ -1,0 +1,15 @@
+{
+  "archive_provider_description_url": "https://www.gharchive.org/",
+  "archive_url": "https://data.gharchive.org/2025-07-07-22.json.gz",
+  "elapsed_seconds": 6.353,
+  "error": "HTTPError: HTTP Error 403: Forbidden",
+  "limits": [
+    "Archived original GitHub public Events API records; archival transport is GH Archive, not a present GitHub API response.",
+    "An observed public event establishes visibility at that time; it does not prove uninterrupted visibility on every intervening day."
+  ],
+  "retrieved_at": "2026-11-16T13:27:56.633021+00:00",
+  "schema_version": 1,
+  "status": "blocked",
+  "target_repository": "edithatogo/innovate",
+  "target_repository_id": 1013131094
+}

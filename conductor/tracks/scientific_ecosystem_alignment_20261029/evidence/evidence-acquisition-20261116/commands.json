@@ -1,0 +1,57 @@
+[
+  {
+    "argv": [
+      "uv",
+      "venv",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer",
+      "--python",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/venv/bin/python"
+    ],
+    "exit_code": 0,
+    "seconds": 0.051
+  },
+  {
+    "argv": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python",
+      "--only-binary",
+      ":all:",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl",
+      "pyarrow==26.0.1",
+      "pytest==9.2.0"
+    ],
+    "exit_code": 0,
+    "seconds": 16.572
+  },
+  {
+    "argv": [
+      "uv",
+      "pip",
+      "check",
+      "--python",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python"
+    ],
+    "exit_code": 0,
+    "seconds": 0.01
+  },
+  {
+    "argv": [
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/consumer/bin/python",
+      "-I",
+      "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence/scripts/qualify_scenario_arrow.py",
+      "--repository",
+      "/workspace/scratch/e4108ca2b049/innovate-scientific-evidence",
+      "--wheel",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/wheels/innovate-0.7.0a1-cp315-cp315-manylinux_2_35_x86_64.whl",
+      "--build-record",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-build/build-provenance.json",
+      "--output",
+      "/workspace/scratch/e4108ca2b049/innovate-alignment-tools/evidence-acquisition-installed/qualification"
+    ],
+    "exit_code": 0,
+    "seconds": 2.878
+  }
+]
