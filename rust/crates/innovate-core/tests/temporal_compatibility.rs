@@ -37,6 +37,17 @@ fn expanded_years_preserve_gregorian_leap_days_and_maximum_date() {
 }
 
 #[test]
+fn calendar_dates_accept_unpadded_fields_and_reject_leading_whitespace() {
+    let response = aggregate(json!(["2024-1-1", "2024-01-01"]), json!([1, 2]), "D");
+    assert_eq!(
+        response["result"],
+        json!({"dates": ["2024-01-01"], "values": [3.0]})
+    );
+    let invalid = aggregate(json!([" 2024-01-01"]), json!([1]), "D");
+    assert_eq!(invalid["error"]["code"], "invalid_request");
+}
+
+#[test]
 fn offset_timestamps_are_bucketed_by_utc_date() {
     let response = aggregate(
         json!(["2024-01-01T23:30:00-02:00", "2024-01-02T00:30:00+01:00"]),

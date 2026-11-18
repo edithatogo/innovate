@@ -283,6 +283,24 @@ must be rechecked on the PR head; no advisory exception has been added.
 
 ### Alert 44 temporal compatibility controls — 17 November 2026
 
+On 18 November, the same chat continues this bounded test-only scope from
+`0c9ecfd3222202fbe8b1d0e3295102d7013d09e7`. A temporary Rust 1.99.1
+differential probe compared Chrono 0.4.45 with Time 0.3.55 and additionally
+found that Chrono accepts unpadded month/day fields and leading whitespace
+that Time's standard date parser rejects. An initial public-dispatch test
+incorrectly assumed leading whitespace was accepted and failed: Innovate's
+dispatcher classifies any space as a timestamp before parsing. The corrected
+controls preserve accepted unpadded calendar dates and rejection of a leading
+space. Do not treat the probe as a replacement or change dependency pins
+without an independently qualified implementation.
+
+With Rust/Cargo 1.99.1, explicit `PATH`, `RUSTC`, `RUSTDOC`, and the existing
+worktree-local target directory, the complete `temporal_compatibility` test
+binary passed all seven cases after the correction. Rustfmt and
+`git diff --check` also passed. The Time probe is a temporary comparison, not a
+new production dependency, and no alert or downstream-consumer resolution is
+claimed from these tests.
+
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this bounded candidate in
 `/Users/doughnut/.codex/worktrees/innovate-pr672-security-pin/innovate`, based
 on main `b74de7e678966865ea91fe00c5fe0eb15d31c20f`. Allowed files are
