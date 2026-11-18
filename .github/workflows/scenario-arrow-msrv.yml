@@ -1,0 +1,147 @@
+# Integrated from the reviewed track-local #556 candidate via sole coordinator #624.
+name: Scenario Arrow and minimum Rust
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/scenario-arrow-msrv.yml
+      - conductor/tracks/scientific_ecosystem_alignment_20261029/integration/**
+      - scripts/qualify_scenario_arrow.py
+      - tests/native/test_scenario*
+      - tests/native/test_python_consumer.py
+      - bindings/python/**
+      - rust/**
+      - Cargo.toml
+      - Cargo.lock
+      - pyproject.toml
+      - uv.lock
+      - README.md
+      - LICENSE
+      - .python-version
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/scenario-arrow-msrv.yml
+      - conductor/tracks/scientific_ecosystem_alignment_20261029/integration/**
+      - scripts/qualify_scenario_arrow.py
+      - tests/native/test_scenario*
+      - tests/native/test_python_consumer.py
+      - bindings/python/**
+      - rust/**
+      - Cargo.toml
+      - Cargo.lock
+      - pyproject.toml
+      - uv.lock
+      - README.md
+      - LICENSE
+      - .python-version
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scenario-arrow-msrv-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  installed-scenario-arrow:
+    name: Installed scenario Arrow
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+        with:
+          enable-cache: false
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.100.0
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: scenario-arrow
+      - name: Install locked build tools
+        run: uv sync --locked --no-install-project --python 3.15.2
+      - name: Build and record the actual development wheel
+        run: |
+          .venv/bin/python conductor/tracks/scientific_ecosystem_alignment_20261029/integration/build_scenario_wheel.py \
+            --repository "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/scenario-arrow/build" --jobs 2
+      - name: Install the identified wheel outside the checkout
+        run: |
+          uv venv "$RUNNER_TEMP/scenario-arrow/consumer" --python .venv/bin/python
+          wheels=("$RUNNER_TEMP"/scenario-arrow/build/wheels/*.whl)
+          test "${#wheels[@]}" -eq 1
+          test -f "${wheels[0]}"
+          uv pip install --only-binary :all: --python "$RUNNER_TEMP/scenario-arrow/consumer/bin/python" \
+            "${wheels[0]}" pyarrow==26.0.1 pytest==9.2.0
+          uv pip check --python "$RUNNER_TEMP/scenario-arrow/consumer/bin/python"
+      - name: Execute all 42 cases including all four optional Arrow cases
+        run: |
+          wheels=("$RUNNER_TEMP"/scenario-arrow/build/wheels/*.whl)
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/scenario-arrow/consumer/bin/python" -I "$GITHUB_WORKSPACE/scripts/qualify_scenario_arrow.py" \
+            --repository "$GITHUB_WORKSPACE" --wheel "${wheels[0]}" \
+            --build-record "$RUNNER_TEMP/scenario-arrow/build/build-provenance.json" \
+            --output "$RUNNER_TEMP/scenario-arrow/qualification.json"
+      - name: Retain observed build and qualification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: scenario-arrow-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/scenario-arrow/build/build.log
+            ${{ runner.temp }}/scenario-arrow/build/build-provenance.json
+            ${{ runner.temp }}/scenario-arrow/build/wheels/*.whl
+            ${{ runner.temp }}/scenario-arrow/qualification*
+          if-no-files-found: warn
+
+  minimum-rust:
+    name: Rust 1.99.1 workspace compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: 1.99.1
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: minimum-rust-1.99.1
+      - name: Record source and compiler
+        run: |
+          mkdir -p "$RUNNER_TEMP/minimum-rust"
+          git rev-parse HEAD > "$RUNNER_TEMP/minimum-rust/source.txt"
+          git rev-parse 'HEAD^{tree}' >> "$RUNNER_TEMP/minimum-rust/source.txt"
+          sha256sum Cargo.toml Cargo.lock >> "$RUNNER_TEMP/minimum-rust/source.txt"
+          rustc --version > "$RUNNER_TEMP/minimum-rust/toolchain.txt"
+          cargo --version >> "$RUNNER_TEMP/minimum-rust/toolchain.txt"
+      - name: Compile all workspace targets at the declared minimum
+        run: |
+          set -o pipefail
+          cargo check --locked --workspace --all-targets -j 2 2>&1 | tee "$RUNNER_TEMP/minimum-rust/check.log"
+      - name: Retain minimum-compiler evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: minimum-rust-${{ github.sha }}
+          path: ${{ runner.temp }}/minimum-rust/
+          if-no-files-found: warn
