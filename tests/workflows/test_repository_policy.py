@@ -63,6 +63,26 @@ def ruleset():
     }
 
 
+def codeql_results_ruleset():
+    return {
+        "name": "Require CodeQL results on main",
+        "target": "branch",
+        "enforcement": "active",
+        "bypass_actors": [],
+        "conditions": {"ref_name": {"include": ["refs/heads/main"], "exclude": []}},
+        "rules": [
+            {
+                "type": "code_scanning",
+                "parameters": {
+                    "code_scanning_tools": [
+                        {"tool": "CodeQL", "alerts_threshold": "errors", "security_alerts_threshold": "high_or_higher"}
+                    ]
+                },
+            }
+        ],
+    }
+
+
 def snapshot():
     return {
         "schema_version": 1,
@@ -70,7 +90,7 @@ def snapshot():
         "default_branch": "main",
         "observed_at": NOW.isoformat(),
         "commit_sha": "a" * 40,
-        "rulesets": [ruleset()],
+        "rulesets": [ruleset(), codeql_results_ruleset()],
         "branch_protection": {
             "required_status_checks": {
                 "strict": True,
@@ -254,6 +274,44 @@ class RepositoryPolicyTests(unittest.TestCase):
         self.assertEqual(report["scope"], "local_and_supplied_snapshot")
         self.assertEqual(report["live"]["source"], "supplied_snapshot")
 
+    def test_live_codeql_results_rule_cannot_be_removed_or_weakened(self):
+        self.assertEqual(self.report(snapshot(), remote=True)["status"], "pass")
+        mutations = {
+            "missing": lambda value: value["rulesets"].pop(1),
+            "disabled": lambda value: value["rulesets"][1].update(enforcement="disabled"),
+            "evaluation only": lambda value: value["rulesets"][1].update(enforcement="evaluate"),
+            "excluded": lambda value: value["rulesets"][1]["conditions"]["ref_name"].update(
+                exclude=["refs/heads/main"]
+            ),
+            "wrong branch": lambda value: value["rulesets"][1]["conditions"]["ref_name"].update(
+                include=["refs/heads/other"]
+            ),
+            "bypass": lambda value: value["rulesets"][1].update(bypass_actors=[self.policy.OWNER_BYPASS]),
+            "no tool": lambda value: value["rulesets"][1]["rules"][0]["parameters"].update(code_scanning_tools=[]),
+            "wrong tool": lambda value: value["rulesets"][1]["rules"][0]["parameters"]["code_scanning_tools"][0].update(
+                tool="Other"
+            ),
+            "no errors": lambda value: value["rulesets"][1]["rules"][0]["parameters"]["code_scanning_tools"][0].update(
+                alerts_threshold="none"
+            ),
+            "critical only": lambda value: value["rulesets"][1]["rules"][0]["parameters"]["code_scanning_tools"][
+                0
+            ].update(security_alerts_threshold="critical"),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                value = snapshot()
+                mutate(value)
+                self.assert_failed(self.report(value, remote=True), "live", "ruleset")
+
+    def test_live_codeql_results_accept_stronger_thresholds_and_other_tools(self):
+        value = snapshot()
+        tools = value["rulesets"][1]["rules"][0]["parameters"]["code_scanning_tools"]
+        tools[0].update(alerts_threshold="errors_and_warnings", security_alerts_threshold="medium_or_higher")
+        tools.append({"tool": "Another scanner", "alerts_threshold": "none", "security_alerts_threshold": "critical"})
+        report = self.report(value, remote=True)
+        self.assertEqual(report["status"], "pass", report)
+
     def test_classic_protection_preserves_all_preexisting_checks_and_their_apps(self):
         for removed in (
             "package",
@@ -329,7 +387,7 @@ class RepositoryPolicyTests(unittest.TestCase):
                         {"actor_type": "Integration", "actor_id": 99, "bypass_mode": "always"}
                     )
                 value["rulesets"].append(second)
-                self.assert_failed(self.report(value, remote=True), "live", "rulesets[1]")
+                self.assert_failed(self.report(value, remote=True), "live", "rulesets[2]")
 
     def test_unavailable_protection_and_collection_errors_remain_unknown(self):
         value = snapshot()
