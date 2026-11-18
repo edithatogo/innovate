@@ -115,8 +115,11 @@ def main() -> int:
         except FileExistsError:
             parser.error(f"Shard receipt already exists: {output}; use a fresh path for each rank")
     result = response["result"]
-    print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
-    return int(result["failed"] > 0 or not result["runs"])
+    if result["failed"] > 0 or not result["runs"]:
+        print("The benchmark suite failed. The detailed receipt was saved.")
+        return 1
+    print("The benchmark suite passed. The detailed receipt was saved.")
+    return 0
 
 
 if __name__ == "__main__":

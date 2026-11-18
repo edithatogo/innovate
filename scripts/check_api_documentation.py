@@ -667,7 +667,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--contract", type=Path, default=CONTRACT_PATH)
     parser.add_argument("--mode", choices=("strict", "audit", "ratchet"), default="strict")
     parser.add_argument("--baseline", type=Path, default=ROOT / "docs/contracts/api-baseline.json")
-    parser.add_argument("--output", type=Path)
+    parser.add_argument("--output", type=Path, help="Save the full structured report to this file.")
     args = parser.parse_args(argv)
     try:
         report = audit(args.root, json.loads(args.contract.read_text(encoding="utf-8")))
@@ -679,16 +679,16 @@ def main(argv: list[str] | None = None) -> int:
             passed = report["inventory_valid"] if args.mode == "audit" else report["python_complete"]
         report["mode"] = args.mode
         report["command_passed"] = passed
-        encoded = json.dumps(report, indent=2, sort_keys=True) + "\n"
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
-            args.output.write_text(encoded, encoding="utf-8")
-            print(
-                f"API docs {args.mode}: command_passed={passed}; python_complete={report['python_complete']}; "
-                f"gaps={report['counts']['gaps']}; Rust=not_executed; complete=False"
-            )
-        else:
-            print(encoded, end="")
+            args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        summary = {"mode": args.mode, "command_passed": False, "python_complete": False,
+                   "rust_status": "not_executed", "complete": False}
+        if passed:
+            summary["command_passed"] = True
+        if report["python_complete"]:
+            summary["python_complete"] = True
+        print(json.dumps(summary, sort_keys=True))
         return 0 if passed else 1
     except (OSError, ValueError, TypeError) as error:
         report = {
@@ -699,14 +699,13 @@ def main(argv: list[str] | None = None) -> int:
             "python_complete": False,
             "rust_status": "not_executed",
             "complete": False,
-            "errors": [{"code": "invalid_input", "detail": str(error)}],
+            "errors": [{"code": "invalid_input", "detail": _diagnostic_fingerprint(str(error))}],
         }
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        else:
-            print(json.dumps(report, indent=2, sort_keys=True))
-        print(f"API documentation qualification failed: {json.dumps(str(error))}", file=sys.stderr)
+        print('{"command_passed": false, "python_complete": false, "rust_status": "not_executed", "complete": false}')
+        print("API documentation qualification failed (invalid_input).", file=sys.stderr)
         return 2
 
 

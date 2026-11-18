@@ -240,3 +240,25 @@ retains the 15 November implementation and verification history. This active
 successor carries DOC-01–08 and their unfinished acceptance after upstream #656
 archived the earlier directory. Archival is not browser, publication or scientific
 completion.
+
+## Offline SAST diagnostic privacy, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the active diagnostic-output
+repair in the PR #684 worktree at `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2`.
+Scope is the API checker, API reference generator, production documentation
+verifier, native benchmark CLI, and derived API manifest. The next operation
+is focused validation and an exact hosted rescan.
+
+Hosted diagnostic run `44423558250` scanned 174 non-Rust sources without
+parser errors and reported nine Python findings. Seven are in the four active
+scripts. Use fixed console outcomes and retain the existing structured report
+files and failure statuses. Two findings are in hash-bound JOSS PDF setup
+source evidence from #662. Keep the attested bytes and their original receipts.
+
+The three documentation contract test modules passed on Python 3.15.2.
+API generation and exact artifact verification, Ruff and repository-policy
+checks passed. The initial benchmark test run required an installed native
+wheel. Build it in scratch with Rust 1.100.0 and run the same affected benchmark
+cases through the installed package. The four CLI changes preserve detailed
+file receipts and exit outcomes. Console output carries only qualification
+status and the existing separation from native and live deployment evidence.
