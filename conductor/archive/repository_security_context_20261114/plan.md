@@ -49,6 +49,34 @@ not enabled`. The protection response itself omitted that field, so evaluating
 it without the second read correctly failed as incomplete. This targeted
 classic-protection check does not certify the separate ruleset proposal.
 
+### Isolated native rule qualification
+
+The same chat owns a temporary `codex/codeql-rule-probe-base` branch and a
+branch-scoped test ruleset for this task. The probe starts at
+`b74de7e678966865ea91fe00c5fe0eb15d31c20f` and advances normally to
+`0f86ee6bc40600d19df467b2c395741c89ad7f92`. It does not target `main` or alter
+another pull request. First enable only a non-fast-forward rule and scan the
+protected test base. Then test a CodeQL code-scanning rule against a temporary
+pull request using this branch's source, read back the resulting rule and
+checks, and close the owned probe after its terminal evidence is recorded.
+The probe will not authorize skipping findings or altering the existing checks.
+GitHub documents that its code-scanning rule does not apply to Dependabot pull
+requests analyzed by default setup, so this limitation must remain explicit.
+The first fast-forward to the already-scanned main commit did not create a
+CodeQL run or analysis for the test ref. A normal empty commit in a separate
+test worktree will check whether a distinct commit triggers the baseline scan;
+an absent baseline is a blocked probe, not a pass.
+
+Rule `27519086` applied only `non_fast_forward` to the test branch. The normal
+fast-forward to `0f86ee6b` and the distinct empty commit
+`4b635ae775690b5278a60e72e034623a85ddd922` produced no default-setup CodeQL
+workflow runs or code-scanning analyses for that protected ref. The expected
+baseline was Python and Rust analyses; only offline-security jobs queued.
+Because both targeted baseline attempts failed, the proposed code-scanning
+rule was not exercised or applied to main. Its missing-analysis and Dependabot
+behavior remain unqualified here. The owned test rule, branch and queued test
+jobs are removed after readback; this does not change main's protections.
+
 ## PR #672 workflow-lint repair — 17 November 2026
 
 - Integrator: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.
