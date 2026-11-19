@@ -29,6 +29,7 @@ serde_json.workspace = true
 ureq = { version = "=3.5.2", default-features = false, features = ["rustls"] }
 libm = "=0.2.16"
 nalgebra = { path = "../../vendor/nalgebra-0.34.2", version = "=0.34.2" }
+num-bigint = "=0.4.8"
 levenberg-marquardt = { path = "../../vendor/levenberg-marquardt-0.15.0", version = "=0.15.0" }
 ode_solvers = { path = "../../vendor/ode_solvers-0.6.2", version = "=0.6.2" }
 petgraph = "=0.8.3"

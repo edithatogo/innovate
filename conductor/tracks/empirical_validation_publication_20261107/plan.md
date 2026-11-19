@@ -160,6 +160,37 @@ not satisfy dependent task acceptance.
   This is a bounded Q01/Q02 contribution; their complete native safety, installed
   matrix and scientific acceptance obligations remain open.
 
+## Adopter classification release evidence — 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`7cfda986df86f63b1f8ead1069fdf7d6f17ca802`. Scope covers the Rust adopter
+classifier, its core manifest, the root and standalone games locks, the
+installed Python consumer regression and this plan. The native scope is
+draft PR #684 and its existing source-built wheel receipts.
+
+The signed macOS wheel from the base revision disagreed with an independent
+rational calculation on 450 of 765 cases spanning three irregular grids.
+With a dominant final weight, the scaled floating-point mean could round to
+the last observation and assign it the earliest category. The corrected
+classifier calculates exact integer moments for the binary input values and
+applies the existing inclusive boundaries. Both locks already selected
+`num-bigint 0.4.8` and now record the core crate's direct dependency.
+
+`cargo test --offline --locked -p innovate-core --lib adopters` passed seven
+tests. The locked Rust Polars prediction target passed all 11 tests. On the
+locally rebuilt CPython 3.15.2 wheel, all 765 independent cases matched
+through both the Polars and JSON entry points. The Polars results preserved
+the input columns and row order. A local optimized Rust timing on 100,000
+ordinary rows measured a median of 0.78 ms before and 13 ms after the
+correction. The test cases cover the declared sample-weighted classification.
+Broader release acceptance remains open.
+
+The locked audit still reports the two Chrono advisories. The published
+`polars-arrow` crate requires `chrono`, and `polars-core` selects
+`polars-compute/cast` through `polars-row`, which enables `chrono-tz`.
+The existing Polars version and public DataFrame type remain in use.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.

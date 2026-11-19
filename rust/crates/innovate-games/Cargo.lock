@@ -674,6 +674,7 @@ dependencies = [
  "levenberg-marquardt",
  "libm",
  "nalgebra 0.34.2",
+ "num-bigint",
  "nuts-rs",
  "ode_solvers",
  "petgraph",
