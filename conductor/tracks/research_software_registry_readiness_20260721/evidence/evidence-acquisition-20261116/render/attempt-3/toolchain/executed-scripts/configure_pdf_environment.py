@@ -82,7 +82,7 @@ def main() -> None:
             }
         )
         (output / "configuration-receipt.json").write_text(json.dumps(record, indent=2) + "\n")
-        print(f"{stage}: exit {result.returncode}; {log}", flush=True)
+        print(f"{stage}: exit {result.returncode}", flush=True)
         if result.returncode:
             raise SystemExit(result.returncode)
 

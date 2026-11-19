@@ -20,6 +20,18 @@ requires the TeX executables to resolve inside that owned tree and builds its
 own LuaLaTeX format and font cache. Each helper refuses an existing installation
 or configuration directory. Neither helper changes the manuscript or renderer.
 
+## Historical helper identity
+
+The current configuration helpers report the stage and exit code to the
+console. The caller's output directory contains the tool logs and configuration
+receipt. The original render and setup receipts refer to the helper bytes
+retained in Git at `9e12948a65d780e23f55dc343aa909e58257e569`.
+
+- The guarded setup helper has SHA-256
+  `c0ca120d679c91f4c10fd3ffb3ed012924ee1dde531f911fda1cb985436b3e8c`. [Original guarded helper](https://github.com/edithatogo/innovate/blob/9e12948a65d780e23f55dc343aa909e58257e569/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/configure_pdf_environment.py)
+- Attempt 3 used a helper with SHA-256
+  `7432f80fa27cb274aec51bd2a16aea8cf85dd52184e7b90aa0e9815df0c55849`. [Original attempt 3 helper](https://github.com/edithatogo/innovate/blob/9e12948a65d780e23f55dc343aa909e58257e569/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render/attempt-3/toolchain/executed-scripts/configure_pdf_environment.py)
+
 Prerequisites are Git, curl, GNU Make, Perl and compatible Linux x86_64 system
 libraries. The original PDF environment's package bootstrap used Python 3.12.14;
 configuration and the repository renderer used Python 3.15.2. The later guarded
@@ -40,7 +52,6 @@ set -eu
 joss_repo=/path/to/reviewed/innovate
 joss_tools=/path/to/new/innovate-joss-tools
 joss_python=/path/to/python3.15
-joss_bootstrap_python=python3.12
 joss_packet="$joss_repo/conductor/tracks/research_software_registry_readiness_20260721/evidence/evidence-acquisition-20261116/render"
 if [ -e "$joss_tools" ] || [ -L "$joss_tools" ]; then
   printf '%s\n' "Refusing existing tools directory: $joss_tools" >&2
@@ -53,7 +64,7 @@ curl --fail --location --output "$joss_tools/texlive-2024-final.tlpdb.xz" \
 curl --fail --location --output "$joss_tools/pandoc-3.6.4-linux-amd64.tar.gz" \
   https://github.com/jgm/pandoc/releases/download/3.6.4/pandoc-3.6.4-linux-amd64.tar.gz
 
-"$joss_bootstrap_python" - "$joss_tools" <<'PY'
+"$joss_python" - "$joss_tools" <<'PY'
 import hashlib
 import sys
 from pathlib import Path
@@ -75,7 +86,7 @@ git init "$joss_tools/hack"
 git -C "$joss_tools/hack" fetch --depth 1 https://github.com/source-foundry/Hack.git b47d21f808fbf4784565feccde2213ef2af924b3
 git -C "$joss_tools/hack" checkout --detach FETCH_HEAD
 
-"$joss_bootstrap_python" "$joss_packet/build_pdf_environment.py" \
+"$joss_python" "$joss_packet/build_pdf_environment.py" \
   --root "$joss_tools/tex" --database "$joss_tools/texlive-2024-final.tlpdb.xz"
 "$joss_python" "$joss_packet/configure_pdf_environment.py" \
   --output "$joss_tools/configured" --texlive "$joss_tools/tex/texlive" \

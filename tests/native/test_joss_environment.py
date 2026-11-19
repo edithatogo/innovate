@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import lzma
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -185,3 +187,78 @@ def test_missing_owned_tools_stop_configuration_before_writes(configure, tmp_pat
     with pytest.raises(SystemExit, match="Missing owned TeX tool"):
         configure.main()
     assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "recipe",
+    ["configure_pdf_environment", "attempt-3/toolchain/executed-scripts/configure_pdf_environment"],
+)
+@pytest.mark.parametrize("tool_exit", [0, 3])
+def test_configuration_logs_stay_in_the_output_directory(recipe, tool_exit, tmp_path, monkeypatch, capsys):
+    module = load_recipe(recipe)
+    output = tmp_path / "caller-selected-output"
+    inara = tmp_path / "inara"
+    hack = tmp_path / "hack"
+    texlive = tmp_path / "texlive"
+    pandoc = tmp_path / "pandoc"
+    for font in (hack / "build/ttf/Hack.ttf", inara / "fonts/libre-franklin/LibreFranklin.ttf"):
+        font.parent.mkdir(parents=True)
+        font.write_bytes(b"synthetic font")
+    (hack / "LICENSE.md").write_text("synthetic licence", encoding="utf-8")
+    pandoc.write_bytes(b"synthetic binary")
+    revisions = {
+        inara: "88ee5d656f147d801448ce77ad8375619d383df6",
+        hack: "b47d21f808fbf4784565feccde2213ef2af924b3",
+    }
+
+    def source_version(command, *, text, cwd=None):
+        assert text
+        if cwd is not None:
+            assert command == ["git", "rev-parse", "HEAD"]
+            return revisions[cwd]
+        assert command == [str(pandoc), "--version"]
+        return "pandoc 3.6.4"
+
+    def run_tool(command, *, cwd, env, stdout, stderr):
+        assert stderr == subprocess.STDOUT
+        stdout.write("synthetic tool output retained in the log\n")
+        if cwd != inara and tool_exit == 0:
+            (cwd / "lualatex.fmt").write_bytes(b"synthetic format")
+        return subprocess.CompletedProcess(command, tool_exit)
+
+    monkeypatch.setattr(module.platform, "platform", lambda: "synthetic platform")
+    monkeypatch.setattr(module.subprocess, "check_output", source_version)
+    monkeypatch.setattr(module.subprocess, "run", run_tool)
+    if hasattr(module, "verify_font_sources"):
+        monkeypatch.setattr(module, "verify_font_sources", lambda *_: None)
+        monkeypatch.setattr(module, "owned_tex_tool", lambda root, name: root / name)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "configure",
+            "--output",
+            str(output),
+            "--inara",
+            str(inara),
+            "--hack",
+            str(hack),
+            "--texlive",
+            str(texlive),
+            "--pandoc",
+            str(pandoc),
+        ],
+    )
+    if tool_exit:
+        with pytest.raises(SystemExit) as stopped:
+            module.main()
+        assert stopped.value.code == tool_exit
+    else:
+        module.main()
+    console = capsys.readouterr()
+    assert "format-build" in console.out
+    assert str(output) not in console.out + console.err
+    assert "synthetic tool output" not in console.out + console.err
+    assert (output / "format-build.log").read_text(encoding="utf-8") == "synthetic tool output retained in the log\n"
+    receipt = json.loads((output / "configuration-receipt.json").read_text(encoding="utf-8"))
+    assert [step["exit_code"] for step in receipt["commands"]] == ([tool_exit] if tool_exit else [0, 0])

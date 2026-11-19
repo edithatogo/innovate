@@ -1,5 +1,27 @@
 # Implementation Plan
 
+## JOSS setup diagnostics — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the diagnostic correction
+from `19603ac397a8e199eb5792559587fbf366f3df80` in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Scope covers the two configuration helpers flagged by the hosted scanner, their
+reproduction instructions and `tests/native/test_joss_environment.py`.
+Native scope is Innovate draft PR #684 and the hosted canary.
+
+The two current scripts report stage and exit code. Their setup logs and
+receipts remain in the caller's output directory. The reproduction instructions
+now identify both original helper blobs and SHA-256 digests at
+`9e12948a65d780e23f55dc343aa909e58257e569`. Both digests match the original
+receipts. The commands for a new setup consistently select Python 3.15.2.
+
+On the repo-local Python 3.15.2 interpreter,
+`pytest tests/native/test_joss_environment.py -k logs_stay` reproduced the
+console path disclosure in all four cases. The four corrected cases pass on
+both success and failure. The existing JOSS environment, draft, registry and
+readiness checks also pass. The next check is the hosted scan of the committed
+source. This work supplies no new render or scientific acceptance evidence.
+
 ## Separate evidence acquisition — 16 November 2026
 
 Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main
