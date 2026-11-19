@@ -63,3 +63,29 @@ not satisfy dependent task acceptance.
 - [ ] For DOCX delivery, enumerate every final paper and supplement file, including clean, tracked, review and journal variants. Apply the maintained manuscript DOCX delivery skill at `~/.codex/skills/manuscript-docx-delivery/SKILL.md`. Run its read-only `scripts/validate.sh --report NEW_RECEIPT.json ALL_FINAL_DOCX_PATHS` after the last save, metadata scrub, Compare or packaging edit. A qualified repository equivalent may be used.
 - [ ] Require zero errors in ZIP/CRC, XML, internal relationship and Microsoft Open XML schema and semantic checks on each final file. Record SHA-256, tool and runtime identity, and diagnostics in a new receipt. Verify every file against its recorded hash immediately before delivery. Changed bytes, missing evidence or tools, exceptions and nonzero results block delivery. Retain failed receipts and repair a versioned copy before revalidation.
 - [ ] Verify content and property fidelity, including fields, comments, tracked revisions and repeating table headers. Inspect the rendered output of every final page and retain any required native Word evidence separately. Structural validity, fidelity, rendering, native Word verification, scientific acceptance, privacy, author approval and submission authority each have their own evidence.
+
+## Q01 maintenance: reproducible bounded fuzzing (2026-11-20)
+
+Base: `fd7e259bb9a685d620f80907c6815d4837da3e53`. Allowed files are the
+existing fuzz workflow, its kernel request harness and isolated lockfile, a fuzz
+reproduction README and this plan entry. This isolated candidate does not advance any scientific,
+FFI, installed-consumer or release acceptance task above. Shared-workflow
+integration remains with the repository integrator after exact-head CI.
+
+- [x] Pin the existing campaign to nightly-2026-11-19 and cargo-fuzz 0.13.2.
+- [x] Keep 30-second PR campaigns, add 300-second weekly/manual campaigns, cap
+  inputs at 64 KiB, memory at 1 GiB and individual inputs at five seconds.
+- [x] Retain source/compiler logs and minimized failure artifacts for 14 days.
+- [x] Refresh the stale isolated fuzz lockfile to the current native manifests;
+  fetch it locked and reject build-time resolution drift before campaign execution.
+- [x] Record scoped local policy and native harness compilation evidence below.
+- [ ] Verify the actual bounded campaign and default sanitizers in hosted CI
+  before admission. Q01's wider safety qualification remains open.
+
+Local `python scripts/check_repository_policy.py` passed. The native
+`cargo +nightly-2026-11-19 check --manifest-path fuzz/Cargo.toml --bins` passed
+in 3m10s after resolving the stale fuzz lockfile. This compilation is not a
+sanitizer campaign or an execution receipt; those remain hosted acceptance gates.
+The same command with `--locked` then passed without changing that graph.
+Changed-target rustfmt, actionlint 1.7.9 syntax/expression validation and
+`git diff --check` passed. Existing vendored-code warnings remain visible.
