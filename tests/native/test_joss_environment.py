@@ -256,7 +256,8 @@ def test_configuration_logs_stay_in_the_output_directory(recipe, tool_exit, tmp_
     else:
         module.main()
     console = capsys.readouterr()
-    assert "format-build" in console.out
+    expected = "format-build failed\n" if tool_exit else "format-build passed\nfont-cache passed\n"
+    assert console.out == expected
     assert str(output) not in console.out + console.err
     assert "synthetic tool output" not in console.out + console.err
     assert (output / "format-build.log").read_text(encoding="utf-8") == "synthetic tool output retained in the log\n"

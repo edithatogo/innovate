@@ -132,9 +132,10 @@ def main() -> None:
             }
         )
         (output / "configuration-receipt.json").write_text(json.dumps(record, indent=2) + "\n")
-        print(f"{stage}: exit {result.returncode}", flush=True)
         if result.returncode:
+            print(f"{stage} failed", flush=True)
             raise SystemExit(result.returncode)
+        print(f"{stage} passed", flush=True)
 
     format_dir = output / "var/web2c/luahbtex"
     format_dir.mkdir(parents=True)

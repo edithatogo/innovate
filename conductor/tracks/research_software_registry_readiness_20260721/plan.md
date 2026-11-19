@@ -22,6 +22,11 @@ both success and failure. The existing JOSS environment, draft, registry and
 readiness checks also pass. The next check is the hosted scan of the committed
 source. This work supplies no new render or scientific acceptance evidence.
 
+Hosted rescan `44478681210` covered all 174 non-Rust files and still
+flagged the two subprocess return values going to the console. Project only
+the stage and its pass or fail outcome. Retain the numeric codes in the
+existing file receipt and preserve the actual process exit status.
+
 ## Separate evidence acquisition — 16 November 2026
 
 Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main

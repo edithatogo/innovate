@@ -22,9 +22,9 @@ or configuration directory. Neither helper changes the manuscript or renderer.
 
 ## Historical helper identity
 
-The current configuration helpers report the stage and exit code to the
-console. The caller's output directory contains the tool logs and configuration
-receipt. The original render and setup receipts refer to the helper bytes
+The current configuration helpers report each stage and whether it passed.
+The caller's output directory contains the tool logs and configuration receipt
+with the numeric exit codes. The original render and setup receipts refer to the helper bytes
 retained in Git at `9e12948a65d780e23f55dc343aa909e58257e569`.
 
 - The guarded setup helper has SHA-256
