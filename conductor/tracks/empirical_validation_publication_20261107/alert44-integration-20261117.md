@@ -131,3 +131,23 @@ The upstream Jiff PR is a draft. Polars' own Cargo policy now ignores the
 two advisories, while Innovate's RustSec check continues to enforce them.
 [Polars replacement](https://github.com/pola-rs/polars/pull/29110) ·
 [Polars policy change](https://github.com/pola-rs/polars/pull/30859)
+
+## Standalone games lockfile in the local Ubuntu replay
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this follow-up in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`
+from `1fb5055bda849ec886900afc938bb2f80e4a1965`. Scope covers
+`rust/crates/innovate-games/Cargo.lock` and this record.
+
+The isolated Tart and Sand Ubuntu guest ran the existing games ban command
+on the exact PR source. Cargo rejected the standalone lock with `--locked`
+because it still listed `chrono` under `innovate-core`. The core manifest had
+already moved to `time`. The locked root graph independently reported the
+two RustSec findings through Polars. The published-DataFrame prediction
+consumer passed in the same guest.
+
+Run `cargo metadata --manifest-path rust/crates/innovate-games/Cargo.toml
+--offline --all-features --format-version 1` to refresh the standalone
+lock. The resulting delta removes Chrono and selects the same six `time`
+packages as the root lock. Paignia and Kairos pins retain their existing
+revisions. Repeat the games ban check with `--locked` in the guest.
