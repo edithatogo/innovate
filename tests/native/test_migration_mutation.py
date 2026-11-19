@@ -84,6 +84,146 @@ def test_qualified_release_requires_matching_source_and_scientific_contract(poli
         policy.main()
 
 
+@pytest.fixture
+def attestation_bundle(policy_tree, monkeypatch):
+    policy, ledger, write = policy_tree
+    source_commit = "c" * 40
+    release_attestations = []
+
+    def evidence(name, value):
+        payload = json.dumps(value).encode()
+        (policy.ROOT / name).write_bytes(payload)
+        return {"path": name, "sha256": hashlib.sha256(payload).hexdigest()}
+
+    def report(name, kind, scopes):
+        return evidence(
+            name,
+            {
+                "schema_version": 1,
+                "kind": kind,
+                "source_sha256": SOURCE_DIGEST,
+                "status": "passed",
+                "results": {scope: {"passed": 1, "failed": 0, "skipped": 0, "errors": 0} for scope in scopes},
+            },
+        )
+
+    obligation_items = [item for group in ("models", "feature_areas") for item in ledger[group]]
+    ob_keys = [item["key"] for item in obligation_items]
+    native = report("native.json", "native_execution", ob_keys)
+    scientific = report("science.json", "scientific_acceptance", ob_keys)
+    for item in obligation_items:
+        item.update(status="qualified", evidence=scientific["path"], evidence_sha256=scientific["sha256"])
+    targets = ("linux-x86_64", "macos-arm64", "windows-x86_64")
+    installed = {}
+    for target in targets:
+        artifact = evidence(f"{target}.artifact", {"target": target})
+        receipt = report(f"{target}.report.json", "installed_execution", [target])
+        data = json.loads((policy.ROOT / receipt["path"]).read_bytes())
+        data["artifact_sha256"] = artifact["sha256"]
+        receipt = evidence(receipt["path"], data)
+        installed[target] = {"report": receipt, "artifact": artifact}
+    manifest = {
+        "schema_version": 1,
+        "kind": "innovate-release-qualification",
+        "source_commit": source_commit,
+        "source_sha256": SOURCE_DIGEST,
+        "obligations": {key: {"native": native, "scientific": scientific} for key in ob_keys},
+        "installed_consumers": installed,
+    }
+    (policy.ROOT / "attestation.jsonl").write_text("synthetic verifier input", encoding="utf-8")
+
+    def save():
+        release = evidence("release.json", manifest)
+        ledger.update(
+            release_ready=True,
+            qualified_source_sha256=SOURCE_DIGEST,
+            release_evidence={"manifest": release["path"], "attestation": "attestation.jsonl"},
+        )
+        write()
+
+    def verify_receipt(payload, bundle, revision):
+        release_attestations.append((payload, bundle.name, revision))
+
+    monkeypatch.setattr(policy, "release_source_digest", lambda: SOURCE_DIGEST)
+    monkeypatch.setattr(policy, "source_inventory_digest", lambda revision: SOURCE_DIGEST)
+    monkeypatch.setattr(policy, "verify_release_attestation", verify_receipt)
+    monkeypatch.setattr(sys, "argv", ["check_migration.py", "--release"])
+    return policy, manifest, save, release_attestations, source_commit
+
+
+def test_release_evidence_binds_all_obligations_and_artifacts(attestation_bundle, capsys):
+    policy, _, save, verified, source_commit = attestation_bundle
+    save()
+    assert policy.main() == 0
+    assert verified == [((policy.ROOT / "release.json").read_bytes(), "attestation.jsonl", source_commit)]
+    assert "scientific release evidence verified" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize(
+    "changed",
+    [
+        "omitted_obligation",
+        "omitted_platform",
+        "mismatched_source",
+        "changed_artifact",
+        "wrong_receipt_role",
+        "skipped_installed_case",
+    ],
+)
+def test_release_evidence_rejects_incomplete_or_mismatched_reports(attestation_bundle, changed):
+    policy, manifest, save, _, _ = attestation_bundle
+    if changed == "omitted_obligation":
+        del manifest["obligations"]["bass"]
+    elif changed == "omitted_platform":
+        del manifest["installed_consumers"]["macos-arm64"]
+    elif changed == "mismatched_source":
+        manifest["source_sha256"] = "b" * 64
+    elif changed == "changed_artifact":
+        (policy.ROOT / "linux-x86_64.artifact").write_bytes(b"changed bytes")
+    elif changed == "skipped_installed_case":
+        ref = manifest["installed_consumers"]["linux-x86_64"]["report"]
+        report_path = policy.ROOT / ref["path"]
+        report = json.loads(report_path.read_bytes())
+        report["results"]["linux-x86_64"]["skipped"] = 1
+        payload = json.dumps(report).encode()
+        report_path.write_bytes(payload)
+        ref["sha256"] = hashlib.sha256(payload).hexdigest()
+    else:
+        manifest["obligations"]["bass"]["native"] = manifest["obligations"]["bass"]["scientific"]
+    save()
+    with pytest.raises(ValueError, match="scientific evidence contract"):
+        policy.main()
+
+
+def test_release_bundle_verification_pins_subject_and_workflow(policy_tree, monkeypatch):
+    policy, _, _ = policy_tree
+    bundle = policy.ROOT / "candidate-attestation.jsonl"
+
+    def reject_verification(command, **options):
+        assert command[:3] == ["gh", "attestation", "verify"]
+        assert Path(command[3]).read_bytes() == b"exact manifest"
+        assert command[4:] == [
+            "--bundle",
+            str(bundle),
+            "--repo",
+            "edithatogo/innovate",
+            "--signer-workflow",
+            "edithatogo/innovate/.github/workflows/release-readiness.yml",
+            "--signer-digest",
+            "c" * 40,
+            "--source-digest",
+            "c" * 40,
+            "--predicate-type",
+            "https://slsa.dev/provenance/v1",
+        ]
+        assert options["check"] is True
+        raise subprocess.CalledProcessError(1, command)
+
+    monkeypatch.setattr(policy.subprocess, "run", reject_verification)
+    with pytest.raises(ValueError, match="lacks a verified release-workflow attestation"):
+        policy.verify_release_attestation(b"exact manifest", bundle, "c" * 40)
+
+
 def test_qualified_but_unapproved_release_remains_blocked(policy_tree, monkeypatch):
     policy, ledger, write = policy_tree
     qualify(ledger)

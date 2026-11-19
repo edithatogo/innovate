@@ -34,11 +34,26 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [~] Q01 — input/property/fuzz/FFI safety; partial native tests exist, but the named corpus, fuzz and sanitizer evidence requires reconciliation.
 - [ ] Q02 — actual native/no-legacy installed CI matrix.
 - [ ] Q03 — supply-chain and distributable-artifact evidence.
-- [~] Q04 — executable scientific/docs release truth; the [fail-closed claim guard](q04-claim-review-20261116.md) is partial and the source-bound receipt contract remains open.
+- [~] Q04 — the [release verifier](release-evidence-contract.md) checks source-bound receipts. The [capability claim guard](q04-claim-review-20261116.md), complete case coverage and the qualification evidence producer remain open.
 - [ ] V05 — clean reproduction and distinct publication packages.
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+## Release evidence verification — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the release-verifier slice in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`74c959bcd249e9133dc1e366adb6d88fb54732a7`. Scope is the release mode in
+`scripts/check_migration.py`, its policy regressions and the
+[release evidence contract](release-evidence-contract.md). The native scope is
+draft PR #684 and its verification runs.
+
+The release checker now binds exact source bytes, obligation coverage, report
+roles and installed artifacts to an attested manifest. Existing capability
+claims remain governed by their own checker. The current ledger still blocks on
+all 38 obligations. Native, scientific and installed-consumer execution and a
+real signed qualification bundle remain open.
 
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
