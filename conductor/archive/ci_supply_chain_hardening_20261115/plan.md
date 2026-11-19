@@ -356,3 +356,20 @@ does not itself migrate or qualify a temporal library. An independent read-only
 reviewer found no blocking issues in the test, while noting that the comparison
 is not original JSON wire-byte proof. Explicit 1.99.1 `cargo fmt --check` and
 the repo-local Python policy check also passed.
+
+## P0 Grype caller follow-up
+
+The approved portfolio rollout adds advisory resolved Python/Cargo inventory
+scans and Critical publication gates, using the immutable shared scanner.
+Python release paths inspect the normalized wheel's actual embedded Rust SBOM
+and a separately resolved installed Python runtime; retained hashes bind the
+inventories and publication subjects. Root, games and validated vendor lock
+inventories retain their distinct scope. Existing cargo-audit/cargo-deny,
+repository policy, privacy checks and scientific release holds remain in place.
+
+Local validation passed three wheel-inventory extraction controls, eleven
+existing release-workflow tests and the repository-policy check. Workflow lint
+and Python lint/format checks passed. These results do not establish a native
+build, live repository policy or hosted publication acceptance. The scheduled
+lane is explicitly current-source monitoring until the first qualified release
+retains an immutable SBOM asset. Hosted caller qualification remains open.

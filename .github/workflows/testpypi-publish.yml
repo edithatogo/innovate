@@ -86,6 +86,38 @@ jobs:
           .venv-release/bin/twine check dist/*
           .venv-release/bin/check-wheel-contents dist/*.whl
 
+      - name: Inventory the exact publication wheel and frozen runtime
+        run: bash scripts/generate_release_sbom.sh
+
+      - name: Gate embedded wheel Rust dependencies with Grype
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: .grype-inputs/wheel-rust.sbom.cdx.json
+          mode: enforce
+          artifact-name: grype-wheel-rust
+          output-directory: .grype-rust-evidence
+
+      - name: Gate installed Python runtime dependencies with Grype
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: .grype-inputs/python.sbom.cdx.json
+          mode: enforce
+          artifact-name: grype-wheel-python
+          output-directory: .grype-python-evidence
+
+      - name: Retain publication subject binding
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: grype-wheel-inputs
+          path: .grype-inputs/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Verify publication bytes remain unchanged
+        run: sha256sum --check .grype-inputs/subjects.sha256
+
       - name: Publish package to TestPyPI
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086
         with:

@@ -54,6 +54,45 @@ jobs:
           RUSTDOCFLAGS: "--cfg docsrs -D warnings"
         run: cargo doc --locked --no-deps -p innovate-core -p innovate-tabular
 
+      - name: Validate and stage resolved crate dependency inventory
+        run: |
+          .venv-release/bin/python scripts/check_vendor_audit.py
+          mkdir -p .grype-crate-inputs/vendor .grype-inputs
+          cp Cargo.lock .grype-crate-inputs/Cargo.lock
+          cp rust/vendor/Cargo.lock .grype-crate-inputs/vendor/Cargo.lock
+          sha256sum Cargo.lock rust/vendor/Cargo.lock > .grype-inputs/subjects.sha256
+
+      - name: Generate resolved crate SPDX inventory
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          path: .grype-crate-inputs
+          syft-version: v1.57.2
+          format: spdx-json
+          output-file: .grype-inputs/crates.sbom.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+
+      - name: Gate crate publication dependencies with Grype
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: .grype-inputs/crates.sbom.spdx.json
+          mode: enforce
+          artifact-name: grype-crates-release
+          output-directory: .grype-crates-evidence
+
+      - name: Retain crate dependency binding
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: grype-crates-inputs
+          path: .grype-inputs/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Verify crate dependency inputs remain unchanged
+        run: sha256sum --check .grype-inputs/subjects.sha256
+
       - name: Mint short-lived crates.io token via Trusted Publishing and publish
         env:
           EVENT_NAME: ${{ github.event_name }}

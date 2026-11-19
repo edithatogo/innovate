@@ -1,0 +1,92 @@
+name: Grype resolved dependency evidence
+
+on:
+  pull_request:
+    paths:
+      - Cargo.lock
+      - Cargo.toml
+      - rust/**/Cargo.toml
+      - rust/**/Cargo.lock
+      - pyproject.toml
+      - uv.lock
+      - scripts/extract_wheel_sbom.py
+      - scripts/generate_release_sbom.sh
+      - .github/workflows/grype.yml
+      - .github/workflows/*publish.yml
+  workflow_dispatch:
+  schedule:
+    - cron: '13 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grype-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolved-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Harden runner egress
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
+        with:
+          version: '0.13.6'
+          enable-cache: false
+      - name: Inventory resolved Python runtime and optional Arrow packages
+        run: |
+          mkdir -p .grype-inputs .grype-rust-inputs/games .grype-rust-inputs/vendor
+          uv export --frozen --no-dev --no-emit-project --all-extras \
+            --format requirements-txt --output-file .grype-inputs/runtime-requirements.txt
+          uv venv --python 3.15.2 .grype-runtime
+          uv pip install --python .grype-runtime/bin/python --require-hashes \
+            -r .grype-inputs/runtime-requirements.txt
+          uvx --from cyclonedx-bom==7.3.0 cyclonedx-py environment \
+            .grype-runtime/bin/python --pyproject pyproject.toml --mc-type library \
+            --sv 1.6 --output-reproducible --of JSON --validate \
+            -o .grype-inputs/python.sbom.cdx.json
+          .grype-runtime/bin/python scripts/check_vendor_audit.py
+          cp Cargo.lock .grype-rust-inputs/Cargo.lock
+          cp rust/crates/innovate-games/Cargo.lock .grype-rust-inputs/games/Cargo.lock
+          cp rust/vendor/Cargo.lock .grype-rust-inputs/vendor/Cargo.lock
+          sha256sum uv.lock Cargo.lock rust/crates/innovate-games/Cargo.lock \
+            rust/vendor/Cargo.lock > .grype-inputs/source-locks.sha256
+      - name: Generate resolved Rust SPDX inventory
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c
+        with:
+          path: .grype-rust-inputs
+          syft-version: v1.57.2
+          format: spdx-json
+          output-file: .grype-inputs/rust.sbom.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
+      - name: Report Python dependency vulnerabilities
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: .grype-inputs/python.sbom.cdx.json
+          mode: advisory
+          artifact-name: grype-python-candidate
+          output-directory: .grype-python-evidence
+      - name: Report Rust dependency vulnerabilities
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@bc76f1fbe0fa87a1371eadc06b08f54b48c623f7
+        with:
+          sbom: .grype-inputs/rust.sbom.spdx.json
+          mode: advisory
+          artifact-name: grype-rust-candidate
+          output-directory: .grype-rust-evidence
+      - name: Retain source dependency binding
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: grype-source-inputs
+          path: .grype-inputs/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
