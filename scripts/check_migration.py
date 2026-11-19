@@ -29,6 +29,7 @@ SOURCE_PATHS = (
     "scripts",
     "specs",
     "tests",
+    "validation",
     "Cargo.toml",
     "Cargo.lock",
     "Dockerfile",

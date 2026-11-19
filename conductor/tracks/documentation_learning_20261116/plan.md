@@ -1,5 +1,27 @@
 # Implementation plan
 
+## Calendar dependency review for PR #684
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the documentation
+review update in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`60c0593988f522495bbc867d91db3949c8086f4c`. Scope is this plan and
+`docs/contracts/scientific-pedagogical-review.json`. The hosted docs build
+failed on stale fingerprints for the core module and scenario execution.
+Recheck the existing timestamp and replay claims against the calendar
+implementation before updating the record. The separate accessibility PR
+keeps its own source, browser runs and acceptance.
+
+The integrator reviewed the private calendar adapter, aggregation and scenario
+timestamp diff. UTC bucketing, the weekly anchor, the scenario import contract
+and the distinction between result replay and execution timestamps still match
+the guides. The four affected implementation fingerprints now cover both
+calendar modules as well as the core and scenario files.
+The exact locked Rust temporal suite passed all eight cases.
+On Python 3.15.2 the scoped source checker and seven contract tests passed.
+The frozen pnpm install, 58 content tests, 211-page Astro build, type check,
+and production artifact verification passed locally.
+
 ## PR #671 source-review follow-up — 17 November 2026
 
 - Final source-to-claim discrepancy: the Browser quality table still advertised version-selector interactions after removal of the selector. Verified the maintained browser spec asserts selector absence and tests current navigation, retirement routes and keyboard search, then corrected the claim and its 66-input scientific-review fingerprint. The previous exact-head 164/164 browser run stays scoped to 1771dffb; the amended guide needs its own hosted qualification. No native or scientific acceptance claim was added.

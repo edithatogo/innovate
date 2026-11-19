@@ -27,7 +27,7 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] M03 — temporal mapping, panel grain and coverage.
 - [ ] M04 — generic utilisation identifiability/observation fixture.
 - [ ] M05 — frozen medicines forecasting cohort.
-- [~] V01 — independent model-oracle registry; source scaffolding exists, but input-bound independent oracle qualification remains open.
+- [~] V01 — six input-bound deterministic reference cases pass through the installed native consumer. Wider model and scientific release qualification remains open.
 - [~] V02 — leakage-safe benchmark runner; source scaffolding exists, but split validity and the required benchmark evidence remain open.
 - [~] V03 — cross-domain and early-stage validation; cohort labels exist, but qualified source-bound comparisons and calibration remain open.
 - [~] V04 — accuracy-controlled performance evaluation; partial receipts exist, but their integrity and required measured workloads remain open.
@@ -39,6 +39,35 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+## V01 analytic reference cases for the release evidence
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` at
+`60c0593988f522495bbc867d91db3949c8086f4c`. R02's typed domain receipt is
+recorded in the Rust core convergence plan. The allowed scope is this plan,
+`validation/oracles/manifest.json`, `validation/oracles/derivations.md`, and
+`tests/validation/test_oracle_manifest.py`. Native scope is the PR #684
+source-built wheel receipt. Bind the independent classical, substitution
+and competition fixtures to their exact inputs and check their expected
+outputs through the installed native Polars consumer.
+
+Extend the existing installed-wheel signing path with these six actual
+predictions. The additional scope is `.github/workflows/release-readiness.yml`,
+the wheel recorder, the release source inventory, their focused tests and
+the evidence contract. The signing job uses the existing workflow identity.
+Full scientific qualification retains the separate mandatory evidence contract.
+
+At the base, the registry accepted a changed Bass time with the old expected
+value. The new checks enforce the input and source fingerprints, reject an
+invalid tolerance and compare predicted levels and preserved row identities
+against the independent references. All 142 focused checks, including the
+16 oracle checks, passed on Python 3.15.2. The installed macOS
+wheel was verified against the signed `60c05939` receipt before execution.
+The complete local native suite with the Arrow extra, the live OECD case
+and the reference suite passed 667 checks without skips. Hosted signing
+requires the new revision's three-platform run. The 38 scientific ledger
+statuses remain bounded.
 
 ## Release evidence verification — 19 November 2026
 

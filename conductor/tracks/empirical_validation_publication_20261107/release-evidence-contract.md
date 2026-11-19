@@ -46,6 +46,13 @@ scope and the observed skip count. Signed reports covering the complete native,
 scientific and installed requirements still need to supply the release bundle.
 Synthetic reports exercise the verifier and provide no release evidence.
 
+The bounded installed-wheel suite also runs six native predictions against
+the independent analytic references. Each named prediction must appear in
+the test report. The release source inventory binds the validation fixtures
+and derivations, and the signed receipt binds the original report and
+installed wheel. The references cover deterministic levels at their recorded
+inputs. [Analytic references](../../../validation/oracles/derivations.md)
+
 A manual dispatch can set `live_oecd` to run the real OECD case on each host.
 The signer checks the original test report hash and requires zero skips
 when that input is enabled.

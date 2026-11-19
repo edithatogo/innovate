@@ -22,16 +22,30 @@ def smoke_report(recorder):
     root = ElementTree.Element("testsuite")
     for module in sorted(recorder.SMOKE_MODULES):
         ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name="test_example")
+    for name in sorted(recorder.ORACLE_CASES):
+        ElementTree.SubElement(root, "testcase", classname=f"tests.validation.{recorder.ORACLE_MODULE}", name=name)
     module, name = recorder.LIVE_OECD
     skipped = ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name=name)
     ElementTree.SubElement(skipped, "skipped")
     return root
 
 
+def smoke_counts(recorder):
+    return dict.fromkeys(recorder.SMOKE_MODULES, 1) | {recorder.ORACLE_MODULE: len(recorder.ORACLE_CASES) + 1}
+
+
 def test_smoke_receipt_records_optional_oecd_skip_separately(recorder):
     passed, skipped = recorder.smoke_results(ElementTree.tostring(smoke_report(recorder)))
-    assert passed == dict.fromkeys(recorder.SMOKE_MODULES, 1)
+    assert passed == smoke_counts(recorder)
     assert skipped == [".".join(recorder.LIVE_OECD)]
+
+
+def test_smoke_receipt_requires_each_named_analytic_prediction(recorder):
+    root = smoke_report(recorder)
+    oracle = next(case for case in root if case.get("name") in recorder.ORACLE_CASES)
+    root.remove(oracle)
+    with pytest.raises(ValueError, match="analytic model suite is incomplete"):
+        recorder.smoke_results(ElementTree.tostring(root))
 
 
 @pytest.mark.parametrize(
@@ -129,7 +143,7 @@ def test_installed_receipt_binds_source_artifact_and_observed_results(
     assert receipt["target"] == target
     assert receipt["artifact_sha256"] == hashlib.sha256(wheel.read_bytes()).hexdigest()
     assert receipt["pytest_report_sha256"] == hashlib.sha256(report.read_bytes()).hexdigest()
-    assert receipt["passed_by_module"] == dict.fromkeys(recorder.SMOKE_MODULES, 1)
+    assert receipt["passed_by_module"] == smoke_counts(recorder)
     assert receipt["skipped"] == [".".join(recorder.LIVE_OECD)]
 
 

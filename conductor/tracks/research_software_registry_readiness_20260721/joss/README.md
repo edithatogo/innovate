@@ -11,13 +11,11 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- Source baseline: `b29a1d27f54fdd08d77881ee999772fceab7c03a`, development version
-  `0.7.0a1`, reassessed after #668 merged on 16 November 2026. The
-  [current source reassessment](../evidence/evidence-acquisition-20261116/source-reassessment.md)
-  explains the added tabular field documentation, unchanged claims and retained
-  limitations. The [preceding assessment](../evidence/source-reassessment-20261116.md)
-  remains evidence for its earlier revision. Refresh the draft when its
-  implementation evidence changes.
+- The 19 November edition describes development version `0.7.0a1` at
+  `60c0593988f522495bbc867d91db3949c8086f4c`. The dependency delta and
+  retained claim limits are recorded in the
+  [calendar dependency reassessment](claim-evidence.md#calendar-dependency-reassessment).
+  Earlier source assessments and render receipts retain their original revisions.
 
 ## Scope and evidence
 

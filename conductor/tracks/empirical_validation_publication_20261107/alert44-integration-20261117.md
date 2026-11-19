@@ -119,3 +119,15 @@ matched 13 dates, 23 timestamp inputs and 1,407 weekly comparisons with
 the same private adapter. The locked core dependency tree selects
 `time 0.3.55`. The workspace tree retains `chrono-tz 0.10.4` through
 `polars-arrow 0.55.2`.
+
+## Published Polars consumer check
+
+From `60c0593988f522495bbc867d91db3949c8086f4c`, a separate Cargo root
+selected crates.io `polars-core 0.55.2` with default features disabled.
+It compiled and passed a Bass prediction using the same published
+`DataFrame` type on input and output. The inverse dependency trees still
+reported `chrono 0.4.45` and `chrono-tz 0.10.4` through Polars.
+The upstream Jiff PR is a draft. Polars' own Cargo policy now ignores the
+two advisories, while Innovate's RustSec check continues to enforce them.
+[Polars replacement](https://github.com/pola-rs/polars/pull/29110) ·
+[Polars policy change](https://github.com/pola-rs/polars/pull/30859)

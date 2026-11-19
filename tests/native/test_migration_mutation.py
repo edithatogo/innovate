@@ -307,7 +307,8 @@ def test_release_and_source_digest_modes_are_mutually_exclusive(policy_tree, mon
     assert error.value.code == 2
 
 
-def test_source_inventory_must_be_nonempty_and_clean(policy_tree, monkeypatch):
+@pytest.mark.parametrize("source_name", ["Cargo.toml", "validation/oracles/derivations.md"])
+def test_source_inventory_must_be_nonempty_and_clean(policy_tree, monkeypatch, source_name):
     policy, _, _ = policy_tree
     source_root = policy.ROOT / "synthetic-git-repo"
     source_root.mkdir()
@@ -334,11 +335,12 @@ def test_source_inventory_must_be_nonempty_and_clean(policy_tree, monkeypatch):
     git("commit", "--quiet", "--allow-empty", "-m", "Synthetic empty inventory")
     with pytest.raises(ValueError, match="Release source inventory is empty"):
         policy.release_source_digest()
-    source = source_root / "Cargo.toml"
+    source = source_root / source_name
+    source.parent.mkdir(parents=True, exist_ok=True)
     source.write_text("synthetic source\n")
-    git("add", "Cargo.toml")
+    git("add", source_name)
     git("commit", "--quiet", "-m", "Synthetic source inventory")
-    expected = hashlib.sha256(git("ls-tree", "-r", "-z", "HEAD", "--", "Cargo.toml")).hexdigest()
+    expected = hashlib.sha256(git("ls-tree", "-r", "-z", "HEAD", "--", source_name)).hexdigest()
     assert policy.release_source_digest() == expected
     source.write_text("changed synthetic source\n")
     with pytest.raises(ValueError, match="Release evidence requires clean source inputs"):

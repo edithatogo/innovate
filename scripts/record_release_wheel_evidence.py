@@ -16,7 +16,18 @@ from xml.etree import ElementTree
 from scripts.check_migration import INSTALLED_TARGETS, ROOT, release_source_digest
 from scripts.qualify_scenario_arrow import validate_native_loader, verify_wheel
 
-SMOKE_MODULES = {"test_python_consumer", "test_competition", "test_multi_generation", "test_paired_outcomes"}
+ORACLE_MODULE = "test_oracle_manifest"
+ORACLE_CASES = {
+    f"test_installed_native_predictions_match_independent_references[{model}]"
+    for model in ("bass", "logistic", "gompertz", "fisher_pry", "norton_bass", "multi_product")
+}
+SMOKE_MODULES = {
+    "test_python_consumer",
+    "test_competition",
+    "test_multi_generation",
+    "test_paired_outcomes",
+    ORACLE_MODULE,
+}
 LIVE_OECD = ("test_python_consumer", "test_live_oecd_fetch_returns_polars_observations")
 
 
@@ -43,6 +54,8 @@ def smoke_results(payload: bytes) -> tuple[dict[str, int], list[str]]:
             passed[module] += 1
     if LIVE_OECD not in seen or passed.keys() != SMOKE_MODULES:
         raise ValueError("The installed-wheel smoke suite is incomplete")
+    if not all((ORACLE_MODULE, name) in seen for name in ORACLE_CASES):
+        raise ValueError("The installed-wheel analytic model suite is incomplete")
     return dict(passed), skipped
 
 

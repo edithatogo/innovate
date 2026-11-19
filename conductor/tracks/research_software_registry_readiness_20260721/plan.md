@@ -1,5 +1,27 @@
 # Implementation Plan
 
+## JOSS source review after the calendar dependency change
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this source review
+in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`60c0593988f522495bbc867d91db3949c8086f4c`. Scope covers this
+record, the JOSS source snapshot, working draft, claim register and README.
+The draft checker reproduced a stale `Cargo.lock` fingerprint. Compare all
+fourteen reviewed inputs with the prior source and retain the existing
+unapproved status. The separate Inara workflow and its artifacts in PR #687
+stay with their current owner.
+
+The compared source inputs changed only in the core manifest and lock.
+The snapshot identifies all fourteen Git inputs and three edition files.
+The repo-local Python 3.15.2 draft and environment suites passed 69 cases.
+Pinned Inara and Pandoc 3.6.4 built a fresh four-page draft. The integrator
+viewed all four pages and checked the source revision, visible draft notice,
+section order and references. The draft-template placeholder and sidebar
+wrapping remain visible on page one. The rendered PDF SHA-256 was
+`2c931607ac506ed09930f57a4610f02533f11d46f4f347eebae4ab055849c846`.
+The draft remains unapproved and submission readiness remains false.
+
 ## JOSS setup diagnostics — 19 November 2026
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the diagnostic correction

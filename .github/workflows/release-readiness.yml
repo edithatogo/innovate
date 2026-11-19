@@ -129,7 +129,8 @@ jobs:
             tests/native/test_python_consumer.py \
             tests/native/test_competition.py \
             tests/native/test_multi_generation.py \
-            tests/native/test_paired_outcomes.py
+            tests/native/test_paired_outcomes.py \
+            tests/validation/test_oracle_manifest.py
           "$staged_python" -m scripts.record_release_wheel_evidence \
             --environment "$staging" --wheel dist/*.whl --report "$staging/installed-results.xml" \
             --output dist/installed-wheel-evidence.json
@@ -201,6 +202,7 @@ jobs:
             .schema_version == 1 and .kind == "bounded_installed_execution" and .status == "passed"
             and .target == $target and .source_commit == $commit
             and .source_sha256 == $source and .artifact_sha256 == $wheel
+            and (.passed_by_module.test_oracle_manifest | type == "number" and . >= 6)
             and .pytest_report_sha256 == $report and (if $live then .skipped == [] else true end)
           ' signed-input/installed-wheel-evidence.json >/dev/null
       - name: Sign the installed-wheel smoke evidence
