@@ -55,6 +55,10 @@ claims remain governed by their own checker. The current ledger still blocks on
 all 38 obligations. Native, scientific and installed-consumer execution and a
 real signed qualification bundle remain open.
 
+The 132 focused migration, capability-claim and release-workflow checks pass
+on Python 3.15.2. The policy tests execute 101 of 108 changed verifier lines
+(93.5%). A synthetic unsigned bundle failed the actual GitHub CLI verifier.
+
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
 established by this review. The reproduced findings and scope of correction

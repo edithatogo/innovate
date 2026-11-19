@@ -195,6 +195,51 @@ def test_release_evidence_rejects_incomplete_or_mismatched_reports(attestation_b
         policy.main()
 
 
+@pytest.mark.parametrize(
+    ("payload", "diagnostic"),
+    [
+        (b'{"status":"failed","status":"passed"}', "duplicate fields"),
+        (b'{"unclosed":', "valid JSON"),
+        (b"[]", "JSON object"),
+    ],
+)
+def test_release_manifest_rejects_ambiguous_or_malformed_json(attestation_bundle, payload, diagnostic):
+    policy, _, save, verified, _ = attestation_bundle
+    save()
+    (policy.ROOT / "release.json").write_bytes(payload)
+    with pytest.raises(ValueError, match=diagnostic):
+        policy.main()
+    assert not verified
+
+
+@pytest.mark.parametrize(
+    ("invalid_ref", "diagnostic"),
+    [
+        ({"path": "native.json"}, "requires a file and SHA-256"),
+        ({"path": "native.json", "sha256": "not-a-digest"}, "valid SHA-256"),
+        ({"path": "", "sha256": DIGEST}, "requires a relative file path"),
+        ({"path": "../native.json", "sha256": DIGEST}, "missing or out-of-scope"),
+        ({"path": "native.json", "sha256": DIGEST}, "report digest does not match"),
+    ],
+)
+def test_release_manifest_rejects_invalid_report_references(attestation_bundle, invalid_ref, diagnostic):
+    policy, manifest, save, verified, _ = attestation_bundle
+    manifest["obligations"]["bass"]["native"] = invalid_ref
+    save()
+    with pytest.raises(ValueError, match=diagnostic):
+        policy.main()
+    assert not verified
+
+
+def test_attested_revision_must_contain_the_same_release_source(attestation_bundle, monkeypatch):
+    policy, _, save, verified, _ = attestation_bundle
+    save()
+    monkeypatch.setattr(policy, "source_inventory_digest", lambda revision: "b" * 64)
+    with pytest.raises(ValueError, match="attested source differs"):
+        policy.main()
+    assert not verified
+
+
 def test_release_bundle_verification_pins_subject_and_workflow(policy_tree, monkeypatch):
     policy, _, _ = policy_tree
     bundle = policy.ROOT / "candidate-attestation.jsonl"
