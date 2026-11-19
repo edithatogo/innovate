@@ -13,7 +13,7 @@ from collections import Counter
 from pathlib import Path
 from xml.etree import ElementTree
 
-from scripts.check_migration import ROOT, release_source_digest
+from scripts.check_migration import INSTALLED_TARGETS, ROOT, release_source_digest
 from scripts.qualify_scenario_arrow import validate_native_loader, verify_wheel
 
 SMOKE_MODULES = {"test_python_consumer", "test_competition", "test_multi_generation", "test_paired_outcomes"}
@@ -47,8 +47,11 @@ def smoke_results(payload: bytes) -> tuple[dict[str, int], list[str]]:
 
 
 def record(environment: Path, wheel: Path, report: Path, output: Path) -> None:
-    if sys.version_info[:3] != (3, 15, 2) or (platform.system(), platform.machine()) != ("Linux", "x86_64"):
-        raise ValueError("The installed-wheel record requires the selected Linux x86_64 Python environment")
+    system = platform.system().lower()
+    machine = platform.machine().lower()
+    target = f"{'macos' if system == 'darwin' else system}-{'x86_64' if machine == 'amd64' else machine}"
+    if sys.version_info[:3] != (3, 15, 2) or target not in INSTALLED_TARGETS:
+        raise ValueError("The installed-wheel record requires Python 3.15.2 on a supported release host")
     import innovate
     from innovate import _native
 
@@ -72,7 +75,7 @@ def record(environment: Path, wheel: Path, report: Path, output: Path) -> None:
         "scope": "Installed Python wheel smoke suite",
         "source_commit": revision,
         "source_sha256": source_digest,
-        "target": "linux-x86_64",
+        "target": target,
         "python": platform.python_version(),
         "artifact_sha256": artifact["sha256"],
         "verified_package_members": artifact["verified_package_members"],

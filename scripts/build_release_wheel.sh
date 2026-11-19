@@ -7,8 +7,13 @@ output="${2:-$PWD/dist}"
 environment="$(cd "$environment" && pwd)"
 mkdir -p "$output"
 output="$(cd "$output" && pwd)"
-python="$environment/bin/python"
-maturin="$environment/bin/maturin"
+if [ -x "$environment/Scripts/python.exe" ]; then
+  python="$environment/Scripts/python.exe"
+  maturin="$environment/Scripts/maturin.exe"
+else
+  python="$environment/bin/python"
+  maturin="$environment/bin/maturin"
+fi
 staging="$(mktemp -d "${TMPDIR:-/tmp}/innovate-release.XXXXXX")"
 trap 'rm -rf "$staging"' EXIT
 mkdir "$staging/sdist" "$staging/source"

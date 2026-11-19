@@ -78,6 +78,21 @@ gate found that the recorder's tests needed a fixture-scoped source import
 when using the installed pytest entry point. The corrected fixture and
 affected consumer tests passed through that entry point locally.
 
+### Verify and extend installed-wheel receipts
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` continues in the PR #684
+worktree from `08dc853ee209d12cdb27abd80632b3980ca869e0`. Scope is the
+release-readiness workflow, wheel build script, receipt recorder, its focused
+tests and this track's evidence contract. The native scope is draft PR #684 and
+its release-readiness dispatches.
+
+Run `44494665780` signed the exact Linux x86_64 wheel smoke result. Verification
+bound the attestation to the configured signer, source commit and the same
+wheel bytes in the dry-run artifact. The receipt recorded 146 passes and the
+documented live OECD skip. The release policy continued to report 38 incomplete
+obligations. The next smoke run also exercises installed macOS ARM64 and
+Windows x64 wheels.
+
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
 established by this review. The reproduced findings and scope of correction

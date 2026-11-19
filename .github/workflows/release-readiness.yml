@@ -41,14 +41,32 @@ jobs:
         run: .venv-release/bin/python scripts/check_migration.py --release
 
   release-lane-checks:
-    runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x86_64
+          - os: macos-latest
+            target: macos-arm64
+          - os: windows-latest
+            target: windows-x86_64
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      UV_PROJECT_ENVIRONMENT: .venv-release
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
         with:
           egress-policy: audit
 
+      - name: Check out source with its original line endings
+        if: runner.os == 'Windows'
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
         with:
           persist-credentials: false
@@ -58,27 +76,38 @@ jobs:
         with:
           toolchain: 1.100.0
       - run: uv venv .venv-release --python 3.15.2
-      - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
+      - run: uv sync --locked --no-install-project --python 3.15.2
       - name: Verify release policy and wheel SBOM normalization
-        run: .venv-release/bin/python -m pytest tests/unit/test_normalize_wheel_sbom.py tests/native/test_migration_policy.py
+        run: uv run --no-sync python -m pytest tests/unit/test_normalize_wheel_sbom.py tests/native/test_migration_policy.py
       - name: Validate release packaging without publishing
         env:
           CARGO_BUILD_JOBS: '2'
         run: |
-          source_digest="$(.venv-release/bin/python scripts/check_migration.py --source-digest)"
+          source_digest="$(uv run --no-sync python scripts/check_migration.py --source-digest)"
           bash scripts/build_release_wheel.sh
-          .venv-release/bin/twine check dist/*
-          .venv-release/bin/check-wheel-contents dist/*.whl
-          test "$(.venv-release/bin/python scripts/check_migration.py --source-digest)" = "$source_digest"
+          uv run --no-sync twine check dist/*
+          uv run --no-sync check-wheel-contents dist/*.whl
+          test "$(uv run --no-sync python scripts/check_migration.py --source-digest)" = "$source_digest"
           printf "%s\n" "$source_digest" > dist/SOURCE_SHA256
-          (cd dist && sha256sum ./*.tar.gz ./*.whl > SHA256SUMS)
+          (
+            cd dist
+            if command -v sha256sum >/dev/null; then
+              sha256sum ./*.tar.gz ./*.whl
+            else
+              shasum -a 256 ./*.tar.gz ./*.whl
+            fi > SHA256SUMS
+          )
       - name: Exercise the release wheel
         run: |
           staging="$(mktemp -d)"
-          uv venv "$staging" --python .venv-release/bin/python
-          uv pip install --python "$staging/bin/python" dist/*.whl pytest==9.2.0
-          uv pip check --python "$staging/bin/python"
-          "$staging/bin/python" - "$staging" <<'PYTHON'
+          uv venv "$staging" --python 3.15.2
+          staged_python="$staging/bin/python"
+          if [[ "$RUNNER_OS" == Windows ]]; then
+            staged_python="$staging/Scripts/python.exe"
+          fi
+          uv pip install --python "$staged_python" dist/*.whl pytest==9.2.0
+          uv pip check --python "$staged_python"
+          "$staged_python" - "$staging" <<'PYTHON'
           import sys
           from pathlib import Path
 
@@ -89,18 +118,18 @@ jobs:
           for module in (innovate, _native):
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
-          "$staging/bin/python" -m pytest -q --junitxml="$staging/installed-results.xml" \
+          "$staged_python" -m pytest -q --junitxml="$staging/installed-results.xml" \
             tests/native/test_python_consumer.py \
             tests/native/test_competition.py \
             tests/native/test_multi_generation.py \
             tests/native/test_paired_outcomes.py
-          "$staging/bin/python" -m scripts.record_release_wheel_evidence \
+          "$staged_python" -m scripts.record_release_wheel_evidence \
             --environment "$staging" --wheel dist/*.whl --report "$staging/installed-results.xml" \
             --output dist/installed-wheel-evidence.json
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: python-release-dry-run-${{ github.sha }}
+          name: python-release-dry-run-${{ matrix.target }}-${{ github.sha }}
           path: |
             dist/*.tar.gz
             dist/*.whl
@@ -109,6 +138,7 @@ jobs:
             dist/installed-wheel-evidence.json
           if-no-files-found: error
       - name: Qualify the installed Voiage consumer
+        if: runner.os == 'Linux'
         run: |
           consumer="$(mktemp -d)"
           uv venv "$consumer" --python .venv-release/bin/python
@@ -116,6 +146,7 @@ jobs:
           uv pip check --python "$consumer/bin/python"
           "$consumer/bin/python" scripts/qualify_voiage_arrow.py --wheel dist/*.whl > dist/voiage-qualification.json
       - name: Retain Voiage qualification receipt
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: voiage-qualification-${{ github.sha }}
@@ -125,6 +156,10 @@ jobs:
   sign-release-wheel-evidence:
     needs: release-lane-checks
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [linux-x86_64, macos-arm64, windows-x86_64]
     permissions:
       actions: read
       contents: read
@@ -139,19 +174,21 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          TARGET: ${{ matrix.target }}
         run: |
           set -euo pipefail
           gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" \
-            --name "python-release-dry-run-$GITHUB_SHA" --dir signed-input
+            --name "python-release-dry-run-$TARGET-$GITHUB_SHA" --dir signed-input
           set -- signed-input/*.whl
           test "$#" -eq 1
           test -f "$1"
           wheel_hash="$(sha256sum "$1" | cut -d' ' -f1)"
           source_hash="$(cat signed-input/SOURCE_SHA256)"
           [[ "$source_hash" =~ ^[a-f0-9]{64}$ ]]
-          jq -e --arg commit "$GITHUB_SHA" --arg source "$source_hash" --arg wheel "$wheel_hash" '
+          jq -e --arg commit "$GITHUB_SHA" --arg source "$source_hash" --arg wheel "$wheel_hash" --arg target "$TARGET" '
             .schema_version == 1 and .kind == "bounded_installed_execution" and .status == "passed"
-            and .source_commit == $commit and .source_sha256 == $source and .artifact_sha256 == $wheel
+            and .target == $target and .source_commit == $commit
+            and .source_sha256 == $source and .artifact_sha256 == $wheel
           ' signed-input/installed-wheel-evidence.json >/dev/null
       - name: Sign the installed-wheel smoke evidence
         id: sign-wheel-evidence
@@ -161,7 +198,7 @@ jobs:
       - name: Retain the signed smoke evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: installed-wheel-evidence-${{ github.sha }}
+          name: installed-wheel-evidence-${{ matrix.target }}-${{ github.sha }}
           path: |
             signed-input/installed-wheel-evidence.json
             ${{ steps.sign-wheel-evidence.outputs.bundle-path }}

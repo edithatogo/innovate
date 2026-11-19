@@ -92,8 +92,20 @@ def installed_case(recorder, tmp_path, monkeypatch):
     return environment, wheel, report, tmp_path / "evidence.json"
 
 
-def test_installed_receipt_binds_source_artifact_and_observed_results(recorder, installed_case, monkeypatch):
+@pytest.mark.parametrize(
+    ("system", "machine", "target"),
+    [
+        ("Linux", "x86_64", "linux-x86_64"),
+        ("Darwin", "arm64", "macos-arm64"),
+        ("Windows", "AMD64", "windows-x86_64"),
+    ],
+)
+def test_installed_receipt_binds_source_artifact_and_observed_results(
+    recorder, installed_case, monkeypatch, system, machine, target
+):
     environment, wheel, report, output = installed_case
+    monkeypatch.setattr(recorder.platform, "system", lambda: system)
+    monkeypatch.setattr(recorder.platform, "machine", lambda: machine)
     monkeypatch.setattr(
         sys,
         "argv",
@@ -114,6 +126,7 @@ def test_installed_receipt_binds_source_artifact_and_observed_results(recorder, 
     assert receipt["kind"] == "bounded_installed_execution"
     assert receipt["source_commit"] == "a" * 40
     assert receipt["source_sha256"] == "b" * 64
+    assert receipt["target"] == target
     assert receipt["artifact_sha256"] == hashlib.sha256(wheel.read_bytes()).hexdigest()
     assert receipt["pytest_report_sha256"] == hashlib.sha256(report.read_bytes()).hexdigest()
     assert receipt["passed_by_module"] == dict.fromkeys(recorder.SMOKE_MODULES, 1)
@@ -126,3 +139,10 @@ def test_stale_wheel_source_cannot_produce_evidence(recorder, installed_case):
     with pytest.raises(ValueError, match="different source inputs"):
         recorder.record(*installed_case)
     assert not output.exists()
+
+
+def test_unqualified_host_cannot_produce_evidence(recorder, installed_case, monkeypatch):
+    monkeypatch.setattr(recorder.platform, "machine", lambda: "aarch64")
+    with pytest.raises(ValueError, match="supported release host"):
+        recorder.record(*installed_case)
+    assert not installed_case[-1].exists()

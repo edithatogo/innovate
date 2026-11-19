@@ -37,10 +37,11 @@ attestation. The repository and signer are fixed to Innovate and its
 `release-readiness.yml` workflow. The source and signer commits must both
 match the qualification commit. GitHub CLI verifies the bundle. [GitHub attestation verification](https://cli.github.com/manual/gh_attestation_verify)
 
-The current ledger still has 38 incomplete obligations. The existing dry-run
-job produces packaging artifacts and a bounded installed-wheel receipt from
-its Linux test execution. A separate automated job verifies the receipt and
-signs it. The receipt's `bounded_installed_execution` kind records the smoke
+The current ledger still has 38 incomplete obligations. The dry-run workflow
+builds wheels from the source distribution and exercises them on Linux x86_64,
+macOS ARM64 and Windows x64. Separate automated jobs verify the source, target
+and wheel digest for each receipt and sign it. The receipt's
+`bounded_installed_execution` kind records the smoke
 scope and the observed skip count. Signed reports covering the complete native,
 scientific and installed requirements still need to supply the release bundle.
 Synthetic reports exercise the verifier and provide no release evidence.
