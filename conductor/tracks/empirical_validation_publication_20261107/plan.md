@@ -72,6 +72,12 @@ suites from its JUnit report. Hosted execution will verify the installed
 Linux wheel bytes and exact source, then sign the bounded result in a separate
 job with signing permissions. Full scientific evidence remains open.
 
+Hosted run `44493390681` produced and signed the bounded result on
+`abd1bc0d0f2da96bd965e3e6441dd1b23936e286`. The separate native-binding
+gate found that the recorder's tests needed a fixture-scoped source import
+when using the installed pytest entry point. The corrected fixture and
+affected consumer tests passed through that entry point locally.
+
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
 established by this review. The reproduced findings and scope of correction

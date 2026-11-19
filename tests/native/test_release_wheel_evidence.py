@@ -3,29 +3,35 @@
 import hashlib
 import json
 import sys
+from importlib import import_module
 from importlib.machinery import ExtensionFileLoader
+from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from xml.etree import ElementTree
 
 import pytest
-from scripts import record_release_wheel_evidence as recorder
-from scripts.record_release_wheel_evidence import LIVE_OECD, SMOKE_MODULES, smoke_results
 
 
-def smoke_report():
+@pytest.fixture
+def recorder(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[2]))
+    return import_module("scripts.record_release_wheel_evidence")
+
+
+def smoke_report(recorder):
     root = ElementTree.Element("testsuite")
-    for module in sorted(SMOKE_MODULES):
+    for module in sorted(recorder.SMOKE_MODULES):
         ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name="test_example")
-    module, name = LIVE_OECD
+    module, name = recorder.LIVE_OECD
     skipped = ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name=name)
     ElementTree.SubElement(skipped, "skipped")
     return root
 
 
-def test_smoke_receipt_records_optional_oecd_skip_separately():
-    passed, skipped = smoke_results(ElementTree.tostring(smoke_report()))
-    assert passed == dict.fromkeys(SMOKE_MODULES, 1)
-    assert skipped == [".".join(LIVE_OECD)]
+def test_smoke_receipt_records_optional_oecd_skip_separately(recorder):
+    passed, skipped = recorder.smoke_results(ElementTree.tostring(smoke_report(recorder)))
+    assert passed == dict.fromkeys(recorder.SMOKE_MODULES, 1)
+    assert skipped == [".".join(recorder.LIVE_OECD)]
 
 
 @pytest.mark.parametrize(
@@ -38,8 +44,8 @@ def test_smoke_receipt_records_optional_oecd_skip_separately():
         ("skipped", "unexpectedly skipped"),
     ],
 )
-def test_smoke_receipt_rejects_missing_or_unsuccessful_required_cases(change, diagnostic):
-    root = smoke_report()
+def test_smoke_receipt_rejects_missing_or_unsuccessful_required_cases(recorder, change, diagnostic):
+    root = smoke_report(recorder)
     if change == "duplicate":
         root.append(root[0])
     elif change == "omitted":
@@ -47,11 +53,11 @@ def test_smoke_receipt_rejects_missing_or_unsuccessful_required_cases(change, di
     else:
         ElementTree.SubElement(root[0], change)
     with pytest.raises(ValueError, match=diagnostic):
-        smoke_results(ElementTree.tostring(root))
+        recorder.smoke_results(ElementTree.tostring(root))
 
 
 @pytest.fixture
-def installed_case(tmp_path, monkeypatch):
+def installed_case(recorder, tmp_path, monkeypatch):
     environment = tmp_path / "venv"
     package = environment / "site-packages/innovate"
     package.mkdir(parents=True)
@@ -75,7 +81,7 @@ def installed_case(tmp_path, monkeypatch):
     wheel = tmp_path / "innovate.whl"
     wheel.write_bytes(b"synthetic fixture")
     report = tmp_path / "report.xml"
-    report.write_bytes(ElementTree.tostring(smoke_report()))
+    report.write_bytes(ElementTree.tostring(smoke_report(recorder)))
 
     def verify(candidate, directory, imported):
         assert candidate == wheel and directory == package
@@ -86,7 +92,7 @@ def installed_case(tmp_path, monkeypatch):
     return environment, wheel, report, tmp_path / "evidence.json"
 
 
-def test_installed_receipt_binds_source_artifact_and_observed_results(installed_case, monkeypatch):
+def test_installed_receipt_binds_source_artifact_and_observed_results(recorder, installed_case, monkeypatch):
     environment, wheel, report, output = installed_case
     monkeypatch.setattr(
         sys,
@@ -110,11 +116,11 @@ def test_installed_receipt_binds_source_artifact_and_observed_results(installed_
     assert receipt["source_sha256"] == "b" * 64
     assert receipt["artifact_sha256"] == hashlib.sha256(wheel.read_bytes()).hexdigest()
     assert receipt["pytest_report_sha256"] == hashlib.sha256(report.read_bytes()).hexdigest()
-    assert receipt["passed_by_module"] == dict.fromkeys(SMOKE_MODULES, 1)
-    assert receipt["skipped"] == [".".join(LIVE_OECD)]
+    assert receipt["passed_by_module"] == dict.fromkeys(recorder.SMOKE_MODULES, 1)
+    assert receipt["skipped"] == [".".join(recorder.LIVE_OECD)]
 
 
-def test_stale_wheel_source_cannot_produce_evidence(installed_case):
+def test_stale_wheel_source_cannot_produce_evidence(recorder, installed_case):
     _, wheel, _, output = installed_case
     (wheel.parent / "SOURCE_SHA256").write_text("c" * 64, encoding="utf-8")
     with pytest.raises(ValueError, match="different source inputs"):
