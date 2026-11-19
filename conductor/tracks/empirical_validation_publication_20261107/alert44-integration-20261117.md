@@ -102,3 +102,20 @@ controls on the exact Innovate source. The new caller selects GitHub-hosted
 Ubuntu through the immutable shared workflow. It keeps the scanner controls,
 adds the Wolfi review to the check, and records image advisories on every run.
 RustSec and the 38 release obligations remain gates on promotion.
+
+## Direct calendar dependency
+
+The same chat owns Innovate's direct calendar dependency from
+`1703840d7c3b70cae6475206ec29e5ad94fed484`. Scope is the core crate's private
+date and timestamp implementation, manifest and lock, and focused consumer
+tests. Preserve the timestamp wire format, the supported calendar range,
+and the Polars DataFrame API. Cargo still resolves the two unmaintained
+crates through published Polars, so the RustSec check must continue to fail
+until that dependency path is replaced too.
+
+Rust 1.100.0 passed the eight temporal consumer cases and both calendar
+unit cases. A standalone comparison against the former implementation
+matched 13 dates, 23 timestamp inputs and 1,407 weekly comparisons with
+the same private adapter. The locked core dependency tree selects
+`time 0.3.55`. The workspace tree retains `chrono-tz 0.10.4` through
+`polars-arrow 0.55.2`.

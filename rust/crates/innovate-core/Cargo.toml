@@ -36,7 +36,7 @@ sha2 = "=0.11.1"
 statrs = "=0.19.1"
 nuts-rs = { path = "../../vendor/nuts-rs-0.19.1", version = "=0.19.1" }
 rand = "=0.10.4"
-chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
+time = { version = "=0.3.55", features = ["large-dates", "parsing"] }
 kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
 kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
