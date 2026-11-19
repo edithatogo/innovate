@@ -149,6 +149,7 @@ pub fn execute_json(input: &str) -> String {
             "import_extension_artifact" => extensions::import_serialized_artifact(&value).to_string(),
             "import_scenario_artifact" => scenario::import_artifact(&value).to_string(),
             "categorize_adopters" => execute_adopters_json(&value).to_string(),
+            "dapane_adoption_capacity" => execute_dapane_adoption_capacity_json(&value).to_string(),
         }
     }
     let response = match result {
@@ -239,6 +240,164 @@ fn execute_adopters_json(value: &serde_json::Value) -> serde_json::Value {
     };
     json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"categorize_adopters",
         "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn execute_dapane_adoption_capacity_json(value: &serde_json::Value) -> serde_json::Value {
+    let result = (|| {
+        if value["schema_version"] != KERNEL_SCHEMA_VERSION {
+            return Err("dapane_adoption_capacity requires schema 2.0".to_string());
+        }
+        let payload = &value["payload"];
+
+        let run_id = payload["run_id"].as_str().ok_or("missing run_id")?.to_string();
+        let iteration = payload["iteration"].as_u64().ok_or("missing iteration")? as i64;
+        if iteration < 0 || iteration > 16 {
+            return Err("iteration must be 0..16".to_string());
+        }
+
+        let prev = payload["previous_evaluation_digest"].as_str();
+        if iteration == 0 {
+            if prev.is_some() {
+                return Err("initial trajectory has no parent".to_string());
+            }
+        } else {
+            let prev_str = prev.ok_or("previous_evaluation_digest required for iteration > 0")?;
+            if prev_str.len() != 66 || !prev_str.starts_with("sha256:") {
+                return Err("invalid previous_evaluation_digest".to_string());
+            }
+        }
+
+        let key = payload["key"].as_object().ok_or("missing key")?;
+        let scenario_id = key["scenario_id"].as_str().ok_or("missing scenario_id")?;
+        let strategy_id = key["strategy_id"].as_str().ok_or("missing strategy_id")?;
+        let draw_id = key["draw_id"].as_str().ok_or("missing draw_id")?;
+        let replication_id = key["replication_id"].as_str().ok_or("missing replication_id")?;
+        let perspective = key["perspective"].as_str().ok_or("missing perspective")?;
+        let subgroup_id = key["subgroup_id"].as_str().ok_or("missing subgroup_id")?;
+
+        let feedback = payload["feedback"].as_object().ok_or("missing feedback")?;
+        let price_affects_adoption = feedback["price_affects_adoption"].as_bool().ok_or("missing price_affects_adoption")?;
+        let mode = feedback["mode"].as_str().ok_or("missing mode")?;
+        let valuation_digest = feedback["valuation_digest"].as_str();
+
+        if iteration == 0 {
+            if price_affects_adoption || mode != "none" || valuation_digest.is_some() {
+                return Err("no implicit price response allowed for iteration 0".to_string());
+            }
+        } else {
+            if !price_affects_adoption || mode != "external_recomputed" || valuation_digest.is_none() {
+                return Err("external recomputed feedback required for iteration > 0".to_string());
+            }
+            let vd = valuation_digest.unwrap();
+            if vd.len() != 66 || !vd.starts_with("sha256:") {
+                return Err("invalid valuation_digest".to_string());
+            }
+        }
+
+        let resource = payload["resource"].as_object().ok_or("missing resource")?;
+        let resource_id = resource["id"].as_str().ok_or("missing resource id")?;
+        let unit = resource["unit"].as_str().ok_or("missing resource unit")?;
+        let quantity_per_adoption = resource["quantity_per_adoption"].as_str().ok_or("missing quantity_per_adoption")?;
+        let capacity_per_period = resource["capacity_per_period"].as_str().ok_or("missing capacity_per_period")?;
+
+        let per_adoption = parse_dapane_exact_fraction(quantity_per_adoption)?;
+        let capacity = parse_dapane_exact_fraction(capacity_per_period)?;
+        if capacity == 0.0 || per_adoption == 0.0 {
+            return Err("positive capacity and intensity required".to_string());
+        }
+
+        let observations = payload["observations"].as_array().ok_or("missing observations")?;
+        if observations.len() < 1 || observations.len() > 120 {
+            return Err("1..120 periods required".to_string());
+        }
+
+        let mut backlog = 0.0f64;
+        let mut last_period = String::new();
+        let mut steps = Vec::new();
+
+        for (i, obs) in observations.iter().enumerate() {
+            let obs_obj = obs.as_object().ok_or(format!("observations[{}] must be object", i))?;
+            let period = obs_obj["period"].as_str().ok_or(format!("missing period in observations[{}]", i))?;
+            if period.len() != 7 || &period[4..5] != "-" {
+                return Err(format!("invalid period format in observations[{}]", i));
+            }
+            if period <= last_period.as_str() {
+                return Err(format!("periods must be strictly ascending in observations[{}]", i));
+            }
+            last_period = period.to_string();
+
+            let adopted = obs_obj["new_adoptions"].as_u64().ok_or(format!("missing new_adoptions in observations[{}]", i))?;
+            if adopted > 10_000_000_000 {
+                return Err(format!("new_adoptions too large in observations[{}]", i));
+            }
+
+            let demand = adopted as f64 * per_adoption + backlog;
+            let served = demand.min(capacity);
+            backlog = demand - served;
+
+            steps.push(serde_json::json!({
+                "period": period,
+                "new_adoptions": adopted,
+                "new_resource_use": format!("{:.10}", adopted as f64 * per_adoption),
+                "demand": format!("{:.10}", demand),
+                "served": format!("{:.10}", served),
+                "backlog": format!("{:.10}", backlog),
+                "capacity_exceeded": demand > capacity,
+            }));
+        }
+
+        Ok(serde_json::json!({
+            "schema_version": "dapane-d2-innovate/0.1",
+            "run_id": run_id,
+            "provider": {
+                "repository": "edithatogo/innovate",
+                "revision": "native",
+                "contract": "declared-innovation-trajectory/0.1",
+                "method": "provided_trajectory",
+                "state": "native_invoked",
+            },
+            "key": {
+                "scenario_id": scenario_id,
+                "strategy_id": strategy_id,
+                "draw_id": draw_id,
+                "replication_id": replication_id,
+                "perspective": perspective,
+                "subgroup_id": subgroup_id,
+            },
+            "iteration": iteration,
+            "previous_evaluation_digest": prev,
+            "feedback_mode": mode,
+            "triggering_valuation_digest": valuation_digest,
+            "resource": {
+                "id": resource_id,
+                "unit": unit,
+                "quantity_per_adoption": quantity_per_adoption,
+                "capacity_per_period": capacity_per_period,
+            },
+            "periods": steps,
+            "pricing_execution": "native_invoked",
+        }))
+    })();
+
+    let (result, error) = match result {
+        Ok(result) => (result, serde_json::Value::Null),
+        Err(message) => (serde_json::Value::Null, serde_json::json!({"code":"invalid_request","message":message})),
+    };
+    serde_json::json!({"schema_version":KERNEL_SCHEMA_VERSION,"operation":"dapane_adoption_capacity",
+        "model_key":null,"result":result,"error":error,"metadata":{"runtime":"rust_native"}})
+}
+
+fn parse_dapane_exact_fraction(s: &str) -> Result<f64, String> {
+    let parts: Vec<&str> = s.split('/').collect();
+    if parts.len() != 2 {
+        return Err(format!("invalid exact fraction: {}", s));
+    }
+    let num: f64 = parts[0].parse().map_err(|_| format!("invalid numerator: {}", parts[0]))?;
+    let den: f64 = parts[1].parse().map_err(|_| format!("invalid denominator: {}", parts[1]))?;
+    if den == 0.0 {
+        return Err("denominator must be positive".to_string());
+    }
+    Ok(num / den)
 }
 
 fn execute_preprocessing_json(value: &serde_json::Value) -> serde_json::Value {
