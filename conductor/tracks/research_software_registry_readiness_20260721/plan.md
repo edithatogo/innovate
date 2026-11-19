@@ -1,5 +1,24 @@
 # Implementation Plan
 
+## JOSS source review after the adopter classifier change
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the draft inputs and this
+record in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Hosted native job `135857338218` reported a stale lockfile fingerprint after
+`c1399484aa7efa224304b0a84c559ecffc10726e`. The integrator checked all fourteen
+input blobs against Git at both revisions and refreshed the source and edition
+hashes in the draft. The core manifest and lock add a direct edge to the already
+locked `num-bigint` 0.4.8.
+
+Python 3.15.2 ran all 87 cases in the draft, setup and render-wrapper suites.
+`scripts/check_joss_readiness.py --json` validated fourteen source hashes,
+three edition hashes and six sections. `--require-submission-ready` returned
+1. The pending render and prior receipts are recorded with their own editions.
+The release source digest is
+`ed085a5f9131fbd265e9bab54706fd6e0cf1811d3a7ecee1a08f4429a6c10eec`
+with or without the draft update.
+
 ## JOSS source review after the calendar dependency change
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this source review

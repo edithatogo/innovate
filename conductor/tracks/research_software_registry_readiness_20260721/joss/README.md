@@ -11,10 +11,10 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- The 19 November edition describes development version `0.7.0a1` at
-  `60c0593988f522495bbc867d91db3949c8086f4c`. The dependency delta and
-  retained claim limits are recorded in the
-  [calendar dependency reassessment](claim-evidence.md#calendar-dependency-reassessment).
+- The 20 November edition describes development version `0.7.0a1` at
+  `c1399484aa7efa224304b0a84c559ecffc10726e`. The
+  [adopter classifier reassessment](claim-evidence.md#adopter-classifier-dependency-reassessment)
+  records the dependency change and claim limits.
   Earlier source assessments and render receipts retain their original revisions.
 
 ## Scope and evidence
@@ -139,10 +139,9 @@ interactions; this packet does not authorise or automate journal correspondence.
    Existing empirical-study owners retain their protocols and acceptance duties.
 3. Confirm authorship, affiliations, funding, conflicts, rights and the full AI
    disclosure. Replace draft-specific pending statements only with verified facts.
-4. Preserve the current render and visual evidence and repeat it when source or
-   manuscript inputs change. The current edition has completed actual BibTeX,
-   official TeX/PDF and four-page inspection. Template layout/metadata limitations
-   are recorded below; author and publication-layout review remain separate.
+4. Render and inspect the 20 November edition before proceeding to submission.
+   The completed BibTeX, TeX/PDF and four-page inspection below apply to the
+   16 November edition, with the recorded template layout and metadata limits.
 5. Re-run relevant installation, scientific, documentation and release gates on
    the selected source/artifacts. Structural manuscript checks do not establish
    submission readiness, scientific validity or a qualified software release.
@@ -256,10 +255,10 @@ the pinned checkout's unmodified Dockerfile provides its intended package
 environment; record the resulting image identity and use draft mode. No Docker
 build or run was executed in this workspace, where Docker is unavailable.
 
-### Current completed draft render: 16 November 2026, after #668
+### Completed draft render: 16 November 2026, after #668
 
 The [render evidence packet](../evidence/evidence-acquisition-20261116/render/README.md)
-contains the [current four-page PDF](../evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf),
+contains the [four-page PDF from that edition](../evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf),
 its [unchanged generated receipt](../evidence/evidence-acquisition-20261116/render/attempt-4/receipt.json),
 the [separate visual review](../evidence/evidence-acquisition-20261116/render/attempt-4/visual-review.json)
 and a [reproduction recipe](../evidence/evidence-acquisition-20261116/render/reproduce.md).

@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition dated 19 November 2026 for development version `0.7.0a1` at
-`60c0593988f522495bbc867d91db3949c8086f4c`.
+Edition dated 20 November 2026 for development version `0.7.0a1` at
+`c1399484aa7efa224304b0a84c559ecffc10726e`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -31,7 +31,18 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
 
-## Calendar dependency reassessment
+## Adopter classifier dependency reassessment
+
+The integrator compared all fourteen source inputs with
+`60c0593988f522495bbc867d91db3949c8086f4c` on 20 November 2026. The core
+manifest and lock add a direct edge to the already resolved `num-bigint` 0.4.8
+for exact weighted moments. C01 and C06 still describe the Rust computation,
+dependency reuse and publication limits. C05's table and interchange inputs
+match the prior revision byte for byte. The scientific prose and bibliography
+carry forward, and P01–P06 remain withheld. The prior render receipts identify
+their respective editions.
+
+## Calendar dependency reassessment: 19 November 2026
 
 The integrator compared all fourteen source inputs with the 18 November
 edition. The core manifest now selects `time` for private calendar
