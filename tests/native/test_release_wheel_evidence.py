@@ -155,6 +155,56 @@ def test_stale_wheel_source_cannot_produce_evidence(recorder, installed_case):
     assert not output.exists()
 
 
+@pytest.fixture
+def arrow_report(recorder, tmp_path, monkeypatch):
+    qualifier = import_module("scripts.qualify_scenario_arrow")
+    versions = qualifier.declared_versions(recorder.ROOT)
+    monkeypatch.setattr(recorder, "package_version", versions.__getitem__, raising=False)
+    root = ElementTree.Element("testsuite")
+    for module, name in sorted(qualifier.EXPECTED_CASES):
+        ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name=name)
+    report = tmp_path / "arrow.xml"
+    report.write_bytes(ElementTree.tostring(root))
+    return report, versions
+
+
+def test_receipt_binds_the_exact_installed_arrow_suite(recorder, installed_case, arrow_report):
+    report, versions = arrow_report
+    recorder.record(*installed_case, arrow_report=report)
+    receipt = json.loads(installed_case[-1].read_bytes())
+    assert receipt["arrow"] == {
+        "versions": versions,
+        "test_results": {"passed": 42, "exports": 38, "optional_arrow": 4, "native_producers": 4},
+        "pytest_report_sha256": hashlib.sha256(report.read_bytes()).hexdigest(),
+    }
+
+
+@pytest.mark.parametrize(
+    ("problem", "diagnostic"),
+    [
+        ("missing case", "missing qualification cases"),
+        ("skipped case", "qualification contains skipped"),
+        ("wrong version", "pyarrow: expected"),
+    ],
+)
+def test_arrow_evidence_rejects_incomplete_or_wrong_runtime(
+    recorder, installed_case, arrow_report, problem, diagnostic
+):
+    report, versions = arrow_report
+    root = ElementTree.fromstring(report.read_bytes())
+    native_case = next(case for case in root if "test_optional_pyarrow" in case.get("name", ""))
+    if problem == "missing case":
+        root.remove(native_case)
+    elif problem == "skipped case":
+        ElementTree.SubElement(native_case, "skipped")
+    else:
+        versions["pyarrow"] = "0.0.0"
+    report.write_bytes(ElementTree.tostring(root))
+    with pytest.raises(ValueError, match=diagnostic):
+        recorder.record(*installed_case, arrow_report=report)
+    assert not installed_case[-1].exists()
+
+
 def test_unqualified_host_cannot_produce_evidence(recorder, installed_case, monkeypatch):
     monkeypatch.setattr(recorder.platform, "machine", lambda: "aarch64")
     with pytest.raises(ValueError, match="supported release host"):

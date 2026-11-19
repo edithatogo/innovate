@@ -10,11 +10,18 @@ import re
 import subprocess
 import sys
 from collections import Counter
+from importlib.metadata import version as package_version
 from pathlib import Path
 from xml.etree import ElementTree
 
 from scripts.check_migration import INSTALLED_TARGETS, ROOT, release_source_digest
-from scripts.qualify_scenario_arrow import validate_native_loader, verify_wheel
+from scripts.qualify_scenario_arrow import (
+    declared_versions,
+    validate_junit,
+    validate_native_loader,
+    validate_versions,
+    verify_wheel,
+)
 
 ORACLE_MODULE = "test_oracle_manifest"
 ORACLE_CASES = {
@@ -59,7 +66,7 @@ def smoke_results(payload: bytes) -> tuple[dict[str, int], list[str]]:
     return dict(passed), skipped
 
 
-def record(environment: Path, wheel: Path, report: Path, output: Path) -> None:
+def record(environment: Path, wheel: Path, report: Path, output: Path, *, arrow_report: Path | None = None) -> None:
     system = platform.system().lower()
     machine = platform.machine().lower()
     target = f"{'macos' if system == 'darwin' else system}-{'x86_64' if machine == 'amd64' else machine}"
@@ -96,6 +103,16 @@ def record(environment: Path, wheel: Path, report: Path, output: Path) -> None:
         "passed_by_module": passed,
         "skipped": skipped,
     }
+    if arrow_report is not None:
+        arrow_payload = arrow_report.read_bytes()
+        expected = declared_versions(ROOT)
+        installed = {name: package_version(name) for name in expected}
+        validate_versions(sys.version_info[:3], installed, expected)
+        evidence["arrow"] = {
+            "versions": installed,
+            "test_results": validate_junit(ElementTree.fromstring(arrow_payload)),
+            "pytest_report_sha256": hashlib.sha256(arrow_payload).hexdigest(),
+        }
     with output.open("x", encoding="utf-8") as stream:
         json.dump(evidence, stream, indent=2, sort_keys=True)
         stream.write("\n")
@@ -105,8 +122,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     for flag in ("environment", "wheel", "report", "output"):
         parser.add_argument("--" + flag, type=Path, required=True)
+    parser.add_argument("--arrow-report", type=Path)
     args = parser.parse_args()
-    record(args.environment, args.wheel, args.report, args.output)
+    record(args.environment, args.wheel, args.report, args.output, arrow_report=args.arrow_report)
     return 0
 
 

@@ -32,13 +32,36 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [~] V03 — cross-domain and early-stage validation; cohort labels exist, but qualified source-bound comparisons and calibration remain open.
 - [~] V04 — accuracy-controlled performance evaluation; partial receipts exist, but their integrity and required measured workloads remain open.
 - [~] Q01 — input/property/fuzz/FFI safety; partial native tests exist, but the named corpus, fuzz and sanitizer evidence requires reconciliation.
-- [ ] Q02 — actual native/no-legacy installed CI matrix.
+- [~] Q02 — installed Python wheel and Arrow-extra matrix qualification. Full native distribution acceptance remains open.
 - [ ] Q03 — supply-chain and distributable-artifact evidence.
 - [~] Q04 — the [release verifier](release-evidence-contract.md) checks source-bound receipts. The [capability claim guard](q04-claim-review-20261116.md), complete case coverage and the qualification evidence producer remain open.
 - [ ] V05 — clean reproduction and distinct publication packages.
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+## Q02 installed Arrow extra release evidence
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`d8c070452da8f467febe2f9ccbc1247bda2a283b`. R06, R07 and R09 have scoped
+receipts in the Rust core convergence plan. The allowed files are this plan,
+the release evidence contract, the existing release-readiness workflow,
+the installed-wheel recorder and its focused tests. The native scope is
+PR #684 and its three-platform release dry run.
+
+The Linux development-wheel lane already executes the established 42-case
+scenario and Arrow suite. Extend the release-wheel matrix to execute and
+sign the same scope after testing the minimal wheel. Keep the signed
+receipt tied to both raw test reports and the same source-built wheel.
+
+The focused recorder, Arrow verifier and workflow checks passed 72 cases
+and 18 subtests. They reject a missing Arrow case, a skipped case and a
+different PyArrow version. On a fresh Python 3.15.2 environment using the
+verified `d8c07045` macOS release wheel, all 163 minimal-wheel cases and
+all 42 Arrow cases passed. The minimal environment had no PyArrow before
+installing the locked extra. Hosted receipts must bind both reports to the
+new release run.
 
 ## V01 analytic reference cases for the release evidence
 

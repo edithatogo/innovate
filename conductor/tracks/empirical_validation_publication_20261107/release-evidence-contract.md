@@ -53,6 +53,11 @@ and derivations, and the signed receipt binds the original report and
 installed wheel. The references cover deterministic levels at their recorded
 inputs. [Analytic references](../../../validation/oracles/derivations.md)
 
+Each release host then installs the built wheel's `arrow` extra and runs the
+42 named scenario and Arrow cases. The recorder requires the locked runtime
+versions and a complete test report with zero skips or failures. The same
+signed receipt identifies the minimal-wheel and Arrow reports by SHA-256.
+
 A manual dispatch can set `live_oecd` to run the real OECD case on each host.
 The signer checks the original test report hash and requires zero skips
 when that input is enabled.
