@@ -57,17 +57,20 @@ jobs:
         uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
         with:
           path: sbom-input
+          syft-version: v1.57.2
           format: spdx-json
           output-file: innovate-ffi-sbom.spdx.json
           upload-release-assets: false
       - name: Verify Rust packages in generated SBOM
         run: jq -e '.packages | any(.name == "innovate-ffi")' innovate-ffi-sbom.spdx.json > /dev/null
-      - name: Scan FFI archive and Rust lockfile with Grype
-        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+      - name: Scan the generated FFI dependency SBOM with Grype
+        uses: edithatogo/repository-standards/.github/actions/grype-scan@06a7bd00074b402fe91b2e3ed7a8af806be945e7
         with:
-          path: sbom-input
-          fail-build: true
+          sbom: innovate-ffi-sbom.spdx.json
+          mode: enforce
           severity-cutoff: critical
+          artifact-name: grype-ffi-release
+          output-directory: .grype-ffi-evidence
       - name: Attest SLSA build provenance (Sigstore / in-toto)
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:

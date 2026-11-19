@@ -37,6 +37,28 @@ We prefer all communications to be in English.
 
 ## Configured security controls
 
+The P0 Grype rollout adds advisory resolved-dependency checks and Critical gates
+before the existing Python, crates.io and binding publication steps. The shared
+action is pinned to an immutable commit. Scanner, database, inventory and
+evidence failures block both modes; existing cargo-audit, cargo-deny, privacy and
+scientific checks remain required.
+
+Python publication inventories the exact normalized wheel's embedded Cargo SBOM
+and its frozen installed Python runtime graph. The extraction helper refuses
+missing, ambiguous or non-Cargo embedded documents without modifying the wheel.
+Publication receipts bind both inventories and the exact wheel/sdist hashes.
+Crates publication separately inventories the root and validated vendor locks;
+the advisory lane also covers the games workspace. These are source/package
+dependency inventories, not complete platform-native or operating-system scans.
+
+Scan evidence and caller-owned subject receipts are retained on failure. The
+scheduled advisory lane currently monitors resolved source dependencies: this
+prerelease branch has no qualified retained release SBOM to rescan. Immutable
+released-asset monitoring remains pending that first qualified release; a
+fresh source inventory must not be described as evidence about published bytes.
+The migration ledger and the explicit binding release-readiness hold remain
+unchanged. No clean scan closes the outstanding scientific release obligations.
+
 [Security and Quality](.github/workflows/security-quality.yml) runs on pull
 requests and pushes targeting `main` or `work`, a weekly schedule and manual
 dispatch. It configures dependency review for pull requests, a RustSec audit of
