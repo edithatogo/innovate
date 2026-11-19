@@ -37,17 +37,58 @@ jobs:
       - name: Select nightly Rust toolchain for libFuzzer
         uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
         with:
-          toolchain: nightly
+          toolchain: nightly-2026-11-19
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
           workspaces: "fuzz -> target"
           shared-key: "fuzz"
 
-      - name: Install cargo-fuzz
-        uses: taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519 # v2
-        with:
-          tool: cargo-fuzz
+      - name: Install pinned cargo-fuzz
+        run: cargo +nightly-2026-11-19 install cargo-fuzz --version 0.13.2 --locked
 
-      - name: Run kernel_request fuzz target
-        run: cargo fuzz run kernel_request --target x86_64-unknown-linux-gnu -- -max_total_time=30
+      - name: Record source and fuzz toolchain
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/fuzz-logs"
+          {
+            git rev-parse HEAD
+            rustc +nightly-2026-11-19 --version
+            cargo +nightly-2026-11-19 fuzz --version
+            sha256sum fuzz/Cargo.lock
+          } | tee "$RUNNER_TEMP/fuzz-logs/environment.txt"
+
+      - name: Build the committed dependency graph
+        shell: bash
+        env:
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          set -euo pipefail
+          cargo +nightly-2026-11-19 fetch --locked --manifest-path fuzz/Cargo.toml
+          lock_before="$(sha256sum fuzz/Cargo.lock)"
+          CARGO_NET_OFFLINE=true cargo +nightly-2026-11-19 fuzz build kernel_request --codegen-units 16 \
+            2>&1 | tee "$RUNNER_TEMP/fuzz-logs/build.txt"
+          test "$lock_before" = "$(sha256sum fuzz/Cargo.lock)"
+
+      - name: Run bounded kernel_request campaign
+        shell: bash
+        env:
+          FUZZ_SECONDS: ${{ github.event_name == 'pull_request' && '30' || '300' }}
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          set -euo pipefail
+          CARGO_NET_OFFLINE=true cargo +nightly-2026-11-19 fuzz run kernel_request --codegen-units 16 \
+            --target x86_64-unknown-linux-gnu -- -max_total_time="$FUZZ_SECONDS" \
+            -max_len=65536 -rss_limit_mb=1024 -timeout=5 \
+            2>&1 | tee "$RUNNER_TEMP/fuzz-logs/campaign.txt"
+
+      - name: Retain campaign evidence and reproducers
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: kernel-request-fuzz-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/fuzz-logs
+            fuzz/artifacts
+          if-no-files-found: ignore
+          retention-days: 14
