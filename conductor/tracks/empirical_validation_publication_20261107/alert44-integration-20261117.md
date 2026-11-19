@@ -90,3 +90,15 @@ ID into the generator boundary rather than creating a filename containing a
 control character. This preserves the diagnostic assertion on Windows filesystems
 that cannot create such names; the separate reviewer reproduced the real-path
 case on macOS. All **27** generator tests and targeted Ruff checks still pass.
+## GitHub-hosted offline check
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the hosted caller in
+the PR #684 worktree from `fcda61d8a9cc1e78c381c5fcb091abd47bbc2e77`.
+This packet covers the offline workflow, security policy and this record.
+The native scope is Innovate PR #684 and shared policy PR #152.
+
+The prior hosted canary denied scanner egress and passed the scanner
+controls on the exact Innovate source. The new caller selects GitHub-hosted
+Ubuntu through the immutable shared workflow. It keeps the scanner controls,
+adds the Wolfi review to the check, and records image advisories on every run.
+RustSec and the 38 release obligations remain gates on promotion.
