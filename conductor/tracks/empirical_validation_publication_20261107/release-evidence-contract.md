@@ -45,3 +45,7 @@ and wheel digest for each receipt and sign it. The receipt's
 scope and the observed skip count. Signed reports covering the complete native,
 scientific and installed requirements still need to supply the release bundle.
 Synthetic reports exercise the verifier and provide no release evidence.
+
+A manual dispatch can set `live_oecd` to run the real OECD case on each host.
+The signer checks the original test report hash and requires zero skips
+when that input is enabled.

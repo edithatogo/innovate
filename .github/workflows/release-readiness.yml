@@ -9,6 +9,11 @@ on:
   pull_request:
     branches: [main, work]
   workflow_dispatch:
+    inputs:
+      live_oecd:
+        description: Run the live OECD installed-wheel test on each host
+        type: boolean
+        default: false
   schedule:
     - cron: "30 6 * * 1"
 
@@ -98,6 +103,8 @@ jobs:
             fi > SHA256SUMS
           )
       - name: Exercise the release wheel
+        env:
+          INNOVATE_TEST_LIVE_OECD: ${{ inputs.live_oecd && '1' || '0' }}
         run: |
           staging="$(mktemp -d)"
           uv venv "$staging" --python 3.15.2
@@ -126,6 +133,7 @@ jobs:
           "$staged_python" -m scripts.record_release_wheel_evidence \
             --environment "$staging" --wheel dist/*.whl --report "$staging/installed-results.xml" \
             --output dist/installed-wheel-evidence.json
+          cp "$staging/installed-results.xml" dist/installed-wheel-results.xml
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -136,6 +144,7 @@ jobs:
             dist/SHA256SUMS
             dist/SOURCE_SHA256
             dist/installed-wheel-evidence.json
+            dist/installed-wheel-results.xml
           if-no-files-found: error
       - name: Qualify the installed Voiage consumer
         if: runner.os == 'Linux'
@@ -175,6 +184,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TARGET: ${{ matrix.target }}
+          LIVE_OECD: ${{ inputs.live_oecd && 'true' || 'false' }}
         run: |
           set -euo pipefail
           gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" \
@@ -183,12 +193,15 @@ jobs:
           test "$#" -eq 1
           test -f "$1"
           wheel_hash="$(sha256sum "$1" | cut -d' ' -f1)"
+          report_hash="$(sha256sum signed-input/installed-wheel-results.xml | cut -d' ' -f1)"
           source_hash="$(cat signed-input/SOURCE_SHA256)"
           [[ "$source_hash" =~ ^[a-f0-9]{64}$ ]]
-          jq -e --arg commit "$GITHUB_SHA" --arg source "$source_hash" --arg wheel "$wheel_hash" --arg target "$TARGET" '
+          jq -e --arg commit "$GITHUB_SHA" --arg source "$source_hash" --arg wheel "$wheel_hash" \
+            --arg target "$TARGET" --arg report "$report_hash" --argjson live "$LIVE_OECD" '
             .schema_version == 1 and .kind == "bounded_installed_execution" and .status == "passed"
             and .target == $target and .source_commit == $commit
             and .source_sha256 == $source and .artifact_sha256 == $wheel
+            and .pytest_report_sha256 == $report and (if $live then .skipped == [] else true end)
           ' signed-input/installed-wheel-evidence.json >/dev/null
       - name: Sign the installed-wheel smoke evidence
         id: sign-wheel-evidence
