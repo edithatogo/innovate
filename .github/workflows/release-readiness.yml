@@ -89,11 +89,14 @@ jobs:
           for module in (innovate, _native):
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
-          "$staging/bin/python" -m pytest -q \
+          "$staging/bin/python" -m pytest -q --junitxml="$staging/installed-results.xml" \
             tests/native/test_python_consumer.py \
             tests/native/test_competition.py \
             tests/native/test_multi_generation.py \
             tests/native/test_paired_outcomes.py
+          "$staging/bin/python" -m scripts.record_release_wheel_evidence \
+            --environment "$staging" --wheel dist/*.whl --report "$staging/installed-results.xml" \
+            --output dist/installed-wheel-evidence.json
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -103,6 +106,7 @@ jobs:
             dist/*.whl
             dist/SHA256SUMS
             dist/SOURCE_SHA256
+            dist/installed-wheel-evidence.json
           if-no-files-found: error
       - name: Qualify the installed Voiage consumer
         run: |
@@ -116,4 +120,49 @@ jobs:
         with:
           name: voiage-qualification-${{ github.sha }}
           path: dist/voiage-qualification.json
+          if-no-files-found: error
+
+  sign-release-wheel-evidence:
+    needs: release-lane-checks
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - name: Verify the dry-run evidence from this workflow run
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" \
+            --name "python-release-dry-run-$GITHUB_SHA" --dir signed-input
+          set -- signed-input/*.whl
+          test "$#" -eq 1
+          test -f "$1"
+          wheel_hash="$(sha256sum "$1" | cut -d' ' -f1)"
+          source_hash="$(cat signed-input/SOURCE_SHA256)"
+          [[ "$source_hash" =~ ^[a-f0-9]{64}$ ]]
+          jq -e --arg commit "$GITHUB_SHA" --arg source "$source_hash" --arg wheel "$wheel_hash" '
+            .schema_version == 1 and .kind == "bounded_installed_execution" and .status == "passed"
+            and .source_commit == $commit and .source_sha256 == $source and .artifact_sha256 == $wheel
+          ' signed-input/installed-wheel-evidence.json >/dev/null
+      - name: Sign the installed-wheel smoke evidence
+        id: sign-wheel-evidence
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: signed-input/installed-wheel-evidence.json
+      - name: Retain the signed smoke evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: installed-wheel-evidence-${{ github.sha }}
+          path: |
+            signed-input/installed-wheel-evidence.json
+            ${{ steps.sign-wheel-evidence.outputs.bundle-path }}
           if-no-files-found: error

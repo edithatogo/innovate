@@ -38,6 +38,9 @@ attestation. The repository and signer are fixed to Innovate and its
 match the qualification commit. GitHub CLI verifies the bundle. [GitHub attestation verification](https://cli.github.com/manual/gh_attestation_verify)
 
 The current ledger still has 38 incomplete obligations. The existing dry-run
-job produces packaging artifacts. A real producer run with complete native,
-scientific and installed evidence still needs to supply the signed bundle.
+job produces packaging artifacts and a bounded installed-wheel receipt from
+its Linux test execution. A separate automated job verifies the receipt and
+signs it. The receipt's `bounded_installed_execution` kind records the smoke
+scope and the observed skip count. Signed reports covering the complete native,
+scientific and installed requirements still need to supply the release bundle.
 Synthetic reports exercise the verifier and provide no release evidence.

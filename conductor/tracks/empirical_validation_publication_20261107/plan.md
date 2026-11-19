@@ -59,6 +59,19 @@ The 132 focused migration, capability-claim and release-workflow checks pass
 on Python 3.15.2. The policy tests execute 101 of 108 changed verifier lines
 (93.5%). A synthetic unsigned bundle failed the actual GitHub CLI verifier.
 
+### Sign the observed installed-wheel smoke result — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19` in the Innovate PR #684
+worktree. Scope covers the dry-run release workflow, the installed-wheel
+recorder and its tests. The current scientific ledger remains the release gate.
+
+The existing smoke suite passed 146 cases with the documented live OECD skip
+using the local installed wheel and Python 3.15.2. The recorder read all four
+suites from its JUnit report. Hosted execution will verify the installed
+Linux wheel bytes and exact source, then sign the bounded result in a separate
+job with signing permissions. Full scientific evidence remains open.
+
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
 established by this review. The reproduced findings and scope of correction
