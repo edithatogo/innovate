@@ -1,5 +1,19 @@
 # Implementation Plan
 
+## JOSS source review after adopter qualification
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` compared the 14 JOSS source
+blobs at `c1399484aa7efa224304b0a84c559ecffc10726e` and
+`dbb360d8e281ea103778484512e0a35958dfba83`. Only the migration ledger
+changed. It records the qualified adopter classifier and 37 incomplete
+obligations. The draft's count of 38 required obligations and its existing
+scientific limitations still apply.
+
+The 88 JOSS and release-claim tests passed on Python 3.15.2. The draft
+checker validated the 14 source and three edition files. Its submission
+check returned 1. The release inventory digest matches the three
+verified wheel signatures.
+
 ## JOSS source review after the adopter classifier change
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the draft inputs and this

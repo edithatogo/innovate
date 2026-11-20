@@ -12,9 +12,9 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
 - The 20 November edition describes development version `0.7.0a1` at
-  `c1399484aa7efa224304b0a84c559ecffc10726e`. The
-  [adopter classifier reassessment](claim-evidence.md#adopter-classifier-dependency-reassessment)
-  records the dependency change and claim limits.
+  `dbb360d8e281ea103778484512e0a35958dfba83`. The
+  [ledger reassessment](claim-evidence.md#adopter-classification-ledger-reassessment)
+  records the qualified adopter-classification scope.
   Earlier source assessments and render receipts retain their original revisions.
 
 ## Scope and evidence
@@ -33,7 +33,7 @@ does not supply their consent. The paper records this limitation visibly.
 
 | Manuscript claim | Repository evidence at the baseline |
 | --- | --- |
-| Rust scientific computation; Python/Julia/R interfaces; sixteen bounded families; 38 outstanding obligations | [README](../../../../README.md), [migration ledger](../../../../migration-ledger.json) |
+| Rust scientific computation, Python/Julia/R interfaces, sixteen bounded families and 38 required obligations | [README](../../../../README.md), [migration ledger](../../../../migration-ledger.json) |
 | Model conventions, time/observation semantics, synthetic versus empirical evidence | [Native scientific guide](../../../../docs/astro-site/src/content/docs/native-migration.md) |
 | Polars/Arrow boundary; copies and LazyFrame collection; incomplete R/Julia IPC/bundles | [README](../../../../README.md), [tabular crate](../../../../rust/crates/innovate-tabular/Cargo.toml) |
 | Reuse of Rust numerical dependencies and pinned Kairos crates | [Core crate manifest](../../../../rust/crates/innovate-core/Cargo.toml) |

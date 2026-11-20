@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
 Edition dated 20 November 2026 for development version `0.7.0a1` at
-`c1399484aa7efa224304b0a84c559ecffc10726e`.
+`dbb360d8e281ea103778484512e0a35958dfba83`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,16 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Adopter-classification ledger reassessment
+
+The integrator compared the fourteen source inputs with the prior edition at
+`c1399484aa7efa224304b0a84c559ecffc10726e`. The migration ledger now records
+the qualified sample-weighted adopter classifier. All 38 obligations are
+required and 37 remain incomplete. C02's model-family inventory and
+required-obligation count still apply. The broader release claim P02 remains
+withheld. Thirteen source inputs, the scientific prose and the bibliography
+match the prior edition. [Adopter-classification results](../../empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md)
 
 ## Adopter classifier dependency reassessment
 
