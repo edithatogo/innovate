@@ -191,6 +191,25 @@ The locked audit still reports the two Chrono advisories. The published
 `polars-compute/cast` through `polars-row`, which enables `chrono-tz`.
 The existing Polars version and public DataFrame type remain in use.
 
+## Adopter-classification qualification — 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the adopter receipt and
+the corresponding ledger entry in the PR #684 worktree. The qualification
+uses the release source inventory at `6feb3e509d860442d884534fed86215365af0f6f`.
+The [native and scientific receipts](evidence/adopter-classification-20261120/README.md)
+record 1,101 exact-reference cases, six invalid inputs and one fitted
+Logistic case through Python, Julia and R. The cases cover grid lengths from
+one to 65 and weights from the smallest positive subnormal to the largest
+finite binary64 value. The Python wheel suite's 765 shared cases have
+verified GitHub signatures on all three platforms. Hosted Julia and R
+jobs passed with their bundled release libraries, and the expanded cases
+passed locally on the same release source inventory.
+
+The ledger qualifies the sample-weighted classifier and its supported
+fitted single-rate adapter. Other model and feature qualifications still
+require their own results. The full release evidence manifest remains
+pending.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.

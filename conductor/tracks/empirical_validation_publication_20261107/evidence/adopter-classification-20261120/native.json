@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "kind": "native_execution",
+  "source_commit": "6feb3e509d860442d884534fed86215365af0f6f",
+  "source_sha256": "ed085a5f9131fbd265e9bab54706fd6e0cf1811d3a7ecee1a08f4429a6c10eec",
+  "status": "passed",
+  "results": {
+    "adopter_classification": {
+      "passed": 3324,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    }
+  },
+  "cases_sha256": "aa4bb6db768641b7905bd4ccaa91ba606ab66bf083aaffc5d2efd2f499123f30",
+  "fixture_generator_sha256": "7137e568a55a643475d0d79c1abc2cd291c836d2147b2d901c99810c5661ace3",
+  "platform": "macos-arm64",
+  "local_rust_version": "1.100.0",
+  "local_native_library_sha256": "89a8a1e5fdbe397da507b4097f6a5458f1c22f59dca203d5c0bf19af851dccb0",
+  "local_executions": {
+    "python": {
+      "runtime": "3.15.2",
+      "artifact_sha256": "28d9a7f19c9b18234932f902e8830f890066dc843043f60bed478f8e530adaad",
+      "report": "python.log",
+      "report_sha256": "467ec1403981571b5bb9888b51e5ae6992b0ed67ee7084843afe207cbf1928c5",
+      "replay_sha256": "3300e73b864afa2d1a7e348d3d8200a2344d490cbae20f4541d97e2241dd6415"
+    },
+    "julia": {
+      "runtime": "1.13.4",
+      "report": "julia.log",
+      "report_sha256": "c6894961ea288e9997abfb5bf3bb2021302dfbeadc697cb8a3ddf4b207e23741",
+      "replay_sha256": "1c58107856e628184d4042be9f1c5d2adf225ad5703e4def8d75db34a8f89219"
+    },
+    "r": {
+      "runtime": "4.3.0",
+      "artifact_sha256": "c7d44a94d14c1d02bf8b4e664b029ee7d74a97800ae4bbfe5bfd5c0732888afb",
+      "report": "r.log",
+      "report_sha256": "7555e0193a4a01963bc0cf052c1d7793c758e59fa716e6581e87d8a72b54fe44",
+      "replay_sha256": "6d784286e972710266c9b9fef4fde5dbaad0434110ec9c9038a64091ac79a449"
+    }
+  },
+  "installed_python_receipts": {
+    "github_run": 44608324560,
+    "source_commit": "c1399484aa7efa224304b0a84c559ecffc10726e",
+    "signed_receipt_artifacts": {
+      "linux-x86_64": 14573843979,
+      "macos-arm64": 14574811432,
+      "windows-x86_64": 14574048978
+    }
+  },
+  "hosted_bundled_julia_r": {
+    "github_run": 44613411217,
+    "jobs": {
+      "linux-x86_64": 135880181970,
+      "macos-arm64": 135880182464,
+      "windows-x86_64": 135880182722
+    }
+  }
+}
