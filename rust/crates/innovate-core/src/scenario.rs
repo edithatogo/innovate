@@ -657,7 +657,8 @@ pub(crate) fn execute_grid(request: &Value) -> Value {
                         metadata["elapsed_seconds"] = json!(elapsed);
                         metadata["kernel"] = kernel;
                         if row["error"].is_null() {
-                            let timestamp = chrono::DateTime::<chrono::Utc>::from(start).to_rfc3339();
+                            let timestamp =
+                                format!("{}+00:00", crate::calendar_time::Timestamp::from_system_time(start));
                             let seed = row["result"]["metadata"].get("seed").unwrap_or_else(|| {
                                 if row["result"]["status"] == "paused" {
                                     &scenario.simulation["simulation_options"]["seed"]
@@ -1671,7 +1672,7 @@ pub(crate) fn import_artifact(request: &Value) -> Value {
     if artifact.model_type.trim().is_empty() || artifact.version.trim().is_empty() {
         return invalid("scenario artifact requires nonblank model_type and version");
     }
-    if chrono::DateTime::parse_from_rfc3339(&artifact.timestamp).is_err() {
+    if crate::calendar_time::Timestamp::parse_offset(&artifact.timestamp).is_none() {
         return invalid("scenario artifact timestamp must be RFC 3339 with a time offset");
     }
     let (format, reason) = if let Some(replay) = &artifact.replay_request {

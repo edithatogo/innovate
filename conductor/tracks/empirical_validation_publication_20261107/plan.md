@@ -27,18 +27,123 @@ Read [taskbook](../../innovation-taskbook-20261107.md).
 - [ ] M03 — temporal mapping, panel grain and coverage.
 - [ ] M04 — generic utilisation identifiability/observation fixture.
 - [ ] M05 — frozen medicines forecasting cohort.
-- [~] V01 — independent model-oracle registry; source scaffolding exists, but input-bound independent oracle qualification remains open.
+- [~] V01 — six input-bound deterministic reference cases pass through the installed native consumer. Wider model and scientific release qualification remains open.
 - [~] V02 — leakage-safe benchmark runner; source scaffolding exists, but split validity and the required benchmark evidence remain open.
 - [~] V03 — cross-domain and early-stage validation; cohort labels exist, but qualified source-bound comparisons and calibration remain open.
 - [~] V04 — accuracy-controlled performance evaluation; partial receipts exist, but their integrity and required measured workloads remain open.
 - [~] Q01 — input/property/fuzz/FFI safety; partial native tests exist, but the named corpus, fuzz and sanitizer evidence requires reconciliation.
-- [ ] Q02 — actual native/no-legacy installed CI matrix.
+- [~] Q02 — installed Python wheel and Arrow-extra matrix qualification. Full native distribution acceptance remains open.
 - [ ] Q03 — supply-chain and distributable-artifact evidence.
-- [~] Q04 — executable scientific/docs release truth; the [fail-closed claim guard](q04-claim-review-20261116.md) is partial and the source-bound receipt contract remains open.
+- [~] Q04 — the [release verifier](release-evidence-contract.md) checks source-bound receipts. The [capability claim guard](q04-claim-review-20261116.md), complete case coverage and the qualification evidence producer remain open.
 - [ ] V05 — clean reproduction and distinct publication packages.
 - [ ] Q05 — beta, RC and exact-artefact stable acceptance.
 
 Complete relevant native/integrity/consumer prerequisites before promotion. Real research use supports JOSS; forecast and innovation/hype studies require their own comparative evidence. Data/venue claims remain scoped.
+
+## Q02 installed Arrow extra release evidence
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`d8c070452da8f467febe2f9ccbc1247bda2a283b`. R06, R07 and R09 have scoped
+receipts in the Rust core convergence plan. The allowed files are this plan,
+the release evidence contract, the existing release-readiness workflow,
+the installed-wheel recorder and its focused tests. The native scope is
+PR #684 and its three-platform release dry run.
+
+The Linux development-wheel lane already executes the established 42-case
+scenario and Arrow suite. Extend the release-wheel matrix to execute and
+sign the same scope after testing the minimal wheel. Keep the signed
+receipt tied to both raw test reports and the same source-built wheel.
+
+The focused recorder, Arrow verifier and workflow checks passed 72 cases
+and 18 subtests. They reject a missing Arrow case, a skipped case and a
+different PyArrow version. On a fresh Python 3.15.2 environment using the
+verified `d8c07045` macOS release wheel, all 163 minimal-wheel cases and
+all 42 Arrow cases passed. The minimal environment had no PyArrow before
+installing the locked extra. Hosted receipts must bind both reports to the
+new release run.
+
+## V01 analytic reference cases for the release evidence
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` at
+`60c0593988f522495bbc867d91db3949c8086f4c`. R02's typed domain receipt is
+recorded in the Rust core convergence plan. The allowed scope is this plan,
+`validation/oracles/manifest.json`, `validation/oracles/derivations.md`, and
+`tests/validation/test_oracle_manifest.py`. Native scope is the PR #684
+source-built wheel receipt. Bind the independent classical, substitution
+and competition fixtures to their exact inputs and check their expected
+outputs through the installed native Polars consumer.
+
+Extend the existing installed-wheel signing path with these six actual
+predictions. The additional scope is `.github/workflows/release-readiness.yml`,
+the wheel recorder, the release source inventory, their focused tests and
+the evidence contract. The signing job uses the existing workflow identity.
+Full scientific qualification retains the separate mandatory evidence contract.
+
+At the base, the registry accepted a changed Bass time with the old expected
+value. The new checks enforce the input and source fingerprints, reject an
+invalid tolerance and compare predicted levels and preserved row identities
+against the independent references. All 142 focused checks, including the
+16 oracle checks, passed on Python 3.15.2. The installed macOS
+wheel was verified against the signed `60c05939` receipt before execution.
+The complete local native suite with the Arrow extra, the live OECD case
+and the reference suite passed 667 checks without skips. Hosted signing
+requires the new revision's three-platform run. The 38 scientific ledger
+statuses remain bounded.
+
+## Release evidence verification — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the release-verifier slice in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`74c959bcd249e9133dc1e366adb6d88fb54732a7`. Scope is the release mode in
+`scripts/check_migration.py`, its policy regressions and the
+[release evidence contract](release-evidence-contract.md). The native scope is
+draft PR #684 and its verification runs.
+
+The release checker now binds exact source bytes, obligation coverage, report
+roles and installed artifacts to an attested manifest. Existing capability
+claims remain governed by their own checker. The current ledger still blocks on
+all 38 obligations. Native, scientific and installed-consumer execution and a
+real signed qualification bundle remain open.
+
+The 132 focused migration, capability-claim and release-workflow checks pass
+on Python 3.15.2. The policy tests execute 101 of 108 changed verifier lines
+(93.5%). A synthetic unsigned bundle failed the actual GitHub CLI verifier.
+
+### Sign the observed installed-wheel smoke result — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet from
+`2b0eac8e76b05d8e7cb71dd7f2ec53b4bb9aab19` in the Innovate PR #684
+worktree. Scope covers the dry-run release workflow, the installed-wheel
+recorder and its tests. The current scientific ledger remains the release gate.
+
+The existing smoke suite passed 146 cases with the documented live OECD skip
+using the local installed wheel and Python 3.15.2. The recorder read all four
+suites from its JUnit report. Hosted execution will verify the installed
+Linux wheel bytes and exact source, then sign the bounded result in a separate
+job with signing permissions. Full scientific evidence remains open.
+
+Hosted run `44493390681` produced and signed the bounded result on
+`abd1bc0d0f2da96bd965e3e6441dd1b23936e286`. The separate native-binding
+gate found that the recorder's tests needed a fixture-scoped source import
+when using the installed pytest entry point. The corrected fixture and
+affected consumer tests passed through that entry point locally.
+
+### Verify and extend installed-wheel receipts
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` continues in the PR #684
+worktree from `08dc853ee209d12cdb27abd80632b3980ca869e0`. Scope is the
+release-readiness workflow, wheel build script, receipt recorder, its focused
+tests and this track's evidence contract. The native scope is draft PR #684 and
+its release-readiness dispatches.
+
+Run `44494665780` signed the exact Linux x86_64 wheel smoke result. Verification
+bound the attestation to the configured signer, source commit and the same
+wheel bytes in the dry-run artifact. The receipt recorded 146 passes and the
+documented live OECD skip. The release policy continued to report 38 incomplete
+obligations. The next smoke run also exercises installed macOS ARM64 and
+Windows x64 wheels.
 
 The earlier V01–V04 and Q04 completion marks exceeded the available taskbook
 evidence. Q01's full corpus, fuzz and sanitizer receipts have not been
@@ -54,6 +159,56 @@ not satisfy dependent task acceptance.
   evidence. Scope and executed receipts: [quality-frontier-413.md](quality-frontier-413.md).
   This is a bounded Q01/Q02 contribution; their complete native safety, installed
   matrix and scientific acceptance obligations remain open.
+
+## Adopter classification release evidence — 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this packet in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`7cfda986df86f63b1f8ead1069fdf7d6f17ca802`. Scope covers the Rust adopter
+classifier, its core manifest, the root and standalone games locks, the
+installed Python consumer regression and this plan. The native scope is
+draft PR #684 and its existing source-built wheel receipts.
+
+The signed macOS wheel from the base revision disagreed with an independent
+rational calculation on 450 of 765 cases spanning three irregular grids.
+With a dominant final weight, the scaled floating-point mean could round to
+the last observation and assign it the earliest category. The corrected
+classifier calculates exact integer moments for the binary input values and
+applies the existing inclusive boundaries. Both locks already selected
+`num-bigint 0.4.8` and now record the core crate's direct dependency.
+
+`cargo test --offline --locked -p innovate-core --lib adopters` passed seven
+tests. The locked Rust Polars prediction target passed all 11 tests. On the
+locally rebuilt CPython 3.15.2 wheel, all 765 independent cases matched
+through both the Polars and JSON entry points. The Polars results preserved
+the input columns and row order. A local optimized Rust timing on 100,000
+ordinary rows measured a median of 0.78 ms before and 13 ms after the
+correction. The test cases cover the declared sample-weighted classification.
+Broader release acceptance remains open.
+
+The locked audit still reports the two Chrono advisories. The published
+`polars-arrow` crate requires `chrono`, and `polars-core` selects
+`polars-compute/cast` through `polars-row`, which enables `chrono-tz`.
+The existing Polars version and public DataFrame type remain in use.
+
+## Adopter-classification qualification — 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the adopter receipt and
+the corresponding ledger entry in the PR #684 worktree. The qualification
+uses the release source inventory at `6feb3e509d860442d884534fed86215365af0f6f`.
+The [native and scientific receipts](evidence/adopter-classification-20261120/README.md)
+record 1,101 exact-reference cases, six invalid inputs and one fitted
+Logistic case through Python, Julia and R. The cases cover grid lengths from
+one to 65 and weights from the smallest positive subnormal to the largest
+finite binary64 value. The Python wheel suite's 765 shared cases have
+verified GitHub signatures on all three platforms. Hosted Julia and R
+jobs passed with their bundled release libraries, and the expanded cases
+passed locally on the same release source inventory.
+
+The ledger qualifies the sample-weighted classifier and its supported
+fitted single-rate adapter. Other model and feature qualifications still
+require their own results. The full release evidence manifest remains
+pending.
 
 ## V05 manuscript checkpoint
 

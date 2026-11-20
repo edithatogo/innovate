@@ -1996,31 +1996,55 @@ def test_adopter_classification_preserves_irregular_time_grids():
         assert result["category"] == categories
 
 
+def _exact_adopter_categories(time, rates):
+    samples = list(zip(map(Fraction, time), map(Fraction, rates), strict=True))
+    total = sum(weight for _, weight in samples)
+    mean = sum(t * weight for t, weight in samples) / total
+    variance = sum((t - mean) ** 2 * weight for t, weight in samples) / total
+
+    expected = []
+    for t, _ in samples:
+        delta = t - mean
+        squared = delta**2
+        if delta <= 0 and squared >= 4 * variance:
+            expected.append("Innovators")
+        elif delta <= 0 and squared >= variance:
+            expected.append("Early Adopters")
+        elif delta <= 0:
+            expected.append("Early Majority")
+        elif squared <= variance:
+            expected.append("Late Majority")
+        else:
+            expected.append("Laggards")
+    return expected
+
+
 def test_adopter_classification_matches_exact_weighted_moments():
     rng = random.Random(401)
     cases = [(sorted(rng.sample(range(-300, 301), 16)), [rng.randrange(31) for _ in range(16)]) for _ in range(512)]
     cases.extend((list(range(5)), weights) for weights in product(range(5), repeat=5) if any(weights))
     for time, rates in cases:
-        total = sum(rates)
-        mean = Fraction(sum(t * w for t, w in zip(time, rates, strict=True)), total)
-        variance = sum((t - mean) ** 2 * w for t, w in zip(time, rates, strict=True)) / total
-
-        expected = []
-        for t in time:
-            delta = t - mean
-            squared = delta**2
-            if delta <= 0 and squared >= 4 * variance:
-                expected.append("Innovators")
-            elif delta <= 0 and squared >= variance:
-                expected.append("Early Adopters")
-            elif delta <= 0:
-                expected.append("Early Majority")
-            elif squared <= variance:
-                expected.append("Late Majority")
-            else:
-                expected.append("Laggards")
         result = innovate.execute("categorize_adopters", time=time, adoption_rate=rates)["result"]
-        assert result["category"] == expected, (time, rates)
+        assert result["category"] == _exact_adopter_categories(time, rates), (time, rates)
+
+
+def test_adopter_classification_retains_heterogeneous_weights_through_polars_and_json():
+    smallest = math.ulp(0.0)
+    largest = float.fromhex("0x1.fffffffffffffp+1023")
+    weights = (0.0, smallest, 1.0, largest)
+    for time in ([-3.0, 0.0, 1.0, 4.0], [0.0, 1.0, 3.0, 8.0], [-largest, 0.0, smallest, largest]):
+        for rates in product(weights, repeat=len(time)):
+            if not any(rates):
+                continue
+            expected = _exact_adopter_categories(time, rates)
+            frame = pl.DataFrame({"row_id": list("abcd"), "time": time, "adoption_rate": rates})
+            observed = innovate.categorize_adopters(frame)
+            assert isinstance(observed, pl.DataFrame)
+            assert observed.select(frame.columns).equals(frame)
+            result = innovate.execute("categorize_adopters", time=time, adoption_rate=rates)["result"]
+            assert result["time"] == time
+            assert result["adoption_rate"] == list(rates)
+            assert observed["category"].to_list() == result["category"] == expected, (time, rates)
 
 
 def test_kairos_tick_checkpoint_resume():

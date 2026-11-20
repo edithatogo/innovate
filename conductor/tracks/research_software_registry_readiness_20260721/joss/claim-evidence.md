@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition: 18 November 2026; source baseline
-`20fe0b41b815bc926fc3d61b9672c3d4b2feb289`; development version `0.7.0a1`.
+Edition dated 20 November 2026 for development version `0.7.0a1` at
+`dbb360d8e281ea103778484512e0a35958dfba83`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,38 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Adopter-classification ledger reassessment
+
+The integrator compared the fourteen source inputs with the prior edition at
+`c1399484aa7efa224304b0a84c559ecffc10726e`. The migration ledger now records
+the qualified sample-weighted adopter classifier. All 38 obligations are
+required and 37 remain incomplete. C02's model-family inventory and
+required-obligation count still apply. The broader release claim P02 remains
+withheld. Thirteen source inputs, the scientific prose and the bibliography
+match the prior edition. [Adopter-classification results](../../empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md)
+
+## Adopter classifier dependency reassessment
+
+The integrator compared all fourteen source inputs with
+`60c0593988f522495bbc867d91db3949c8086f4c` on 20 November 2026. The core
+manifest and lock add a direct edge to the already resolved `num-bigint` 0.4.8
+for exact weighted moments. C01 and C06 still describe the Rust computation,
+dependency reuse and publication limits. C05's table and interchange inputs
+match the prior revision byte for byte. The scientific prose and bibliography
+carry forward, and P01–P06 remain withheld. The prior render receipts identify
+their respective editions.
+
+## Calendar dependency reassessment: 19 November 2026
+
+The integrator compared all fourteen source inputs with the 18 November
+edition. The core manifest now selects `time` for private calendar
+operations. The lock removes the core crate's direct Chrono dependency,
+adds the `time` closure and still resolves Chrono through published Polars.
+C01 and C06 retain the same Rust ownership, vendored dependencies and crate
+publication limits. C05's Polars and Arrow interface inputs are byte-identical.
+The remaining source inputs, bibliography and scientific prose are unchanged.
+P01–P06 remain withheld. Earlier render receipts identify their own editions.
 
 ## Source-to-claim reassessment: 18 November 2026
 

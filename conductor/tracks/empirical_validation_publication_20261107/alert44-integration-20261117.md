@@ -90,3 +90,93 @@ ID into the generator boundary rather than creating a filename containing a
 control character. This preserves the diagnostic assertion on Windows filesystems
 that cannot create such names; the separate reviewer reproduced the real-path
 case on macOS. All **27** generator tests and targeted Ruff checks still pass.
+## GitHub-hosted offline check
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the hosted caller in
+the PR #684 worktree from `fcda61d8a9cc1e78c381c5fcb091abd47bbc2e77`.
+This packet covers the offline workflow, security policy and this record.
+The native scope is Innovate PR #684 and shared policy PR #152.
+
+The prior hosted canary denied scanner egress and passed the scanner
+controls on the exact Innovate source. The new caller selects GitHub-hosted
+Ubuntu through the immutable shared workflow. It keeps the scanner controls,
+adds the Wolfi review to the check, and records image advisories on every run.
+RustSec and the 38 release obligations remain gates on promotion.
+
+## Direct calendar dependency
+
+The same chat owns Innovate's direct calendar dependency from
+`1703840d7c3b70cae6475206ec29e5ad94fed484`. Scope is the core crate's private
+date and timestamp implementation, manifest and lock, and focused consumer
+tests. Preserve the timestamp wire format, the supported calendar range,
+and the Polars DataFrame API. Cargo still resolves the two unmaintained
+crates through published Polars, so the RustSec check must continue to fail
+until that dependency path is replaced too.
+
+Rust 1.100.0 passed the eight temporal consumer cases and both calendar
+unit cases. A standalone comparison against the former implementation
+matched 13 dates, 23 timestamp inputs and 1,407 weekly comparisons with
+the same private adapter. The locked core dependency tree selects
+`time 0.3.55`. The workspace tree retains `chrono-tz 0.10.4` through
+`polars-arrow 0.55.2`.
+
+## Published Polars consumer check
+
+From `60c0593988f522495bbc867d91db3949c8086f4c`, a separate Cargo root
+selected crates.io `polars-core 0.55.2` with default features disabled.
+It compiled and passed a Bass prediction using the same published
+`DataFrame` type on input and output. The inverse dependency trees still
+reported `chrono 0.4.45` and `chrono-tz 0.10.4` through Polars.
+The upstream Jiff PR is a draft. Polars' own Cargo policy now ignores the
+two advisories, while Innovate's RustSec check continues to enforce them.
+[Polars replacement](https://github.com/pola-rs/polars/pull/29110) ·
+[Polars policy change](https://github.com/pola-rs/polars/pull/30859)
+
+## Standalone games lockfile in the local Ubuntu replay
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this follow-up in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`
+from `1fb5055bda849ec886900afc938bb2f80e4a1965`. Scope covers
+`rust/crates/innovate-games/Cargo.lock` and this record.
+
+The isolated Tart and Sand Ubuntu guest ran the existing games ban command
+on the exact PR source. Cargo rejected the standalone lock with `--locked`
+because it still listed `chrono` under `innovate-core`. The core manifest had
+already moved to `time`. The locked root graph independently reported the
+two RustSec findings through Polars. The published-DataFrame prediction
+consumer passed in the same guest.
+
+Run `cargo metadata --manifest-path rust/crates/innovate-games/Cargo.toml
+--offline --all-features --format-version 1` to refresh the standalone
+lock. The resulting delta removes Chrono and selects the same six `time`
+packages as the root lock. Paignia and Kairos pins retain their existing
+revisions. Repeat the games ban check with `--locked` in the guest.
+
+## Transitive RustSec findings, 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the PR #684 audit policy
+and this record from `72c414958b0446dd9198c0fb83e0cf6a30460e17`.
+Scorecard run `44644790846` refreshed alert #44 on main. It reported
+`RUSTSEC-2026-0574` through `RUSTSEC-2026-0582` in addition to the two
+Chrono findings. The locked normal dependency trees for the root workspace
+and standalone games both resolve `heapless 0.8.0` through Kairos.
+`rstar 0.13.1` is a direct Kairos dependency and published `geo 0.33.1`
+uses `rstar 0.12.2`. Both versions of `rstar` require `heapless 0.8`.
+
+The workspace lock SHA-256 is
+`f6e0e3c5228b9b2dba5fbfc7e056f4d20cae666ecba9320839de5b7e6f82ebad`.
+The games lock SHA-256 is
+`03c534e75faaf29c03628479f5bac8cdf25cd7c20e94f7128aa02f205c6f449b`.
+RustSec names `heapless 0.9.4` as the first patched version. Published
+`rstar 0.14.0` supports that version, and Geo's corresponding update has
+merged upstream. The published Geo and Geo Types packages still need
+releases with that support before the Kairos pin can carry the upgrade.
+[Geo update](https://github.com/georust/geo/pull/1641)
+
+A fresh RustSec database at `074ea9a7ed619f511b5b7374c7a97e98d1e98be4`
+confirmed the audit coverage gap. Cargo Deny 0.20.2 defaults unsound
+advisories to workspace packages. The updated `deny.toml` applies them to
+the full dependency graph. With both locked graphs, the new scope finds all
+nine Heapless advisories. The root audit also reports the two Chrono
+advisories, and its ban, license and source checks pass. The release gate
+still requires dependency remediation.
