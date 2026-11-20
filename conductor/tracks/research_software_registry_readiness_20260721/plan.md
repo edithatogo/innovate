@@ -14,6 +14,13 @@ checker validated the 14 source and three edition files. Its submission
 check returned 1. The release inventory digest matches the three
 verified wheel signatures.
 
+Hosted job `135984167161` also found the registry-readiness packet's old
+ledger digest. Its four input blobs were compared at the prior assessed
+revision and `dbb360d8e281ea103778484512e0a35958dfba83`. The ledger was the
+only changed input. The updated registry packet continues to list all three
+destinations as pending. The registry and JOSS readiness suites passed 106
+tests, and the registry checker reported a valid incomplete record.
+
 ## JOSS source review after the adopter classifier change
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the draft inputs and this

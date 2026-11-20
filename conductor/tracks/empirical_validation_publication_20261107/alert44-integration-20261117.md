@@ -151,3 +151,32 @@ Run `cargo metadata --manifest-path rust/crates/innovate-games/Cargo.toml
 lock. The resulting delta removes Chrono and selects the same six `time`
 packages as the root lock. Paignia and Kairos pins retain their existing
 revisions. Repeat the games ban check with `--locked` in the guest.
+
+## Transitive RustSec findings, 20 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the PR #684 audit policy
+and this record from `72c414958b0446dd9198c0fb83e0cf6a30460e17`.
+Scorecard run `44644790846` refreshed alert #44 on main. It reported
+`RUSTSEC-2026-0574` through `RUSTSEC-2026-0582` in addition to the two
+Chrono findings. The locked normal dependency trees for the root workspace
+and standalone games both resolve `heapless 0.8.0` through Kairos.
+`rstar 0.13.1` is a direct Kairos dependency and published `geo 0.33.1`
+uses `rstar 0.12.2`. Both versions of `rstar` require `heapless 0.8`.
+
+The workspace lock SHA-256 is
+`f6e0e3c5228b9b2dba5fbfc7e056f4d20cae666ecba9320839de5b7e6f82ebad`.
+The games lock SHA-256 is
+`03c534e75faaf29c03628479f5bac8cdf25cd7c20e94f7128aa02f205c6f449b`.
+RustSec names `heapless 0.9.4` as the first patched version. Published
+`rstar 0.14.0` supports that version, and Geo's corresponding update has
+merged upstream. The published Geo and Geo Types packages still need
+releases with that support before the Kairos pin can carry the upgrade.
+[Geo update](https://github.com/georust/geo/pull/1641)
+
+A fresh RustSec database at `074ea9a7ed619f511b5b7374c7a97e98d1e98be4`
+confirmed the audit coverage gap. Cargo Deny 0.20.2 defaults unsound
+advisories to workspace packages. The updated `deny.toml` applies them to
+the full dependency graph. With both locked graphs, the new scope finds all
+nine Heapless advisories. The root audit also reports the two Chrono
+advisories, and its ban, license and source checks pass. The release gate
+still requires dependency remediation.
