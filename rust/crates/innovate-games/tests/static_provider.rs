@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use innovate_core::models::demand::PreferenceParameters;
+use innovate_demand::PreferenceParameters;
 use innovate_games::{
     CompletenessClaim, DuopolyPricingSpec, GameClass, InformationStructure, PROVIDER_NAME,
     PricingOffer, SolutionConcept, SolutionStatus, StaticGameError, build_duopoly_pricing_game,

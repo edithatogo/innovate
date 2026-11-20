@@ -6,9 +6,11 @@
 use std::collections::BTreeMap;
 use std::fmt;
 
-use innovate_core::inference::InnovationError;
-use innovate_core::models::demand::{ChoiceSet, PreferenceParameters, choice_shares};
-use paignia_core::{ActionEdge, ActionId, Game, Node, NodeId, PayoffVector, PlayerId};
+use innovate_demand::{ChoiceSet, InnovationError, PreferenceParameters, choice_shares};
+use paignia_core::{
+    ActionEdge, ActionId, GAME_SPEC_SCHEMA_VERSION, Game, GameSpecification, GameSpecificationId,
+    Node, NodeId, PayoffVector, PlayerId,
+};
 use paignia_solve::{
     NormalFormGame, SolveError, SolverConfig, StrategyProfile, TiePolicy,
     backward_induction_with_config, pure_nash_equilibria,
@@ -44,7 +46,7 @@ pub enum InformationStructure {
 pub enum SolutionConcept {
     /// Enumerate pure-strategy Nash equilibria of a finite normal-form game.
     PureNash,
-    /// Obtain one perfect-information solution by backward induction.
+    /// Obtain one perfect-information policy by backward induction under the solver tolerance.
     SubgamePerfectBackwardInduction,
     /// Mixed-strategy Nash request; unsupported by this adapter.
     MixedNash,
@@ -194,7 +196,7 @@ impl From<SolveError> for StaticGameError {
     }
 }
 
-/// Build a two-firm simultaneous innovation pricing game backed by `innovate_core::models::demand::choice_shares`.
+/// Build a two-firm simultaneous innovation pricing game backed by [`choice_shares`].
 ///
 /// The players are `firm_a` and `firm_b`. For every pair of offers, the demand
 /// calculation includes an outside option with utility zero. Firm `i` receives
@@ -287,10 +289,15 @@ pub fn build_duopoly_pricing_game(
 /// chooses its response. Terminal profits are the same demand and cost
 /// valuations used by [`build_duopoly_pricing_game`]. Actions are ordered by
 /// identity to keep the decision graph independent of menu presentation.
+/// The returned specification carries the caller's identity for versioned
+/// result admission through [`paignia_solve::backward_induction_result`].
 ///
 /// # Errors
 /// Returns a [`StaticGameError`] for invalid demand, offer or payoff data.
-pub fn build_price_commitment_game(spec: &DuopolyPricingSpec) -> Result<Game, StaticGameError> {
+pub fn build_price_commitment_game(
+    spec: &DuopolyPricingSpec,
+    specification_id: GameSpecificationId,
+) -> Result<GameSpecification, StaticGameError> {
     let mut market = build_duopoly_pricing_game(spec)?;
     market.validate()?;
     let leader = &market.players[0];
@@ -340,7 +347,11 @@ pub fn build_price_commitment_game(spec: &DuopolyPricingSpec) -> Result<Game, St
             edges: commitments,
         },
     );
-    Ok(Game { root, nodes })
+    Ok(GameSpecification {
+        schema_version: GAME_SPEC_SCHEMA_VERSION.into(),
+        id: specification_id.0,
+        game: Game { root, nodes },
+    })
 }
 
 /// Solve a static normal-form innovation game under the requested [`SolutionConcept`].
@@ -404,7 +415,8 @@ pub fn solve_normal_form_innovation_game(
     }
 }
 
-/// Solve a finite, acyclic, perfect-information extensive-form innovation game via backward induction.
+/// Select a policy for a finite, acyclic, perfect-information game through
+/// tolerance-aware backward induction.
 ///
 /// Returns the provider's chosen action map and root payoff vector, with
 /// [`CompletenessClaim::OneFound`]. The supplied tie policy determines choices
