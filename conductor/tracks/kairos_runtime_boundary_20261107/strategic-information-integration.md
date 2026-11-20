@@ -115,8 +115,7 @@ the native demand implementation through `innovate-demand`. The core
 reexports the same types and calculation for its existing callers. The
 adapter consumes `bd880dd` and its locked normal and build closure excludes
 the simulation runtime. Hosted CI tests the closure and keeps the moved
-demand source in the existing coverage gate. Qualification of the exact
-packaged archives remains separate.
+demand source in the existing coverage gate.
 
 The artifact runner uses Rust 1.99.1 and the repository's CPython 3.15.2
 environment. Put the qualified Paignia archives and sparse registry cache
@@ -139,6 +138,12 @@ git -C "$reimbursement_checkout" show \
 The runner passes the locked package resolution and native test commands
 through one macOS sandbox. It records the archive pair, resolved metadata,
 lockfile, source-read controls and test output in the new staging directory.
+At `4166b4e9bff894ff2e3c63169cab4ea9cdb22ac1`, all five pricing tests passed
+against the same qualified archives as reimbursement. The retained log
+includes denial controls for the application checkout, provider checkout
+and cached Paignia Git source. This receipt is pending integration review.
+[Candidate receipt](../../../docs/validation/receipts/t17-innovate-price-commitment.json)
+[Execution log](../../../docs/validation/receipts/t17-innovate-price-commitment.log)
 
 ## Coordinated Voiage plan
 
