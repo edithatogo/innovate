@@ -8,7 +8,7 @@ use std::fmt;
 
 use innovate_core::inference::InnovationError;
 use innovate_core::models::demand::{ChoiceSet, PreferenceParameters, choice_shares};
-use paignia_core::{ActionId, Game, NodeId, PayoffVector, PlayerId};
+use paignia_core::{ActionEdge, ActionId, Game, Node, NodeId, PayoffVector, PlayerId};
 use paignia_solve::{
     NormalFormGame, SolveError, SolverConfig, StrategyProfile, TiePolicy,
     backward_induction_with_config, pure_nash_equilibria,
@@ -279,6 +279,68 @@ pub fn build_duopoly_pricing_game(
         strategies,
         payoffs,
     })
+}
+
+/// Build a perfect-information pricing commitment game from Innovate demand.
+///
+/// Firm A commits to a price and offer, then firm B observes that choice and
+/// chooses its response. Terminal profits are the same demand and cost
+/// valuations used by [`build_duopoly_pricing_game`]. Actions are ordered by
+/// identity to keep the decision graph independent of menu presentation.
+///
+/// # Errors
+/// Returns a [`StaticGameError`] for invalid demand, offer or payoff data.
+pub fn build_price_commitment_game(spec: &DuopolyPricingSpec) -> Result<Game, StaticGameError> {
+    let mut market = build_duopoly_pricing_game(spec)?;
+    market.validate()?;
+    let leader = &market.players[0];
+    let follower = &market.players[1];
+    let mut leader_actions = market.strategies[leader].clone();
+    let mut follower_actions = market.strategies[follower].clone();
+    leader_actions.sort_unstable();
+    follower_actions.sort_unstable();
+
+    let root = NodeId("price-commitment".into());
+    let mut nodes = BTreeMap::new();
+    let mut commitments = Vec::with_capacity(leader_actions.len());
+    for (leader_index, leader_action) in leader_actions.into_iter().enumerate() {
+        let response = NodeId(format!("price-response/{leader_index}"));
+        let mut responses = Vec::with_capacity(follower_actions.len());
+        for (follower_index, follower_action) in follower_actions.iter().enumerate() {
+            let profile = StrategyProfile::from([
+                (leader.clone(), leader_action.clone()),
+                (follower.clone(), follower_action.clone()),
+            ]);
+            let payoffs = market.payoffs.remove(&profile).ok_or_else(|| {
+                StaticGameError::InvalidInput("missing profits for the proposed offers".into())
+            })?;
+            let target = NodeId(format!("pricing-profits/{leader_index}/{follower_index}"));
+            nodes.insert(target.clone(), Node::Terminal { payoffs });
+            responses.push(ActionEdge {
+                action: follower_action.clone(),
+                target,
+            });
+        }
+        nodes.insert(
+            response.clone(),
+            Node::Decision {
+                player: follower.clone(),
+                edges: responses,
+            },
+        );
+        commitments.push(ActionEdge {
+            action: leader_action,
+            target: response,
+        });
+    }
+    nodes.insert(
+        root.clone(),
+        Node::Decision {
+            player: leader.clone(),
+            edges: commitments,
+        },
+    );
+    Ok(Game { root, nodes })
 }
 
 /// Solve a static normal-form innovation game under the requested [`SolutionConcept`].

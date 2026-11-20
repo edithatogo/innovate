@@ -87,6 +87,33 @@ owner's bounded packet; demonstrate failure, implement, run focused and required
 repository checks, and retain source/artifact hashes. No pin changes, capability
 promotion, publication or completed-task marks occur in this planning addition.
 
+## T17.10 static price commitment
+
+The bounded consumer case starts from `fd7e259bb9a685d620f80907c6815d4837da3e53`.
+It adds a sequential game to the existing `innovate-games` adapter. The first
+firm commits to one of its offers. The second firm observes the commitment
+and chooses its own offer. Innovate's native multinomial-logit shares and
+margin calculations supply both firms' terminal profits. Paignia returns
+the contingent policy and a single subgame-perfect solution.
+
+For equal qualities, the synthetic case uses 100 demand units and a price
+coefficient of `−ln(2)`. The offers at prices 1 and 3 receive weights `1/2`
+and `1/8`. With the outside-option weight 1, the independent shares are
+`1/4` each at low prices, `1/10` each at high prices, and `4/13` and `1/13`
+when prices differ. The follower chooses the same price as the leader.
+The leader chooses the premium price for profit 27.50 and follower profit
+29.50. A premium fixed cost of 20 changes the commitment to the value price,
+with profits 18.75 and 23.75. The controls also check action identity under
+menu reordering and reject duplicate offers. The assumptions are for static
+scenario analysis using synthetic inputs.
+
+Rust 1.99.1 passed seven tests through
+`cargo test --locked --manifest-path rust/crates/innovate-games/Cargo.toml --all-targets`,
+including four price-commitment controls. The standalone static crate inherits
+Kairos ABM and DES from `innovate-core`. Matching-archive execution and the
+no-scheduler dependency boundary are still open. The case has source tests
+against the existing development pin, `ad3e193`.
+
 ## Coordinated Voiage plan
 
 See the [shared SI01–SI04 plan and SI-V01–SI-V08 cases](https://github.com/edithatogo/voiage/blob/c414752a228e7af5d689d9d5876f8f7372c42447/conductor/tracks/scientific_ecosystem_alignment_20261029/strategic-information-integration.md).
