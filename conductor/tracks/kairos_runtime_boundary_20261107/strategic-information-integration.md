@@ -118,6 +118,28 @@ the simulation runtime. Hosted CI tests the closure and keeps the moved
 demand source in the existing coverage gate. Qualification of the exact
 packaged archives remains separate.
 
+The artifact runner uses Rust 1.99.1 and the repository's CPython 3.15.2
+environment. Put the qualified Paignia archives and sparse registry cache
+within reach of the runner and choose a staging directory outside the
+application and provider checkouts. Retrieve the pinned admission helper
+from the reimbursement checkout. The runner checks the helper's SHA-256.
+
+```sh
+git -C "$reimbursement_checkout" show \
+  b669bd00e78757029e2b9e7d26d86a07e20bed43:scripts/validate_paignia_consumer.py \
+  > "$evidence_directory/reimbursement-verifier.py"
+"$project_python" scripts/qualify_paignia_consumer.py \
+  --application "$PWD" --revision "$application_revision" \
+  --provider "$provider_checkout" --handoff "$handoff_json" \
+  --archives "$qualified_archives" --registry "$cargo_registry_cache" \
+  --work-dir "$evidence_directory" \
+  --admission-helper "$evidence_directory/reimbursement-verifier.py"
+```
+
+The runner passes the locked package resolution and native test commands
+through one macOS sandbox. It records the archive pair, resolved metadata,
+lockfile, source-read controls and test output in the new staging directory.
+
 ## Coordinated Voiage plan
 
 See the [shared SI01–SI04 plan and SI-V01–SI-V08 cases](https://github.com/edithatogo/voiage/blob/c414752a228e7af5d689d9d5876f8f7372c42447/conductor/tracks/scientific_ecosystem_alignment_20261029/strategic-information-integration.md).
