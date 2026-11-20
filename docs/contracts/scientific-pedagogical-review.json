@@ -89,7 +89,7 @@
     "docs/astro-site/src/components/ModelCatalogue.astro": "e64221e75f574d87d342539056e34bdcc61d1e056060c38a4ef7567a3e23abe6",
     "docs/astro-site/src/components/TutorialCatalogue.astro": "d6e990dd4c8885cfbd330c49365e0804554c95aec2860d934fcdc33a4feb453c",
     "docs/astro-site/src/content/docs/api/python.md": "e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3",
-    "docs/astro-site/src/content/docs/bindings/rust.md": "429d4419ed0388958e5497a6ec68a2b67bf36a8fea74f03d8d10a89382e68a2c",
+    "docs/astro-site/src/content/docs/bindings/rust.md": "f7ada164077e83ff253b8ac05dce4dd8025a607bc3956d8a90d5ecd933746e7f",
     "docs/astro-site/src/content/docs/core/arrow-interchange.md": "513150b1658e0215b839bf0608eea9271488979a122f532ce2b9095298af842d",
     "docs/astro-site/src/content/docs/core/index.md": "d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
@@ -144,7 +144,9 @@
     "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
     "rust/crates/innovate-core/src/simulation.rs": "fd3ef8614f5f303adbe8d6267c15ad9544fc4705cf901c1db762832754fcb94d",
     "rust/crates/innovate-ffi/src/lib.rs": "af0c0513e5658d18dc6958b0d1edc1753e5c02bd290d5369c208b1edc785afc7",
-    "rust/crates/innovate-games/Cargo.toml": "d2d4d1161bdc7a6d3283bb2d5219d27341387361fc37de5dde40f29e159202e6",
+    "rust/crates/innovate-core/Cargo.toml": "9ae04c993e19ac3200ddda1a0725c20c1c756594d47eef3c18d7fea4c6b4cba3",
+    "rust/crates/innovate-demand/Cargo.toml": "6ca015367292a4534b00307c5da60980e89b6b09e593ad822df20c2b90e5fdfe",
+    "rust/crates/innovate-games/Cargo.toml": "c71857b2a2bc9dc466d5e96df3adfea1e2918e4ee07f07a607bd7d517f96396b",
     "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1"
   },
   "references": [
@@ -757,7 +759,7 @@
       "id": "integration-rust-workspace-scope",
       "page": "docs/astro-site/src/content/docs/bindings/rust.md",
       "prompt": "Does a passing root cargo doc --workspace or workspace doctest result qualify innovate-games? Which adapter joins the root workspace?",
-      "expected_answer": "No. innovate-games is explicitly excluded and uses its own workspace, manifest and lockfile; it requires a separate recorded run. innovate-kairos is the fifth root workspace crate. Compiler and example execution do not establish scientific acceptance.",
+      "expected_answer": "Run innovate-games separately through its own workspace, manifest and lockfile. The root workspace explicitly lists five crates including innovate-kairos, and Cargo includes innovate-demand through the core path dependency. That gives six root members. Doctests run for eligible targets. Scientific acceptance requires its own evidence.",
       "answer_review": "agent_checked",
       "human_execution": "not_run"
     },
@@ -1163,13 +1165,16 @@
         "outcome": "no_blocking_findings_in_scoped_read",
         "checks": [
           "Compared the five named workspace packages with the root manifest and the Kairos package manifest.",
-          "Confirmed innovate-games is explicitly excluded and has its own manifest/workspace; the guide does not attribute workspace compiler/doctest qualification to it."
+          "Confirmed innovate-games is explicitly excluded and has its own manifest/workspace; the guide does not attribute workspace compiler/doctest qualification to it.",
+          "On 21 November, independently checked the updated guide against the manifests at b5cceb3f. The five explicit members and the demand path dependency give six effective members. The standalone games crate has its own lock, shares demand, and pins Paignia to bd880dd. The follow-up covers membership, dependency and command claims."
         ],
         "source_paths": [
           "docs/astro-site/src/content/docs/bindings/rust.md",
           "Cargo.toml",
           "rust/crates/innovate-kairos/Cargo.toml",
-          "rust/crates/innovate-games/Cargo.toml"
+          "rust/crates/innovate-games/Cargo.toml",
+          "rust/crates/innovate-core/Cargo.toml",
+          "rust/crates/innovate-demand/Cargo.toml"
         ],
         "references": []
       }
