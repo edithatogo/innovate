@@ -94,7 +94,7 @@ It adds a sequential game to the existing `innovate-games` adapter. The first
 firm commits to one of its offers. The second firm observes the commitment
 and chooses its own offer. Innovate's native multinomial-logit shares and
 margin calculations supply both firms' terminal profits. Paignia returns
-the contingent policy and a single subgame-perfect solution.
+a contingent policy with its versioned tolerance and selection rule.
 
 For equal qualities, the synthetic case uses 100 demand units and a price
 coefficient of `−ln(2)`. The offers at prices 1 and 3 receive weights `1/2`
@@ -103,16 +103,20 @@ and `1/8`. With the outside-option weight 1, the independent shares are
 when prices differ. The follower chooses the same price as the leader.
 The leader chooses the premium price for profit 27.50 and follower profit
 29.50. A premium fixed cost of 20 changes the commitment to the value price,
-with profits 18.75 and 23.75. The controls also check action identity under
-menu reordering and reject duplicate offers. The assumptions are for static
-scenario analysis using synthetic inputs.
+with profits 18.75 and 23.75. The controls check all four payoff vectors,
+action identity under menu reordering, duplicate offers and the declared
+policy selection when the tolerance covers a payoff gap. The assumptions
+are for static scenario analysis using synthetic inputs.
 
-Rust 1.99.1 passed seven tests through
-`cargo test --locked --manifest-path rust/crates/innovate-games/Cargo.toml --all-targets`,
-including four price-commitment controls. The standalone static crate inherits
-Kairos ABM and DES from `innovate-core`. Matching-archive execution and the
-no-scheduler dependency boundary are still open. The case has source tests
-against the existing development pin, `ad3e193`.
+Rust 1.99.1 passed eight adapter tests through
+`cargo test --locked --manifest-path rust/crates/innovate-games/Cargo.toml --all-targets`.
+The existing competition and public contract tests also passed. The adapter shares
+the native demand implementation through `innovate-demand`. The core
+reexports the same types and calculation for its existing callers. The
+adapter consumes `bd880dd` and its locked normal and build closure excludes
+the simulation runtime. Hosted CI tests the closure and keeps the moved
+demand source in the existing coverage gate. Qualification of the exact
+packaged archives remains separate.
 
 ## Coordinated Voiage plan
 
