@@ -145,6 +145,16 @@ and cached Paignia Git source. This receipt is pending integration review.
 [Candidate receipt](../../../docs/validation/receipts/t17-innovate-price-commitment.json)
 [Execution log](../../../docs/validation/receipts/t17-innovate-price-commitment.log)
 
+Reproduced the JOSS input mismatch at `5096bd3519a3a9503fefaf70af4da86656b11d3b`
+with 26 failures in `tests/native/test_joss_readiness.py`. The
+[working-draft claim reassessment](../research_software_registry_readiness_20260721/joss/claim-evidence.md#source-reassessment-on-21-november-2026)
+records the three changed source inputs. On Python 3.15.2, the readiness,
+renderer-control and registry tests passed (124 tests). The structural
+checker accepted the source and edition byte identities. The submission
+check still returned exit 1 for the unapproved draft. The separate release
+policy reports incomplete scientific migration, and the dependency audit
+still reports the Chrono and heapless findings.
+
 ## Coordinated Voiage plan
 
 See the [shared SI01–SI04 plan and SI-V01–SI-V08 cases](https://github.com/edithatogo/voiage/blob/c414752a228e7af5d689d9d5876f8f7372c42447/conductor/tracks/scientific_ecosystem_alignment_20261029/strategic-information-integration.md).
