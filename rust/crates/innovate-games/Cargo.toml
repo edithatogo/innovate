@@ -10,6 +10,6 @@ license = "Apache-2.0"
 repository = "https://github.com/edithatogo/innovate"
 
 [dependencies]
-innovate-core = { path = "../innovate-core" }
-paignia-core = { git = "https://github.com/edithatogo/paignia.git", rev = "ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf" }
-paignia-solve = { git = "https://github.com/edithatogo/paignia.git", rev = "ad3e1932469fcdfe3c13a5182a4e79b4448e4fbf" }
+innovate-demand = { path = "../innovate-demand" }
+paignia-core = { git = "https://github.com/edithatogo/paignia.git", rev = "bd880dd756d2ba56cc5f479bc078cea31b53c1d1", version = "=0.1.0", default-features = false }
+paignia-solve = { git = "https://github.com/edithatogo/paignia.git", rev = "bd880dd756d2ba56cc5f479bc078cea31b53c1d1", version = "=0.1.0", default-features = false }

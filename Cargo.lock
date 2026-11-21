@@ -896,6 +896,7 @@ version = "0.7.0-alpha.1"
 dependencies = [
  "chrono",
  "faer",
+ "innovate-demand",
  "kairo-ecs-abm",
  "kairo-ecs-core",
  "kairo-ecs-des",
@@ -914,6 +915,10 @@ dependencies = [
  "statrs",
  "ureq",
 ]
+
+[[package]]
+name = "innovate-demand"
+version = "0.7.0-alpha.1"
 
 [[package]]
 name = "innovate-ffi"

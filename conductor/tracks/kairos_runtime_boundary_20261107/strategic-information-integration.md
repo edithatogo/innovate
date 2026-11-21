@@ -87,6 +87,74 @@ owner's bounded packet; demonstrate failure, implement, run focused and required
 repository checks, and retain source/artifact hashes. No pin changes, capability
 promotion, publication or completed-task marks occur in this planning addition.
 
+## T17.10 static price commitment
+
+The bounded consumer case starts from `fd7e259bb9a685d620f80907c6815d4837da3e53`.
+It adds a sequential game to the existing `innovate-games` adapter. The first
+firm commits to one of its offers. The second firm observes the commitment
+and chooses its own offer. Innovate's native multinomial-logit shares and
+margin calculations supply both firms' terminal profits. Paignia returns
+a contingent policy with its versioned tolerance and selection rule.
+
+For equal qualities, the synthetic case uses 100 demand units and a price
+coefficient of `−ln(2)`. The offers at prices 1 and 3 receive weights `1/2`
+and `1/8`. With the outside-option weight 1, the independent shares are
+`1/4` each at low prices, `1/10` each at high prices, and `4/13` and `1/13`
+when prices differ. The follower chooses the same price as the leader.
+The leader chooses the premium price for profit 27.50 and follower profit
+29.50. A premium fixed cost of 20 changes the commitment to the value price,
+with profits 18.75 and 23.75. The controls check all four payoff vectors,
+action identity under menu reordering, duplicate offers and the declared
+policy selection when the tolerance covers a payoff gap. The assumptions
+are for static scenario analysis using synthetic inputs.
+
+Rust 1.99.1 passed eight adapter tests through
+`cargo test --locked --manifest-path rust/crates/innovate-games/Cargo.toml --all-targets`.
+The existing competition and public contract tests also passed. The adapter shares
+the native demand implementation through `innovate-demand`. The core
+reexports the same types and calculation for its existing callers. The
+adapter consumes `bd880dd` and its locked normal and build closure excludes
+the simulation runtime. Hosted CI tests the closure and keeps the moved
+demand source in the existing coverage gate.
+
+The artifact runner uses Rust 1.99.1 and the repository's CPython 3.15.2
+environment. Put the qualified Paignia archives and sparse registry cache
+within reach of the runner and choose a staging directory outside the
+application and provider checkouts. Retrieve the pinned admission helper
+from the reimbursement checkout. The runner checks the helper's SHA-256.
+
+```sh
+git -C "$reimbursement_checkout" show \
+  b669bd00e78757029e2b9e7d26d86a07e20bed43:scripts/validate_paignia_consumer.py \
+  > "$evidence_directory/reimbursement-verifier.py"
+"$project_python" scripts/qualify_paignia_consumer.py \
+  --application "$PWD" --revision "$application_revision" \
+  --provider "$provider_checkout" --handoff "$handoff_json" \
+  --archives "$qualified_archives" --registry "$cargo_registry_cache" \
+  --work-dir "$evidence_directory" \
+  --admission-helper "$evidence_directory/reimbursement-verifier.py"
+```
+
+The runner passes the locked package resolution and native test commands
+through one macOS sandbox. It records the archive pair, resolved metadata,
+lockfile, source-read controls and test output in the new staging directory.
+At `4166b4e9bff894ff2e3c63169cab4ea9cdb22ac1`, all five pricing tests passed
+against the same qualified archives as reimbursement. The retained log
+includes denial controls for the application checkout, provider checkout
+and cached Paignia Git source. This receipt is pending integration review.
+[Candidate receipt](../../../docs/validation/receipts/t17-innovate-price-commitment.json)
+[Execution log](../../../docs/validation/receipts/t17-innovate-price-commitment.log)
+
+Reproduced the JOSS input mismatch at `5096bd3519a3a9503fefaf70af4da86656b11d3b`
+with 26 failures in `tests/native/test_joss_readiness.py`. The
+[working-draft claim reassessment](../research_software_registry_readiness_20260721/joss/claim-evidence.md#source-reassessment-on-21-november-2026)
+records the three changed source inputs. On Python 3.15.2, the readiness,
+renderer-control and registry tests passed (124 tests). The structural
+checker accepted the source and edition byte identities. The submission
+check still returned exit 1 for the unapproved draft. The separate release
+policy reports incomplete scientific migration, and the dependency audit
+still reports the Chrono and heapless findings.
+
 ## Coordinated Voiage plan
 
 See the [shared SI01–SI04 plan and SI-V01–SI-V08 cases](https://github.com/edithatogo/voiage/blob/c414752a228e7af5d689d9d5876f8f7372c42447/conductor/tracks/scientific_ecosystem_alignment_20261029/strategic-information-integration.md).
