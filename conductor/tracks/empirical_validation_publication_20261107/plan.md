@@ -342,6 +342,15 @@ still running. Changing the workflow pin changes the release source inventory;
 the earlier signed wheel receipts continue to describe their recorded source,
 and the new inventory needs fresh signed receipts before release.
 
+The updated policy's [Linux suite](https://github.com/edithatogo/repository-standards/actions/runs/45002444585)
+passed 368 tests with 55 skips. Its
+[image qualification](https://github.com/edithatogo/repository-standards/actions/runs/45002452335)
+passed all eight controls. The
+[Innovate pull-request check](https://github.com/edithatogo/innovate/actions/runs/45003001607)
+passed on `d815565e`. Artifact `14747370555` matched archive SHA-256
+`7b0a3d1fd33efe30c35fc873ebca8c2895d865984ea004e040d45caac2d1766e`.
+Its image review passed with eight verified backports and no ignored findings.
+
 ### Reconcile the current main branch
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the PR #684 integration in
@@ -357,6 +366,28 @@ check passed and the source inventory digest was
 `188a0e3640509cfc8b61f0bc360ef76418d3be918ecc473e2c06af2e08e5765c`.
 `actionlint` passed for the offline and FAIR workflows. This does not qualify
 the outstanding dependency or release gates.
+
+The next local x86-64 replay is owned by the same chat at consumer commit
+`d815565ee740754694ff74468750f27202bafdf2`, using policy workflow
+`851fc22e2453bfff973eab668f72f6e6c203cd72` and policy source
+`7d8aa3fc88f86cc0c54b2c4d57ca9a4bfa97bdda`. The host input directory is
+`/Volumes/PortableSSD/.innovate684-qualification.Bj0eUf/local-x64-d815565e`.
+The guest input and work directories are `/var/tmp/local-x64-d815565e` and
+`/var/tmp/innovate684-d815565e`. Do not start the replay until the other
+guest workers and containers have completed.
+
+### Signed wheels for the combined source
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the refreshed wheel receipts,
+their original test reports, their evidence README and the exact Windows receipt
+attribute in `.gitattributes`. Release run `45003005112` built and signed all
+three platform wheels from `d815565ee740754694ff74468750f27202bafdf2` with
+source inventory
+`188a0e3640509cfc8b61f0bc360ef76418d3be918ecc473e2c06af2e08e5765c`.
+GitHub verified each signature, source, archive and wheel hash, and both
+original test-report hashes. Each receipt records 164 minimal and 42 Arrow
+cases with no skips. The separate release-readiness job still failed on the
+37 obligations. The signed wheel reports are bounded consumer evidence.
 
 ## V05 manuscript checkpoint
 
