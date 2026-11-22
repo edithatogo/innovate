@@ -1,4 +1,4 @@
-FROM rust:1.100.0-slim@sha256:e9d95b74296f7126a83ae3d041aeaba1ff4c478f13abc5cc034fcf7c131c3d4a AS rust-toolchain
+FROM rust:1.100.0-slim@sha256:6f14b2b4b278ec0d50aa1d69541c304ce0f95e0f6268487aa9924af1c2e9aebe AS rust-toolchain
 FROM python:3.15.2-slim@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS build-source
 COPY --from=rust-toolchain /usr/local/cargo /usr/local/cargo
 COPY --from=rust-toolchain /usr/local/rustup /usr/local/rustup
