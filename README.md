@@ -134,3 +134,8 @@ records inspected source revisions, recommendations and remaining gates.
 Only Python, Julia and R bindings are maintained. TypeScript, Go and C# packages
 were removed; earlier documentation and Conductor records are historical evidence.
 Project-owned code is licensed under [Apache-2.0](LICENSE).
+
+## Security
+
+Follow the [security policy](SECURITY.md) to report vulnerabilities
+privately. Keep credentials and sensitive data out of public issues and pull requests.

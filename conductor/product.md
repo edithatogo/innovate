@@ -29,7 +29,23 @@ Innovate consumes Kairos for DES/ABM execution: one native clock, state, event o
 
 Voiage can consume Innovate forecasts and joint uncertainty through an optional integration adapter and explicit economic/utility mapping. Neither core imports the other in both directions. A study or policy selected by Voiage can return as a versioned design artefact to Innovate through application orchestration; data feedback is not a dependency cycle.
 
-Generic game representation/solution is incubated in `new-drug-reimbursement-game` and overlaps Kairos's existing game crates. Consolidate it into one independently consumable Rust game-runtime capability, keeping Kairos execution adapters optional and UOGTO semantic identifiers explicit. Innovate constructs innovation/competition games; the reimbursement application supplies its own institutional assumptions.
+Innovate is a parallel innovation/domain-method library and a downstream
+consumer of the generic game core. Paignia owns reusable Rust game
+representations and solvers; UOGTO is the authoritative game ontology. Innovation
+diffusion, adoption, substitution, demand methods and domain game construction
+remain in Innovate with their payoffs, data and calibration. The reimbursement
+application is another consumer of Paignia.
+
+Mature generic game implementations move to Paignia gradually, method by method,
+after numerical/behavioural parity and caller compatibility are demonstrated.
+Retain the working implementation until its replacement is qualified. Keep
+Paignia and Kairos adapters optional, dependency directions acyclic and UOGTO
+semantic identifiers explicit. Every newly identified or changed game must
+record separate semantic and implementation dispositions under the
+[contributor intake rule](../CONTRIBUTING.md#game-capability-intake).
+Provider adoption needs exact accepted revisions and actual consumer conformance
+evidence. This policy does not authorise an immediate rewrite or complete the
+outstanding G01–G04 or T17 work.
 
 `vop_poc_nz` is a proof of concept. Its reusable decision, perspective, equity and VOI methods belong in Voiage after verification. `tobac`, CareOps and other applications retain their scientific scenarios and evidence while promoting reusable methods to the corresponding library. Do not copy application code into a library without tests, provenance and a consumer migration.
 
