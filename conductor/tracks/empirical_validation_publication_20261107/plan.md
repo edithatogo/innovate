@@ -420,7 +420,22 @@ The [hosted offline check](https://github.com/edithatogo/innovate/actions/runs/4
 passed on `67621486`. Artifact `14747158312` matched archive SHA-256
 `f6ebf768a20faa09580283b9bca191eb3a068fd78cdcb4a162c199458ca525b6`.
 All eight controls passed, and the image review verified eight backports with
-zero ignored findings. The separate local replay remains in progress.
+zero ignored findings. At that point the separate local replay was in progress.
+
+The local replay built the scanner image from the pinned inputs and passed the
+Gitleaks build, vendor preparation, network-disabled image asset verification,
+runtime, network-preflight and manifest-binding checks. When the shared host
+drive fell to about 10 GiB free, this chat interrupted its own qualification
+process during the separate asset-preflight control. The receipt records that
+control as failed and the remaining controls as not run; its container cleanup
+passed. The other chat's container and runner were left running. The image was
+`sha256:d0439a9cccbc75f297d77dd73cbddbd7b5ece02a5c623f6bda6da2b84c63aa9b`.
+The retained local qualification receipt has SHA-256
+`9504bedfba8fddb0f54c4be9e3327420447a3d4334bde3b1acccb111f5aa9c4b`, and
+the full result manifest is retained in the host and guest directories above.
+This chat also owns the portable, non-sensitive interrupted receipts under
+`evidence/local-offline-20261122-67621486`.
+This interrupted replay does not qualify the local scan or image review.
 
 ## V05 manuscript checkpoint
 
