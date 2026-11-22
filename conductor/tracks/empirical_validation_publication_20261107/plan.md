@@ -376,6 +376,13 @@ The guest input and work directories are `/var/tmp/local-x64-d815565e` and
 `/var/tmp/innovate684-d815565e`. Do not start the replay until the other
 guest workers and containers have completed.
 
+The signed-evidence commit advanced the PR head to
+`67621486c4d8658610a98d742060bea1b7108885` without changing the source
+inventory. Prepare the next local replay at that exact commit in host directory
+`/Volumes/PortableSSD/.innovate684-qualification.Bj0eUf/local-x64-67621486`,
+with guest input `/var/tmp/local-x64-67621486` and work directory
+`/var/tmp/innovate684-67621486`. The same guest and policy ownership applies.
+
 ### Signed wheels for the combined source
 
 Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the refreshed wheel receipts,
@@ -388,6 +395,32 @@ GitHub verified each signature, source, archive and wheel hash, and both
 original test-report hashes. Each receipt records 164 minimal and 42 Arrow
 cases with no skips. The separate release-readiness job still failed on the
 37 obligations. The signed wheel reports are bounded consumer evidence.
+
+### Replay the adopter references on the combined-source wheel
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this bounded replay in the
+same worktree from `67621486c4d8658610a98d742060bea1b7108885`. Use the signed
+macOS wheel from run `45003005112`, the existing exact-reference case generator
+and public Python consumer, and record results here. Verify the installed wheel
+bytes and case hash before execution. This does not by itself qualify the full
+release manifest or the other ledger obligations.
+
+The [bounded replay](evidence/adopter-replay-20261122-d815565e/README.md)
+passed 1,101 reference cases, six invalid cases and the fitted Logistic case on
+the verified wheel. The generated inputs matched the prior exact-reference
+case hash. This replay result is not itself signed release acceptance.
+
+The same chat owns a replay of the existing independent analytic batch against
+this signed wheel. Record its four model and Polars row-preservation results in
+the existing evidence area; do not promote bounded results to full qualification.
+The [replay](evidence/analytic-batch-20261122-d815565e/README.md) passed 540
+comparisons and four invalid-parameter cases, matching the earlier batch.
+
+The [hosted offline check](https://github.com/edithatogo/innovate/actions/runs/45004435187)
+passed on `67621486`. Artifact `14747158312` matched archive SHA-256
+`f6ebf768a20faa09580283b9bca191eb3a068fd78cdcb4a162c199458ca525b6`.
+All eight controls passed, and the image review verified eight backports with
+zero ignored findings. The separate local replay remains in progress.
 
 ## V05 manuscript checkpoint
 

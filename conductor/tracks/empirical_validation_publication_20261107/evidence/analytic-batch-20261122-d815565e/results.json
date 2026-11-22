@@ -1,0 +1,35 @@
+{
+  "kind": "bounded_analytic_reference_batch",
+  "schema_version": 1,
+  "status": "passed",
+  "python": "3.15.2",
+  "platform": "macos-arm64",
+  "wheel_sha256": "5de562362fad24ea88674d6b6e425bd0304a0c3d9faf5c724862869ba602c72b",
+  "source_commit": "d815565ee740754694ff74468750f27202bafdf2",
+  "source_sha256": "188a0e3640509cfc8b61f0bc360ef76418d3be918ecc473e2c06af2e08e5765c",
+  "independent_reference": "Decimal exponential with 70 digits and binary64 input conversion",
+  "dataframe": "preserved time, row_id, note, order and prediction column",
+  "results": {
+    "bass": {
+      "series": 27,
+      "reference_values": 162,
+      "max_absolute_error": 1.8189894035458565e-11
+    },
+    "logistic": {
+      "series": 27,
+      "reference_values": 162,
+      "max_absolute_error": 1.8189894035458565e-12
+    },
+    "gompertz": {
+      "series": 27,
+      "reference_values": 162,
+      "max_absolute_error": 1.8189894035458565e-12
+    },
+    "fisher_pry": {
+      "series": 9,
+      "reference_values": 54,
+      "max_absolute_error": 1.1102230246251565e-16
+    }
+  },
+  "invalid_parameter_rejections": 4
+}
