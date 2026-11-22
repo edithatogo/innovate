@@ -342,6 +342,15 @@ still running. Changing the workflow pin changes the release source inventory;
 the earlier signed wheel receipts continue to describe their recorded source,
 and the new inventory needs fresh signed receipts before release.
 
+### Reconcile the current main branch
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the PR #684 integration in
+this worktree from `a7ca45b6d21159411e064dd93fa72c7548b6e675`. The incoming
+main commit is `a79a58d1be51a1c8d4968fd9a535d8b7e5992666`; it adds the FAIR
+assessment and its advisory workflow. Integrate those two files with the
+existing PR changes, then recheck the combined source. The added workflow is
+part of the release source inventory and requires fresh release evidence.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
