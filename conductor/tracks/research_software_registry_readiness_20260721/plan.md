@@ -275,3 +275,22 @@ native suite, installed-package acceptance, docs build, provider submission,
 publication, author attestation, or external acceptance is inferred from these
 local checks. Local Node is 24.22.1; the documentation build requires Node 26,
 so the existing qualified hosted documentation workflow must supply that gate.
+
+## Community navigation reassessment — 22 November 2026
+
+The Community Standards increment appends a Security section to the README,
+linking the existing private vulnerability-reporting policy. It changes no
+software capability, scientific statement, usage example, licence term or
+manuscript claim. The existing JOSS packet was reassessed for that bounded
+packaging-input change; only the README fingerprint was updated from
+`35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be` to
+`9aba1db7cec72e9b47f4ebc9b3a788e80c2f3c9094b45cb55ab14d4869e19cc4`.
+The other thirteen source fingerprints, three edition fingerprints and
+original software revision remain unchanged from the prior reassessment.
+
+Under the existing CPython 3.15.2 repair environment,
+`python -m pytest tests/native/test_joss_readiness.py -q` passed all 50 cases.
+`python scripts/check_joss_readiness.py --json` exited 0 with all fourteen
+source and three edition inputs valid. It retains `submission_ready: false`,
+`scientific_qualification_performed: false` and `git_revision_verified: false`.
+No provider submission, scientific release hold or author declaration changes.

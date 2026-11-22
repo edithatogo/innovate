@@ -5,7 +5,7 @@
   "software_version": "0.7.0a1",
   "submission_ready": false,
   "source_sha256": {
-    "README.md": "35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be",
+    "README.md": "9aba1db7cec72e9b47f4ebc9b3a788e80c2f3c9094b45cb55ab14d4869e19cc4",
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
     "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
     "pyproject.toml": "9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05",
