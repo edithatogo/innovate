@@ -274,6 +274,43 @@ changes the release source inventory. The existing wheel receipts remain
 evidence for the recorded earlier inventory and require fresh qualification
 for the final release source.
 
+Hosted Innovate run `44996113225` passed on
+`f0f31f5a3e4f1ae10d3c8c3ea1f3308c9e0d6823`. Its downloaded artifact
+`14743849372` passed its GitHub archive hash check. The scanner image was
+`sha256:c39e0fdd001cb8ff23ffa887b2683ae086ee2547c512bd8bdb7a8966f4869147`.
+All eight image controls and the network-denied source scan passed. The
+image review passed with eight verified backports and zero ignored findings.
+The reviewed policy source was `e5938b140806c0dfcf97afc60700451bf76004d8`.
+[Innovate offline run](https://github.com/edithatogo/innovate/actions/runs/44996113225)
+
+The [refreshed signed-wheel evidence](evidence/signed-wheels-20261122/README.md)
+uses release source inventory
+`1a9f5541b60906f286b7fda765d23757c8bd9c99f06ad46536c3ab8194b538bc`.
+The Linux, macOS and Windows receipts each authenticate 164 minimal-wheel and
+42 Arrow cases with zero skips. Their GitHub signatures, original test reports
+and artifact hashes were verified after download. Release run `44996337632`
+retains the wheels and source distributions. Its readiness job failed on the
+37 unqualified obligations. The Windows receipt's original signed CRLF bytes
+are preserved, with Git's `cr-at-eol` attribute scoped to that receipt.
+
+The [analytic prediction batch](evidence/analytic-batch-20261122/README.md)
+used the newly authenticated macOS wheel for 540 independent reference values
+across Bass, Logistic, Gompertz and Fisher–Pry, plus four parameter rejections.
+These deterministic cases extend the bounded evidence for the four models.
+The same wheel passed the existing adopter replay with 1,101 exact reference
+cases, six error cases and the fitted Logistic case. The replay input matched
+the original scientific receipt's SHA-256.
+
+The current RustSec audit still identifies Chrono and Chrono-TZ through
+Polars `0.55.2`, and Heapless `0.8.0` through both Geo's R-tree `0.12.2`
+and Kairos's direct R-tree `0.13.1`. Polars's Jiff candidate is an open
+draft based on `0.55.1` and documents temporal API changes. The R-tree
+`0.13` maintenance change is an open upstream PR and does not cover Geo's
+`0.12` path. The released public types and current advisory checks remain in
+place pending compatible dependency changes.
+[Polars candidate](https://github.com/pola-rs/polars/pull/29110),
+[R-tree maintenance candidate](https://github.com/georust/rstar/pull/274)
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
