@@ -1,5 +1,44 @@
 # Implementation Plan
 
+## Product-boundary input reassessment — 22 November 2026
+
+PR #700 head `54330fff28a81f790598361029bd5768a95a86a5` changes only one
+of the fourteen JOSS source inputs: `conductor/product.md`. Its generic-game
+paragraph now identifies Paignia as the reusable provider and UOGTO as the
+semantic authority, with gradual migration after parity and consumer checks.
+The other thirteen source inputs and all three manuscript-edition inputs match
+their recorded fingerprints.
+
+The affected source-supported claims C01 and C06 were reassessed: the Rust and
+Python/Julia/R architecture is unchanged, as are the optional Kairos/Voiage
+boundaries and their acceptance limits. The new game-ownership policy does not
+claim completed provider adoption, scientific qualification or release. The
+manuscript therefore needs no scientific prose change. Its recorded software
+baseline, edition hashes and historical render receipts remain unchanged;
+this is a reviewed product-document supplement to that baseline.
+
+The previous product digest was
+`20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27`;
+the reviewed input at the PR head is
+`a69206d611af99b8a9e0c7d685f5fecd8b36570804b30ac63afd7908dba0f9e7`.
+Only that entry in `joss/source-snapshot.json` changes. The checker has no
+automatic hash-refresh mode and is unchanged. `submission_ready` and
+`release_ready` remain false; all 38 migration obligations and the existing
+author, rendering, scientific and provider acceptance holds remain in force.
+
+Validation used repo-local CPython 3.15.2 and pytest 9.2.0. The pre-fix checker
+reproduced `Input digest mismatch: conductor/product.md`. After the review:
+
+- `python -m pytest tests/native/test_joss_readiness.py`: 50 passed.
+- `python scripts/check_joss_readiness.py --json`: exit 0; fourteen source and
+  three edition inputs verified, submission readiness false.
+- The same checker with `--require-submission-ready`: exit 1 as required.
+- `python scripts/check_migration.py --release`: exit 1 with all 38 existing
+  obligations still unqualified.
+- `git diff --check`: passed.
+
+No native, release or hosted pass is inferred from this input repair.
+
 ## Separate evidence acquisition — 16 November 2026
 
 Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main

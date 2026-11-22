@@ -12,7 +12,7 @@
     "Cargo.toml": "2f22f7a075467934df9e710bfb087b89958b6b069de9d15814b6ee1ee2ba9959",
     "Cargo.lock": "642a7176be4ac9fae0c633e468abfd5decdd2531c594fcdf8f3d4029c8784342",
     "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
-    "conductor/product.md": "20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27",
+    "conductor/product.md": "a69206d611af99b8a9e0c7d685f5fecd8b36570804b30ac63afd7908dba0f9e7",
     "conductor/release-gates-20261107.md": "e2e7cb2795cb33fe9c8568e760817c8b051aa196c261985ff22fbb675717788a",
     "docs/astro-site/src/content/docs/native-migration.md": "345122a4f0984e3baceac98dd5e122d34ef5260c8d39f0410c2c1d9f811c7763",
     "rust/crates/innovate-core/Cargo.toml": "afe2af0cca4eeedb027a95c3b24e6bdd8425d72b4fd3718e68fac0b2f5cb2b3c",
