@@ -437,6 +437,19 @@ This chat also owns the portable, non-sensitive interrupted receipts under
 `evidence/local-offline-20261122-67621486`.
 This interrupted replay does not qualify the local scan or image review.
 
+### Reconcile the subsequent main update
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the PR #684 integration
+from `5af412338d1cf46c502da89295f058816ca00e3f` in this worktree. Main
+advanced to `a9360c1ea3414eaf0e712dbb131d3e923e958571` through PR #700.
+The merge conflicts are confined to the JOSS readiness plan and source
+snapshot. Preserve both branches' recorded reassessments, the PR's manuscript
+edition and ledger references, and main's reviewed README and product inputs.
+Compare all fourteen source and three edition hashes against the combined tree
+before accepting the snapshot. The incoming workflow and README also change
+the release source inventory, so earlier signed wheels remain historical for
+their recorded source.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
