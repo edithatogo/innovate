@@ -311,6 +311,27 @@ place pending compatible dependency changes.
 [Polars candidate](https://github.com/pola-rs/polars/pull/29110),
 [R-tree maintenance candidate](https://github.com/georust/rstar/pull/274)
 
+### Local x86-64 offline replay
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this local replay from
+Innovate worktree `/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+The consumer is `6d0dc9a2604bde08c5f26e47e98fdff5ebebfa3e`, and the policy
+workflow is `7a4a73e6b751c5bb20a462e49a2987d30fad0812`. The native scope is
+the existing Lima `offline-x64` guest and its Docker daemon. The host work
+directory is `/Volumes/PortableSSD/.innovate684-qualification.Bj0eUf/local-x64-6d0dc9a2`
+and the guest work directory is `/var/tmp/innovate684-6d0dc9a2`. The prior Dapane job completed, and the
+preflight found no registered Dapane runner, running worker or container. Replay
+the selected workflow steps locally and retain exact results and limitations.
+
+The local replay passed scope and source verification but exited 2 during
+binary preparation. The Go compiler ran for the policy's 600-second build
+limit on the emulated guest. The receipt records the binary-stage failure and
+does not disclose the underlying exception. The first result and its SHA-256
+manifest remain in the host directory above and in the guest results directory.
+The scan, image controls and vulnerability review did not run locally. Another
+job subsequently started on the guest, so a new replay must wait until it is
+idle. The corresponding hosted Innovate check passed on this consumer commit.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
