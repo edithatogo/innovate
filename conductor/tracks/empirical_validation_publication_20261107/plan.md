@@ -210,6 +210,12 @@ fitted single-rate adapter. Other model and feature qualifications still
 require their own results. The full release evidence manifest remains
 pending.
 
+The Windows CI job at `df23c84b` failed two migration-policy cases after
+checkout converted the hashed adopter receipt to CRLF. A checkout with
+`core.autocrlf=true` reproduced both failures. The Git attributes rule keeps
+all ten evidence files byte-identical to their committed blobs. All 20
+migration-policy tests passed in that checkout.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.

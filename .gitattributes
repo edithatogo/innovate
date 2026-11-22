@@ -1,2 +1,4 @@
 rust/vendor/** -text
 THIRD-PARTY-LICENSES -text
+# Qualification receipts and their replay inputs are hashed byte for byte.
+conductor/tracks/empirical_validation_publication_20261107/evidence/** -text
