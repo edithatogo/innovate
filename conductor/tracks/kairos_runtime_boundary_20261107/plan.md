@@ -204,3 +204,30 @@ installed-consumer milestone once. Preserve required repository/hosted checks
 and the original scientific completion obligations; structural checks cannot
 certify runtime capability. Larger unresolved implementation tasks are split
 into bounded leaves before local-model dispatch.
+
+## I07-P: Game intake policy — 22 November 2026
+
+- [x] Add canonical UOGTO/Paignia intake to agent and contributor guidance;
+  clarify Innovate's parallel library role and gradual, parity-qualified generic
+  game migration in current product guidance; verify the documentation locally.
+
+Base: `a79a58d1be51a1c8d4968fd9a535d8b7e5992666`.
+Allowed files: `AGENTS.md`, `CONTRIBUTING.md`, `conductor/product.md` and this plan.
+The [intake rule](../../../CONTRIBUTING.md#game-capability-intake) requires
+separate semantic and implementation dispositions for every newly identified
+or changed game. Innovation/domain methods remain in Innovate; Paignia owns the
+generic game core and UOGTO owns the ontology. Mature generic methods transfer
+only after numerical/behavioural parity and caller compatibility, retaining the
+working implementation until its replacement is qualified.
+
+This policy step is independent of runtime implementation. It does not complete
+I07, G01–G04, T17, consumer acceptance or any existing scientific/release gate.
+Local documentation checks and publication status are recorded below.
+
+Local verification: `python scripts/check_repository_policy.py` passed its local
+scope; live settings were not checked. The standard-library documentation check
+validated all three new local links/anchors, both canonical upstream pointers
+and both sets of dispositions. Scoped `git diff --check` and staged
+`git diff --cached --check` passed. No runtime tests were run for these
+documentation-only changes. Remote publication, upstream-document availability
+and hosted checks remain pending integration.

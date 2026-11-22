@@ -40,6 +40,25 @@ model semantics. Voiage owns value-of-information and economic analysis. Respect
 the provider and consumer boundaries in the owning track instead of copying a
 second implementation into Innovate.
 
+Innovate is a parallel innovation/domain-method library and a downstream
+consumer of the generic game core. UOGTO is the authoritative game ontology;
+Paignia owns reusable game representations and solvers. Every newly identified,
+added or materially changed game must record semantic coverage and generic
+capability needs under the
+[contributor intake rule](CONTRIBUTING.md#game-capability-intake), following
+[UOGTO's intake contract](https://github.com/edithatogo/UOGTO/blob/main/docs/contracts/downstream-game-intake.md)
+and [Paignia's intake contract](https://github.com/edithatogo/paignia/blob/main/docs/integrations/downstream-game-intake.md).
+Record UOGTO's `reuse_existing`, `extension_required`, `unsupported` or
+`mapping_review_pending` disposition separately from Paignia's `reuse_existing`,
+`extension_required`, `unsupported`, `domain_only` or `assessment_pending`.
+Innovation diffusion, adoption, substitution and demand methods, domain data,
+payoffs and calibration remain here. Migrate mature generic game implementations
+to Paignia gradually, method by method, after numerical/behavioural parity and
+caller compatibility are demonstrated. Retain the working implementation until
+the replacement is qualified. Keep the optional adapter acyclic; link exact
+accepted provider revisions and actual consumer conformance evidence. This
+instruction does not qualify existing adapters or authorise an immediate rewrite.
+
 Test changed behavior with independent expected results and negative cases.
 Keep required scientific capabilities, tolerances and quality thresholds intact.
 Skipped, cancelled, queued or unexecuted checks are not passes. A source check,
