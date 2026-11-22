@@ -450,6 +450,18 @@ before accepting the snapshot. The incoming workflow and README also change
 the release source inventory, so earlier signed wheels remain historical for
 their recorded source.
 
+Merge `459cb50267e57a0cc94a179aee136250259ee978` incorporates that main
+commit. All fourteen source and three manuscript-edition hashes matched the
+combined tree. The JOSS readiness check passed while correctly retaining the
+draft's unapproved status; its submission-required mode failed as expected.
+All 50 focused JOSS tests, the repository-policy check, and `actionlint` for
+both affected workflows passed. The release check still reported 37
+unqualified obligations. Repo-local Python 3.15.2 reported the new source
+inventory digest as
+`f5341d41dd984b43536daafc3709e5318fca2c711619c60ea46813438694d637`.
+Refresh the signed platform-wheel evidence for this source before relying on
+it for the updated branch; the previous signatures retain their original scope.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
