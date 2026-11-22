@@ -332,6 +332,16 @@ The scan, image controls and vulnerability review did not run locally. Another
 job subsequently started on the guest, so a new replay must wait until it is
 idle. The corresponding hosted Innovate check passed on this consumer commit.
 
+For the next replay, this chat also owns the immutable consumer workflow pin
+from `7816c064` in this worktree. Policy workflow
+`851fc22e2453bfff973eab668f72f6e6c203cd72` selects policy source
+`7d8aa3fc88f86cc0c54b2c4d57ca9a4bfa97bdda`. It extends only the bounded
+Gitleaks build time; the locked output and security checks remain required.
+The Linux policy suite passed with 55 skips, and the image qualification is
+still running. Changing the workflow pin changes the release source inventory;
+the earlier signed wheel receipts continue to describe their recorded source,
+and the new inventory needs fresh signed receipts before release.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
