@@ -351,6 +351,13 @@ assessment and its advisory workflow. Integrate those two files with the
 existing PR changes, then recheck the combined source. The added workflow is
 part of the release source inventory and requires fresh release evidence.
 
+Merge `003cd35c2e3e5fa911e013602e7c047b848f9042` contains the incoming
+commit without conflicts. On repo-local Python 3.15.2, the repository-policy
+check passed and the source inventory digest was
+`188a0e3640509cfc8b61f0bc360ef76418d3be918ecc473e2c06af2e08e5765c`.
+`actionlint` passed for the offline and FAIR workflows. This does not qualify
+the outstanding dependency or release gates.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
