@@ -216,6 +216,64 @@ checkout converted the hashed adopter receipt to CRLF. A checkout with
 all ten evidence files byte-identical to their committed blobs. All 20
 migration-policy tests passed in that checkout.
 
+## Release evidence batch — 22 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this record in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` at
+`849f5d40723aed5352b766000f1995e57337cf99`. The native scope is PR #684
+and its existing release receipts.
+
+`python scripts/check_migration.py --source-digest` returned
+`ed085a5f9131fbd265e9bab54706fd6e0cf1811d3a7ecee1a08f4429a6c10eec`,
+the inventory signed from `c1399484aa7efa224304b0a84c559ecffc10726e`.
+Verified the three original GitHub attestations, archive hashes, wheel hashes
+and both test report hashes. All receipts recorded 164 minimal-wheel cases
+and 42 Arrow cases with zero skips.
+[Signed release run](https://github.com/edithatogo/innovate/actions/runs/44608324560)
+
+| Target | Signed wheel receipt | Native CI evidence |
+| --- | --- | --- |
+| Linux x86-64 | 14573843979 | 14742112777 |
+| macOS ARM64 | 14574811432 | 14741304530 |
+| Windows x86-64 | 14574048978 | 14741739160 |
+
+The native CI artifacts each recorded 477 passed and one skipped. All three
+decision-report and report-composition tests passed in each artifact. The
+tested merge commit `e6d0640821b2f60fe5ec50ed432a95d9e88e2e91` differs from
+the assessed PR head only in the FAIR workflow and its documentation. The
+Windows lockfile hash matched the same lockfile after CRLF conversion, and
+the Windows native job passed the migration checker.
+[Native CI run](https://github.com/edithatogo/innovate/actions/runs/44991607193)
+
+A fresh Python 3.15.2 environment reused the signed macOS wheel. The JSON and
+Markdown decision-report checks passed for five workflows and four claim
+types, with eight additional rejection cases. The original Linux Voiage
+artifact `14572378141` names the exact signed Linux wheel hash. Six normalized
+input cases passed and both EVPI results matched the independent references.
+These results cover the exercised report and handoff cases. The release
+checker still reports 37 incomplete obligations, including broader decision
+handoff, hosted remote isolation, accelerator execution and bootstrap
+calibration. The full release manifest is pending.
+
+The shared offline policy's hosted qualification restored signed-index
+selection for the locked ncurses pair. Artifact `14742918832` matched the
+50-package inventory and passed all eight image controls. Its raw scan had
+eight existing findings, zero high or critical findings and zero ignored
+matches. The final Innovate consumer run must apply the image review. Updating
+the Innovate workflow pin changes the release inventory digest, so this batch
+records the verified receipts for the current pin.
+[Shared image qualification](https://github.com/edithatogo/repository-standards/actions/runs/44994313537)
+
+### Innovate consumer qualification
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the offline workflow pin
+and this record in the PR #684 worktree from
+`849f5d40723aed5352b766000f1995e57337cf99`. Run the actual Innovate consumer
+with shared policy `7a4a73e6b751c5bb20a462e49a2987d30fad0812`. The policy pin
+changes the release source inventory. The existing wheel receipts remain
+evidence for the recorded earlier inventory and require fresh qualification
+for the final release source.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
