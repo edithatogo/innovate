@@ -462,6 +462,36 @@ inventory digest as
 Refresh the signed platform-wheel evidence for this source before relying on
 it for the updated branch; the previous signatures retain their original scope.
 
+### Retain the refreshed combined-source receipts
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this bounded evidence
+packet from `1f45e1622eddf705596f586856f82cd79d1bc946` in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`. The
+allowed paths are this plan, the two `1f45e162` evidence directories and the
+exact Windows-receipt attribute. Its native scope is PR #684's hosted scans
+and non-publishing release-wheel workflow. Retain the verified receipts, then
+check the unchanged release source digest and the PR's current gates.
+
+[Release run 45015739813](https://github.com/edithatogo/innovate/actions/runs/45015739813)
+built and signed all three platform wheels from that commit. The
+[retained receipts](evidence/signed-wheels-20261122-1f45e162/README.md)
+passed exact GitHub provenance, archive, wheel and original report verification;
+each records 164 minimal and 42 Arrow cases with no skips. The separate
+readiness job still failed on 37 unqualified obligations. These bounded receipts
+are not the missing scientific acceptance or signed release manifest.
+
+The [hosted offline run](evidence/hosted-offline-20261122-1f45e162/README.md)
+passed on the same source and verified policy. All eight controls passed, and
+the image review recorded eight verified backports with no ignored matches.
+The separate push run's first attempt failed after bounded retries on an HTTP
+503 fetching a CPython patch; its second attempt passed. The prior local x86-64
+replay remains interrupted and does not establish a local pass.
+
+On this head, both required CodeQL language analyses and the other completed
+PR checks passed except RustSec and release readiness. The RustSec audit still
+reports the two Chrono and nine Heapless advisories in its audited dependency
+paths. No gate or required-approval setting was changed to obtain these results.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
