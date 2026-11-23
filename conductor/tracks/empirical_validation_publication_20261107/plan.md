@@ -492,6 +492,46 @@ PR checks passed except RustSec and release readiness. The RustSec audit still
 reports the two Chrono and nine Heapless advisories in its audited dependency
 paths. No gate or required-approval setting was changed to obtain these results.
 
+### Sequential PR integration — 24 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the first integration
+packet in managed worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr684-reconcile-20261124/innovate`,
+branch `codex/innovate-1118-security`, from
+`5372c9940c3ebea6385578b3a262366acf13f2d0`. The native scope is PR #684
+and its exact-head checks; no other chat's checkout or in-flight operation is
+owned by this packet. Reconcile main
+`951070f237c7de9c352b92956c92002b9970f6b2`, preserving its five dependency
+updates and this branch's patches and evidence. Allowed paths are this plan,
+the incoming merge paths, and any source-review fingerprints demonstrably
+affected by that merge. Retain the previous receipts as historical if the
+source inventory changes.
+
+The intended order starts with #684's shared security and offline lane. Then
+consider the scoped planning and documentation PRs #686, #687 and #689;
+scanner and fuzz PRs #693 and #694; and game consumer #696. Review #690
+against the identical previously closed #681 proposal before deciding its
+disposition. Process the narrow Renovate updates #717, #709, #707, #708,
+#710 and #719 individually, then the grouped Actions update #711 and the
+provider-pin update #716. #693 also depends on the shared scanner policy PR;
+#696 needs the current game-intake and provider-consumer evidence. This order
+is provisional when live dependencies or conflicts require a change.
+
+At each promotion, re-read main, PR head, conflicts, bot settings and the
+actual checks; qualify the affected source and consumer behavior, then merge
+only that PR when its applicable gates pass. Skipped, cancelled and queued
+checks are not passes. Preserve zero mandatory approvals, failed security
+evidence and all release/scientific holds. GitHub auto-merge was disabled on
+#707, #708, #709, #710 and #716 while their security checks were failing;
+Renovate's configuration can enable it again, so recheck before promotion.
+
+The existing PR #684 RustSec audit still fails on Chrono and Heapless, and
+release readiness still lists 37 unqualified obligations. The prior hosted
+offline and signed-wheel receipts bind source inventory
+`f5341d41dd984b43536daafc3709e5318fca2c711619c60ea46813438694d637`;
+the incoming Dockerfile update changes that inventory and needs fresh
+source-bound release evidence. No merge is authorised while those gates fail.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
