@@ -543,6 +543,12 @@ are present. `actionlint` passed for the offline, release-readiness and
 community-standard workflows. These checks do not close RustSec, local offline
 qualification, scientific acceptance or release readiness.
 
+Merge `7b6f4fe4` incorporates that exact main revision. The combined release
+source inventory is
+`c0bfafda041647ba74cbb5c0ff3af8e51813f106fc7731fdc8897d38e7a15d7d`.
+Earlier signed wheels remain valid for their recorded inventories; refresh
+platform signatures for this inventory before using them in a release packet.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
