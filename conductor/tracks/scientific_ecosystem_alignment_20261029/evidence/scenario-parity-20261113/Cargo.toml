@@ -12,7 +12,7 @@ name = "historical-producer"
 path = "historical_producer.rs"
 
 [dependencies]
-innovate-core = { git = "https://github.com/edithatogo/innovate.git", rev = "3681c8a820e7f3f852ff7429687ba3997cbcae3f" }
+innovate-core = { git = "https://github.com/edithatogo/innovate.git", rev = "951070f237c7de9c352b92956c92002b9970f6b2" }
 serde_json = { version = "=1.0.154", features = ["float_roundtrip"] }
 
 [patch.crates-io]
