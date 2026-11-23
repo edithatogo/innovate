@@ -88,3 +88,51 @@ Follow CODE_OF_CONDUCT.md. Report bugs with the model, schema, environment, mini
 input and expected behavior, excluding private data and credentials. Use scoped
 commits and cite retained evidence in the Conductor track. The migration release
 gate must remain closed until every required feature and distribution gate passes.
+
+## Game capability intake
+
+UOGTO owns game-theoretic semantics and Paignia owns reusable game
+representations and solvers. Every newly identified, added or materially changed
+game must have linked records under both upstream contracts:
+
+- [UOGTO semantic coverage and extension intake](https://github.com/edithatogo/UOGTO/blob/main/docs/contracts/downstream-game-intake.md).
+- [Paignia generic capability and fixture intake](https://github.com/edithatogo/paignia/blob/main/docs/integrations/downstream-game-intake.md).
+
+Use the same intake key in both records and link them from the local plan or
+pull request. Identify the originating source path and immutable revision,
+players, actions, information, timing, payoff meaning and requested solution.
+Record the semantic and implementation dispositions separately:
+
+| Upstream | Allowed dispositions |
+| --- | --- |
+| UOGTO | `reuse_existing`, `extension_required`, `unsupported`, `mapping_review_pending` |
+| Paignia | `reuse_existing`, `extension_required`, `unsupported`, `domain_only`, `assessment_pending` |
+
+For `reuse_existing`, add or refine the UOGTO mapping/example with full term
+IRIs and link the supported Paignia API/profile, its limits and fixture evidence.
+For `extension_required`, link the upstream proposal, a minimal synthetic example
+and independently expected results. `unsupported` records the missing requirement
+and its effect on claims or execution. Paignia's `domain_only` records why the
+change needs no generic implementation. Pending assessments need a reason,
+owner and next action; they do not establish semantic or executable support.
+
+Inspect existing upstream work before proposing another term, solver or fixture.
+An unchanged game with new parameters can reuse its intake key and add an
+example. Innovate remains a parallel innovation/domain-method library: diffusion,
+adoption, substitution, demand methods and domain assumptions remain here.
+Paignia receives only reusable game representations, algorithms and conformance
+fixtures. Preserve source revision, licence and attribution for
+any transferred example or implementation.
+
+On adoption, record the exact UOGTO revision/profile and full IRIs, Paignia
+revision or artifact hash, fixture identity, and focused semantic/native/consumer
+checks actually run, including independent expected results and invalid or
+unsupported cases. Ontology conformance and numerical verification are separate.
+A record or dependency pin alone does not complete a migration.
+
+Migrate mature generic game implementations to Paignia method by method, only
+after numerical/behavioural parity and caller compatibility are demonstrated.
+Retain the working implementation until the replacement is qualified, with scope
+and limitations labelled; keep the Paignia integration optional and acyclic.
+New game changes still require intake. This policy does not itself rewrite
+algorithms or complete existing migration or scientific acceptance gates.

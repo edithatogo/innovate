@@ -356,3 +356,25 @@ does not itself migrate or qualify a temporal library. An independent read-only
 reviewer found no blocking issues in the test, while noting that the comparison
 is not original JSON wire-byte proof. Explicit 1.99.1 `cargo fmt --check` and
 the repo-local Python policy check also passed.
+
+### Read-only blocker reconciliation — 22 November 2026
+
+PR #700 head `54330fff28a81f790598361029bd5768a95a86a5` again reports the
+same two unmaintained advisories in the
+[RustSec job](https://github.com/edithatogo/innovate/actions/runs/45002410126/job/137146610107).
+`innovate-core` still uses Chrono in `calendar.rs` and scenario timestamp
+formatting/import validation. `innovate-tabular` reaches Chrono and Chrono-TZ
+through Polars Arrow/compute/core 0.55.2, whose published Arrow manifest retains
+a mandatory Chrono dependency. Replacing only the direct dependency would
+therefore leave the audit failing.
+
+The [Polars Jiff migration](https://github.com/pola-rs/polars/pull/29110) remains
+an open draft at `e3d55b387184bf88cf61bca6acff6d8c02dfd7c5`, with 145 changed
+files and declared parsing, display and date-range changes. The existing seven
+`temporal_compatibility` controls already cover expanded years, the maximum
+date, offsets, fractional weekly boundaries, leap seconds and artifact imports;
+they were read, not rerun in this reconciliation. RustSec still lists no patched
+Chrono/Chrono-TZ version and recommends Jiff or Time as alternatives. A qualified
+direct migration and a qualified Polars solution remain required; this is not
+a lockfile-only repair. No dependency, source, advisory exception, warning
+level, test expectation or acceptance status changes in this recheck.

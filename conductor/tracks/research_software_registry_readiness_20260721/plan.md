@@ -1,5 +1,44 @@
 # Implementation Plan
 
+## Product-boundary input reassessment — 22 November 2026
+
+PR #700 head `54330fff28a81f790598361029bd5768a95a86a5` changes only one
+of the fourteen JOSS source inputs: `conductor/product.md`. Its generic-game
+paragraph now identifies Paignia as the reusable provider and UOGTO as the
+semantic authority, with gradual migration after parity and consumer checks.
+The other thirteen source inputs and all three manuscript-edition inputs match
+their recorded fingerprints.
+
+The affected source-supported claims C01 and C06 were reassessed: the Rust and
+Python/Julia/R architecture is unchanged, as are the optional Kairos/Voiage
+boundaries and their acceptance limits. The new game-ownership policy does not
+claim completed provider adoption, scientific qualification or release. The
+manuscript therefore needs no scientific prose change. Its recorded software
+baseline, edition hashes and historical render receipts remain unchanged;
+this is a reviewed product-document supplement to that baseline.
+
+The previous product digest was
+`20c3ed89c5afd4c097555dded6169ee1c01e0c6777b02ad2d0ffdab62b8def27`;
+the reviewed input at the PR head is
+`a69206d611af99b8a9e0c7d685f5fecd8b36570804b30ac63afd7908dba0f9e7`.
+Only that entry in `joss/source-snapshot.json` changes. The checker has no
+automatic hash-refresh mode and is unchanged. `submission_ready` and
+`release_ready` remain false; all 38 migration obligations and the existing
+author, rendering, scientific and provider acceptance holds remain in force.
+
+Validation used repo-local CPython 3.15.2 and pytest 9.2.0. The pre-fix checker
+reproduced `Input digest mismatch: conductor/product.md`. After the review:
+
+- `python -m pytest tests/native/test_joss_readiness.py`: 50 passed.
+- `python scripts/check_joss_readiness.py --json`: exit 0; fourteen source and
+  three edition inputs verified, submission readiness false.
+- The same checker with `--require-submission-ready`: exit 1 as required.
+- `python scripts/check_migration.py --release`: exit 1 with all 38 existing
+  obligations still unqualified.
+- `git diff --check`: passed.
+
+No native, release or hosted pass is inferred from this input repair.
+
 ## Separate evidence acquisition — 16 November 2026
 
 Starting PR head `d36c33f6b4fb480828ddb9aae0121f3379667015`; assessed main
@@ -236,3 +275,22 @@ native suite, installed-package acceptance, docs build, provider submission,
 publication, author attestation, or external acceptance is inferred from these
 local checks. Local Node is 24.22.1; the documentation build requires Node 26,
 so the existing qualified hosted documentation workflow must supply that gate.
+
+## Community navigation reassessment — 22 November 2026
+
+The Community Standards increment appends a Security section to the README,
+linking the existing private vulnerability-reporting policy. It changes no
+software capability, scientific statement, usage example, licence term or
+manuscript claim. The existing JOSS packet was reassessed for that bounded
+packaging-input change; only the README fingerprint was updated from
+`35c86f3d89d6187cffe62a37ccb67d061f530ec2616768c5aae008ba2cf309be` to
+`9aba1db7cec72e9b47f4ebc9b3a788e80c2f3c9094b45cb55ab14d4869e19cc4`.
+The other thirteen source fingerprints, three edition fingerprints and
+original software revision remain unchanged from the prior reassessment.
+
+Under the existing CPython 3.15.2 repair environment,
+`python -m pytest tests/native/test_joss_readiness.py -q` passed all 50 cases.
+`python scripts/check_joss_readiness.py --json` exited 0 with all fourteen
+source and three edition inputs valid. It retains `submission_ready: false`,
+`scientific_qualification_performed: false` and `git_revision_verified: false`.
+No provider submission, scientific release hold or author declaration changes.
