@@ -1,0 +1,72 @@
+{
+  "backport_catalog_sha256": {
+    "glibc-2.44": "896bc7d449b618b50def2ee925f230db76063ca6f85b2aa38d7e02506c10bf4b",
+    "python-3.15": "dc5a53d574667c3de8c70f6a2baeb13e0a1c3f90e9c67670070d2c4c919df4b9"
+  },
+  "database_sha256": "cb2940548440e727d0614b801e7e9d634931107592117c5feae46e085f533faa",
+  "findings": [
+    {
+      "advisory": "CVE-2026-124249",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Medium",
+      "version": "3.15.2_git20261113-r0"
+    },
+    {
+      "advisory": "CVE-2026-115819",
+      "disposition": "verified_backport",
+      "package": "glibc-2.44",
+      "severity": "Medium",
+      "version": "2.44-r23"
+    },
+    {
+      "advisory": "CVE-2026-100290",
+      "disposition": "verified_backport",
+      "package": "glibc-2.44",
+      "severity": "Low",
+      "version": "2.44-r23"
+    },
+    {
+      "advisory": "CVE-2026-115559",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Medium",
+      "version": "3.15.2_git20261113-r0"
+    },
+    {
+      "advisory": "CVE-2026-103995",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Low",
+      "version": "3.15.2_git20261113-r0"
+    },
+    {
+      "advisory": "CVE-2026-115791",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Medium",
+      "version": "3.15.2_git20261113-r0"
+    },
+    {
+      "advisory": "CVE-2026-16052",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Low",
+      "version": "3.15.2_git20261113-r0"
+    },
+    {
+      "advisory": "CVE-2026-19552",
+      "disposition": "verified_backport",
+      "package": "python-3.15",
+      "severity": "Negligible",
+      "version": "3.15.2_git20261113-r0"
+    }
+  ],
+  "ignored_matches": 0,
+  "image": "localhost/offline-ai-security@sha256:7f7274048617b6a1693d806d04393dd18e7c25b6a52a51e884391afc7d8c7dbd",
+  "kind": "offline-wolfi-advisory-review",
+  "report_sha256": "1466280bbd8c3c1e2369050a70145eeb30d5905faff7ef77755a9345bace55ba",
+  "review_catalog_sha256": "c03ca2b790878d757ce07c2d0adc32c585f46f5156fdb129ea66b8367e0a3092",
+  "schema_version": 1,
+  "status": "passed"
+}

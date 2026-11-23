@@ -507,6 +507,10 @@ the incoming merge paths, and any source-review fingerprints demonstrably
 affected by that merge. Retain the previous receipts as historical if the
 source inventory changes.
 
+The same owner may retain the resulting `f902b2af` hosted-offline and wheel
+dry-run evidence directories and their exact Windows-receipt attribute. The
+wheel signing jobs remain owned by this packet until they finish.
+
 The intended order starts with #684's shared security and offline lane. Then
 consider the scoped planning and documentation PRs #686, #687 and #689;
 scanner and fuzz PRs #693 and #694; and game consumer #696. Review #690
@@ -548,6 +552,20 @@ source inventory is
 `c0bfafda041647ba74cbb5c0ff3af8e51813f106fc7731fdc8897d38e7a15d7d`.
 Earlier signed wheels remain valid for their recorded inventories; refresh
 platform signatures for this inventory before using them in a release packet.
+
+The [hosted offline job](evidence/hosted-offline-20261124-f902b2af/README.md)
+passed on `f902b2af`. Its artifact digest, eight controls, scanner network
+isolation and exact image-review dispositions were verified. This bounded
+result does not qualify application adapters or the release. Renovate's
+`stop-updating` label was applied to its eight open PRs, and their GitHub
+auto-merge settings were read back as disabled. Remove each hold when its
+PR is ready for individual integration; recheck its head and settings first.
+
+All three [wheel dry runs](evidence/wheel-dry-run-20261124-f902b2af/README.md)
+passed, and their original reports, artifact digests and wheel hashes were
+verified. Each exercised 164 minimal and 42 Arrow cases without skips. The
+three signing jobs are queued; the retained receipts are unsigned and do not
+replace the release manifest or any missing scientific qualification.
 
 ## V05 manuscript checkpoint
 

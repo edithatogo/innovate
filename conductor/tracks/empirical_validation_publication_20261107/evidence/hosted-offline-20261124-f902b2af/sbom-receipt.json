@@ -1,0 +1,26 @@
+{
+  "collected_at": "2026-11-23T14:40:52.462025+00:00",
+  "evidence_sha256": {
+    "sbom.spdx.json": "9db06e2aa5e91a55a0e1285fe2633c442fbf339a9dc24a36d854295b35d08898",
+    "syft-version.json": "633434c370aee7539531d269c65ab87560e923ec5d87f3f1e4ab010ba92aaa37",
+    "syft.yaml": "fab04cf35c0d7f04a5b9ca41d1132d9b8472b25fbd59cacc472936c5c9006c6c"
+  },
+  "image": "localhost/offline-ai-security@sha256:7f7274048617b6a1693d806d04393dd18e7c25b6a52a51e884391afc7d8c7dbd",
+  "image_digest": "sha256:7f7274048617b6a1693d806d04393dd18e7c25b6a52a51e884391afc7d8c7dbd",
+  "image_id": "sha256:d6a90d1e56bdeaf5e92aa0c3e218e4ae04d879d0fad69852b863e79f9653e148",
+  "kind": "offline-image-sbom-evidence",
+  "last_stage": "complete",
+  "package_count": 897,
+  "release_qualified": false,
+  "scanner": {
+    "archive_sha256": "bf52519eb57f675d47c07d43213cb6dff6449f3d6d1147ff6701ed91f44eef0c",
+    "archive_size": 31432061,
+    "archive_url": "https://github.com/anchore/syft/releases/download/v1.57.1/syft_1.57.1_linux_amd64.tar.gz",
+    "name": "syft",
+    "source_commit": "a0c0d3890a9d79421c403e8fcadec50a2e55bf21",
+    "version": "1.57.1"
+  },
+  "schema_version": 1,
+  "scope": "squashed",
+  "status": "collected"
+}
