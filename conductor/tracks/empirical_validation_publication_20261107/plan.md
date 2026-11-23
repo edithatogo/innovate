@@ -532,6 +532,17 @@ offline and signed-wheel receipts bind source inventory
 the incoming Dockerfile update changes that inventory and needs fresh
 source-bound release evidence. No merge is authorised while those gates fail.
 
+The combined tree merged main without textual conflicts. On the selected
+repo-local Python 3.15.2 interpreter, the repository-policy check and the
+focused JOSS and registry test files passed. JOSS preflight checked all 14
+source and three edition hashes, retained the unapproved draft state, and
+its submission-required mode failed as expected. With Node 26.13.1 and
+pnpm 12.21.0, the frozen lockfile passed supply-chain policy for 561 entries;
+the main-branch `axe-core` update and both existing Picomatch patch hashes
+are present. `actionlint` passed for the offline, release-readiness and
+community-standard workflows. These checks do not close RustSec, local offline
+qualification, scientific acceptance or release readiness.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
