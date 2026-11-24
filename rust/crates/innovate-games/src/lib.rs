@@ -256,12 +256,10 @@ pub fn build_duopoly_pricing_game(
                 price: vec![offer_a.price, offer_b.price],
             };
             let shares = choice_shares(&choices, &spec.preferences)?;
-            let profit_a =
-                spec.market_size * shares[0] * (offer_a.price - offer_a.unit_cost)
-                    - offer_a.fixed_cost;
-            let profit_b =
-                spec.market_size * shares[1] * (offer_b.price - offer_b.unit_cost)
-                    - offer_b.fixed_cost;
+            let profit_a = spec.market_size * shares[0] * (offer_a.price - offer_a.unit_cost)
+                - offer_a.fixed_cost;
+            let profit_b = spec.market_size * shares[1] * (offer_b.price - offer_b.unit_cost)
+                - offer_b.fixed_cost;
 
             let mut profile = StrategyProfile::new();
             profile.insert(firm_a.clone(), ActionId(offer_a.action.clone()));

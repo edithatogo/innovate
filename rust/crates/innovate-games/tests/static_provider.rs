@@ -205,10 +205,7 @@ fn sequential_launch_tree_solves_via_backward_induction() {
         sol.identity.solution_concept,
         SolutionConcept::SubgamePerfectBackwardInduction
     );
-    assert_eq!(
-        sol.identity.completeness_claim,
-        CompletenessClaim::OneFound
-    );
+    assert_eq!(sol.identity.completeness_claim, CompletenessClaim::OneFound);
     assert_eq!(
         sol.extensive_choices.get(&NodeId("root".to_owned())),
         Some(&ActionId("enter".to_owned()))
