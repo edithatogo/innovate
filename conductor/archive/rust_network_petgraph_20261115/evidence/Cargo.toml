@@ -12,6 +12,6 @@ name = "replay-probe"
 path = "replay_probe.rs"
 
 [dependencies]
-baseline = { package = "innovate-core", git = "https://github.com/edithatogo/innovate.git", rev = "07d6d897b3f2b57672e6c9a2d4cb54ac1dfcd6e0" }
-candidate = { package = "innovate-codeql-historical-network-candidate", git = "https://github.com/edithatogo/innovate.git", rev = "b0a60804f6bcd407e2548197301a3976011b08e1" }
+baseline = { package = "innovate-core", git = "https://github.com/edithatogo/innovate.git", rev = "951070f237c7de9c352b92956c92002b9970f6b2" }
+candidate = { package = "innovate-codeql-historical-network-candidate", git = "https://github.com/edithatogo/innovate.git", rev = "951070f237c7de9c352b92956c92002b9970f6b2" }
 serde_json = { version = "=1.0.154", features = ["float_roundtrip"] }

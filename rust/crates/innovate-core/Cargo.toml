@@ -37,11 +37,11 @@ statrs = "=0.19.1"
 nuts-rs = { path = "../../vendor/nuts-rs-0.19.1", version = "=0.19.1" }
 rand = "=0.10.4"
 chrono = { version = "=0.4.45", default-features = false, features = ["std"] }
-kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
-kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
-kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
-kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
-kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "a1f6283575ad26918230adc122a99b5c08fc4da3" }
+kairo-ecs-core = { git = "https://github.com/edithatogo/kairos.git", rev = "ca2d11de1aa69d727b5174d721ce6fc40c95e369" }
+kairo-ecs-rng = { git = "https://github.com/edithatogo/kairos.git", rev = "ca2d11de1aa69d727b5174d721ce6fc40c95e369" }
+kairo-ecs-types = { git = "https://github.com/edithatogo/kairos.git", rev = "ca2d11de1aa69d727b5174d721ce6fc40c95e369" }
+kairo-ecs-abm = { git = "https://github.com/edithatogo/kairos.git", rev = "ca2d11de1aa69d727b5174d721ce6fc40c95e369" }
+kairo-ecs-des = { git = "https://github.com/edithatogo/kairos.git", rev = "ca2d11de1aa69d727b5174d721ce6fc40c95e369" }
 
 [dev-dependencies]
 faer = { path = "../../vendor/faer-0.24.4", version = "=0.24.4", default-features = false, features = ["sparse"] }
