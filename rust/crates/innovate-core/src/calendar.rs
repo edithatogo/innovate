@@ -1,4 +1,4 @@
-use chrono::{DateTime, Datelike, Days, Months, NaiveDate, NaiveDateTime, TimeDelta};
+use crate::calendar_time::{Date, Timestamp};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
 
@@ -21,18 +21,12 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
         let (timestamps, offsets): (Vec<_>, Vec<_>) = dates
             .iter()
             .map(|date| {
-                DateTime::parse_from_rfc3339(date)
-                    .map(|time| (time.naive_utc(), true))
-                    .or_else(|_| {
-                        NaiveDateTime::parse_from_str(date, "%Y-%m-%dT%H:%M:%S%.f")
-                            .or_else(|_| {
-                                NaiveDateTime::parse_from_str(date, "%Y-%m-%d %H:%M:%S%.f")
-                            })
-                            .map(|time| (time, false))
-                    })
+                Timestamp::parse_offset(date)
+                    .map(|time| (time, true))
+                    .or_else(|| Timestamp::parse_naive(date).map(|time| (time, false)))
             })
-            .collect::<Result<Vec<_>, _>>()
-            .map_err(|_| "invalid ISO timestamp or mixed date and timestamp inputs")?
+            .collect::<Option<Vec<_>>>()
+            .ok_or("invalid ISO timestamp or mixed date and timestamp inputs")?
             .into_iter()
             .unzip();
         let aware = offsets[0];
@@ -46,39 +40,31 @@ pub(crate) fn aggregate(payload: &Value) -> Result<Value, &'static str> {
                 .expect("timestamp input is nonempty");
             let mut sums = BTreeMap::new();
             for (time, value) in timestamps.into_iter().zip(values) {
-                let weeks = (time - first).num_days() / 7;
-                let bucket = first
-                    .checked_add_signed(TimeDelta::days(weeks * 7))
+                let bucket = time
+                    .weekly_bucket(first)
                     .ok_or("calendar bucket outside supported date range")?;
                 add_value(&mut sums, bucket, value)?;
             }
             let (dates, values): (Vec<_>, Vec<_>) = sums
                 .into_iter()
                 .map(|(time, value)| {
-                    (
-                        time.format(if aware {
-                            "%Y-%m-%dT%H:%M:%S%.fZ"
-                        } else {
-                            "%Y-%m-%dT%H:%M:%S%.f"
-                        })
-                        .to_string(),
-                        value,
-                    )
+                    let suffix = if aware { "Z" } else { "" };
+                    (format!("{time}{suffix}"), value)
                 })
                 .unzip();
             return Ok(json!({"dates": dates, "values": values}));
         }
         return aggregate_dates(
-            timestamps.into_iter().map(|time| time.date()).collect(),
+            timestamps.into_iter().map(|time| time.date).collect(),
             values,
             frequency,
         );
     }
     let dates = dates
         .iter()
-        .map(|date| NaiveDate::parse_from_str(date, "%Y-%m-%d"))
-        .collect::<Result<_, _>>()
-        .map_err(|_| "invalid ISO calendar date")?;
+        .map(|date| Date::parse(date))
+        .collect::<Option<_>>()
+        .ok_or("invalid ISO calendar date")?;
     aggregate_dates(dates, values, frequency)
 }
 
@@ -96,7 +82,7 @@ fn add_value<K: Ord>(
 }
 
 fn aggregate_dates(
-    dates: Vec<NaiveDate>,
+    dates: Vec<Date>,
     values: Vec<f64>,
     frequency: &str,
 ) -> Result<Value, &'static str> {
@@ -107,8 +93,8 @@ fn aggregate_dates(
     let mut sums = BTreeMap::new();
     for (date, value) in dates.into_iter().zip(values) {
         let bucket = match frequency {
-            "W" => first.checked_add_days(Days::new((date - first).num_days() as u64 / 7 * 7)),
-            "M" | "ME" => date.with_day(1),
+            "W" => first.checked_add_days(date.days_since(first) / 7 * 7),
+            "M" | "ME" => date.month_start(0),
             _ => Some(date),
         }
         .ok_or("calendar bucket outside supported date range")?;
@@ -130,12 +116,12 @@ fn aggregate_dates(
                 return Err("calendar output exceeds 100000 periods");
             }
             let next = if monthly {
-                date.checked_add_months(Months::new(1))
+                date.month_start(1)
             } else {
-                date.succ_opt()
+                date.checked_add_days(1)
             };
             let label = if monthly {
-                next.and_then(|d| d.pred_opt())
+                next.and_then(|d| d.checked_add_days(-1))
                     .ok_or("month end outside supported date range")?
             } else {
                 date

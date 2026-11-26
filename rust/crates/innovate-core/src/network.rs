@@ -1,9 +1,9 @@
 //! Heterogeneous network adoption with Kairos agent state, dispatch and priority service.
+use crate::agent_state::AgentState;
 use crate::validation::{numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
 };
-use kairo_ecs_abm::ABMContext;
 use kairo_ecs_des::{PriorityResource, RenegingQueue};
 use kairo_ecs_rng::{
     DeterministicStream,
@@ -391,7 +391,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid("initial agent indices must be unique and in range"));
     }
-    let mut context = ABMContext::new(o.seed);
+    let mut context = AgentState::new();
     let agents: Vec<_> = (0..o.population)
         .map(|i| {
             let id = context.spawn_agent();

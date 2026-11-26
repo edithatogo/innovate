@@ -1,9 +1,9 @@
 //! Finite-population Bass pure-birth process. Kairos owns time, dispatch and RNG.
+use crate::agent_state::AgentState;
 use crate::validation::{numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
 };
-use kairo_ecs_abm::ABMContext;
 use kairo_ecs_core::Scheduler;
 use kairo_ecs_rng::{
     DeterministicStream,
@@ -101,7 +101,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     let mut forcing_index = 0;
     let horizon = (*time.last().unwrap() * ticks as f64).floor() as u128;
     let mut scheduler = Scheduler::new();
-    let mut abm = (engine == "kairos_abm").then(|| ABMContext::new(seed));
+    let mut abm = (engine == "kairos_abm").then(AgentState::new);
     let agents: Vec<_> = if let Some(context) = abm.as_mut() {
         (0..population)
             .map(|_| {
