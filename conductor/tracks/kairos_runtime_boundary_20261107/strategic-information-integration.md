@@ -104,15 +104,14 @@ includes the follower's response to each observed commitment. Payoffs are
 modelled profits ordered by the committing firm and the follower.
 [Reviewed constructor](https://github.com/edithatogo/innovate/blob/d892137df19396e42c63a54f27c5fac68451cb0a/rust/crates/innovate-games/src/lib.rs)
 
-- **UOGTO `mapping_review_pending`.** The finite declaration profile supplies
-  candidate terms for the specification, extensive-form representation and
-  perfect information. The Innovate game-profile owner will use I07 to pin and
-  validate the full-IRI declaration for the decision order, observations and
-  paired profits, using both synthetic cost cases below.
+- **UOGTO `reuse_existing`.** The full-IRI declaration and replay bind
+  decision order, observations and paired profits for both synthetic cost cases.
+  [I07 receiving profile](../../../specs/ecosystem/uogto/innovate-game-profile.md)
   [UOGTO intake](https://github.com/edithatogo/UOGTO/blob/b3f1de0119ee1c1e49913d9c1f9284e053e43433/docs/contracts/downstream-game-intake.md#semantic-intake-register)
   [Finite declaration profile](https://github.com/edithatogo/UOGTO/blob/b3f1de0119ee1c1e49913d9c1f9284e053e43433/docs/contracts/executable-game-subset-v1.md)
 - **Paignia `reuse_existing`.** The adapter uses `GameSpecification` and
-  `backward_induction_result` at `bd880dd756d2ba56cc5f479bc078cea31b53c1d1`
+  `backward_induction_result` at signed 0.1.0 source
+  `a04a19da06cc50e310a172574ed66f62000b891a`
   under `paignia/static-finite-perfect-information-sparse-zero/1.0.0`.
   The finite two-firm fixture declares a payoff for each firm at every terminal
   and uses the solver's ordered actions and tie tolerance.
@@ -136,8 +135,8 @@ Rust 1.99.1 passed eight adapter tests through
 The existing competition and public contract tests also passed. The adapter shares
 the native demand implementation through `innovate-demand`. The core
 reexports the same types and calculation for its existing callers. The
-adapter consumes `bd880dd` and its locked normal and build closure excludes
-the simulation runtime. Hosted CI tests the closure and keeps the moved
+original receipt used `bd880dd`. I07 replays the signed pin and its locked
+normal and build dependencies. Hosted CI tests the closure and keeps the moved
 demand source in the existing coverage gate.
 
 The artifact runner uses Rust 1.99.1 and the repository's CPython 3.15.2

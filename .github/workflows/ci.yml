@@ -89,6 +89,39 @@ jobs:
             echo 'The static adapter depends on the simulation runtime' >&2
             exit 1
           fi
+      - name: Check out the pinned Paignia interchange verifier
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/checkout@6026fb2ad3aa556d78b517cf65c8c1f832075860
+        with:
+          repository: edithatogo/paignia
+          ref: a04a19da06cc50e310a172574ed66f62000b891a
+          path: target/i07/provider
+          persist-credentials: false
+      - name: Verify the I07 UOGTO pricing commitment
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          set -euo pipefail
+          replay="$PWD/target/i07"
+          provider="$replay/provider"
+          verifier="$provider/verification/uogto_interchange"
+          uv venv --python "$(cat .python-version)" "$replay/python"
+          python="$replay/python/bin/python"
+          "$python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
+          uv pip install --python "$python" --require-hashes --only-binary :all: -r "$verifier/requirements.txt"
+          "$python" -I "$verifier/interchange.py" stage --ontology-dir "$replay/ontology"
+          CARGO_TARGET_DIR="$replay/target" cargo build --release --locked \
+            --manifest-path "$provider/crates/paignia-io/Cargo.toml" --example solve -j 2
+          "$python" -I specs/ecosystem/uogto/verify_price_commitment.py \
+            "$provider" "$replay/ontology" "$replay/target/release/examples/solve" "$replay/receipt.json"
+      - name: Retain the I07 receiving receipt
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: i07-pricing-commitment
+          path: target/i07/receipt.json
+          if-no-files-found: error
+          retention-days: 30
       - run: uv run --no-sync pytest tests/native
       - name: Verify source and capability evidence guards
         run: uv run --no-sync nox -s validation_coverage

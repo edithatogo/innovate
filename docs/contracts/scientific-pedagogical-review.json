@@ -146,7 +146,7 @@
     "rust/crates/innovate-ffi/src/lib.rs": "af0c0513e5658d18dc6958b0d1edc1753e5c02bd290d5369c208b1edc785afc7",
     "rust/crates/innovate-core/Cargo.toml": "e4d86f76917305ec56b55ef441fd0a220fa85008cec8b057132ba58883c5bf48",
     "rust/crates/innovate-demand/Cargo.toml": "6ca015367292a4534b00307c5da60980e89b6b09e593ad822df20c2b90e5fdfe",
-    "rust/crates/innovate-games/Cargo.toml": "c71857b2a2bc9dc466d5e96df3adfea1e2918e4ee07f07a607bd7d517f96396b",
+    "rust/crates/innovate-games/Cargo.toml": "fdc92096fc0390016447d6fb1b8959da0ea008e997945b0f80dd7e5cce4f39d8",
     "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1"
   },
   "references": [
@@ -1167,7 +1167,8 @@
         "checks": [
           "Compared the five named workspace packages with the root manifest and the Kairos package manifest.",
           "Confirmed innovate-games is explicitly excluded and has its own manifest/workspace; the guide does not attribute workspace compiler/doctest qualification to it.",
-          "On 21 November, independently checked the updated guide against the manifests at b5cceb3f. The five explicit members and the demand path dependency give six effective members. The standalone games crate has its own lock, shares demand, and pins Paignia to bd880dd. The follow-up covers membership, dependency and command claims."
+          "On 21 November, independently checked the updated guide against the manifests at b5cceb3f. The five explicit members and the demand path dependency give six effective members. The standalone games crate has its own lock, shares demand, and pins Paignia to bd880dd. The follow-up covers membership, dependency and command claims.",
+          "On 27 November, checked the standalone manifest and unchanged Rust guide for the signed Paignia 0.1.0 pin. The workspace and testing command still apply. Both games dependencies resolve to a04a19da with default features disabled. The locked native suite and the comparative I07 replay separately verify the declared use."
         ],
         "source_paths": [
           "docs/astro-site/src/content/docs/bindings/rust.md",

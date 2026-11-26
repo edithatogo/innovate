@@ -1,7 +1,9 @@
 //! Independent finite price-commitment controls using Innovate's demand model.
 
 use innovate_demand::PreferenceParameters;
-use innovate_games::{DuopolyPricingSpec, PricingOffer, build_price_commitment_game};
+use innovate_games::{
+    DuopolyPricingSpec, PricingOffer, build_price_commitment_game, solve_extensive_innovation_game,
+};
 use paignia_core::{
     ActionId, BACKWARD_INDUCTION_ALGORITHM_VERSION, CatalogueClaim, Game, GameInstanceId,
     GameSpecification, GameSpecificationId, Node, NodeId, PayoffVector, PlayerId,
@@ -76,36 +78,71 @@ fn assert_price_payoffs(payoffs: &PayoffVector, leader: f64, follower: f64) {
     assert!((payoffs[&PlayerId("firm_b".into())] - follower).abs() < 1e-10);
 }
 
-#[test]
-fn follower_prices_contingently_and_leader_takes_the_premium_opportunity() {
-    let specification = build(&spec(0.0));
-    let game = &specification.game;
-    let solved = solve(&specification, "base", SolverConfig::default());
+fn assert_action_order(game: &Game, node: &NodeId) {
+    let Node::Decision { edges, .. } = &game.nodes[node] else {
+        panic!("expected a decision at {node:?}");
+    };
+    let actions: Vec<_> = edges.iter().map(|edge| edge.action.0.as_str()).collect();
+    assert_eq!(actions, ["premium", "value"]);
+}
 
-    // At prices 1 and 3, unnormalized choice weights are 1/2 and 1/8.
-    // At equal offers each firm sells 25 units at value and 10 units at premium.
-    // The low and high shares are 4/13 and 1/13 when prices differ.
-    for (commitment, response, leader, follower) in [
-        ("value", "value", 75.0 / 4.0, 95.0 / 4.0),
-        ("value", "premium", 300.0 / 13.0, 295.0 / 13.0),
-        ("premium", "value", 275.0 / 13.0, 380.0 / 13.0),
-        ("premium", "premium", 55.0 / 2.0, 59.0 / 2.0),
-    ] {
+fn assert_price_tree(game: &Game, case: &str) {
+    // At prices 1 and 3, choice weights are 1/2 and 1/8. Each firm
+    // sells 25 or 10 units when offers match. The mixed shares are 4/13
+    // and 1/13, which give the other profits after costs.
+    let rows = include_str!("fixtures/price_commitment_payoffs.tsv");
+    let mut profiles = std::collections::BTreeSet::new();
+    assert_eq!(game.nodes.len(), 7);
+    assert_action_order(game, &game.root);
+    for row in rows.lines().skip(1) {
+        let columns: Vec<_> = row.split('\t').collect();
+        let [fixture_case, commitment, response, leader, follower] = columns[..] else {
+            panic!("invalid pricing oracle row: {row}");
+        };
+        if fixture_case != case {
+            continue;
+        }
+        assert!(profiles.insert((commitment, response)));
         let continuation = decision_target(game, &game.root, "firm_a", commitment);
+        assert_action_order(game, continuation);
         let terminal = decision_target(game, continuation, "firm_b", response);
         let Node::Terminal { payoffs } = &game.nodes[terminal] else {
             panic!("expected terminal profits for {commitment}/{response}");
         };
-        assert_price_payoffs(payoffs, leader, follower);
+        assert_eq!(payoffs.len(), 2);
+        assert_price_payoffs(payoffs, leader.parse().unwrap(), follower.parse().unwrap());
     }
+    assert_eq!(profiles.len(), 4);
+}
 
+fn assert_complete_policy(
+    specification: &GameSpecification,
+    solved: &ResultEnvelope,
+    root_action: &str,
+    leader_profit: f64,
+    follower_profit: f64,
+) {
+    let game = &specification.game;
+    assert_eq!(solved.solutions.len(), 1);
     let policy = &solved.solutions[0];
+    assert_eq!(policy.choices.len(), 3);
     for action in ["value", "premium"] {
         let continuation = decision_target(game, &game.root, "firm_a", action);
         assert_eq!(policy.choices[continuation], ActionId(action.into()));
     }
-    assert_eq!(policy.choices[&game.root], ActionId("premium".into()));
-    assert_price_payoffs(&policy.expected_payoffs, 27.5, 29.5);
+    assert_eq!(policy.choices[&game.root], ActionId(root_action.into()));
+    assert_price_payoffs(&policy.expected_payoffs, leader_profit, follower_profit);
+    let wrapper = solve_extensive_innovation_game(game, SolverConfig::default()).unwrap();
+    assert_eq!(wrapper.extensive_choices, policy.choices);
+    assert_eq!(wrapper.expected_payoffs, policy.expected_payoffs);
+}
+
+#[test]
+fn follower_prices_contingently_and_leader_takes_the_premium_opportunity() {
+    let specification = build(&spec(0.0));
+    let solved = solve(&specification, "base", SolverConfig::default());
+    assert_price_tree(&specification.game, "base");
+    assert_complete_policy(&specification, &solved, "premium", 27.5, 29.5);
     assert_eq!(solved.semantic_profile, STATIC_GAME_PROFILE_V1);
     assert_eq!(solved.status, ResultStatus::Completed);
     assert_eq!(solved.catalogue, CatalogueClaim::OneFound);
@@ -124,14 +161,9 @@ fn follower_prices_contingently_and_leader_takes_the_premium_opportunity() {
 fn premium_launch_cost_changes_the_leaders_commitment() {
     let specification = build(&spec(20.0));
     let solved = solve(&specification, "cost", SolverConfig::default());
-    let policy = &solved.solutions[0];
-
     // The same continuation responses yield 18.75 at value and 27.5 - 20 at premium.
-    assert_eq!(
-        policy.choices[&specification.game.root],
-        ActionId("value".into())
-    );
-    assert_price_payoffs(&policy.expected_payoffs, 18.75, 23.75);
+    assert_price_tree(&specification.game, "cost");
+    assert_complete_policy(&specification, &solved, "value", 18.75, 23.75);
 }
 
 #[test]

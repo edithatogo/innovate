@@ -1,0 +1,9 @@
+case	firm_a_action	firm_b_action	firm_a_profit	firm_b_profit
+base	premium	premium	27.5	29.5
+base	premium	value	21.153846153846153	29.23076923076923
+base	value	premium	23.076923076923077	22.692307692307693
+base	value	value	18.75	23.75
+cost	premium	premium	7.5	29.5
+cost	premium	value	1.1538461538461537	29.23076923076923
+cost	value	premium	23.076923076923077	22.692307692307693
+cost	value	value	18.75	23.75
