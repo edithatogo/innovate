@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "state": "unapproved_working_draft",
-  "software_revision": "55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1",
+  "software_revision": "263dc706c5598e463d5b53284e020bf496a7fed4",
   "software_version": "0.7.0a1",
   "submission_ready": false,
   "source_sha256": {
     "README.md": "9aba1db7cec72e9b47f4ebc9b3a788e80c2f3c9094b45cb55ab14d4869e19cc4",
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
     "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
-    "pyproject.toml": "9f6cdc01a00664e5cae53192f261891d3b440aa68a26ed5173ba8fe3a4110a05",
+    "pyproject.toml": "bc184cbc74b3fbf84726856eea2418c55b865da695d1f3a19cfe3abd757621ee",
     "Cargo.toml": "32bec5c53a910a912972bf20b216a6a84f888ccc34277ee138ad031162f48e74",
     "Cargo.lock": "6e345af2a975e00558bcaa08868303ef325cff70f178115917467f659530d94d",
     "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5",
@@ -21,9 +21,9 @@
     ".github/workflows/ci.yml": "b9b2b7db0f161118838d49efc65aa684c64f4b754eb744474427669d73da8b85"
   },
   "edition_sha256": {
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "4d2e15b8b4529b78ad5fea8f6b114a9fd6a360d55787745f551b7c25937f5e60",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "d566810ffefc36b30e15775c3bdacd0c74291bbea50f1f7c3334308bd6bb7f28",
     "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "dadf058712792f5aaa884cbfeea6a589e938d3cdf9e7eb0bea268f04688ac0e7"
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "d044d3e320464809feb2c4e786b2e38fdb750cdabe0ef9f251eaef1bf9890b0b"
   },
   "limitations": [
     "Source hashes bind this scoped assessment, not complete implementation coverage or scientific validity.",
