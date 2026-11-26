@@ -23,7 +23,7 @@ bibliography: paper.bib
 > metadata are provisional, copied from the repository's citation record.
 > Research-use evidence, declarations, scientific qualification and release
 > acceptance remain outstanding. This draft describes development version
-> 0.7.0a1 at commit `20fe0b41b815bc926fc3d61b9672c3d4b2feb289`.
+> 0.7.0a1 at commit `5f599a12d474af20f811e5baa6fcf21a18f29c1f`.
 
 # Summary
 

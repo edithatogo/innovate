@@ -52,20 +52,21 @@ jobs:
         run: |
           mkdir -p coverage
           git rev-parse HEAD > coverage/source-commit.txt
-          cargo llvm-cov --locked -p innovate-core -p innovate-tabular -p innovate-ffi -j 4 --no-report
+          cargo llvm-cov --locked -p innovate-core -p innovate-demand -p innovate-tabular -p innovate-ffi -j 4 --no-report
       - name: Generate the native line report
         id: report
         run: |
           # The pinned tool excludes tests/examples/benches and *_tests.rs.
           # Inline unit-test modules remain in their source files' denominator.
-          cargo llvm-cov report -p innovate-core -p innovate-tabular -p innovate-ffi --lcov --output-path coverage/rust.lcov
+          cargo llvm-cov report -p innovate-core -p innovate-demand -p innovate-tabular -p innovate-ffi --lcov --output-path coverage/rust.lcov
           test -s coverage/rust.lcov
           grep -qF 'rust/crates/innovate-core/src/' coverage/rust.lcov
+          grep -qF 'rust/crates/innovate-demand/src/' coverage/rust.lcov
           grep -qF 'rust/crates/innovate-tabular/src/' coverage/rust.lcov
           grep -qF 'rust/crates/innovate-ffi/src/' coverage/rust.lcov
           grep -qE '^LH:[1-9][0-9]*$' coverage/rust.lcov
       - name: Enforce the native line-coverage floor
-        run: cargo llvm-cov report -p innovate-core -p innovate-tabular -p innovate-ffi --fail-under-lines 80
+        run: cargo llvm-cov report -p innovate-core -p innovate-demand -p innovate-tabular -p innovate-ffi --fail-under-lines 80
       - name: Upload native line coverage with OIDC
         if: ${{ !cancelled() && steps.report.outcome == 'success' }}
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1

@@ -6,9 +6,11 @@
 use std::collections::BTreeMap;
 use std::fmt;
 
-use innovate_core::inference::InnovationError;
-use innovate_core::models::demand::{ChoiceSet, PreferenceParameters, choice_shares};
-use paignia_core::{ActionId, Game, NodeId, PayoffVector, PlayerId};
+use innovate_demand::{ChoiceSet, InnovationError, PreferenceParameters, choice_shares};
+use paignia_core::{
+    ActionEdge, ActionId, GAME_SPEC_SCHEMA_VERSION, Game, GameSpecification, GameSpecificationId,
+    Node, NodeId, PayoffVector, PlayerId,
+};
 use paignia_solve::{
     NormalFormGame, SolveError, SolverConfig, StrategyProfile, TiePolicy,
     backward_induction_with_config, pure_nash_equilibria,
@@ -44,7 +46,7 @@ pub enum InformationStructure {
 pub enum SolutionConcept {
     /// Enumerate pure-strategy Nash equilibria of a finite normal-form game.
     PureNash,
-    /// Obtain one perfect-information solution by backward induction.
+    /// Obtain one perfect-information policy by backward induction under the solver tolerance.
     SubgamePerfectBackwardInduction,
     /// Mixed-strategy Nash request; unsupported by this adapter.
     MixedNash,
@@ -194,7 +196,7 @@ impl From<SolveError> for StaticGameError {
     }
 }
 
-/// Build a two-firm simultaneous innovation pricing game backed by `innovate_core::models::demand::choice_shares`.
+/// Build a two-firm simultaneous innovation pricing game backed by [`choice_shares`].
 ///
 /// The players are `firm_a` and `firm_b`. For every pair of offers, the demand
 /// calculation includes an outside option with utility zero. Firm `i` receives
@@ -281,6 +283,77 @@ pub fn build_duopoly_pricing_game(
     })
 }
 
+/// Build a perfect-information pricing commitment game from Innovate demand.
+///
+/// Firm A commits to a price and offer, then firm B observes that choice and
+/// chooses its response. Terminal profits are the same demand and cost
+/// valuations used by [`build_duopoly_pricing_game`]. Actions are ordered by
+/// identity to keep the decision graph independent of menu presentation.
+/// The returned specification carries the caller's identity for versioned
+/// result admission through [`paignia_solve::backward_induction_result`].
+///
+/// # Errors
+/// Returns a [`StaticGameError`] for invalid demand, offer or payoff data.
+pub fn build_price_commitment_game(
+    spec: &DuopolyPricingSpec,
+    specification_id: GameSpecificationId,
+) -> Result<GameSpecification, StaticGameError> {
+    let mut market = build_duopoly_pricing_game(spec)?;
+    market.validate()?;
+    let leader = &market.players[0];
+    let follower = &market.players[1];
+    let mut leader_actions = market.strategies[leader].clone();
+    let mut follower_actions = market.strategies[follower].clone();
+    leader_actions.sort_unstable();
+    follower_actions.sort_unstable();
+
+    let root = NodeId("price-commitment".into());
+    let mut nodes = BTreeMap::new();
+    let mut commitments = Vec::with_capacity(leader_actions.len());
+    for (leader_index, leader_action) in leader_actions.into_iter().enumerate() {
+        let response = NodeId(format!("price-response/{leader_index}"));
+        let mut responses = Vec::with_capacity(follower_actions.len());
+        for (follower_index, follower_action) in follower_actions.iter().enumerate() {
+            let profile = StrategyProfile::from([
+                (leader.clone(), leader_action.clone()),
+                (follower.clone(), follower_action.clone()),
+            ]);
+            let payoffs = market.payoffs.remove(&profile).ok_or_else(|| {
+                StaticGameError::InvalidInput("missing profits for the proposed offers".into())
+            })?;
+            let target = NodeId(format!("pricing-profits/{leader_index}/{follower_index}"));
+            nodes.insert(target.clone(), Node::Terminal { payoffs });
+            responses.push(ActionEdge {
+                action: follower_action.clone(),
+                target,
+            });
+        }
+        nodes.insert(
+            response.clone(),
+            Node::Decision {
+                player: follower.clone(),
+                edges: responses,
+            },
+        );
+        commitments.push(ActionEdge {
+            action: leader_action,
+            target: response,
+        });
+    }
+    nodes.insert(
+        root.clone(),
+        Node::Decision {
+            player: leader.clone(),
+            edges: commitments,
+        },
+    );
+    Ok(GameSpecification {
+        schema_version: GAME_SPEC_SCHEMA_VERSION.into(),
+        id: specification_id.0,
+        game: Game { root, nodes },
+    })
+}
+
 /// Solve a static normal-form innovation game under the requested [`SolutionConcept`].
 ///
 /// The supported route is [`SolutionConcept::PureNash`], delegated to Paignia.
@@ -342,7 +415,8 @@ pub fn solve_normal_form_innovation_game(
     }
 }
 
-/// Solve a finite, acyclic, perfect-information extensive-form innovation game via backward induction.
+/// Select a policy for a finite, acyclic, perfect-information game through
+/// tolerance-aware backward induction.
 ///
 /// Returns the provider's chosen action map and root payoff vector, with
 /// [`CompletenessClaim::OneFound`]. The supplied tie policy determines choices

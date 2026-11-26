@@ -628,16 +628,17 @@ def main(argv: list[str] | None = None) -> int:
         if args.check:
             errors = check_generated(ROOT)
             if errors:
-                for error in errors:
-                    print(json.dumps(error), file=sys.stderr)
+                print("Generated API references are missing, stale, or invalid.", file=sys.stderr)
                 return 1
             print("Current API references match all declared language, source and generator hashes.")
         else:
-            result = generate(ROOT)
-            pages, removed = result["pages"], result["removed"]
-            print(f"Generated {pages} current API reference pages; removed {removed} owned stale pages.")
+            generate(ROOT)
+            print("Generated current API reference pages.")
     except (OSError, ValueError, SyntaxError) as error:
-        print(f"API reference generation failed: {json.dumps(str(error))}", file=sys.stderr)
+        if "unresolved_export" in str(error):
+            print("API reference generation failed (unresolved_export).", file=sys.stderr)
+        else:
+            print("API reference generation failed while validating its inputs or output.", file=sys.stderr)
         return 1
     return 0
 

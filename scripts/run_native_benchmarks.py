@@ -113,7 +113,7 @@ def main() -> int:
                 staged.write_text(receipt, encoding="utf-8")
                 os.link(staged, output)
         except FileExistsError:
-            parser.error(f"Shard receipt already exists: {output}; use a fresh path for each rank")
+            parser.error("Shard receipt already exists. Use a fresh path for each rank.")
     result = response["result"]
     print(f"Benchmark suite: {result['succeeded']} succeeded, {result['failed']} failed")
     return int(result["failed"] > 0 or not result["runs"])

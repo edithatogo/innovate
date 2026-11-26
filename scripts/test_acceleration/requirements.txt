@@ -155,7 +155,7 @@ pytest-gremlins==1.14.3 \
     --hash=sha256:8e4d553b1a78ac38c7203b994e9dbbfb6149777a3561a425e4530ac515e4762c \
     --hash=sha256:ba86f06221021e13f294d43f3efa37ec452bb4aee34b8b6e985b62906737b6ec
     # via -r scripts/test_acceleration/requirements.in
-pytest-testmon==2.3.0 \
-    --hash=sha256:7bcd50afce305393edc6b530ee77a61c91949efafe0c54f799f12fe3da999623 \
-    --hash=sha256:fd541506efa483e5a217e6cc5c07c73b382619c218d1ed4ffa80584c34defd77
+pytest-testmon==2.3.1 \
+    --hash=sha256:695bd3c2e3ed38b06244ae5697f51d68cefb4ebbf4785496c5cd1ed5c80a8fa1 \
+    --hash=sha256:d6056e00bbb80aa2438241bb7b2d37f8e3b7826c2e503cb447d93d31c9e5a9e1
     # via -r scripts/test_acceleration/requirements.in

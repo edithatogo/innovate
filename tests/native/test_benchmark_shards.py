@@ -48,6 +48,12 @@ def test_slurm_benchmark_receipts_require_a_single_step(tmp_path):
         receipt = shard(rank, "0", template)
         assert receipt.returncode == 0, receipt.stderr
     first, second = tmp_path / "rank-0.json", tmp_path / "rank-1.json"
+    original = first.read_bytes()
+    duplicate = shard(0, "0", template)
+    assert duplicate.returncode == 2, duplicate.stderr
+    assert "Shard receipt already exists." in duplicate.stderr
+    assert str(tmp_path) not in duplicate.stdout + duplicate.stderr
+    assert first.read_bytes() == original
     result = run(verifier, serial, second, first)
     assert result.returncode == 0, result.stderr
 
