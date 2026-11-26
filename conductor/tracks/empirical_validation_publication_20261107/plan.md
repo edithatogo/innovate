@@ -650,6 +650,19 @@ head `ee2dd74c` aligns the optional tool pins with the hash-locked Python 3.15.2
 installation. Testmon selection and recovery and both coverage engines passed.
 The mutation profile caught all 34 mutations. Hosted checks are running.
 
+The reconciled source includes main `66983fbb` and its additional adopter
+reference cases. The floating-point baseline still misclassifies the latest
+sample with the largest finite weight and a positive subnormal tail. The
+receiving branch retains its exact integer calculation and both sets of cases.
+
+Cargo Deny on Rust 1.99.1 passed advisories, bans, licenses and sources on the
+recovered lock. The games bans check passed. The audited cache is RustSec
+revision `b9b8a3c` from 25 November. The root and games Cargo Audit runs found
+no advisories. A vendor-only local check could not look up yanks in the offline
+index. The 73 core, 16 Kairos and nine calendar tests passed before adding the
+last adopter regression. The JOSS source reassessment retains the working
+draft status. All 38 obligations need current release evidence.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.

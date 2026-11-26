@@ -11,11 +11,12 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- The 20 November edition describes development version `0.7.0a1` at
-  `dbb360d8e281ea103778484512e0a35958dfba83`. The
-  [ledger reassessment](claim-evidence.md#adopter-classification-ledger-reassessment)
-  records the qualified adopter-classification scope.
-  Earlier source assessments and render receipts retain their original revisions.
+- The current draft describes development version `0.7.0a1` at
+  `34b4868c094742495fb7f89f5410676917e7a05b`. The
+  [source reassessment](claim-evidence.md#security-integration-source-reassessment-on-26-november-2026)
+  records the dependency and ledger changes. The earlier
+  [adopter receipts](../../empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md)
+  and render receipts retain their original revisions.
 
 ## Scope and evidence
 
