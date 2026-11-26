@@ -678,6 +678,17 @@ state crate, tests the same three engines and rejects Heapless. All three
 corrected cases passed against the local installed wheel. The updated commit
 requires new run-bound security and wheel receipts.
 
+At `5be45146`, all three [wheel builds and signing jobs](https://github.com/edithatogo/innovate/actions/runs/45807454847)
+passed. The verified signatures bind the release source inventory
+`640493fb9795cd93a1db56223069de4b67fcbe210233446f9dcd9a79f47bc6a1`
+and 179 minimal-wheel and 42 Arrow checks per target with zero skips.
+The [offline job](https://github.com/edithatogo/innovate/actions/runs/45807382433/job/139866074641)
+passed on the exact test merge `5f14dfc3`. The receiving branch's
+registry-readiness packet now references the reassessed ledger. Its source
+change is confined to that packet and this record. The registry and community
+documentation suites passed 80 tests and 28 subtests. Registrations remain
+pending, and the release gate still reports 38 incomplete obligations.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
