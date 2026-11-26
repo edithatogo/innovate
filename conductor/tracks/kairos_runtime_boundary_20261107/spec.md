@@ -28,7 +28,7 @@ alignment and PR570 retain ownership of broader Rust-core/scientific changes.
 
 The runtime consumer receipt is independent of the optional game profile and
 solver qualification. I10 retains every native, replay, installed-consumer and
-paired-outcome prerequisite while I07 remains separately pending. A static
+paired-outcome prerequisite. I07 separately qualifies the finite pricing profile. A static
 game can be qualified against its solver/profile without dynamic execution;
 claims about simulated games additionally require native adapter evidence.
 Neither receipt completes the other scope or closes unfinished work in this
