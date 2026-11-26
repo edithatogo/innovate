@@ -1,34 +1,6 @@
 //! Fail-closed inference status and analytic Gaussian log-density/gradient contracts.
 
-use std::fmt;
-
-/// Typed error returned when inference state or inputs violate scientific contracts.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct InnovationError {
-    /// Machine-readable error category.
-    pub code: &'static str,
-    /// Human-readable explanation.
-    pub message: String,
-}
-
-impl InnovationError {
-    /// Construct a typed `InnovationError`.
-    #[must_use]
-    pub fn new(code: &'static str, message: impl Into<String>) -> Self {
-        Self {
-            code,
-            message: message.into(),
-        }
-    }
-}
-
-impl fmt::Display for InnovationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}: {}", self.code, self.message)
-    }
-}
-
-impl std::error::Error for InnovationError {}
+pub use innovate_demand::InnovationError;
 
 /// Validated observation series with strictly positive finite noise scale.
 #[derive(Debug, Clone, PartialEq)]

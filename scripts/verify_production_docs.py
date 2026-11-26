@@ -395,7 +395,8 @@ def main() -> int:
     parser.add_argument("--dist", type=Path)
     parser.add_argument("--contract", type=Path)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--json", action="store_true")
+    parser.add_argument("--json", action="store_true",
+                        help="Print the qualification status as JSON. The full report is saved separately.")
     args = parser.parse_args()
     root = args.root.resolve()
     dist = args.dist or root / "docs/astro-site/dist"
@@ -419,13 +420,18 @@ def main() -> int:
         }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    passed = report["status"] == "passed"
     if args.json:
-        print(json.dumps(report, indent=2, sort_keys=True))
+        summary = {"status": "passed" if passed else "failed"}
+        for field in ("content_complete", "live_deployment_verified",
+                      "browser_accessibility_verified", "source_artifact_binding_verified"):
+            summary[field] = True if report.get(field) is True else False
+        print(json.dumps(summary, sort_keys=True))
+    elif passed:
+        print("Documentation artifact verification passed. The full report was saved.")
     else:
-        print(f"Documentation artifact: {report['status']}; {len(report['errors'])} errors; report: {output}")
-        for error in report["errors"][:20]:
-            print(json.dumps(error, sort_keys=True))
-    return 0 if report["status"] == "passed" else 1
+        print("Documentation artifact verification failed. The full report was saved.")
+    return 0 if passed else 1
 
 
 if __name__ == "__main__":

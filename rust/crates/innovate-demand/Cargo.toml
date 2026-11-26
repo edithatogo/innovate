@@ -1,0 +1,9 @@
+[package]
+name = "innovate-demand"
+description = "Native structural demand used by Innovate's scientific and game models"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false

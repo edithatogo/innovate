@@ -23,6 +23,26 @@ fn bass_cumulative_matches_boundary_exponential_and_high_precision_reference() {
 }
 
 #[test]
+fn bass_cumulative_retains_representable_values_at_extreme_rate_scales() {
+    // 75-digit evaluation of F = p(1 - exp(-(p+q)t)) / (p + q exp(-(p+q)t)).
+    let scenarios = [
+        (700.0, 1e-310, 1.0, 1.0, 1.014_231_026_069_386_9e-6),
+        (720.0, 1e-310, 1.0, 1.0, 0.997_971_890_783_595_9),
+        (800.0, 1e-310, 1.0, 1.0, 1.0),
+        // In the q=0 limit the leading term is m*p*t. The next term is
+        // smaller by 5e-341, beyond the precision of this expected value.
+        (1e-40, 1e-300, 0.0, 1e300, 1e-40),
+    ];
+    for (t, p, q, m, expected) in scenarios {
+        let actual = bass_cumulative(t, p, q, m).unwrap();
+        assert!(
+            (actual / expected - 1.0).abs() <= 1e-12,
+            "t={t}, p={p}, q={q}, m={m}: {actual} != {expected}"
+        );
+    }
+}
+
+#[test]
 fn bass_cumulative_rejects_invalid_inputs() {
     assert!(bass_cumulative(-1.0, 0.03, 0.38, 1000.0).is_err());
     assert!(bass_cumulative(f64::NAN, 0.03, 0.38, 1000.0).is_err());
