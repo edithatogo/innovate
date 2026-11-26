@@ -167,6 +167,88 @@
       }
     },
     {
+      "name": "polars-arrow",
+      "version": "0.55.2",
+      "license": "MIT AND Apache-2.0",
+      "crate_sha256": "c5ab55460ca2553d1a2bbaf2046998cfbbb685bc18d1e168b4367b63301eb271",
+      "local_patches": [
+        {
+          "path": "Cargo.toml",
+          "upstream_sha256": "e1b7367ee60554691a8f1594a24a11e7b65b0e1e95737bfaa6baba083cb7244e",
+          "patched_sha256": "a430c6173cfc2d4167ebb0f10ade598bbe3199e43e6aed2b30c9149bab86bdf1",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/array/primitive/fmt.rs",
+          "upstream_sha256": "11e3433672c83daed38952cbd47feb712935893423cdbe59d2b045fca9ac61ee",
+          "patched_sha256": "57329bfb37795f995751fdca71473c2e79c31c84f38dfb4460aab8c230583ee9",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/compute/temporal.rs",
+          "upstream_sha256": "3c783aadd490aab14a8c5425a918d9bcd311b8fa382178b34acd1744d7d13bcf",
+          "patched_sha256": "19417bc6c73f209d885ba8628ab613a1fa53ac4ee18e8a5b65cd4748adebd117",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/io/ipc/read/reader.rs",
+          "upstream_sha256": "4e6fd2662905328a3c4df164134a25c637cf15f150cd7da614b15262dce17947",
+          "patched_sha256": "9656957357827d104c06fd38603a733907834220d578db4217f4219b19e53d0e",
+          "reason": "Remove trailing whitespace in an upstream Rustdoc line."
+        },
+        {
+          "path": "src/legacy/kernels/time.rs",
+          "upstream_sha256": "b119aa225fe5ccded952eb4ec1b4d6bd7cfad7388fba94113ecc30d7f2b0b8e8",
+          "patched_sha256": "bd5ba1baf6aa1614eab63c57875a66e931ce55e9004c36aa669103198e135685",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/legacy/time_zone.rs",
+          "upstream_sha256": "002055a37d4262d6f20c2bc9bf38e8a2ccbbcff91a9e5b5959bc7c8689d38be5",
+          "patched_sha256": "44a0451e932d694a2ddc98a4727dd2090512781062da68842cdc545b00ff46f6",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/temporal_conversions.rs",
+          "upstream_sha256": "6fbf642d8478a42247e48adc9912c064f4881c416108a8b347454c983fd02f43",
+          "patched_sha256": "71ffa34cf1219ba7fead00729244f3e646b702ee8fd8e940d21a107fce4c1683",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        }
+      ],
+      "upstream_vcs": {
+        "git": {
+          "sha1": "d7488c71ecfbc77790292ff5b365b991c08380ce"
+        },
+        "path_in_vcs": "crates/polars-arrow"
+      }
+    },
+    {
+      "name": "polars-compute",
+      "version": "0.55.2",
+      "license": "MIT",
+      "crate_sha256": "0b54be44ceacf1028fd8219b34c791ed4e1db852950f3eb7e10ba9bf63bbdb50",
+      "local_patches": [
+        {
+          "path": "Cargo.toml",
+          "upstream_sha256": "cbab5c1aa2d68da2de6f2d3c38662e25f2ded3f6ee578b81372499c20e98ea32",
+          "patched_sha256": "6b5209382f1487147cde140131a4b6715e525bd3ceaffed628756e7671a166d3",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        },
+        {
+          "path": "src/cast/temporal.rs",
+          "upstream_sha256": "f0e0a53780c98f5800cddb9b619ec7eff2efeebfe01fc4b52df24d73d2b0a6fb",
+          "patched_sha256": "9d5d8f368925186541e23690bcc9ec2c5cb995f5294ea78c7297ec7bd9bc6a7c",
+          "reason": "Backport Jiff temporal dependencies and conversions for Innovate's locked Polars profile."
+        }
+      ],
+      "upstream_vcs": {
+        "git": {
+          "sha1": "d7488c71ecfbc77790292ff5b365b991c08380ce"
+        },
+        "path_in_vcs": "crates/polars-compute"
+      }
+    },
+    {
       "name": "pulp",
       "version": "0.22.3",
       "license": "MIT",

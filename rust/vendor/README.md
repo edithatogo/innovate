@@ -7,11 +7,23 @@ consumer receives the same dependency graph. `gemm-f16` is retained for the
 upstream optional feature, even when the current Innovate graph does not enable
 it. Upstream licences, notices and original manifests are retained alongside
 each crate; `UPSTREAM.json` records the original archive checksums and revisions.
-The only local Rust source change is in `faer/src/sort.rs`: empty block-sort
+In `faer/src/sort.rs`, empty block-sort
 cursors initially point to their offset arrays instead of using null sentinels.
 The loop already reset each empty cursor to that array before dereferencing it;
 the new initialization makes that invariant explicit. `UPSTREAM.json` records
 the original and patched file hashes, and the audit check verifies the latter.
+
+The `polars-arrow` and `polars-compute` 0.55.2 sources carry a backport of
+the Jiff conversions from [Polars #29110](https://github.com/pola-rs/polars/pull/29110)
+at `e3d55b387184bf88cf61bca6acff6d8c02dfd7c5`, adapted to Jiff 1.0.3 and
+the published 0.55.2 sources. The workspace patch keeps the existing
+`polars-core` release and matches its Arrow and compute crate instances
+across the native bindings. It uses Jiff's bundled time-zone data for the
+locked Innovate profile. The audit inventory retains both original crate
+identities and the hashes of each changed source or manifest. Qualification
+applies to Innovate's declared feature set. Requalify against a published
+Polars replacement before changing that set or distributing independent Rust
+packages.
 
 Cargo advisory tools skip path dependencies. `Cargo.lock` in this directory is
 therefore an **audit inventory**, not a build lock: it records the original
