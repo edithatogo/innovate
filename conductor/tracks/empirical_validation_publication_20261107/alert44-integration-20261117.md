@@ -180,3 +180,28 @@ the full dependency graph. With both locked graphs, the new scope finds all
 nine Heapless advisories. The root audit also reports the two Chrono
 advisories, and its ban, license and source checks pass. The release gate
 still requires dependency remediation.
+
+## Current main and fuzz closure on 27 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` reconciled PR #684 in the
+clean recovery worktree
+`/Users/doughnut/Documents/Codex/innovate-pr684-recovery.LuWsjf/security`.
+Source commit `ac6fb48be0aa1ab74d31ef5515f0ef77b925bb2a` joins draft
+`eca089f3` with main `850ae266`. The JOSS and documentation records
+preserve the earlier claims and the newer signed Paignia review.
+Registry and JOSS readiness, the 71-input review contract and repository
+policy all passed, along with 137 focused tests and 28 subtests.
+
+Cargo 1.100.0 regenerated the fuzz lock from the revised core manifest.
+Offline and locked Linux x86-64 Cargo metadata resolved 237 workspace
+packages with all features and 156 fuzz packages. Heapless, Chrono,
+Chrono TZ and paste are absent from those active graphs and the tracked
+workspace, fuzz, games and vendor lockfiles. The fuzz lock digest is
+`f34076ad3f794d0751729c6ef15926b892361204c4fbb5cbb37dcb3300b3a1db`.
+PR #694's separate campaign changes depend on this reconciled source and
+must retain the same active lock. [Fuzz draft](https://github.com/edithatogo/innovate/pull/694)
+
+All 38 ledger entries still have bounded native evidence. Native and
+scientific acceptance reports for the exact release inventory and the
+aggregate signature remain open. Wheel smoke attestations retain their
+observed scope and source. [Evidence contract](release-evidence-contract.md)

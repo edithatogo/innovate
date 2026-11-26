@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition dated 26 November 2026. Source baseline
-`62328bd07c3ab904f5d560a3301540eb62c7a1e8` and development version `0.7.0a1`.
+Edition dated 27 November 2026. Source baseline
+`ac6fb48be0aa1ab74d31ef5515f0ef77b925bb2a` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,14 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Reconciled security source reassessment on 27 November 2026
+
+The combined source retains the reviewed Kairos state and scheduler integration,
+the current development tools and the native CI workflow. The regenerated fuzz
+lockfile follows the same core dependency graph. The draft's existing claim
+limits and all 38 release obligations still apply.
+[PR #684](https://github.com/edithatogo/innovate/pull/684)
 
 ## Actions dependency reassessment on 27 November 2026
 
@@ -66,6 +74,16 @@ preserved notebook source and removed execution output and empty cells.
 C01–C08 and P01–P06 retain their existing scope. Registry outcomes and
 submission remain pending. The PDF receipt identifies its earlier edition.
 [PR #708](https://github.com/edithatogo/innovate/pull/708)
+
+## Security integration source reassessment on 26 November 2026
+
+Four of the fourteen source inputs changed since the dependency follow-up.
+The core manifest and lock retain the Jiff and Polars backports and narrow the
+Kairos dependency to the existing entity state and scheduler crates. The
+native guide describes that same ownership boundary. The ledger still
+requires all 38 obligations and preserves the earlier adopter receipts at
+their recorded source. C01, C05, C06 and C07 retain their scope. The other
+ten source inputs retain their previous fingerprints. P01–P06 remain pending.
 
 ## Source reassessment on 26 November 2026
 

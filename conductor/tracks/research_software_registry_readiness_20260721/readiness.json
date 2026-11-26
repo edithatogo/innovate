@@ -2,13 +2,13 @@
   "schema_version": 1,
   "repository": "https://github.com/edithatogo/innovate",
   "parent_issue": 398,
-  "assessed_revision": "5f599a12d474af20f811e5baa6fcf21a18f29c1f",
+  "assessed_revision": "ac6fb48be0aa1ab74d31ef5515f0ef77b925bb2a",
   "software_version": "0.7.0a1",
   "input_sha256": {
     "CITATION.cff": "76d7e12849ce6db83e0e7585fe628652f65f035989ade25390b7421d9f417384",
     "LICENSE": "7a6194e77d58636a4bf07388d4ce05b615c34a3ff9a7c1f0bd0c8d434832a648",
     "pyproject.toml": "087de747fd99a9988e1decf4bec5b95848dee772448f014d1cfcad8ad89c8688",
-    "migration-ledger.json": "124bd8fdd1ac4158b4e41d8e307cf3f6b4b28c231730ee0311a06459636923d5"
+    "migration-ledger.json": "f82c1595401546954bf41c45c7e6cde6963f0ccbd26f1ce7685dc45cbc6b13b3"
   },
   "destinations": [
     {
