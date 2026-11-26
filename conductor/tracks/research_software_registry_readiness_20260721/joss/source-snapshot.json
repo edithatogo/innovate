@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "state": "unapproved_working_draft",
-  "software_revision": "ac6fb48be0aa1ab74d31ef5515f0ef77b925bb2a",
+  "software_revision": "6f818d103ae4b5499bd9ce97ec2e36e9497e134b",
   "software_version": "0.7.0a1",
   "submission_ready": false,
   "source_sha256": {
@@ -11,7 +11,7 @@
     "pyproject.toml": "087de747fd99a9988e1decf4bec5b95848dee772448f014d1cfcad8ad89c8688",
     "Cargo.toml": "32bec5c53a910a912972bf20b216a6a84f888ccc34277ee138ad031162f48e74",
     "Cargo.lock": "6bbce2fbc39606d0a9ac7cbbe7a4f6d45b493eaf4fe4b0ef6dc214e74527eb07",
-    "migration-ledger.json": "f82c1595401546954bf41c45c7e6cde6963f0ccbd26f1ce7685dc45cbc6b13b3",
+    "migration-ledger.json": "11bb28221b15d8ed96994631070b96d6f590ca1160823be153c32e95248b48cd",
     "conductor/product.md": "a69206d611af99b8a9e0c7d685f5fecd8b36570804b30ac63afd7908dba0f9e7",
     "conductor/release-gates-20261107.md": "e2e7cb2795cb33fe9c8568e760817c8b051aa196c261985ff22fbb675717788a",
     "docs/astro-site/src/content/docs/native-migration.md": "246dd3391f10ceb155e99f1e832e94e90a15376c33ec7c3a8973d34e61a1564b",
@@ -21,9 +21,9 @@
     ".github/workflows/ci.yml": "4dccab8e766ceb007c5ab1507900f7dc2ca4ffb63a453e69c542b32955cc3e0e"
   },
   "edition_sha256": {
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "94af31f60b2048c17b73d7ec7c39497b9b2c63a6720d50b203e74d108851572b",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "aa4f432418e7ef8d65e5c4d7d12043be5bff1deebcdd6d002b10d30812977dc8",
     "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "b0cbdb688b39af6a80f3348d33c88c1df6e0908d8d618490fa6871dcb4b59b3d"
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "b6a6c595cd6383c208583c577201381ed585ffee9b8f281cb41992b3fcd400d2"
   },
   "limitations": [
     "Source hashes bind this scoped assessment, not complete implementation coverage or scientific validity.",
