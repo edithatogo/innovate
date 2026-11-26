@@ -30,9 +30,10 @@ def test_declared_sdist_inputs_are_in_release_source_scope():
         "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/historical-initialization.json",
         "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/sarima-reference/stationary-fixed.json",
         "conductor/tracks/scientific_ecosystem_alignment_20261029/evidence/stl-reference-20261107/reference.json",
+        "validation/oracles/manifest.json",
     ],
 )
-def test_release_source_digest_tracks_packaged_reference(tmp_path, monkeypatch, reference):
+def test_release_source_digest_tracks_reference_inputs(tmp_path, monkeypatch, reference):
     spec = importlib.util.spec_from_file_location("migration_policy", ROOT / "scripts/check_migration.py")
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
@@ -69,7 +70,7 @@ def test_release_source_digest_tracks_packaged_reference(tmp_path, monkeypatch, 
     with pytest.raises(ValueError, match="clean source inputs"):
         module.release_source_digest()
     git("add", reference)
-    git("commit", "-m", "Change packaged reference")
+    git("commit", "-m", "Change release reference")
     assert module.release_source_digest() != initial
 
 

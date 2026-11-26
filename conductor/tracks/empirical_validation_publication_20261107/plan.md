@@ -87,6 +87,19 @@ case ignored. The locally installed CPython 3.15.2 development wheel passed
 the retained Bass tests. Hosted artifact and release-scope qualification
 remain open in the respective tracks.
 
+## Release evidence for the analytic reference cases
+
+The non-publishing lane checks the independent Bass and Logistic limits and
+the Norton–Bass pre-launch condition against the declared inputs. The
+inputs have canonical SHA-256 fingerprints. The lane checks separate
+reference and native source bytes, includes the reference manifest in the
+release source digest and retains the installed test results under the
+artifact checksums. The installed package replays the same three manifest
+cases. Before the Norton–Bass second launch, the independent reference
+predicts 150.50007196371295 for the first generation and zero for the second.
+All three cases passed from the clean macOS arm64 release-mode installation.
+The full V01, Q04 and 38-obligation release assessments remain open.
+
 ## Issue #413 — warranted testing and CI gaps
 
 - [~] Reconcile the July DST/MT inventory, add bounded native metamorphic relations,
