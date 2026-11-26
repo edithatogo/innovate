@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
 Edition dated 26 November 2026. Source baseline
-`5f599a12d474af20f811e5baa6fcf21a18f29c1f` and development version `0.7.0a1`.
+`62328bd07c3ab904f5d560a3301540eb62c7a1e8` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,14 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Actions dependency reassessment on 27 November 2026
+
+The reviewed native CI workflow updates the pinned Harden Runner and
+tool-installer actions. The existing native test matrix, commands and
+acceptance conditions remain in effect. The other thirteen source
+fingerprints match the previous assessment. The claim dispositions retain
+their existing scope. [PR #711](https://github.com/edithatogo/innovate/pull/711)
 
 ## Zizmor dependency reassessment on 26 November 2026
 

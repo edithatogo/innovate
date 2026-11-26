@@ -36,8 +36,10 @@ every observed commitment.
 
 [Native CI](https://github.com/edithatogo/innovate/actions/workflows/ci.yml)
 checks the application’s own payoff construction and replays the two
-declared graphs with the signed provider. The retained evidence covers all
-choices, both profits, source bindings and asserted RDF output. The
+declared graphs with the signed provider. Both routes check the same
+independent oracle for each ordered action and all eight terminal payoff
+pairs. They verify both complete policies, realised profits, source bindings
+and asserted RDF output. The
 perfect-information projection rejects a shared follower information set.
 [Baseline graph](pricing-v1/base.nt) · [Launch-cost graph](pricing-v1/cost.nt)
 
@@ -46,6 +48,6 @@ perfect-information projection rejects a shared follower information set.
 | Caller family | Disposition |
 | --- | --- |
 | `solve_normal_form_innovation_game` | Finite Nash pricing uses Paignia's pure solver. Innovate owns ordered offers and demand-derived payoffs. |
-| `solve_extensive_innovation_game` | The observed-price commitment uses Paignia’s contingent policy. This receipt covers the two synthetic cost cases. |
+| `solve_extensive_innovation_game` | Native tests verify the wrapper returns the same complete pricing policies and profits as `backward_induction_result` in both cases. The RDF receipt replays the versioned result route. |
 | Demand, Bass and logistic adoption | The application owns demand estimation and diffusion trajectories. Their runtime and independent prediction contracts are distinct from the finite equilibrium interface. |
 | Continuous competing adoption | The separate trajectory reference needs its own matched state, rate and time contract. [Innovate #724](https://github.com/edithatogo/innovate/issues/724) |

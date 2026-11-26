@@ -135,7 +135,8 @@ Acceptance: New target: selected core model compiles/runs without Arrow when unu
 
 ## I07: Qualify the optional domain-game profile
 
-- [x] I07 Qualify the finite pricing declaration and signed provider replay.
+- [~] I07 Qualify the domain-game profile. Finite pricing is verified. The
+  continuous diffusion/adoption declaration and trajectory remain in #724.
 
 Executor: specialist. Requires: UOGTO executable profile and generic Rust game package.
 
