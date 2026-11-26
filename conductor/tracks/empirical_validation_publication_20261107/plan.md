@@ -72,6 +72,21 @@ Its original wheel, source archive and checksums passed readback. The same
 installed wheel passed ordinary and weighted Voiage EVPI handoff tests.
 [Run 45763517360](https://github.com/edithatogo/innovate/actions/runs/45763517360)
 
+## Logistic, Gompertz and Fisher–Pry scientific verification
+
+The follow-up to the Bass packet uses the same installed consumer. Decimal
+references fix the scaled levels and derivatives in the tails. Before the
+fix, all three models lost positive values to overflow or premature rounding.
+The comparison preserves the original `fit_quality.rs` noise pattern, training
+cutoff and per-family tolerances for fit recovery and held-out prediction.
+It exercises the shared scalar implementation from the published Python API.
+
+Rust 1.100.0 passed 130 selected native tests with the inherited live OECD
+case ignored. The locally installed CPython 3.15.2 development wheel passed
+17 selected cases, including the independent tail and held-out checks and
+the retained Bass tests. Hosted artifact and release-scope qualification
+remain open in the respective tracks.
+
 ## Release evidence for the analytic reference cases
 
 The non-publishing lane checks the independent Bass and Logistic limits and
