@@ -53,11 +53,8 @@ def validate_oracle_manifest(manifest: dict[str, Any]) -> list[str]:
     entries = manifest.get("oracles")
     if not isinstance(entries, list) or not entries:
         return ["missing oracle cases"]
-    if (
-        sorted(entry.get("model", "") for entry in entries if isinstance(entry, dict))
-        != ["bass", "logistic", "norton_bass"]
-        or len(entries) != 3
-    ):
+    models = [entry.get("model") for entry in entries if isinstance(entry, dict)]
+    if len(entries) != 3 or any(models.count(model) != 1 for model in ("bass", "logistic", "norton_bass")):
         return ["required oracle cases must each occur once"]
     for idx, entry in enumerate(entries):
         try:
@@ -96,3 +93,10 @@ def test_invalid_independence_tolerance_inputs_and_result_are_caught(field, valu
     candidate = copy.deepcopy(manifest)
     candidate["oracles"][0][field] = value
     assert any(message in error for error in validate_oracle_manifest(candidate))
+
+
+@pytest.mark.parametrize("replacement", ["bass", ["norton_bass"], None])
+def test_missing_or_malformed_model_coverage_is_rejected(replacement):
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest["oracles"][-1]["model"] = replacement
+    assert validate_oracle_manifest(manifest) == ["required oracle cases must each occur once"]
