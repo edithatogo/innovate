@@ -80,7 +80,7 @@
   },
   "fingerprint_encoding": "sha256 of UTF-8 bytes with CRLF normalized to LF",
   "source_files": {
-    "Cargo.toml": "2f22f7a075467934df9e710bfb087b89958b6b069de9d15814b6ee1ee2ba9959",
+    "Cargo.toml": "32bec5c53a910a912972bf20b216a6a84f888ccc34277ee138ad031162f48e74",
     "bindings/julia/src/Innovate.jl": "be3b798ac602e29685673fc37a8c2282faa3ac51dca7b5c64eb7ee0c040023ca",
     "bindings/python/innovate/__init__.py": "522871fe0b61b840b5f85b8f278beb2b79c7afd68645265ae3a68983d56d74e4",
     "bindings/r/R/kernel_bridge.R": "45d365fff417f0e09ae809598c1b38dbba5e4ab5cd4f9dce7b900a4910fbdb77",
@@ -89,7 +89,7 @@
     "docs/astro-site/src/components/ModelCatalogue.astro": "e64221e75f574d87d342539056e34bdcc61d1e056060c38a4ef7567a3e23abe6",
     "docs/astro-site/src/components/TutorialCatalogue.astro": "d6e990dd4c8885cfbd330c49365e0804554c95aec2860d934fcdc33a4feb453c",
     "docs/astro-site/src/content/docs/api/python.md": "e13d6d0cc9f8f7b89ff68436d97bb73d3ae5438cd95184e0240fc7d60ddd64f3",
-    "docs/astro-site/src/content/docs/bindings/rust.md": "429d4419ed0388958e5497a6ec68a2b67bf36a8fea74f03d8d10a89382e68a2c",
+    "docs/astro-site/src/content/docs/bindings/rust.md": "f7ada164077e83ff253b8ac05dce4dd8025a607bc3956d8a90d5ecd933746e7f",
     "docs/astro-site/src/content/docs/core/arrow-interchange.md": "513150b1658e0215b839bf0608eea9271488979a122f532ce2b9095298af842d",
     "docs/astro-site/src/content/docs/core/index.md": "d7c401ab2ff4ae6b7880d6cb2ce351134e7eb406f5b4196d0a2967d65b0ff96f",
     "docs/astro-site/src/content/docs/core/kernel.md": "13cd1576a76a7541a20cd4ee700088b14972d6f2112324ecda2d4f5190ee9e84",
@@ -137,14 +137,16 @@
     "rust/crates/innovate-core/src/causal.rs": "393fd0d382014cb5f67afd29ede99265d4cadcded95d53b51537529fcb970765",
     "rust/crates/innovate-core/src/discovery.json": "935a5f0ca05209f6f74e859d629356b4f7dda338e38208f21e7a695abd31ff2b",
     "rust/crates/innovate-core/src/forcing.rs": "37c9e509bcc84b580dda3003d6e169cab69f352c0bacb4ddaafa3a8a3a261d8d",
-    "rust/crates/innovate-core/src/lib.rs": "36faf35baa3804ab2374543693a05815cb6fc0f56112f6e6c9531b22fb11632f",
+    "rust/crates/innovate-core/src/lib.rs": "6541b49ce4866f941e397d04455c92f948a0bad08c5b9496ab4e5c9463e125ba",
     "rust/crates/innovate-core/src/network.rs": "2e1f90b06d97b813c5038e42ff58c761df6a5ef654d4082e86123bfd49b3b523",
     "rust/crates/innovate-core/src/provenance.rs": "309832db89ae2b983b92d344bb561b782371f3bf25259d487d2ab02dabaf5102",
     "rust/crates/innovate-core/src/regime.rs": "fe0becb9a743333aa42d74322f087794bba7480525506b6546d083be79a5c17b",
-    "rust/crates/innovate-core/src/scenario.rs": "09a5a24c46cb39fc355e6ef378205df776e7b00ab7633b9970b02e87037a87d8",
+    "rust/crates/innovate-core/src/scenario.rs": "21e6ee25e4838baec7bc17c4fd6a01330d326aa4ecfc854f77a431962b5ed376",
     "rust/crates/innovate-core/src/simulation.rs": "fd3ef8614f5f303adbe8d6267c15ad9544fc4705cf901c1db762832754fcb94d",
     "rust/crates/innovate-ffi/src/lib.rs": "af0c0513e5658d18dc6958b0d1edc1753e5c02bd290d5369c208b1edc785afc7",
-    "rust/crates/innovate-games/Cargo.toml": "d2d4d1161bdc7a6d3283bb2d5219d27341387361fc37de5dde40f29e159202e6",
+    "rust/crates/innovate-core/Cargo.toml": "e4d86f76917305ec56b55ef441fd0a220fa85008cec8b057132ba58883c5bf48",
+    "rust/crates/innovate-demand/Cargo.toml": "6ca015367292a4534b00307c5da60980e89b6b09e593ad822df20c2b90e5fdfe",
+    "rust/crates/innovate-games/Cargo.toml": "c71857b2a2bc9dc466d5e96df3adfea1e2918e4ee07f07a607bd7d517f96396b",
     "rust/crates/innovate-kairos/Cargo.toml": "2f18ab798dc4adf66d7f499b1471ea9eb9a156e2d922c634d718b1eab8aa3ee1"
   },
   "references": [
@@ -757,7 +759,7 @@
       "id": "integration-rust-workspace-scope",
       "page": "docs/astro-site/src/content/docs/bindings/rust.md",
       "prompt": "Does a passing root cargo doc --workspace or workspace doctest result qualify innovate-games? Which adapter joins the root workspace?",
-      "expected_answer": "No. innovate-games is explicitly excluded and uses its own workspace, manifest and lockfile; it requires a separate recorded run. innovate-kairos is the fifth root workspace crate. Compiler and example execution do not establish scientific acceptance.",
+      "expected_answer": "Run innovate-games separately through its own workspace, manifest and lockfile. The root workspace explicitly lists five crates including innovate-kairos, and Cargo includes innovate-demand through the core path dependency. That gives six root members. Doctests run for eligible targets. Scientific acceptance requires its own evidence.",
       "answer_review": "agent_checked",
       "human_execution": "not_run"
     },
@@ -784,7 +786,8 @@
     "independent_migration_review": "Twelve current pages independently read against source at d732999; six imported expected outputs rechecked unchanged at 5f805f85cbd99be29be99f1077642c9cbf876cdb. Two tutorial paragraphs improved; no raw example changes.",
     "contract_checker": "The seven standard-library unittest cases passed on CPython 3.15.2 in the recovered integrated checkout. They cover fresh UTF-8/CRLF inputs, source drift, unsupported human claims, nested-cwd receipt output, imported-source linkage, reference IDs and duplicate JSON keys. The real 27-input review record also passed consistency and freshness validation; this does not certify scientific or pedagogical quality.",
     "pr671_source_drift_followup": "Agent source-to-claim follow-up at f34625288a5ed2ca786b1531f4ef82f97da08715 compared the four changed inputs with their previously fingerprinted bytes. Cargo.toml adds 16 vendor exclusions without changing the five members or the games exclusion; the Rust guide still reserves separate games qualification. The games manifest changes only the Paignia revisions, matching its lockfile. simulation.rs changes only provider revision metadata, matching the core manifest and lockfile; the tutorial limits replay to an identical request and installed runtime and makes no cross-version claim. The documentation-quality paragraph matches the diagnostic fingerprint and ratchet code, including the warning that guessable names are not secret. This source review does not rerun native simulations, establish upstream behavior or confer scientific, human or release acceptance. Earlier independent review and historical receipts retain their original source scope.",
-    "pr671_browser_contract_alignment": "17 November 2026 source-to-claim review at 1771dffb: the maintained Playwright spec checks current navigation, retirement routes, keyboard search and responsive accessibility. It asserts the removed Starlight version selector is absent, not that version switching functions. The documentation-quality browser-layer claim was corrected accordingly. The prior 1771dffb head passed 164/164 hosted Chromium cases and reviewed-source freshness; the new documentation-only change must be qualified on its own head. Neither result is human assistive-technology or live deployment acceptance."
+    "pr671_browser_contract_alignment": "17 November 2026 source-to-claim review at 1771dffb: the maintained Playwright spec checks current navigation, retirement routes, keyboard search and responsive accessibility. It asserts the removed Starlight version selector is absent, not that version switching functions. The documentation-quality browser-layer claim was corrected accordingly. The prior 1771dffb head passed 164/164 hosted Chromium cases and reviewed-source freshness; the new documentation-only change must be qualified on its own head. Neither result is human assistive-technology or live deployment acceptance.",
+    "pr696_dependency_source_review": "26 November 2026 source-to-claim review at 55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1. The workspace keeps its five members and the standalone games boundary. The two vendored Polars exclusions describe the existing Arrow and compute dependencies, whose locked backport passed the declared IPC and installed binding checks. The core manifest and dispatcher register Jiff-backed Gregorian calendar support. Scenario timestamp creation remains UTC and imports retain the RFC 3339 offset requirement and the supplied accepted timestamp. The scenario replay and comparison claims keep their existing bounds. Earlier independent reviews retain their original source scope. Human validation and empirical release qualification remain pending."
   },
   "recovery": {
     "reason": "The local execution environment became unavailable before these edits were committed.",
@@ -1163,13 +1166,16 @@
         "outcome": "no_blocking_findings_in_scoped_read",
         "checks": [
           "Compared the five named workspace packages with the root manifest and the Kairos package manifest.",
-          "Confirmed innovate-games is explicitly excluded and has its own manifest/workspace; the guide does not attribute workspace compiler/doctest qualification to it."
+          "Confirmed innovate-games is explicitly excluded and has its own manifest/workspace; the guide does not attribute workspace compiler/doctest qualification to it.",
+          "On 21 November, independently checked the updated guide against the manifests at b5cceb3f. The five explicit members and the demand path dependency give six effective members. The standalone games crate has its own lock, shares demand, and pins Paignia to bd880dd. The follow-up covers membership, dependency and command claims."
         ],
         "source_paths": [
           "docs/astro-site/src/content/docs/bindings/rust.md",
           "Cargo.toml",
           "rust/crates/innovate-kairos/Cargo.toml",
-          "rust/crates/innovate-games/Cargo.toml"
+          "rust/crates/innovate-games/Cargo.toml",
+          "rust/crates/innovate-core/Cargo.toml",
+          "rust/crates/innovate-demand/Cargo.toml"
         ],
         "references": []
       }

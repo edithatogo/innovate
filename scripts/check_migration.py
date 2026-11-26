@@ -24,6 +24,7 @@ SOURCE_PATHS = (
     "scripts",
     "specs",
     "tests",
+    "validation/oracles/manifest.json",
     "Cargo.toml",
     "Cargo.lock",
     "Dockerfile",

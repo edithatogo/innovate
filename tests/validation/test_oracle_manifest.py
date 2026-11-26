@@ -1,8 +1,9 @@
-"""V01 independent model-oracle registry validation tests."""
+"""Validate the versioned independent analytic reference cases."""
 
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -10,44 +11,97 @@ from typing import Any
 
 import pytest
 
+ROOT = Path(__file__).resolve().parents[2]
+MANIFEST = ROOT / "validation/oracles/manifest.json"
+
+
+def _file_sha256(path: str) -> str:
+    source = ROOT / path
+    if Path(path).is_absolute() or not source.resolve().is_relative_to(ROOT):
+        raise ValueError("reference and kernel sources must be inside the repository")
+    return hashlib.sha256(source.read_bytes()).hexdigest()
+
+
+def _check_value(entry: dict[str, Any], tolerance: float) -> None:
+    data = entry["input"]
+    match entry["model"], entry["source"]:
+        case "bass", "closed_form_exponential_limit_q_zero":
+            if data["q"] != 0.0:
+                raise ValueError("the Bass exponential limit requires q = 0")
+            expected = -data["m"] * math.expm1(-data["p"] * data["t"])
+            recorded = entry["expected"]
+        case "logistic", "closed_form_inflection_midpoint":
+            if data["t"] != data["x0"]:
+                raise ValueError("the Logistic midpoint requires t = x0")
+            expected = data["L"] / 2.0
+            recorded = entry["expected"]
+        case "norton_bass", "norton_bass_1987_conservation_identity":
+            if data["t"] >= data["tau2"]:
+                raise ValueError("this Norton–Bass case precedes generation-two launch")
+            p, q = data["p1"], data["q1"]
+            survival = math.exp(-(p + q) * data["t"])
+            first_generation = data["m1"] * p * (1.0 - survival) / (p + q * survival)
+            if not math.isclose(first_generation, entry["expected_gen1_before_launch"], abs_tol=tolerance, rel_tol=0.0):
+                raise ValueError("first generation disagrees with the analytic reference")
+            expected = 0.0
+            recorded = entry["expected_gen2_before_launch"]
+        case _:
+            raise ValueError("unrecognised reference")
+    if not math.isclose(expected, recorded, abs_tol=tolerance, rel_tol=0.0):
+        raise ValueError("recorded result disagrees with the analytic reference")
+
 
 def validate_oracle_manifest(manifest: dict[str, Any]) -> list[str]:
+    if manifest.get("schema_version") != "1.1":
+        return ["unsupported oracle manifest schema_version"]
     errors: list[str] = []
-    if manifest.get("schema_version") != "1.0":
-        errors.append("unsupported oracle manifest schema_version")
-    for idx, entry in enumerate(manifest.get("oracles", [])):
-        if entry.get("implementation_hash") == entry.get("kernel_hash"):
-            errors.append(f"oracles[{idx}] implementation_hash matches kernel_hash (not independent)")
-        tol = entry.get("tolerance")
-        if not isinstance(tol, (int, float)) or not math.isfinite(tol) or tol <= 0.0:
-            errors.append(f"oracles[{idx}] missing positive finite tolerance")
-        if not entry.get("input") or not entry.get("licence"):
-            errors.append(f"oracles[{idx}] missing input or licence")
+    entries = manifest.get("oracles")
+    if not isinstance(entries, list) or not entries:
+        return ["missing oracle cases"]
+    models = [entry.get("model") for entry in entries if isinstance(entry, dict)]
+    if len(entries) != 3 or any(models.count(model) != 1 for model in ("bass", "logistic", "norton_bass")):
+        return ["required oracle cases must each occur once"]
+    for idx, entry in enumerate(entries):
+        try:
+            if not entry.get("input") or not entry.get("licence"):
+                raise ValueError("missing input or licence")
+            tol = entry["tolerance"]
+            if not isinstance(tol, (int, float)) or not math.isfinite(tol) or tol <= 0.0:
+                raise ValueError("missing positive finite tolerance")
+            if _file_sha256(entry["reference_path"]) == _file_sha256(entry["kernel_path"]):
+                raise ValueError("reference and kernel have identical source bytes")
+            data = json.dumps(entry["input"], sort_keys=True, separators=(",", ":"), allow_nan=False)
+            if hashlib.sha256(data.encode()).hexdigest() != entry["input_sha256"]:
+                raise ValueError("input fingerprint differs")
+            _check_value(entry, tol)
+        except (KeyError, OSError, TypeError, ValueError) as error:
+            errors.append(f"oracles[{idx}]: {error}")
     return errors
 
 
 def test_checked_in_oracle_manifest_is_valid_and_matches_analytic_limits():
-    manifest = json.loads(Path("validation/oracles/manifest.json").read_text(encoding="utf-8"))
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert validate_oracle_manifest(manifest) == []
 
-    bass = manifest["oracles"][0]
-    inp = bass["input"]
-    analytic = inp["m"] * (1.0 - math.exp(-inp["p"] * inp["t"]))
-    assert abs(analytic - bass["expected"]) <= bass["tolerance"]
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("kernel_path", "tests/validation/test_oracle_manifest.py", "identical source bytes"),
+        ("tolerance", -1.0, "positive finite tolerance"),
+        ("input_sha256", "0" * 64, "input fingerprint differs"),
+        ("expected", 1.0, "disagrees with the analytic reference"),
+    ],
+)
+def test_invalid_independence_tolerance_inputs_and_result_are_caught(field, value, message):
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    candidate = copy.deepcopy(manifest)
+    candidate["oracles"][0][field] = value
+    assert any(message in error for error in validate_oracle_manifest(candidate))
 
 
-def test_non_independent_hash_unknown_tolerance_and_wrong_output_are_caught():
-    manifest = json.loads(Path("validation/oracles/manifest.json").read_text(encoding="utf-8"))
-
-    same_hash = copy.deepcopy(manifest)
-    same_hash["oracles"][0]["implementation_hash"] = same_hash["oracles"][0]["kernel_hash"]
-    assert validate_oracle_manifest(same_hash)
-
-    bad_tol = copy.deepcopy(manifest)
-    bad_tol["oracles"][0]["tolerance"] = -1.0
-    assert validate_oracle_manifest(bad_tol)
-
-    wrong_val = manifest["oracles"][1]["expected"] + 1.0
-    assert abs(wrong_val - 50.0) > manifest["oracles"][1]["tolerance"]
-    with pytest.raises(AssertionError):
-        assert abs(wrong_val - 50.0) <= manifest["oracles"][1]["tolerance"]
+@pytest.mark.parametrize("replacement", ["bass", ["norton_bass"], None])
+def test_missing_or_malformed_model_coverage_is_rejected(replacement):
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest["oracles"][-1]["model"] = replacement
+    assert validate_oracle_manifest(manifest) == ["required oracle cases must each occur once"]

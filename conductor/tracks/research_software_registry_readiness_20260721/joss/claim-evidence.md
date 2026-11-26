@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition: 18 November 2026; source baseline
-`20fe0b41b815bc926fc3d61b9672c3d4b2feb289`; development version `0.7.0a1`.
+Edition dated 26 November 2026. Source baseline
+`263dc706c5598e463d5b53284e020bf496a7fed4` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,50 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Notebook hook dependency reassessment on 26 November 2026
+
+The notebook hook update changes one of the fourteen reviewed inputs. The
+manifest raises the development-only pin to `0.9.2`. The lock retains the
+tool's dependency on `nbformat`, and the runtime dependency declarations
+match the previous assessment. On Python `3.15.2`, the repository hook
+preserved notebook source and removed execution output and empty cells.
+C01–C08 and P01–P06 retain their existing scope. Registry outcomes and
+submission remain pending. The PDF receipt identifies its earlier edition.
+[PR #708](https://github.com/edithatogo/innovate/pull/708)
+
+## Source reassessment on 26 November 2026
+
+The [dependency follow-up](https://github.com/edithatogo/innovate/commit/55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1)
+changes three of the fourteen reviewed inputs. The core manifest replaces
+Chrono with Jiff for calendar and scenario timestamps. The workspace manifest
+and lock select the vendored Polars Arrow and compute backport while retaining
+the five workspace members and the standalone games crate.
+
+C01 and C06 retain their Rust ownership, dependency reuse and registry
+publication limits. C05 retains its copying IPC, table validation and binding
+limits. The native calendar tests cover expanded Gregorian years, leap-second
+labels and fixed-offset UTC bucketing. The Rust IPC and installed Python checks
+exercise the affected interchange profile. C07 retains its model-time-grid
+and untrusted-input limits. The ledger still requires all 38 obligations.
+P01–P06 remain pending, and the render receipt remains tied to its earlier
+edition. [Dependency qualification](../../../archive/ci_supply_chain_hardening_20261115/plan.md#innovate-696-chrono-remediation--26-november-2026)
+
+## Source reassessment on 21 November 2026
+
+The [T17.10 consumer candidate](https://github.com/edithatogo/innovate/pull/696)
+at `5096bd3519a3a9503fefaf70af4da86656b11d3b` changes three
+of the fourteen inputs reviewed on 18 November. The other eleven match their
+recorded fingerprints.
+
+| Input | Claim disposition |
+| --- | --- |
+| `Cargo.lock` and `rust/crates/innovate-core/Cargo.toml` | The core now links the extracted native demand implementation through the local `innovate-demand` package. C01 and C06 retain their architecture and dependency scope. |
+| `.github/workflows/ci.yml` | The Linux job exercises the standalone pricing case and checks its dependency closure. The workflow declaration provides no receiving-head, research-use or release result. |
+
+The displayed source identity follows this review. The existing render receipt
+belongs to its dated source, and current rendering, author and release
+decisions are pending.
 
 ## Source-to-claim reassessment: 18 November 2026
 
