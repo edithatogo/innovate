@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition dated 21 November 2026. Source baseline
-`5096bd3519a3a9503fefaf70af4da86656b11d3b` and development version `0.7.0a1`.
+Edition dated 26 November 2026. Source baseline
+`55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,23 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Source reassessment on 26 November 2026
+
+The [dependency follow-up](https://github.com/edithatogo/innovate/commit/55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1)
+changes three of the fourteen reviewed inputs. The core manifest replaces
+Chrono with Jiff for calendar and scenario timestamps. The workspace manifest
+and lock select the vendored Polars Arrow and compute backport while retaining
+the five workspace members and the standalone games crate.
+
+C01 and C06 retain their Rust ownership, dependency reuse and registry
+publication limits. C05 retains its copying IPC, table validation and binding
+limits. The native calendar tests cover expanded Gregorian years, leap-second
+labels and fixed-offset UTC bucketing. The Rust IPC and installed Python checks
+exercise the affected interchange profile. C07 retains its model-time-grid
+and untrusted-input limits. The ledger still requires all 38 obligations.
+P01–P06 remain pending, and the render receipt remains tied to its earlier
+edition. [Dependency qualification](../../../archive/ci_supply_chain_hardening_20261115/plan.md#innovate-696-chrono-remediation--26-november-2026)
 
 ## Source reassessment on 21 November 2026
 

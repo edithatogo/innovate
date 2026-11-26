@@ -402,3 +402,12 @@ against an installed CPython 3.15.2 wheel, with the existing live OECD test
 skipped. Qualification covers Innovate's current Polars features, adapters
 and interchange contracts. Hosted qualification and scientific release
 readiness are tracked on [Innovate #696](https://github.com/edithatogo/innovate/pull/696).
+
+The follow-up assesses the same dependency source at `55221e23`. It
+refreshes the working JOSS draft's three changed source fingerprints and the
+documentation review of four source inputs. The API inventory now lists
+both vendored Polars crates outside the workspace member scope. All 249
+documentation contract tests passed, as did the JOSS snapshot and migration
+policy tests and generated API reference check on Python 3.15.2. The draft
+remains in review. The release command still fails closed with the same 38
+scientific obligations.
