@@ -122,6 +122,28 @@ The full V01, Q04 and 38-obligation release assessments remain open.
   This is a bounded Q01/Q02 contribution; their complete native safety, installed
   matrix and scientific acceptance obligations remain open.
 
+## Symmetric competing-product reference
+
+The [A04 receiving case](https://github.com/edithatogo/innovate/issues/724)
+uses two products with equal initial adoption of 25 and shared capacity 100.
+Both enter at the origin. The external adoption and cross-effect coefficients
+are zero and each imitation rate is ln(3). Summing the two rate equations
+gives logistic growth from total adoption 50. At one time unit the total is
+75 and each product has adopted 37.5 units. Each initial derivative is
+12.5 ln(3) units per time unit.
+
+The test passes the native A04 rate function to the existing Dormand–Prince
+integrator. On Rust 1.100.0 at base `6cb044646da7`, the maximum total error at
+the four checkpoints was 3.73 × 10⁻⁸ against the 10⁻⁶ limit. The two products
+remained equal and the solver used 123 rate evaluations against a budget of
+512. The two existing competition conservation tests also passed.
+
+Run `cargo test --locked -p innovate-core --lib symmetric_trajectory_matches_the_closed_form_logistic_reference -- --nocapture`
+and `cargo test --locked -p innovate-core --test competition_conservation`.
+This qualifies the synthetic symmetric case. Staggered entry and asymmetric
+interactions need their own trajectory references. The continuous UOGTO
+mapping, Paignia receiving contract and empirical acceptance remain open.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
