@@ -96,6 +96,29 @@ and chooses its own offer. Innovate's native multinomial-logit shares and
 margin calculations supply both firms' terminal profits. Paignia returns
 a contingent policy with its versioned tolerance and selection rule.
 
+### Pricing commitment intake
+
+The shared intake key is `finite-perfect-information` and the synthetic
+specification ID is `urn:innovate:price-commitment:1`. The contingent policy
+includes the follower's response to each observed commitment. Payoffs are
+modelled profits ordered by the committing firm and the follower.
+[Reviewed constructor](https://github.com/edithatogo/innovate/blob/d892137df19396e42c63a54f27c5fac68451cb0a/rust/crates/innovate-games/src/lib.rs)
+
+- **UOGTO `mapping_review_pending`.** The finite declaration profile supplies
+  candidate terms for the specification, extensive-form representation and
+  perfect information. The Innovate game-profile owner will use I07 to pin and
+  validate the full-IRI declaration for the decision order, observations and
+  paired profits, using both synthetic cost cases below.
+  [UOGTO intake](https://github.com/edithatogo/UOGTO/blob/b3f1de0119ee1c1e49913d9c1f9284e053e43433/docs/contracts/downstream-game-intake.md#semantic-intake-register)
+  [Finite declaration profile](https://github.com/edithatogo/UOGTO/blob/b3f1de0119ee1c1e49913d9c1f9284e053e43433/docs/contracts/executable-game-subset-v1.md)
+- **Paignia `reuse_existing`.** The adapter uses `GameSpecification` and
+  `backward_induction_result` at `bd880dd756d2ba56cc5f479bc078cea31b53c1d1`
+  under `paignia/static-finite-perfect-information-sparse-zero/1.0.0`.
+  The finite two-firm fixture declares a payoff for each firm at every terminal
+  and uses the solver's ordered actions and tie tolerance.
+  [Paignia intake](https://github.com/edithatogo/paignia/blob/8c17466cd9ca062b897eaa72a6780edc08375885/docs/integrations/downstream-game-intake.md#initial-provider-intake)
+  [Accepted consumer receipt](https://github.com/edithatogo/paignia/blob/8c17466cd9ca062b897eaa72a6780edc08375885/docs/validation/receipts/t17-innovate-price-commitment-linux-x64.json)
+
 For equal qualities, the synthetic case uses 100 demand units and a price
 coefficient of `−ln(2)`. The offers at prices 1 and 3 receive weights `1/2`
 and `1/8`. With the outside-option weight 1, the independent shares are
