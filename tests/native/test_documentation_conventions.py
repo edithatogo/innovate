@@ -239,7 +239,7 @@ class RustWorkspaceScopeTests(unittest.TestCase):
                 self.assertNotIn("innovate-games", scope["workspace_crates"])
                 self.assertEqual(scope["excluded_crates"], self.contract["rust"]["excluded_crates"])
                 self.assertNotIn("innovate-games", scope["workspace_crates"])
-                self.assertEqual(len(scope["excluded_crates"]), 17)
+                self.assertEqual(len(scope["excluded_crates"]), 19)
                 self.assertEqual(scope["excluded_crates_qualification"], "not_qualified_by_workspace_commands")
                 self.assertEqual(scope["compiler_and_doctests"], "not_executed")
                 self.assertEqual(report["rust_status"], "not_executed")
