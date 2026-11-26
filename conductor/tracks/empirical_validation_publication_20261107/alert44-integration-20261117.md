@@ -205,3 +205,40 @@ All 38 ledger entries still have bounded native evidence. Native and
 scientific acceptance reports for the exact release inventory and the
 aggregate signature remain open. Wheel smoke attestations retain their
 observed scope and source. [Evidence contract](release-evidence-contract.md)
+
+## Historical replay locks on 27 November 2026
+
+The two standalone CodeQL workspaces use dependency backports of their
+three original core revisions. The Jiff calendar and Kairos state
+adapter replace Chrono and the spatial dependency path that brought in
+Heapless. The original Kairos revisions, replay probes and fixtures are
+preserved. The original manifests and lockfiles are recoverable from
+`cc2e4da4af9c848043b31f1191c9d96212048276` by the hashes recorded in the
+[CodeQL context documentation](../../../tools/codeql-evidence/README.md).
+
+Locked offline Cargo metadata resolved 71 network packages and 41
+scenario packages on Linux x86-64. The network and scenario locks have
+SHA-256 values
+`3e7d368d09a5f58971d1c9da91fc954c246d7f30faff9b759c7bdb501514cb45`
+and `1b72e5c35244c25a0e4c3e2da3c171b27b6a3aff2bbe68eaa75c96dfabd89bac`.
+On macOS ARM64, the Git-pinned network contexts reproduced all 160
+full-response comparisons and the original output SHA-256
+`47e3e6aeec589cc73ba5a17b4518c192a1db328b4e0b57e8e41e8a515ce99c80`.
+The Git-pinned historical scenario producer matched all 24 retained
+result sets. The existing installed Python, Julia and R bindings
+replayed the 24 scenarios and preserved the five legacy seed tokens.
+The Python wheel also passed 16 analytic substitution cases.
+
+The adopter-classification ledger entry now references its native and
+scientific reports. The source inventory is still
+`a775210e7bd324ebb353787f2f9076d1295561912937b653dbdff9fb832ac38d`.
+The three existing wheel attestations verified for that inventory.
+The release gate still requires the other 37 obligations and an
+aggregate attestation. [Evidence contract](release-evidence-contract.md)
+
+The signed macOS wheel reran the sparse-transition Logistic coverage
+experiment with 40 trials and 200 refits per trial. At nominal 95%,
+capacity coverage was 33/40 for paired resampling and 27/40 for centered
+residual resampling. All baseline fits converged. Calibration therefore
+remains open. Multi-node and accelerator qualification also remain
+outstanding under the release ledger.
