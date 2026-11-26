@@ -2153,6 +2153,17 @@ def test_adopter_classification_matches_exact_weighted_moments():
     rng = random.Random(401)
     cases = [(sorted(rng.sample(range(-300, 301), 16)), [rng.randrange(31) for _ in range(16)]) for _ in range(512)]
     cases.extend((list(range(5)), weights) for weights in product(range(5), repeat=5) if any(weights))
+    grids = ([0, 1, 5, 11, 17, 47], [-8, -5, -1, 0, 2, 17], [-8, -1, 0, 1, 2, 8])
+    weights = (
+        [0, 1, 5, 11, 5, 1],
+        [2.0**-1000, 2.0**-500, 1.0, 2.0**500, 2.0**1000, 2.0**500],
+        [2.0**1000, 1.0, 2.0**-1000, 0, 1, 1],
+    )
+    cases.extend(
+        ([math.ldexp(t, exponent) for t in grid], rates)
+        for grid, rates, exponent in product(grids, weights, (-1000, 0, 1017))
+    )
+    cases.append(([0.0, 1.0, 2.0], [2.0**-500, 2.0**500, 0.0]))
     for time, rates in cases:
         result = innovate.execute("categorize_adopters", time=time, adoption_rate=rates)["result"]
         assert result["category"] == _exact_adopter_categories(time, rates), (time, rates)

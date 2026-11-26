@@ -141,6 +141,22 @@ mod tests {
     }
 
     #[test]
+    fn dominant_weight_keeps_the_direction_of_the_mean_shift() {
+        let tail = 2_f64.powi(-120);
+        let time = [0., 1., 2.];
+        // The heavier tail shifts the exact mean to that side of 1. The shift
+        // is smaller than the standard deviation but larger than zero.
+        assert_eq!(
+            classify_adopters(&time, &[tail, 1., tail / 4.]).unwrap(),
+            ["Innovators", "Late Majority", "Laggards"]
+        );
+        assert_eq!(
+            classify_adopters(&time, &[tail / 4., 1., tail]).unwrap(),
+            ["Innovators", "Early Majority", "Laggards"]
+        );
+    }
+
+    #[test]
     fn zero_weight_extremes_do_not_compress_weighted_time_grid() {
         let tiny = f64::from_bits(1);
         assert_eq!(
