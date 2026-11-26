@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "scientific_acceptance",
+  "source_commit": "a0d158224eb70e25cabebceed5cafd9718436cf8",
+  "source_sha256": "a775210e7bd324ebb353787f2f9076d1295561912937b653dbdff9fb832ac38d",
+  "status": "passed",
+  "results": {
+    "adopter_classification": {
+      "passed": 1102,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    }
+  },
+  "date": "2026-11-27",
+  "scope": "Sample-weighted historical labels on strictly increasing finite time grids with aligned nonnegative finite weights of positive total mass. This scope includes user-supplied weights and the supported fitted single-rate adapter.",
+  "reference": "Exact rational mean and centered variance on the binary64 inputs, with inclusive category boundaries. The fitted Logistic case uses independently calculated analytic levels and rates.",
+  "cases_sha256": "aa4bb6db768641b7905bd4ccaa91ba606ab66bf083aaffc5d2efd2f499123f30",
+  "cases": {
+    "signed_wheel_direct": 765,
+    "additional_direct": 336,
+    "fitted_logistic": 1
+  },
+  "native_report": "native.json",
+  "review": "Automated replay of the existing adopter-classification qualification scope."
+}

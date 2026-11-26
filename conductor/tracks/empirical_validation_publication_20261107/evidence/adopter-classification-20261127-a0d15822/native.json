@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "native_execution",
+  "source_commit": "a0d158224eb70e25cabebceed5cafd9718436cf8",
+  "source_sha256": "a775210e7bd324ebb353787f2f9076d1295561912937b653dbdff9fb832ac38d",
+  "status": "passed",
+  "cases_sha256": "aa4bb6db768641b7905bd4ccaa91ba606ab66bf083aaffc5d2efd2f499123f30",
+  "fixture_generator_sha256": "7137e568a55a643475d0d79c1abc2cd291c836d2147b2d901c99810c5661ace3",
+  "platform": "macos-arm64",
+  "local_rust_version": "1.100.0",
+  "local_native_library_sha256": "b0b0a9191d9c7285b6d9d8c2f990438dd3843d13ce38f0cd976f06650aa7d59d",
+  "local_executions": {
+    "python": {
+      "runtime": "3.15.2",
+      "artifact_sha256": "4df9d51cbc2a598fd685ccd41def6b5ea3afb8b7315ed04569acc27868d632f5",
+      "report": "python.log",
+      "report_sha256": "467ec1403981571b5bb9888b51e5ae6992b0ed67ee7084843afe207cbf1928c5",
+      "replay_sha256": "3300e73b864afa2d1a7e348d3d8200a2344d490cbae20f4541d97e2241dd6415"
+    },
+    "julia": {
+      "runtime": "1.13.4",
+      "artifact_sha256": "b0b0a9191d9c7285b6d9d8c2f990438dd3843d13ce38f0cd976f06650aa7d59d",
+      "report": "julia.log",
+      "report_sha256": "c6894961ea288e9997abfb5bf3bb2021302dfbeadc697cb8a3ddf4b207e23741",
+      "replay_sha256": "1c58107856e628184d4042be9f1c5d2adf225ad5703e4def8d75db34a8f89219"
+    },
+    "r": {
+      "runtime": "4.3.0",
+      "artifact_sha256": "dfb0ba63aace089859dc105920bfaa8fdcda18f13147ceb2ab9721214b34b556",
+      "report": "r.log",
+      "report_sha256": "7555e0193a4a01963bc0cf052c1d7793c758e59fa716e6581e87d8a72b54fe44",
+      "replay_sha256": "6d784286e972710266c9b9fef4fde5dbaad0434110ec9c9038a64091ac79a449"
+    }
+  },
+  "installed_python_receipts": {
+    "github_run": 45891650893,
+    "source_commit": "a0d158224eb70e25cabebceed5cafd9718436cf8",
+    "signed_receipt_artifacts": {
+      "linux-x86_64": 15152267686,
+      "macos-arm64": 15152701080,
+      "windows-x86_64": 15152686177
+    }
+  },
+  "hosted_bundled_julia_r": {
+    "github_run": 45891480737,
+    "source_commit": "3d1c73a018f8674c7f8fe367c01c4e81663d1c57",
+    "jobs": {
+      "linux-x86_64": 140154988216,
+      "macos-arm64": 140154988092,
+      "windows-x86_64": 140154988073
+    }
+  },
+  "results": {
+    "adopter_classification": {
+      "passed": 3324,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0
+    }
+  }
+}
