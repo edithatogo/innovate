@@ -38,6 +38,11 @@ def _check_value(entry: dict[str, Any], tolerance: float) -> None:
         case "norton_bass", "norton_bass_1987_conservation_identity":
             if data["t"] >= data["tau2"]:
                 raise ValueError("this Norton–Bass case precedes generation-two launch")
+            p, q = data["p1"], data["q1"]
+            survival = math.exp(-(p + q) * data["t"])
+            first_generation = data["m1"] * p * (1.0 - survival) / (p + q * survival)
+            if not math.isclose(first_generation, entry["expected_gen1_before_launch"], abs_tol=tolerance, rel_tol=0.0):
+                raise ValueError("first generation disagrees with the analytic reference")
             expected = 0.0
             recorded = entry["expected_gen2_before_launch"]
         case _:
