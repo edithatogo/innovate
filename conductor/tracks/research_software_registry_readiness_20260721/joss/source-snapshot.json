@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "state": "unapproved_working_draft",
-  "software_revision": "5f599a12d474af20f811e5baa6fcf21a18f29c1f",
+  "software_revision": "62328bd07c3ab904f5d560a3301540eb62c7a1e8",
   "software_version": "0.7.0a1",
   "submission_ready": false,
   "source_sha256": {
@@ -18,12 +18,12 @@
     "rust/crates/innovate-core/Cargo.toml": "e4d86f76917305ec56b55ef441fd0a220fa85008cec8b057132ba58883c5bf48",
     "rust/crates/innovate-tabular/Cargo.toml": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
     "rust/crates/innovate-tabular/src/lib.rs": "d8fae4e66a9862f20eb28689b20b8eb66b5bac09f47927777ba3bbb593d56558",
-    ".github/workflows/ci.yml": "b9b2b7db0f161118838d49efc65aa684c64f4b754eb744474427669d73da8b85"
+    ".github/workflows/ci.yml": "44276f3ff762a63f7cfda6983cd2d68bdf5c5001d1201eb5221b61a3126e2cdf"
   },
   "edition_sha256": {
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "b28fe8c16b35e876c6dad713ef506be7435e9b21756568215f69858d6b93c0a5",
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "b44e873746be5fb68ca915aa89c2042fa187bb0c8f1510a00c891a6625e13465",
     "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.bib": "69ebbb5d1d7a1fe5ef8bb35d51a411573f07441584333e94fd09bf926d00969d",
-    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "efd7ebc61324c018933979709c36157d6c008d64bcc12ed38bf5b863b3c693a3"
+    "conductor/tracks/research_software_registry_readiness_20260721/joss/claim-evidence.md": "9bb1da0882a1fa54c8f03d851424986ad1dec4b50429360cd4e3ffacfa6be559"
   },
   "limitations": [
     "Source hashes bind this scoped assessment, not complete implementation coverage or scientific validity.",
