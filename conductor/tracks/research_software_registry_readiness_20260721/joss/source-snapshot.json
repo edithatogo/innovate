@@ -18,7 +18,7 @@
     "rust/crates/innovate-core/Cargo.toml": "e4d86f76917305ec56b55ef441fd0a220fa85008cec8b057132ba58883c5bf48",
     "rust/crates/innovate-tabular/Cargo.toml": "90d243b5711ee151b34584d18c7912f9650e5a56924c04cdbdfdce202032a664",
     "rust/crates/innovate-tabular/src/lib.rs": "d8fae4e66a9862f20eb28689b20b8eb66b5bac09f47927777ba3bbb593d56558",
-    ".github/workflows/ci.yml": "b9b2b7db0f161118838d49efc65aa684c64f4b754eb744474427669d73da8b85"
+    ".github/workflows/ci.yml": "2beb88984791e931060774ab620629502997b398b559da04d9df41c82381e0cd"
   },
   "edition_sha256": {
     "conductor/tracks/research_software_registry_readiness_20260721/joss/paper.md": "b28fe8c16b35e876c6dad713ef506be7435e9b21756568215f69858d6b93c0a5",
