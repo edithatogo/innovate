@@ -112,3 +112,12 @@ and retained evidence. It is not active root CI until the existing integrator
 adopts and executes it. The scoped negative tests live in
 `tests/native/test_scenario_wheel_build.py`; no scientific implementation,
 tolerance, shared pin or required quality gate is changed.
+
+## Serde boundary assessment — 18 November 2026
+
+The active Rust workspace already pins `serde` derive and `serde_json` with `float_roundtrip`, while the actual simulation/data paths use Kairos, numerical engines and Polars/Arrow. Rust FFI/Python adapters use JSON for bounded control contracts. **Retain current usage**: `serde` cannot replace tabular, simulation, networking or numerical dependencies. There is no evidence of a beneficial blanket migration.
+
+- [ ] Audit only actual repeated manual JSON in stable Rust/Python/FFI control contracts against the already-qualified Kairos 74/75 typed DTOs; do not introduce duplicate public schemas when one upstream contract already exists.
+- [ ] Freeze Unicode, duplicate keys, exact integer/floating point, nonfinite handling, schema version and error-contract fixtures; preserve scientific reproducibility and source identity in metadata alongside numerical output.
+- [ ] Test scientific output equivalence across Rust/Python/Arrow/Polars at pinned Kairos and package versions; no claims from Serde roundtrips alone.
+- [ ] Any justified adapter change must remain within its independently owned scientific/ecosystem lane, pass locked Cargo + Python ABI/consumer gates, review exact head and preserve existing scientific/publication acceptance boundaries.
