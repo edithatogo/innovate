@@ -1347,26 +1347,12 @@ fn bass_native_response(
         ));
     }
 
-    let scale = p.max(q);
-    let normalized_sum = p / scale + q / scale;
-    let log_sum = scale.ln() + normalized_sum.ln();
-    let log_ratio = q.ln() - p.ln();
+    let evaluate = crate::domain::bass_curve(p, q, m);
     let (predictions, rates): (Vec<_>, Vec<_>) = stable_payload
         .time
         .iter()
         .map(|&t| {
-            if t == 0. {
-                return (0., [m * p]);
-            }
-            let elapsed = (scale * t) * normalized_sum;
-            if elapsed == f64::INFINITY {
-                return (m, [0.]);
-            }
-            let odds = log_ratio - elapsed;
-            let log_denominator = odds.max(0.) + (-odds.abs()).exp().ln_1p();
-            let level = (m.ln() + (-(-elapsed).exp_m1()).ln() - log_denominator).exp();
-            // Evaluate the analytic derivative without forming q/p or squaring p+q.
-            let rate = (m.ln() + 2. * log_sum - p.ln() - elapsed - 2. * log_denominator).exp();
+            let (level, rate) = evaluate(t);
             (level, [rate])
         })
         .unzip();
@@ -1389,12 +1375,8 @@ fn bass_native_response(
 }
 
 fn bass_prediction_series(time: &[f64], p: f64, q: f64, m: f64) -> Vec<f64> {
-    time.iter()
-        .map(|t| {
-            let decay = (-(p + q) * t).exp();
-            m * (1.0 - decay) / (1.0 + (q / p) * decay)
-        })
-        .collect()
+    let evaluate = crate::domain::bass_curve(p, q, m);
+    time.iter().map(|&t| evaluate(t).0).collect()
 }
 
 #[derive(Debug, Clone)]

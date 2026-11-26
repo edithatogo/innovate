@@ -47,6 +47,31 @@ are recorded in the [M01 handoff](m01-source-qualification-20261116.md#review-of
 and [integration review](integration-review-20261117.md). Partial source does
 not satisfy dependent task acceptance.
 
+## Bass scientific verification
+
+The first V01 and A01 packet starts from Innovate `05750f4e3044` on
+`codex/bass-qualification-20261126`. Chat `01a1f635-4bc4-73f0-b6f2-2d2541bb46a0` owns this branch. The branch owns the Bass scalar
+calculation, focused reference tests and this evidence entry. Q04, the
+38 required ledger obligations and release promotion retain their existing
+ownership and acceptance criteria.
+
+For cumulative adoption fraction \(F\), the Bass model satisfies
+\(F'=(p+qF)(1-F)\) with \(F(0)=0\). Integration gives
+\(F=p(1-e^{-(p+q)t})/(p+qe^{-(p+q)t})\). The installed Python tests
+evaluate the level and the ODE derivative with 75-digit decimal arithmetic.
+They retain the zero-imitation limit, nonzero imitation and extreme rate
+scales, then fit two noiseless irregular grids in different units and compare
+held-out levels and rates. The rate and level comparison uses relative
+tolerance `1e-12`. Recovery and held-out predictions use `1e-5`, the
+existing parameter-recovery tolerance. The native stress fixture catches
+the previous overflow in `q/p` and avoids losing market-scaled predictions
+when elapsed time underflows.
+
+The earlier release dry run used Innovate `05750f4e30445712f66d9ee9f6ce9393305ddde5`.
+Its original wheel, source archive and checksums passed readback. The same
+installed wheel passed ordinary and weighted Voiage EVPI handoff tests.
+[Run 45763517360](https://github.com/edithatogo/innovate/actions/runs/45763517360)
+
 ## Release evidence for the analytic reference cases
 
 The non-publishing lane checks the independent Bass and Logistic limits and
