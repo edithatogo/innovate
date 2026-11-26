@@ -712,18 +712,14 @@ fn logistic_summary_or_diagnose_response(
                     "time and observed arrays must have the same length",
                 ));
             }
-            let predicted: Vec<f64> = times
-                .iter()
-                .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-                .collect();
+            let predict = crate::models::logistic::curve(l, k, x0);
+            let predicted: Vec<f64> = times.iter().map(|&t| predict(t).0).collect();
             let diagnostics = summary_diagnostics_value(times, values, &predicted, "LogisticModel");
             (predicted, Some(diagnostics))
         }
         (Some(times), None) => {
-            let predicted: Vec<f64> = times
-                .iter()
-                .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-                .collect();
+            let predict = crate::models::logistic::curve(l, k, x0);
+            let predicted: Vec<f64> = times.iter().map(|&t| predict(t).0).collect();
             (predicted, None)
         }
         (None, Some(_)) => {
@@ -889,10 +885,8 @@ fn fit_logistic_curve(
         })
         .unwrap_or((best_sse, best_l, best_k, best_x0));
 
-    let predictions: Vec<f64> = time
-        .iter()
-        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-        .collect();
+    let predict = crate::models::logistic::curve(l, k, x0);
+    let predictions: Vec<f64> = time.iter().map(|&t| predict(t).0).collect();
 
     let _ = sse;
 
@@ -945,10 +939,8 @@ fn fit_logistic_at_asymptote(
         return None;
     }
 
-    let predictions: Vec<f64> = time
-        .iter()
-        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-        .collect();
+    let predict = crate::models::logistic::curve(l, k, x0);
+    let predictions: Vec<f64> = time.iter().map(|&t| predict(t).0).collect();
     let sse = observed
         .iter()
         .zip(predictions.iter())
@@ -1123,19 +1115,14 @@ fn logistic_native_response(
     let l = required_f64(parameters, "L", operation)?;
     let k = required_f64(parameters, "k", operation)?;
     let x0 = required_f64(parameters, "x0", operation)?;
-    let predictions: Vec<f64> = time
+    let predict = crate::models::logistic::curve(l, k, x0);
+    let (predictions, rates): (Vec<_>, Vec<_>) = time
         .iter()
-        .map(|t| l / (1.0 + (-k * (t - x0)).exp()))
-        .collect();
-
-    let rates: Vec<_> = time
-        .iter()
-        .map(|t| {
-            let tail = (-(k * (t - x0)).abs()).exp();
-            let denominator = 1. + tail;
-            [(l * tail / denominator) * (k / denominator)]
+        .map(|&t| {
+            let (level, rate) = predict(t);
+            (level, [rate])
         })
-        .collect();
+        .unzip();
 
     Ok(KernelResponse {
         schema_version: KERNEL_SCHEMA_VERSION.to_string(),
@@ -1253,20 +1240,15 @@ fn gompertz_predict_native_response(
     let a = required_f64(parameters, "a", operation)?;
     let b = required_f64(parameters, "b", operation)?;
     let c = required_f64(parameters, "c", operation)?;
-    let predictions = gompertz_prediction_series(&time, a, b, c);
-
-    let rates = time
+    let predict = crate::models::gompertz::curve(a, b, c);
+    let (predictions, rates): (Vec<_>, Vec<_>) = time
         .iter()
-        .zip(&predictions)
-        .map(|(t, level)| {
-            let z = b * (-c * t).exp();
-            [if z == f64::INFINITY {
-                0.
-            } else {
-                (level * z) * c
-            }]
+        .map(|&t| {
+            let (level, rate) = predict(t);
+            (level, [rate])
         })
-        .collect::<Vec<_>>();
+        .unzip();
+
     let mut result = kernel_array_payload(&predictions);
     result["rates"] = json!(rates);
 
@@ -1945,19 +1927,15 @@ fn fisher_pry_predict_native_response(
 
     let alpha = required_f64(parameters, "alpha", operation)?;
     let t0 = required_f64(parameters, "t0", operation)?;
-    let predictions: Vec<f64> = time
+    let predict = crate::models::logistic::curve(1.0, alpha, t0);
+    let (predictions, rates): (Vec<_>, Vec<_>) = time
         .iter()
-        .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
-        .collect();
-
-    let rates = time
-        .iter()
-        .map(|t| {
-            let tail = (-(alpha * (t - t0)).abs()).exp();
-            let denominator = 1. + tail;
-            [(tail / denominator) * (alpha / denominator)]
+        .map(|&t| {
+            let (level, rate) = predict(t);
+            (level, [rate])
         })
-        .collect::<Vec<_>>();
+        .unzip();
+
     let mut result = kernel_array_payload(&predictions);
     result["rates"] = json!(rates);
 
@@ -2075,10 +2053,8 @@ fn fisher_pry_fit_native_response(
         ));
     }
 
-    let predictions: Vec<f64> = time
-        .iter()
-        .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
-        .collect();
+    let predict = crate::models::logistic::curve(1.0, alpha, t0);
+    let predictions: Vec<f64> = time.iter().map(|&t| predict(t).0).collect();
     let prediction_payload = kernel_array_payload(&predictions);
     let diagnostics = fit_diagnostics(&time, &observed, &predictions, "FisherPryModel");
     let state = json!({
@@ -2207,19 +2183,15 @@ fn fisher_pry_summary_native_response(
                     "time and observed arrays must have the same length",
                 ));
             }
-            let predicted: Vec<f64> = times
-                .iter()
-                .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
-                .collect();
+            let predict = crate::models::logistic::curve(1.0, alpha, t0);
+            let predicted: Vec<f64> = times.iter().map(|&t| predict(t).0).collect();
             let diagnostics =
                 summary_diagnostics_value(times, values, &predicted, "FisherPryModel");
             (predicted, Some(diagnostics))
         }
         (Some(times), None) => {
-            let predicted: Vec<f64> = times
-                .iter()
-                .map(|t| 1.0 / (1.0 + (-alpha * (t - t0)).exp()))
-                .collect();
+            let predict = crate::models::logistic::curve(1.0, alpha, t0);
+            let predicted: Vec<f64> = times.iter().map(|&t| predict(t).0).collect();
             (predicted, None)
         }
         (None, Some(_)) => {
@@ -2459,9 +2431,8 @@ fn gompertz_summary_native_response(
 }
 
 fn gompertz_prediction_series(time: &[f64], a: f64, b: f64, c: f64) -> Vec<f64> {
-    time.iter()
-        .map(|t| a * (-(b * (-c * t).exp())).exp())
-        .collect()
+    let predict = crate::models::gompertz::curve(a, b, c);
+    time.iter().map(|&t| predict(t).0).collect()
 }
 
 struct GompertzFitResult {

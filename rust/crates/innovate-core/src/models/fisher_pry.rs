@@ -11,13 +11,13 @@ pub fn evaluate(time: &[f64], alpha: f64, t0: f64) -> Result<Vec<f64>, Innovatio
             "FisherPry requires finite alpha > 0 and finite t0",
         ));
     }
+    let predict = super::logistic::curve(1.0, alpha, t0);
     time.iter()
         .map(|&t| {
             if !t.is_finite() {
                 return Err(InnovationError::new("invalid_time", "time must be finite"));
             }
-            let val = 1.0 / (1.0 + (-alpha * (t - t0)).exp());
-            Ok(val.clamp(0.0, 1.0))
+            Ok(predict(t).0)
         })
         .collect()
 }

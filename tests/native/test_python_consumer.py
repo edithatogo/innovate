@@ -160,6 +160,64 @@ def test_bass_installed_fit_flags_weakly_identified_early_data():
     assert "parameters are locally rank deficient" in fit.diagnostics["warnings"]
 
 
+@pytest.mark.parametrize(
+    ("model", "parameters", "time"),
+    [
+        ("logistic", {"L": 1e300, "k": 1.0, "x0": 750.0}, [0.0, 10.0, 750.0, 1500.0]),
+        ("fisher_pry", {"alpha": 1.0, "t0": 710.0}, [0.0, 10.0, 710.0, 1420.0]),
+        ("gompertz", {"a": 1e300, "b": 1.0, "c": 1.0}, [-math.log(750), -math.log(740), 0.0, 1.0]),
+    ],
+)
+def test_classical_installed_tails_preserve_representable_levels_and_rates(model, parameters, time):
+    with localcontext() as context:
+        context.prec = 75
+        expected_levels, expected_rates = [], []
+        for t in map(lambda value: Decimal(str(value)), time):
+            if model == "gompertz":
+                exponent = (-t).exp()
+                level = Decimal("1e300") * (-exponent).exp()
+                rate = level * exponent
+            else:
+                market = Decimal(str(parameters.get("L", 1)))
+                midpoint = Decimal(str(parameters.get("x0", parameters.get("t0"))))
+                odds = (midpoint - t).exp()
+                level = market / (1 + odds)
+                rate = market * odds / (1 + odds) ** 2
+            expected_levels.append(float(level))
+            expected_rates.append(float(rate))
+
+    data = pl.DataFrame({"time": time})
+    assert innovate.predict(model, data, parameters)["prediction"].to_list() == pytest.approx(
+        expected_levels, abs=0.0, rel=1e-12
+    )
+    assert innovate.predict(model, data, parameters, quantity="rate")["rate"].to_list() == pytest.approx(
+        expected_rates, abs=0.0, rel=1e-12
+    )
+
+
+@pytest.mark.parametrize(
+    ("model", "expected_rank", "tolerance", "truth"),
+    [
+        ("logistic", 3, 1.0, lambda t: 120 / (1 + math.exp(-0.38 * (t - 12)))),
+        ("gompertz", 3, 1.0, lambda t: 120 * math.exp(-4 * math.exp(-0.16 * t))),
+        ("fisher_pry", 2, 0.01, lambda t: 1 / (1 + math.exp(-0.3 * (t - 12)))),
+    ],
+)
+def test_classical_installed_fit_forecasts_original_noisy_holdout(model, expected_rank, tolerance, truth):
+    # Same frozen inputs and per-family tolerances as fit_quality.rs.
+    noise = [0.8, -1.1, 0.4, -0.6, 1.3, -0.3]
+    observed = [truth(t) + tolerance * noise[t % len(noise)] for t in range(22)]
+    data = pl.DataFrame({"time": list(range(22)), "observed": observed})
+    fit = innovate.fit(model, data)
+    assert fit.envelope["metadata"]["runtime"] == "rust_native"
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.diagnostics["identifiability"]["rank"] == expected_rank
+
+    holdout = list(range(22, 31))
+    predicted = fit.predict(pl.DataFrame({"time": holdout}))["prediction"].to_list()
+    assert predicted == pytest.approx([truth(t) for t in holdout], abs=tolerance, rel=0.0)
+
+
 def test_unrepresentable_fit_sensitivities_fail_in_the_installed_native_library():
     with pytest.raises(innovate.NativeError, match="finite numerical domain"):
         innovate.execute(
