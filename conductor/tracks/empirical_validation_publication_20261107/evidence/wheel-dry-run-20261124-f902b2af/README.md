@@ -8,15 +8,16 @@ inventory SHA-256 is
 
 The GitHub archive digests, wheel hashes and original test reports were checked
 after download. Each platform passed 164 minimal and 42 Arrow cases without
-skips, including live OECD and adopter-classification cases. The reports and
-unsigned receipts are retained here; wheel archives remain workflow artifacts.
+skips, including live OECD and adopter-classification cases. GitHub CLI
+verified each signature against the original receipt, repository, release
+workflow and source commit. The original reports, receipts and signature
+bundles are retained here. The wheel archives remain workflow artifacts.
 
-| Target | Wheel artifact |
-| --- | --- |
-| linux-x86_64 | 14827811395 |
-| macos-arm64 | 14829141561 |
-| windows-x86_64 | 14828496734 |
+| Target | Wheel artifact | Signed receipt artifact |
+| --- | --- | --- |
+| linux-x86_64 | 14827811395 | 14831620857 |
+| macos-arm64 | 14829141561 | 14830363283 |
+| windows-x86_64 | 14828496734 | 14830741411 |
 
-The three signing jobs were queued when this packet was recorded. These
-bounded, unsigned results are not a signed release manifest or scientific
-acceptance. The readiness job in the same run failed on 37 obligations.
+The signatures cover the installed wheel tests on the recorded source.
+The release readiness job in the same run failed on 37 obligations.
