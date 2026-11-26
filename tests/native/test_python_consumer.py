@@ -260,7 +260,7 @@ def test_kairos_metadata_identifies_the_locked_provider(engine):
     root = Path(__file__).resolve().parents[2]
     manifest = tomllib.loads((root / "rust/crates/innovate-core/Cargo.toml").read_text(encoding="utf-8"))
     lock = tomllib.loads((root / "Cargo.lock").read_text(encoding="utf-8"))
-    direct_names = {"kairo-ecs-core", "kairo-ecs-rng", "kairo-ecs-types", "kairo-ecs-abm", "kairo-ecs-des"}
+    direct_names = {"kairo-ecs-core", "kairo-ecs-rng", "kairo-ecs-types", "kairo-ecs-state", "kairo-ecs-des"}
     dependencies = [manifest["dependencies"][name] for name in direct_names]
     revisions = {dependency["rev"] for dependency in dependencies}
     origins = {dependency["git"] for dependency in dependencies}
@@ -270,12 +270,14 @@ def test_kairos_metadata_identifies_the_locked_provider(engine):
     assert len(revision) == 40 and all(character in "0123456789abcdef" for character in revision)
     assert origin == "https://github.com/edithatogo/kairos.git"
     expected_source = f"git+{origin}?rev={revision}#{revision}"
-    names = direct_names | {"kairo-ecs-state"}
     packages = [
-        package for package in lock["package"] if package["name"] in names and package.get("source") == expected_source
+        package
+        for package in lock["package"]
+        if package["name"] in direct_names and package.get("source") == expected_source
     ]
-    assert len(packages) == len(names)
-    assert {package["name"] for package in packages} == names
+    assert len(packages) == len(direct_names)
+    assert {package["name"] for package in packages} == direct_names
+    assert {"kairo-ecs-abm", "heapless"}.isdisjoint(package["name"] for package in lock["package"])
 
     options = {"engine": engine, "seed": 42, "population": 3, "ticks_per_unit": 1}
     if engine == "kairos_network":
