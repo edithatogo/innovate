@@ -378,3 +378,27 @@ Chrono/Chrono-TZ version and recommends Jiff or Time as alternatives. A qualifie
 direct migration and a qualified Polars solution remain required; this is not
 a lockfile-only repair. No dependency, source, advisory exception, warning
 level, test expectation or acceptance status changes in this recheck.
+
+### Innovate #696 Chrono remediation — 26 November 2026
+
+The temporal migration pins Jiff 1.0.3 in `236ea94e`. It preserves the
+expanded Gregorian range, ISO and RFC 3339 admission, fixed-offset UTC
+bucketing and serialized leap-second labels. The calendar and native boundary
+controls passed 114 tests on Rust 1.100.0 and macOS arm64, with the existing
+live OECD test ignored. An isolated comparison against the original Chrono
+implementation matched 5,204 calendar and timestamp cases.
+
+Commit `0c7a23ee` backports the Jiff conversions to the published Polars
+Arrow and compute 0.55.2 archives. The registry audit inventory retains their
+original identities, licences, and source and patch hashes. The root and
+standalone fuzz locks contain neither Chrono crate, and the fuzz target
+compiled under its refreshed lock. The unchanged
+`cargo deny --all-features --locked check` passed advisories, bans, licences
+and sources on the root lock. The source distribution also resolved with
+that lock and both vendored licences present.
+
+The isolated backport build passed 30 tabular and FFI tests and 177 tests
+against an installed CPython 3.15.2 wheel, with the existing live OECD test
+skipped. Qualification covers Innovate's current Polars features, adapters
+and interchange contracts. Hosted qualification and scientific release
+readiness are tracked on [Innovate #696](https://github.com/edithatogo/innovate/pull/696).
