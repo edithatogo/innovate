@@ -87,6 +87,20 @@ case ignored. The locally installed CPython 3.15.2 development wheel passed
 the retained Bass tests. Hosted artifact and release-scope qualification
 remain open in the respective tracks.
 
+## Adopter classification across heterogeneous weights
+
+The largest weight can dominate the mean while other positive weights
+still produce a nonzero spread. When binary64 rounds adjacent thresholds
+to the same coordinate, the classifier recomputes moments around the
+maximum-weight sample and compares centered distances. Existing cases
+retain their exact category boundaries and tie order.
+
+The installed test retains all existing rational-moment cases and adds
+three new time-grid shapes, three scales and heterogeneous rate ratios.
+The changed native classifier matched all 3,664 independent comparisons.
+The installed CPython 3.15.2 wheel passed all three selected adopter tests.
+This covers the new range in the local artifact qualification.
+
 ## Release evidence for the analytic reference cases
 
 The non-publishing lane checks the independent Bass and Logistic limits and
