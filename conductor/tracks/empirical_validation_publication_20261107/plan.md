@@ -47,6 +47,16 @@ are recorded in the [M01 handoff](m01-source-qualification-20261116.md#review-of
 and [integration review](integration-review-20261117.md). Partial source does
 not satisfy dependent task acceptance.
 
+## Release evidence for the analytic reference cases
+
+The non-publishing lane checks the independent Bass and Logistic limits and
+the Norton–Bass pre-launch condition against the declared inputs. The
+inputs have canonical SHA-256 fingerprints. The lane checks separate
+reference and native source bytes, includes the reference manifest in the
+release source digest and retains the installed test results under the
+artifact checksums. The three cases cover the named scientific controls.
+The full V01, Q04 and 38-obligation release assessments remain open.
+
 ## Issue #413 — warranted testing and CI gaps
 
 - [~] Reconcile the July DST/MT inventory, add bounded native metamorphic relations,

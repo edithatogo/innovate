@@ -1,35 +1,54 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "oracles": [
     {
       "model": "bass",
       "source": "closed_form_exponential_limit_q_zero",
       "licence": "Apache-2.0",
-      "implementation_hash": "oracle-analytic-bass-v1",
-      "kernel_hash": "innovate-core-domain-v1",
-      "input": {"t": 5.0, "p": 0.04, "q": 0.0, "m": 500.0},
+      "input": {
+        "t": 5.0,
+        "p": 0.04,
+        "q": 0.0,
+        "m": 500.0
+      },
       "expected": 90.63462346100908,
-      "tolerance": 1e-10
+      "tolerance": 1e-10,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/domain.rs",
+      "input_sha256": "3042a399c3bcf696a2595e75acb774013947c5b9875d1cb28f7486f9f4180593"
     },
     {
       "model": "logistic",
       "source": "closed_form_inflection_midpoint",
       "licence": "Apache-2.0",
-      "implementation_hash": "oracle-analytic-logistic-v1",
-      "kernel_hash": "innovate-core-models-v1",
-      "input": {"t": 6.0, "L": 100.0, "k": 0.5, "x0": 6.0},
+      "input": {
+        "t": 6.0,
+        "L": 100.0,
+        "k": 0.5,
+        "x0": 6.0
+      },
       "expected": 50.0,
-      "tolerance": 1e-12
+      "tolerance": 1e-12,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/models/logistic.rs",
+      "input_sha256": "8385ac6504abd6df0c1e124997331b7c879ce9e01af2606b81bffbc5a557aa2e"
     },
     {
       "model": "norton_bass",
       "source": "norton_bass_1987_conservation_identity",
       "licence": "Apache-2.0",
-      "implementation_hash": "oracle-analytic-norton-bass-v1",
-      "kernel_hash": "innovate-core-models-v1",
-      "input": {"t": 3.0, "p1": 0.03, "q1": 0.38, "m1": 1000.0, "tau2": 5.0},
+      "input": {
+        "t": 3.0,
+        "p1": 0.03,
+        "q1": 0.38,
+        "m1": 1000.0,
+        "tau2": 5.0
+      },
       "expected_gen2_before_launch": 0.0,
-      "tolerance": 1e-12
+      "tolerance": 1e-12,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/models/norton_bass.rs",
+      "input_sha256": "411cb074dca0cf1af75fcd4abf3a177bf9cb7afb99745aa34902ac5b8fd0eeb3"
     }
   ]
 }

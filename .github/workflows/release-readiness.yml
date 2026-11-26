@@ -59,8 +59,11 @@ jobs:
           toolchain: 1.100.0
       - run: uv venv .venv-release --python 3.15.2
       - run: UV_PROJECT_ENVIRONMENT=.venv-release uv sync --locked --no-install-project --python .venv-release/bin/python
-      - name: Verify release policy and wheel SBOM normalization
-        run: .venv-release/bin/python -m pytest tests/unit/test_normalize_wheel_sbom.py tests/native/test_migration_policy.py
+      - name: Verify release policy, scientific references and wheel SBOM normalization
+        run: >-
+          .venv-release/bin/python -m pytest
+          tests/unit/test_normalize_wheel_sbom.py tests/native/test_migration_policy.py
+          tests/validation/test_oracle_manifest.py
       - name: Validate release packaging without publishing
         env:
           CARGO_BUILD_JOBS: '2'
@@ -89,11 +92,12 @@ jobs:
           for module in (innovate, _native):
               assert Path(module.__file__).resolve().is_relative_to(root), module.__file__
           PYTHON
-          "$staging/bin/python" -m pytest -q \
+          "$staging/bin/python" -m pytest -q --junitxml=dist/installed-tests.xml \
             tests/native/test_python_consumer.py \
             tests/native/test_competition.py \
             tests/native/test_multi_generation.py \
             tests/native/test_paired_outcomes.py
+          (cd dist && sha256sum installed-tests.xml >> SHA256SUMS)
       - name: Retain validated dry-run artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -103,6 +107,7 @@ jobs:
             dist/*.whl
             dist/SHA256SUMS
             dist/SOURCE_SHA256
+            dist/installed-tests.xml
           if-no-files-found: error
       - name: Qualify the installed Voiage consumer
         run: |
