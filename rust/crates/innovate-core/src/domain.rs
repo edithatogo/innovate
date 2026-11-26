@@ -271,11 +271,37 @@ pub fn bass_cumulative(t: f64, p: f64, q: f64, m: f64) -> Result<f64, Innovation
             "m must be finite and strictly positive",
         ));
     }
-    if t == 0.0 {
-        return Ok(0.0);
+    let evaluate = bass_curve(p, q, m);
+    Ok(evaluate(t).0)
+}
+
+/// Evaluate level and analytic derivative for validated Bass parameters and time.
+pub(crate) fn bass_curve(p: f64, q: f64, m: f64) -> impl Fn(f64) -> (f64, f64) {
+    let scale = p.max(q);
+    let normalized_sum = p / scale + q / scale;
+    let log_m = m.ln();
+    let log_p = p.ln();
+    let log_sum = scale.ln() + normalized_sum.ln();
+    let log_ratio = q.ln() - log_p;
+    move |t| {
+        if t == 0.0 {
+            return (0.0, m * p);
+        }
+        let elapsed = (scale * t) * normalized_sum;
+        if elapsed == f64::INFINITY {
+            return (m, 0.0);
+        }
+        if elapsed < f64::MIN_POSITIVE {
+            // F(t) = p*t to relative accuracy O((p+q)*t). Keep the
+            // market-scaled level representable even if p*t underflows.
+            return ((log_m + log_p + t.ln()).exp(), m * p);
+        }
+        let odds = log_ratio - elapsed;
+        let log_denominator = odds.max(0.0) + (-odds.abs()).exp().ln_1p();
+        let level = (log_m + (-(-elapsed).exp_m1()).ln() - log_denominator)
+            .exp()
+            .min(m);
+        let rate = (log_m + 2.0 * log_sum - log_p - elapsed - 2.0 * log_denominator).exp();
+        (level, rate)
     }
-    let rate = p + q;
-    let exp_term = (-rate * t).exp();
-    let value = m * (1.0 - exp_term) / (1.0 + (q / p) * exp_term);
-    Ok(value.clamp(0.0, m))
 }
