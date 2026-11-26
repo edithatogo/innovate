@@ -3,7 +3,7 @@
 These level predictions use the equations below and fixed synthetic inputs.
 Their values were calculated independently of the Rust implementation.
 Times, parameters, options, expected columns and absolute tolerances are
-recorded in the [manifest](manifest.json). Project-owned material is
+recorded in the [installed prediction manifest](installed-manifest.json). Project-owned material is
 Apache-2.0. [Licence](../../LICENSE)
 
 ## Bass without imitation

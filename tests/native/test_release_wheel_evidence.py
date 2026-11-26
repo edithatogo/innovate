@@ -24,6 +24,8 @@ def smoke_report(recorder):
         ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name="test_example")
     for name in sorted(recorder.ORACLE_CASES):
         ElementTree.SubElement(root, "testcase", classname=f"tests.validation.{recorder.ORACLE_MODULE}", name=name)
+    for name in sorted(recorder.REFERENCE_CASES):
+        ElementTree.SubElement(root, "testcase", classname=f"tests.native.{recorder.REFERENCE_MODULE}", name=name)
     module, name = recorder.LIVE_OECD
     skipped = ElementTree.SubElement(root, "testcase", classname=f"tests.native.{module}", name=name)
     ElementTree.SubElement(skipped, "skipped")
@@ -31,7 +33,10 @@ def smoke_report(recorder):
 
 
 def smoke_counts(recorder):
-    return dict.fromkeys(recorder.SMOKE_MODULES, 1) | {recorder.ORACLE_MODULE: len(recorder.ORACLE_CASES) + 1}
+    return dict.fromkeys(recorder.SMOKE_MODULES, 1) | {
+        recorder.ORACLE_MODULE: len(recorder.ORACLE_CASES) + 1,
+        recorder.REFERENCE_MODULE: len(recorder.REFERENCE_CASES) + 1,
+    }
 
 
 def test_smoke_receipt_records_optional_oecd_skip_separately(recorder):
@@ -40,9 +45,10 @@ def test_smoke_receipt_records_optional_oecd_skip_separately(recorder):
     assert skipped == [".".join(recorder.LIVE_OECD)]
 
 
-def test_smoke_receipt_requires_each_named_analytic_prediction(recorder):
+@pytest.mark.parametrize("cases", ["ORACLE_CASES", "REFERENCE_CASES"])
+def test_smoke_receipt_requires_each_named_analytic_prediction(recorder, cases):
     root = smoke_report(recorder)
-    oracle = next(case for case in root if case.get("name") in recorder.ORACLE_CASES)
+    oracle = next(case for case in root if case.get("name") in getattr(recorder, cases))
     root.remove(oracle)
     with pytest.raises(ValueError, match="analytic model suite is incomplete"):
         recorder.smoke_results(ElementTree.tostring(root))

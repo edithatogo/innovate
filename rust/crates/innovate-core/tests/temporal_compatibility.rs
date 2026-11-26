@@ -61,6 +61,20 @@ fn offset_timestamps_are_bucketed_by_utc_date() {
 }
 
 #[test]
+fn utc_offset_crosses_the_gregorian_cycle_at_either_end() {
+    for (input, expected) in [
+        ("9999-12-31T23:30:00-01:00", "+10000-01-01T00:30:00Z"),
+        ("0000-01-01T00:30:00+01:00", "-0001-12-31T23:30:00Z"),
+    ] {
+        let response = aggregate(json!([input]), json!([1]), "W");
+        assert_eq!(
+            response["result"],
+            json!({"dates": [expected], "values": [1.0]})
+        );
+    }
+}
+
+#[test]
 fn fractional_weekly_anchor_preserves_the_exact_seven_day_boundary() {
     let response = aggregate(
         json!([

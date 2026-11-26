@@ -37,8 +37,9 @@ attestation. The repository and signer are fixed to Innovate and its
 `release-readiness.yml` workflow. The source and signer commits must both
 match the qualification commit. GitHub CLI verifies the bundle. [GitHub attestation verification](https://cli.github.com/manual/gh_attestation_verify)
 
-The ledger records [qualified adopter classification](evidence/adopter-classification-20261120/README.md).
-The other 37 obligations remain incomplete. The dry-run workflow
+The [20 November adopter evidence](evidence/adopter-classification-20261120/README.md)
+remains valid for its recorded source. The reconciled source requires refreshed
+adopter evidence and qualification for the other 37 obligations. The dry-run workflow
 builds wheels from the source distribution and exercises them on Linux x86_64,
 macOS ARM64 and Windows x64. Separate automated jobs verify the source, target
 and wheel digest for each receipt and sign it. The receipt's

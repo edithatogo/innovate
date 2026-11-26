@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
-Edition dated 20 November 2026 for development version `0.7.0a1` at
-`dbb360d8e281ea103778484512e0a35958dfba83`.
+Edition dated 26 November 2026. Source baseline
+`55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -31,37 +31,38 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
 
-## Adopter-classification ledger reassessment
+## Source reassessment on 26 November 2026
 
-The integrator compared the fourteen source inputs with the prior edition at
-`c1399484aa7efa224304b0a84c559ecffc10726e`. The migration ledger now records
-the qualified sample-weighted adopter classifier. All 38 obligations are
-required and 37 remain incomplete. C02's model-family inventory and
-required-obligation count still apply. The broader release claim P02 remains
-withheld. Thirteen source inputs, the scientific prose and the bibliography
-match the prior edition. [Adopter-classification results](../../empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md)
+The [dependency follow-up](https://github.com/edithatogo/innovate/commit/55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1)
+changes three of the fourteen reviewed inputs. The core manifest replaces
+Chrono with Jiff for calendar and scenario timestamps. The workspace manifest
+and lock select the vendored Polars Arrow and compute backport while retaining
+the five workspace members and the standalone games crate.
 
-## Adopter classifier dependency reassessment
+C01 and C06 retain their Rust ownership, dependency reuse and registry
+publication limits. C05 retains its copying IPC, table validation and binding
+limits. The native calendar tests cover expanded Gregorian years, leap-second
+labels and fixed-offset UTC bucketing. The Rust IPC and installed Python checks
+exercise the affected interchange profile. C07 retains its model-time-grid
+and untrusted-input limits. The ledger still requires all 38 obligations.
+P01–P06 remain pending, and the render receipt remains tied to its earlier
+edition. [Dependency qualification](../../../archive/ci_supply_chain_hardening_20261115/plan.md#innovate-696-chrono-remediation--26-november-2026)
 
-The integrator compared all fourteen source inputs with
-`60c0593988f522495bbc867d91db3949c8086f4c` on 20 November 2026. The core
-manifest and lock add a direct edge to the already resolved `num-bigint` 0.4.8
-for exact weighted moments. C01 and C06 still describe the Rust computation,
-dependency reuse and publication limits. C05's table and interchange inputs
-match the prior revision byte for byte. The scientific prose and bibliography
-carry forward, and P01–P06 remain withheld. The prior render receipts identify
-their respective editions.
+## Source reassessment on 21 November 2026
 
-## Calendar dependency reassessment: 19 November 2026
+The [T17.10 consumer candidate](https://github.com/edithatogo/innovate/pull/696)
+at `5096bd3519a3a9503fefaf70af4da86656b11d3b` changes three
+of the fourteen inputs reviewed on 18 November. The other eleven match their
+recorded fingerprints.
 
-The integrator compared all fourteen source inputs with the 18 November
-edition. The core manifest now selects `time` for private calendar
-operations. The lock removes the core crate's direct Chrono dependency,
-adds the `time` closure and still resolves Chrono through published Polars.
-C01 and C06 retain the same Rust ownership, vendored dependencies and crate
-publication limits. C05's Polars and Arrow interface inputs are byte-identical.
-The remaining source inputs, bibliography and scientific prose are unchanged.
-P01–P06 remain withheld. Earlier render receipts identify their own editions.
+| Input | Claim disposition |
+| --- | --- |
+| `Cargo.lock` and `rust/crates/innovate-core/Cargo.toml` | The core now links the extracted native demand implementation through the local `innovate-demand` package. C01 and C06 retain their architecture and dependency scope. |
+| `.github/workflows/ci.yml` | The Linux job exercises the standalone pricing case and checks its dependency closure. The workflow declaration provides no receiving-head, research-use or release result. |
+
+The displayed source identity follows this review. The existing render receipt
+belongs to its dated source, and current rendering, author and release
+decisions are pending.
 
 ## Source-to-claim reassessment: 18 November 2026
 

@@ -23,16 +23,21 @@ from scripts.qualify_scenario_arrow import (
     verify_wheel,
 )
 
-ORACLE_MODULE = "test_oracle_manifest"
+ORACLE_MODULE = "test_installed_oracle_manifest"
 ORACLE_CASES = {
     f"test_installed_native_predictions_match_independent_references[{model}]"
     for model in ("bass", "logistic", "gompertz", "fisher_pry", "norton_bass", "multi_product")
+}
+REFERENCE_MODULE = "test_release_analytic_oracles"
+REFERENCE_CASES = {
+    f"test_frozen_prediction_matches_analytic_oracle[{model}]" for model in ("bass", "logistic", "norton_bass")
 }
 SMOKE_MODULES = {
     "test_python_consumer",
     "test_competition",
     "test_multi_generation",
     "test_paired_outcomes",
+    REFERENCE_MODULE,
     ORACLE_MODULE,
 }
 LIVE_OECD = ("test_python_consumer", "test_live_oecd_fetch_returns_polars_observations")
@@ -61,7 +66,10 @@ def smoke_results(payload: bytes) -> tuple[dict[str, int], list[str]]:
             passed[module] += 1
     if LIVE_OECD not in seen or passed.keys() != SMOKE_MODULES:
         raise ValueError("The installed-wheel smoke suite is incomplete")
-    if not all((ORACLE_MODULE, name) in seen for name in ORACLE_CASES):
+    required_predictions = {(ORACLE_MODULE, name) for name in ORACLE_CASES} | {
+        (REFERENCE_MODULE, name) for name in REFERENCE_CASES
+    }
+    if not required_predictions <= seen:
         raise ValueError("The installed-wheel analytic model suite is incomplete")
     return dict(passed), skipped
 

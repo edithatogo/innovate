@@ -787,7 +787,7 @@ isolated nodes have zero imitation. Native simulation now permits p=0, allowing
 pure contagion seeded by initial agents. Deterministic Bass fitting/prediction
 retains its previous positive-p domain.
 
-Kairos ABMContext owns entity state and dispatch. Its PriorityResource owns the
+Kairos supplies entity state and event dispatch. Its PriorityResource owns the
 waiting order. Innovate controls admission and the active service count.
 Optional population-length `agent_priorities` supplies signed 32-bit integers. Higher values serve first among waiters, with FIFO ties. The
 default is zero for every agent. An active service always runs to completion. An agent becomes adopted at service completion. Pending agents

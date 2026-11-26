@@ -15,7 +15,7 @@ authors:
 affiliations:
   - name: Victoria University of Wellington
     index: 1
-date: 19 November 2026
+date: 18 November 2026
 bibliography: paper.bib
 ---
 
@@ -23,7 +23,7 @@ bibliography: paper.bib
 > metadata are provisional, copied from the repository's citation record.
 > Research-use evidence, declarations, scientific qualification and release
 > acceptance remain outstanding. This draft describes development version
-> 0.7.0a1 at commit `dbb360d8e281ea103778484512e0a35958dfba83`.
+> 0.7.0a1 at commit `55221e232836b5b3ab78543e3ee7bbe7d6f5c4f1`.
 
 # Summary
 

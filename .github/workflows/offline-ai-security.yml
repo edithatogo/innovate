@@ -7,9 +7,144 @@ permissions:
   contents: read
 jobs:
   offline-ai-security:
-    uses: edithatogo/repository-standards/.github/workflows/reusable-ai-sec-pipeline.yml@851fc22e2453bfff973eab668f72f6e6c203cd72
-    permissions:
-      contents: read
-    with:
-      enforce_ai: false
-      github_hosted: true
+    name: offline-ai-security / offline-security
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - innovate-ai-security-offline-apple
+      - offline-${{ github.run_id }}-${{ github.run_attempt }}
+    timeout-minutes: 45
+    env:
+      ENFORCE_AI: "false"
+      BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+      POLICY_SHA: 77d33d3fb0c452de573262b81b911826c164aa62
+      IMAGE_INDEX: sha256:e4a7036b17f47911b1d2f33652d5c6a84583ce14498055756c987ca8d9e8aefb
+      IMAGE_MANIFEST: sha256:44803e52885fe265a984eada3e99adc4ba9a858d9de6d331d16dfcf6ca434737
+      IMAGE_CONFIG: sha256:648e981136d992c3313c886a3289765d3d98aa232e74da0bb561f9b0037adc9d
+      SAST_PROFILE: hosted-sast
+      SAST_LOCK_SHA256: 62aa1e23fff85558bc146aae1ff8a43f6571edede021668b53040f36b3a7c45b
+    steps:
+      - name: Verify the offline scanner result for this run and source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = edithatogo/innovate
+          test "$RUNNER_ENVIRONMENT" = self-hosted
+          test "$RUNNER_OS" = Linux
+          test "$RUNNER_ARCH" = X64
+          case "$GITHUB_EVENT_NAME" in
+            push|pull_request|workflow_dispatch) ;;
+            *) exit 2 ;;
+          esac
+          result=/offline-receipt/result
+          while [[ ! -f "$result" && "$SECONDS" -lt 2500 ]]; do sleep 2; done
+          test -f "$result" && test ! -L "$result"
+          printf '%s\n' passed "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" \
+            "$RUNNER_NAME" "$GITHUB_EVENT_NAME" "$GITHUB_SHA" "$BASE_SHA" "$ENFORCE_AI" \
+            "$POLICY_SHA" "$IMAGE_INDEX" "$SAST_PROFILE" "$SAST_LOCK_SHA256" | cmp -s - "$result"
+          echo "Apple Container offline scan passed for $GITHUB_SHA"
+      - name: Verify the scanner image review
+        id: image_review
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          python -I - <<'PYTHON'
+          from datetime import UTC, datetime, timedelta
+          from hashlib import file_digest
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          root = Path("/offline-receipt/image-audit")
+          image = "localhost/offline-ai-security@" + os.environ["IMAGE_INDEX"]
+          config = os.environ["IMAGE_CONFIG"]
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          def evidence(name):
+              path = root / name
+              require(path.is_file() and path.resolve() == path, f"Missing or indirect evidence file: {name}")
+              return path
+
+          def read(name):
+              return json.loads(evidence(name).read_bytes())
+
+          def verify_files(folder, receipt, names):
+              hashes = receipt["evidence_sha256"]
+              require(set(hashes) == set(names), f"Unexpected {folder} evidence inventory")
+              for name in names:
+                  with evidence(f"{folder}/{name}").open("rb") as stream:
+                      require(file_digest(stream, "sha256").hexdigest() == hashes[name],
+                              f"Changed evidence file: {folder}/{name}")
+
+          require(sys.version_info[:3] == (3, 15, 2), "Image evidence requires Python 3.15.2")
+          qualification = read("qualification.json")
+          sbom = read("sbom/receipt.json")
+          vulnerability = read("vulnerability/receipt.json")
+          review = read("wolfi-image-disposition.json")
+          verify_files("sbom", sbom, ("sbom.spdx.json", "syft-version.json", "syft.yaml"))
+          verify_files("vulnerability", vulnerability,
+                       ("grype.json", "grype-version.json", "grype-db-status.json", "grype.yaml"))
+          require(set(root.rglob("*")) == {
+              root / name for name in (
+                  "qualification.json", "sbom", "sbom/receipt.json", "sbom/sbom.spdx.json",
+                  "sbom/syft-version.json", "sbom/syft.yaml", "vulnerability",
+                  "vulnerability/receipt.json", "vulnerability/grype.json",
+                  "vulnerability/grype-version.json", "vulnerability/grype-db-status.json",
+                  "vulnerability/grype.yaml", "wolfi-image-disposition.json",
+              )
+          }, "Unexpected files in the image evidence bundle")
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a") as output:
+              output.write("files_verified=true\n")
+
+          required_controls = {"runtime", "network-preflight", "manifest-binding", "asset-preflight",
+                               "gitleaks-fixtures", "sast-fixtures", "dlp-model", "promptfoo-mock"}
+          require(qualification["status"] == "passed"
+                  and qualification["policy_commit"] == os.environ["POLICY_SHA"]
+                  and qualification["source_index"] == os.environ["IMAGE_INDEX"]
+                  and qualification["amd64_manifest"] == os.environ["IMAGE_MANIFEST"]
+                  and len(qualification["stages"]) == len(required_controls)
+                  and {item["name"] for item in qualification["stages"] if item["status"] == "passed"}
+                  == required_controls, "Scanner image qualification failed")
+          require(sbom["image"] == vulnerability["image"] == review["image"] == image
+                  and sbom["image_id"] == vulnerability["image_id"] == config,
+                  "Image reports describe a different image")
+          require(sbom["status"] == "collected" and sbom["scope"] == "squashed"
+                  and sbom["package_count"] > 0 and read("sbom/syft-version.json")["version"] == "1.57.1",
+                  "The pinned Syft SBOM is missing")
+          database = read("vulnerability/grype-db-status.json")
+          age = datetime.now(UTC) - datetime.fromisoformat(database["built"])
+          require(database["valid"] is True and not database.get("error")
+                  and database["from"] and timedelta(0) <= age <= timedelta(hours=120),
+                  "The Grype database is invalid or stale")
+          report = read("vulnerability/grype.json")
+          require(vulnerability["status"] == "review_pending"
+                  and vulnerability["scope"] == "all-layers" and vulnerability["last_stage"] == "complete"
+                  and vulnerability["evidence_sha256"]["grype.yaml"]
+                  == "be81c82b1f2886e07af2c12392000e0d8e14900032d0c639e88605d76a7b7b28"
+                  and report["distro"]["name"] == "wolfi"
+                  and report["source"]["target"]["imageID"] == config
+                  and report["descriptor"]["version"] == "0.121.3"
+                  and not report.get("ignoredMatches", []) and vulnerability["ignored_matches"] == 0
+                  and review["ignored_matches"] == 0 and review["status"] == "passed"
+                  and review["database_sha256"] == vulnerability["database_sha256"]
+                  and review["report_sha256"] == vulnerability["evidence_sha256"]["grype.json"]
+                  and review["review_catalog_sha256"]
+                  == "c03ca2b790878d757ce07c2d0adc32c585f46f5156fdb129ea66b8367e0a3092"
+                  and len(review["findings"]) == vulnerability["matches"] == len(report["matches"])
+                  and all(item["disposition"] == "verified_backport" for item in review["findings"]),
+                  "The image vulnerability review failed")
+          print("The scanner image inventory and vulnerability review passed")
+          PYTHON
+      - name: Retain the scanner image reports
+        if: ${{ always() && steps.image_review.outputs.files_verified == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: hosted-offline-security-${{ github.run_id }}-${{ github.run_attempt }}
+          path: /offline-receipt/image-audit/
+          if-no-files-found: error
+          retention-days: 14

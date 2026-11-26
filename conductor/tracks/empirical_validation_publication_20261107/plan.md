@@ -152,6 +152,59 @@ are recorded in the [M01 handoff](m01-source-qualification-20261116.md#review-of
 and [integration review](integration-review-20261117.md). Partial source does
 not satisfy dependent task acceptance.
 
+## Bass scientific verification
+
+The first V01 and A01 packet starts from Innovate `05750f4e3044` on
+`codex/bass-qualification-20261126`. Chat `01a1f635-4bc4-73f0-b6f2-2d2541bb46a0` owns this branch. The branch owns the Bass scalar
+calculation, focused reference tests and this evidence entry. Q04, the
+38 required ledger obligations and release promotion retain their existing
+ownership and acceptance criteria.
+
+For cumulative adoption fraction \(F\), the Bass model satisfies
+\(F'=(p+qF)(1-F)\) with \(F(0)=0\). Integration gives
+\(F=p(1-e^{-(p+q)t})/(p+qe^{-(p+q)t})\). The installed Python tests
+evaluate the level and the ODE derivative with 75-digit decimal arithmetic.
+They retain the zero-imitation limit, nonzero imitation and extreme rate
+scales, then fit two noiseless irregular grids in different units and compare
+held-out levels and rates. The rate and level comparison uses relative
+tolerance `1e-12`. Recovery and held-out predictions use `1e-5`, the
+existing parameter-recovery tolerance. The native stress fixture catches
+the previous overflow in `q/p` and avoids losing market-scaled predictions
+when elapsed time underflows.
+
+The earlier release dry run used Innovate `05750f4e30445712f66d9ee9f6ce9393305ddde5`.
+Its original wheel, source archive and checksums passed readback. The same
+installed wheel passed ordinary and weighted Voiage EVPI handoff tests.
+[Run 45763517360](https://github.com/edithatogo/innovate/actions/runs/45763517360)
+
+## Logistic, Gompertz and Fisher–Pry scientific verification
+
+The follow-up to the Bass packet uses the same installed consumer. Decimal
+references fix the scaled levels and derivatives in the tails. Before the
+fix, all three models lost positive values to overflow or premature rounding.
+The comparison preserves the original `fit_quality.rs` noise pattern, training
+cutoff and per-family tolerances for fit recovery and held-out prediction.
+It exercises the shared scalar implementation from the published Python API.
+
+Rust 1.100.0 passed 130 selected native tests with the inherited live OECD
+case ignored. The locally installed CPython 3.15.2 development wheel passed
+17 selected cases, including the independent tail and held-out checks and
+the retained Bass tests. Hosted artifact and release-scope qualification
+remain open in the respective tracks.
+
+## Release evidence for the analytic reference cases
+
+The non-publishing lane checks the independent Bass and Logistic limits and
+the Norton–Bass pre-launch condition against the declared inputs. The
+inputs have canonical SHA-256 fingerprints. The lane checks separate
+reference and native source bytes, includes the reference manifest in the
+release source digest and retains the installed test results under the
+artifact checksums. The installed package replays the same three manifest
+cases. Before the Norton–Bass second launch, the independent reference
+predicts 150.50007196371295 for the first generation and zero for the second.
+All three cases passed from the clean macOS arm64 release-mode installation.
+The full V01, Q04 and 38-obligation release assessments remain open.
+
 ## Issue #413 — warranted testing and CI gaps
 
 - [~] Reconcile the July DST/MT inventory, add bounded native metamorphic relations,
@@ -566,6 +619,22 @@ passed, and their original reports, artifact digests and wheel hashes were
 verified. Each exercised 164 minimal and 42 Arrow cases without skips. The
 three signing jobs are queued; the retained receipts are unsigned and do not
 replace the release manifest or any missing scientific qualification.
+
+### Security integration checkpoint
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns PR #684 in the Git worktree
+`/Users/doughnut/Documents/Codex/innovate-pr684-recovery.LuWsjf/security`. PortableSSD disconnected during the
+merge, so the previous managed checkout retains its suspended state. This
+worktree starts at remote head `7dc5c35f` and receives main `6cb04464`.
+Its source scope is the merge resolutions, pinned Kairos state dependency,
+network and simulation call sites, and their tests and source fingerprints.
+The next operation is to qualify the combined lock and verify the existing
+DataFrame, scheduling, and checkpoint contracts.
+
+PR #709 is owned by the same chat in its separate managed worktree. Its pushed
+head `ee2dd74c` aligns the optional tool pins with the hash-locked Python 3.15.2
+installation. Testmon selection and recovery and both coverage engines passed.
+The mutation profile caught all 34 mutations. Hosted checks are running.
 
 ## V05 manuscript checkpoint
 

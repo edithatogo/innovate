@@ -188,10 +188,10 @@
     },
     {
       "key": "adopter_classification",
-      "status": "qualified",
+      "status": "bounded_native",
       "required": true,
-      "evidence": "conductor/tracks/empirical_validation_publication_20261107/evidence/adopter-classification-20261120/scientific.json",
-      "evidence_sha256": "68660e2e499c492a8ef985c3d8785122c8c3d8ba6057a3e9dae2aa1692a6016b"
+      "evidence": "conductor/tracks/empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md",
+      "remaining": "Replay the independently derived cases and installed binding checks on the reconciled source. The 20 November signed receipts remain valid for their recorded source."
     },
     {
       "key": "data_ingestion_provenance_validation",

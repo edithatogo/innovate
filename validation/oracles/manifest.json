@@ -1,194 +1,58 @@
 {
   "schema_version": "1.1",
-  "reference": {
-    "licence": "Apache-2.0",
-    "sha256": "0da9febfd8201e1c541055d6a92053c512084d59a00e5d19cf36d4a9c24e9de7"
-  },
-  "kernel_sha256": {
-    "kernel.rs": "afddef24fc3322242a30fbdc7b53fee0f29a176befef68c8516d39b9822b092d",
-    "substitution.rs": "6eb73d71ee28e9ff3413549202a3d854a66fbec82b8995452adb8559a63493ac",
-    "competition.rs": "53afee0b663a1f361a29cc4220dbd7059db41a85f3ebed5c2777fd3fcdfecb8e"
-  },
   "oracles": [
     {
       "model": "bass",
-      "derivation": "Bass without imitation",
+      "source": "closed_form_exponential_limit_q_zero",
+      "licence": "Apache-2.0",
       "input": {
-        "time": [
-          0.0,
-          5.0
-        ],
-        "parameters": {
-          "p": 0.04,
-          "q": 0,
-          "m": 500
-        },
-        "model_options": {}
+        "t": 5.0,
+        "p": 0.04,
+        "q": 0.0,
+        "m": 500.0
       },
-      "input_sha256": "5065104338b929777f9c34219f3bcf385f06c2b7e1c7a75239024763ddd85c0a",
-      "expected": {
-        "prediction": [
-          0,
-          90.63462346100907
-        ]
-      },
-      "tolerance": 1e-10
+      "expected": 90.63462346100908,
+      "tolerance": 1e-10,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/domain.rs",
+      "input_sha256": "3042a399c3bcf696a2595e75acb774013947c5b9875d1cb28f7486f9f4180593"
     },
     {
       "model": "logistic",
-      "derivation": "Logistic midpoint",
+      "source": "closed_form_inflection_midpoint",
+      "licence": "Apache-2.0",
       "input": {
-        "time": [
-          0.0,
-          6.0
-        ],
-        "parameters": {
-          "L": 100,
-          "k": 0.5,
-          "x0": 6
-        },
-        "model_options": {}
+        "t": 6.0,
+        "L": 100.0,
+        "k": 0.5,
+        "x0": 6.0
       },
-      "input_sha256": "ce343b037de532e44de93dd20fc9f0e4f5d2a24a2c5f91d8e0b162d7e4516944",
-      "expected": {
-        "prediction": [
-          4.742587317756678,
-          50
-        ]
-      },
-      "tolerance": 1e-12
-    },
-    {
-      "model": "gompertz",
-      "derivation": "Gompertz unit displacement",
-      "input": {
-        "time": [
-          0.0,
-          1.0
-        ],
-        "parameters": {
-          "a": 125,
-          "b": 1,
-          "c": 0.4
-        },
-        "model_options": {}
-      },
-      "input_sha256": "4b049f820b3d61a76842a864fd3a5029231d2255a04f7df228cbb5138deee46f",
-      "expected": {
-        "prediction": [
-          45.984930146430294,
-          63.9431042111302
-        ]
-      },
-      "tolerance": 1e-12
-    },
-    {
-      "model": "fisher_pry",
-      "derivation": "Fisher–Pry substitution midpoint",
-      "input": {
-        "time": [
-          0.0,
-          6.0,
-          12.0
-        ],
-        "parameters": {
-          "alpha": 0.5,
-          "t0": 6
-        },
-        "model_options": {}
-      },
-      "input_sha256": "b67c7e46a51a294b0c2442a571f8a2b2409044779e9fa60d84196ed038987232",
-      "expected": {
-        "prediction": [
-          0.04742587317756678,
-          0.5,
-          0.9525741268224333
-        ]
-      },
-      "tolerance": 1e-12
+      "expected": 50.0,
+      "tolerance": 1e-12,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/models/logistic.rs",
+      "input_sha256": "8385ac6504abd6df0c1e124997331b7c879ce9e01af2606b81bffbc5a557aa2e"
     },
     {
       "model": "norton_bass",
-      "derivation": "Norton–Bass generation launch",
+      "source": "norton_bass_1987_conservation_identity",
+      "licence": "Apache-2.0",
       "input": {
-        "time": [
-          0.0,
-          3.0,
-          5.0,
-          7.0
-        ],
-        "parameters": {
-          "p1": 0.03,
-          "q1": 0.38,
-          "m1": 1000,
-          "p2": 0.02,
-          "q2": 0.3,
-          "m2": 1500
-        },
-        "model_options": {
-          "n_generations": 2,
-          "variant": "successive_generations",
-          "launch_times": [
-            0.0,
-            5.0
-          ]
-        }
+        "t": 3.0,
+        "p1": 0.03,
+        "q1": 0.38,
+        "m1": 1000.0,
+        "p2": 0.02,
+        "q2": 0.3,
+        "m2": 1500.0,
+        "tau2": 5.0
       },
-      "input_sha256": "9df27ec9878b3be5929ad62853f31f1aa9e61b6847dd71b9ed1598f25fc055b6",
-      "expected": {
-        "prediction_1": [
-          0.0,
-          150.50007196371294,
-          331.1986424913736,
-          519.8807922946256
-        ],
-        "prediction_2": [
-          0.0,
-          0.0,
-          0.0,
-          108.71483050388396
-        ]
-      },
-      "tolerance": 1e-09
-    },
-    {
-      "model": "multi_product",
-      "derivation": "Competition with zero adoption rates",
-      "input": {
-        "time": [
-          0.0,
-          5.0
-        ],
-        "parameters": {
-          "p1": 0,
-          "p2": 0,
-          "q1": 0,
-          "q2": 0,
-          "m1": 100,
-          "m2": 100,
-          "alpha_1_2": 0,
-          "alpha_2_1": 0
-        },
-        "model_options": {
-          "n_products": 2,
-          "initial_values": [
-            25,
-            75
-          ]
-        }
-      },
-      "input_sha256": "3cdcefb99c570e48e326975ccbd6108b75ada84b7cac2cecf59e066b40bf940a",
-      "expected": {
-        "prediction_1": [
-          25,
-          25
-        ],
-        "prediction_2": [
-          75,
-          75
-        ]
-      },
-      "tolerance": 1e-12
+      "expected_gen1_before_launch": 150.50007196371295,
+      "expected_gen2_before_launch": 0.0,
+      "tolerance": 1e-12,
+      "reference_path": "tests/validation/test_oracle_manifest.py",
+      "kernel_path": "rust/crates/innovate-core/src/models/norton_bass.rs",
+      "input_sha256": "490af157deb1b13eee024548b3fd54ecebb0194ac4c805c5eb9342c46f4b989d"
     }
   ]
 }

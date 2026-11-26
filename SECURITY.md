@@ -52,11 +52,11 @@ workflow definitions describe configured controls; only completed runs on the
 relevant source establish their outcomes.
 
 The [offline AI security check](.github/workflows/offline-ai-security.yml)
-uses GitHub-hosted Ubuntu to prepare the pinned image and scanners. The
-scanner container has no network access and mounts the source and policy
-read-only. The job runs the scanner controls and retains the image inventory,
-all-layer advisory report and Wolfi disposition. Unresolved findings fail
-the check.
+uses the pinned scanner image in Apple Container on local Linux x86-64.
+The scanner has no network access and mounts the source and policy read-only.
+A job-specific GitHub Actions runner verifies the scan receipt for its run,
+attempt and source. It checks the image inventory, all-layer advisory report
+and Wolfi disposition. Unresolved findings fail the check.
 
 Python dependencies use `uv.lock`, Rust uses `Cargo.lock` with explicit upstream
 revisions, and documentation dependencies use the documentation workspace lock.
