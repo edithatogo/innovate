@@ -215,3 +215,85 @@ fn bass_prediction_recovers_after_rejected_parameters() {
         assert!((value.as_f64().unwrap() - expected).abs() < 1e-10);
     }
 }
+
+#[test]
+fn classical_predictions_preserve_scaled_elapsed_time_and_gompertz_tails() {
+    let binding = KernelBinding::new();
+    // Expected levels and rates evaluated with 75-digit decimal arithmetic.
+    let cases = [
+        (
+            "logistic",
+            json!({"L": 500.0, "k": 1e-308, "x0": 1.7e308}),
+            -1.7e308,
+            16.147_732_349_225_26,
+            1.562_623_382_918_082_8e-307,
+        ),
+        (
+            "gompertz",
+            json!({"a": 1e300, "b": 1.0, "c": 1.0}),
+            -2000.0,
+            0.0,
+            0.0,
+        ),
+        (
+            "gompertz",
+            json!({"a": 1e300, "b": 1.0, "c": 1.0}),
+            -6.620_073_206_530_356,
+            1.901_684_963_475_149e-26,
+            1.426_263_722_606_361_5e-23,
+        ),
+        (
+            "gompertz",
+            json!({"a": 1e300, "b": 1.0, "c": 1.0}),
+            750.0,
+            1e300,
+            1.901_684_963_475_006_4e-26,
+        ),
+    ];
+    for (model, parameters, time, level, rate) in cases {
+        let result = binding
+            .predict_model(
+                model,
+                json!({"inputs": {"time":[time]}, "parameters": parameters}),
+            )
+            .unwrap()
+            .result
+            .unwrap();
+        for (actual, expected) in [
+            (&result["values"][0], level),
+            (&result["rates"][0][0], rate),
+        ] {
+            let actual = actual.as_f64().unwrap();
+            assert!(
+                (actual - expected).abs() <= 1e-12 * expected,
+                "{model} at {time}: {actual:e} != {expected:e}"
+            );
+        }
+    }
+}
+
+#[test]
+fn scalar_summaries_with_only_time_preserve_parameters_without_residuals() {
+    let binding = KernelBinding::new();
+    for (model, parameters) in [
+        ("logistic", json!({"L":100.0, "k":0.5, "x0":6.0})),
+        ("fisher_pry", json!({"alpha":0.5, "t0":6.0})),
+    ] {
+        let payload = json!({
+            "inputs": {"time":[3.0, 6.0, 9.0]},
+            "state":{"model_key":model, "parameters": parameters}
+        });
+        let summary = binding
+            .invoke(&KernelRequest::summarize_model(model, payload.clone()))
+            .unwrap()
+            .result
+            .unwrap();
+        assert_eq!(summary["parameters"], parameters);
+        assert!(summary.get("diagnostics").is_none());
+        assert!(
+            binding
+                .invoke(&KernelRequest::diagnose_model(model, payload))
+                .is_err()
+        );
+    }
+}

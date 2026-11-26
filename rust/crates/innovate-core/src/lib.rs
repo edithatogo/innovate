@@ -5,6 +5,7 @@ mod bayesian;
 mod benchmark;
 mod bootstrap;
 mod calendar;
+mod calendar_time;
 mod calibration;
 mod causal;
 mod competition;

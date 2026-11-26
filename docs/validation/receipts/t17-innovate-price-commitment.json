@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scope": "real-application-artifact-consumer",
+  "case_kind": "application-model",
+  "repository": "https://github.com/edithatogo/innovate",
+  "revision": "4166b4e9bff894ff2e3c63169cab4ea9cdb22ac1",
+  "case_name": "Innovate sequential price commitment with structural demand",
+  "expected_result_basis": "Independent rational multinomial-logit shares with an outside option. See the T17.10 static price commitment section in conductor/tracks/kairos_runtime_boundary_20261107/strategic-information-integration.md at the application revision.",
+  "provider_revision": "bd880dd756d2ba56cc5f479bc078cea31b53c1d1",
+  "semantic_profile": "paignia/static-finite-perfect-information-sparse-zero/1.0.0",
+  "profile_sha256": "8c20e1969e3e33bf1a8ac6b3ba6073775e06782348b733da73603441a068f59e",
+  "artifacts": {
+    "paignia-core": "c184e24dd9b96c7a2b64614378ff150e559f1ed823312d7265385e0a89fda99e",
+    "paignia-solve": "f2d7974020b0e63c3e023923223af913d4cf076600bc5286637e1ba52e766f1d"
+  },
+  "result": "passed",
+  "tests_passed": 5,
+  "tests_failed": 0,
+  "tests_skipped": 0,
+  "commands": [
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $PROVIDER/README.md",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $APPLICATION_CHECKOUT/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/12b22ce/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/5103675/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/6f27257/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/ad3e193/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/bd880dd/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-2e07980d1bfab6db/da5e620/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-d8868afd966e4902/12b22ce/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $CARGO_GIT/checkouts/paignia-d8868afd966e4902/bd880dd/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb /bin/cat $STAGE/application/rust/crates/innovate-games/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb $TOOLCHAIN/bin/cargo --version",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb $TOOLCHAIN/bin/rustc --version",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb $TOOLCHAIN/bin/cargo metadata --offline --format-version 1 --manifest-path $STAGE/application/rust/crates/innovate-games/Cargo.toml",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb $TOOLCHAIN/bin/cargo metadata --offline --format-version 1 --manifest-path $STAGE/application/rust/crates/innovate-games/Cargo.toml --locked",
+    "/usr/bin/sandbox-exec -D STAGE=$STAGE -D PROVIDER=$PROVIDER -D CARGO_GIT=$CARGO_GIT -D TOOLCHAIN=$TOOLCHAIN -f $STAGE/source-isolation.sb $TOOLCHAIN/bin/cargo test --offline --locked --manifest-path $STAGE/application/rust/crates/innovate-games/Cargo.toml --test price_commitment"
+  ],
+  "execution_evidence": {
+    "path": "docs/validation/receipts/t17-innovate-price-commitment.log",
+    "sha256": "a059c007db61329bc5fa5cfbc40245af61e3a3f3c5d55ed6f84747916c8b1b93"
+  }
+}
