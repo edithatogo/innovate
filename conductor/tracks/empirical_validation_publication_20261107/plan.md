@@ -663,6 +663,21 @@ index. The 73 core, 16 Kairos and nine calendar tests passed before adding the
 last adopter regression. The JOSS source reassessment retains the working
 draft status. All 38 obligations need current release evidence.
 
+The rebuilt macOS ARM64 wheel passed the installed analytic checks and all
+1,108 adopter checks from the retained reference generator. The generated
+cases matched the earlier digest. RustSec, dependency review and the
+secret scan passed on `82fb2f39`. Its
+[offline GitHub job](https://github.com/edithatogo/innovate/actions/runs/45804571747/job/139856288430)
+passed on the job-specific Apple Container Linux x86-64 runner. It verified
+the exact test merge `b659d755` and the approved image review, with eight verified
+backports and zero ignored findings. The runner was removed after the job.
+
+The first wheel matrix reached the installed checks on all three hosts and
+failed on the old Kairos package name. The corrected test verifies the pinned
+state crate, tests the same three engines and rejects Heapless. All three
+corrected cases passed against the local installed wheel. The updated commit
+requires new run-bound security and wheel receipts.
+
 ## V05 manuscript checkpoint
 
 - [ ] Before revising a paper, freeze its contract revision and source-linked inventories under the [paper requirements](spec.md#paper-contracts-and-scientific-acceptance). Resolve journal rules against official sources for that edition and retain any unverified portal requirements.
