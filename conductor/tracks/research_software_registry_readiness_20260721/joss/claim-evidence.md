@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
 Edition dated 26 November 2026. Source baseline
-`263dc706c5598e463d5b53284e020bf496a7fed4` and development version `0.7.0a1`.
+`9bdcadfa90108eae01a29eb2bc378983d5d85764` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -30,6 +30,14 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P04 | More than six months of publicly available iterative development has been established for submission | Public availability and development chronology with releases/issues/PRs and dates; a repository creation timestamp alone is insufficient. |
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
+
+## Ruff dependency reassessment on 26 November 2026
+
+The manifest changes the development-only Ruff pin to `0.17.6`, leaving
+the runtime dependency declarations and the other thirteen reviewed inputs
+as recorded. The locked install, lint and formatting checks passed on
+Python `3.15.2`. The existing claim and evidence dispositions still apply.
+[PR #710](https://github.com/edithatogo/innovate/pull/710)
 
 ## Notebook hook dependency reassessment on 26 November 2026
 
