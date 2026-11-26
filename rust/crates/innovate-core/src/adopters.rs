@@ -40,8 +40,8 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     let last = *weighted_samples.clone().next_back().unwrap().0;
     // Halve before subtraction when the grid spans both extremes.
     let prescale = if (last - first).is_finite() { 1. } else { 0.5 };
-    let origin = first * prescale;
-    let span = last * prescale - origin;
+    let first_origin = first * prescale;
+    let span = last * prescale - first_origin;
     // For finite spans, use a power of two to avoid rounding exact boundary ties.
     let exponent = span.to_bits() & f64::INFINITY.to_bits();
     let scale = if prescale == 1. {
@@ -49,35 +49,56 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     } else {
         span
     };
-    let scaled_time = |t: f64| (t * prescale - origin) / scale;
+    let scaled_time = |t: f64, origin: f64| (t * prescale - origin) / scale;
     // Binary scaling avoids rounding exact weighted-moment boundaries
     // merely because the largest rate is not a power of two.
     let rate_exponent = max_rate.to_bits() & f64::INFINITY.to_bits();
     let rate_scale = f64::from_bits(rate_exponent).max(f64::MIN_POSITIVE);
-    let points = weighted_samples
-        .clone()
-        .map(|(&t, rate)| (scaled_time(t), rate / rate_scale));
-    let total: f64 = points.clone().map(|(_, weight)| weight).sum();
-    let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
-    let variance = points
-        .clone()
-        .map(|(t, weight)| (t - mean).powi(2) * weight)
-        .sum::<f64>()
-        / total;
-    let sd = if variance < f64::MIN_POSITIVE {
-        // Square-root weights retain dispersion even when variance underflows.
-        let root_rate_scale = rate_scale.sqrt();
-        weighted_samples
-            .map(|(&t, rate)| (scaled_time(t) - mean) * (rate.sqrt() / root_rate_scale))
-            .fold(0.0_f64, f64::hypot)
-            / total.sqrt()
-    } else {
-        variance.sqrt()
+    let moments = |origin| {
+        let points = weighted_samples
+            .clone()
+            .map(|(&t, rate)| (scaled_time(t, origin), rate / rate_scale));
+        let total: f64 = points.clone().map(|(_, weight)| weight).sum();
+        let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
+        let variance = points
+            .map(|(t, weight)| (t - mean).powi(2) * weight)
+            .sum::<f64>()
+            / total;
+        let sd = if variance < f64::MIN_POSITIVE {
+            // Square-root weights retain dispersion even when variance underflows.
+            let root_rate_scale = rate_scale.sqrt();
+            weighted_samples
+                .clone()
+                .map(|(&t, rate)| (scaled_time(t, origin) - mean) * (rate.sqrt() / root_rate_scale))
+                .fold(0.0_f64, f64::hypot)
+                / total.sqrt()
+        } else {
+            variance.sqrt()
+        };
+        (mean, sd)
     };
+    let (mean, sd) = moments(first_origin);
+    let lower = mean - sd;
+    let (origin, mean, sd, shift) =
+        if sd > 0. && (lower == mean || mean - 2. * sd == lower || mean + sd == mean) {
+            // Recenter when adding the spread to the mean cannot distinguish
+            // adjacent thresholds. A dominant weight at zero preserves small
+            // mean shifts that otherwise disappear when accumulating moments.
+            let dominant = *weighted_samples
+                .clone()
+                .find(|(_, rate)| **rate == max_rate)
+                .unwrap()
+                .0
+                * prescale;
+            let (mean, sd) = moments(dominant);
+            (dominant, 0., sd, mean)
+        } else {
+            (first_origin, mean, sd, 0.)
+        };
     let categories: Vec<_> = time
         .iter()
         .map(|&sample| {
-            let t = scaled_time(sample);
+            let t = scaled_time(sample, origin) - shift;
             if t <= mean - 2. * sd {
                 "Innovators"
             } else if t <= mean - sd {
