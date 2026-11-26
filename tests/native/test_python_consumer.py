@@ -8,6 +8,7 @@ import os
 import random
 import struct
 import tomllib
+from decimal import Decimal, localcontext
 from fractions import Fraction
 from itertools import product
 from pathlib import Path
@@ -86,6 +87,135 @@ def test_forecast_batch_can_begin_after_zero():
     frame = innovate.predict("bass", pl.DataFrame({"time": [3.0, 4.0]}), {"p": 0.03, "q": 0.35, "m": 1000.0})
     decay = math.exp(-0.38 * 3.0)
     assert frame["prediction"][0] == pytest.approx(1000.0 * (1 - decay) / (1 + 0.35 / 0.03 * decay), abs=1e-10)
+
+
+def _bass_decimal_reference(time, parameters):
+    with localcontext() as context:
+        context.prec = 75
+        p, q, market = (Decimal(str(parameters[name])) for name in ("p", "q", "m"))
+        if q == 0 and p * Decimal(str(time)) < Decimal("1e-70"):
+            # The correction to the linear term is below the precision of the inputs.
+            return float(market * p * Decimal(str(time))), float(market * p)
+        decay = (-(p + q) * Decimal(str(time))).exp()
+        fraction = p * (1 - decay) / (p + q * decay)
+        return float(market * fraction), float(market * (1 - fraction) * (p + q * fraction))
+
+
+@pytest.mark.parametrize(
+    ("parameters", "time"),
+    [
+        ({"p": 0.04, "q": 0.0, "m": 500.0}, [0.0, 1e-12, 5.0, 25.0]),
+        ({"p": 0.03, "q": 0.38, "m": 1000.0}, [0.1, 2.0, 5.0, 30.0, 70.0]),
+        ({"p": 1e-300, "q": 0.0, "m": 1e300}, [0.0, 1e-40, 1e-25]),
+    ],
+    ids=["exponential-limit", "imitation", "subnormal-elapsed"],
+)
+def test_bass_installed_point_routes_match_independent_reference(parameters, time):
+    reference = [_bass_decimal_reference(t, parameters) for t in time]
+    expected_levels = [level for level, _ in reference]
+    expected_rates = [rate for _, rate in reference]
+    grid = pl.DataFrame({"time": time, "row": list(range(len(time)))})
+
+    levels = innovate.predict("bass", grid.lazy(), parameters)
+    rates = innovate.predict("bass", grid, parameters, quantity="rate")
+    simulation = innovate.execute("simulate_model", "bass", inputs={"time": time}, parameters=parameters)
+
+    assert levels["row"].to_list() == grid["row"].to_list()
+    assert levels["prediction"].to_list() == pytest.approx(expected_levels, rel=1e-12, abs=0.0)
+    assert rates["rate"].to_list() == pytest.approx(expected_rates, rel=1e-12, abs=0.0)
+    assert simulation["metadata"]["runtime"] == "rust_native"
+    assert simulation["result"]["values"] == pytest.approx(expected_levels, rel=1e-12, abs=0.0)
+
+
+@pytest.mark.parametrize(("time_unit", "market_unit"), [(1.0, 1.0), (365.0, 1000.0)])
+def test_bass_installed_fit_recovers_parameters_and_forecasts_holdout(time_unit, market_unit):
+    parameters = {"p": 0.03 / time_unit, "q": 0.35 / time_unit, "m": 100.0 * market_unit}
+    training_time = [value * time_unit for value in (0.0, 0.3, 1.1, 2.0, 4.7, 7.0, 9.5, 13.2, 20.0, 30.0)]
+    observed = [_bass_decimal_reference(t, parameters)[0] for t in training_time]
+    fit = innovate.fit("bass", pl.DataFrame({"time": training_time, "observed": observed}))
+
+    assert fit.envelope["metadata"]["runtime"] == "rust_native"
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.parameters == pytest.approx(parameters, rel=1e-5, abs=0.0)
+
+    holdout_time = [value * time_unit for value in (35.0, 55.0)]
+    reference = [_bass_decimal_reference(t, parameters) for t in holdout_time]
+    holdout = pl.DataFrame({"time": holdout_time})
+
+    assert fit.predict(holdout)["prediction"].to_list() == pytest.approx(
+        [level for level, _ in reference], rel=1e-5, abs=0.0
+    )
+    assert fit.predict(holdout, quantity="rate")["rate"].to_list() == pytest.approx(
+        [rate for _, rate in reference], rel=1e-5, abs=0.0
+    )
+
+
+def test_bass_installed_fit_flags_weakly_identified_early_data():
+    time = [0.0, 1e-9, 2e-9, 3e-9, 4e-9]
+    # The first-order data identifies m*p, with little information about p, q and m separately.
+    fit = innovate.fit("bass", pl.DataFrame({"time": time, "observed": [3 * t for t in time]}))
+    rank = fit.diagnostics["identifiability"]
+    assert rank["status"] == "rank_deficient"
+    assert rank["rank"] < rank["parameters"] == 3
+    assert "parameters are locally rank deficient" in fit.diagnostics["warnings"]
+
+
+@pytest.mark.parametrize(
+    ("model", "parameters", "time"),
+    [
+        ("logistic", {"L": 1e300, "k": 1.0, "x0": 750.0}, [0.0, 10.0, 750.0, 1500.0]),
+        ("fisher_pry", {"alpha": 1.0, "t0": 710.0}, [0.0, 10.0, 710.0, 1420.0]),
+        ("gompertz", {"a": 1e300, "b": 1.0, "c": 1.0}, [-math.log(750), -math.log(740), 0.0, 1.0]),
+    ],
+)
+def test_classical_installed_tails_preserve_representable_levels_and_rates(model, parameters, time):
+    with localcontext() as context:
+        context.prec = 75
+        expected_levels, expected_rates = [], []
+        for t in map(lambda value: Decimal(str(value)), time):
+            if model == "gompertz":
+                exponent = (-t).exp()
+                level = Decimal("1e300") * (-exponent).exp()
+                rate = level * exponent
+            else:
+                market = Decimal(str(parameters.get("L", 1)))
+                midpoint = Decimal(str(parameters.get("x0", parameters.get("t0"))))
+                odds = (midpoint - t).exp()
+                level = market / (1 + odds)
+                rate = market * odds / (1 + odds) ** 2
+            expected_levels.append(float(level))
+            expected_rates.append(float(rate))
+
+    data = pl.DataFrame({"time": time})
+    assert innovate.predict(model, data, parameters)["prediction"].to_list() == pytest.approx(
+        expected_levels, abs=0.0, rel=1e-12
+    )
+    assert innovate.predict(model, data, parameters, quantity="rate")["rate"].to_list() == pytest.approx(
+        expected_rates, abs=0.0, rel=1e-12
+    )
+
+
+@pytest.mark.parametrize(
+    ("model", "expected_rank", "tolerance", "truth"),
+    [
+        ("logistic", 3, 1.0, lambda t: 120 / (1 + math.exp(-0.38 * (t - 12)))),
+        ("gompertz", 3, 1.0, lambda t: 120 * math.exp(-4 * math.exp(-0.16 * t))),
+        ("fisher_pry", 2, 0.01, lambda t: 1 / (1 + math.exp(-0.3 * (t - 12)))),
+    ],
+)
+def test_classical_installed_fit_forecasts_original_noisy_holdout(model, expected_rank, tolerance, truth):
+    # Same frozen inputs and per-family tolerances as fit_quality.rs.
+    noise = [0.8, -1.1, 0.4, -0.6, 1.3, -0.3]
+    observed = [truth(t) + tolerance * noise[t % len(noise)] for t in range(22)]
+    data = pl.DataFrame({"time": list(range(22)), "observed": observed})
+    fit = innovate.fit(model, data)
+    assert fit.envelope["metadata"]["runtime"] == "rust_native"
+    assert fit.diagnostics["optimizer"]["converged"]
+    assert fit.diagnostics["identifiability"]["rank"] == expected_rank
+
+    holdout = list(range(22, 31))
+    predicted = fit.predict(pl.DataFrame({"time": holdout}))["prediction"].to_list()
+    assert predicted == pytest.approx([truth(t) for t in holdout], abs=tolerance, rel=0.0)
 
 
 def test_unrepresentable_fit_sensitivities_fail_in_the_installed_native_library():
@@ -2000,13 +2130,26 @@ def test_adopter_classification_matches_exact_weighted_moments():
     rng = random.Random(401)
     cases = [(sorted(rng.sample(range(-300, 301), 16)), [rng.randrange(31) for _ in range(16)]) for _ in range(512)]
     cases.extend((list(range(5)), weights) for weights in product(range(5), repeat=5) if any(weights))
+    grids = ([0, 1, 5, 11, 17, 47], [-8, -5, -1, 0, 2, 17], [-8, -1, 0, 1, 2, 8])
+    weights = (
+        [0, 1, 5, 11, 5, 1],
+        [2.0**-1000, 2.0**-500, 1.0, 2.0**500, 2.0**1000, 2.0**500],
+        [2.0**1000, 1.0, 2.0**-1000, 0, 1, 1],
+    )
+    cases.extend(
+        ([math.ldexp(t, exponent) for t in grid], rates)
+        for grid, rates, exponent in product(grids, weights, (-1000, 0, 1017))
+    )
+    cases.append(([0.0, 1.0, 2.0], [2.0**-500, 2.0**500, 0.0]))
     for time, rates in cases:
-        total = sum(rates)
-        mean = Fraction(sum(t * w for t, w in zip(time, rates, strict=True)), total)
-        variance = sum((t - mean) ** 2 * w for t, w in zip(time, rates, strict=True)) / total
+        samples = list(map(Fraction, time))
+        exact_rates = list(map(Fraction, rates))
+        total = sum(exact_rates)
+        mean = sum(t * w for t, w in zip(samples, exact_rates, strict=True)) / total
+        variance = sum((t - mean) ** 2 * w for t, w in zip(samples, exact_rates, strict=True)) / total
 
         expected = []
-        for t in time:
+        for t in samples:
             delta = t - mean
             squared = delta**2
             if delta <= 0 and squared >= 4 * variance:

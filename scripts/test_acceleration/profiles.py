@@ -28,7 +28,7 @@ SCOPES = {
     "native": ("tests/native",),
     "policy": ("tests/native/test_migration_policy.py", "tests/native/test_migration_mutation.py"),
 }
-VERSIONS = {"pytest": "9.2.0", "coverage": "7.17.2", "pytest-testmon": "2.3.0", "pytest-gremlins": "1.13.2"}
+VERSIONS = {"pytest": "9.2.0", "coverage": "7.17.4", "pytest-testmon": "2.3.1", "pytest-gremlins": "1.14.3"}
 
 
 class ProfileError(ValueError):

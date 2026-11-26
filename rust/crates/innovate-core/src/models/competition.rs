@@ -87,3 +87,62 @@ pub fn competing_rates(
     }
     Ok(MarketRates { rates })
 }
+
+#[cfg(test)]
+mod tests {
+    use std::cell::Cell;
+
+    use super::{CompetitionParameters, MarketState, competing_rates};
+    use crate::numerics::integrate;
+
+    #[test]
+    fn symmetric_trajectory_matches_the_closed_form_logistic_reference() {
+        let q = 3.0_f64.ln();
+        let params = CompetitionParameters {
+            market_capacity: 100.0,
+            entry_times: vec![0.0, 0.0],
+            p: vec![0.0, 0.0],
+            q: vec![q, q],
+            interaction: vec![vec![0.0, 0.0], vec![0.0, 0.0]],
+        };
+        let initial = MarketState {
+            adoption: vec![25.0, 25.0],
+        };
+        let rates = competing_rates(0.0, &initial, &params).unwrap();
+        for rate in rates.rates {
+            assert!((rate - 12.5 * q).abs() < 1e-12);
+        }
+
+        let evaluations = Cell::new(0);
+        let times = [0.0, 0.5, 1.0, 2.0];
+        let rows = integrate(&times, 0.0, &initial.adoption, |t, adoption| {
+            evaluations.set(evaluations.get() + 1);
+            let state = MarketState {
+                adoption: adoption.to_vec(),
+            };
+            competing_rates(t, &state, &params).unwrap().rates
+        })
+        .unwrap();
+
+        assert_eq!(rows.len(), times.len());
+        let mut max_total_error = 0.0_f64;
+        for (time, row) in times.into_iter().zip(&rows) {
+            let [first, second] = row.as_slice() else {
+                panic!("expected two products at time {time}");
+            };
+            // Summing the two rates yields logistic growth with initial total 50.
+            let expected_total = 100.0 / (1.0 + (-q * time).exp());
+            let observed_total = first + second;
+            assert_eq!(first, second);
+            assert!((50.0..=100.0).contains(&observed_total));
+            max_total_error = max_total_error.max((observed_total - expected_total).abs());
+        }
+        assert!((rows[2][0] - 37.5).abs() < 5e-7);
+        assert!(max_total_error < 1e-6, "total error {max_total_error:e}");
+        assert!((1..=512).contains(&evaluations.get()));
+        eprintln!(
+            "symmetric A04 maximum total error {max_total_error:e}, {} rate evaluations",
+            evaluations.get()
+        );
+    }
+}
