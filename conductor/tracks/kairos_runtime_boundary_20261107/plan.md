@@ -1,7 +1,7 @@
 # Bounded plan
 
-All implementation leaves are pending. One behaviour and no more than five files
-per leaf. Use the existing scientific-alignment integrator for shared source/pin
+Use one behaviour and no more than five files per implementation leaf.
+Use the existing scientific-alignment integrator for shared source/pin
 handoffs. Commands run from repository root with qualified tools; two commands
 shown together are independent checks. A named future test is an explicit output,
 not an assertion that the target exists today. Stop on missing contracts, toolchain
@@ -12,15 +12,13 @@ define the dependency graph: I01 precedes I00, then I02. I00 was inserted after
 review to prepare the candidate and lock without renumbering the existing leaves.
 Do not infer dependencies from numbering or document order.
 
-The I10 receipt covers the native runtime consumer only. Optional game profile
-I07 stays pending independently and does not block that receipt or a release
-that claims no game capability. Game integration follows the existing
+The I10 receipt covers the native runtime consumer. Optional I07 qualifies
+the initial static pricing game independently. Game integration follows the existing
 [PR570 G01–G04/A08 programme](https://github.com/edithatogo/innovate/pull/570)
 and the game provider's T17 handoff; this track does not take over that branch.
 A game claim needs its accepted profile and real solver-consumer evidence, with
-native replay additionally required for dynamic execution. Static game acceptance
-does not require the dynamic adapter. Keep the whole track open while I07 is
-unfinished; a scoped runtime receipt must not mark optional game work complete.
+native replay additionally required for dynamic execution. The I07 static game
+uses the standalone adapter. Each remaining leaf keeps its own acceptance criteria.
 
 ## I01: Correct the native claim boundary
 
@@ -137,7 +135,8 @@ Acceptance: New target: selected core model compiles/runs without Arrow when unu
 
 ## I07: Qualify the optional domain-game profile
 
-- [ ] I07 Implement and verify this bounded outcome.
+- [~] I07 Qualify the domain-game profile. Finite pricing is verified. The
+  continuous diffusion/adoption declaration and trajectory remain in #724.
 
 Executor: specialist. Requires: UOGTO executable profile and generic Rust game package.
 
@@ -146,6 +145,12 @@ Files: `specs/ecosystem/uogto/innovate-game-profile.md`.
 Check: `python scripts/conductor_registry_hygiene.py --json`.
 
 Acceptance: Declare diffusion/adoption players/actions/information/payoffs and model assumptions, map UOGTO IDs and solver capability/results. No generic solver in Innovate and no mandatory Kairos dependency for static games. Registry hygiene is structural only; require a real game fixture in follow-on leaves. This optional profile has its own game-acceptance scope and is not an I10 runtime prerequisite.
+
+The [receiving profile](../../../specs/ecosystem/uogto/innovate-game-profile.md)
+records the two finite pricing cases. Native CI checks the actual application
+profits, the static dependency closure and the pinned UOGTO replay. The
+independent continuous competing-adoption case follows its own
+[trajectory contract](https://github.com/edithatogo/innovate/issues/724).
 
 ## I08: Add a distinguishing paired-outcome regression
 

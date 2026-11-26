@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
 Edition dated 26 November 2026. Source baseline
-`34b4868c094742495fb7f89f5410676917e7a05b` and development version `0.7.0a1`.
+`62328bd07c3ab904f5d560a3301540eb62c7a1e8` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).
@@ -31,15 +31,41 @@ Hash equality preserves identity, not truth or scientific acceptance.
 | P05 | Author list, affiliation, funding, conflicts, rights and human AI review are confirmed | Authors' own factual declarations. The current metadata are provisional; this draft cannot attest on their behalf. |
 | P06 | SWH archival, RRID approval, JOSS submission/acceptance or archive DOI is complete | Actual provider/editorial records and identifier resolution under [readiness.json](../readiness.json). Local validation and structurally plausible identifiers are insufficient. |
 
-## Security integration source reassessment on 26 November 2026
+## Actions dependency reassessment on 27 November 2026
 
-Four of the fourteen source inputs changed since the dependency follow-up.
-The core manifest and lock retain the Jiff and Polars backports and narrow the
-Kairos dependency to the existing entity state and scheduler crates. The
-native guide describes that same ownership boundary. The ledger still
-requires all 38 obligations and preserves the earlier adopter receipts at
-their recorded source. C01, C05, C06 and C07 retain their scope. The other
-ten source inputs retain their previous fingerprints. P01–P06 remain pending.
+The reviewed native CI workflow updates the pinned Harden Runner and
+tool-installer actions. The existing native test matrix, commands and
+acceptance conditions remain in effect. The other thirteen source
+fingerprints match the previous assessment. The claim dispositions retain
+their existing scope. [PR #711](https://github.com/edithatogo/innovate/pull/711)
+
+## Zizmor dependency reassessment on 26 November 2026
+
+The manifest updates the development-only Zizmor pin to `1.33.1`. The
+runtime dependency declarations and the other thirteen reviewed inputs
+match the previous assessment. The locked tool produced the same workflow
+audit result as `1.32.0` with the repository's existing configuration.
+The existing claim and evidence dispositions still apply.
+[PR #719](https://github.com/edithatogo/innovate/pull/719)
+
+## Ruff dependency reassessment on 26 November 2026
+
+The manifest changes the development-only Ruff pin to `0.17.6`, leaving
+the runtime dependency declarations and the other thirteen reviewed inputs
+as recorded. The locked install, lint and formatting checks passed on
+Python `3.15.2`. The existing claim and evidence dispositions still apply.
+[PR #710](https://github.com/edithatogo/innovate/pull/710)
+
+## Notebook hook dependency reassessment on 26 November 2026
+
+The notebook hook update changes one of the fourteen reviewed inputs. The
+manifest raises the development-only pin to `0.9.2`. The lock retains the
+tool's dependency on `nbformat`, and the runtime dependency declarations
+match the previous assessment. On Python `3.15.2`, the repository hook
+preserved notebook source and removed execution output and empty cells.
+C01–C08 and P01–P06 retain their existing scope. Registry outcomes and
+submission remain pending. The PDF receipt identifies its earlier edition.
+[PR #708](https://github.com/edithatogo/innovate/pull/708)
 
 ## Source reassessment on 26 November 2026
 

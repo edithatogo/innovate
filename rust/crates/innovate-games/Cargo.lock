@@ -18,7 +18,7 @@ dependencies = [
 [[package]]
 name = "paignia-core"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=bd880dd756d2ba56cc5f479bc078cea31b53c1d1#bd880dd756d2ba56cc5f479bc078cea31b53c1d1"
+source = "git+https://github.com/edithatogo/paignia.git?rev=a04a19da06cc50e310a172574ed66f62000b891a#a04a19da06cc50e310a172574ed66f62000b891a"
 dependencies = [
  "thiserror",
 ]
@@ -26,7 +26,7 @@ dependencies = [
 [[package]]
 name = "paignia-solve"
 version = "0.1.0"
-source = "git+https://github.com/edithatogo/paignia.git?rev=bd880dd756d2ba56cc5f479bc078cea31b53c1d1#bd880dd756d2ba56cc5f479bc078cea31b53c1d1"
+source = "git+https://github.com/edithatogo/paignia.git?rev=a04a19da06cc50e310a172574ed66f62000b891a#a04a19da06cc50e310a172574ed66f62000b891a"
 dependencies = [
  "paignia-core",
  "thiserror",
