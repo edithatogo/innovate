@@ -242,3 +242,19 @@ capacity coverage was 33/40 for paired resampling and 27/40 for centered
 residual resampling. All baseline fits converged. Calibration therefore
 remains open. Multi-node and accelerator qualification also remain
 outstanding under the release ledger.
+
+## I07 CI verifier environment
+
+Linux CI restored an existing Python environment at `target/i07/python`
+and failed during `uv venv`. The I07 check now stages Python and its
+ontology inputs in a fresh `RUNNER_TEMP` directory. It still uses the
+pinned verifier, hashed package requirements, locked Rust solver,
+comparison checks and the existing receiving receipt. Two local
+environment rehearsals passed with a populated cache directory.
+[Linux failure](https://github.com/edithatogo/innovate/actions/runs/45913833832/job/140228207599)
+
+This workflow repair changes the qualified release source inventory to
+`4755d79d2ce1e5559ac5858d79abafe97360a4bb557124a61fa8fabb542643d0`.
+The earlier wheel attestations and adopter reports remain valid at
+their recorded inventory. The revised inventory requires refreshed
+source-bound evidence and all 37 unfinished release obligations.

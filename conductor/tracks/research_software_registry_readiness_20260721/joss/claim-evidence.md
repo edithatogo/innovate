@@ -1,7 +1,7 @@
 # JOSS working-draft claim register
 
 Edition dated 27 November 2026. Source baseline
-`6f818d103ae4b5499bd9ce97ec2e36e9497e134b` and development version `0.7.0a1`.
+`084c31fc3cbb7eeb50d46429f3135db28d48c7b6` and development version `0.7.0a1`.
 Applies to [paper.md](paper.md) and [paper.bib](paper.bib), not the legacy
 manuscript or an eventual submitted version. Relevant input bytes and this
 manuscript edition are identified in [source-snapshot.json](source-snapshot.json).

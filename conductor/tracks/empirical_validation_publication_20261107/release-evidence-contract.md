@@ -40,8 +40,9 @@ match the qualification commit. GitHub CLI verifies the bundle. [GitHub attestat
 The [20 November adopter evidence](evidence/adopter-classification-20261120/README.md)
 remains valid for its recorded source. The
 [reconciled adopter evidence](evidence/adopter-classification-20261127-a0d15822/README.md)
-qualifies the same scope in the current release inventory. The other 37
-obligations still require native and scientific acceptance. The dry-run workflow
+qualifies the same scope for its recorded source inventory. The I07 CI
+environment repair changes that inventory and requires refreshed receipts.
+The other 37 obligations still require native and scientific acceptance. The dry-run workflow
 builds wheels from the source distribution and exercises them on Linux x86_64,
 macOS ARM64 and Windows x64. Separate automated jobs verify the source, target
 and wheel digest for each receipt and sign it. The receipt's
