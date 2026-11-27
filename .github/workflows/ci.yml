@@ -103,17 +103,18 @@ jobs:
         run: |
           set -euo pipefail
           replay="$PWD/target/i07"
+          scratch="$(mktemp -d "$RUNNER_TEMP/innovate-i07.XXXXXX")"
           provider="$replay/provider"
           verifier="$provider/verification/uogto_interchange"
-          uv venv --python "$(cat .python-version)" "$replay/python"
-          python="$replay/python/bin/python"
+          uv venv --python "$(cat .python-version)" "$scratch/python"
+          python="$scratch/python/bin/python"
           "$python" -I -c 'import sys; assert sys.version_info[:3] == (3, 15, 2)'
           uv pip install --python "$python" --require-hashes --only-binary :all: -r "$verifier/requirements.txt"
-          "$python" -I "$verifier/interchange.py" stage --ontology-dir "$replay/ontology"
+          "$python" -I "$verifier/interchange.py" stage --ontology-dir "$scratch/ontology"
           CARGO_TARGET_DIR="$replay/target" cargo build --release --locked \
             --manifest-path "$provider/crates/paignia-io/Cargo.toml" --example solve -j 2
           "$python" -I specs/ecosystem/uogto/verify_price_commitment.py \
-            "$provider" "$replay/ontology" "$replay/target/release/examples/solve" "$replay/receipt.json"
+            "$provider" "$scratch/ontology" "$replay/target/release/examples/solve" "$replay/receipt.json"
       - name: Retain the I07 receiving receipt
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
