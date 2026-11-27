@@ -1,6 +1,7 @@
 //! Rust-owned diffusion fitting, prediction, diagnostics and execution contracts.
 #![forbid(unsafe_code)]
 mod adopters;
+mod agent_state;
 mod bayesian;
 mod benchmark;
 mod bootstrap;

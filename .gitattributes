@@ -1,2 +1,9 @@
 rust/vendor/** -text
 THIRD-PARTY-LICENSES -text
+# Qualification receipts and their replay inputs are hashed byte for byte.
+conductor/tracks/empirical_validation_publication_20261107/evidence/** -text
+# The Windows receipt is signed with CRLF line endings.
+conductor/tracks/empirical_validation_publication_20261107/evidence/signed-wheels-20261122/receipt-windows-x86_64.json whitespace=cr-at-eol
+conductor/tracks/empirical_validation_publication_20261107/evidence/signed-wheels-20261122-d815565e/receipt-windows-x86_64.json whitespace=cr-at-eol
+conductor/tracks/empirical_validation_publication_20261107/evidence/signed-wheels-20261122-1f45e162/receipt-windows-x86_64.json whitespace=cr-at-eol
+conductor/tracks/empirical_validation_publication_20261107/evidence/wheel-dry-run-20261124-f902b2af/receipt-windows-x86_64.json whitespace=cr-at-eol

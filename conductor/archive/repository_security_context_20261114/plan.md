@@ -1,5 +1,121 @@
 # Issue #414 implementation plan
 
+## Alert #56 and StepSecurity PR #681 follow-up, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the repository protection
+readback and the bounded PR #681 policy repair. The worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`
+is on `codex/innovate-1118-security`. It started at
+`bdc8558fd468c9d40b42b99267ba141bf4b10332` and fast-forwarded to
+`20fe0b41b815bc926fc3d61b9672c3d4b2feb289` after PR #678 merged.
+The allowed source scope is this plan, the policy snapshot checker and its
+tests, the bot-added `.github/dependabot.yml` and its ESLint hook addition
+in `.pre-commit-config.yaml`. Preserve the existing hook entries. The native
+scope is the existing tracked solo-maintainer ruleset and the disposition of
+PR #681. Other PRs and their auto-merge settings have separate owners.
+
+The Scorecard alert reports missing explicit pull-request protection and
+mandatory human and code-owner reviews. The existing
+`.github/rulesets/main.json` proposal defines an explicit pull-request rule
+with zero required approvals, force-push and deletion protection, and two
+strict automated contexts already required by classic branch protection.
+Verify the live baseline and activate that proposal. Preserve the classic
+protection and the existing CodeQL results ruleset, then rerun Scorecard and
+read the alert back. The solo-maintainer policy requires zero approvals.
+
+The saved ruleset `27532448` is active on main. Its four rules are effective
+alongside CodeQL rule `27522878`. The entire classic protection response was
+unchanged across the activation. GitHub added its default
+`require_extra_approval_for_unattributed_changes: true` and an empty
+`required_reviewers` list to the saved response. GitHub documents that this
+default adds an approval only when the required approval count is above zero.
+The native and tracked configurations both specify zero, so retain the
+default and validate its type in the live snapshot checker.
+
+PR #681's job `134656576567` at
+`3305d565642beb950d505d0e2842199c8dfe0032` failed when the policy checker
+detected the bot-added weekly GitHub Actions update schedule. GitHub reports
+an active Renovate dashboard covering Actions and enabled Dependabot
+vulnerability alerts and security fixes. The other proposed change repeats
+the ESLint 10.8.0 hook that previously failed qualification in PR #672.
+Reproduce the policy failure on the exact bot source and qualify the minimal
+repair without promoting changes while the supply-chain checks are failing.
+Use the isolated standard Git worktree `/Users/doughnut/.codex/worktrees/innovate-pr681-policy/innovate`,
+branch `codex/pr681-policy-repair`, for the exact bot-head comparison.
+
+On the bot head, repo-local Python 3.15.2 reproduced the policy exit 1.
+The proposed ESLint 10.8.0 hook returned exit 2 on the documentation generator
+because the repository has no ESLint configuration. Removing the two bot
+additions made the policy command and all 21 policy tests pass. The repaired
+tree has zero differences from the bot PR's base `bdc8558f`. GitHub confirmed
+PR #681 closed without a merge at `2026-11-18T08:21:29Z`. The isolated
+verification worktree was removed after restoring the two trial paths.
+
+Scorecard run `44265672565` completed on `20fe0b41` after the ruleset activation.
+Branch Protection rose from 3 to 4 and stopped reporting a missing pull-request
+requirement. Alert #56 remains open for Scorecard's review and bypass criteria.
+Native classic protection still applies to administrators, and the separate
+CodeQL rule has no bypass actors. The activated tracked ruleset retains the
+owner's pull-request recovery exception. The combined live settings snapshot
+passed the policy checker with both rulesets, strict classic checks, and zero
+required approvals. The checker now validates the GitHub-added boolean, and
+all 21 policy tests and Ruff pass on the selected Python 3.15.2 environment.
+
+## Dependabot #166 documentation dependency mitigation, 18 November 2026
+
+The same integration branch owns a bounded docs workspace follow-up from
+`20fe0b41b815bc926fc3d61b9672c3d4b2feb289`. Allowed files are this plan, the
+site's pnpm workspace and lock, the two scoped package patches, and a focused
+documentation test. Keep the existing dependency release-age policy and full
+site checks. The advisory lists all versions through 4.0.7 and no fixed
+release. The lock includes 4.0.7 via Astro, Starlight, Vite and tinyglobby, and
+2.3.2 via anymatch. Its unchanged baseline SHA-256 is
+`17bef22df127cab558cae199a180afbf3effa63a5f7f73fb7bb976d5da7f0826`.
+Prepare a temporary, version-bound guard rejecting repeated extglob syntax
+in both package parsers and qualify the actual installed docs build. This
+is an interim mitigation. Keep the advisory open pending an upstream release
+and successful scanner readback.
+
+The updated lock has SHA-256
+`c3983b770f2dca6cfb1dc506ec7cfab416a04d8ddb452a512e6c420d516f41c3`.
+All seven resolved `picomatch` references carry the applicable patch hash.
+Removing the patch references restores the original lock byte for byte.
+With Node 26.13.1 and pnpm 12.21.0, `pnpm install --frozen-lockfile`,
+`pnpm test`, `pnpm build` and `pnpm check` passed on the final patches.
+The suite exercised both installed dependency paths and passed all 58 tests.
+The site built 211 pages, with valid internal links and a passing production
+artifact check. Astro reported zero errors, warnings or hints. GitHub still
+reports Dependabot alert #166 open and lists no patched version.
+
+## Alert #44 dependency follow-up, 18 November 2026
+
+GitHub still reports `RUSTSEC-2026-0543` and `RUSTSEC-2026-0555` on main
+`20fe0b41` after PR #678 merged the temporal compatibility tests. The locked
+Innovate consumer graph still contains `chrono` 0.4.45 and `chrono-tz` 0.10.4
+through Polars 0.55.2. The upstream Polars change in PR #29110 is an unmerged
+draft. A released Polars dependency that removes these paths and preserves
+the public `DataFrame` type remains necessary. Keep both advisories visible
+in RustSec. The release and offline security lanes still require successful
+qualification before promotion.
+
+## PR #684 base update, 18 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this draft branch in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Align its head `ecaccce231a1aa53b46418df52bd2cf3cc4e8d85` with main
+`fd7e259bb9a685d620f80907c6815d4837da3e53` through a normal merge.
+The preview confirmed the same eight PR paths against the new base.
+The only additional edit in this operation is this record. Native scope is
+the existing draft's head branch and check readback. Its next required
+promotion evidence is successful checks on the updated head.
+
+The new main includes the scientific evidence and Arrow/MSRV workflow from
+PRs #662 and #685. Its hosted Release Readiness run `44288977642` still
+reports all 38 incomplete scientific obligations. The Rust dependency
+fixtures and both documentation patches retain their existing bytes.
+On the integrated tree the local repository-policy check, all 21 policy
+tests, both installed `picomatch` controls and the diff checks passed.
+
 ## Alert #44 CodeQL language-check gap — 18 November 2026
 
 - Owner: Codex chat `01a1e448-3a28-7653-a681-cd3fdb41f498`.

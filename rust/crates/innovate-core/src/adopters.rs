@@ -1,3 +1,46 @@
+use num_bigint::BigInt;
+
+fn dyadic_parts(value: f64) -> (i64, i32) {
+    let bits = value.to_bits();
+    let exponent_bits = ((bits >> 52) & 0x7ff) as i32;
+    let fraction = bits & ((1_u64 << 52) - 1);
+    let (significand, exponent) = if exponent_bits == 0 {
+        (fraction, -1074)
+    } else {
+        ((1_u64 << 52) | fraction, exponent_bits - 1075)
+    };
+    if significand == 0 {
+        return (0, 0);
+    }
+    let trailing = significand.trailing_zeros();
+    let magnitude = (significand >> trailing) as i64;
+    let integer = if value.is_sign_negative() {
+        -magnitude
+    } else {
+        magnitude
+    };
+    (integer, exponent + trailing as i32)
+}
+
+fn common_exponent(values: &[f64]) -> i32 {
+    values
+        .iter()
+        .copied()
+        .filter(|&value| value != 0.)
+        .map(|value| dyadic_parts(value).1)
+        .min()
+        .unwrap_or(0)
+}
+
+fn scaled_integer(value: f64, scale_exponent: i32) -> BigInt {
+    let (integer, exponent) = dyadic_parts(value);
+    if integer == 0 {
+        BigInt::ZERO
+    } else {
+        BigInt::from(integer) << (exponent - scale_exponent) as usize
+    }
+}
+
 /// Assign historical adopter categories from aligned sample weights.
 ///
 /// `time` must be strictly increasing in one consistent unit. `rates` are
@@ -31,87 +74,51 @@ pub fn classify_adopters(time: &[f64], rates: &[f64]) -> Result<Vec<&'static str
     if time.windows(2).any(|pair| pair[0] >= pair[1]) {
         return Err("time must be strictly increasing");
     }
-    let max_rate = rates.iter().copied().fold(0., f64::max);
-    if max_rate == 0. || rates.iter().any(|rate| *rate < 0.) {
+    if rates.iter().all(|&rate| rate == 0.) || rates.iter().any(|&rate| rate < 0.) {
         return Err("adoption rates must be nonnegative with positive total");
     }
-    let weighted_samples = time.iter().zip(rates).filter(|&(_, rate)| *rate > 0.);
-    let first = *weighted_samples.clone().next().unwrap().0;
-    let last = *weighted_samples.clone().next_back().unwrap().0;
-    // Halve before subtraction when the grid spans both extremes.
-    let prescale = if (last - first).is_finite() { 1. } else { 0.5 };
-    let first_origin = first * prescale;
-    let span = last * prescale - first_origin;
-    // For finite spans, use a power of two to avoid rounding exact boundary ties.
-    let exponent = span.to_bits() & f64::INFINITY.to_bits();
-    let scale = if prescale == 1. {
-        f64::from_bits(exponent).max(f64::MIN_POSITIVE)
-    } else {
-        span
-    };
-    let scaled_time = |t: f64, origin: f64| (t * prescale - origin) / scale;
-    // Binary scaling avoids rounding exact weighted-moment boundaries
-    // merely because the largest rate is not a power of two.
-    let rate_exponent = max_rate.to_bits() & f64::INFINITY.to_bits();
-    let rate_scale = f64::from_bits(rate_exponent).max(f64::MIN_POSITIVE);
-    let moments = |origin| {
-        let points = weighted_samples
-            .clone()
-            .map(|(&t, rate)| (scaled_time(t, origin), rate / rate_scale));
-        let total: f64 = points.clone().map(|(_, weight)| weight).sum();
-        let mean = points.clone().map(|(t, weight)| t * weight).sum::<f64>() / total;
-        let variance = points
-            .map(|(t, weight)| (t - mean).powi(2) * weight)
-            .sum::<f64>()
-            / total;
-        let sd = if variance < f64::MIN_POSITIVE {
-            // Square-root weights retain dispersion even when variance underflows.
-            let root_rate_scale = rate_scale.sqrt();
-            weighted_samples
-                .clone()
-                .map(|(&t, rate)| (scaled_time(t, origin) - mean) * (rate.sqrt() / root_rate_scale))
-                .fold(0.0_f64, f64::hypot)
-                / total.sqrt()
-        } else {
-            variance.sqrt()
-        };
-        (mean, sd)
-    };
-    let (mean, sd) = moments(first_origin);
-    let lower = mean - sd;
-    let (origin, mean, sd, shift) =
-        if sd > 0. && (lower == mean || mean - 2. * sd == lower || mean + sd == mean) {
-            // Recenter when adding the spread to the mean cannot distinguish
-            // adjacent thresholds. A dominant weight at zero preserves small
-            // mean shifts that otherwise disappear when accumulating moments.
-            let dominant = *weighted_samples
-                .clone()
-                .find(|(_, rate)| **rate == max_rate)
-                .unwrap()
-                .0
-                * prescale;
-            let (mean, sd) = moments(dominant);
-            (dominant, 0., sd, mean)
-        } else {
-            (first_origin, mean, sd, 0.)
-        };
-    let categories: Vec<_> = time
-        .iter()
-        .map(|&sample| {
-            let t = scaled_time(sample, origin) - shift;
-            if t <= mean - 2. * sd {
-                "Innovators"
-            } else if t <= mean - sd {
-                "Early Adopters"
-            } else if t <= mean {
-                "Early Majority"
-            } else if t <= mean + sd {
-                "Late Majority"
-            } else {
-                "Laggards"
-            }
-        })
-        .collect();
+
+    // Interpret the finite binary floats exactly. The common time and weight
+    // scales cancel when comparing distances to the weighted mean and
+    // standard deviation. Integer cutoffs retain the inclusive ties.
+    let time_exponent = common_exponent(time);
+    let rate_exponent = common_exponent(rates);
+    let mut total_weight = BigInt::ZERO;
+    let mut first_moment = BigInt::ZERO;
+    let mut second_moment = BigInt::ZERO;
+    for (&sample, &rate) in time.iter().zip(rates).filter(|&(_, &rate)| rate > 0.) {
+        let sample = scaled_integer(sample, time_exponent);
+        let weight = scaled_integer(rate, rate_exponent);
+        let weighted_sample = &sample * &weight;
+        second_moment += &sample * &weighted_sample;
+        first_moment += weighted_sample;
+        total_weight += weight;
+    }
+    let variance_numerator = &total_weight * second_moment - &first_moment * &first_moment;
+    let sigma_floor = variance_numerator.sqrt();
+    let sigma_ceil = &sigma_floor + u8::from(&sigma_floor * &sigma_floor < variance_numerator);
+    let four_variances = variance_numerator << 2_usize;
+    let twice_sigma_floor = four_variances.sqrt();
+    let twice_sigma_ceil =
+        &twice_sigma_floor + u8::from(&twice_sigma_floor * &twice_sigma_floor < four_variances);
+
+    // The time grid is sorted, so find each inclusive cutoff once. Round the
+    // subtracted deviations up and the added deviation down for exact integer
+    // comparisons, including when the standard deviation is irrational.
+    let boundaries = [
+        (&first_moment - twice_sigma_ceil, "Innovators"),
+        (&first_moment - sigma_ceil, "Early Adopters"),
+        (first_moment.clone(), "Early Majority"),
+        (first_moment + sigma_floor, "Late Majority"),
+    ];
+    let mut categories = Vec::with_capacity(time.len());
+    for (cutoff, category) in boundaries {
+        let end = time.partition_point(|&sample| {
+            scaled_integer(sample, time_exponent) * &total_weight <= cutoff
+        });
+        categories.resize(end, category);
+    }
+    categories.resize(time.len(), "Laggards");
     Ok(categories)
 }
 
@@ -174,6 +181,17 @@ mod tests {
             classify_adopters(&[0., 1e-317, 1.], &[f64::MAX, 0., f64::from_bits(1)]).unwrap(),
             ["Early Majority", "Late Majority", "Laggards"]
         );
+    }
+
+    #[test]
+    fn dominant_weight_does_not_turn_a_late_sample_into_an_innovator() {
+        let smallest = f64::from_bits(1);
+        for dominant in [1., f64::MAX] {
+            assert_eq!(
+                classify_adopters(&[-3., 0., 1., 4.], &[0., 0., smallest, dominant]).unwrap(),
+                ["Innovators", "Innovators", "Innovators", "Late Majority"]
+            );
+        }
     }
 
     #[test]

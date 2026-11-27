@@ -1,0 +1,45 @@
+{
+  "application_adapters_qualified": false,
+  "asset_manifest_sha256": "52dcdae6f0d03bdfed904176ee0a57b5a76fee80206df609acd64bed214b6cc2",
+  "cleanup_status": "not-needed",
+  "image": "localhost/offline-ai-security@sha256:7f7274048617b6a1693d806d04393dd18e7c25b6a52a51e884391afc7d8c7dbd",
+  "kind": "offline-image-qualification",
+  "policy_commit": "7d8aa3fc88f86cc0c54b2c4d57ca9a4bfa97bdda",
+  "runner_registration_qualified": false,
+  "schema_version": 1,
+  "stages": [
+    {
+      "name": "runtime",
+      "status": "passed"
+    },
+    {
+      "name": "network-preflight",
+      "status": "passed"
+    },
+    {
+      "name": "manifest-binding",
+      "status": "passed"
+    },
+    {
+      "name": "asset-preflight",
+      "status": "passed"
+    },
+    {
+      "name": "gitleaks-fixtures",
+      "status": "passed"
+    },
+    {
+      "name": "sast-fixtures",
+      "status": "passed"
+    },
+    {
+      "name": "dlp-model",
+      "status": "passed"
+    },
+    {
+      "name": "promptfoo-mock",
+      "status": "passed"
+    }
+  ],
+  "status": "passed"
+}

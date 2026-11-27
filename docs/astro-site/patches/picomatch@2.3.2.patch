@@ -1,0 +1,15 @@
+diff --git a/lib/parse.js b/lib/parse.js
+index caa2b86aa5a567df33cef4bda3c7a97794f439f8..8444625d421218f509798f83ec122ea140d175d9 100644
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -497,6 +497,10 @@ const parse = (input, options) => {
+     token.prev = prev;
+     token.parens = state.parens;
+     token.output = state.output;
++    // Disable repeated extglobs until GHSA-fc5q-39xc-vjpf has a released fix.
++    if (type === 'plus' || type === 'star') {
++      throw new SyntaxError('Repeated extglob patterns are disabled in this workspace');
++    }
+     token.startIndex = state.index;
+     token.tokensIndex = tokens.length;
+     const output = (opts.capture ? '(' : '') + token.open;

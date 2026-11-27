@@ -5,12 +5,17 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+RELEASE_EVIDENCE_ERROR = "Release blocked: scientific evidence contract"
+INSTALLED_TARGETS = {"linux-x86_64", "macos-arm64", "windows-x86_64"}
+SIGNER_WORKFLOW = "edithatogo/innovate/.github/workflows/release-readiness.yml"
 
 
 SOURCE_PATHS = (
@@ -24,7 +29,7 @@ SOURCE_PATHS = (
     "scripts",
     "specs",
     "tests",
-    "validation/oracles/manifest.json",
+    "validation",
     "Cargo.toml",
     "Cargo.lock",
     "Dockerfile",
@@ -35,16 +40,163 @@ SOURCE_PATHS = (
 )
 
 
-def release_source_digest() -> str:
-    def git(*args: str) -> bytes:
-        return subprocess.check_output(["git", *args], cwd=ROOT)
-
-    if git("status", "--porcelain", "--untracked-files=normal", "--", *SOURCE_PATHS):
-        raise ValueError("Release evidence requires clean source inputs")
-    entries = git("ls-tree", "-r", "-z", "HEAD", "--", *SOURCE_PATHS)
+def source_inventory_digest(revision: str) -> str:
+    entries = subprocess.check_output(["git", "ls-tree", "-r", "-z", revision, "--", *SOURCE_PATHS], cwd=ROOT)
     if not entries:
         raise ValueError("Release source inventory is empty")
     return hashlib.sha256(entries).hexdigest()
+
+
+def release_source_digest() -> str:
+    if subprocess.check_output(
+        ["git", "status", "--porcelain", "--untracked-files=normal", "--", *SOURCE_PATHS], cwd=ROOT
+    ):
+        raise ValueError("Release evidence requires clean source inputs")
+    return source_inventory_digest("HEAD")
+
+
+def release_evidence_path(location: object) -> Path:
+    if not isinstance(location, str) or not location or "\x00" in location:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires a relative file path")
+    path = Path(location)
+    resolved = (ROOT / path).resolve()
+    if path.is_absolute() or ".." in path.parts or not resolved.is_relative_to(ROOT) or not resolved.is_file():
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} references a missing or out-of-scope file")
+    return resolved
+
+
+def release_evidence_json(payload: bytes) -> dict:
+    def unique_fields(pairs):
+        result = dict(pairs)
+        if len(result) != len(pairs):
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} contains duplicate fields")
+        return result
+
+    try:
+        document = json.loads(payload, object_pairs_hook=unique_fields)
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires valid JSON") from error
+    if not isinstance(document, dict):
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires a JSON object")
+    return document
+
+
+def release_file_ref(ref: object) -> Path:
+    if not isinstance(ref, dict) or set(ref) != {"path", "sha256"}:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires a file and SHA-256")
+    if not isinstance(ref["sha256"], str) or not re.fullmatch(r"[0-9a-f]{64}", ref["sha256"]):
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires a valid SHA-256")
+    return release_evidence_path(ref["path"])
+
+
+def verify_release_report(ref: object, kind: str, scope: str, source_digest: str) -> dict:
+    payload = release_file_ref(ref).read_bytes()
+    if hashlib.sha256(payload).hexdigest() != ref["sha256"]:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} report digest does not match")
+    report = release_evidence_json(payload)
+    results = report.get("results")
+    if (
+        report.get("schema_version") != 1
+        or report.get("kind") != kind
+        or report.get("source_sha256") != source_digest
+        or report.get("status") != "passed"
+        or not isinstance(results, dict)
+        or scope not in results
+    ):
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} report has the wrong source, scope or outcome")
+    for counts in results.values():
+        if not isinstance(counts, dict) or set(counts) != {"passed", "failed", "skipped", "errors"}:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} needs explicit test outcomes")
+        if any(type(count) is not int for count in counts.values()):
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} needs integer test outcomes")
+        if counts["passed"] < 1 or any(counts[outcome] != 0 for outcome in ("failed", "skipped", "errors")):
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires executed checks with no unsuccessful outcomes")
+    return report
+
+
+def verify_release_attestation(payload: bytes, bundle: Path, revision: str) -> None:
+    # Verify the exact bytes already parsed, without exposing verifier diagnostics to CI logs.
+    with tempfile.TemporaryDirectory(prefix="innovate-release-evidence-") as folder:
+        subject = Path(folder) / "release-evidence.json"
+        subject.write_bytes(payload)
+        try:
+            subprocess.run(
+                [
+                    "gh",
+                    "attestation",
+                    "verify",
+                    str(subject),
+                    "--bundle",
+                    str(bundle),
+                    "--repo",
+                    "edithatogo/innovate",
+                    "--signer-workflow",
+                    SIGNER_WORKFLOW,
+                    "--signer-digest",
+                    revision,
+                    "--source-digest",
+                    revision,
+                    "--predicate-type",
+                    "https://slsa.dev/provenance/v1",
+                ],
+                cwd=ROOT,
+                check=True,
+                timeout=90,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        except (OSError, subprocess.SubprocessError) as error:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} lacks a verified release-workflow attestation") from error
+
+
+def verify_release_evidence(ledger: dict, source_digest: str) -> None:
+    details = ledger.get("release_evidence")
+    if not isinstance(details, dict) or set(details) != {"manifest", "attestation"}:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} and obligation coverage are not qualified")
+    payload = release_evidence_path(details["manifest"]).read_bytes()
+    bundle = release_evidence_path(details["attestation"])
+    manifest = release_evidence_json(payload)
+    revision = manifest.get("source_commit")
+    if (
+        manifest.get("schema_version") != 1
+        or manifest.get("kind") != "innovate-release-qualification"
+        or not isinstance(revision, str)
+        or not re.fullmatch(r"[0-9a-f]{40}", revision)
+        or manifest.get("source_sha256") != source_digest
+    ):
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} manifest has the wrong identity or source digest")
+    try:
+        observed_digest = source_inventory_digest(revision)
+    except (OSError, subprocess.SubprocessError) as error:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} source revision could not be verified") from error
+    if observed_digest != source_digest:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} attested source differs from the release inputs")
+    obligations = {item["key"]: item for group in ("models", "feature_areas") for item in ledger[group]}
+    coverage = manifest.get("obligations")
+    if not isinstance(coverage, dict) or coverage.keys() != obligations.keys():
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires every ledger obligation")
+    for key, item in obligations.items():
+        refs = coverage[key]
+        if not isinstance(refs, dict) or set(refs) != {"native", "scientific"}:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} needs native and scientific receipts")
+        if refs["scientific"] != {"path": item["evidence"], "sha256": item["evidence_sha256"]}:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} scientific receipt differs from the ledger")
+        verify_release_report(refs["native"], "native_execution", key, source_digest)
+        verify_release_report(refs["scientific"], "scientific_acceptance", key, source_digest)
+    installed = manifest.get("installed_consumers")
+    if not isinstance(installed, dict) or installed.keys() != INSTALLED_TARGETS:
+        raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires all installed-consumer targets")
+    for target, lane in installed.items():
+        if not isinstance(lane, dict) or set(lane) != {"artifact", "report"}:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} requires an installed artifact and report")
+        artifact = release_file_ref(lane["artifact"])
+        with artifact.open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        report = verify_release_report(lane["report"], "installed_execution", target, source_digest)
+        if digest != lane["artifact"]["sha256"] or report.get("artifact_sha256") != digest:
+            raise ValueError(f"{RELEASE_EVIDENCE_ERROR} installed artifact digest does not match")
+    verify_release_attestation(payload, bundle, revision)
 
 
 def main() -> int:
@@ -164,12 +316,12 @@ def main() -> int:
     if release_ready and pending:
         raise ValueError("release_ready requires all migration obligations to be qualified")
     if args.release and release_ready:
-        if ledger.get("qualified_source_sha256") != release_source_digest():
+        source_digest = release_source_digest()
+        if ledger.get("qualified_source_sha256") != source_digest:
             raise ValueError("Qualified evidence does not match the release source digest")
-        # A digest of arbitrary text is not scientific or installed-artifact
-        # acceptance. The current capability matrix covers only a subset of the
-        # ledger and has no qualified source-bound receipt/coverage contract.
-        raise ValueError("Release blocked: scientific evidence contract and obligation coverage are not qualified")
+        verify_release_evidence(ledger, source_digest)
+        print("Native migration and scientific release evidence verified.")
+        return 0
     if args.release and not release_ready:
         print("Release blocked: scientific migration and acceptance remain incomplete:", ", ".join(pending))
         return 1

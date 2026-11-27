@@ -11,13 +11,12 @@ Owning issue: [#401](https://github.com/edithatogo/innovate/issues/401), under
   line, not a replacement or requalification of the legacy `paper.qmd`.
 - [paper.bib](paper.bib) contains five references checked against primary publisher
   or software-project sources on **16 November 2026**.
-- Source baseline: `b29a1d27f54fdd08d77881ee999772fceab7c03a`, development version
-  `0.7.0a1`, reassessed after #668 merged on 16 November 2026. The
-  [current source reassessment](../evidence/evidence-acquisition-20261116/source-reassessment.md)
-  explains the added tabular field documentation, unchanged claims and retained
-  limitations. The [preceding assessment](../evidence/source-reassessment-20261116.md)
-  remains evidence for its earlier revision. Refresh the draft when its
-  implementation evidence changes.
+- The current draft describes development version `0.7.0a1` at
+  `34b4868c094742495fb7f89f5410676917e7a05b`. The
+  [source reassessment](claim-evidence.md#security-integration-source-reassessment-on-26-november-2026)
+  records the dependency and ledger changes. The earlier
+  [adopter receipts](../../empirical_validation_publication_20261107/evidence/adopter-classification-20261120/README.md)
+  and render receipts retain their original revisions.
 
 ## Scope and evidence
 
@@ -35,7 +34,7 @@ does not supply their consent. The paper records this limitation visibly.
 
 | Manuscript claim | Repository evidence at the baseline |
 | --- | --- |
-| Rust scientific computation; Python/Julia/R interfaces; sixteen bounded families; 38 outstanding obligations | [README](../../../../README.md), [migration ledger](../../../../migration-ledger.json) |
+| Rust scientific computation, Python/Julia/R interfaces, sixteen bounded families and 38 required obligations | [README](../../../../README.md), [migration ledger](../../../../migration-ledger.json) |
 | Model conventions, time/observation semantics, synthetic versus empirical evidence | [Native scientific guide](../../../../docs/astro-site/src/content/docs/native-migration.md) |
 | Polars/Arrow boundary; copies and LazyFrame collection; incomplete R/Julia IPC/bundles | [README](../../../../README.md), [tabular crate](../../../../rust/crates/innovate-tabular/Cargo.toml) |
 | Reuse of Rust numerical dependencies and pinned Kairos crates | [Core crate manifest](../../../../rust/crates/innovate-core/Cargo.toml) |
@@ -141,10 +140,9 @@ interactions; this packet does not authorise or automate journal correspondence.
    Existing empirical-study owners retain their protocols and acceptance duties.
 3. Confirm authorship, affiliations, funding, conflicts, rights and the full AI
    disclosure. Replace draft-specific pending statements only with verified facts.
-4. Preserve the current render and visual evidence and repeat it when source or
-   manuscript inputs change. The current edition has completed actual BibTeX,
-   official TeX/PDF and four-page inspection. Template layout/metadata limitations
-   are recorded below; author and publication-layout review remain separate.
+4. Render and inspect the 20 November edition before proceeding to submission.
+   The completed BibTeX, TeX/PDF and four-page inspection below apply to the
+   16 November edition, with the recorded template layout and metadata limits.
 5. Re-run relevant installation, scientific, documentation and release gates on
    the selected source/artifacts. Structural manuscript checks do not establish
    submission readiness, scientific validity or a qualified software release.
@@ -258,10 +256,10 @@ the pinned checkout's unmodified Dockerfile provides its intended package
 environment; record the resulting image identity and use draft mode. No Docker
 build or run was executed in this workspace, where Docker is unavailable.
 
-### Current completed draft render: 16 November 2026, after #668
+### Completed draft render: 16 November 2026, after #668
 
 The [render evidence packet](../evidence/evidence-acquisition-20261116/render/README.md)
-contains the [current four-page PDF](../evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf),
+contains the [four-page PDF from that edition](../evidence/evidence-acquisition-20261116/render/attempt-4/paper.pdf),
 its [unchanged generated receipt](../evidence/evidence-acquisition-20261116/render/attempt-4/receipt.json),
 the [separate visual review](../evidence/evidence-acquisition-20261116/render/attempt-4/visual-review.json)
 and a [reproduction recipe](../evidence/evidence-acquisition-20261116/render/reproduce.md).

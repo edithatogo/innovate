@@ -1,0 +1,16 @@
+{
+  "application_adapters_qualified": false,
+  "gitleaks_candidate_evidence_only": false,
+  "gitleaks_reviewed_build": true,
+  "image_exported": false,
+  "image_redistribution_qualified": false,
+  "kind": "offline-image-hosted-execution",
+  "last_stage": "complete",
+  "policy_commit": "7d8aa3fc88f86cc0c54b2c4d57ca9a4bfa97bdda",
+  "preparation_network_access": true,
+  "release_qualified": false,
+  "runner_registration_qualified": false,
+  "scanner_network_access": false,
+  "schema_version": 1,
+  "status": "passed"
+}

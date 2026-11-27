@@ -5,6 +5,7 @@ all-features = true
 
 [advisories]
 ignore = []
+unsound = "all"
 
 [licenses]
 confidence-threshold = 0.8

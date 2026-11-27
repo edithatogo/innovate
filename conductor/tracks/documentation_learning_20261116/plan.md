@@ -1,5 +1,27 @@
 # Implementation plan
 
+## Calendar dependency review for PR #684
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the documentation
+review update in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`60c0593988f522495bbc867d91db3949c8086f4c`. Scope is this plan and
+`docs/contracts/scientific-pedagogical-review.json`. The hosted docs build
+failed on stale fingerprints for the core module and scenario execution.
+Recheck the existing timestamp and replay claims against the calendar
+implementation before updating the record. The separate accessibility PR
+keeps its own source, browser runs and acceptance.
+
+The integrator reviewed the private calendar adapter, aggregation and scenario
+timestamp diff. UTC bucketing, the weekly anchor, the scenario import contract
+and the distinction between result replay and execution timestamps still match
+the guides. The four affected implementation fingerprints now cover both
+calendar modules as well as the core and scenario files.
+The exact locked Rust temporal suite passed all eight cases.
+On Python 3.15.2 the scoped source checker and seven contract tests passed.
+The frozen pnpm install, 58 content tests, 211-page Astro build, type check,
+and production artifact verification passed locally.
+
 ## PR #671 source-review follow-up — 17 November 2026
 
 - Final source-to-claim discrepancy: the Browser quality table still advertised version-selector interactions after removal of the selector. Verified the maintained browser spec asserts selector absence and tests current navigation, retirement routes and keyboard search, then corrected the claim and its 66-input scientific-review fingerprint. The previous exact-head 164/164 browser run stays scoped to 1771dffb; the amended guide needs its own hosted qualification. No native or scientific acceptance claim was added.
@@ -240,3 +262,31 @@ retains the 15 November implementation and verification history. This active
 successor carries DOC-01–08 and their unfinished acceptance after upstream #656
 archived the earlier directory. Archival is not browser, publication or scientific
 completion.
+
+## Offline SAST diagnostic privacy, 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the active diagnostic-output
+repair in the PR #684 worktree at `12c58c52ca2caed38ad54b93e562c5c0f9a1d4a2`.
+Scope is the API checker, API reference generator, production documentation
+verifier, native benchmark CLI, and derived API manifest. The next operation
+is focused validation and an exact hosted rescan.
+
+Hosted diagnostic run `44423558250` scanned 174 non-Rust sources without
+parser errors and reported nine Python findings. Seven are in the four active
+scripts. Use fixed console outcomes and retain the existing structured report
+files and failure statuses. Two findings are in hash-bound JOSS PDF setup
+source evidence from #662. Keep the attested bytes and their original receipts.
+
+The three documentation contract test modules passed on Python 3.15.2.
+API generation and exact artifact verification, Ruff and repository-policy
+checks passed. The initial benchmark test run required an installed native
+wheel. Build it in scratch with Rust 1.100.0 and run the same affected benchmark
+cases through the installed package. The four CLI changes preserve detailed
+file receipts and exit outcomes. Console output carries only qualification
+status and the existing separation from native and live deployment evidence.
+
+Run `44424922110` rechecked all 174 non-Rust files. Six active findings
+cleared. The other active finding points to the duplicate benchmark receipt
+error, which included the caller's output path. Keep the refusal to overwrite
+and the original benchmark count summary. Report the duplicate with a fixed
+message. Both hash-bound JOSS findings remain.

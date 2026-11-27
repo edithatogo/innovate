@@ -106,6 +106,22 @@ fn leap_second_label_is_not_silently_normalized() {
 }
 
 #[test]
+fn offset_normalization_preserves_leap_labels_and_only_normalizes_offset_signs() {
+    let crossing = aggregate(json!(["2017-01-01T00:59:60.123+01:00"]), json!([1]), "W");
+    assert_eq!(
+        crossing["result"],
+        json!({"dates": ["2016-12-31T23:59:60.123Z"], "values": [1.0]})
+    );
+    let minus = aggregate(json!(["2026-11-19T14:15:20−05:30"]), json!([1]), "W");
+    assert_eq!(
+        minus["result"],
+        json!({"dates": ["2026-11-19T19:45:20Z"], "values": [1.0]})
+    );
+    let invalid = aggregate(json!(["2026−11-19T14:15:20-05:30"]), json!([1]), "W");
+    assert_eq!(invalid["error"]["code"], "invalid_request");
+}
+
+#[test]
 fn naive_timestamps_keep_naive_labels_and_cannot_mix_with_offsets() {
     let naive = aggregate(
         json!(["2024-01-01 12:00:00", "2024-01-08T12:00:00"]),

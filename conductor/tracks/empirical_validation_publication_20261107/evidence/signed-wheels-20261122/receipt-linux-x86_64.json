@@ -1,0 +1,36 @@
+{
+  "arrow": {
+    "pytest_report_sha256": "96f4b7d16d0fe8cb7cdab1bae7c85fc146a96761ca7a6ce7e83de98cd5abbff1",
+    "test_results": {
+      "exports": 38,
+      "native_producers": 4,
+      "optional_arrow": 4,
+      "passed": 42
+    },
+    "versions": {
+      "innovate": "0.7.0a1",
+      "polars": "2.1.0",
+      "pyarrow": "26.0.1",
+      "pytest": "9.2.0"
+    }
+  },
+  "artifact_sha256": "77b06dadc854ae13456797b54ce4792d2fdcff5f0abebd37c9e4e560ba22ea57",
+  "kind": "bounded_installed_execution",
+  "passed_by_module": {
+    "test_competition": 2,
+    "test_multi_generation": 4,
+    "test_oracle_manifest": 16,
+    "test_paired_outcomes": 1,
+    "test_python_consumer": 141
+  },
+  "pytest_report_sha256": "590176cf4bd798438eafcf5f9a12d65177932ca978bc790ab7b2969e02ac8a07",
+  "python": "3.15.2",
+  "schema_version": 1,
+  "scope": "Installed Python wheel smoke suite",
+  "skipped": [],
+  "source_commit": "f0f31f5a3e4f1ae10d3c8c3ea1f3308c9e0d6823",
+  "source_sha256": "1a9f5541b60906f286b7fda765d23757c8bd9c99f06ad46536c3ab8194b538bc",
+  "status": "passed",
+  "target": "linux-x86_64",
+  "verified_package_members": 4
+}

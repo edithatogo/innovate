@@ -1,0 +1,68 @@
+# Scientific release evidence contract
+
+The release checker validates the evidence after every migration obligation is
+declared qualified. The ledger's `qualified_source_sha256` must match the clean
+Git source inventory. Set `release_evidence.manifest` and
+`release_evidence.attestation` to relative paths for the qualification manifest
+and its GitHub attestation bundle. The qualification source commit must be
+available locally and have the same source inventory as the release checkout.
+This allows the evidence to be recorded after execution without changing the
+qualified source.
+
+## Manifest and receipts
+
+The manifest uses `schema_version: 1`, `kind: innovate-release-qualification`,
+the full `source_commit` and its `source_sha256`. Its `obligations` object has
+exactly one entry for each required model and feature. Each entry references a
+`native` and a `scientific` report. The scientific reference agrees with the
+ledger's evidence path and digest.
+
+The `installed_consumers` object covers `linux-x86_64`, `macos-arm64` and
+`windows-x86_64`, with an `artifact` and a `report` for each. References
+contain a relative `path` and the file's `sha256`. An installed report records
+the tested artifact's `artifact_sha256`.
+
+Reports use `schema_version: 1`, the same `source_sha256`, and a kind of
+`native_execution`, `scientific_acceptance` or `installed_execution`. Each
+successful report has `status: passed` and `results` keyed by obligation or
+platform. Each result records counts for `passed`, `failed`, `skipped` and
+`errors`. At least one check must have passed in each claimed scope. The three
+other counts must be zero. The producer is responsible for running all required
+cases and recording the accepted scientific scope from the track.
+
+## Verification and current scope
+
+The verifier binds the exact manifest bytes to a GitHub SLSA provenance
+attestation. The repository and signer are fixed to Innovate and its
+`release-readiness.yml` workflow. The source and signer commits must both
+match the qualification commit. GitHub CLI verifies the bundle. [GitHub attestation verification](https://cli.github.com/manual/gh_attestation_verify)
+
+The [20 November adopter evidence](evidence/adopter-classification-20261120/README.md)
+remains valid for its recorded source. The
+[reconciled adopter evidence](evidence/adopter-classification-20261127-a0d15822/README.md)
+qualifies the same scope for its recorded source inventory. The I07 CI
+environment repair changes that inventory and requires refreshed receipts.
+The other 37 obligations still require native and scientific acceptance. The dry-run workflow
+builds wheels from the source distribution and exercises them on Linux x86_64,
+macOS ARM64 and Windows x64. Separate automated jobs verify the source, target
+and wheel digest for each receipt and sign it. The receipt's
+`bounded_installed_execution` kind records the smoke
+scope and the observed skip count. Signed reports covering the complete native,
+scientific and installed requirements still need to supply the release bundle.
+Synthetic reports exercise the verifier and provide no release evidence.
+
+The bounded installed-wheel suite also runs six native predictions against
+the independent analytic references. Each named prediction must appear in
+the test report. The release source inventory binds the validation fixtures
+and derivations, and the signed receipt binds the original report and
+installed wheel. The references cover deterministic levels at their recorded
+inputs. [Analytic references](../../../validation/oracles/derivations.md)
+
+Each release host then installs the built wheel's `arrow` extra and runs the
+42 named scenario and Arrow cases. The recorder requires the locked runtime
+versions and a complete test report with zero skips or failures. The same
+signed receipt identifies the minimal-wheel and Arrow reports by SHA-256.
+
+A manual dispatch can set `live_oecd` to run the real OECD case on each host.
+The signer checks the original test report hash and requires zero skips
+when that input is enabled.

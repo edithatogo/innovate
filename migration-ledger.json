@@ -188,10 +188,10 @@
     },
     {
       "key": "adopter_classification",
-      "status": "bounded_native",
+      "status": "qualified",
       "required": true,
-      "evidence": "conductor/tracks/scientific_ecosystem_alignment_20261029/plan.md",
-      "remaining": "Independent Rust regression covers 2,744 cases on two irregular grids across four common rate scales. Broader grid shapes, heterogeneous rate extremes, and release binding qualification remain open."
+      "evidence": "conductor/tracks/empirical_validation_publication_20261107/evidence/adopter-classification-20261127-a0d15822/scientific.json",
+      "evidence_sha256": "fbd3031336204ffb19d216736537e8c6e3cb8a0df5407a2e86d1553d2fd67e64"
     },
     {
       "key": "data_ingestion_provenance_validation",

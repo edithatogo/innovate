@@ -1,9 +1,9 @@
 //! Heterogeneous network adoption with Kairos agent state, dispatch and priority service.
+use crate::agent_state::AgentState;
 use crate::validation::{numeric_array_from_aliases, object_section, required_f64};
 use crate::{
     KERNEL_SCHEMA_VERSION, KernelBindingError, KernelOperation, KernelRequest, KernelResponse,
 };
-use kairo_ecs_abm::ABMContext;
 use kairo_ecs_des::{PriorityResource, RenegingQueue};
 use kairo_ecs_rng::{
     DeterministicStream,
@@ -45,7 +45,7 @@ struct ServiceStart {
 }
 
 impl ServiceStart {
-    fn schedule_completion(&self, context: &mut ABMContext, agent: EntityId) {
+    fn schedule_completion(&self, context: &mut AgentState, agent: EntityId) {
         context.schedule_behaviour(
             agent,
             2,
@@ -641,7 +641,7 @@ pub(crate) fn execute(r: &KernelRequest) -> Result<KernelResponse, KernelBinding
     {
         return Err(invalid("initial agent indices must be unique and in range"));
     }
-    let mut context = ABMContext::new(o.seed);
+    let mut context = AgentState::new();
     let agents: Vec<_> = (0..o.population)
         .map(|i| {
             let id = context.spawn_agent();
@@ -1452,7 +1452,7 @@ mod tests {
 
     #[test]
     fn rebuilt_deadlines_keep_original_expiry_and_arrival_order() {
-        let mut context = ABMContext::new(42);
+        let mut context = AgentState::new();
         let agents = [
             context.spawn_agent(),
             context.spawn_agent(),
@@ -1471,7 +1471,7 @@ mod tests {
 
     #[test]
     fn rebuilt_waiters_retain_priority_and_fifo_order() {
-        let mut context = ABMContext::new(42);
+        let mut context = AgentState::new();
         let agents = [
             context.spawn_agent(),
             context.spawn_agent(),
@@ -1488,7 +1488,7 @@ mod tests {
 
     #[test]
     fn admission_order_reconstructs_tied_completion_order() {
-        let mut context = ABMContext::new(42);
+        let mut context = AgentState::new();
         let agents = [context.spawn_agent(), context.spawn_agent()];
         let admissions = [
             ServiceStart {

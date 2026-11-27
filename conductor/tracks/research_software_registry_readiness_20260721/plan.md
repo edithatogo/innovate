@@ -1,5 +1,112 @@
 # Implementation Plan
 
+## Combined PR and main input reassessment — 22 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` reconciled PR #684 at
+`5af412338d1cf46c502da89295f058816ca00e3f` with main commit
+`a9360c1ea3414eaf0e712dbb131d3e923e958571`. Compared with the PR snapshot,
+only the README and product input hashes changed in the combined tree. The
+README adds the private security-reporting link. The product change records
+Paignia and UOGTO responsibilities and preserves the requirement for provider
+parity and acceptance. The main-branch reassessments below cover these two
+changes; they do not add a scientific or completed-provider claim to the draft.
+
+The combined snapshot retains the PR's ledger, lock, manuscript edition and
+software baseline, together with the two reviewed main-branch input hashes.
+All fourteen source and three edition hashes match the combined working tree.
+The focused JOSS readiness suite passed on repo-local Python 3.15.2. The draft
+checker passed and its submission-ready mode returned 1 as required. The
+scientific, author, provider and release holds remain open.
+
+## JOSS source review after adopter qualification
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` compared the 14 JOSS source
+blobs at `c1399484aa7efa224304b0a84c559ecffc10726e` and
+`dbb360d8e281ea103778484512e0a35958dfba83`. Only the migration ledger
+changed. It records the qualified adopter classifier and 37 incomplete
+obligations. The draft's count of 38 required obligations and its existing
+scientific limitations still apply.
+
+The 88 JOSS and release-claim tests passed on Python 3.15.2. The draft
+checker validated the 14 source and three edition files. Its submission
+check returned 1. The release inventory digest matches the three
+verified wheel signatures.
+
+Hosted job `135984167161` also found the registry-readiness packet's old
+ledger digest. Its four input blobs were compared at the prior assessed
+revision and `dbb360d8e281ea103778484512e0a35958dfba83`. The ledger was the
+only changed input. The updated registry packet continues to list all three
+destinations as pending. The registry and JOSS readiness suites passed 106
+tests, and the registry checker reported a valid incomplete record.
+
+## JOSS source review after the adopter classifier change
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the draft inputs and this
+record in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Hosted native job `135857338218` reported a stale lockfile fingerprint after
+`c1399484aa7efa224304b0a84c559ecffc10726e`. The integrator checked all fourteen
+input blobs against Git at both revisions and refreshed the source and edition
+hashes in the draft. The core manifest and lock add a direct edge to the already
+locked `num-bigint` 0.4.8.
+
+Python 3.15.2 ran all 87 cases in the draft, setup and render-wrapper suites.
+`scripts/check_joss_readiness.py --json` validated fourteen source hashes,
+three edition hashes and six sections. `--require-submission-ready` returned
+1. The pending render and prior receipts are recorded with their own editions.
+The release source digest is
+`ed085a5f9131fbd265e9bab54706fd6e0cf1811d3a7ecee1a08f4429a6c10eec`
+with or without the draft update.
+
+## JOSS source review after the calendar dependency change
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns this source review
+in the PR #684 worktree
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate` from
+`60c0593988f522495bbc867d91db3949c8086f4c`. Scope covers this
+record, the JOSS source snapshot, working draft, claim register and README.
+The draft checker reproduced a stale `Cargo.lock` fingerprint. Compare all
+fourteen reviewed inputs with the prior source and retain the existing
+unapproved status. The separate Inara workflow and its artifacts in PR #687
+stay with their current owner.
+
+The compared source inputs changed only in the core manifest and lock.
+The snapshot identifies all fourteen Git inputs and three edition files.
+The repo-local Python 3.15.2 draft and environment suites passed 69 cases.
+Pinned Inara and Pandoc 3.6.4 built a fresh four-page draft. The integrator
+viewed all four pages and checked the source revision, visible draft notice,
+section order and references. The draft-template placeholder and sidebar
+wrapping remain visible on page one. The rendered PDF SHA-256 was
+`2c931607ac506ed09930f57a4610f02533f11d46f4f347eebae4ab055849c846`.
+The draft remains unapproved and submission readiness remains false.
+
+## JOSS setup diagnostics — 19 November 2026
+
+Chat `01a1e448-3a28-7653-a681-cd3fdb41f498` owns the diagnostic correction
+from `19603ac397a8e199eb5792559587fbf366f3df80` in
+`/Users/doughnut/.codex/worktrees/innovate-pr671-ci-repair/innovate`.
+Scope covers the two configuration helpers flagged by the hosted scanner, their
+reproduction instructions and `tests/native/test_joss_environment.py`.
+Native scope is Innovate draft PR #684 and the hosted canary.
+
+The two current scripts report stage and exit code. Their setup logs and
+receipts remain in the caller's output directory. The reproduction instructions
+now identify both original helper blobs and SHA-256 digests at
+`9e12948a65d780e23f55dc343aa909e58257e569`. Both digests match the original
+receipts. The commands for a new setup consistently select Python 3.15.2.
+
+On the repo-local Python 3.15.2 interpreter,
+`pytest tests/native/test_joss_environment.py -k logs_stay` reproduced the
+console path disclosure in all four cases. The four corrected cases pass on
+both success and failure. The existing JOSS environment, draft, registry and
+readiness checks also pass. The next check is the hosted scan of the committed
+source. This work supplies no new render or scientific acceptance evidence.
+
+Hosted rescan `44478681210` covered all 174 non-Rust files and still
+flagged the two subprocess return values going to the console. Project only
+the stage and its pass or fail outcome. Retain the numeric codes in the
+existing file receipt and preserve the actual process exit status.
+
 ## Product-boundary input reassessment — 22 November 2026
 
 PR #700 head `54330fff28a81f790598361029bd5768a95a86a5` changes only one
